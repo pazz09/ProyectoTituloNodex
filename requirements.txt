@@ -1,0 +1,20 @@
+# --- Dependencias oficiales (Tabla 8.9 del Informe de Seminario) ---
+google-genai>=1.0.0
+chromadb>=0.5.0
+sentence-transformers>=2.7.0
+langgraph>=0.2.0
+requests>=2.31.0
+typing-extensions>=4.0.0
+
+# --- Extras usados en este repo, no listados en la Tabla 8.9 ---
+python-dotenv>=1.0.0          # carga de .env (el notebook usaba google.colab.userdata)
+graphviz>=0.20.0              # opcional, para draw_mermaid_png en notebooks
+pandas>=2.2.0                 # notebook de experimentos / comparación de baselines
+matplotlib>=3.9.0
+xlrd>=2.0.0
+pytest>=8.3.0                 # testing
+
+# --- Interfaz web (panel de análisis, src/api/), 1-sep-2026 ---
+fastapi>=0.110.0
+uvicorn[standard]>=0.29.0
+python-multipart>=0.0.9       # necesario para UploadFile (subida de archivos) en FastAPI

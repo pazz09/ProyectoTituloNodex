@@ -1,0 +1,28 @@
+# Entorno
+.venv/
+venv/
+# venv de Linux inservible en Windows (ver README)
+.venv.linux-broken/
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
+.env.local
+*.key
+*.pem
+
+# Datos locales / caché / vectordb (no versionar contenido real)
+data/chroma/
+data/*.json
+data/*.cache
+
+# Notebooks - checkpoints
+.ipynb_checkpoints/
+
+# Editor
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

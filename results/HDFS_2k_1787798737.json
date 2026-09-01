@@ -1,0 +1,32 @@
+{
+  "archivo_origen": "data/logs/HDFS_2k.log",
+  "formato_detectado": "hdfs",
+  "total_lineas": 2000,
+  "n_ips_distintas": 202,
+  "ventana_temporal": {
+    "inicio": "2008-11-09 20:36:15",
+    "fin": "2008-11-11 10:20:17"
+  },
+  "servicios": {
+    "hdfs.datanode": 1058,
+    "hdfs.fsnamesystem": 659,
+    "hdfs.datablockscanner": 20,
+    "hdfs.fsdataset": 263
+  },
+  "eventos": {
+    "evento_normal": 1920,
+    "evento_critico": 80
+  },
+  "diagnostico": "Tráfico operativo interno correspondiente a un cluster Hadoop HDFS (DataNodes, FSNamesystem, FSDataset). Se registran 2000 eventos distribuidos entre 202 direcciones IP privadas con reputación limpia. Se observan 80 eventos catalogados como críticos y fallos dispersos en operaciones sobre bloques de datos (ej. blk_*), compatibles con errores de replicación, lectura/escritura o timeouts transitorios típicos de la carga distribuida del cluster. No se detectan patrones de intrusión, explotación maliciosa ni anomalías de seguridad.",
+  "confianza": 0.0,
+  "comandos_mitigacion": [
+    "hdfs fsck / -openforwrite -files -blocks",
+    "netstat -s | grep -E -i 'drop|overflow|timeout'",
+    "iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT",
+    "iptables -A INPUT -s 10.0.0.0/8 -p tcp -m multiport --dports 8020,9000,9864,9870,50010,50020,50070,50075 -j ACCEPT",
+    "sysctl -w net.core.somaxconn=4096"
+  ],
+  "comandos_validos": true,
+  "requiere_revision_humana": true,
+  "intentos_correccion": 1
+}

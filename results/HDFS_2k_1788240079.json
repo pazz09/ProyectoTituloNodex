@@ -1,0 +1,31 @@
+{
+  "archivo_origen": "data/logs/HDFS_2k.log",
+  "formato_detectado": "hdfs",
+  "total_lineas": 2000,
+  "n_ips_distintas": 202,
+  "ventana_temporal": {
+    "inicio": "2008-11-09 20:36:15",
+    "fin": "2008-11-11 10:20:17"
+  },
+  "servicios": {
+    "hdfs.datanode": 1058,
+    "hdfs.fsnamesystem": 659,
+    "hdfs.datablockscanner": 20,
+    "hdfs.fsdataset": 263
+  },
+  "eventos": {
+    "evento_normal": 1920,
+    "evento_critico": 80
+  },
+  "diagnostico": "El análisis del lote de logs de HDFS (2000 eventos en una ventana temporal de 2 días) muestra comportamiento predominantemente operacional y distribuido entre 202 direcciones IP internas (rangos 10.250.x.x y 10.251.x.x). Se detectan 80 eventos críticos/fallidos (4% del total), los cuales responden a errores de verificación de bloques (blk_*) o desconexiones temporales en DataNode/FSNamesystem habituales en la operación de HDFS. Ninguna dirección IP presenta reputación maliciosa ni patrones de ataque (fuerza bruta, exfiltración o C2). Se clasifica la actividad como tráfico legítimo con fallos operativos menores de infraestructura.",
+  "confianza": 0.95,
+  "comandos_mitigacion": [
+    "hdfs dfsadmin -report",
+    "hdfs fsck / -files -blocks -locations",
+    "journalctl -u hadoop-hdfs-datanode --since '2 days ago' | grep -E 'ERROR|WARN'",
+    "sudo ufw status verbose"
+  ],
+  "comandos_validos": true,
+  "requiere_revision_humana": false,
+  "intentos_correccion": 1
+}

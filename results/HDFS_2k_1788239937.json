@@ -1,0 +1,28 @@
+{
+  "archivo_origen": "data/logs/HDFS_2k.log",
+  "formato_detectado": "hdfs",
+  "total_lineas": 2000,
+  "n_ips_distintas": 202,
+  "ventana_temporal": {
+    "inicio": "2008-11-09 20:36:15",
+    "fin": "2008-11-11 10:20:17"
+  },
+  "servicios": {
+    "hdfs.datanode": 1058,
+    "hdfs.fsnamesystem": 659,
+    "hdfs.datablockscanner": 20,
+    "hdfs.fsdataset": 263
+  },
+  "eventos": {
+    "evento_normal": 1920,
+    "evento_critico": 80
+  },
+  "diagnostico": "El análisis de los logs indica actividad normal de un clúster Hadoop (HDFS). Las operaciones registradas corresponden a la gestión de bloques de datos (identificados por 'blk_...') entre los nodos del clúster (DataNodes y NameNode). No se observan patrones de ataque, las IPs tienen reputación limpia y los intentos fallidos son mínimos, lo cual es consistente con errores operativos normales en sistemas distribuidos. Los eventos críticos probablemente correspondan a advertencias de estado del sistema y no a incidentes de seguridad.",
+  "confianza": 0.95,
+  "comandos_mitigacion": [
+    "# No se requieren acciones de mitigacion. La actividad del cluster Hadoop (HDFS) es normal."
+  ],
+  "comandos_validos": true,
+  "requiere_revision_humana": false,
+  "intentos_correccion": 1
+}

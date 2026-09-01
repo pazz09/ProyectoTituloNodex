@@ -1,0 +1,26 @@
+{
+  "archivo_origen": "data/logs/HDFS_2k.log",
+  "formato_detectado": "hdfs",
+  "total_lineas": 2000,
+  "n_ips_distintas": 202,
+  "ventana_temporal": {
+    "inicio": "2008-11-09 20:36:15",
+    "fin": "2008-11-11 10:20:17"
+  },
+  "servicios": {
+    "hdfs.datanode": 1058,
+    "hdfs.fsnamesystem": 659,
+    "hdfs.datablockscanner": 20,
+    "hdfs.fsdataset": 263
+  },
+  "eventos": {
+    "evento_normal": 1920,
+    "evento_critico": 80
+  },
+  "diagnostico": "",
+  "confianza": 0.0,
+  "comandos_mitigacion": [],
+  "comandos_validos": true,
+  "requiere_revision_humana": true,
+  "intentos_correccion": 0
+}

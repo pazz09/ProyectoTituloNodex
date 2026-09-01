@@ -1,0 +1,31 @@
+{
+  "archivo_origen": "data/logs/BGL_2k.log",
+  "formato_detectado": "bgl",
+  "total_lineas": 2000,
+  "n_ips_distintas": 2,
+  "ventana_temporal": {
+    "inicio": "2005-06-03-15.42.50.675872",
+    "fin": "2006-01-03-07.13.09.127918"
+  },
+  "servicios": {
+    "bgl.kernel": 1820,
+    "bgl.app": 107,
+    "bgl.otro": 38,
+    "bgl.mmcs": 35
+  },
+  "eventos": {
+    "evento_normal": 1857,
+    "evento_critico": 143
+  },
+  "diagnostico": "Se detecta un patrón sospechoso de movimiento lateral, escaneo horizontal o intentos de fuerza bruta desde la IP interna 172.16.96.116. Esta dirección ha generado 26 intentos fallidos dirigidos a 26 nodos/usuarios distintos del clúster (ej. R04-M1-N4-I:J18-U11) a través del servicio bgl.app. Adicionalmente, el lote presenta 143 eventos críticos, principalmente asociados a bgl.kernel, lo que sugiere posibles fallos de hardware o inestabilidad en los nodos del supercomputador Blue Gene/L que podrían estar correlacionados con los intentos de acceso. La IP 1.0.0.102 presenta actividad mínima y no se considera una amenaza en este momento.",
+  "confianza": 0.95,
+  "comandos_mitigacion": [
+    "iptables -I INPUT 1 -s 172.16.96.116 -j DROP",
+    "iptables -I FORWARD 1 -s 172.16.96.116 -j DROP",
+    "ufw insert 1 deny from 172.16.96.116",
+    "ip route add blackhole 172.16.96.116"
+  ],
+  "comandos_validos": true,
+  "requiere_revision_humana": false,
+  "intentos_correccion": 1
+}

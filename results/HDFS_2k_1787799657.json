@@ -1,0 +1,30 @@
+{
+  "archivo_origen": "data/logs/HDFS_2k.log",
+  "formato_detectado": "hdfs",
+  "total_lineas": 2000,
+  "n_ips_distintas": 202,
+  "ventana_temporal": {
+    "inicio": "2008-11-09 20:36:15",
+    "fin": "2008-11-11 10:20:17"
+  },
+  "servicios": {
+    "hdfs.datanode": 1058,
+    "hdfs.fsnamesystem": 659,
+    "hdfs.datablockscanner": 20,
+    "hdfs.fsdataset": 263
+  },
+  "eventos": {
+    "evento_normal": 1920,
+    "evento_critico": 80
+  },
+  "diagnostico": "El análisis de los logs de HDFS muestra un comportamiento operativo normal y distribuido dentro de un clúster que utiliza direccionamiento IP privado (rangos 10.250.x.x y 10.251.x.x). Los identificadores reportados como 'usuarios_objetivo' corresponden en realidad a bloques de datos de HDFS (block IDs, ej. blk_...). Los escasos intentos fallidos (0-2 por IP) y la baja tasa de eventos críticos (4%) son consistentes con reintentos de red normales, verificaciones de integridad de bloques o réplicas rutinarias entre DataNodes y NameNode. No se observan patrones de intrusión, exfiltración ni fuerza bruta. El tráfico es legítimo y de carácter interno.",
+  "confianza": 0.95,
+  "comandos_mitigacion": [
+    "sudo iptables -A INPUT -s 10.250.0.0/16 -p tcp -m multiport --dports 8020,9000,9820,9870,9864,9866 -m comment --comment 'Permitir trafico HDFS interno 10.250.x.x' -j ACCEPT",
+    "sudo iptables -A INPUT -s 10.251.0.0/16 -p tcp -m multiport --dports 8020,9000,9820,9870,9864,9866 -m comment --comment 'Permitir trafico HDFS interno 10.251.x.x' -j ACCEPT",
+    "sudo iptables -A INPUT -p tcp -m multiport --dports 8020,9000,9820,9870,9864,9866 -m comment --comment 'Bloquear accesos externos no autorizados a HDFS' -j DROP"
+  ],
+  "comandos_validos": true,
+  "requiere_revision_humana": false,
+  "intentos_correccion": 1
+}

@@ -1,0 +1,34 @@
+{
+  "archivo_origen": "data/logs/HDFS_2k.log",
+  "formato_detectado": "hdfs",
+  "total_lineas": 2000,
+  "n_ips_distintas": 202,
+  "ventana_temporal": {
+    "inicio": "2008-11-09 20:36:15",
+    "fin": "2008-11-11 10:20:17"
+  },
+  "servicios": {
+    "hdfs.datanode": 1058,
+    "hdfs.fsnamesystem": 659,
+    "hdfs.datablockscanner": 20,
+    "hdfs.fsdataset": 263
+  },
+  "eventos": {
+    "evento_normal": 1920,
+    "evento_critico": 80
+  },
+  "diagnostico": "El análisis del lote de logs de HDFS (2000 eventos entre el 09 y 11 de noviembre de 2008) muestra una actividad operativa normal de un clúster distribuido Hadoop. Se registraron 80 eventos críticos (4% del total), atribuibles a advertencias habituales de verificación de bloques (DataBlockScanner/DataNode) o reintentos de comunicación entre nodos internos (redes 10.250.x.x y 10.251.x.x). No hay presencia de direccionamiento externo sospechoso ni patrones de fuerza bruta o exfiltración. Se concluye que el comportamiento corresponde al funcionamiento estándar del clúster sin indicios de actividad maliciosa.",
+  "confianza": 0.95,
+  "comandos_mitigacion": [
+    "sudo ufw default deny incoming",
+    "sudo ufw default allow outgoing",
+    "sudo ufw allow from 10.250.0.0/16 to any comment 'Permitir comunicacion interna HDFS 10.250.x.x'",
+    "sudo ufw allow from 10.251.0.0/16 to any comment 'Permitir comunicacion interna HDFS 10.251.x.x'",
+    "sudo ufw allow proto tcp from 10.250.0.0/15 to any port 22 comment 'SSH administrativo interno'",
+    "sudo ufw logging medium",
+    "sudo ufw --force enable"
+  ],
+  "comandos_validos": true,
+  "requiere_revision_humana": false,
+  "intentos_correccion": 1
+}

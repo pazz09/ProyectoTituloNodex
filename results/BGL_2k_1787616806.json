@@ -1,0 +1,26 @@
+{
+  "archivo_origen": "data/logs/BGL_2k.log",
+  "formato_detectado": "bgl",
+  "total_lineas": 2000,
+  "n_ips_distintas": 2,
+  "ventana_temporal": {
+    "inicio": "2005-06-03-15.42.50.675872",
+    "fin": "2006-01-03-07.13.09.127918"
+  },
+  "servicios": {
+    "bgl.kernel": 1820,
+    "bgl.app": 107,
+    "bgl.otro": 38,
+    "bgl.mmcs": 35
+  },
+  "eventos": {
+    "evento_normal": 1857,
+    "evento_critico": 143
+  },
+  "diagnostico": "Se observa actividad en registros del sistema Blue Gene/L (BGL) con un total de 143 eventos críticos concentrados principalmente en el servicio de kernel y aplicaciones. Se identifica tráfico anómalo originado desde la dirección IP privada 172.16.96.116 interactuando con 26 identificadores de nodo distintos (ej. R04-M1-N4, R14-M0-N8) con fallos registrados. Aunque las consultas de reputación externa (AbuseIPDB) catalogan las IPs como limpias por tratarse de rangos privados/internos, el patrón de eventos críticos recurrentes y accesos multi-nodo sugiere fallos de hardware/software coordinados o un posible escaneo/ejecución anómala interna en el clúster.",
+  "confianza": 0.0,
+  "comandos_mitigacion": [],
+  "comandos_validos": true,
+  "requiere_revision_humana": true,
+  "intentos_correccion": 0
+}

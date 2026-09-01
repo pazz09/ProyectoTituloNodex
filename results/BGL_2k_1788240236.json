@@ -1,0 +1,33 @@
+{
+  "archivo_origen": "data/logs/BGL_2k.log",
+  "formato_detectado": "bgl",
+  "total_lineas": 2000,
+  "n_ips_distintas": 2,
+  "ventana_temporal": {
+    "inicio": "2005-06-03-15.42.50.675872",
+    "fin": "2006-01-03-07.13.09.127918"
+  },
+  "servicios": {
+    "bgl.kernel": 1820,
+    "bgl.app": 107,
+    "bgl.otro": 38,
+    "bgl.mmcs": 35
+  },
+  "eventos": {
+    "evento_normal": 1857,
+    "evento_critico": 143
+  },
+  "diagnostico": "Se han detectado 143 eventos críticos en registros del supercomputador BlueGene/L (BGL). La IP de origen interna 172.16.96.116 registró 26 intentos fallidos dirigidos a múltiples nodos de cómputo (e.g., R04, R05, R13, R14) a través del servicio bgl.app. Este patrón refleja una alta tasa de anomalías o fallos en el despliegue/ejecución de trabajos sobre la infraestructura de supercómputo, lo que requiere inspección directa de los componentes del kernel y el subsistema MMCS para descartar propagación de fallos de red o errores masivos de autenticación/job submission.",
+  "confianza": 0.95,
+  "comandos_mitigacion": [
+    "iptables -I INPUT 1 -s 172.16.96.116 -j DROP",
+    "iptables -I FORWARD 1 -s 172.16.96.116 -j DROP",
+    "ss -K src 172.16.96.116",
+    "ufw insert 1 deny from 172.16.96.116 to any",
+    "grep -E \"172.16.96.116|bgl.app\" /var/log/messages | tail -n 100",
+    "dmesg -T | grep -iE \"mmcs|bgl|network error\" | tail -n 50"
+  ],
+  "comandos_validos": true,
+  "requiere_revision_humana": false,
+  "intentos_correccion": 1
+}

@@ -1,0 +1,32 @@
+{
+  "archivo_origen": "data/logs/BGL_2k.log",
+  "formato_detectado": "bgl",
+  "total_lineas": 2000,
+  "n_ips_distintas": 2,
+  "ventana_temporal": {
+    "inicio": "2005-06-03-15.42.50.675872",
+    "fin": "2006-01-03-07.13.09.127918"
+  },
+  "servicios": {
+    "bgl.kernel": 1820,
+    "bgl.app": 107,
+    "bgl.otro": 38,
+    "bgl.mmcs": 35
+  },
+  "eventos": {
+    "evento_normal": 1857,
+    "evento_critico": 143
+  },
+  "diagnostico": "El análisis de los logs del sistema Blue Gene/L (BGL) revela un comportamiento anómalo concentrado en la IP interna 172.16.96.116. Se registran 26 eventos críticos/fallos (clasificados en el parser como intentos fallidos) que afectan a múltiples componentes de hardware específicos (identificadores de Rack/Midplane/Node como R04-M1-N4, R14-M0-N8, etc.) a través del servicio 'bgl.app'. No se observan indicios de un ataque cibernético externo dirigido, ya que la actividad proviene de una IP privada y las reputaciones son limpias. El diagnóstico apunta a fallos operativos, de conexión o de hardware distribuidos en los nodos de la supercomputadora. Se recomienda una revisión física y lógica de los racks y nodos afectados reportados por el servicio de la aplicación.",
+  "confianza": 0.9,
+  "comandos_mitigacion": [
+    "iptables -A INPUT -s 172.16.96.116 -m limit --limit 5/min -j LOG --log-prefix 'BGL_ANOMALY_DETECTION: '",
+    "iptables -A INPUT -s 172.16.96.116 -j REJECT --reject-with icmp-host-prohibited",
+    "ufw insert 1 deny from 172.16.96.116 to any comment 'Aislamiento temporal de nodo con fallos de hardware'",
+    "journalctl -u bgl.app --since '2 hours ago' --no-pager",
+    "systemctl status bgl.app"
+  ],
+  "comandos_validos": true,
+  "requiere_revision_humana": false,
+  "intentos_correccion": 1
+}

@@ -1,0 +1,26 @@
+{
+  "archivo_origen": "data/logs/HDFS_2k.log",
+  "formato_detectado": "hdfs",
+  "total_lineas": 2000,
+  "n_ips_distintas": 202,
+  "ventana_temporal": {
+    "inicio": "2008-11-09 20:36:15",
+    "fin": "2008-11-11 10:20:17"
+  },
+  "servicios": {
+    "hdfs.datanode": 1058,
+    "hdfs.fsnamesystem": 659,
+    "hdfs.datablockscanner": 20,
+    "hdfs.fsdataset": 263
+  },
+  "eventos": {
+    "evento_normal": 1920,
+    "evento_critico": 80
+  },
+  "diagnostico": "Actividad operativa normal en clúster HDFS distribuido. Se observan 2000 eventos distribuidos entre DataNodes y NameSystem a través de 202 direcciones IP privadas internas (rangos 10.250.x.x y 10.251.x.x). Los 80 eventos críticos e intentos fallidos aislados corresponden a incidencias operativas típicas del sistema de almacenamiento (reintentos de replicación, verificación de bloques corruptos/scanner o anomalías transitorias de red entre nodos de datos), descartándose un ataque malicioso o actividad adversaria externa.",
+  "confianza": 0.0,
+  "comandos_mitigacion": [],
+  "comandos_validos": true,
+  "requiere_revision_humana": true,
+  "intentos_correccion": 0
+}

@@ -1,0 +1,32 @@
+{
+  "archivo_origen": "data/logs/BGL_2k.log",
+  "formato_detectado": "bgl",
+  "total_lineas": 2000,
+  "n_ips_distintas": 2,
+  "ventana_temporal": {
+    "inicio": "2005-06-03-15.42.50.675872",
+    "fin": "2006-01-03-07.13.09.127918"
+  },
+  "servicios": {
+    "bgl.kernel": 1820,
+    "bgl.app": 107,
+    "bgl.otro": 38,
+    "bgl.mmcs": 35
+  },
+  "eventos": {
+    "evento_normal": 1857,
+    "evento_critico": 143
+  },
+  "diagnostico": "Se han detectado 143 eventos críticos en el sistema BlueGene/L (BGL), principalmente concentrados en el servicio de kernel (bgl.kernel) y aplicación (bgl.app). Asimismo, se registran 26 fallos acumulados provenientes de la dirección IP 172.16.96.116 que afectan a múltiples nodos de cómputo del supercomputador (identificados mediante sintaxis Rxx-Mx-Nx). Esto sugiere la presencia de fallos de hardware/software a nivel de kernel y fallos de ejecución repetidos en los componentes del supercomputador.",
+  "confianza": 0.9,
+  "comandos_mitigacion": [
+    "iptables -I INPUT 1 -s 172.16.96.116 -j LOG --log-prefix \"[BGL_NODE_CRIT_FAIL] \" --log-level 4",
+    "iptables -I INPUT 2 -s 172.16.96.116 -j DROP",
+    "ip route add blackhole 172.16.96.116",
+    "ss -K dst 172.16.96.116",
+    "ufw insert 1 deny from 172.16.96.116 to any"
+  ],
+  "comandos_validos": true,
+  "requiere_revision_humana": false,
+  "intentos_correccion": 1
+}

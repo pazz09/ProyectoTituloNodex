@@ -1,0 +1,26 @@
+{
+  "archivo_origen": "data/logs/BGL_2k.log",
+  "formato_detectado": "bgl",
+  "total_lineas": 2000,
+  "n_ips_distintas": 2,
+  "ventana_temporal": {
+    "inicio": "2005-06-03-15.42.50.675872",
+    "fin": "2006-01-03-07.13.09.127918"
+  },
+  "servicios": {
+    "bgl.kernel": 1820,
+    "bgl.app": 107,
+    "bgl.otro": 38,
+    "bgl.mmcs": 35
+  },
+  "eventos": {
+    "evento_normal": 1857,
+    "evento_critico": 143
+  },
+  "diagnostico": "Se analiza un lote de 2000 eventos del sistema Blue Gene/L (BGL) con 143 eventos críticos concentrados principalmente a nivel de kernel y aplicaciones. Se identifica actividad sospechosa/anómala desde la IP privada 172.16.96.116, la cual presenta 26 intentos fallidos distribuidos en múltiples nodos de cómputo (midplanes/racks como R04-M1, R14-M0, R27-M1, entre otros) del servicio 'bgl.app'. Este comportamiento sugiere un posible escaneo interno horizontal, un intento de propagación lateral o una ejecución fallida masiva de trabajos concurrentes sobre la infraestructura. Se recomienda aislar e inspeccionar el host 172.16.96.116 y revisar los logs detallados del kernel en los nodos afectados.",
+  "confianza": 0.0,
+  "comandos_mitigacion": [],
+  "comandos_validos": true,
+  "requiere_revision_humana": true,
+  "intentos_correccion": 0
+}
