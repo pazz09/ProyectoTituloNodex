@@ -1,0 +1,62 @@
+{
+  "dataset": "hdfs",
+  "n_lotes": 4,
+  "lineas_por_lote": 120,
+  "umbral_confianza": 0.7,
+  "campo_veredicto": "hay_anomalia",
+  "metricas": {
+    "tp": 2,
+    "fp": 1,
+    "fn": 0,
+    "tn": 1,
+    "precision": 0.6666666666666666,
+    "recall": 1.0,
+    "f1": 0.8
+  },
+  "resultados": [
+    {
+      "id": "hdfs_positivo_000_blk_8483848473254499625",
+      "ground_truth": "anomalo",
+      "confianza": 0.95,
+      "hay_anomalia": true,
+      "hay_incidente": false,
+      "prediccion": "anomalo",
+      "diagnostico": "El lote de logs muestra actividad típica de un clúster HDFS distribuido en múltiples nodos internos (IPs 10.x.x.x). Se observan 4 eventos críticos correspondientes a intentos fallidos aislados desde distintas IPs, lo cual es común en operaciones de HDFS (ej. errores de bloque o de conexión). No hay indicios de actividad maliciosa ni IPs con mala reputación. Se considera tráfico benigno de mantenimiento y operación del clúster.",
+      "n_comandos_mitigacion": 0,
+      "duracion_seg": 28.7
+    },
+    {
+      "id": "hdfs_positivo_001_blk_-1368324087589035770",
+      "ground_truth": "anomalo",
+      "confianza": 0.95,
+      "hay_anomalia": true,
+      "hay_incidente": false,
+      "prediccion": "anomalo",
+      "diagnostico": "La actividad analizada corresponde a operaciones normales de un clúster HDFS. Se observan 4 eventos críticos asociados a intentos fallidos desde IPs internas (ej. 10.251.126.255, 10.251.42.191), lo cual es típico en HDFS debido a errores de bloques, fallos de replicación o problemas de conexión entre nodos. Todas las IPs son internas y tienen reputación limpia. No hay indicios de un ataque malicioso.",
+      "n_comandos_mitigacion": 0,
+      "duracion_seg": 28.1
+    },
+    {
+      "id": "hdfs_negativo_000",
+      "ground_truth": "normal",
+      "confianza": 1.0,
+      "hay_anomalia": false,
+      "hay_incidente": false,
+      "prediccion": "normal",
+      "diagnostico": "No se detecta ningún ataque. Los registros muestran actividad normal de un clúster HDFS. Los eventos críticos (6 en total) y los intentos fallidos corresponden probablemente a errores rutinarios de bloques o problemas de comunicación entre nodos, típicos en sistemas de archivos distribuidos. Todas las IPs involucradas son internas (rango 10.x.x.x) y tienen una reputación limpia.",
+      "n_comandos_mitigacion": 1,
+      "duracion_seg": 32.6
+    },
+    {
+      "id": "hdfs_negativo_001",
+      "ground_truth": "normal",
+      "confianza": 0.95,
+      "hay_anomalia": true,
+      "hay_incidente": false,
+      "prediccion": "anomalo",
+      "diagnostico": "No se detecta un ataque. Los registros corresponden a la actividad normal de un clúster HDFS. Los eventos críticos y los intentos fallidos están asociados a operaciones con bloques de datos (identificados por 'blk_...'), lo cual es común en HDFS debido a fallos de red temporales, reasignación de bloques o problemas menores en los DataNodes. Todas las IPs involucradas son internas (rango 10.x.x.x) y tienen una reputación limpia.",
+      "n_comandos_mitigacion": 0,
+      "duracion_seg": 29.6
+    }
+  ]
+}

@@ -7,7 +7,7 @@ Arquitectura Plan-and-Execute:
     Entrada (lote de logs crudos)
      -> AGREGACIÓN (código, sin LLM)                         [src/tools/aggregation.py]
       -> CORROBORACIÓN DE IPs (código + caché, AbuseIPDB)     [src/tools/reputation.py]
-       -> agente_analista_triage (LLM) --router_triage--> tool_consultar_rag (Tool)
+       -> agente_analista_triage (LLM) --router_triage--> tool_consultar_rag (Tool, también consulta MITRE ATT&CK/STIX -- ver src/memory.py y README)
         -> agente_selector_herramientas (LLM) --router_selector--> tool_consultar_cve (Tool)
          -> agente_ingeniero_mitigacion (LLM)
           -> tool_validar_comandos (Tool) --router_validacion--> (retry o continúa)

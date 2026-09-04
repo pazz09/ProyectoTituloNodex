@@ -1,0 +1,49 @@
+{
+  "dataset": "bgl",
+  "n_lotes": 4,
+  "lineas_por_lote": 120,
+  "umbral_confianza": 0.7,
+  "metricas": {
+    "tp": 1,
+    "fp": 3,
+    "fn": 0,
+    "tn": 0,
+    "precision": 0.25,
+    "recall": 1.0,
+    "f1": 0.4
+  },
+  "resultados": [
+    {
+      "id": "bgl_ventana_0005",
+      "ground_truth": "normal",
+      "confianza": 1.0,
+      "prediccion": "anomalo",
+      "diagnostico": "El lote de logs analizado muestra un comportamiento normal del sistema Blue Gene/L. Se registraron 120 eventos, en su mayoría provenientes del kernel (118), todos clasificados como normales. No se detectaron direcciones IP externas, anomalías ni indicios de actividad maliciosa durante la ventana temporal analizada.",
+      "duracion_seg": 65.9
+    },
+    {
+      "id": "bgl_ventana_0006",
+      "ground_truth": "anomalo",
+      "confianza": 0.95,
+      "prediccion": "anomalo",
+      "diagnostico": "El análisis del lote de logs del sistema Blue Gene/L (bgl) no muestra indicios de un ciberataque. La ausencia de direcciones IP y la naturaleza de los servicios (bgl.kernel, bgl.app) indican que se trata de logs de telemetría interna del clúster. Los 2 eventos críticos detectados a lo largo de 4 días probablemente corresponden a fallos de hardware, problemas de memoria o errores a nivel de kernel típicos en infraestructuras HPC, en lugar de actividad maliciosa. Se recomienda revisar el detalle de los eventos críticos para tareas de mantenimiento operativo.",
+      "duracion_seg": 35.0
+    },
+    {
+      "id": "bgl_ventana_0007",
+      "ground_truth": "normal",
+      "confianza": 1.0,
+      "prediccion": "anomalo",
+      "diagnostico": "El análisis del lote de logs indica un comportamiento normal del sistema. Se procesaron 120 eventos, en su mayoría del servicio bgl.kernel, todos clasificados como 'evento_normal'. No se detectaron direcciones IP, errores, ni indicadores de compromiso (IoC). No hay evidencia de actividad maliciosa o anomalías operativas durante la ventana temporal analizada.",
+      "duracion_seg": 26.1
+    },
+    {
+      "id": "bgl_ventana_0009",
+      "ground_truth": "normal",
+      "confianza": 0.95,
+      "prediccion": "anomalo",
+      "diagnostico": "El lote de logs analizado muestra un comportamiento completamente normal del sistema Blue Gene/L (BGL). Se registraron 120 eventos, en su mayoría del servicio bgl.kernel, todos clasificados como normales durante un período de 6 días. No se detectan anomalías, errores de hardware ni indicios de actividad maliciosa o ataques.",
+      "duracion_seg": 35.3
+    }
+  ]
+}

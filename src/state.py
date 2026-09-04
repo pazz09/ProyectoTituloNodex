@@ -29,9 +29,13 @@ class LogGuardState(TypedDict):
     necesita_rag: bool               # Router 1: ¿va a ChromaDB?
     usar_cve: bool                   # Router 2: ¿va a NVD?
     contexto_rag: list
+    tecnicas_mitre: list              # técnicas MITRE ATT&CK recuperadas por RAG estructurado (STIX) (3-sep-2026)
     cves_encontrados: list
     comandos_mitigacion: List[str]
     comandos_validos: bool           # Router 3: ¿ciclo de corrección?
     motivos_rechazo: Annotated[List[str], limpiar_o_acumular]
     confianza: float
+    hay_incidente: bool              # veredicto de seguridad del auditor, independiente de confianza (3-sep-2026)
+    hay_anomalia: bool               # veredicto de anomalía de sistema (seguridad u operativa) (3-sep-2026)
+    evaluacion_auditor: str          # texto de justificación del auditor -- antes solo se imprimía (3-sep-2026)
     intentos_correccion: int         # evita loops infinitos en router_validacion

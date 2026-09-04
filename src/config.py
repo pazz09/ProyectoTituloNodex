@@ -109,6 +109,54 @@ COL_HISTORY = "host_history"
 EMBEDDING_MODEL = os.environ.get("EMBEDDING_MODEL", "all-MiniLM-L6-v2")
 CHROMA_PATH = os.environ.get("CHROMA_PATH", "./data/chroma")
 
+# --- Integración MITRE ATT&CK / STIX 2.1 (§6.7, §8.7.2, §9 del informe; 4ta
+# colección de ChromaDB, agregada 3-sep-2026) ---
+# El informe cita "MITRE ATT&CK v15" como base de conocimiento, pero esa
+# versión ya quedó 4 releases atrás del catálogo oficial (decisión explícita
+# de Antonia, 3-sep-2026: usar la versión ACTUAL, no la citada en el texto
+# del informe -- hay que actualizar esa cita al redactar la sección
+# correspondiente). Se apunta al archivo "flotante" del repo oficial, que
+# siempre sirve la última release -- `preparar_mitre_attack.py` registra la
+# versión real (`x_mitre_version`) que encontró al correr, para que la
+# corrida quede documentada y sea reproducible aunque el archivo cambie más
+# adelante.
+COL_ATTACK = "attack_techniques"
+TOP_K_ATTACK = int(os.environ.get("TOP_K_ATTACK", "3"))
+ATTACK_MAX_CHARS_EMBED = int(os.environ.get("ATTACK_MAX_CHARS_EMBED", "800"))
+# Umbral de similitud propio para `attack_techniques` -- NO reutiliza
+# SIMILARITY_FLOOR (0.55). Ese umbral se calibró para comparar firmas de
+# lote contra firmas de lote (mismo "género" de texto, ver `patterns`);
+# acá se compara la firma de un lote contra prosa descriptiva de MITRE --
+# dominios de texto distintos, y `all-MiniLM-L6-v2` no da similitudes tan
+# altas entre dominios distintos aunque el contenido esté claramente
+# relacionado. Bug real encontrado (4-sep-2026): con SIMILARITY_FLOOR=0.55,
+# la colección quedaba cargada (697 técnicas) pero desconectada en la
+# práctica -- una consulta manual de "brute force ssh failed password
+# authentication" recupera T1110/Brute Force (similitud 0.523),
+# T1110.003/Password Spraying (0.404) y T1021.004/SSH (0.370) por búsqueda
+# semántica directa contra ChromaDB, pero las tres quedaban filtradas por
+# el umbral de 0.55 -- `retrieve_attack_techniques()` devolvía [] siempre,
+# para cualquier lote, incluido un ataque real. Ruido no relacionado
+# (HDFS/logs operativos benignos contra las mismas técnicas) midió
+# similitud 0.16-0.18 en la misma corrida -- bien por debajo de 0.35, así
+# que el nuevo umbral separa limpio señal real de ruido de dominio
+# distinto en los casos medidos.
+SIMILARITY_FLOOR_ATTACK = float(os.environ.get("SIMILARITY_FLOOR_ATTACK", "0.35"))
+MITRE_ATTACK_URL = os.environ.get(
+    "MITRE_ATTACK_URL",
+    "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/"
+    "enterprise-attack/enterprise-attack.json",
+)
+# Requisito de atribución del propio MITRE (NO es licencia Creative Commons,
+# pese a que algunas fuentes de terceros lo describan así -- ver
+# https://attack.mitre.org/resources/terms-of-use/, verificado 3-sep-2026).
+# Debe citarse textualmente donde se muestren o redistribuyan datos de
+# ATT&CK -- ver README, sección "Integración MITRE ATT&CK".
+MITRE_ATTACK_ATTRIBUTION = (
+    "MITRE ATT&CK® data reproduced and distributed with the permission of "
+    "The MITRE Corporation. © The MITRE Corporation."
+)
+
 
 def validate_config() -> None:
     """Lanza un error claro si falta alguna key obligatoria antes de correr el grafo."""

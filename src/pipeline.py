@@ -47,11 +47,15 @@ def _preparar_estado_inicial(raw_logs: str, thread_id: str | None = None):
         "necesita_rag": False,
         "usar_cve": False,
         "contexto_rag": [],
+        "tecnicas_mitre": [],
         "cves_encontrados": [],
         "comandos_mitigacion": [],
         "comandos_validos": True,
         "motivos_rechazo": [],
         "confianza": 0.0,
+        "hay_incidente": False,
+        "hay_anomalia": False,
+        "evaluacion_auditor": "",
         "intentos_correccion": 0,
     }
     config = {"configurable": {"thread_id": thread_id or f"incidente_{int(time.time())}"}}
@@ -140,6 +144,10 @@ def analizar_lote_stream(raw_logs: str, thread_id: str | None = None):
         "reporte": {
             "diagnostico": estado_final.get("diagnostico"),
             "confianza": confianza,
+            "hay_incidente": estado_final.get("hay_incidente"),
+            "hay_anomalia": estado_final.get("hay_anomalia"),
+            "evaluacion_auditor": estado_final.get("evaluacion_auditor"),
+            "tecnicas_mitre": estado_final.get("tecnicas_mitre"),
             "comandos_mitigacion": estado_final.get("comandos_mitigacion"),
             "comandos_validos": estado_final.get("comandos_validos"),
             "cves_encontrados": estado_final.get("cves_encontrados"),

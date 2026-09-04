@@ -1,0 +1,62 @@
+{
+  "dataset": "bgl",
+  "n_lotes": 4,
+  "lineas_por_lote": 120,
+  "umbral_confianza": 0.7,
+  "campo_veredicto": "hay_anomalia",
+  "metricas": {
+    "tp": 1,
+    "fp": 0,
+    "fn": 0,
+    "tn": 3,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  "resultados": [
+    {
+      "id": "bgl_ventana_0005",
+      "ground_truth": "normal",
+      "confianza": 1.0,
+      "hay_anomalia": false,
+      "hay_incidente": false,
+      "prediccion": "normal",
+      "diagnostico": "Los logs indican un funcionamiento normal del sistema. Se procesaron 120 eventos, principalmente del servicio bgl.kernel, y todos fueron clasificados como 'evento_normal'. No se observan anomalías, errores críticos ni indicios de actividad maliciosa o fallos de hardware.",
+      "n_comandos_mitigacion": 3,
+      "duracion_seg": 28.2
+    },
+    {
+      "id": "bgl_ventana_0006",
+      "ground_truth": "anomalo",
+      "confianza": 0.95,
+      "hay_anomalia": true,
+      "hay_incidente": false,
+      "prediccion": "anomalo",
+      "diagnostico": "Se han detectado 2 eventos críticos asociados al servicio bgl.kernel en un lapso de 4 días. Dado el formato de los logs (Blue Gene/L) y la total ausencia de direcciones IP, el incidente apunta a fallos de hardware, problemas de temperatura o errores internos del sistema operativo del supercomputador, más que a un ciberataque de red externo. Se requiere inspeccionar los mensajes de error específicos de los 2 eventos críticos para confirmar la causa del fallo en el nodo.",
+      "n_comandos_mitigacion": 6,
+      "duracion_seg": 31.0
+    },
+    {
+      "id": "bgl_ventana_0007",
+      "ground_truth": "normal",
+      "confianza": 1.0,
+      "hay_anomalia": false,
+      "hay_incidente": false,
+      "prediccion": "normal",
+      "diagnostico": "El lote de logs analizado muestra un comportamiento completamente normal del sistema. Se registraron 120 eventos, en su mayoría del servicio bgl.kernel, todos clasificados como 'evento_normal'. No se detectaron direcciones IP, errores, ni indicios de actividad maliciosa o anómala. Se trata de operaciones de rutina del sistema.",
+      "n_comandos_mitigacion": 0,
+      "duracion_seg": 20.8
+    },
+    {
+      "id": "bgl_ventana_0009",
+      "ground_truth": "normal",
+      "confianza": 1.0,
+      "hay_anomalia": false,
+      "hay_incidente": false,
+      "prediccion": "normal",
+      "diagnostico": "El lote de logs analizado contiene 120 eventos del sistema Blue Gene/L, predominantemente del servicio bgl.kernel. Todos los eventos han sido clasificados como normales (evento_normal) durante una ventana temporal de aproximadamente 6 días. No se detectan direcciones IP, anomalías, ni indicadores de compromiso. Se concluye que corresponde a la operación rutinaria y benigna del sistema, sin indicios de ataque.",
+      "n_comandos_mitigacion": 0,
+      "duracion_seg": 24.8
+    }
+  ]
+}

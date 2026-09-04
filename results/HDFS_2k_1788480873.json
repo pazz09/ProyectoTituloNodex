@@ -1,0 +1,30 @@
+{
+  "archivo_origen": "data/logs/HDFS_2k.log",
+  "formato_detectado": "hdfs",
+  "total_lineas": 2000,
+  "n_ips_distintas": 202,
+  "ventana_temporal": {
+    "inicio": "2008-11-09 20:36:15",
+    "fin": "2008-11-11 10:20:17"
+  },
+  "servicios": {
+    "hdfs.datanode": 1058,
+    "hdfs.fsnamesystem": 659,
+    "hdfs.datablockscanner": 20,
+    "hdfs.fsdataset": 263
+  },
+  "eventos": {
+    "evento_normal": 1920,
+    "evento_critico": 80
+  },
+  "diagnostico": "El análisis de los logs de HDFS indica un comportamiento normal de operaciones dentro de un clúster Hadoop. Las direcciones IP involucradas son internas (rango 10.x.x.x) y están interactuando de manera estándar con múltiples bloques de datos (identificados por 'blk_...'). Aunque se registran 80 eventos críticos y una cantidad muy baja de intentos fallidos, estos valores son típicos de errores operativos, latencia o fallos de comunicación habituales en sistemas distribuidos, y no representan un comportamiento anómalo. Todas las IPs tienen una reputación limpia. No se detectan patrones de ataque ni aplican técnicas de MITRE ATT&CK.",
+  "confianza": 0.95,
+  "hay_incidente": false,
+  "hay_anomalia": false,
+  "evaluacion_auditor": "El diagnóstico concluye de manera fundamentada que el comportamiento observado en los logs de HDFS es normal para un clúster Hadoop. Los eventos críticos y fallos registrados se atribuyen a la operatividad típica de sistemas distribuidos, como latencia o fallos de comunicación, y no constituyen anomalías ni incidentes de seguridad. Las IPs involucradas son internas y tienen buena reputación, sin indicios de actividad maliciosa.",
+  "tecnicas_mitre": [],
+  "comandos_mitigacion": [],
+  "comandos_validos": true,
+  "requiere_revision_humana": false,
+  "intentos_correccion": 1
+}
