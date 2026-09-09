@@ -323,6 +323,39 @@
     <ul id="cves-lista"><li style="color:var(--text-dim)">—</li></ul>
   </section>
 
+  <!-- Historial de corridas (Fase A). Se carga bajo demanda: si nadie lo
+       abre, no se consulta la base. -->
+  <section class="panel" id="historial-panel">
+    <h2 style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+      <span>4. Historial de corridas</span>
+      <button class="primary" id="btn-historial" style="font-size:13px; padding:6px 14px">
+        Ver historial
+      </button>
+    </h2>
+
+    <p class="hint-formatos" id="historial-vacio" style="display:none">
+      Todavía no hay corridas registradas. Analizá un lote y va a aparecer acá.
+    </p>
+
+    <div id="historial-tabla-wrap" style="display:none; overflow-x:auto">
+      <table id="historial-tabla" style="width:100%; border-collapse:collapse; font-size:13px">
+        <thead>
+          <tr style="text-align:left; color:var(--text-dim); font-size:11.5px;
+                     text-transform:uppercase; letter-spacing:.03em">
+            <th style="padding:6px 8px">Fecha</th>
+            <th style="padding:6px 8px">Archivo</th>
+            <th style="padding:6px 8px">Formato</th>
+            <th style="padding:6px 8px">Diagnóstico</th>
+            <th style="padding:6px 8px">Confianza</th>
+            <th style="padding:6px 8px">Veredicto</th>
+          </tr>
+        </thead>
+        <tbody id="historial-filas"></tbody>
+      </table>
+      <p class="hint-formatos" id="historial-pie" style="margin-top:10px"></p>
+    </div>
+  </section>
+
   <footer>NODEX · interfaz de demostración sobre <code>src/pipeline.py</code> · no reemplaza las corridas de evaluación del informe</footer>
 </div>
 
@@ -593,6 +626,98 @@
       btnAnalizar.disabled = false;
     }
   }
+
+  // --- Historial de corridas (Fase A) ---------------------------------
+  // Reusa `mostrarReporte()` para el detalle: la lógica de render del
+  // reporte final no se duplica. Por eso el endpoint de detalle devuelve
+  // el mismo shape que el evento `final` del streaming.
+
+  const btnHistorial = document.getElementById('btn-historial');
+  const historialFilas = document.getElementById('historial-filas');
+  const historialWrap = document.getElementById('historial-tabla-wrap');
+  const historialVacio = document.getElementById('historial-vacio');
+  const historialPie = document.getElementById('historial-pie');
+
+  function fechaCorta(iso) {
+    if (!iso) return '—';
+    // El backend guarda UTC en ISO-8601; se muestra en hora local.
+    const d = new Date(iso);
+    return isNaN(d) ? iso : d.toLocaleString();
+  }
+
+  function recortar(texto, n) {
+    if (!texto) return '—';
+    return texto.length > n ? texto.slice(0, n - 1) + '…' : texto;
+  }
+
+  function veredicto(c) {
+    if (c.estado === 'error') return '<span style="color:var(--err)">error</span>';
+    if (c.hay_incidente) return '<span style="color:var(--err)">incidente</span>';
+    if (c.hay_anomalia) return '<span style="color:var(--warn)">anomalía</span>';
+    return 'normal';
+  }
+
+  async function cargarHistorial() {
+    btnHistorial.disabled = true;
+    btnHistorial.textContent = 'Cargando…';
+    try {
+      const r = await fetch('/api/historial?limit=50');
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const datos = await r.json();
+
+      historialFilas.innerHTML = '';
+      if (!datos.corridas.length) {
+        historialVacio.style.display = 'block';
+        historialWrap.style.display = 'none';
+        return;
+      }
+      historialVacio.style.display = 'none';
+      historialWrap.style.display = 'block';
+
+      for (const c of datos.corridas) {
+        const tr = document.createElement('tr');
+        tr.style.cursor = 'pointer';
+        tr.style.borderTop = '1px solid var(--border)';
+        tr.title = 'Ver el detalle de esta corrida';
+        tr.innerHTML = `
+          <td style="padding:7px 8px; white-space:nowrap">${fechaCorta(c.timestamp)}</td>
+          <td style="padding:7px 8px">${recortar(c.archivo_origen, 24)}</td>
+          <td style="padding:7px 8px"><code>${c.formato_detectado ?? '—'}</code></td>
+          <td style="padding:7px 8px">${recortar(c.diagnostico, 70)}</td>
+          <td style="padding:7px 8px; font-family:var(--mono)">${
+            c.confianza == null ? '—' : c.confianza.toFixed(2)}</td>
+          <td style="padding:7px 8px">${veredicto(c)}</td>`;
+        tr.addEventListener('click', () => abrirDetalle(c.job_id));
+        historialFilas.appendChild(tr);
+      }
+      historialPie.textContent =
+        `Mostrando ${datos.corridas.length} de ${datos.total} corrida(s). ` +
+        'Hacé clic en una fila para ver su reporte completo.';
+    } catch (e) {
+      historialVacio.style.display = 'block';
+      historialVacio.textContent = `No se pudo cargar el historial: ${e.message}`;
+      historialWrap.style.display = 'none';
+    } finally {
+      btnHistorial.disabled = false;
+      btnHistorial.textContent = 'Ver historial';
+    }
+  }
+
+  async function abrirDetalle(jobId) {
+    try {
+      const r = await fetch(`/api/historial/${jobId}`);
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const c = await r.json();
+      // Mismo render que una corrida en vivo.
+      mostrarReporte(c);
+      document.getElementById('reporte').scrollIntoView({ behavior: 'smooth' });
+    } catch (e) {
+      errorBanner.style.display = 'block';
+      errorBanner.textContent = `No se pudo abrir la corrida: ${e.message}`;
+    }
+  }
+
+  btnHistorial.addEventListener('click', cargarHistorial);
 
   btnAnalizar.addEventListener('click', analizar);
 })();
