@@ -12,7 +12,9 @@ No define el diseño nuevo; registra el punto de partida.
 - Commit de referencia: `c090aef07a9fbc51d19f3554d76b59bfe940b404`.
 - Estado al comenzar el levantamiento: limpio y sincronizado con
   `origin/main`.
-- Pruebas definidas: 85 funciones `test_*`.
+- Pruebas definidas al levantar la línea base: 85 funciones `test_*`.
+- Pruebas al cierre del desarrollo (9-sep-2026): **317**, todas en verde.
+- Commit de la verificación de cierre: `dd73cd21eec47324e06166c285fa8771f1ad99a1`.
 
 ## Ejecución de la suite (resuelto el 4-sep-2026)
 
@@ -58,6 +60,54 @@ Comando de verificación:
 ```bash
 python -m pytest tests/ -q
 ```
+
+## Verificación de cierre (9-sep-2026)
+
+La nota original de este documento —«la suite no pudo ejecutarse durante este
+levantamiento porque el entorno no expone una instalación de Python»— queda
+resuelta. La suite se ejecutó contra el repositorio real, con las dependencias
+instaladas:
+
+```
+$ python -m pytest -q
+317 passed, 1 warning in 19.23s
+```
+
+**317 pruebas, 0 fallos.** El único aviso es un `StarletteDeprecationWarning`
+de `fastapi.testclient` sobre `httpx`, ajeno al código del proyecto.
+
+No hacen falta credenciales: la suite corre completa en un clon sin `.env`
+(ver «Ejecución de la suite» arriba). Tampoco cambia el resultado según el
+motor de preprocesamiento: **317 pasan tanto con `LOG_PREPROCESSING_ENGINE=v1`
+como con `=v2`**.
+
+Distribución por archivo:
+
+| Archivo | Pruebas |
+|---|---:|
+| `test_preprocessing_decoders.py` | 36 |
+| `test_preprocessing_heterogeneous.py` | 22 |
+| `test_preprocessing_validacion.py` | 21 |
+| `test_preprocessing_models.py` | 20 |
+| `test_preprocessing_config.py` | 20 |
+| `test_preprocessing_aggregation.py` | 20 |
+| `test_preprocessing_segmentation.py` | 17 |
+| `test_preprocessing_ground_truth.py` | 17 |
+| `test_preprocessing_consumidores.py` | 17 |
+| `test_llm.py` | 17 |
+| `test_eval_deteccion.py` | 17 |
+| `test_preprocessing_enrichers.py` | 15 |
+| `test_preprocessing_normalization.py` | 14 |
+| `test_preprocessing_integracion.py` | 13 |
+| `test_preparar_mitre_attack.py` | 11 |
+| `test_aggregation_csv.py` | 9 |
+| `test_agente_auditor_final.py` | 8 |
+| `test_resumen_prompt.py` | 6 |
+| `test_aggregation_multi_formato.py` | 5 |
+| `test_reputation.py` | 4 |
+| `test_validation.py` | 3 |
+| `test_aggregation.py` | 3 |
+| `test_ciclo_correccion.py` | 2 |
 
 ## Entradas de referencia disponibles
 

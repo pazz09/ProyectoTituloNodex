@@ -8,7 +8,11 @@ publica MITRE ATT&CK Navigator). Se apunta a la ruta "flotante"
 `enterprise-attack.json` en `master` -- siempre sirve la ÚLTIMA versión
 publicada, no la v15 que cita el informe (decisión explícita de Antonia,
 3-sep-2026: usar la versión actual, no la del texto -- hay que actualizar
-esa cita al redactar la sección correspondiente). Por eso este script
+esa cita al redactar la sección correspondiente).
+
+La corrida real del 4-sep-2026 cargó la **v19.2**: 697 técnicas, 222
+principales y 475 sub-técnicas, con la procedencia en
+`data/mitre_attack/provenance.json`. Por eso este script
 imprime y registra la versión real (`x_mitre_version` del objeto
 `x-mitre-collection` del bundle) que encontró al correr, para que la
 corrida quede documentada y sea reproducible aunque el archivo cambie

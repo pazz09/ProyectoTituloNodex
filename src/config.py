@@ -119,7 +119,9 @@ CHROMA_PATH = os.environ.get("CHROMA_PATH", "./data/chroma")
 # siempre sirve la última release -- `preparar_mitre_attack.py` registra la
 # versión real (`x_mitre_version`) que encontró al correr, para que la
 # corrida quede documentada y sea reproducible aunque el archivo cambie más
-# adelante.
+# adelante. La corrida real del 4-sep-2026 cargó la **v19.2** (697 técnicas:
+# 222 principales + 475 sub-técnicas); queda registrada en
+# `data/mitre_attack/provenance.json`.
 COL_ATTACK = "attack_techniques"
 TOP_K_ATTACK = int(os.environ.get("TOP_K_ATTACK", "3"))
 ATTACK_MAX_CHARS_EMBED = int(os.environ.get("ATTACK_MAX_CHARS_EMBED", "800"))

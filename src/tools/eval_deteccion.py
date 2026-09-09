@@ -359,6 +359,12 @@ def correr_evaluacion(
         })
 
     metricas = _metricas(resultados)
+    # El motor de preprocesamiento cambia lo que el detector observa: con
+    # v1, el flag de alerta de BGL alimentaba `evento_critico` y las
+    # métricas salían infladas por esa fuga. Sin registrar cuál se usó, dos
+    # archivos de `results/` parecen comparables y no lo son.
+    from src.config import LOG_PREPROCESSING_ENGINE, config_preprocesamiento_efectiva
+
     salida = {
         "dataset": dataset,
         "n_lotes": len(lotes),
@@ -366,6 +372,11 @@ def correr_evaluacion(
         "umbral_confianza": CONFIDENCE_THRESHOLD,
         "campo_veredicto": campo_veredicto,
         "prop_positivos": prop_positivos if dataset == "hdfs" else None,
+        "motor_preprocesamiento": LOG_PREPROCESSING_ENGINE,
+        "config_preprocesamiento": (
+            config_preprocesamiento_efectiva()
+            if LOG_PREPROCESSING_ENGINE == "v2" else None
+        ),
         "metricas": metricas,
         "resultados": resultados,
     }
