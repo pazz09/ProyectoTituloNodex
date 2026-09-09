@@ -1,0 +1,164 @@
+{
+  "baseline": "reglas_deterministicas",
+  "dataset": "hdfs",
+  "n_lotes": 20,
+  "lineas_por_lote": 120,
+  "prop_positivos": 0.5,
+  "umbrales": {
+    "proporcion_fallidos": 0.1,
+    "fallidos_por_ip": 5
+  },
+  "duracion_seg": 0.018,
+  "llamadas_llm": 0,
+  "metricas": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 10,
+    "tn": 10,
+    "precision": null,
+    "recall": 0.0,
+    "f1": null
+  },
+  "resultados": [
+    {
+      "id": "hdfs_positivo_000_blk_8483848473254499625",
+      "ground_truth": "anomalo",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "hdfs_positivo_001_blk_-1368324087589035770",
+      "ground_truth": "anomalo",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "hdfs_positivo_002_blk_-3734839878416656496",
+      "ground_truth": "anomalo",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "hdfs_positivo_003_blk_6552418180158772377",
+      "ground_truth": "anomalo",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "hdfs_positivo_004_blk_278357163850888",
+      "ground_truth": "anomalo",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "hdfs_positivo_005_blk_6888300867578983331",
+      "ground_truth": "anomalo",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "hdfs_positivo_006_blk_797263375273454863",
+      "ground_truth": "anomalo",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "hdfs_positivo_007_blk_4516306414837452219",
+      "ground_truth": "anomalo",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "hdfs_positivo_008_blk_8303413189200230139",
+      "ground_truth": "anomalo",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "hdfs_positivo_009_blk_2312679955495839894",
+      "ground_truth": "anomalo",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "hdfs_negativo_000",
+      "ground_truth": "normal",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "hdfs_negativo_001",
+      "ground_truth": "normal",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "hdfs_negativo_002",
+      "ground_truth": "normal",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "hdfs_negativo_003",
+      "ground_truth": "normal",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "hdfs_negativo_004",
+      "ground_truth": "normal",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "hdfs_negativo_005",
+      "ground_truth": "normal",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "hdfs_negativo_006",
+      "ground_truth": "normal",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "hdfs_negativo_007",
+      "ground_truth": "normal",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "hdfs_negativo_008",
+      "ground_truth": "normal",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "hdfs_negativo_009",
+      "ground_truth": "normal",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    }
+  ]
+}

@@ -13,7 +13,14 @@ Las líneas de ejemplo abajo son fragmentos reales de HDFS_2k.log y
 BGL_2k.log (no sintéticos), elegidos para cubrir esos tres problemas.
 """
 
-from src.tools.aggregation import aggregate_logs
+# Estos tests describen el comportamiento del AGREGADOR v1, así que
+# invocan `aggregate_logs_v1` directamente en vez de pasar por la
+# fachada `aggregate_logs`, que despacha según
+# LOG_PREPROCESSING_ENGINE. De ese modo siguen verificando lo que
+# deben verificar aunque el entorno tenga el motor v2 activo -- la
+# fidelidad con el prototipo del Seminario se conserva en v1, no en
+# el esquema nuevo (ver docs/plan_accion_preprocesamiento_heterogeneo.md).
+from src.tools.aggregation import aggregate_logs_v1 as aggregate_logs
 
 HDFS_MUESTRA = (
     "081109 203615 148 INFO dfs.DataNode$PacketResponder: PacketResponder 1 for block blk_38865049064139660 terminating\n"

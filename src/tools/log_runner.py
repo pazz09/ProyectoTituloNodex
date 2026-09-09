@@ -33,8 +33,19 @@ def run_from_file(path: str, thread_id: str | None = None, guardar: bool = True)
     resultado = analizar_lote(raw, thread_id=thread_id or f"{nombre_base}_{int(time.time())}")
 
     resumen_logs = resultado.get("resumen_logs", {})
+    # Versionado del resultado (Fase 11 del plan): sin esto, dos archivos
+    # de `results/` producidos por motores distintos parecen comparables y
+    # no lo son. Se guarda además la configuración efectiva del parsing,
+    # porque una salida distinta puede deberse al código o a la config.
+    from src.config import LOG_PREPROCESSING_ENGINE
+    metadatos = resultado.get("preprocessing_metadata") or {}
     salida = {
         "archivo_origen": path,
+        "motor_preprocesamiento": LOG_PREPROCESSING_ENGINE,
+        "schema_version": metadatos.get("schema_version", "1.0"),
+        "config_preprocesamiento": metadatos.get("config"),
+        "preprocesamiento": {k: v for k, v in metadatos.items()
+                             if k not in ("config", "segments")},
         "formato_detectado": resumen_logs.get("formato_detectado"),
         "total_lineas": resumen_logs.get("total_lineas"),
         "n_ips_distintas": resumen_logs.get("n_ips_distintas"),

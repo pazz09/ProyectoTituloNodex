@@ -391,6 +391,95 @@ Guarda la procedencia de la corrida (versión de ATT&CK encontrada, cantidad de 
 
 **Pendiente**: correr `preparar_mitre_attack.py` contra la API real de GitHub (necesita red real — pendiente para Antonia o su Claude Code local) para poblar `attack_techniques` de verdad, y confirmar de punta a punta con `log_runner.py` sobre un lote real que `tecnicas_mitre` llega no vacío al reporte final cuando corresponde. También queda pendiente el enlace formal CVE ↔ técnica ATT&CK que menciona el §9 del informe — no incluido en esta ronda.
 
+## Preprocesamiento heterogéneo (esquema v2)
+
+Implementa el plan de [`docs/plan_accion_preprocesamiento_heterogeneo.md`](docs/plan_accion_preprocesamiento_heterogeneo.md), completado en sus 14 fases el 4-sep-2026. Reemplaza el enfoque «detectar dataset → elegir un parser → procesar todo el lote» por una tubería genérica:
+
+```
+ingesta → segmentación → detección → decodificación → enriquecimiento → agregación
+```
+
+**El motor v1 sigue siendo el predeterminado.** `LOG_PREPROCESSING_ENGINE=v1` corre el agregador original sin cambios; `=v2` corre la tubería nueva y deriva de ella los campos que los consumidores esperan. La bandera permite comparar ambos sobre las mismas entradas y volver atrás sin tocar código.
+
+### Qué cambia
+
+| Aspecto | v1 | v2 |
+|---|---|---|
+| Formatos por lote | uno solo | varios, por segmentos o intercalados |
+| Formatos soportados | auth-log, HDFS, BGL, CSV | + JSON/JSONL, syslog RFC 3164/5424, CEF, LEEF, `clave=valor`, texto libre |
+| Fallback | auth-log (le atribuía semántica de sshd/apache a texto desconocido) | texto libre, que no inventa servicio ni evento |
+| Eventos multilínea | no | sí (stack traces, JSON multilínea) |
+| Líneas físicas vs. eventos | mismo contador | contadores separados |
+| Campo `usuario` | usuario, block id, nodo o id de flujo, según el adaptador | un campo por concepto; los identificadores van a `attributes` |
+| Registros sin IP | subrepresentados | eventos válidos con sus propias entidades |
+| Ground truth | el flag de BGL alimentaba `evento_critico` | canal separado, invisible para el detector |
+| Observabilidad | ninguna | cobertura, advertencias, segmentos y confianza por evento |
+
+### Estructura
+
+```
+src/preprocessing/
+├── models.py         # NormalizedEvent, RecordSegment, ParsingWarning, GroundTruthRecord
+├── result.py         # PreprocessingResult
+├── segmentation.py   # líneas físicas → registros lógicos
+├── detection.py      # decoder dominante por bloque, modos batch/chunked/line/hybrid
+├── normalization.py  # mapeo de campos por sinónimo, con prioridad declarada
+├── aggregation.py    # resumen v2 + derivación de los campos v1
+├── ground_truth.py   # canal separado de etiquetas
+├── prompt_context.py # cómo se interpretó el lote, para los prompts
+├── decoders/         # json, csv, syslog, key_value, cef, leef, text
+└── enrichers/        # hdfs, bgl, zeek, auth
+```
+
+### La fuga de ground truth que esto corrige
+
+El adaptador BGL de v1 leía el primer campo de cada línea —el flag de alerta que los curadores del dataset agregaron— y lo convertía en `evento_critico`, o sea en la feature que el detector observa. El sistema no detectaba anomalías: leía la respuesta escrita en la propia línea.
+
+Eso explica el **F1 = 1.00 medido sobre BGL** el 2-sep-2026, que parecía detección perfecta y era circularidad.
+
+En v2 el flag viaja al canal de ground truth y `evento_critico` se deriva de la severidad que el log declara y del resultado de la operación. Sobre `BGL_2k.log` eso da 403 eventos críticos en vez de 143: la señal es **ruidosa** —recall 1.00 y precisión 0.35 respecto de la etiqueta— o sea que el detector vuelve a tener trabajo real. Las métricas de HDFS y BGL deben recalcularse con el motor v2 antes de citarlas en el informe.
+
+Preservar el registro original y ocultar la etiqueta se contradicen cuando la etiqueta está escrita en la línea, como en BGL. Se resuelve conservando `raw` para auditoría y **prohibiendo que se muestree hacia el LLM** cuando el lote trae ground truth embebido; `verificar_aislamiento(..., revisar_raw=True)` lo comprueba.
+
+### Métricas medidas (4-sep-2026)
+
+| Dataset | Eventos | Cobertura | Fallback | Pérdida de líneas | s/1000 ev | Memoria | Fugas |
+|---|---|---|---|---|---|---|---|
+| HDFS_2k | 2000 | 1.00 | 0 % | 0 | 0,17 | 5,8 MB | 0 |
+| BGL_2k | 2000 | 1.00 | 0 % | 0 | 0,17 | 6,0 MB | 0 |
+| Lote mixto (8 formatos) | 176 | 0,86 | 14 % | 0 | 0,20 | 0,5 MB | 0 |
+
+Tokens del prompt de triage, sobre HDFS_2k: resumen completo 9842 → **acotado 1167 + 102 de contexto de preprocesamiento = 1269**. El acotamiento por cardinalidad de IPs sigue vigente y el contexto nuevo agrega ~100 tokens.
+
+**Cobertura cuenta el enriquecimiento, no solo el decoder.** HDFS y BGL no tienen estructura genérica —los reconoce un enriquecedor de producto, no un decoder—, así que medir solo por decoder les daba 0 % estando completamente interpretados, y el contexto llegaba a advertirle al agente que el lote «no pudo interpretarse» cuando sí se había interpretado.
+
+### Paridad con v1, verificada sobre los datasets reales
+
+**HDFS_2k coincide exactamente** en formato, líneas, servicios (mismos 4 con igual conteo), IPs (las mismas 202) y eventos críticos (80).
+
+**BGL_2k difiere en tres puntos, y los tres son mejoras:**
+
+- **11 IPs en vez de 2.** Las 9 nuevas son direcciones privadas reales que v1 perdía. Además, v2 descarta `1.0.0.102`, que v1 reportaba como IP y en realidad es un fragmento de la cadena de versión `hpcc-1.0.0.102905` dentro de una ruta: la regex de v1 no usa bordes de palabra y matchea un prefijo truncado.
+- **5 subsistemas en vez de 4**: reconoce también `bgl.discovery` y `bgl.hardware`.
+- **403 eventos críticos en vez de 143**: el efecto de quitar la fuga, descrito arriba.
+
+### Configuración
+
+Todas las variables `LOG_*` están documentadas en `.env.example`. Las de uso más frecuente:
+
+- `LOG_PREPROCESSING_ENGINE` — `v1` (predeterminado) o `v2`.
+- `LOG_PARSING_MODE` — `batch` | `chunked` | `line` | `hybrid` (recomendado).
+- `LOG_ENABLE_MULTILINE` — desactiva la unión de registros multilínea.
+- `LOG_MAX_FILE_BYTES` / `LOG_MAX_EVENTS` — cotas de volumen, aplicadas en la API y en la tubería.
+
+### Ambigüedad conocida y aceptada
+
+Una línea de texto plano **después** de un registro con timestamp es indistinguible de la segunda línea de un stack trace. La segmentación las une, que es lo correcto para el stack trace y discutible para un lote heterogéneo. Se resolvió a favor de no perder la relación entre líneas —el contenido queda íntegro en `raw` y las líneas contabilizadas—, con `LOG_ENABLE_MULTILINE=false` como escape. Los formatos autodelimitados (CEF, LEEF, JSON, filas CSV) nunca absorben la línea siguiente.
+
+### Divergencia deliberada entre motores
+
+El enriquecedor de autenticación de v2 extrae `admin` de `"for invalid user admin"`, mientras que `parse_log()` de v1 extrae `invalid` — la particularidad heredada del notebook que este README documenta más arriba como preservada a propósito. **El motor v1 la conserva intacta**; solo v2 hace la extracción correcta. Los tests que fijan comportamiento v1 invocan `aggregate_logs_v1` directamente, así que siguen verificando lo que deben aunque el entorno tenga v2 activo.
+
 ## Notas de fidelidad con el prototipo (`notebooks/LLM_Agente_INICIO.ipynb`)
 
 Además de lo anterior, la migración preserva dos particularidades de comportamiento del notebook que no están cubiertas por el informe (son detalles de implementación, no de arquitectura), documentadas y cubiertas por tests en `tests/`:

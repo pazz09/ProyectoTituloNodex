@@ -1,6 +1,14 @@
 """Tests de la agregación determinística (no requieren API keys)."""
 
-from src.tools.aggregation import aggregate_logs, firma_lote, parse_log
+# Estos tests describen el comportamiento del AGREGADOR v1, así que
+# invocan `aggregate_logs_v1` directamente en vez de pasar por la
+# fachada `aggregate_logs`, que despacha según
+# LOG_PREPROCESSING_ENGINE. De ese modo siguen verificando lo que
+# deben verificar aunque el entorno tenga el motor v2 activo -- la
+# fidelidad con el prototipo del Seminario se conserva en v1, no en
+# el esquema nuevo (ver docs/plan_accion_preprocesamiento_heterogeneo.md).
+from src.tools.aggregation import aggregate_logs_v1 as aggregate_logs
+from src.tools.aggregation import firma_lote, parse_log
 
 
 def test_parse_log_detecta_ip_y_servicio_sshd():

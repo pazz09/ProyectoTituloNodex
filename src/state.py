@@ -24,6 +24,14 @@ def limpiar_o_acumular(actuales: list, nuevos: list):
 
 class LogGuardState(TypedDict):
     resumen_logs: dict
+    # --- metadatos del preprocesamiento v2 (Fase 9 del plan) ---
+    # Deliberadamente NO se guardan los eventos normalizados completos: el
+    # estado del grafo se serializa en cada checkpoint, así que crecería en
+    # proporción al archivo de entrada. Acá van solo agregados y muestras
+    # acotadas (§14 del plan, riesgo de uso de memoria).
+    preprocessing_metadata: dict     # esquema, cobertura, decoders, productos, segmentos
+    parsing_warnings: list           # advertencias del preprocesamiento
+    raw_samples: list                # muestras de texto crudo, acotadas y filtradas
     firma: str
     diagnostico: str
     necesita_rag: bool               # Router 1: ¿va a ChromaDB?

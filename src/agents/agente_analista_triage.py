@@ -10,6 +10,7 @@ router `router_triage`.
 import json
 
 from src.llm import llm_json
+from src.preprocessing.prompt_context import contexto_preprocesamiento
 from src.state import LogGuardState
 from src.tools.resumen_prompt import acotar_resumen_para_prompt
 
@@ -61,10 +62,22 @@ def agente_analista_triage(state: LogGuardState) -> dict:
         # (hallazgo real 25-ago-2026). Esto NO toca state["resumen_logs"] --
         # solo el texto que ve el LLM aquí.
         resumen_para_llm = acotar_resumen_para_prompt(state["resumen_logs"])
+        # Cómo se interpretó el lote: formatos, cobertura y advertencias.
+        # Sin esto, el agente no puede saber que está diagnosticando sobre un
+        # resumen incompleto y responde con la misma seguridad que si todo
+        # se hubiera decodificado (Fase 10 del plan). Va vacío con el motor
+        # v1, donde estos metadatos no existen.
+        contexto_pre = contexto_preprocesamiento(
+            state.get("preprocessing_metadata"),
+            state.get("parsing_warnings"),
+            state.get("raw_samples"),
+            incluir_muestras=True,
+        )
         user_content = (
             f"RESUMEN DEL LOTE:\n{json.dumps(resumen_para_llm, ensure_ascii=False)}\n\n"
-            f"CONTEXTO HISTÓRICO (RAG):\n{contexto_txt}\n\n"
-            f"TÉCNICAS MITRE ATT&CK RELACIONADAS:\n{tecnicas_txt}"
+            + (f"{contexto_pre}\n\n" if contexto_pre else "")
+            + f"CONTEXTO HISTÓRICO (RAG):\n{contexto_txt}\n\n"
+            + f"TÉCNICAS MITRE ATT&CK RELACIONADAS:\n{tecnicas_txt}"
         )
         respuesta = llm_json(user_content, system=sys_instruction)
         return {

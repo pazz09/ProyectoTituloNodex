@@ -1,0 +1,136 @@
+{
+  "baseline": "reglas_deterministicas",
+  "dataset": "bgl",
+  "n_lotes": 16,
+  "lineas_por_lote": 120,
+  "prop_positivos": null,
+  "umbrales": {
+    "proporcion_fallidos": 0.1,
+    "fallidos_por_ip": 5
+  },
+  "duracion_seg": 0.009,
+  "llamadas_llm": 0,
+  "metricas": {
+    "tp": 4,
+    "fp": 0,
+    "fn": 6,
+    "tn": 6,
+    "precision": 1.0,
+    "recall": 0.4,
+    "f1": 0.5714285714285715
+  },
+  "resultados": [
+    {
+      "id": "bgl_ventana_0000",
+      "ground_truth": "anomalo",
+      "prediccion": "anomalo",
+      "regla": "proporcion_fallidos",
+      "detalle": "19/120 eventos fallidos (16% > 10%)"
+    },
+    {
+      "id": "bgl_ventana_0001",
+      "ground_truth": "anomalo",
+      "prediccion": "anomalo",
+      "regla": "proporcion_fallidos",
+      "detalle": "73/120 eventos fallidos (61% > 10%)"
+    },
+    {
+      "id": "bgl_ventana_0002",
+      "ground_truth": "anomalo",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "bgl_ventana_0003",
+      "ground_truth": "anomalo",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "bgl_ventana_0004",
+      "ground_truth": "normal",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "bgl_ventana_0005",
+      "ground_truth": "normal",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "bgl_ventana_0006",
+      "ground_truth": "anomalo",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "bgl_ventana_0007",
+      "ground_truth": "normal",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "bgl_ventana_0008",
+      "ground_truth": "anomalo",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "bgl_ventana_0009",
+      "ground_truth": "normal",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "bgl_ventana_0010",
+      "ground_truth": "anomalo",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "bgl_ventana_0011",
+      "ground_truth": "anomalo",
+      "prediccion": "anomalo",
+      "regla": "proporcion_fallidos",
+      "detalle": "13/120 eventos fallidos (11% > 10%)"
+    },
+    {
+      "id": "bgl_ventana_0012",
+      "ground_truth": "anomalo",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "bgl_ventana_0013",
+      "ground_truth": "normal",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "bgl_ventana_0014",
+      "ground_truth": "anomalo",
+      "prediccion": "anomalo",
+      "regla": "proporcion_fallidos",
+      "detalle": "18/120 eventos fallidos (15% > 10%)"
+    },
+    {
+      "id": "bgl_ventana_0015",
+      "ground_truth": "normal",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    }
+  ]
+}

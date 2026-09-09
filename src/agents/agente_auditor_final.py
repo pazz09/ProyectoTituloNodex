@@ -53,6 +53,7 @@ guarda en `results/eval_deteccion_*.json` junto al resto del veredicto.
 """
 
 from src.llm import llm_json
+from src.preprocessing.prompt_context import contexto_preprocesamiento
 from src.state import LogGuardState
 
 
@@ -78,11 +79,20 @@ def agente_auditor_final(state: LogGuardState) -> dict:
         'Responde SOLO en JSON: {"confianza": 0.0-1.0, "hay_anomalia": true/false, '
         '"hay_incidente": true/false, "evaluacion": "..."}'
     )
+    # La calidad de la evidencia depende de cuánto del lote se entendió: un
+    # diagnóstico sobre un lote con 30 % de cobertura no merece la misma
+    # confianza que uno sobre un lote completamente decodificado. Sin este
+    # dato el auditor no tiene cómo saberlo (Fase 10 del plan).
+    contexto_pre = contexto_preprocesamiento(
+        state.get("preprocessing_metadata"),
+        state.get("parsing_warnings"),
+    )
     user_content = (
         f"DIAGNÓSTICO: {state.get('diagnostico')}\n"
         f"COMANDOS VALIDADOS: {state.get('comandos_mitigacion')}\n"
         f"CVEs ENCONTRADOS: {len(state.get('cves_encontrados', []))} CVEs\n"
         f"CONTEXTO RAG: {'Sí' if state.get('contexto_rag') else 'No'}"
+        + (f"\n\n{contexto_pre}" if contexto_pre else "")
     )
 
     respuesta = llm_json(user_content, system=sys_instruction)

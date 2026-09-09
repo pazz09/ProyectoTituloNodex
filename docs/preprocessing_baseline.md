@@ -14,16 +14,50 @@ No define el diseño nuevo; registra el punto de partida.
   `origin/main`.
 - Pruebas definidas: 85 funciones `test_*`.
 
-## Limitación del entorno de verificación
+## Ejecución de la suite (resuelto el 4-sep-2026)
 
-La suite no pudo ejecutarse durante este levantamiento porque el entorno no
-expone una instalación de Python. Tampoco están disponibles `pytest`, `pip`,
-`uv`, Conda ni un entorno virtual local. Por lo tanto, la presencia de las 85
-pruebas no debe interpretarse como una corrida exitosa actual.
+La limitación registrada en el levantamiento inicial —«el entorno no expone una
+instalación de Python»— era en parte de entorno y en parte un **defecto real
+del código**, que quedó identificado y corregido como parte de la Fase 0.
 
-Antes de modificar el comportamiento productivo se debe disponer de Python,
-instalar `requirements.txt` y ejecutar `python -m pytest -q`. El resultado de
-esa corrida deberá agregarse a este documento.
+### Defecto encontrado
+
+`src/llm.py` invocaba `validate_config()` en **tiempo de importación**. Como
+consecuencia, en cualquier clon sin `.env` la COLECCIÓN de pytest abortaba con
+`OSError: Falta GEMINI_API_KEY` en cuatro archivos —`test_llm.py`,
+`test_eval_deteccion.py`, `test_ciclo_correccion.py` y
+`test_agente_auditor_final.py`—, dejando **44 de las 85 pruebas sin ejecutar**.
+Esas cuatro solo importan el módulo para simular el LLM; ninguna llama a la API.
+
+Esto además contradecía la afirmación del README de que la suite es
+determinística y no requiere API keys: solo lo era para 41 de las 85 pruebas.
+
+### Corrección aplicada
+
+La validación de credenciales se difirió al primer uso real, en `llm_json()`,
+mediante el helper `_asegurar_credenciales()`. El cliente `genai.Client` se
+sigue construyendo al importar —no valida la credencial ni toca la red al
+crearse— para que continúe siendo monkeypatcheable desde las pruebas. Los
+helpers internos (`_generate_con_backoff`) no exigen credencial, de modo que
+los tests puedan ejercitar el backoff y el modelo de respaldo con el cliente
+simulado.
+
+### Resultado verificado
+
+| Escenario | Resultado |
+|---|---|
+| Entorno con `.env` configurado | **85 passed** |
+| Clon limpio, sin `.env` ni variables de entorno | **85 passed** |
+| `llm_json()` sin credencial | Lanza `OSError` con el mensaje original |
+
+No se detectaron fallos preexistentes más allá del descrito. La suite es ahora
+reproducible sin credenciales, que era la condición de la puerta de la Fase 1.
+
+Comando de verificación:
+
+```bash
+python -m pytest tests/ -q
+```
 
 ## Entradas de referencia disponibles
 
@@ -146,6 +180,17 @@ de decodificadores, advertencias ni configuración efectiva de preprocesamiento.
 
 ## Puerta para comenzar la Fase 1
 
+Condición original: «debe resolverse la ejecución de la suite actual o dejar la
+excepción explícitamente aceptada».
+
+**Resuelta el 4-sep-2026.** La suite corre completa (85/85) tanto con `.env`
+configurado como en un clon limpio sin credenciales —ver «Ejecución de la
+suite» arriba—, de modo que no queda ninguna excepción que aceptar. Los
+criterios de aceptación de la Fase 0 quedan cubiertos:
+
+- Suite ejecutada y resultado documentado: **85 passed**, reproducible.
+- Fallos preexistentes identificados: uno, el de validación en importación, ya
+  corregido.
+- Contrato v1 explícito e inventario de consumidores: documentados arriba.
+
 La Fase 1 puede definir modelos nuevos sin sustituir todavía el contrato v1.
-Antes de integrar esos modelos al pipeline debe resolverse la ejecución de la
-suite actual o dejar la excepción explícitamente aceptada.

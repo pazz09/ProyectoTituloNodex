@@ -12,7 +12,14 @@ La primera muestra es una fila real del dataset (archivo
 `part-00000-...csv`, export Parquet→CSV vía Spark).
 """
 
-from src.tools.aggregation import aggregate_logs
+# Estos tests describen el comportamiento del AGREGADOR v1, así que
+# invocan `aggregate_logs_v1` directamente en vez de pasar por la
+# fachada `aggregate_logs`, que despacha según
+# LOG_PREPROCESSING_ENGINE. De ese modo siguen verificando lo que
+# deben verificar aunque el entorno tenga el motor v2 activo -- la
+# fidelidad con el prototipo del Seminario se conserva en v1, no en
+# el esquema nuevo (ver docs/plan_accion_preprocesamiento_heterogeneo.md).
+from src.tools.aggregation import aggregate_logs_v1 as aggregate_logs
 
 _UWF_CABECERA = (
     "community_id,conn_state,duration,history,src_ip_zeek,src_port_zeek,dest_ip_zeek,"

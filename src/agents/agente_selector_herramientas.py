@@ -20,9 +20,23 @@ def agente_selector_herramientas(state: LogGuardState) -> dict:
         "query_cve es útil cuando el diagnóstico menciona un servicio o vulnerabilidad específica. "
         'Responde SOLO en JSON: {"usar_cve": true/false, "razon": "..."}'
     )
+    # El selector decidía mirando solo `servicios`, que con el esquema v2
+    # puede traer nombres internos (`hdfs.datanode`) inútiles para buscar
+    # CVEs. Se le agregan producto, categoría y protocolo, que son las
+    # señales con las que la NVD indexa (Fase 10 del plan).
+    metadatos = state.get("preprocessing_metadata") or {}
+    resumen = state.get("resumen_logs") or {}
+    senales = [f"servicios={resumen.get('servicios', {})}"]
+    for etiqueta, clave in (("productos", "product_distribution"),
+                            ("categorias", "event_categories"),
+                            ("severidades", "severity_distribution")):
+        valor = metadatos.get(clave)
+        if valor:
+            senales.append(f"{etiqueta}={valor}")
+
     user_content = (
         f"DIAGNÓSTICO ACTUAL: {state.get('diagnostico', 'Sin diagnóstico')}\n"
-        f"RESUMEN DEL LOTE: servicios={state['resumen_logs'].get('servicios', {})}"
+        f"RESUMEN DEL LOTE: {' '.join(senales)}"
     )
 
     respuesta = llm_json(user_content, system=sys_instruction)

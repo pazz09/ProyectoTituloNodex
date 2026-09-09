@@ -232,6 +232,20 @@
         <div><dt>IPs distintas</dt><dd id="r-ips">—</dd></div>
         <div><dt>Ventana temporal</dt><dd id="r-ventana">—</dd></div>
       </dl>
+
+      <!-- Preprocesamiento v2: solo aparece si el motor lo informa.
+           Distingue líneas físicas de eventos lógicos y muestra cuánto del
+           lote se entendió, para que un parsing parcial no pase por uno
+           completo (Fase 12 del plan). -->
+      <div id="preproc" style="display:none">
+        <dl class="grid">
+          <div><dt>Eventos / líneas físicas</dt><dd id="p-eventos">—</dd></div>
+          <div><dt>Cobertura del parsing</dt><dd id="p-cobertura">—</dd></div>
+          <div><dt>Formatos</dt><dd id="p-decoders">—</dd></div>
+          <div><dt>Segmentos</dt><dd id="p-segmentos">—</dd></div>
+        </dl>
+        <p id="p-advertencias" class="hint-formatos" style="display:none"></p>
+      </div>
     </div>
   </section>
 
@@ -423,6 +437,44 @@
     lineaEventos.scrollTop = lineaEventos.scrollHeight;
   }
 
+  // Muestra cómo se interpretó el archivo. Con el motor v1 estos datos no
+  // existen y el bloque queda oculto, en vez de mostrar campos vacíos que
+  // parecerían un error.
+  function mostrarPreprocesamiento(meta, advertencias) {
+    const caja = document.getElementById('preproc');
+    if (!meta || !Object.keys(meta).length) { caja.style.display = 'none'; return; }
+    caja.style.display = 'block';
+
+    document.getElementById('p-eventos').textContent =
+      `${meta.total_eventos ?? '—'} / ${meta.total_lineas_fisicas ?? '—'}`;
+
+    const parsing = meta.parsing || {};
+    const cobertura = typeof parsing.coverage === 'number'
+      ? `${Math.round(parsing.coverage * 100)}%` : '—';
+    const fallback = parsing.fallback_events ?? 0;
+    document.getElementById('p-cobertura').textContent =
+      fallback ? `${cobertura} (${fallback} en texto libre)` : cobertura;
+
+    const decoders = meta.decoder_distribution || {};
+    const nombres = Object.keys(decoders);
+    document.getElementById('p-decoders').textContent = nombres.length
+      ? (nombres.length > 1 ? `mixto: ${nombres.map(n => `${n}(${decoders[n]})`).join(', ')}`
+                            : nombres[0])
+      : '—';
+
+    document.getElementById('p-segmentos').textContent = (meta.segments || []).length || '—';
+
+    const graves = (advertencias || []).filter(w => w.severidad !== 'info');
+    const parrafo = document.getElementById('p-advertencias');
+    if (graves.length) {
+      parrafo.style.display = 'block';
+      parrafo.textContent = `${graves.length} advertencia(s): ` +
+        graves.slice(0, 3).map(w => w.mensaje).join(' · ');
+    } else {
+      parrafo.style.display = 'none';
+    }
+  }
+
   function manejarEvento(ev) {
     if (ev.tipo === 'inicio') {
       resumenLote.style.display = 'block';
@@ -432,6 +484,7 @@
       const vt = ev.resumen.ventana_temporal || {};
       document.getElementById('r-ventana').textContent = vt.inicio && vt.fin ? `${vt.inicio} → ${vt.fin}` : '—';
       agregarLineaEvento(`Lote agregado: ${ev.resumen.total_lineas} líneas, ${ev.resumen.n_ips_distintas} IP(s), formato "${ev.resumen.formato_detectado}".`);
+      mostrarPreprocesamiento(ev.preprocesamiento, ev.advertencias);
       return;
     }
     if (ev.tipo === 'nodo') {

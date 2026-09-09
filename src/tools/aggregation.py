@@ -423,6 +423,31 @@ def _registrar_ip(por_ip: dict, ip: str, info: dict, rol: str) -> None:
 
 
 def aggregate_logs(raw: str) -> dict:
+    """Fachada de compatibilidad: devuelve el resumen v1 del lote.
+
+    Es el punto donde la migración se activa o se revierte. Según
+    `LOG_PREPROCESSING_ENGINE`:
+
+    - ``v1`` (por defecto): corre el agregador original de este módulo, sin
+      cambios de comportamiento.
+    - ``v2``: corre la tubería de `src/preprocessing/` y **deriva** los
+      campos v1 desde su agregación, sin volver a parsear.
+
+    La bandera existe para poder comparar los dos motores sobre las mismas
+    entradas y para volver atrás sin tocar código si algo regresiona (§12 y
+    §13 del plan). No debe pasar a ``v2`` hasta que la Fase 13 valide la
+    migración completa.
+    """
+    from src.config import LOG_PREPROCESSING_ENGINE
+
+    if LOG_PREPROCESSING_ENGINE == "v2":
+        from src.preprocessing.aggregation import derivar_v1
+        from src.preprocessing.pipeline import preprocesar
+        return derivar_v1(preprocesar(raw))
+    return aggregate_logs_v1(raw)
+
+
+def aggregate_logs_v1(raw: str) -> dict:
     """Preprocesa TODO el lote de forma determinística (sin LLM). Detecta
     el formato una vez por lote y usa el adaptador correspondiente para
     cada línea.
@@ -475,9 +500,39 @@ def aggregate_logs(raw: str) -> dict:
     return resumen
 
 
-def firma_lote(summary: dict) -> str:
-    """Firma compacta del lote para embeddings/memoria (no el blob crudo)."""
+def firma_lote(summary: dict, metadatos: dict | None = None) -> str:
+    """Firma compacta del lote para embeddings/memoria (no el blob crudo).
+
+    **Va prefijada por versión de esquema** (Fase 11 del plan). Una firma v1
+    y una v2 describen el mismo lote con vocabularios distintos, así que sus
+    embeddings no son comparables: buscar los patrones más parecidos
+    mezclando ambas devolvería vecinos sin sentido. El prefijo hace que una
+    búsqueda v2 no recupere firmas v1 por casualidad, y deja el dato
+    visible en la propia cadena para poder auditar la memoria.
+
+    Con `metadatos` (el resumen v2) la firma incorpora además decoders,
+    productos, severidades y cobertura, que son las señales que el esquema
+    nuevo aporta y que el v1 no tenía cómo expresar.
+    """
     svc = ",".join(f"{k}:{v}" for k, v in summary.get("servicios", {}).items())
     ev = ",".join(f"{k}:{v}" for k, v in summary.get("eventos", {}).items())
-    return (f"lineas={summary.get('total_lineas')} ips={summary.get('n_ips_distintas')} "
+    base = (f"lineas={summary.get('total_lineas')} "
+            f"ips={summary.get('n_ips_distintas')} "
             f"servicios=[{svc}] eventos=[{ev}]")
+
+    if not metadatos:
+        return f"v1|{base}"
+
+    def _dist(clave: str) -> str:
+        return ",".join(f"{k}:{v}" for k, v in (metadatos.get(clave) or {}).items())
+
+    cobertura = (metadatos.get("parsing") or {}).get("coverage")
+    return (
+        f"v2|{base} "
+        f"eventos_totales={metadatos.get('total_eventos')} "
+        f"decoders=[{_dist('decoder_distribution')}] "
+        f"productos=[{_dist('product_distribution')}] "
+        f"severidades=[{_dist('severity_distribution')}] "
+        f"categorias=[{_dist('event_categories')}] "
+        f"cobertura={cobertura}"
+    )

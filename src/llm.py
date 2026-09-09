@@ -32,11 +32,35 @@ from src.config import (
     validate_config,
 )
 
-validate_config()
+# La validación de credenciales se DIFIERE al primer uso real de la API
+# (ver `_asegurar_credenciales`). Importar este módulo no debe exigir una
+# GEMINI_API_KEY: `validate_config()` se llamaba acá, en tiempo de
+# importación, y eso hacía fallar la COLECCIÓN de pytest en cualquier clon
+# sin `.env` -- 44 de los 85 tests (test_llm, test_eval_deteccion,
+# test_ciclo_correccion, test_agente_auditor_final) solo importan este
+# módulo para simular el LLM, nunca lo llaman de verdad. Bloqueo real
+# reportado en la Fase 0 del plan de preprocesamiento heterogéneo
+# (docs/plan_accion_preprocesamiento_heterogeneo.md §18) y reproducido el
+# 4-sep-2026 sobre un clon limpio.
+#
+# El cliente se construye igual al importar -- `genai.Client` no valida la
+# credencial ni toca la red al crearse -- para que siga siendo un objeto de
+# módulo que los tests puedan monkeypatchear (`llm_mod.client.models`).
 client = genai.Client(
-    api_key=GEMINI_API_KEY,
+    api_key=GEMINI_API_KEY or "no-configurada",
     http_options=types.HttpOptions(timeout=int(TIMEOUT_SOLICITUD_SEG * 1000)),
 )
+
+
+def _asegurar_credenciales() -> None:
+    """Valida que exista una API key antes de la primera llamada real.
+
+    Se invoca desde `llm_json`, no al importar: así el error
+    sigue apareciendo —con el mismo mensaje de siempre— para quien intente
+    usar el sistema sin configurarlo, pero no para quien solo corre la
+    suite determinista.
+    """
+    validate_config()
 
 
 def _safe_json_parse(text: str):
@@ -242,6 +266,10 @@ def llm_json(prompt: str, system: str = None, retries: int = 1) -> dict:
     - Cambio automático a un modelo de respaldo si el principal agota sus
       reintentos por un error reconocido (ver `_generate_con_fallback`).
     """
+    # Frontera de uso real: acá sí hace falta una credencial. Los helpers
+    # internos (`_generate_con_backoff`) no la exigen, para que los tests
+    # puedan ejercitar el backoff con el cliente simulado sin configurar nada.
+    _asegurar_credenciales()
     cfg = types.GenerateContentConfig(
         temperature=TEMPERATURE,
         response_mime_type="application/json",

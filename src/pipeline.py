@@ -32,16 +32,71 @@ def get_ip_cache():
     return _ip_cache
 
 
+def _metadatos_preprocesamiento(raw_logs: str) -> tuple[dict, list, list]:
+    """Metadatos del preprocesamiento v2 para el estado del grafo.
+
+    Devuelve (metadatos, advertencias, muestras). Con el motor v1 activo
+    devuelve estructuras vacías: la información no existe en ese esquema y
+    fabricarla sería peor que no tenerla.
+
+    **No se devuelven los eventos normalizados.** El estado de LangGraph se
+    serializa en cada checkpoint, así que guardarlos haría crecer el estado
+    en proporción al archivo (§14 del plan). Solo agregados y muestras.
+    """
+    from src.config import LOG_MAX_RAW_SAMPLES, LOG_PREPROCESSING_ENGINE
+
+    if LOG_PREPROCESSING_ENGINE != "v2":
+        return {}, [], []
+
+    from src.preprocessing.aggregation import agregar_v2
+    from src.preprocessing.pipeline import preprocesar
+
+    resultado = preprocesar(raw_logs)
+    v2 = agregar_v2(resultado, max_muestras=LOG_MAX_RAW_SAMPLES)
+
+    metadatos = {
+        "schema_version": v2["schema_version"],
+        "total_lineas_fisicas": v2["total_lineas_fisicas"],
+        "total_eventos": v2["total_eventos"],
+        "decoder_distribution": v2["decoder_distribution"],
+        "product_distribution": v2["product_distribution"],
+        "severity_distribution": v2["severity_distribution"],
+        "event_categories": v2["event_categories"],
+        "parsing": v2["parsing"],
+        "segments": v2["segments"],
+        "entities_resumen": {k: len(v) for k, v in v2["entities"].items()},
+        "config": resultado.config,
+    }
+    # Las muestras ya vienen filtradas por `agregar_v2`: se omiten si el
+    # lote trae ground truth embebido en la línea.
+    muestras = v2["samples"].get("por_decoder", {})
+    muestras_lista = [{"decoder": k, "texto": v} for k, v in muestras.items()]
+    if "nota" in v2["samples"]:
+        muestras_lista.append({"decoder": None, "texto": v2["samples"]["nota"]})
+    return metadatos, v2["warnings"], muestras_lista
+
+
 def _preparar_estado_inicial(raw_logs: str, thread_id: str | None = None):
     """Agregación determinística + corroboración de IPs, común a
     `analizar_lote` (CLI/informe) y `analizar_lote_stream` (interfaz web,
     ver `src/api/main.py`). Devuelve (input_inicial, config, firma)."""
     resumen = aggregate_logs(raw_logs)
-    resumen["reputacion_ips"] = corroborar_ips(resumen["ips_distintas"], get_ip_cache())
-    firma = firma_lote(resumen)
+
+    # La reputación se consulta SOLO sobre entidades de tipo IP. Con el
+    # esquema v2 un lote puede no tener ninguna —un log de aplicación, por
+    # ejemplo— y eso ya no impide analizarlo: antes, `ips_distintas` vacío
+    # dejaba el resumen prácticamente sin contenido.
+    ips = resumen.get("ips_distintas") or []
+    resumen["reputacion_ips"] = corroborar_ips(ips, get_ip_cache()) if ips else {}
+
+    metadatos, advertencias, muestras = _metadatos_preprocesamiento(raw_logs)
+    firma = firma_lote(resumen, metadatos)
 
     input_inicial = {
         "resumen_logs": resumen,
+        "preprocessing_metadata": metadatos,
+        "parsing_warnings": advertencias,
+        "raw_samples": muestras,
         "firma": firma,
         "diagnostico": "",
         "necesita_rag": False,
@@ -124,6 +179,13 @@ def analizar_lote_stream(raw_logs: str, thread_id: str | None = None):
             "eventos": input_inicial["resumen_logs"].get("eventos"),
             "ventana_temporal": input_inicial["resumen_logs"].get("ventana_temporal"),
         },
+        # Cómo se interpretó el archivo (Fase 12 del plan): permite que la
+        # interfaz distinga un parsing completo de uno parcial o en
+        # fallback, en vez de mostrar un único "formato detectado" que con
+        # lotes heterogéneos sería una simplificación engañosa. Va vacío
+        # con el motor v1.
+        "preprocesamiento": input_inicial.get("preprocessing_metadata") or {},
+        "advertencias": input_inicial.get("parsing_warnings") or [],
     }
 
     try:

@@ -1,0 +1,99 @@
+"""Enriquecedor de BlueGene/L (Fase 6 del plan).
+
+Extrae lo que el adaptador `_BglAdapter` del esquema v1 conocía: nodo del
+clúster, subsistema RAS y severidad declarada.
+
+**El cambio más importante de toda la migración está acá.** En v1, el
+primer campo de la línea —el flag de alerta que los curadores del dataset
+agregaron: `-` para no-alerta, un código como `KERNDTLB` para alerta— se
+traducía directamente en `evento_critico`, o sea en la feature que el
+detector observa. Eso es fuga de ground truth: el sistema "detectaba"
+anomalías leyendo la respuesta que el dataset traía escrita.
+
+Y no era una sutileza teórica. Explicaba el F1 = 1.00 medido sobre BGL,
+que parecía una detección perfecta y en realidad medía si el LLM repetía
+fielmente una señal que el parser ya le había entregado.
+
+Acá el flag sale por `extraer_ground_truth()` hacia el canal separado, y
+**no** queda en el evento. Los campos que sí quedan son los que el log
+declara por sí mismo: nodo, subsistema y severidad.
+"""
+
+import re
+
+from src.preprocessing.enrichers.base import Enricher
+from src.preprocessing.models import GroundTruthRecord, NormalizedEvent
+
+# flag epoch fecha nodo timestamp nodo_repetido RAS subsistema severidad mensaje
+_BGL_RE = re.compile(
+    r"^(?P<flag>\S+)\s+(?P<epoch>\d+)\s+(?P<fecha>\d{4}\.\d{2}\.\d{2})\s+"
+    r"(?P<nodo>\S+)\s+(?P<ts>\d{4}-\d{2}-\d{2}-\d{2}\.\d{2}\.\d{2}\.\d+)\s+"
+    r"(?P<nodo2>\S+)\s+(?P<tipo>\S+)\s+(?P<subsistema>\S+)\s+"
+    r"(?P<severidad>\S+)\s+(?P<msg>.*)$"
+)
+
+_SUBSISTEMA_A_SERVICIO = {
+    "KERNEL": "bgl.kernel",
+    "APP": "bgl.app",
+    "MMCS": "bgl.mmcs",
+    "DISCOVERY": "bgl.discovery",
+    "HARDWARE": "bgl.hardware",
+    "LINKCARD": "bgl.linkcard",
+    "MONITOR": "bgl.monitor",
+}
+
+# Valor del primer campo que significa "esta línea no es una alerta".
+SIN_ALERTA = "-"
+
+
+class BglEnricher(Enricher):
+    nombre = "bgl"
+    producto = "BlueGene/L"
+
+    def aplica(self, evento: NormalizedEvent) -> bool:
+        return bool(_BGL_RE.match(evento.raw.split("\n", 1)[0]))
+
+    def enriquecer(self, evento: NormalizedEvent) -> NormalizedEvent:
+        m = _BGL_RE.match(evento.raw.split("\n", 1)[0])
+        if not m:
+            return evento
+
+        evento.timestamp = m.group("ts")
+        evento.product = self.producto
+        evento.vendor = "IBM"
+        evento.source_host = m.group("nodo")
+        subsistema = m.group("subsistema")
+        evento.service_name = _SUBSISTEMA_A_SERVICIO.get(
+            subsistema, f"bgl.{subsistema.lower()}")
+        evento.severity = m.group("severidad")
+        evento.message = m.group("msg") or evento.message
+        evento.attributes["bgl_subsistema"] = subsistema
+        evento.attributes["bgl_tipo"] = m.group("tipo")
+        evento.attributes["bgl_nodo"] = m.group("nodo")
+        # El flag NO se copia al evento: es la etiqueta del dataset y viaja
+        # por `extraer_ground_truth()`.
+        return evento
+
+    def extraer_ground_truth(self, evento: NormalizedEvent) -> GroundTruthRecord | None:
+        """El flag de alerta del dataset, hacia el canal separado.
+
+        Se lee del primer token del texto crudo, no del match completo:
+        algunas variantes de línea (`NULL DISCOVERY ...` en vez de
+        `RAS KERNEL INFO ...`) no matchean el patrón entero, y leer el flag
+        solo del match perdería esas alertas. Es el mismo hallazgo que se
+        corrigió en el adaptador v1 el 24-ago-2026.
+        """
+        partes = evento.raw.split(None, 1)
+        if not partes:
+            return None
+        flag = partes[0]
+        # La clave se arma SOLO con lo disponible antes del enriquecimiento:
+        # `bgl_nodo` lo escribe `enriquecer()`, que corre después, así que
+        # usarlo acá daría siempre el fallback. BGL etiqueta por evento, y
+        # el número de registro es su identificador natural.
+        return GroundTruthRecord(
+            key=str(evento.record_number),
+            label="Alert" if flag != SIN_ALERTA else "Normal",
+            scope="evento",
+            source="bgl",
+        )

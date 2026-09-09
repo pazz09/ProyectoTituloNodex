@@ -158,6 +158,181 @@ MITRE_ATTACK_ATTRIBUTION = (
 )
 
 
+# --- Preprocesamiento heterogéneo de logs, esquema v2 (Fase 2 del plan;
+# ver docs/plan_accion_preprocesamiento_heterogeneo.md §9) ---
+#
+# Estas variables NO afectan todavía al parser v1: `src/tools/aggregation.py`
+# sigue funcionando exactamente igual. Se externalizan acá para que la
+# tubería nueva, cuando exista, no tenga decisiones cableadas en el código y
+# para poder registrar la configuración efectiva de cada corrida (sin eso,
+# dos corridas con resultados distintos no son comparables).
+#
+# A diferencia del resto del archivo, este bloque parsea con helpers que
+# validan: un valor presente pero inválido lanza un error que NOMBRA la
+# variable, en vez de un `ValueError: invalid literal for int()` sin
+# contexto. Una variable ausente usa su default y no lanza -- importar
+# `src.config` en un clon limpio no debe fallar (lección de la Fase 0).
+
+
+def _env_int(nombre: str, default: int) -> int:
+    crudo = os.environ.get(nombre)
+    if crudo is None or crudo.strip() == "":
+        return default
+    try:
+        return int(crudo)
+    except ValueError:
+        raise ValueError(
+            f"{nombre} debe ser un entero; se recibió {crudo!r}"
+        ) from None
+
+
+def _env_float(nombre: str, default: float) -> float:
+    crudo = os.environ.get(nombre)
+    if crudo is None or crudo.strip() == "":
+        return default
+    try:
+        return float(crudo)
+    except ValueError:
+        raise ValueError(
+            f"{nombre} debe ser un número; se recibió {crudo!r}"
+        ) from None
+
+
+def _env_bool(nombre: str, default: bool) -> bool:
+    crudo = os.environ.get(nombre)
+    if crudo is None or crudo.strip() == "":
+        return default
+    valor = crudo.strip().lower()
+    if valor in ("1", "true", "yes", "si", "sí", "on"):
+        return True
+    if valor in ("0", "false", "no", "off"):
+        return False
+    raise ValueError(
+        f"{nombre} debe ser booleano (true/false); se recibió {crudo!r}"
+    )
+
+
+# Modos de detección de formato (§9 del plan):
+#   batch   -- un decoder dominante para todo el lote (comportamiento v1)
+#   chunked -- un decoder por bloque de LOG_DETECTION_CHUNK_SIZE registros
+#   line    -- detección independiente por registro (el más lento)
+#   hybrid  -- bloques, reprocesando individualmente los registros rechazados
+MODOS_PARSING = ("batch", "chunked", "line", "hybrid")
+
+# Motor de preprocesamiento activo. Bandera de migración (§12 del plan): NO
+# debe pasar a "v2" hasta que la Fase 8 derive los campos v1 desde la
+# agregación nueva, ni eliminarse "v1" antes de completar la Fase 13.
+MOTORES_PREPROCESAMIENTO = ("v1", "v2")
+
+LOG_PREPROCESSING_ENGINE = os.environ.get("LOG_PREPROCESSING_ENGINE", "v1")
+LOG_PARSING_MODE = os.environ.get("LOG_PARSING_MODE", "hybrid")
+LOG_DETECTION_CHUNK_SIZE = _env_int("LOG_DETECTION_CHUNK_SIZE", 50)
+# Confianza mínima para aceptar un decoder como dominante de un bloque.
+LOG_FORMAT_CONFIDENCE_THRESHOLD = _env_float("LOG_FORMAT_CONFIDENCE_THRESHOLD", 0.50)
+# Por debajo de esto, un registro del bloque se reprocesa individualmente
+# en vez de aceptarse con el decoder dominante.
+LOG_LINE_FALLBACK_THRESHOLD = _env_float("LOG_LINE_FALLBACK_THRESHOLD", 0.70)
+
+LOG_ENABLE_MULTILINE = _env_bool("LOG_ENABLE_MULTILINE", True)
+LOG_PRESERVE_RAW = _env_bool("LOG_PRESERVE_RAW", True)
+LOG_MAX_RAW_SAMPLES = _env_int("LOG_MAX_RAW_SAMPLES", 20)
+LOG_MAX_UNMAPPED_FIELDS = _env_int("LOG_MAX_UNMAPPED_FIELDS", 100)
+
+LOG_NORMALIZATION_SCHEMA_VERSION = os.environ.get("LOG_NORMALIZATION_SCHEMA_VERSION", "2.0")
+LOG_MAX_FILE_BYTES = _env_int("LOG_MAX_FILE_BYTES", 52428800)   # 50 MiB
+LOG_MAX_EVENTS = _env_int("LOG_MAX_EVENTS", 100000)
+
+
+def validar_config_preprocesamiento() -> None:
+    """Valida rangos y combinaciones de las variables `LOG_*`.
+
+    Se invoca explícitamente desde la tubería de preprocesamiento, NO al
+    importar el módulo: importar `src.config` con una configuración
+    incompleta no debe romper la suite (ver `docs/preprocessing_baseline.md`,
+    "Ejecución de la suite").
+    """
+    problemas: list[str] = []
+
+    if LOG_PREPROCESSING_ENGINE not in MOTORES_PREPROCESAMIENTO:
+        problemas.append(
+            f"LOG_PREPROCESSING_ENGINE inválido: {LOG_PREPROCESSING_ENGINE!r}. "
+            f"Valores admitidos: {', '.join(MOTORES_PREPROCESAMIENTO)}"
+        )
+    if LOG_PARSING_MODE not in MODOS_PARSING:
+        problemas.append(
+            f"LOG_PARSING_MODE inválido: {LOG_PARSING_MODE!r}. "
+            f"Valores admitidos: {', '.join(MODOS_PARSING)}"
+        )
+    if LOG_DETECTION_CHUNK_SIZE < 1:
+        problemas.append(
+            f"LOG_DETECTION_CHUNK_SIZE debe ser >= 1; es {LOG_DETECTION_CHUNK_SIZE}"
+        )
+    for nombre, valor in (
+        ("LOG_FORMAT_CONFIDENCE_THRESHOLD", LOG_FORMAT_CONFIDENCE_THRESHOLD),
+        ("LOG_LINE_FALLBACK_THRESHOLD", LOG_LINE_FALLBACK_THRESHOLD),
+    ):
+        if not (0.0 <= valor <= 1.0):
+            problemas.append(f"{nombre} debe estar entre 0.0 y 1.0; es {valor}")
+    for nombre, valor in (
+        ("LOG_MAX_RAW_SAMPLES", LOG_MAX_RAW_SAMPLES),
+        ("LOG_MAX_UNMAPPED_FIELDS", LOG_MAX_UNMAPPED_FIELDS),
+    ):
+        if valor < 0:
+            problemas.append(f"{nombre} no puede ser negativo; es {valor}")
+    for nombre, valor in (
+        ("LOG_MAX_FILE_BYTES", LOG_MAX_FILE_BYTES),
+        ("LOG_MAX_EVENTS", LOG_MAX_EVENTS),
+    ):
+        if valor < 1:
+            problemas.append(f"{nombre} debe ser >= 1; es {valor}")
+
+    # Combinación que deja al modo híbrido sin su razón de ser: si ningún
+    # registro puede quedar por debajo del umbral de reproceso, "hybrid"
+    # se comporta exactamente como "chunked" y el reproceso individual
+    # nunca ocurre. Es un no-op silencioso, así que se rechaza.
+    if (LOG_PARSING_MODE == "hybrid"
+            and LOG_LINE_FALLBACK_THRESHOLD <= LOG_FORMAT_CONFIDENCE_THRESHOLD):
+        problemas.append(
+            "En modo 'hybrid', LOG_LINE_FALLBACK_THRESHOLD "
+            f"({LOG_LINE_FALLBACK_THRESHOLD}) debe ser mayor que "
+            f"LOG_FORMAT_CONFIDENCE_THRESHOLD ({LOG_FORMAT_CONFIDENCE_THRESHOLD}); "
+            "si no, ningún registro se reprocesa individualmente y 'hybrid' "
+            "equivale a 'chunked'. Usa 'chunked' explícitamente o sube el umbral."
+        )
+
+    if problemas:
+        raise ValueError(
+            "Configuración de preprocesamiento inválida:\n  - "
+            + "\n  - ".join(problemas)
+        )
+
+
+def config_preprocesamiento_efectiva() -> dict:
+    """Instantánea de la configuración con la que corrió el preprocesamiento.
+
+    Se guarda en `PreprocessingResult.config` y en los archivos de
+    `results/`: sin esto, dos corridas con salidas distintas no se pueden
+    comparar, porque no se sabe si cambió el código o la configuración
+    (§11 y §17 del plan). Las claves van ordenadas para que la
+    serialización sea determinística.
+    """
+    valores = {
+        "LOG_PREPROCESSING_ENGINE": LOG_PREPROCESSING_ENGINE,
+        "LOG_PARSING_MODE": LOG_PARSING_MODE,
+        "LOG_DETECTION_CHUNK_SIZE": LOG_DETECTION_CHUNK_SIZE,
+        "LOG_FORMAT_CONFIDENCE_THRESHOLD": LOG_FORMAT_CONFIDENCE_THRESHOLD,
+        "LOG_LINE_FALLBACK_THRESHOLD": LOG_LINE_FALLBACK_THRESHOLD,
+        "LOG_ENABLE_MULTILINE": LOG_ENABLE_MULTILINE,
+        "LOG_PRESERVE_RAW": LOG_PRESERVE_RAW,
+        "LOG_MAX_RAW_SAMPLES": LOG_MAX_RAW_SAMPLES,
+        "LOG_MAX_UNMAPPED_FIELDS": LOG_MAX_UNMAPPED_FIELDS,
+        "LOG_NORMALIZATION_SCHEMA_VERSION": LOG_NORMALIZATION_SCHEMA_VERSION,
+        "LOG_MAX_FILE_BYTES": LOG_MAX_FILE_BYTES,
+        "LOG_MAX_EVENTS": LOG_MAX_EVENTS,
+    }
+    return {k: valores[k] for k in sorted(valores)}
+
+
 def validate_config() -> None:
     """Lanza un error claro si falta alguna key obligatoria antes de correr el grafo."""
     if not GEMINI_API_KEY:

@@ -50,6 +50,27 @@ async def crear_analisis(archivo: UploadFile = File(...)):
     cliente a `/api/stream/{job_id}` (así el navegador puede mostrar la
     barra de progreso desde el primer evento, no solo al final)."""
     contenido = await archivo.read()
+
+    # Validaciones de ingesta (Fase 12 del plan). Se aplican ANTES de
+    # decodificar y de guardar el lote en memoria: rechazar temprano un
+    # archivo desmedido o binario cuesta mucho menos que descubrirlo a
+    # mitad del análisis.
+    from src.config import LOG_MAX_FILE_BYTES
+
+    if len(contenido) > LOG_MAX_FILE_BYTES:
+        raise HTTPException(
+            413,
+            f"El archivo pesa {len(contenido)} bytes y el límite es "
+            f"{LOG_MAX_FILE_BYTES}. Subí un lote más chico o ajustá "
+            "LOG_MAX_FILE_BYTES.",
+        )
+    if b"\x00" in contenido[:8192]:
+        raise HTTPException(
+            415,
+            "El archivo parece binario (contiene bytes nulos). Se esperan "
+            "logs de texto: .log, .csv o .txt.",
+        )
+
     raw_logs = contenido.decode("utf-8", errors="replace")
 
     if not raw_logs.strip():
