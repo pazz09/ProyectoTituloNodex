@@ -23,6 +23,7 @@ import uuid
 from pathlib import Path
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, Response, StreamingResponse
 from pydantic import BaseModel
 
@@ -31,6 +32,24 @@ from src.api.informe_pdf import generar_informe_pdf
 from src.pipeline import analizar_lote_stream, commit_feedback
 
 app = FastAPI(title="NODEX — Panel de análisis")
+
+# CORS para el frontend de desarrollo (Next.js en :3000), que corre en otro
+# origen que esta API. Se listan orígenes explícitos en vez de "*": con
+# `allow_credentials` el navegador rechaza el comodín, y de paso deja claro
+# que esto es para desarrollo local. La interfaz servida desde `/` es del
+# mismo origen y no pasa por acá.
+#
+# `expose_headers` incluye Content-Disposition porque el frontend necesita
+# leerlo para nombrar el PDF que descarga: por defecto el navegador no
+# expone esa cabecera a JavaScript en una respuesta de otro origen.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["Content-Disposition"],
+)
 
 _STATIC_DIR = Path(__file__).parent / "static"
 

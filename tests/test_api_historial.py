@@ -249,3 +249,22 @@ def test_el_resumen_persistido_incluye_la_reputacion_de_las_ips(monkeypatch):
     assert evento["tipo"] == "inicio"
     assert evento["resumen"]["reputacion_ips"] == {
         "203.0.113.99": {"categoria": "malicioso"}}
+
+
+def test_cors_habilitado_para_el_frontend_de_desarrollo(cliente):
+    """El frontend de Next.js corre en :3000, otro origen que esta API."""
+    r = cliente.get("/api/historial", headers={"Origin": "http://localhost:3000"})
+    assert r.headers["access-control-allow-origin"] == "http://localhost:3000"
+
+
+def test_cors_expone_content_disposition(cliente):
+    """El frontend lee esa cabecera para nombrar el PDF que descarga; sin
+    `expose_headers` el navegador no se la entrega a JavaScript."""
+    # Va en la respuesta real, no en el preflight.
+    r = cliente.get("/api/historial", headers={"Origin": "http://localhost:3000"})
+    assert "content-disposition" in r.headers.get("access-control-expose-headers", "").lower()
+
+
+def test_un_origen_ajeno_no_recibe_cors(cliente):
+    r = cliente.get("/api/historial", headers={"Origin": "http://evil.example"})
+    assert "access-control-allow-origin" not in r.headers
