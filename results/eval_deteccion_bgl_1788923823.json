@@ -29,6 +29,18 @@
     "recall": 1.0,
     "f1": 0.8333333333333333
   },
+  "lotes_abortados": [],
+  "n_lotes_validos": 16,
+  "metricas_excluyendo_abortos": {
+    "tp": 10,
+    "fp": 4,
+    "fn": 0,
+    "tn": 2,
+    "precision": 0.7142857142857143,
+    "recall": 1.0,
+    "f1": 0.8333333333333333
+  },
+  "nota_abortos": "Un lote abortado es aquel en que el grafo colapsó por un fallo transitorio de la API: quedó sin diagnóstico y con confianza 0.0, y el runner lo registró como prediccion='normal'. Eso es un fallo de infraestructura, no una predicción del modelo. `metricas` conserva el cómputo original con esos lotes incluidos; `metricas_excluyendo_abortos` los excluye. Ambos quedan en el archivo para que la exclusión sea auditable.",
   "resultados": [
     {
       "id": "bgl_ventana_0000",

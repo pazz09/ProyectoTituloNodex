@@ -29,6 +29,29 @@
     "recall": 0.9,
     "f1": 0.6428571428571429
   },
+  "lotes_abortados": [
+    {
+      "id": "hdfs_positivo_004_blk_278357163850888",
+      "duracion_seg": 8.8,
+      "ground_truth": "anomalo"
+    },
+    {
+      "id": "hdfs_negativo_003",
+      "duracion_seg": 6.9,
+      "ground_truth": "normal"
+    }
+  ],
+  "n_lotes_validos": 18,
+  "metricas_excluyendo_abortos": {
+    "tp": 9,
+    "fp": 9,
+    "fn": 0,
+    "tn": 0,
+    "precision": 0.5,
+    "recall": 1.0,
+    "f1": 0.6666666666666666
+  },
+  "nota_abortos": "Un lote abortado es aquel en que el grafo colapsó por un fallo transitorio de la API: quedó sin diagnóstico y con confianza 0.0, y el runner lo registró como prediccion='normal'. Eso es un fallo de infraestructura, no una predicción del modelo. `metricas` conserva el cómputo original con esos lotes incluidos; `metricas_excluyendo_abortos` los excluye. Ambos quedan en el archivo para que la exclusión sea auditable.",
   "resultados": [
     {
       "id": "hdfs_positivo_000_blk_8483848473254499625",
