@@ -303,7 +303,12 @@
   </section>
 
   <section class="panel" id="reporte">
-    <h2>3. Reporte final</h2>
+    <h2 style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+      <span>3. Reporte final</span>
+      <button class="primary" id="btn-pdf" style="font-size:13px; padding:6px 14px; display:none">
+        Descargar informe (PDF)
+      </button>
+    </h2>
 
     <div class="escalamiento" id="escalamiento"></div>
 
@@ -403,6 +408,8 @@
 
   function resetUI() {
     errorBanner.style.display = 'none';
+    // La corrida anterior deja de ser la que se puede descargar.
+    jobIdMostrado = null;
     resumenLote.style.display = 'none';
     grafoPanel.style.display = 'block';
     reportePanel.style.display = 'none';
@@ -508,6 +515,10 @@
     }
   }
 
+  // job_id que devolvió /api/analizar: se guarda para poder pedir después
+  // el informe en PDF de ESTA corrida.
+  let jobIdEnCurso = null;
+
   function manejarEvento(ev) {
     if (ev.tipo === 'inicio') {
       resumenLote.style.display = 'block';
@@ -537,13 +548,21 @@
     }
     if (ev.tipo === 'final') {
       NODOS.forEach(n => marcarHecho(n));
-      mostrarReporte(ev.reporte);
+      mostrarReporte(ev.reporte, jobIdEnCurso);
       return;
     }
   }
 
-  function mostrarReporte(r) {
+  // job_id de la corrida que se está mostrando: lo necesita el botón de
+  // descarga, que pide el PDF al backend en vez de armarlo en el navegador
+  // (el backend ya tiene los datos persistidos y no vuelve a correr el grafo).
+  let jobIdMostrado = null;
+
+  function mostrarReporte(r, jobId) {
     reportePanel.style.display = 'block';
+    jobIdMostrado = jobId ?? r.job_id ?? jobIdMostrado;
+    document.getElementById('btn-pdf').style.display =
+      jobIdMostrado ? 'inline-block' : 'none';
 
     const esc = document.getElementById('escalamiento');
     if (r.requiere_revision_humana) {
@@ -598,6 +617,7 @@
       const resp = await fetch('/api/analizar', { method: 'POST', body: form });
       if (!resp.ok) throw new Error(`No se pudo subir el archivo (HTTP ${resp.status}).`);
       const { job_id } = await resp.json();
+      jobIdEnCurso = job_id;
 
       let completado = false;
       if (esActivo) esActivo.close();
@@ -716,6 +736,34 @@
       errorBanner.textContent = `No se pudo abrir la corrida: ${e.message}`;
     }
   }
+
+  const btnPdf = document.getElementById('btn-pdf');
+  btnPdf.addEventListener('click', async () => {
+    if (!jobIdMostrado) return;
+    // Se descarga por fetch y no por navegación directa: si el backend
+    // contesta 404 -- la corrida todavía no terminó de persistirse, o el
+    // historial se borró -- navegar dejaría al analista mirando un JSON de
+    // error en lugar del panel.
+    const etiqueta = btnPdf.textContent;
+    btnPdf.disabled = true;
+    btnPdf.textContent = 'Generando…';
+    try {
+      const r = await fetch(`/api/historial/${jobIdMostrado}/pdf`);
+      if (!r.ok) throw new Error(`El informe no está disponible (HTTP ${r.status}).`);
+      const url = URL.createObjectURL(await r.blob());
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `informe_${jobIdMostrado}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      errorBanner.textContent = e.message || String(e);
+      errorBanner.style.display = 'block';
+    } finally {
+      btnPdf.disabled = false;
+      btnPdf.textContent = etiqueta;
+    }
+  });
 
   btnHistorial.addEventListener('click', cargarHistorial);
 

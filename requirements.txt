@@ -18,3 +18,6 @@ pytest>=8.3.0                 # testing
 fastapi>=0.110.0
 uvicorn[standard]>=0.29.0
 python-multipart>=0.0.9       # necesario para UploadFile (subida de archivos) en FastAPI
+fpdf2>=2.7.0                  # informe descargable en PDF (src/api/informe_pdf.py);
+                              # Python puro, sin binarios de sistema, para que el
+                              # despliegue autohospedado no dependa de librerías nativas

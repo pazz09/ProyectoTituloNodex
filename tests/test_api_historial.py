@@ -217,3 +217,35 @@ def test_el_streaming_sigue_emitiendo_los_mismos_eventos(cliente, monkeypatch):
     tipos = [json.loads(l[6:])["tipo"] for l in cuerpo.splitlines()
              if l.startswith("data: ")]
     assert tipos == ["inicio", "nodo", "nodo", "final"]
+
+
+def test_el_resumen_persistido_incluye_la_reputacion_de_las_ips(monkeypatch):
+    """El informe en PDF resume la reputación observada, y el evento "inicio"
+    es lo único del resumen que la capa web persiste: si `reputacion_ips` no
+    viaja ahí, el campo del informe nunca se llena."""
+    from src import pipeline
+
+    estado = {
+        "resumen_logs": {
+            "formato_detectado": "auth_log", "total_lineas": 3,
+            "n_ips_distintas": 1, "servicios": {"sshd": 3},
+            "eventos": {"acceso_fallido": 3},
+            "ventana_temporal": {"inicio": "a", "fin": "b"},
+            "reputacion_ips": {"203.0.113.99": {"categoria": "malicioso"}},
+        },
+        "preprocessing_metadata": {},
+        "parsing_warnings": [],
+    }
+    monkeypatch.setattr(pipeline, "get_app", lambda: object())
+    monkeypatch.setattr(pipeline, "_preparar_estado_inicial",
+                        lambda *a, **k: (estado, {}, "firma"))
+
+    # Solo se consume el primer evento: el grafo nunca llega a ejecutarse, así
+    # que el test no toca el LLM.
+    generador = pipeline.analizar_lote_stream("x", thread_id="t")
+    evento = next(generador)
+    generador.close()
+
+    assert evento["tipo"] == "inicio"
+    assert evento["resumen"]["reputacion_ips"] == {
+        "203.0.113.99": {"categoria": "malicioso"}}

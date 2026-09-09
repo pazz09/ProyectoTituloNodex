@@ -178,6 +178,13 @@ def analizar_lote_stream(raw_logs: str, thread_id: str | None = None):
             "servicios": input_inicial["resumen_logs"].get("servicios"),
             "eventos": input_inicial["resumen_logs"].get("eventos"),
             "ventana_temporal": input_inicial["resumen_logs"].get("ventana_temporal"),
+            # Veredicto de AbuseIPDB por IP. Se incluye porque el informe en
+            # PDF (Fase B) resume la reputación observada, y este evento es
+            # lo único del resumen que la capa web persiste. Es un dict
+            # chico -- una entrada por IP distinta del lote -- y el resto de
+            # los campos pesados del resumen (`por_ip`, `ips_distintas`)
+            # siguen sin viajar.
+            "reputacion_ips": input_inicial["resumen_logs"].get("reputacion_ips") or {},
         },
         # Cómo se interpretó el archivo (Fase 12 del plan): permite que la
         # interfaz distinga un parsing completo de uno parcial o en

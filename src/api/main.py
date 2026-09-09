@@ -23,9 +23,10 @@ import uuid
 from pathlib import Path
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
-from fastapi.responses import FileResponse, StreamingResponse
+from fastapi.responses import FileResponse, Response, StreamingResponse
 
 from src.api import historial
+from src.api.informe_pdf import generar_informe_pdf
 from src.pipeline import analizar_lote_stream
 
 app = FastAPI(title="NODEX — Panel de análisis")
@@ -114,6 +115,12 @@ def _datos_para_historial(nombre_archivo: str | None, resumen: dict,
         "tecnicas_mitre": reporte.get("tecnicas_mitre") or [],
         "estado": "error" if error else "completo",
         "error_mensaje": error,
+        # Copia íntegra, para que el informe en PDF (Fase B) pueda armar sus
+        # secciones sin volver a correr el grafo: la lista de comandos, la
+        # ventana temporal, los servicios y los CVEs no tienen columna
+        # propia y se perderían de otro modo.
+        "resumen_json": resumen,
+        "reporte_json": reporte or {},
     }
 
 
@@ -139,6 +146,24 @@ def detalle_historial(job_id: str):
     if corrida is None:
         raise HTTPException(404, f"No hay ninguna corrida con job_id {job_id}.")
     return corrida
+
+
+@app.get("/api/historial/{job_id}/pdf")
+def descargar_informe(job_id: str):
+    """Informe de la corrida en PDF.
+
+    Se arma con lo que quedó persistido: NO vuelve a correr el grafo, así
+    que descargar el informe no cuesta cuota de LLM.
+    """
+    corrida = historial.obtener_corrida(job_id)
+    if corrida is None:
+        raise HTTPException(404, f"No hay ninguna corrida con job_id {job_id}.")
+    pdf = generar_informe_pdf(corrida)
+    return Response(
+        content=pdf,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename=informe_{job_id}.pdf'},
+    )
 
 
 @app.get("/api/stream/{job_id}")

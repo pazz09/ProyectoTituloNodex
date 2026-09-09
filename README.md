@@ -127,6 +127,26 @@ Abre `http://127.0.0.1:8000` en el navegador, sube un archivo de `data/logs/` (o
 - Verificado sin gastar cuota real: `analizar_lote_stream()` se probó con `llm_json` mockeado (dos escenarios — flujo con RAG+CVE, y ciclo de corrección de comandos rechazados→corregidos) para confirmar el orden de eventos emitidos y que el reporte final sea correcto y serializable a JSON, antes de aplicarlo al repo real.
 - Limitación conocida: el `job_id` se consume al conectarse (`_JOBS.pop(...)`) y vive en memoria de un solo proceso — si el navegador se recarga a mitad de un análisis, o si se corre `uvicorn` con más de un worker, hay que subir el archivo de nuevo. Suficiente para demostración de un solo usuario; no es la arquitectura para un despliegue multiusuario.
 
+### Historial de corridas (9-sep-2026)
+
+Cada análisis lanzado desde el panel queda registrado en `data/historial.db` (SQLite de la librería estándar, ignorado por git como `data/chroma/`), de modo que se puede volver a mirar un resultado sin volver a correr el grafo — es decir, sin volver a gastar cuota de LLM. La sección "4. Historial de corridas" de la interfaz lista las corridas de la más reciente a la más antigua y, al hacer clic en una, reusa el mismo panel de reporte para mostrar el detalle.
+
+- `src/api/historial.py` **solo almacena**: no sabe nada del grafo ni del LLM. El enganche vive en `src/api/main.py`, dentro del `finally` del generador SSE, para que una desconexión del navegador a mitad del análisis no pierda el resultado — el grafo igual corrió y gastó cuota.
+- Endpoints: `GET /api/historial` (lista paginada) y `GET /api/historial/{job_id}` (detalle).
+- Además de las columnas escalares, se guarda una copia íntegra del resumen del lote y del reporte final (`resumen_json`, `reporte_json`). Es lo que necesita el informe en PDF, que sin eso tendría que volver a correr el grafo para recuperar la ventana temporal, los servicios o la lista de comandos.
+
+### Informe descargable en PDF (9-sep-2026)
+
+El botón "Descargar informe (PDF)" del panel de reporte —y del detalle de cualquier corrida del historial— pide `GET /api/historial/{job_id}/pdf`, que arma el documento con `src/api/informe_pdf.py` a partir de lo ya persistido. **No genera contenido nuevo ni vuelve a correr el grafo**: descargar el informe no cuesta cuota.
+
+El documento tiene encabezado más cinco secciones fijas (resumen ejecutivo, evidencia observada, contexto y técnicas relacionadas, evaluación del auditor, mitigación propuesta) y una sexta opcional de revisión humana. Las secciones que dependen de datos ausentes se omiten y la numeración se lleva con un contador, para que el informe no salte de "2." a "4." como si faltara una página.
+
+Dos limitaciones documentadas:
+
+- **Texto latin-1.** `fpdf2` se eligió por ser Python puro (sin binarios de sistema, coherente con el modelo de distribución autohospedado), pero sus fuentes base codifican en latin-1 y los diagnósticos del LLM traen raya (—), puntos suspensivos (…) y comillas tipográficas, que no existen ahí. Verificado el 9-sep-2026: `multi_cell()` lanza `FPDFUnicodeEncodingException` con cualquiera de ellos. Se resuelve mapeándolos a su equivalente ASCII (`sanear()`) en vez de empotrar una fuente TTF Unicode de ~750 KB en el repositorio; los acentos del español sí están en latin-1 y se conservan intactos.
+- **Corridas anteriores a esta fase** no tienen `resumen_json`/`reporte_json`: su informe se genera igual, pero declara explícitamente qué no se conservó en lugar de dejar la sección vacía.
+
+
 ## Informe vs. prototipo — qué manda dónde
 
 | Aspecto | Informe (spec oficial) | Notebook (prototipo) | En este repo |

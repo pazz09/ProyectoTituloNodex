@@ -45,7 +45,9 @@ CREATE TABLE IF NOT EXISTS corridas (
     error_mensaje            TEXT,
     feedback_correcto        INTEGER,
     feedback_comentario      TEXT,
-    feedback_timestamp       TEXT
+    feedback_timestamp       TEXT,
+    resumen_json             TEXT,
+    reporte_json             TEXT
 );
 CREATE INDEX IF NOT EXISTS idx_corridas_timestamp ON corridas (timestamp DESC);
 """
@@ -57,11 +59,11 @@ _COLUMNAS = (
     "hay_anomalia", "hay_incidente", "requiere_revision_humana",
     "n_comandos_mitigacion", "evaluacion_auditor", "tecnicas_mitre",
     "estado", "error_mensaje", "feedback_correcto", "feedback_comentario",
-    "feedback_timestamp",
+    "feedback_timestamp", "resumen_json", "reporte_json",
 )
 
 # Columnas que se guardan como JSON serializado y vuelven deserializadas.
-_COLUMNAS_JSON = ("tecnicas_mitre",)
+_COLUMNAS_JSON = ("tecnicas_mitre", "resumen_json", "reporte_json")
 
 # Columnas que SQLite guarda como entero y el resto del sistema espera como
 # booleano. `None` se conserva: en `feedback_correcto` significa "todavía no
@@ -78,10 +80,24 @@ def _conectar(ruta: str | Path | None = None) -> sqlite3.Connection:
     return con
 
 
+# Columnas agregadas después de la primera versión del esquema. SQLite no
+# las crea con `CREATE TABLE IF NOT EXISTS` sobre una tabla que ya existe,
+# así que hay que sumarlas a mano -- si no, un historial creado antes de la
+# Fase B seguiría sin ellas y cualquier lectura fallaría.
+_COLUMNAS_AGREGADAS = (
+    ("resumen_json", "TEXT"),
+    ("reporte_json", "TEXT"),
+)
+
+
 def init_db(ruta: str | Path | None = None) -> None:
-    """Crea la tabla si no existe. Idempotente."""
+    """Crea la tabla si no existe y aplica las migraciones. Idempotente."""
     with _conectar(ruta) as con:
         con.executescript(_ESQUEMA)
+        existentes = {f["name"] for f in con.execute("PRAGMA table_info(corridas)")}
+        for nombre, tipo in _COLUMNAS_AGREGADAS:
+            if nombre not in existentes:
+                con.execute(f"ALTER TABLE corridas ADD COLUMN {nombre} {tipo}")
 
 
 def _ahora() -> str:
@@ -110,6 +126,15 @@ def _a_fila(job_id: str, datos: dict) -> dict:
         "feedback_correcto": datos.get("feedback_correcto"),
         "feedback_comentario": datos.get("feedback_comentario"),
         "feedback_timestamp": datos.get("feedback_timestamp"),
+        # Copia íntegra del resumen del lote y del reporte final. El
+        # informe en PDF (Fase B) necesita datos que no tienen columna
+        # propia -- ventana temporal, servicios, la LISTA de comandos (no
+        # solo su conteo), CVEs -- y volver a correr el grafo para
+        # recuperarlos costaría cuota de LLM por un documento que solo
+        # cambia de formato. Se guardan como JSON en vez de abrir una
+        # columna por campo: no se consultan ni se filtran por ellos.
+        "resumen_json": datos.get("resumen_json"),
+        "reporte_json": datos.get("reporte_json"),
     }
     for col in _COLUMNAS_JSON:
         if fila[col] is not None and not isinstance(fila[col], str):
@@ -131,7 +156,8 @@ def _desde_fila(fila: sqlite3.Row) -> dict:
                 # se devuelve el texto crudo y queda visible el problema.
                 pass
         elif col in d:
-            d[col] = []
+            # `tecnicas_mitre` es una lista; los dos blobs son objetos.
+            d[col] = [] if col == "tecnicas_mitre" else {}
     for col in _COLUMNAS_BOOL:
         if d.get(col) is not None:
             d[col] = bool(d[col])
