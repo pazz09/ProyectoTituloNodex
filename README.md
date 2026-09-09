@@ -405,7 +405,7 @@ La Tabla 7.4 del informe (Brecha 2: "Falta de integración con CTI estructurada"
 ### Diseño
 
 - **Fuente**: el repositorio oficial `mitre-attack/attack-stix-data` (el mismo que alimenta ATT&CK Navigator), bundle Enterprise en formato STIX 2.1 — no un dataset de terceros ni una re-elaboración.
-- **Versión**: se apunta a la ruta "flotante" (`enterprise-attack.json` en `master`), que siempre sirve la última release, en vez de fijar la v15 que cita el informe actual. **La corrida del 4-sep-2026 cargó la v19.2**, registrada en `data/mitre_attack/provenance.json`. **Decisión explícita de Antonia (3-sep-2026): usar la versión ACTUAL de ATT&CK, no la citada en el texto del informe** — la sección correspondiente del informe debe actualizarse para reflejar la versión real usada (`src/tools/preparar_mitre_attack.py` registra la versión real encontrada, `x_mitre_version`, en `data/mitre_attack/provenance.json`, para que la corrida quede documentada y sea reproducible aunque el archivo cambie más adelante).
+- **Versión**: se apunta a la ruta "flotante" (`enterprise-attack.json` en `master`), que siempre sirve la última release, en vez de fijar la v15 que cita el informe actual. **La corrida del 4-sep-2026 cargó la v19.2**, registrada en `data/mitre_attack/provenance.json`. Se repobló el 9-sep-2026 al limpiar `data/chroma/` (ver «Limpieza de la memoria» abajo): misma versión y misma cantidad de técnicas, solo cambia `fecha_corrida_utc`. **Decisión explícita de Antonia (3-sep-2026): usar la versión ACTUAL de ATT&CK, no la citada en el texto del informe** — la sección correspondiente del informe debe actualizarse para reflejar la versión real usada (`src/tools/preparar_mitre_attack.py` registra la versión real encontrada, `x_mitre_version`, en `data/mitre_attack/provenance.json`, para que la corrida quede documentada y sea reproducible aunque el archivo cambie más adelante).
 - **Arquitectura**: se extendió el nodo Tool existente `tool_consultar_rag` para consultar también la nueva colección, **en vez de agregar un nodo nuevo al grafo** — decisión explícita de Antonia (3-sep-2026) para preservar la tabla de "7 nodos (4 LLM + 3 Tool)" que documenta el informe (§8.3.1, Tabla 8.9). La consulta usaba al principio la misma `firma` del lote que `patterns`/`errors`; desde el 9-sep-2026 usa una descripción en prosa del lote (`describir_lote_en_prosa()`, también determinística y en `src/tools/aggregation.py`) — ver «Texto de consulta a ATT&CK» abajo. `firma_lote()` no cambió y sigue siendo la clave de las otras tres colecciones.
 - **4ta colección ChromaDB**: `attack_techniques` (ver `src/config.py`/`src/memory.py`), poblada UNA vez de forma offline — a diferencia de `patterns`/`errors`/`history`, no crece con el feedback loop del sistema.
 - **Alcance**: solo Enterprise ATT&CK (no ICS ni Mobile — el informe no menciona esas matrices), excluyendo técnicas `revoked`/`x_mitre_deprecated`. No incluye atribución de grupos de amenaza (`intrusion-set`) ni de software (`malware`/`tool`) — fuera del alcance que el §8.7.2 excluye explícitamente.
@@ -491,6 +491,27 @@ La cláusula de fallos se deriva de la distribución de eventos y no del contado
 Se toma 0,42 por ser el punto medio de la banda libre. La medición es reproducible sin gastar cuota de LLM: agregación determinística más consulta a ChromaDB.
 
 **Verificado de punta a punta** el 9-sep-2026 contra la API real, con un lote `auth_log` de fuerza bruta SSH: el nodo RAG recupera T1021 (*Remote Services*, 0,484), T1685.001 (0,471) y T1110.003 (*Password Spraying*, 0,471), y las tres llegan al reporte y al informe en PDF con la nota de atribución de MITRE. Dos de las tres son pertinentes; T1685.001 (*Disable or Modify Windows Event Log*) es un vecino plausible pero equivocado — una técnica de Windows para un log de Linux. Es una consecuencia de recuperar `TOP_K_ATTACK=3` una vez superado el piso, no del piso en sí, y queda como limitación conocida: el prompt del triage ya instruye citar un ID **solo si de verdad aplica** al lote.
+
+### Limpieza de la memoria (9-sep-2026)
+
+La verificación de la Fase C escribió documentos reales en `host_history`, `attack_patterns` y `error_memory` a partir de un lote sintético de prueba (`auth_muestra.log`). Como las tres colecciones estaban en 0 antes de esa verificación, se borró `data/chroma/` completo y se repobló solo `attack_techniques`:
+
+```bash
+rm -rf data/chroma
+python -m src.tools.preparar_mitre_attack
+```
+
+Estado confirmado después: `attack_techniques` = **697** documentos (ATT&CK **v19.2**, 222 técnicas + 475 sub-técnicas), y `attack_patterns` = `error_memory` = `host_history` = **0**. `data/mitre_attack/provenance.json` quedó idéntico salvo `fecha_corrida_utc` (`2026-09-04T00:13:20Z` → `2026-09-09T17:04:41Z`): misma URL de origen, misma versión, mismos conteos, misma atribución. La recuperación sigue dando el mismo resultado que antes de borrar — la prosa del lote de fuerza bruta devuelve T1021 (0,484), T1685.001 (0,471) y T1110.003 (0,469), idénticas similitudes.
+
+`data/chroma/` está en `.gitignore`, así que la limpieza no aparece en el diff: quien clone el repositorio tiene que correr `preparar_mitre_attack.py` de todos modos.
+
+### Unicidad de los ids en ChromaDB (9-sep-2026)
+
+Los documentos se identificaban con `f"hist-{int(time.time()*1000)}"` (y equivalentes para `pat-`, `err-`, `seed-`), heredado del prototipo. Dos escrituras dentro del mismo milisegundo generaban el mismo id y ChromaDB sobrescribía la primera **en silencio**. Nunca importó mientras `commit_feedback()` no tenía llamadores; desde la Fase C es un botón que un analista puede apretar dos veces seguidas para corregirse.
+
+`LongTermMemory._nuevo_id(prefijo)` agrega un sufijo aleatorio (`uuid4().hex[:6]`) y conserva el timestamp al principio, para que los ids sigan ordenándose cronológicamente. Cubierto por `tests/test_memory_ids.py`, que congela `time.time()` para forzar la colisión en vez de depender de la velocidad de la máquina.
+
+**Los ids de `attack_techniques` NO llevan azar**: son `attack-<technique_id>`, y el `upsert` depende de esa clave estable para reemplazar al actualizar de versión de ATT&CK. Con ids aleatorios, cada recarga duplicaría las 697 técnicas — hay un test que lo fija.
 
 ## Preprocesamiento heterogéneo (esquema v2)
 

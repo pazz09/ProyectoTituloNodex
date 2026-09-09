@@ -14,6 +14,7 @@ README, sección "Integración MITRE ATT&CK".
 
 import json
 import time
+import uuid
 
 import chromadb
 from chromadb.utils import embedding_functions
@@ -97,6 +98,22 @@ class LongTermMemory:
         return out
 
     # --- few-shot dinámico ---
+    @staticmethod
+    def _nuevo_id(prefijo: str) -> str:
+        """ID único para un documento de ChromaDB.
+
+        Lleva sufijo aleatorio además del timestamp: con `int(time.time()*1000)`
+        a secas, dos escrituras dentro del mismo milisegundo generaban el
+        MISMO id y ChromaDB sobrescribía la primera en silencio. Antes daba
+        igual porque `commit_feedback()` no tenía llamadores; desde la Fase C
+        es un botón que un analista puede apretar dos veces (o dos veces
+        seguidas para corregirse), así que la colisión es alcanzable.
+
+        El timestamp se conserva al principio para que los ids sigan
+        ordenándose cronológicamente al leerlos.
+        """
+        return f"{prefijo}-{int(time.time()*1000)}-{uuid.uuid4().hex[:6]}"
+
     def retrieve_examples(self, firma, k=TOP_K_FEWSHOT):
         return self._query(self.patterns, firma, k)
 
@@ -109,17 +126,17 @@ class LongTermMemory:
             documents=[firma[:MAX_RAW_CHARS_EMBED]],
             metadatas=[{"erroneo": json.dumps(diagnostico_erroneo, ensure_ascii=False)[:1500],
                         "correccion": json.dumps(correccion, ensure_ascii=False)}],
-            ids=[f"err-{int(time.time()*1000)}"])
+            ids=[self._nuevo_id("err")])
 
     # --- feedback loop ---
     def commit_validated(self, firma, report, host="desconocido"):
         meta = {"clasificacion": str(report.get("clasificacion_global")),
                  "confianza": float(report.get("confianza", 0) or 0), "host": host}
         self.history.add(documents=[firma[:MAX_RAW_CHARS_EMBED]], metadatas=[meta],
-                          ids=[f"hist-{int(time.time()*1000)}"])
+                          ids=[self._nuevo_id("hist")])
         if meta["confianza"] >= AUTO_PROMOTE:
             self.patterns.add(documents=[firma[:MAX_RAW_CHARS_EMBED]], metadatas=[meta],
-                               ids=[f"pat-{int(time.time()*1000)}"])
+                               ids=[self._nuevo_id("pat")])
             return True  # promovido
         return False
 
@@ -127,7 +144,7 @@ class LongTermMemory:
         self.patterns.add(
             documents=[firma],
             metadatas=[{"clasificacion": clasificacion, "mitigacion": mitigacion}],
-            ids=[f"seed-{int(time.time()*1000000)}"])
+            ids=[self._nuevo_id("seed")])
 
     # --- MITRE ATT&CK (STIX 2.1), agregado 3-sep-2026 ---
     #
