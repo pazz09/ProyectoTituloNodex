@@ -128,22 +128,48 @@ ATTACK_MAX_CHARS_EMBED = int(os.environ.get("ATTACK_MAX_CHARS_EMBED", "800"))
 # Umbral de similitud propio para `attack_techniques` -- NO reutiliza
 # SIMILARITY_FLOOR (0.55). Ese umbral se calibró para comparar firmas de
 # lote contra firmas de lote (mismo "género" de texto, ver `patterns`);
-# acá se compara la firma de un lote contra prosa descriptiva de MITRE --
-# dominios de texto distintos, y `all-MiniLM-L6-v2` no da similitudes tan
-# altas entre dominios distintos aunque el contenido esté claramente
-# relacionado. Bug real encontrado (4-sep-2026): con SIMILARITY_FLOOR=0.55,
-# la colección quedaba cargada (697 técnicas) pero desconectada en la
-# práctica -- una consulta manual de "brute force ssh failed password
-# authentication" recupera T1110/Brute Force (similitud 0.523),
-# T1110.003/Password Spraying (0.404) y T1021.004/SSH (0.370) por búsqueda
-# semántica directa contra ChromaDB, pero las tres quedaban filtradas por
-# el umbral de 0.55 -- `retrieve_attack_techniques()` devolvía [] siempre,
-# para cualquier lote, incluido un ataque real. Ruido no relacionado
-# (HDFS/logs operativos benignos contra las mismas técnicas) midió
-# similitud 0.16-0.18 en la misma corrida -- bien por debajo de 0.35, así
-# que el nuevo umbral separa limpio señal real de ruido de dominio
-# distinto en los casos medidos.
-SIMILARITY_FLOOR_ATTACK = float(os.environ.get("SIMILARITY_FLOOR_ATTACK", "0.35"))
+# acá se compara una descripción del lote contra prosa descriptiva de
+# MITRE, y `all-MiniLM-L6-v2` no da similitudes tan altas entre dominios
+# distintos aunque el contenido esté claramente relacionado.
+#
+# Historia de la calibración -- importante para la defensa, porque el
+# primer valor era correcto para un texto de consulta que después cambió:
+#
+#   4-sep-2026, 0.55 -> 0.35. Con 0.55 la colección quedaba cargada (697
+#   técnicas) pero desconectada: una consulta manual en prosa ("brute
+#   force ssh failed password authentication") recuperaba T1110 (0.523),
+#   T1110.003 (0.404) y T1021.004 (0.370), y las tres quedaban filtradas.
+#
+#   9-sep-2026, 0.35 -> 0.42. El 0.35 se calibró con consultas escritas a
+#   mano, pero el sistema consultaba con `firma_lote()` -- una cadena de
+#   conteos (`v1|lineas=23 ips=3 servicios=[sshd:18...]`). Medido sobre
+#   corridas reales, esa firma topaba en 0.324 (auth_log) y 0.300 (BGL):
+#   `retrieve_attack_techniques()` devolvía [] SIEMPRE, para cualquier
+#   lote, incluido un ataque real. Se corrigió el texto de consulta
+#   (`describir_lote_en_prosa()`, ver `src/tools/aggregation.py`), y con
+#   prosa el 0.35 pasó a quedar DENTRO de la banda de ruido: sobre 32
+#   ventanas reales de BGL y HDFS -- las mismas que usa la evaluación --
+#   19 disparaban técnicas irrelevantes, incluidas 8/8 ventanas benignas
+#   de HDFS con T1564.004 (NTFS File Attributes) a ~0.36.
+#
+# Medición del 9-sep-2026 que fija el valor actual:
+#
+#   ruido (32 ventanas BGL+HDFS, benignas y anómalas): máximo 0.365
+#   señal (auth_log con fuerza bruta SSH real):        0.462 - 0.484
+#                                                      (T1021, T1110.003)
+#
+#   piso   ventanas de ruido que disparan   técnicas del ataque real
+#   0.35            19 / 32                          5 / 5
+#   0.38             0 / 32                          5 / 5
+#   0.42             0 / 32                          5 / 5
+#   0.45             0 / 32                          5 / 5
+#   0.47             0 / 32                          2 / 5
+#
+# Cualquier valor entre 0.38 y 0.45 separa limpio; se toma 0.42 por ser el
+# punto medio de esa banda, con margen a los dos lados (0.055 sobre el
+# ruido medido, 0.042 bajo la señal medida). Reproducible sin gastar cuota
+# de LLM: la medición es agregación determinística + consulta a ChromaDB.
+SIMILARITY_FLOOR_ATTACK = float(os.environ.get("SIMILARITY_FLOOR_ATTACK", "0.42"))
 MITRE_ATTACK_URL = os.environ.get(
     "MITRE_ATTACK_URL",
     "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/"

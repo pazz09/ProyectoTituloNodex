@@ -13,6 +13,7 @@ contexto externo antes del diagnóstico") sin ampliar esa cuenta.
 
 from src.memory import LongTermMemory
 from src.state import LogGuardState
+from src.tools.aggregation import describir_lote_en_prosa
 
 # Instancia única de memoria de largo plazo para el proceso.
 # NOTA: si necesitas inyectar una instancia distinta (tests, múltiples hosts),
@@ -25,7 +26,17 @@ def tool_consultar_rag(state: LogGuardState) -> dict:
     patrones = ltm.retrieve_examples(state["firma"])
     print(f"   → {len(patrones)} patrones similares encontrados.")
 
-    tecnicas = ltm.retrieve_attack_techniques(state["firma"])
+    # ATT&CK se consulta con una descripción en prosa del lote, no con la
+    # firma: la colección guarda las técnicas como texto en prosa, y
+    # comparar contra una cadena de conteos (`v1|lineas=23 ips=3
+    # servicios=[sshd:18...]`) no recuperaba nada. Medido el 9-sep-2026
+    # sobre corridas reales, la similitud máxima con la firma quedaba en
+    # 0.324 (auth_log) y 0.300 (BGL), bajo el piso de 0.35 -- es decir,
+    # `tecnicas_mitre` venía vacío siempre. Las otras tres colecciones
+    # siguen consultándose con la firma, que ahí sí es el formato correcto:
+    # lo indexado también son firmas.
+    descripcion = describir_lote_en_prosa(state.get("resumen_logs") or {})
+    tecnicas = ltm.retrieve_attack_techniques(descripcion)
     if tecnicas:
         ids = ", ".join(t["meta"].get("technique_id", "?") for t in tecnicas)
         print(f"   → {len(tecnicas)} técnicas MITRE ATT&CK relacionadas: {ids}")

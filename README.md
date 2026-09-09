@@ -384,7 +384,7 @@ La Tabla 7.4 del informe (Brecha 2: "Falta de integración con CTI estructurada"
 
 - **Fuente**: el repositorio oficial `mitre-attack/attack-stix-data` (el mismo que alimenta ATT&CK Navigator), bundle Enterprise en formato STIX 2.1 — no un dataset de terceros ni una re-elaboración.
 - **Versión**: se apunta a la ruta "flotante" (`enterprise-attack.json` en `master`), que siempre sirve la última release, en vez de fijar la v15 que cita el informe actual. **La corrida del 4-sep-2026 cargó la v19.2**, registrada en `data/mitre_attack/provenance.json`. **Decisión explícita de Antonia (3-sep-2026): usar la versión ACTUAL de ATT&CK, no la citada en el texto del informe** — la sección correspondiente del informe debe actualizarse para reflejar la versión real usada (`src/tools/preparar_mitre_attack.py` registra la versión real encontrada, `x_mitre_version`, en `data/mitre_attack/provenance.json`, para que la corrida quede documentada y sea reproducible aunque el archivo cambie más adelante).
-- **Arquitectura**: se extendió el nodo Tool existente `tool_consultar_rag` para consultar también la nueva colección, **en vez de agregar un nodo nuevo al grafo** — decisión explícita de Antonia (3-sep-2026) para preservar la tabla de "7 nodos (4 LLM + 3 Tool)" que documenta el informe (§8.3.1, Tabla 8.9). La consulta usa la misma `firma` del lote (`firma_lote()` en `src/tools/aggregation.py`) que ya se usa para `patterns`/`errors` — no se introdujo una representación de consulta nueva.
+- **Arquitectura**: se extendió el nodo Tool existente `tool_consultar_rag` para consultar también la nueva colección, **en vez de agregar un nodo nuevo al grafo** — decisión explícita de Antonia (3-sep-2026) para preservar la tabla de "7 nodos (4 LLM + 3 Tool)" que documenta el informe (§8.3.1, Tabla 8.9). La consulta usaba al principio la misma `firma` del lote que `patterns`/`errors`; desde el 9-sep-2026 usa una descripción en prosa del lote (`describir_lote_en_prosa()`, también determinística y en `src/tools/aggregation.py`) — ver «Texto de consulta a ATT&CK» abajo. `firma_lote()` no cambió y sigue siendo la clave de las otras tres colecciones.
 - **4ta colección ChromaDB**: `attack_techniques` (ver `src/config.py`/`src/memory.py`), poblada UNA vez de forma offline — a diferencia de `patterns`/`errors`/`history`, no crece con el feedback loop del sistema.
 - **Alcance**: solo Enterprise ATT&CK (no ICS ni Mobile — el informe no menciona esas matrices), excluyendo técnicas `revoked`/`x_mitre_deprecated`. No incluye atribución de grupos de amenaza (`intrusion-set`) ni de software (`malware`/`tool`) — fuera del alcance que el §8.7.2 excluye explícitamente.
 - **Atribución**: los datos de ATT&CK **no son Creative Commons** (una confusión común) — MITRE exige una nota de atribución textual exacta en cualquier redistribución (ver https://attack.mitre.org/resources/terms-of-use/, verificado 3-sep-2026): *"© The MITRE Corporation. This work is reproduced and distributed with the permission of The MITRE Corporation."* — ver `MITRE_ATTACK_ATTRIBUTION` en `src/config.py`, y citarla en el informe donde se muestren o describan datos de ATT&CK.
@@ -409,7 +409,7 @@ Guarda la procedencia de la corrida (versión de ATT&CK encontrada, cantidad de 
 
 `_extraer_tecnicas` (filtrado STIX puro: técnicas válidas, `revoked`, `x_mitre_deprecated`, sub-técnicas, objetos sin referencia `mitre-attack`, objetos de otro tipo mezclados en el bundle real, tácticas múltiples, `kill_chain_phases` de otro framework) está cubierto por 11 tests en `tests/test_preparar_mitre_attack.py`, siguiendo la misma convención que el resto del proyecto: la capa que toca ChromaDB (`cargar_tecnicas_attack`/`retrieve_attack_techniques`, y el propio `main()` de `preparar_mitre_attack.py`, que necesita red real) no tiene tests pytest — se verificó aparte con un stub de ChromaDB que sí persiste datos en memoria de proceso, confirmando: (1) carga y recuperación de técnicas, (2) que `upsert` reemplaza por `technique_id` sin duplicar al recargar, (3) que `cargar_tecnicas_attack([])` es un no-op seguro, (4) que `tool_consultar_rag` devuelve `contexto_rag` y `tecnicas_mitre` correctamente mezclados, y (5) que con la colección vacía (antes de correr `preparar_mitre_attack.py` por primera vez) no rompe nada — devuelve lista vacía.
 
-**Ejecutado el 4-sep-2026.** `preparar_mitre_attack.py` corrió contra la API real de GitHub: **ATT&CK v19.2, 697 técnicas** (222 principales + 475 sub-técnicas, excluidas `revoked` y `deprecated`), cargadas en `attack_techniques` y con la procedencia registrada en `data/mitre_attack/provenance.json` (versión, fecha UTC y atribución de MITRE para citar). Confirmado de punta a punta con `log_runner.py` sobre `HDFS_2k.log`: `tecnicas_mitre` llega **vacío**, que es lo correcto para un lote operativo benigno — el propio diagnóstico concluye que «no se detectan patrones de ataque ni aplican técnicas de MITRE ATT&CK». La recuperación sí funciona: una consulta de fuerza bruta SSH devuelve T1110, T1110.003 y T1021.004 (ver «Umbral propio de similitud» abajo). También queda pendiente el enlace formal CVE ↔ técnica ATT&CK que menciona el §9 del informe — no incluido en esta ronda.
+**Ejecutado el 4-sep-2026.** `preparar_mitre_attack.py` corrió contra la API real de GitHub: **ATT&CK v19.2, 697 técnicas** (222 principales + 475 sub-técnicas, excluidas `revoked` y `deprecated`), cargadas en `attack_techniques` y con la procedencia registrada en `data/mitre_attack/provenance.json` (versión, fecha UTC y atribución de MITRE para citar). Confirmado de punta a punta con `log_runner.py` sobre `HDFS_2k.log`: `tecnicas_mitre` llega **vacío**, que es lo correcto para un lote operativo benigno — el propio diagnóstico concluye que «no se detectan patrones de ataque ni aplican técnicas de MITRE ATT&CK». La recuperación funciona cuando se la consulta **en prosa**: una consulta escrita a mano de fuerza bruta SSH devuelve T1110, T1110.003 y T1021.004 (ver «Umbral propio de similitud» abajo). Lo que esa verificación NO cubrió — y se descubrió el 9-sep-2026 — es que el sistema no consultaba en prosa, sino con `firma_lote()`: ver «Texto de consulta a ATT&CK» más abajo. También queda pendiente el enlace formal CVE ↔ técnica ATT&CK que menciona el §9 del informe — no incluido en esta ronda.
 
 ### Umbral propio de similitud (`SIMILARITY_FLOOR_ATTACK`, 4-sep-2026)
 
@@ -438,6 +438,37 @@ El corte separa limpio: ruido operativo no relacionado midió 0,16–0,18 de
 similitud contra las mismas técnicas. Verificado tras el fix: la consulta de
 fuerza bruta recupera las tres técnicas, y las consultas de HDFS y BGL siguen
 devolviendo **0** — sin falsos positivos, que era el riesgo de bajar el umbral.
+
+### Texto de consulta a ATT&CK (`describir_lote_en_prosa`, 9-sep-2026)
+
+El umbral de arriba se calibró con consultas **escritas a mano** en prosa. El sistema, en cambio, consultaba la colección con `firma_lote()` — una cadena de conteos del estilo `v1|lineas=23 ips=3 servicios=[sshd:18,...] eventos=[acceso_fallido:13,...]`. Se estaba comparando una tabla de conteos contra prosa narrativa, y la consecuencia, medida sobre corridas reales, era que **`tecnicas_mitre` venía vacío siempre**, para cualquier lote:
+
+| Texto de consulta | auth_log (fuerza bruta SSH real) | BGL_2k | HDFS_2k |
+|---|---|---|---|
+| `firma_lote()` | 0,324 | 0,300 | 0,302 |
+| `describir_lote_en_prosa()` | **0,484** (T1021, T1110.003) | 0,342 | 0,349 |
+
+`describir_lote_en_prosa(resumen)` arma una o dos oraciones con los campos que la agregación ya produjo — formato, evento y servicio dominantes con sus conteos, intentos fallidos, IPs distintas, y una cláusula de reputación solo si AbuseIPDB marcó algo:
+
+> Lote de tipo auth_log. Predominan eventos de acceso_fallido sobre el servicio sshd (13 eventos). 13 intentos fallidos de autenticacion desde 3 IPs distintas. 1 IP con reputacion maliciosa reportada en AbuseIPDB.
+
+Es determinística (no consulta el LLM) y vive junto a `firma_lote()`, que **no cambió**: las colecciones `patterns`/`errors`/`history` se siguen consultando con la firma, porque ahí ambos lados de la comparación son firmas.
+
+La cláusula de fallos se deriva de la distribución de eventos y no del contador `intentos_fallidos`. Los adaptadores de HDFS y BGL usan ese contador como marca de criticidad (`"intentos_fallidos": 1 if critico else 0`), no como fallo de login: describirlo como autenticación afirmaría algo que el log no dice y arrastraba la búsqueda hacia técnicas de credenciales por un lote de fallas de hardware — medido, con la primera versión de la prosa BGL llegaba a 0,369 contra T1016.
+
+**Consecuencia sobre el umbral: 0,35 → 0,42.** Con la prosa como consulta, el piso viejo quedó dentro de la banda de ruido. Medido sobre 32 ventanas reales de BGL y HDFS — las mismas que arma la evaluación — 19 disparaban técnicas irrelevantes, incluidas **8 de 8 ventanas benignas de HDFS** con T1564.004 (*NTFS File Attributes*) a ~0,36. El barrido separa limpio, porque la señal real y el ruido no se tocan (ruido máximo 0,365; señal 0,462–0,484):
+
+| Piso | Ventanas BGL/HDFS que disparan | Técnicas del ataque real |
+|---|---|---|
+| 0,35 | 19 / 32 | 5 / 5 |
+| 0,38 | 0 / 32 | 5 / 5 |
+| **0,42** | **0 / 32** | **5 / 5** |
+| 0,45 | 0 / 32 | 5 / 5 |
+| 0,47 | 0 / 32 | 2 / 5 |
+
+Se toma 0,42 por ser el punto medio de la banda libre. La medición es reproducible sin gastar cuota de LLM: agregación determinística más consulta a ChromaDB.
+
+**Verificado de punta a punta** el 9-sep-2026 contra la API real, con un lote `auth_log` de fuerza bruta SSH: el nodo RAG recupera T1021 (*Remote Services*, 0,484), T1685.001 (0,471) y T1110.003 (*Password Spraying*, 0,471), y las tres llegan al reporte y al informe en PDF con la nota de atribución de MITRE. Dos de las tres son pertinentes; T1685.001 (*Disable or Modify Windows Event Log*) es un vecino plausible pero equivocado — una técnica de Windows para un log de Linux. Es una consecuencia de recuperar `TOP_K_ATTACK=3` una vez superado el piso, no del piso en sí, y queda como limitación conocida: el prompt del triage ya instruye citar un ID **solo si de verdad aplica** al lote.
 
 ## Preprocesamiento heterogéneo (esquema v2)
 

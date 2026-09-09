@@ -536,3 +536,83 @@ def firma_lote(summary: dict, metadatos: dict | None = None) -> str:
         f"categorias=[{_dist('event_categories')}] "
         f"cobertura={cobertura}"
     )
+
+def _dominante(dist: dict) -> tuple[str, int] | None:
+    """Clave con más ocurrencias de una distribución, con su conteo."""
+    if not dist:
+        return None
+    clave = max(dist, key=lambda k: (dist[k], k))
+    return clave, dist[clave]
+
+
+def describir_lote_en_prosa(resumen: dict) -> str:
+    """Describe el lote en una o dos oraciones, a partir de los campos que
+    `aggregate_logs()` ya agregó. Determinística: no consulta el LLM.
+
+    **Por qué existe.** La colección `attack_techniques` guarda las técnicas
+    de MITRE ATT&CK como prosa ("SSH. Adversaries may use Valid Accounts to
+    log into remote machines..."). Consultarla con `firma_lote()` -- una
+    cadena de conteos del estilo `v1|lineas=23 ips=3 servicios=[sshd:18...]`
+    -- comparaba un formato con el otro y no recuperaba nada: medido el
+    9-sep-2026 sobre corridas reales, la similitud máxima quedaba en 0.324
+    (auth_log) y 0.300 (BGL), bajo el piso de 0.35, de modo que
+    `tecnicas_mitre` venía vacío SIEMPRE. Esta función arma el texto de
+    consulta en el mismo registro que los documentos indexados.
+
+    `firma_lote()` no cambia: sigue siendo la clave de `patterns`,
+    `errors` e `history`, donde ambos lados de la comparación son firmas y
+    el formato compacto es el correcto.
+    """
+    resumen = resumen or {}
+    partes = []
+
+    formato = resumen.get("formato_detectado") or "desconocido"
+    partes.append(f"Lote de tipo {formato}.")
+
+    ev = _dominante(resumen.get("eventos") or {})
+    svc = _dominante(resumen.get("servicios") or {})
+    if ev and svc:
+        partes.append(f"Predominan eventos de {ev[0]} sobre el servicio "
+                      f"{svc[0]} ({ev[1]} eventos).")
+    elif ev:
+        partes.append(f"Predominan eventos de {ev[0]} ({ev[1]} eventos).")
+    elif svc:
+        partes.append(f"Predomina el servicio {svc[0]} ({svc[1]} eventos).")
+
+    # La cláusula de fallos se deriva de la DISTRIBUCIÓN DE EVENTOS, no del
+    # contador `intentos_fallidos`. En auth-log ese contador sí son fallos
+    # de autenticación, pero los adaptadores de HDFS y BGL lo usan como
+    # marca de criticidad (`"intentos_fallidos": 1 if critico else 0`), así
+    # que describirlo como autenticación afirmaría algo que el log no dice
+    # -- y de paso arrastraría a ATT&CK hacia técnicas de credenciales por
+    # un lote de fallas de hardware.
+    eventos = resumen.get("eventos") or {}
+    n_ips = resumen.get("n_ips_distintas") or 0
+    n_fallos = eventos.get("acceso_fallido", 0)
+    if n_fallos:
+        # `intentos_fallidos` se acredita solo al origen del registro (ver
+        # `_registrar_ip`), así que sumarlo sobre `por_ip` no cuenta dos
+        # veces las líneas de flujo que nombran dos IPs. Una línea puede
+        # tener más de un fallo, por eso se prefiere al conteo de eventos.
+        intentos = sum((d or {}).get("intentos_fallidos", 0)
+                       for d in (resumen.get("por_ip") or {}).values()) or n_fallos
+        partes.append(f"{intentos} intentos fallidos de autenticacion desde "
+                      f"{n_ips} IPs distintas.")
+    elif eventos.get("evento_critico"):
+        partes.append(f"{eventos['evento_critico']} eventos criticos del "
+                      f"sistema registrados.")
+    if n_ips and not n_fallos:
+        partes.append(f"Actividad de {n_ips} IPs distintas.")
+
+    # Cláusula de reputación: solo si AbuseIPDB marcó algo. Una IP limpia no
+    # aporta señal y alargar la consulta con "0 IPs maliciosas" solo diluye
+    # el embedding.
+    reputacion = resumen.get("reputacion_ips") or {}
+    marcadas = [ip for ip, d in reputacion.items()
+                if (d or {}).get("categoria") in ("malicioso", "sospechoso")]
+    if marcadas:
+        etiqueta = "IP" if len(marcadas) == 1 else "IPs"
+        partes.append(f"{len(marcadas)} {etiqueta} con reputacion maliciosa "
+                      f"reportada en AbuseIPDB.")
+
+    return " ".join(partes)
