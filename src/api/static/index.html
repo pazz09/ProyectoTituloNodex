@@ -186,6 +186,28 @@
   #reporte h3 { font-size: 13px; margin: 18px 0 8px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .03em; }
   #reporte h3:first-of-type { margin-top: 0; }
   #diagnostico-txt { font-size: 15px; line-height: 1.55; }
+  #feedback {
+    margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--border);
+  }
+  #feedback .aviso { color: var(--text-dim); font-size: 13px; margin: 0 0 12px; }
+  #feedback .botones { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  #feedback button {
+    font: inherit; font-size: 14px; padding: 8px 16px; border-radius: 6px;
+    border: 1px solid var(--border); background: var(--panel); color: var(--text);
+    cursor: pointer;
+  }
+  #feedback button:hover:not(:disabled) { border-color: var(--accent); }
+  #feedback button:disabled { opacity: .5; cursor: default; }
+  #fb-si.elegido { background: var(--ok-soft); border-color: var(--ok); color: var(--ok); }
+  #fb-no.elegido { background: var(--err-soft); border-color: var(--err); color: var(--err); }
+  #fb-comentario {
+    width: 100%; margin-top: 12px; padding: 8px 10px; font: inherit; font-size: 14px;
+    border: 1px solid var(--border); border-radius: 6px; background: var(--panel);
+    color: var(--text); resize: vertical; min-height: 62px;
+  }
+  #fb-estado { font-size: 13px; margin: 12px 0 0; }
+  #fb-estado.ok { color: var(--ok); }
+  #fb-estado.error { color: var(--err); }
   #comandos-lista, #cves-lista { margin: 0; padding-left: 0; list-style: none; }
   #comandos-lista li {
     font-family: var(--mono); font-size: 13px; background: #fafbfd;
@@ -326,6 +348,23 @@
 
     <h3>CVEs relacionados</h3>
     <ul id="cves-lista"><li style="color:var(--text-dim)">—</li></ul>
+
+    <!-- Feedback humano (Fase C). No es un control decorativo: escribe en
+         la memoria de largo plazo (ChromaDB) y cambia lo que el RAG le
+         muestra al Triage en corridas futuras. De ahí la confirmación. -->
+    <div id="feedback">
+      <h3 style="margin-top:0">Revisión del analista</h3>
+      <p class="aviso">
+        Tu veredicto alimenta la memoria de largo plazo del sistema y afecta
+        las recomendaciones de análisis futuros.
+      </p>
+      <div class="botones">
+        <button id="fb-si">✅ Diagnóstico correcto</button>
+        <button id="fb-no">❌ Diagnóstico incorrecto</button>
+      </div>
+      <textarea id="fb-comentario" placeholder="Comentario (opcional): qué falta, qué sobra, o qué era en realidad."></textarea>
+      <p id="fb-estado" style="display:none"></p>
+    </div>
   </section>
 
   <!-- Historial de corridas (Fase A). Se carga bajo demanda: si nadie lo
@@ -563,6 +602,7 @@
     jobIdMostrado = jobId ?? r.job_id ?? jobIdMostrado;
     document.getElementById('btn-pdf').style.display =
       jobIdMostrado ? 'inline-block' : 'none';
+    prepararFeedback(r);
 
     const esc = document.getElementById('escalamiento');
     if (r.requiere_revision_humana) {
@@ -764,6 +804,93 @@
       btnPdf.textContent = etiqueta;
     }
   });
+
+  // --- Feedback humano (Fase C) -------------------------------------------
+  // Escribe en la memoria de largo plazo del sistema, así que se confirma
+  // antes de enviar y los botones quedan bloqueados mientras viaja.
+  const fbSi = document.getElementById('fb-si');
+  const fbNo = document.getElementById('fb-no');
+  const fbComentario = document.getElementById('fb-comentario');
+  const fbEstado = document.getElementById('fb-estado');
+
+  function prepararFeedback(r) {
+    const bloque = document.getElementById('feedback');
+    // Sin job_id no hay corrida persistida contra la cual registrar nada.
+    bloque.style.display = jobIdMostrado ? 'block' : 'none';
+    fbSi.classList.remove('elegido');
+    fbNo.classList.remove('elegido');
+    fbSi.disabled = fbNo.disabled = false;
+    fbComentario.value = '';
+    fbEstado.style.display = 'none';
+    fbEstado.className = '';
+
+    // Detalle del historial: si ya hubo veredicto, se muestra en vez de
+    // pedirlo de nuevo -- pero se deja reenviar, porque corregirse debe
+    // poder hacerse.
+    if (r && r.feedback_correcto !== null && r.feedback_correcto !== undefined) {
+      (r.feedback_correcto ? fbSi : fbNo).classList.add('elegido');
+      fbComentario.value = r.feedback_comentario || '';
+      mostrarEstadoFeedback(
+        `Ya revisada${r.feedback_timestamp ? ' el ' + r.feedback_timestamp : ''}.`, 'ok');
+    }
+  }
+
+  function mostrarEstadoFeedback(texto, clase) {
+    fbEstado.textContent = texto;
+    fbEstado.className = clase || '';
+    fbEstado.style.display = 'block';
+  }
+
+  async function enviarFeedback(correcto) {
+    if (!jobIdMostrado) return;
+    const veredicto = correcto ? 'CORRECTO' : 'INCORRECTO';
+    if (!confirm(
+        `Vas a marcar este diagnóstico como ${veredicto}.\n\n` +
+        'Esto va a afectar las recomendaciones futuras del sistema: el veredicto ' +
+        'se guarda en la memoria de largo plazo y se usa como referencia en ' +
+        'análisis posteriores.\n\n¿Confirmás?')) {
+      return;
+    }
+
+    fbSi.disabled = fbNo.disabled = true;
+    mostrarEstadoFeedback('Guardando...', '');
+    try {
+      const resp = await fetch(`/api/feedback/${jobIdMostrado}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ correcto, comentario: fbComentario.value.trim() || null }),
+      });
+      if (!resp.ok) throw new Error(`El servidor respondió HTTP ${resp.status}.`);
+      const datos = await resp.json();
+
+      fbSi.classList.toggle('elegido', correcto);
+      fbNo.classList.toggle('elegido', !correcto);
+
+      // Se informa qué pasó con la memoria, no solo que "se guardó": el
+      // punto de esta pantalla es que la escritura no es decorativa.
+      let detalle = 'Veredicto registrado.';
+      if (datos.memoria) {
+        detalle += ` Guardado en ${datos.memoria.guardado_en}`;
+        if (datos.memoria.promovido_a_attack_patterns) {
+          detalle += ', promovido a attack_patterns';
+        }
+        if (datos.memoria.error_registrado) {
+          detalle += ', registrado en error_memory';
+        }
+        detalle += '.';
+      } else if (datos.detalle) {
+        detalle += ' ' + datos.detalle;
+      }
+      mostrarEstadoFeedback(detalle, 'ok');
+    } catch (e) {
+      mostrarEstadoFeedback(`No se pudo guardar el veredicto: ${e.message || e}`, 'error');
+    } finally {
+      fbSi.disabled = fbNo.disabled = false;
+    }
+  }
+
+  fbSi.addEventListener('click', () => enviarFeedback(true));
+  fbNo.addEventListener('click', () => enviarFeedback(false));
 
   btnHistorial.addEventListener('click', cargarHistorial);
 

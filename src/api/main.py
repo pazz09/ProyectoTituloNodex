@@ -24,10 +24,11 @@ from pathlib import Path
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.responses import FileResponse, Response, StreamingResponse
+from pydantic import BaseModel
 
 from src.api import historial
 from src.api.informe_pdf import generar_informe_pdf
-from src.pipeline import analizar_lote_stream
+from src.pipeline import analizar_lote_stream, commit_feedback
 
 app = FastAPI(title="NODEX — Panel de análisis")
 
@@ -165,6 +166,84 @@ def descargar_informe(job_id: str):
         headers={"Content-Disposition": f'attachment; filename=informe_{job_id}.pdf'},
     )
 
+
+
+class Feedback(BaseModel):
+    """Veredicto de un analista humano sobre una corrida."""
+
+    correcto: bool
+    comentario: str | None = None
+
+
+@app.post("/api/feedback/{job_id}")
+def registrar_feedback(job_id: str, cuerpo: Feedback):
+    """Guarda el veredicto humano y lo propaga a la memoria de largo plazo.
+
+    Es una escritura REAL a ChromaDB: lo que se guarda acá cambia lo que el
+    RAG le muestra al Triage en corridas futuras. Por eso la interfaz pide
+    confirmación antes de llamar a este endpoint.
+
+    Sobrescribe un feedback previo a propósito: corregirse debe poder
+    hacerse. La escritura a memoria vuelve a ocurrir en ese caso -- las
+    colecciones son append-only, así que quedan las dos entradas; es el
+    comportamiento de `commit_feedback()` y no se altera acá.
+    """
+    corrida = historial.obtener_corrida(job_id)
+    if corrida is None:
+        raise HTTPException(404, f"No hay ninguna corrida con job_id {job_id}.")
+
+    historial.registrar_feedback(job_id, cuerpo.correcto, cuerpo.comentario)
+
+    # `commit_feedback()` lee la firma del lote de `_firma`. El historial no
+    # tiene columna propia para ella: viaja dentro del reporte. Las corridas
+    # anteriores a que se guardara el reporte completo no la tienen, y sin
+    # firma el documento que iría a ChromaDB sería la cadena vacía. En ese
+    # caso el veredicto se guarda igual en la tabla y se avisa que no se
+    # propagó -- decisión de Antonia (9-sep-2026), preferida sobre rechazar
+    # el feedback o sobre reconstruir una firma que podría no coincidir con
+    # la que realmente se usó en la corrida.
+    firma = (corrida.get("reporte_json") or {}).get("firma")
+    if not firma:
+        return {
+            "guardado": True,
+            "memoria": None,
+            "detalle": "La corrida no conserva la firma del lote (es anterior "
+                       "al registro del reporte completo), así que el veredicto "
+                       "no se propagó a la memoria de largo plazo.",
+        }
+
+    estado = {
+        "_firma": firma,
+        "diagnostico": corrida.get("diagnostico"),
+        "confianza": corrida.get("confianza"),
+    }
+
+    correccion = None
+    if not cuerpo.correcto:
+        correccion = {
+            "veredicto_humano": "incorrecto",
+            "comentario": cuerpo.comentario or "",
+            # `commit_feedback()` mergea `correccion` sobre el reporte ANTES
+            # de llamar a `commit_validated()`, que promueve a
+            # `attack_patterns` cuando la confianza supera AUTO_PROMOTE.
+            # Sin este 0.0, marcar un diagnóstico como incorrecto lo dejaría
+            # igual como ejemplar few-shot del Triage: verificado con un stub
+            # el 9-sep-2026 sobre una corrida real de confianza 1.00, donde
+            # `attack_patterns` pasaba de 1 a 2 documentos. La corrida sí
+            # queda en `host_history`, para no perder la trazabilidad.
+            "confianza": 0.0,
+        }
+
+    try:
+        resultado = commit_feedback(estado, host="web", correccion=correccion)
+    except Exception as e:  # noqa: BLE001
+        # El veredicto ya quedó guardado en la tabla: un fallo de ChromaDB no
+        # debe hacerlo perder ni devolver un 500 que sugiera lo contrario.
+        return {"guardado": True, "memoria": None,
+                "detalle": f"El veredicto se guardó, pero falló la escritura "
+                           f"a la memoria de largo plazo: {e}"}
+
+    return {"guardado": True, "memoria": resultado}
 
 @app.get("/api/stream/{job_id}")
 def stream_analisis(job_id: str):

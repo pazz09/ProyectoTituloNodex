@@ -147,6 +147,28 @@ Dos limitaciones documentadas:
 - **Corridas anteriores a esta fase** no tienen `resumen_json`/`reporte_json`: su informe se genera igual, pero declara explícitamente qué no se conservó en lugar de dejar la sección vacía.
 
 
+### Feedback humano conectado a la memoria (9-sep-2026)
+
+El panel de reporte —y el detalle de cualquier corrida del historial— cierra con "✅ Diagnóstico correcto" / "❌ Diagnóstico incorrecto" y un comentario opcional. `POST /api/feedback/{job_id}` guarda el veredicto en la tabla `corridas` y lo propaga a la memoria de largo plazo con `commit_feedback()` (`src/pipeline.py`). **Es una escritura real a ChromaDB**: cambia lo que el RAG le muestra al Triage en corridas futuras, y por eso la interfaz pide confirmación explícita antes de enviar.
+
+Hasta esta fase `commit_feedback()` **no tenía ningún llamador** en el repositorio: el ciclo de feedback estaba implementado pero nunca se había ejercitado.
+
+**Semántica del veredicto negativo.** `commit_feedback()` no distingue "correcto" de "incorrecto": distingue si recibe o no un `correccion`. Y con `correccion` igual llama a `commit_validated()`, que promueve a `attack_patterns` cuando la confianza supera `AUTO_PROMOTE` (0,90). Verificado con un stub que persiste en memoria de proceso, sobre una corrida real de confianza 1,00: marcar el diagnóstico como **incorrecto** lo dejaba igual como ejemplar few-shot del Triage — `attack_patterns` pasaba de 1 a 2 documentos. Es decir, el sistema aprendería el diagnóstico equivocado.
+
+La capa web resuelve esto sin tocar `commit_feedback()`: el `correccion` que manda incluye `"confianza": 0.0`, y como la función mergea `{**reporte, **correccion}` **antes** de commitear, la promoción nunca se dispara. La corrida sí queda en `host_history`, para no perder la trazabilidad. Decisión de Antonia (9-sep-2026) entre las tres opciones medidas; `tests/test_api_feedback.py` fija tanto el argumento que manda el endpoint como el orden del merge del que depende la garantía, para que un cambio en `pipeline.py` no la rompa en silencio.
+
+| Veredicto | `host_history` | `attack_patterns` | `error_memory` |
+|---|---|---|---|
+| ✅ correcto | + 1 | + 1 *(si confianza ≥ 0,90)* | — |
+| ❌ incorrecto | + 1 *(confianza 0,00)* | — | + 1 *(con el comentario humano)* |
+
+**Corridas sin firma.** `commit_feedback()` lee la firma del lote de `_firma`, y el historial no tiene columna propia para ella: viaja dentro de `reporte_json`. Las corridas anteriores a la Fase B no la conservan, y sin firma el documento que iría a ChromaDB sería la cadena vacía. En ese caso el veredicto se guarda igual en la tabla y la respuesta declara que no se propagó — se prefirió esto a rechazar el feedback o a reconstruir una firma que podría no coincidir con la que realmente se usó.
+
+**Verificado contra la colección real** el 9-sep-2026, partiendo de las tres colecciones en 0 documentos. Un feedback positivo y uno negativo sobre dos corridas de prueba (`auth_muestra.log`, ajenas a los datos de evaluación) dejaron `attack_patterns`=1, `host_history`=2 y `error_memory`=1, con el contenido esperado en cada una: el positivo promovido con confianza 1,00, el negativo commiteado con 0,00 y su comentario humano en `error_memory`. Consultando después con la misma firma, `retrieve_examples()` devuelve el patrón (similitud 1,000) y `retrieve_corrections()` la corrección — **es la primera vez que el ciclo de feedback se ejercita de punta a punta con datos reales.**
+
+*Nota:* esos documentos siguen en `data/chroma/`. Son de un lote sintético de prueba, así que una corrida de evaluación posterior sobre un lote parecido podría recuperarlos como few-shot; borrar la colección (`data/chroma/`) y repoblar solo `attack_techniques` con `preparar_mitre_attack.py` deja el estado limpio.
+
+
 ## Informe vs. prototipo — qué manda dónde
 
 | Aspecto | Informe (spec oficial) | Notebook (prototipo) | En este repo |
