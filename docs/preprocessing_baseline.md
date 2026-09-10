@@ -164,6 +164,38 @@ entregando los siguientes campos derivados:
     "n_ips_distintas": int,
     "ips_distintas": list[str],
     "por_ip": dict[str, dict],
+
+    # Agregados el 10-sep-2026 para cubrir los elementos que el §8.7.1 del
+    # informe exige en el reporte estructurado. Ambos motores los producen.
+    "usuarios": dict[str, int],            # top 10 por frecuencia
+    "n_usuarios_distintos": int,           # conteo real, sin truncar
+    "codigos_respuesta": dict[str, int],   # solo si el formato los trae
+    "entidades": list[dict],               # top 8 IPs, con usuarios y servicios
+    "cronologia": list[dict],              # secuencia temporal de lo relevante
+    "cronologia_omitidos": int,            # recorte declarado, no silencioso
+}
+```
+
+`cronologia` y `entidades` son de la **capa de presentación**: alimentan el
+informe, el PDF y la interfaz, y `src/tools/resumen_prompt.py` las excluye
+del prompt. La cronología además no puede llegar al LLM: sus entradas
+incluyen texto del registro, y en los formatos con etiqueta embebida en la
+línea (BGL, exportaciones de Zeek) eso reabriría la fuga de ground truth que
+cerró la Fase 7. Para esos formatos el mensaje se toma ya separado de la
+etiqueta —`_BglAdapter` expone `mensaje` en v1, `NormalizedEvent.message` en
+v2— y nunca la línea cruda.
+
+Cada entrada de `cronologia`:
+
+```python
+{
+    "n": int,                  # número de registro en el lote
+    "timestamp": str | None,
+    "servicio": str | None,
+    "evento": str | None,
+    "mensaje": str,            # recortado a 180 caracteres
+    # presentes solo si tienen contenido:
+    "ip": str, "ip_destino": str, "usuario": str, "codigo_respuesta": str,
 }
 ```
 

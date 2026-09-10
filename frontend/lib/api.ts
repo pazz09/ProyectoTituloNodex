@@ -38,6 +38,29 @@ export type ReputacionIp = {
   pais?: string | null
 }
 
+export type Entidad = {
+  ip: string
+  n_eventos: number
+  intentos_fallidos: number
+  usuarios_objetivo: string[]
+  servicios: string[]
+  n_como_origen: number
+  n_como_destino: number
+}
+
+/** Una entrada de la secuencia temporal del incidente. */
+export type EntradaCronologia = {
+  n: number
+  timestamp: string | null
+  servicio: string | null
+  evento: string | null
+  mensaje: string
+  ip?: string
+  ip_destino?: string
+  usuario?: string
+  codigo_respuesta?: string
+}
+
 export type ResumenLote = {
   formato_detectado?: string
   total_lineas?: number
@@ -46,6 +69,13 @@ export type ResumenLote = {
   eventos?: Record<string, number>
   ventana_temporal?: { inicio: string | null; fin: string | null }
   reputacion_ips?: Record<string, ReputacionIp>
+  // Elementos del §8.7.1 del informe, agregados el 10-sep-2026.
+  usuarios?: Record<string, number>
+  n_usuarios_distintos?: number
+  codigos_respuesta?: Record<string, number>
+  entidades?: Entidad[]
+  cronologia?: EntradaCronologia[]
+  cronologia_omitidos?: number
 }
 
 export type ReporteFinal = {
@@ -61,6 +91,14 @@ export type ReporteFinal = {
   intentos_correccion?: number
   requiere_revision_humana?: boolean
   firma?: string
+  /** Precedentes que el RAG recuperó y que el triage tuvo a la vista. */
+  precedentes?: {
+    clasificacion: string | null
+    confianza: number | null
+    host: string | null
+    similitud: number | null
+  }[]
+  n_precedentes?: number
 }
 
 /** Fila del historial: el shape que consume la vista de informe. */

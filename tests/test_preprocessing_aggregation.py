@@ -91,7 +91,11 @@ def test_el_resumen_v1_derivado_tiene_todos_los_campos_del_contrato():
     v1 = derivar_v1(preprocesar(CSV, modo="line"))
     assert set(v1) == {"formato_detectado", "total_lineas", "servicios",
                        "eventos", "ventana_temporal", "n_ips_distintas",
-                       "ips_distintas", "por_ip"}
+                       "ips_distintas", "por_ip",
+                       # Agregados el 10-sep-2026 para cubrir los elementos
+                       # que el §8.7.1 del informe exige en el reporte.
+                       "usuarios", "n_usuarios_distintos", "codigos_respuesta",
+                       "entidades", "cronologia", "cronologia_omitidos"}
 
 
 def test_por_ip_conserva_la_forma_que_los_consumidores_esperan():

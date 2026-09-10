@@ -161,6 +161,18 @@ export function ReportView({
 
   const yaRevisada = corrida.feedback_correcto !== null && corrida.feedback_correcto !== undefined
 
+  const cronologia = resumen.cronologia ?? []
+  const entidades = resumen.entidades ?? []
+  const usuarios = Object.entries(resumen.usuarios ?? {}).sort((a, b) => b[1] - a[1])
+  const codigos = Object.entries(resumen.codigos_respuesta ?? {}).sort((a, b) => b[1] - a[1])
+  const precedentes = reporte.precedentes ?? []
+
+  // Las secciones condicionales se omiten según los datos, así que la
+  // numeración se lleva con un contador: con números fijos el informe
+  // saltaría de "3" a "5" y se leería como una sección faltante.
+  let n = 0
+  const seccion = () => ++n
+
   return (
     <AppShell
       vista="report"
@@ -297,7 +309,7 @@ export function ReportView({
         <section className="panel">
           <div className="panel-head">
             <div>
-              <span className="label">Sección 1</span>
+              <span className="label">Sección {seccion()}</span>
               <h2>Diagnóstico</h2>
             </div>
             <span className="panel-note">agente de triage</span>
@@ -312,7 +324,7 @@ export function ReportView({
         <section className="panel">
           <div className="panel-head">
             <div>
-              <span className="label">Sección 2</span>
+              <span className="label">Sección {seccion()}</span>
               <h2>Evaluación del auditor</h2>
             </div>
           </div>
@@ -327,7 +339,7 @@ export function ReportView({
       <section className="panel">
         <div className="panel-head">
           <div>
-            <span className="label">Sección 3</span>
+            <span className="label">Sección {seccion()}</span>
             <h2>Evidencia observada</h2>
           </div>
           <span className="panel-note">preprocesamiento determinístico, sin LLM</span>
@@ -354,6 +366,22 @@ export function ReportView({
                 </dd>
               </div>
               <div>
+                <dt>Usuarios / actores</dt>
+                <dd className="mono">
+                  {usuarios.length === 0
+                    ? '—'
+                    : `${resumen.n_usuarios_distintos ?? usuarios.length} distinto(s)`}
+                </dd>
+              </div>
+              {codigos.length > 0 && (
+                <div>
+                  <dt>Códigos de respuesta</dt>
+                  <dd className="mono">
+                    {codigos.map(([c, k]) => `${c} (${k})`).join(' · ')}
+                  </dd>
+                </div>
+              )}
+              <div>
                 <dt>Firma del lote</dt>
                 <dd className="mono" style={{ wordBreak: 'break-all', fontSize: 11 }}>
                   {reporte.firma ?? '—'}
@@ -366,9 +394,17 @@ export function ReportView({
                 <Distribucion datos={resumen.servicios} />
               </div>
               <span className="label">Tipos de evento</span>
-              <div style={{ marginTop: 9 }}>
+              <div style={{ marginTop: 9, marginBottom: usuarios.length ? 17 : 0 }}>
                 <Distribucion datos={resumen.eventos} />
               </div>
+              {usuarios.length > 0 && (
+                <>
+                  <span className="label">Usuarios / actores más frecuentes</span>
+                  <div style={{ marginTop: 9 }}>
+                    <Distribucion datos={resumen.usuarios} tope={5} />
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -409,13 +445,104 @@ export function ReportView({
           </div>
           </>
         )}
+        {entidades.length > 0 && (
+          <>
+            <div className="subhead">
+              <span className="label">Entidades involucradas, por actividad</span>
+            </div>
+            <div className="table-scroll">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Dirección</th>
+                    <th style={{ textAlign: 'right' }}>Eventos</th>
+                    <th style={{ textAlign: 'right' }}>Fallidos</th>
+                    <th>Servicios</th>
+                    <th>Usuarios objetivo</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {entidades.map((e) => (
+                    <tr key={e.ip}>
+                      <td className="mono">{e.ip}</td>
+                      <td className="num">{e.n_eventos}</td>
+                      <td className="num">{e.intentos_fallidos || '—'}</td>
+                      <td className="mono" style={{ color: 'var(--text-muted)' }}>
+                        {e.servicios.join(', ') || '—'}
+                      </td>
+                      <td className="mono" style={{ color: 'var(--text-muted)' }}>
+                        {e.usuarios_objetivo.join(', ') || '—'}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
       </section>
+
+      {cronologia.length > 0 && (
+        <section className="panel">
+          <div className="panel-head">
+            <div>
+              <span className="label">Sección {seccion()}</span>
+              <h2>Secuencia temporal de los registros relevantes</h2>
+            </div>
+            <span className="panel-note">selección determinística, sin LLM</span>
+          </div>
+          <div className="table-scroll">
+            <table className="table cronologia">
+              <thead>
+                <tr>
+                  <th style={{ textAlign: 'right' }}>#</th>
+                  <th>Marca de tiempo</th>
+                  <th>Servicio</th>
+                  <th>Evento</th>
+                  <th>Actores</th>
+                  <th>Registro</th>
+                </tr>
+              </thead>
+              <tbody>
+                {cronologia.map((e) => (
+                  <tr key={`${e.n}-${e.timestamp}`}>
+                    <td className="num">{e.n}</td>
+                    <td className="mono nowrap">{e.timestamp ?? '—'}</td>
+                    <td className="mono" style={{ color: 'var(--text-muted)' }}>
+                      {e.servicio ?? '—'}
+                    </td>
+                    <td>
+                      <span className={e.evento === 'evento_critico' || e.evento === 'acceso_fallido' ? 'chip warn' : 'chip'}>
+                        {(e.evento ?? '—').replace(/_/g, ' ')}
+                      </span>
+                    </td>
+                    <td className="mono" style={{ color: 'var(--text-muted)' }}>
+                      {[e.ip, e.usuario, e.codigo_respuesta].filter(Boolean).join(' · ') || '—'}
+                    </td>
+                    <td>
+                      <code>{e.mensaje}</code>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {(resumen.cronologia_omitidos ?? 0) > 0 && (
+            <div className="pager" style={{ justifyContent: 'flex-start' }}>
+              <span>
+                {resumen.cronologia_omitidos} registro(s) relevante(s) más, omitidos por
+                extensión. Los conteos de la sección anterior se calculan sobre el lote completo.
+              </span>
+            </div>
+          )}
+        </section>
+      )}
 
       {tecnicas.length > 0 && (
         <section className="panel">
           <div className="panel-head">
             <div>
-              <span className="label">Sección 4</span>
+              <span className="label">Sección {seccion()}</span>
               <h2>Técnicas MITRE ATT&amp;CK relacionadas</h2>
             </div>
             <span className="panel-note">
@@ -453,10 +580,52 @@ export function ReportView({
         </section>
       )}
 
+      {precedentes.length > 0 && (
+        <section className="panel">
+          <div className="panel-head">
+            <div>
+              <span className="label">Sección {seccion()}</span>
+              <h2>Precedentes considerados</h2>
+            </div>
+            <span className="panel-note">memoria de largo plazo del sistema</span>
+          </div>
+          <div className="panel-body">
+            <p className="prose" style={{ marginBottom: 13 }}>
+              Casos anteriores que el RAG recuperó y que el agente de triage tuvo a la vista al
+              redactar el diagnóstico.
+            </p>
+            <div className="table-scroll">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Clasificación registrada</th>
+                    <th style={{ textAlign: 'right' }}>Confianza</th>
+                    <th style={{ textAlign: 'right' }}>Similitud</th>
+                    <th>Host</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {precedentes.map((p, i) => (
+                    <tr key={i}>
+                      <td>{p.clasificacion ?? 'sin clasificación'}</td>
+                      <td className="num">{p.confianza ?? '—'}</td>
+                      <td className="num">{p.similitud ?? '—'}</td>
+                      <td className="mono" style={{ color: 'var(--text-muted)' }}>
+                        {p.host ?? '—'}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      )}
+
       <section className="panel">
         <div className="panel-head">
           <div>
-            <span className="label">Sección {tecnicas.length > 0 ? 5 : 4}</span>
+            <span className="label">Sección {seccion()}</span>
             <h2>Mitigación propuesta</h2>
           </div>
           <span className="panel-note">NODEX no ejecuta estos comandos</span>
@@ -487,7 +656,7 @@ export function ReportView({
       <section className="panel">
         <div className="panel-head">
           <div>
-            <span className="label">Sección {tecnicas.length > 0 ? 6 : 5}</span>
+            <span className="label">Sección {seccion()}</span>
             <h2>Revisión del analista</h2>
           </div>
           <span className="panel-note">escribe en la memoria de largo plazo</span>

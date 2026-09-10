@@ -299,6 +299,11 @@ code, .mono { font-family: var(--font-mono); font-size: .94em; }
 .table tr.clickable:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 .table-scroll { overflow-x: auto; }
 .subhead { padding: 11px 17px 8px; border-top: 1px solid var(--border-soft); }
+/* La cronología es la tabla más densa del informe: el registro crudo va en
+   monoespaciado y a un cuerpo menor, para que una línea de log entre sin
+   partirse en cuatro renglones. */
+.table.cronologia td { padding-top: 7px; padding-bottom: 7px; }
+.table.cronologia code { font-size: 11px; color: var(--text-body); }
 
 /* Filas etiqueta/valor, para datos que no son tabulares. */
 .facts { display: grid; gap: 0; }

@@ -19,6 +19,12 @@ registro, así que mandar `raw` al LLM reabriría exactamente la fuga que la
 Fase 7 cerró.
 """
 
+from src.config import CRONOLOGIA_MAX_EVENTOS
+from src.tools.aggregation import (
+    _CRONOLOGIA_MAX_MENSAJE,
+    _entidades,
+    _top,
+)
 from src.preprocessing.models import NormalizedEvent
 from src.preprocessing.result import PreprocessingResult
 
@@ -207,6 +213,8 @@ def derivar_v1(resultado: PreprocessingResult, resumen_v2: dict | None = None) -
     if not servicios:
         servicios = {"desconocido": len(eventos)}
 
+    usuarios = _contar(e.source_user for e in eventos)
+
     return {
         "formato_detectado": formato,
         "total_lineas": resultado.total_eventos,
@@ -216,7 +224,63 @@ def derivar_v1(resultado: PreprocessingResult, resumen_v2: dict | None = None) -
         "n_ips_distintas": len(ips),
         "ips_distintas": ips,
         "por_ip": por_ip,
+        # Elementos del §8.7.1 agregados el 10-sep-2026. Se derivan acá para
+        # que v2 exponga lo mismo que v1: el informe, el PDF y la interfaz
+        # consumen estas claves y no deben depender del motor activo.
+        "usuarios": _top(usuarios, 10),
+        "n_usuarios_distintos": len(usuarios),
+        "codigos_respuesta": _contar(e.event_code for e in eventos),
+        "entidades": _entidades(ips, por_ip),
+        **_cronologia_v2(eventos, tiene_gt_embebido(resultado)),
     }
+
+
+def tiene_gt_embebido(resultado: PreprocessingResult) -> bool:
+    """Si la etiqueta del dataset viaja dentro de la propia línea.
+
+    Mismo criterio que usa `agregar_v2` para omitir las muestras crudas del
+    prompt (Fase 7 del plan): en BGL la etiqueta es el primer token y en las
+    exportaciones de Zeek es una columna del registro.
+    """
+    return any(g.source in ("bgl", "zeek") for g in resultado.ground_truth)
+
+
+def _cronologia_v2(eventos: list[NormalizedEvent], gt_embebido: bool = False) -> dict:
+    """Secuencia temporal de los registros relevantes, desde el esquema v2.
+
+    Usa el MISMO criterio de criticidad que `_eventos_v1` (`_es_critico`),
+    para que la cronología de v2 y la de v1 seleccionen los mismos registros
+    de un lote equivalente. El tope y el recorte del mensaje también son los
+    de v1: la sección del informe no cambia de forma según el motor.
+
+    Con `gt_embebido` NO se reproduce `raw`: la etiqueta del dataset vive en
+    la línea y copiarla al resumen reabriría la fuga de la Fase 7. Se usa
+    `message`, que es la parte del registro ya separada por el decoder.
+    """
+    entradas, omitidos = [], 0
+    for e in eventos:
+        if not _es_critico(e):
+            continue
+        if len(entradas) >= CRONOLOGIA_MAX_EVENTOS:
+            omitidos += 1
+            continue
+        crudo = e.message if gt_embebido else (e.raw or e.message)
+        mensaje = (crudo or "").strip()
+        if len(mensaje) > _CRONOLOGIA_MAX_MENSAJE:
+            mensaje = f"{mensaje[:_CRONOLOGIA_MAX_MENSAJE].rstrip()}…"
+        entrada = {
+            "n": e.record_number if e.record_number is not None else len(entradas) + 1,
+            "timestamp": e.timestamp,
+            "servicio": e.service_name,
+            "evento": "evento_critico",
+            "mensaje": mensaje,
+        }
+        for clave, valor in (("ip", e.source_ip), ("ip_destino", e.destination_ip),
+                             ("usuario", e.source_user), ("codigo_respuesta", e.event_code)):
+            if valor:
+                entrada[clave] = valor
+        entradas.append(entrada)
+    return {"cronologia": entradas, "cronologia_omitidos": omitidos}
 
 
 # Severidades que el propio log declara como graves. Son contenido del

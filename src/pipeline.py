@@ -185,6 +185,22 @@ def analizar_lote_stream(raw_logs: str, thread_id: str | None = None):
             # los campos pesados del resumen (`por_ip`, `ips_distintas`)
             # siguen sin viajar.
             "reputacion_ips": input_inicial["resumen_logs"].get("reputacion_ips") or {},
+            # Elementos que el §8.7.1 del informe exige en el reporte
+            # estructurado: entidades involucradas (usuarios incluidos) y la
+            # secuencia temporal de los registros relevantes. Van acotados
+            # desde la agregación (`usuarios` top 10, `entidades` top 8,
+            # `cronologia` con tope y `cronologia_omitidos` declarando el
+            # recorte), así que el evento sigue siendo chico.
+            #
+            # NO van al prompt del LLM: `resumen_prompt` los excluye. La
+            # cronología lleva texto crudo y en BGL la etiqueta del dataset
+            # es el primer token de la línea.
+            "usuarios": input_inicial["resumen_logs"].get("usuarios") or {},
+            "n_usuarios_distintos": input_inicial["resumen_logs"].get("n_usuarios_distintos") or 0,
+            "codigos_respuesta": input_inicial["resumen_logs"].get("codigos_respuesta") or {},
+            "entidades": input_inicial["resumen_logs"].get("entidades") or [],
+            "cronologia": input_inicial["resumen_logs"].get("cronologia") or [],
+            "cronologia_omitidos": input_inicial["resumen_logs"].get("cronologia_omitidos") or 0,
         },
         # Cómo se interpretó el archivo (Fase 12 del plan): permite que la
         # interfaz distinga un parsing completo de uno parcial o en
@@ -223,8 +239,37 @@ def analizar_lote_stream(raw_logs: str, thread_id: str | None = None):
             "intentos_correccion": estado_final.get("intentos_correccion"),
             "requiere_revision_humana": confianza < CONFIDENCE_THRESHOLD,
             "firma": firma,
+            # Evidencias utilizadas (§8.7.1): los precedentes que el RAG
+            # recuperó de la memoria y que el triage tuvo a la vista.
+            "precedentes": _precedentes(estado_final.get("contexto_rag")),
+            "n_precedentes": len(estado_final.get("contexto_rag") or []),
         },
     }
+
+
+def _precedentes(contexto_rag) -> list:
+    """Los precedentes que el RAG recuperó y que el triage efectivamente vio.
+
+    El §8.7.1 exige que el reporte incluya "las evidencias utilizadas". Los
+    CVEs, la reputación de IPs y las técnicas de ATT&CK ya quedaban en el
+    reporte; los patrones históricos de ChromaDB, no -- así que no era
+    auditable qué precedentes influyeron en el diagnóstico. Se guarda una
+    versión compacta (clasificación, confianza, similitud) en vez del
+    documento completo: el texto es la firma del lote precedente, que no
+    aporta nada leída y sí pesa en el JSON.
+    """
+    salida = []
+    for patron in contexto_rag or []:
+        if not isinstance(patron, dict):
+            continue
+        meta = patron.get("meta") or {}
+        salida.append({
+            "clasificacion": meta.get("clasificacion"),
+            "confianza": meta.get("confianza"),
+            "host": meta.get("host"),
+            "similitud": patron.get("similitud"),
+        })
+    return salida
 
 
 def commit_feedback(estado_final: dict, host: str = "desconocido", correccion: dict | None = None) -> dict:

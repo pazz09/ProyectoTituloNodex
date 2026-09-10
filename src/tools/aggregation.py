@@ -25,19 +25,36 @@ import csv
 import re
 from datetime import datetime, timezone
 
+from src.config import CRONOLOGIA_MAX_EVENTOS
+
 IP_RE = re.compile(r"(\d{1,3}(?:\.\d{1,3}){3})")
 TS_RE = re.compile(r"^([A-Z][a-z]{2}\s+\d+\s+\d{2}:\d{2}:\d{2})")
+
+# Código de respuesta HTTP. Se exige el marcador `HTTP/x.y` antes del número
+# para no confundirlo con un puerto, un PID o un id de bloque: en un lote de
+# auth-log o de HDFS abundan los números de tres cifras que no son códigos de
+# respuesta. Si la línea no es de un servicio web, no hay código y el campo
+# queda en None -- que es la respuesta correcta, no un hueco.
+CODIGO_RESPUESTA_RE = re.compile(r'HTTP/\d(?:\.\d)?"?\s+([1-5]\d{2})\b')
 
 
 def parse_log(raw: str) -> dict:
     """Helper por LÍNEA (formato auth-log): extrae IP, usuario, servicio y
-    tipo de evento. SIN CAMBIOS respecto a la versión original — incluye el
-    comportamiento heredado del notebook donde la regex de usuario prioriza
-    por posición, no por especificidad (ver tests/test_aggregation.py)."""
+    tipo de evento. Las claves originales conservan su comportamiento sin
+    cambios — incluye la particularidad heredada del notebook donde la regex
+    de usuario prioriza por posición, no por especificidad (ver
+    tests/test_aggregation.py).
+
+    El 10-sep-2026 se AGREGÓ la clave `codigo_respuesta` (§8.7.1 del informe
+    la nombra entre los elementos a extraer). Es un campo nuevo: no altera
+    ninguna de las claves previas ni la particularidad documentada.
+    """
     m = IP_RE.search(raw)
     ip = m.group(1) if m else None
     mu = re.search(r"(?:invalid user|user|for)\s+([A-Za-z0-9._-]+)", raw)
     user = mu.group(1) if mu else None
+    mc = CODIGO_RESPUESTA_RE.search(raw)
+    codigo = mc.group(1) if mc else None
     low = raw.lower()
     if "sshd" in low:
         servicio = "sshd"
@@ -52,7 +69,8 @@ def parse_log(raw: str) -> dict:
     fallidos = len(re.findall(r"failed password|authentication failure|401|403", low))
     evento = "acceso_fallido" if fallidos else "evento_generico"
     return {"ip": ip, "usuario": user, "servicio": servicio,
-            "evento": evento, "intentos_fallidos": fallidos}
+            "evento": evento, "intentos_fallidos": fallidos,
+            "codigo_respuesta": codigo}
 
 
 # ---------------------------------------------------------------------------
@@ -153,6 +171,12 @@ _BGL_SUBSISTEMA_A_SERVICIO = {
 
 
 class _BglAdapter:
+    # La etiqueta de anomalía del dataset es el PRIMER TOKEN de la línea, así
+    # que el texto crudo no se puede reproducir en el informe: la Fase 7 del
+    # plan cerró justamente esa fuga. Con este flag, la cronología usa el
+    # mensaje ya separado del flag y nunca la línea entera.
+    gt_embebido = True
+
     """Logs de BlueGene/L (supercomputador, RAS/kernel). Formato: LogHub
     BGL_2k y equivalentes — Tabla 8.11 del Informe. A diferencia de HDFS,
     BGL SÍ trae una etiqueta de anomalía real por línea: el primer campo
@@ -195,6 +219,8 @@ class _BglAdapter:
             "evento": "evento_critico" if es_alerta else "evento_normal",
             "intentos_fallidos": 1 if es_alerta else 0,
             "timestamp": ts_legible,
+            # Mensaje SIN el flag de alerta, para la cronología.
+            "mensaje": f"{subsistema} {nodo}: {msg}",
         }
 
 
@@ -447,6 +473,98 @@ def aggregate_logs(raw: str) -> dict:
     return aggregate_logs_v1(raw)
 
 
+# Etiquetas de evento que cada adaptador usa para el caso BASE, es decir el
+# registro que no aporta nada a la reconstrucción del incidente. Todo lo que
+# NO es una de estas entra a la cronología.
+#
+# Se define por exclusión y no por lista blanca a propósito: un adaptador
+# nuevo que agregue una etiqueta propia (`alerta`, `error_critico`, ...) queda
+# incluido en la cronología por omisión. El sesgo correcto acá es incluir de
+# más y que el analista descarte, no perder un registro en silencio.
+_EVENTOS_BASE = {"evento_generico", "evento_normal"}
+
+_CRONOLOGIA_MAX_MENSAJE = 180
+
+
+def _es_relevante(info: dict) -> bool:
+    """Si el registro entra o no a la cronología del incidente."""
+    if info.get("evento") not in _EVENTOS_BASE:
+        return True
+    # Un 4xx/5xx es relevante aunque el adaptador haya clasificado la línea
+    # como genérica.
+    codigo = info.get("codigo_respuesta")
+    return bool(codigo) and codigo[0] in "45"
+
+
+def _entrada_cronologia(n: int, info: dict, linea: str,
+                        gt_embebido: bool = False) -> dict:
+    """Una entrada de la secuencia temporal.
+
+    Incluye un extracto del registro CRUDO recortado: sin él la cronología
+    sería una tabla de metadatos, y lo que el §8.7.1 pide es poder
+    reconstruir el incidente leyéndola.
+
+    **Excepción por fuga de ground truth.** Si el formato trae la etiqueta
+    del dataset embebida en la propia línea -- en BGL es el primer token --
+    reproducir el crudo metería esa etiqueta en el resumen, que es la fuga
+    que cerró la Fase 7 del plan de preprocesamiento. En ese caso se usa el
+    mensaje que el adaptador ya separó del flag, y si no hay uno se declara
+    la omisión en vez de caer al crudo.
+    """
+    etiquetado = gt_embebido or bool(info.get("etiqueta"))
+    if etiquetado:
+        mensaje = info.get("mensaje") or (
+            "(registro omitido: el formato trae la etiqueta del dataset en la "
+            "línea y el adaptador no expuso un mensaje separado)"
+        )
+    else:
+        mensaje = info.get("mensaje") or linea
+    mensaje = mensaje.strip()
+    if len(mensaje) > _CRONOLOGIA_MAX_MENSAJE:
+        mensaje = f"{mensaje[:_CRONOLOGIA_MAX_MENSAJE].rstrip()}…"
+    entrada = {
+        "n": n,
+        "timestamp": info.get("timestamp"),
+        "servicio": info.get("servicio"),
+        "evento": info.get("evento"),
+        "mensaje": mensaje,
+    }
+    # Solo las claves con contenido: una cronología con `"usuario": null` en
+    # cada entrada infla el JSON y el PDF sin decir nada.
+    for clave in ("ip", "ip_destino", "usuario", "codigo_respuesta"):
+        if info.get(clave):
+            entrada[clave] = info[clave]
+    return entrada
+
+
+def _top(conteos: dict, n: int) -> dict:
+    """Las `n` claves más frecuentes. Acota lo que puede crecer sin techo:
+    en HDFS el "usuario" es un block id y hay miles por lote."""
+    return dict(sorted(conteos.items(), key=lambda kv: (-kv[1], kv[0]))[:n])
+
+
+def _entidades(ips: list, por_ip: dict, tope: int = 8) -> list:
+    """Entidades involucradas (§8.7.1), acotadas y ya ordenadas por actividad.
+
+    `por_ip` completo puede tener cientos de entradas -- 202 en HDFS_2k -- y
+    va al prompt acotado por `resumen_prompt`, pero el REPORTE necesita una
+    versión corta y estable que se pueda leer.
+    """
+    salida = []
+    for ip in ips[:tope]:
+        datos = por_ip.get(ip) or {}
+        salida.append({
+            "ip": ip,
+            "n_eventos": datos.get("n_eventos", 0),
+            "intentos_fallidos": datos.get("intentos_fallidos", 0),
+            "usuarios_objetivo": (datos.get("usuarios_objetivo") or [])[:5],
+            "servicios": (datos.get("servicios") or [])[:3],
+            "n_como_origen": datos.get("n_como_origen", 0),
+            "n_como_destino": datos.get("n_como_destino", 0),
+        })
+    return salida
+
+
 def aggregate_logs_v1(raw: str) -> dict:
     """Preprocesa TODO el lote de forma determinística (sin LLM). Detecta
     el formato una vez por lote y usa el adaptador correspondiente para
@@ -458,8 +576,12 @@ def aggregate_logs_v1(raw: str) -> dict:
     """
     lineas = [l for l in raw.splitlines() if l.strip()]
     adapter = _detectar_formato(lineas)
+    gt_embebido = getattr(adapter, "gt_embebido", False)
     servicios, eventos, por_ip, etiquetas = {}, {}, {}, {}
+    usuarios, codigos = {}, {}
     timestamps = []
+    cronologia: list[dict] = []
+    omitidos_cronologia = 0
     n_registros = 0
     for ln in lineas:
         info = adapter.parsear_linea(ln)
@@ -468,6 +590,10 @@ def aggregate_logs_v1(raw: str) -> dict:
         n_registros += 1
         servicios[info["servicio"]] = servicios.get(info["servicio"], 0) + 1
         eventos[info["evento"]] = eventos.get(info["evento"], 0) + 1
+        if info.get("usuario"):
+            usuarios[info["usuario"]] = usuarios.get(info["usuario"], 0) + 1
+        if info.get("codigo_respuesta"):
+            codigos[info["codigo_respuesta"]] = codigos.get(info["codigo_respuesta"], 0) + 1
         etiqueta = info.get("etiqueta")
         if etiqueta:
             etiquetas[etiqueta] = etiquetas.get(etiqueta, 0) + 1
@@ -477,6 +603,13 @@ def aggregate_logs_v1(raw: str) -> dict:
             _registrar_ip(por_ip, info["ip"], info, "origen")
         if info.get("ip_destino") and info["ip_destino"] != info["ip"]:
             _registrar_ip(por_ip, info["ip_destino"], info, "destino")
+
+        if _es_relevante(info):
+            if len(cronologia) < CRONOLOGIA_MAX_EVENTOS:
+                cronologia.append(_entrada_cronologia(
+                    n_registros, info, ln, gt_embebido))
+            else:
+                omitidos_cronologia += 1
     por_ip_ser = {ip: {"intentos_fallidos": v["intentos_fallidos"],
                        "usuarios_objetivo": sorted(v["usuarios"]),
                        "servicios": sorted(v["servicios"]),
@@ -491,7 +624,16 @@ def aggregate_logs_v1(raw: str) -> dict:
                                     "fin": timestamps[-1] if timestamps else None},
                "n_ips_distintas": len(ips),
                "ips_distintas": ips,
-               "por_ip": por_ip_ser}
+               "por_ip": por_ip_ser,
+               # Elementos que el §8.7.1 del informe nombra explícitamente y
+               # que antes se calculaban solo por dentro (usuarios) o no se
+               # calculaban (códigos de respuesta, cronología).
+               "usuarios": _top(usuarios, 10),
+               "n_usuarios_distintos": len(usuarios),
+               "codigos_respuesta": codigos,
+               "entidades": _entidades(ips, por_ip_ser),
+               "cronologia": cronologia,
+               "cronologia_omitidos": omitidos_cronologia}
     # Solo aparece si el formato traía una columna de etiqueta (ground truth
     # del dataset, p. ej. label_tactic de UWF-ZeekDataFall22 con tácticas
     # MITRE ATT&CK). Los formatos sin etiquetar no ensucian el resumen.

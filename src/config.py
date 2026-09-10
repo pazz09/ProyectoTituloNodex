@@ -267,6 +267,13 @@ LOG_MAX_RAW_SAMPLES = _env_int("LOG_MAX_RAW_SAMPLES", 20)
 LOG_MAX_UNMAPPED_FIELDS = _env_int("LOG_MAX_UNMAPPED_FIELDS", 100)
 
 LOG_NORMALIZATION_SCHEMA_VERSION = os.environ.get("LOG_NORMALIZATION_SCHEMA_VERSION", "2.0")
+# Máximo de registros que entran a la secuencia temporal del incidente
+# (§8.7.1 del informe). Es un tope de PRESENTACIÓN, no de análisis: los
+# conteos y distribuciones siguen calculándose sobre el lote completo, y lo
+# que se recorta queda declarado en `cronologia_omitidos`. Con 40 entradas
+# el JSON del historial y la sección del PDF se mantienen legibles.
+CRONOLOGIA_MAX_EVENTOS = _env_int("CRONOLOGIA_MAX_EVENTOS", 40)
+
 LOG_MAX_FILE_BYTES = _env_int("LOG_MAX_FILE_BYTES", 52428800)   # 50 MiB
 LOG_MAX_EVENTS = _env_int("LOG_MAX_EVENTS", 100000)
 

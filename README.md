@@ -219,6 +219,43 @@ La capa web resuelve esto sin tocar `commit_feedback()`: el `correccion` que man
 *Nota:* esos documentos siguen en `data/chroma/`. Son de un lote sintético de prueba, así que una corrida de evaluación posterior sobre un lote parecido podría recuperarlos como few-shot; borrar la colección (`data/chroma/`) y repoblar solo `attack_techniques` con `preparar_mitre_attack.py` deja el estado limpio.
 
 
+## Cobertura del alcance del informe (§8.7.1, 10-sep-2026)
+
+Las siete capacidades del §8.7.1 están implementadas. Los ocho elementos que ese apartado exige en el reporte estructurado también, pero tres se cerraron el 10-sep-2026 porque faltaban o estaban a medias:
+
+| Elemento del reporte (§8.7.1) | Dónde vive |
+|---|---|
+| Descripción general del evento | `diagnostico` |
+| **Secuencia temporal de los registros relevantes** | `cronologia` — **agregado el 10-sep** |
+| **Entidades involucradas** | `entidades` + `usuarios` — **usuarios agregados el 10-sep** |
+| Hipótesis del incidente | `diagnostico`, `hay_incidente`, `hay_anomalia` |
+| **Evidencias utilizadas** | CVEs, reputación, ATT&CK, y `precedentes` — **agregado el 10-sep** |
+| Técnicas MITRE ATT&CK asociadas | `tecnicas_mitre` |
+| Nivel de confianza | `confianza` + umbral de escalamiento |
+| Acciones recomendadas | `comandos_mitigacion` + `comandos_validos` |
+
+**Secuencia temporal.** Antes el reporte tenía la *ventana* del lote (inicio y fin) pero no una cronología, que es justo lo que sostiene el argumento de "reconstrucción del incidente". `cronologia` selecciona los registros que se apartan del comportamiento base del lote, en orden de aparición, con un extracto del registro. La selección es **determinística**: no interviene el LLM. La regla se define por exclusión —todo lo que no es `evento_generico`/`evento_normal`, más cualquier 4xx/5xx— para que un adaptador nuevo con etiquetas propias quede incluido por omisión en vez de perderse en silencio.
+
+El tope es `CRONOLOGIA_MAX_EVENTOS` (40 por defecto) y lo recortado queda **declarado** en `cronologia_omitidos`: en BGL_2k son 40 mostrados y 103 omitidos de 143 eventos críticos; en HDFS_2k, 40 de 80. Es un tope de presentación, no de análisis — los conteos y distribuciones se siguen calculando sobre el lote completo.
+
+**Cuidado con la fuga de ground truth.** La cronología reproduce texto del registro, y en BGL la etiqueta de anomalía del dataset **es el primer token de la línea**: copiar el crudo reabriría la fuga que cerró la Fase 7 del preprocesamiento y volvería circulares las métricas de detección. Hay dos defensas, y un test para cada una:
+
+1. Para los formatos con etiqueta embebida en la línea, el mensaje se toma ya separado del flag (`_BglAdapter` expone `mensaje` en v1, `NormalizedEvent.message` en v2). Si no hay un mensaje separable, se declara la omisión en vez de caer al crudo.
+2. `cronologia` y `entidades` **no llegan al prompt** del LLM: `resumen_prompt.py` las excluye. Son de la capa de presentación — el informe, el PDF y la interfaz.
+
+**Códigos de respuesta.** El §8.7.1 los nombra entre los elementos a extraer y v1 no los guardaba (solo usaba `401|403` para contar fallos). `parse_log()` gana la clave `codigo_respuesta`, sin alterar ninguna de las claves previas ni la particularidad heredada del notebook que este README documenta. Se exige el marcador `HTTP/x.y` antes del número: en auth-log, HDFS o BGL abundan los números de tres cifras que son puertos, PIDs o ids de bloque, y tomarlos por códigos de respuesta sería inventar evidencia.
+
+**Precedentes.** Los CVEs, la reputación de IPs y las técnicas de ATT&CK ya quedaban en el reporte; los patrones históricos que el RAG recuperó de ChromaDB, no — así que no era auditable qué precedentes influyeron en el diagnóstico. `precedentes` guarda una versión compacta (clasificación, confianza registrada, similitud, host) en vez del documento completo.
+
+**Los dos motores exponen las mismas claves.** El informe, el PDF y la interfaz no deben cambiar de forma según `LOG_PREPROCESSING_ENGINE`; hay un test que lo fija.
+
+### Lo que sigue fuera del alcance, a propósito
+
+El §8.7.2 excluye explícitamente el despliegue productivo, la integración con SIEM, la ingesta en tiempo real, la ejecución automática de acciones, el parser universal, el fine-tuning, el análisis forense profundo y la generación de reglas SIEM. Nada de eso se implementó. Dos consecuencias concretas que conviene tener a mano:
+
+- **La validación de comandos es básica por diseño**, como dice el propio alcance: 8 patrones destructivos y una lista blanca de 12 binarios en `src/tools/validation.py`. No es un sandbox.
+- **El ciclo de corrección de comandos nunca se disparó con un LLM real.** `intentos_correccion > 1` en 0 de las corridas registradas: el validador aprobó siempre en el primer intento. El nodo existe y está cubierto con mocks, pero no hay evidencia empírica de ese camino.
+
 ## Informe vs. prototipo — qué manda dónde
 
 | Aspecto | Informe (spec oficial) | Notebook (prototipo) | En este repo |

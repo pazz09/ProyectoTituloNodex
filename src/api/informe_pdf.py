@@ -231,6 +231,19 @@ def generar_informe_pdf(corrida: dict) -> bytes:
     if n_ips is not None:
         _campo(pdf, "Direcciones IP distintas", n_ips)
 
+    usuarios = resumen.get("usuarios") or {}
+    if usuarios:
+        n_distintos = resumen.get("n_usuarios_distintos") or len(usuarios)
+        principales_usr = sorted(usuarios.items(), key=lambda kv: -kv[1])[:8]
+        _campo(pdf, "Usuarios / actores observados",
+               f"{n_distintos} distinto(s). Más frecuentes: "
+               + ", ".join(f"{k} ({v})" for k, v in principales_usr))
+
+    codigos = resumen.get("codigos_respuesta") or {}
+    if codigos:
+        _campo(pdf, "Códigos de respuesta",
+               ", ".join(f"{k}: {v}" for k, v in sorted(codigos.items())))
+
     reputacion = resumen.get("reputacion_ips") or {}
     if reputacion:
         categorias: dict[str, int] = {}
@@ -242,10 +255,62 @@ def generar_informe_pdf(corrida: dict) -> bytes:
     if not any((ventana, servicios, eventos, n_ips is not None, reputacion)):
         _parrafo(pdf, "No se registró el detalle de la evidencia para esta corrida.")
 
+    # --- Entidades involucradas -------------------------------------------
+    entidades = resumen.get("entidades") or []
+    if entidades:
+        pdf.ln(2)
+        _parrafo(pdf, "Entidades involucradas, por actividad:")
+        for ent in entidades:
+            detalle = [f"{ent.get('n_eventos', 0)} evento(s)"]
+            if ent.get("intentos_fallidos"):
+                detalle.append(f"{ent['intentos_fallidos']} intento(s) fallido(s)")
+            if ent.get("servicios"):
+                detalle.append("servicios: " + ", ".join(ent["servicios"]))
+            if ent.get("usuarios_objetivo"):
+                detalle.append("usuarios: " + ", ".join(ent["usuarios_objetivo"]))
+            _parrafo(pdf, f"   {ent.get('ip', '?')} - " + " | ".join(detalle))
+
+    # --- Secuencia temporal de los registros relevantes -------------------
+    # El §8.7.1 del informe la exige explícitamente: sin ella el documento
+    # tiene la ventana del lote pero no permite reconstruir el incidente.
+    cronologia = resumen.get("cronologia") or []
+    if cronologia:
+        seccion("Secuencia temporal de los registros relevantes")
+        omitidos = resumen.get("cronologia_omitidos") or 0
+        _parrafo(pdf, "Registros que se apartan del comportamiento base del "
+                      "lote, en orden de aparición. La selección es "
+                      "determinística: no interviene el modelo de lenguaje.")
+        pdf.ln(1)
+        for entrada in cronologia:
+            cabecera = " | ".join(str(x) for x in (
+                f"#{entrada.get('n', '?')}",
+                entrada.get("timestamp") or "sin marca de tiempo",
+                entrada.get("servicio") or "-",
+                entrada.get("evento") or "-",
+            ))
+            actores = [f"{k}={entrada[k]}" for k in
+                       ("ip", "ip_destino", "usuario", "codigo_respuesta")
+                       if entrada.get(k)]
+            if actores:
+                cabecera += " | " + " ".join(actores)
+            pdf.set_font("Helvetica", "B", 8)
+            pdf.multi_cell(0, 4, sanear(cabecera),
+                           new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+            pdf.set_font("Courier", size=8)
+            pdf.multi_cell(0, 4, sanear(f"   {entrada.get('mensaje', '')}"),
+                           new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+            pdf.ln(1.5)
+        pdf.set_font("Helvetica", size=10)
+        if omitidos:
+            _parrafo(pdf, f"({omitidos} registro(s) relevante(s) más, omitidos "
+                          "por extensión. Los conteos y distribuciones de la "
+                          "sección anterior se calculan sobre el lote completo.)")
+
     # --- 4. Contexto y técnicas relacionadas -----------------------------
     tecnicas = corrida.get("tecnicas_mitre") or []
     cves = reporte.get("cves_encontrados") or []
-    if tecnicas or cves:
+    precedentes = reporte.get("precedentes") or []
+    if tecnicas or cves or precedentes:
         seccion("Contexto y técnicas relacionadas")
         if tecnicas:
             _parrafo(pdf, "Técnicas de MITRE ATT&CK relacionadas con el "
@@ -265,6 +330,27 @@ def generar_informe_pdf(corrida: dict) -> bytes:
             pdf.ln(1)
         if cves:
             _campo(pdf, "CVEs consultados en la NVD", len(cves))
+        if precedentes:
+            # "Evidencias utilizadas" (§8.7.1): qué precedentes de la memoria
+            # de largo plazo tuvo a la vista el agente de triage.
+            _parrafo(pdf, "Precedentes recuperados de la memoria del sistema "
+                          "y considerados en el diagnóstico:")
+            for p in precedentes:
+                sim = p.get("similitud")
+                conf = p.get("confianza")
+                detalle = []
+                if sim is not None:
+                    detalle.append(f"similitud {sim}")
+                if conf is not None:
+                    detalle.append(f"confianza registrada {conf}")
+                if p.get("host"):
+                    detalle.append(f"host {p['host']}")
+                texto = str(p.get("clasificacion") or "sin clasificación")
+                if len(texto) > 220:
+                    texto = f"{texto[:220].rstrip()}..."
+                _parrafo(pdf, f"   {texto}")
+                if detalle:
+                    _parrafo(pdf, "      (" + ", ".join(detalle) + ")")
 
     # --- 5. Evaluación del auditor ---------------------------------------
     seccion("Evaluación del auditor")

@@ -22,6 +22,28 @@ from src.config import TOP_N_IPS_PROMPT
 
 _CATEGORIAS_RELEVANTES = {"malicioso", "sospechoso"}
 
+# Claves del resumen que NO van al prompt. Son de la capa de presentación:
+# alimentan el informe, el PDF y la interfaz, no el razonamiento del LLM.
+#
+# `cronologia` además NO PUEDE ir al prompt: sus entradas incluyen un
+# extracto del registro CRUDO, y en BGL la etiqueta de anomalía del dataset
+# es el primer token de la línea. Mandarla reabriría exactamente la fuga de
+# ground truth que cerró la Fase 7 del plan de preprocesamiento -- por eso
+# `agregar_v2` ya omite las muestras crudas en los lotes con etiqueta
+# embebida. La cronología existe para que la lea un humano, no el detector.
+#
+# `entidades` se excluye por costo y no por fuga: es una vista corta de
+# `por_ip`, que el prompt ya recibe acotado, así que serializarla sería
+# pagar dos veces por la misma información.
+_CLAVES_FUERA_DEL_PROMPT = ("cronologia", "cronologia_omitidos", "entidades")
+
+
+def _sin_claves_de_presentacion(resumen: dict) -> dict:
+    """Copia del resumen sin las claves que no deben llegar al LLM."""
+    if not any(clave in resumen for clave in _CLAVES_FUERA_DEL_PROMPT):
+        return resumen
+    return {k: v for k, v in resumen.items() if k not in _CLAVES_FUERA_DEL_PROMPT}
+
 
 def acotar_resumen_para_prompt(resumen: dict, top_n: int = TOP_N_IPS_PROMPT) -> dict:
     """Devuelve una copia de `resumen` con el desglose por IP acotado.
@@ -44,6 +66,8 @@ def acotar_resumen_para_prompt(resumen: dict, top_n: int = TOP_N_IPS_PROMPT) -> 
     Si el lote tiene `top_n` IPs distintas o menos, no hay nada que acotar
     y se devuelve `resumen` sin copiar.
     """
+    resumen = _sin_claves_de_presentacion(resumen)
+
     ips_ordenadas = resumen.get("ips_distintas", [])
     if len(ips_ordenadas) <= top_n:
         return resumen
