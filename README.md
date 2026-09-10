@@ -109,6 +109,39 @@ uvicorn src.api.main:app --reload                         # interfaz web (panel 
 
 `src/pipeline.py` es el punto de entrada: agrega el lote, corre el grafo de 7 nodos con streaming paso a paso, y expone `analizar_lote()` / `commit_feedback()` para integrarlo en otro script o notebook. `src/tools/log_runner.py` (24-ago-2026) es un wrapper de línea de comandos sobre `analizar_lote()` para correrlo directamente contra un archivo de logs (en vez del lote de ejemplo hardcodeado en `pipeline.py`) — guarda un resumen curado del resultado (diagnóstico, confianza, comandos, formato detectado, distribución de servicios/eventos) en `results/<nombre>_<timestamp>.json`, salvo que se pase `--no-guardar`. `data/logs/` trae `HDFS_2k.log` y `BGL_2k.log` (muestras de LogHub, Tabla 8.11 del informe) listas para probar.
 
+## Interfaz nueva en Next.js (`frontend/`, 9-sep-2026)
+
+Interfaz definitiva, sobre un skeleton de diseño generado en v0 y aprobado por Antonia: Next.js 16 + React 19 + Tailwind 4 + shadcn. **No reemplaza todavía** a `src/api/static/index.html` (ver sección siguiente) — conviven hasta que se decida retirar la vieja.
+
+```bash
+# terminal 1 -- backend
+uvicorn src.api.main:app --reload
+
+# terminal 2 -- frontend
+cd frontend && pnpm install && pnpm dev      # http://localhost:3000
+```
+
+El backend expone CORS para `http://localhost:3000` y `http://127.0.0.1:3000`, con `Content-Disposition` en `expose_headers` (el frontend lo lee para nombrar el PDF). La URL de la API se puede cambiar con `NEXT_PUBLIC_API_BASE`; por defecto apunta a `http://127.0.0.1:8000`.
+
+**Cuatro vistas**, en `frontend/components/`: carga (`upload-view`), análisis en vivo (`analysis-view`), informe (`report-view`) e historial (`historial-view`). El diseño visual es el del skeleton, sin cambios de paleta, tipografía ni espaciado; lo que se agregó (tarjetas de MITRE, tabla del historial, botones de feedback, estados de error) reusa las mismas clases y la misma familia de color, en `app/globals.css`.
+
+**El progreso del grafo no es lineal, y el estado lo refleja** (`lib/nodos.ts`). En vez de un índice que solo avanza, hay un mapa por nodo con estado (`pendiente`/`activo`/`completado`) y contador de visitas, porque en corridas reales:
+
+- `agente_analista_triage` se ejecuta **de nuevo** después del RAG. Cuando eso pasa, el paso vuelve a mostrarse activo con la etiqueta "Revisando de nuevo" y un `×2`, **sin** resetear los pasos intermedios que ya corrieron.
+- `tool_consultar_rag` y `tool_consultar_cve` pueden **no ejecutarse nunca** (lo decide el selector): quedan marcados "Solo si se necesita" y no cuentan en el porcentaje hasta que aparecen.
+- `agente_ingeniero_mitigacion` y `tool_validar_comandos` pueden repetirse por el ciclo de corrección de comandos.
+
+El orden en que se listan los 7 pasos es el de la topología del grafo, no el de ejecución (el RAG corre antes del selector): los números son etiquetas, no secuencia.
+
+**Una sola vista de informe para la corrida en vivo y para el detalle del historial.** El evento `final` del SSE no trae `job_id` ni los datos del archivo, así que al recibirlo el frontend pide `GET /api/historial/{job_id}` y alimenta `report-view` con esa fila — el mismo shape que usa el historial. Ver [`docs/contrato_api_frontend.md`](docs/contrato_api_frontend.md), que documenta los campos medidos contra respuestas reales.
+
+Detalles que conviene saber:
+
+- El límite de archivo que muestra la interfaz es el real del backend (`LOG_MAX_FILE_BYTES`, 50 MiB), no el "500 MB" del skeleton.
+- Las descripciones de las técnicas de ATT&CK se limpian antes de mostrarse: el `texto` indexado trae el marcado propio de MITRE (`[Valid Accounts](https://…)`, `(Citation: …)`) y repite el nombre de la técnica al principio.
+- El veredicto del banner se deriva de `hay_incidente`/`hay_anomalia`. **No se inventa un puntaje de riesgo** que el sistema no calcula.
+- `frontend/AGENTS.md` y `frontend/CLAUDE.md` los genera Next 16 solo en cada `pnpm dev`; borrarlos no sirve, vuelven a aparecer.
+
 ## Interfaz web (panel de análisis, 1-sep-2026)
 
 `src/api/` agrega una interfaz web local (FastAPI + HTML/JS sin frameworks de frontend) sobre `src/pipeline.py`, pensada para demostración: subir un lote de logs, ver el grafo de 7 nodos ejecutarse en vivo (qué nodo está corriendo, qué devolvió, si entra al ciclo de RAG, CVE o de corrección de comandos) y el reporte final con confianza, diagnóstico, comandos de mitigación y CVEs. No reemplaza `log_runner.py` ni las corridas usadas para el informe — es una capa puramente visual sobre el mismo `analizar_lote()`.

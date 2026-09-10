@@ -1,0 +1,200 @@
+/**
+ * Cliente de la API de NODEX.
+ *
+ * Los tipos siguen los campos REALES de la API, medidos contra respuestas
+ * reales -- ver `docs/contrato_api_frontend.md`. Dos que sorprenden y
+ * conviene no olvidar:
+ *
+ *  - `tecnicas_mitre` no es `{technique_id, nombre}`: cada elemento trae
+ *    `texto`, `meta` y `similitud`.
+ *  - el evento `final` del SSE no trae `job_id` ni los datos del archivo, así
+ *    que la vista de informe se alimenta con la fila del historial (el mismo
+ *    shape que usa el detalle) en vez de con el evento.
+ */
+
+export const API_BASE =
+  process.env.NEXT_PUBLIC_API_BASE ?? 'http://127.0.0.1:8000'
+
+/** Límite real del backend: `LOG_MAX_FILE_BYTES` en `src/config.py`. */
+export const MAX_BYTES = 52_428_800
+
+export type TecnicaMitre = {
+  texto: string
+  similitud: number
+  meta: {
+    technique_id: string
+    name: string
+    tactics: string // separado por comas, no es lista
+    url: string
+    is_subtechnique: boolean
+  }
+}
+
+export type ReputacionIp = {
+  fuente?: string
+  ip?: string
+  score?: number | null
+  categoria?: 'malicioso' | 'sospechoso' | 'limpio' | 'desconocido'
+  pais?: string | null
+}
+
+export type ResumenLote = {
+  formato_detectado?: string
+  total_lineas?: number
+  n_ips_distintas?: number
+  servicios?: Record<string, number>
+  eventos?: Record<string, number>
+  ventana_temporal?: { inicio: string | null; fin: string | null }
+  reputacion_ips?: Record<string, ReputacionIp>
+}
+
+export type ReporteFinal = {
+  diagnostico?: string
+  confianza?: number
+  hay_incidente?: boolean
+  hay_anomalia?: boolean
+  evaluacion_auditor?: string
+  tecnicas_mitre?: TecnicaMitre[]
+  comandos_mitigacion?: string[]
+  comandos_validos?: boolean
+  cves_encontrados?: unknown[]
+  intentos_correccion?: number
+  requiere_revision_humana?: boolean
+  firma?: string
+}
+
+/** Fila del historial: el shape que consume la vista de informe. */
+export type Corrida = {
+  job_id: string
+  timestamp: string
+  archivo_origen: string | null
+  formato_detectado: string | null
+  total_lineas: number | null
+  motor_preprocesamiento: string | null
+  diagnostico: string | null
+  confianza: number | null
+  hay_anomalia: boolean | null
+  hay_incidente: boolean | null
+  requiere_revision_humana: boolean | null
+  n_comandos_mitigacion: number | null
+  evaluacion_auditor: string | null
+  tecnicas_mitre: TecnicaMitre[]
+  estado: 'completo' | 'error' | string
+  error_mensaje: string | null
+  feedback_correcto: boolean | null
+  feedback_comentario: string | null
+  feedback_timestamp: string | null
+  resumen_json: ResumenLote
+  reporte_json: ReporteFinal
+}
+
+export type EventoSse =
+  | { tipo: 'inicio'; resumen: ResumenLote; preprocesamiento: Record<string, unknown>; advertencias: unknown[] }
+  | { tipo: 'nodo'; nombre: string; detalle: Record<string, unknown> }
+  | { tipo: 'error'; mensaje: string }
+  | { tipo: 'final'; reporte: ReporteFinal }
+
+async function detalleDelError(r: Response, porDefecto: string) {
+  try {
+    const cuerpo = await r.json()
+    if (typeof cuerpo?.detail === 'string') return cuerpo.detail
+  } catch {
+    // el backend no siempre responde JSON (p. ej. un 500 de uvicorn)
+  }
+  return porDefecto
+}
+
+/** Sube el archivo y devuelve el `job_id` con el que se abre el stream. */
+export async function subirArchivo(archivo: File): Promise<{ job_id: string; nombre_archivo: string }> {
+  const cuerpo = new FormData()
+  cuerpo.append('archivo', archivo) // el backend espera exactamente este campo
+
+  let r: Response
+  try {
+    r = await fetch(`${API_BASE}/api/analizar`, { method: 'POST', body: cuerpo })
+  } catch {
+    throw new Error(
+      `No se pudo contactar al servidor de análisis en ${API_BASE}. ` +
+        'Verificá que esté corriendo (uvicorn src.api.main:app).',
+    )
+  }
+  if (!r.ok) {
+    throw new Error(await detalleDelError(r, `El servidor rechazó el archivo (HTTP ${r.status}).`))
+  }
+  return r.json()
+}
+
+export function urlDelStream(jobId: string) {
+  return `${API_BASE}/api/stream/${jobId}`
+}
+
+/**
+ * Fila del historial de una corrida.
+ *
+ * `reintentos` existe por una carrera acotada: la fila se escribe en el
+ * `finally` del generador SSE, es decir justo DESPUÉS de emitir el evento
+ * `final`. Pedirla de inmediato puede dar 404 por unos milisegundos.
+ */
+export async function obtenerCorrida(jobId: string, reintentos = 4): Promise<Corrida> {
+  for (let intento = 0; ; intento++) {
+    const r = await fetch(`${API_BASE}/api/historial/${jobId}`)
+    if (r.ok) return r.json()
+    if (r.status !== 404 || intento >= reintentos) {
+      throw new Error(await detalleDelError(r, `No se pudo leer la corrida (HTTP ${r.status}).`))
+    }
+    await new Promise((listo) => setTimeout(listo, 250))
+  }
+}
+
+export async function listarHistorial(limit: number, offset: number): Promise<{
+  total: number
+  limit: number
+  offset: number
+  corridas: Corrida[]
+}> {
+  const r = await fetch(`${API_BASE}/api/historial?limit=${limit}&offset=${offset}`)
+  if (!r.ok) throw new Error(await detalleDelError(r, `No se pudo leer el historial (HTTP ${r.status}).`))
+  return r.json()
+}
+
+/** Descarga el informe en PDF que arma el backend. */
+export async function descargarInforme(jobId: string) {
+  const r = await fetch(`${API_BASE}/api/historial/${jobId}/pdf`)
+  if (!r.ok) throw new Error(await detalleDelError(r, `El informe no está disponible (HTTP ${r.status}).`))
+
+  // El nombre viene en Content-Disposition; el backend expone esa cabecera
+  // por CORS para poder leerla desde acá.
+  const disposicion = r.headers.get('content-disposition') ?? ''
+  const nombre = /filename=([^;]+)/i.exec(disposicion)?.[1]?.trim() ?? `informe_${jobId}.pdf`
+
+  const url = URL.createObjectURL(await r.blob())
+  const enlace = document.createElement('a')
+  enlace.href = url
+  enlace.download = nombre
+  enlace.click()
+  URL.revokeObjectURL(url)
+}
+
+export type RespuestaFeedback = {
+  guardado: boolean
+  memoria: {
+    guardado_en: string
+    promovido_a_attack_patterns: boolean
+    error_registrado: boolean
+  } | null
+  detalle?: string
+}
+
+export async function enviarFeedback(
+  jobId: string,
+  correcto: boolean,
+  comentario: string | null,
+): Promise<RespuestaFeedback> {
+  const r = await fetch(`${API_BASE}/api/feedback/${jobId}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ correcto, comentario }),
+  })
+  if (!r.ok) throw new Error(await detalleDelError(r, `No se pudo guardar el veredicto (HTTP ${r.status}).`))
+  return r.json()
+}
