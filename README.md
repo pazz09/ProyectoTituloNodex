@@ -123,7 +123,24 @@ cd frontend && pnpm install && pnpm dev      # http://localhost:3000
 
 El backend expone CORS para `http://localhost:3000` y `http://127.0.0.1:3000`, con `Content-Disposition` en `expose_headers` (el frontend lo lee para nombrar el PDF). La URL de la API se puede cambiar con `NEXT_PUBLIC_API_BASE`; por defecto apunta a `http://127.0.0.1:8000`.
 
-**Cuatro vistas**, en `frontend/components/`: carga (`upload-view`), análisis en vivo (`analysis-view`), informe (`report-view`) e historial (`historial-view`). El diseño visual es el del skeleton, sin cambios de paleta, tipografía ni espaciado; lo que se agregó (tarjetas de MITRE, tabla del historial, botones de feedback, estados de error) reusa las mismas clases y la misma familia de color, en `app/globals.css`.
+**Cuatro vistas**, en `frontend/components/`: carga (`upload-view`), análisis en vivo (`analysis-view`), informe (`report-view`) e historial (`historial-view`), todas dentro del armazón de `app-shell.tsx` (barra lateral persistente + área de trabajo).
+
+### Sistema visual (rediseño del 10-sep-2026)
+
+El skeleton de v0 era un flujo de tres pantallas con estética de landing de producto: titular de 51px, copy de venta ("Resultado en minutos, no horas") y el informe como una pila de tarjetas con títulos coloquiales. Se rehízo tomando como referencia las consolas de operaciones de seguridad actuales (Elastic Security, Wazuh, Sentinel) **en su modo claro**, con tres reglas que están documentadas en la cabecera de `app/globals.css`:
+
+1. **Densidad antes que tamaño.** Nada supera los 22px; la jerarquía la dan el peso, el color y el espaciado. La escala anterior (51px de titular) hacía que una herramienta de análisis se leyera como un producto de consumo.
+2. **El color se reserva para el estado.** Neutros fríos y planos; el azul es solo acción y rojo/ámbar/verde solo severidad (`--crit`/`--warn`/`--ok`). Un informe donde todo llama la atención no comunica nada.
+3. **Monoespaciado para todo lo que se lee como dato:** IPs, identificadores, marcas de tiempo, comandos, IDs de ATT&CK.
+
+La barra lateral es slate profundo (`#17222f`), **no negro**: da el encuadre de consola sin el contraste del modo oscuro, y el área de trabajo queda clara para que el informe se lea como documento.
+
+Cambios de estructura respecto del skeleton:
+
+- **La pantalla de inicio dejó de ser un hero.** Es un espacio de trabajo: zona de carga, las últimas cinco ejecuciones reales, y el recorrido del grafo de 7 nodos como referencia de arquitectura.
+- **El informe tiene secciones numeradas y estables** (diagnóstico, evaluación del auditor, evidencia, ATT&CK, mitigación, revisión) en vez de títulos coloquiales.
+- **La evidencia se separó en tres presentaciones distintas** según lo que es cada cosa: filas etiqueta/valor para los metadatos del lote, barras proporcionales para las distribuciones de servicios y eventos, y una tabla propia para la reputación de las IPs. Antes las tres iban en una sola tabla con una columna "categoría" para distinguirlas.
+- **El banner de veredicto es una barra de estado compacta** con la severidad en el borde izquierdo, en lugar de un bloque de color grande.
 
 **El progreso del grafo no es lineal, y el estado lo refleja** (`lib/nodos.ts`). En vez de un índice que solo avanza, hay un mapa por nodo con estado (`pendiente`/`activo`/`completado`) y contador de visitas, porque en corridas reales:
 

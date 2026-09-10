@@ -4,20 +4,16 @@ import { useState } from 'react'
 import {
   AlertTriangle,
   CheckCircle2,
-  Clock3,
   Download,
-  FileText,
   Info,
   Loader2,
-  RotateCcw,
-  ShieldCheck,
+  Plus,
   ThumbsDown,
   ThumbsUp,
-  Zap,
 } from 'lucide-react'
 
+import { AppShell, Sep, type Vista } from '@/components/app-shell'
 import { ConfirmDialog } from '@/components/confirm-dialog'
-import { Header, type Vista } from '@/components/header'
 import {
   descargarInforme,
   enviarFeedback,
@@ -29,7 +25,7 @@ const ATRIBUCION_MITRE =
   'MITRE ATT&CK® data reproduced and distributed with the permission of The MITRE Corporation. © The MITRE Corporation.'
 
 function fechaLegible(iso: string | null) {
-  if (!iso) return 'sin fecha'
+  if (!iso) return '—'
   const d = new Date(iso)
   return Number.isNaN(d.getTime())
     ? iso
@@ -37,72 +33,78 @@ function fechaLegible(iso: string | null) {
 }
 
 /**
- * Veredicto para el banner, derivado de los dos booleanos que da el
- * backend. No se inventa un puntaje de riesgo que el sistema no calcula:
- * `hay_incidente` y `hay_anomalia` son lo que hay.
+ * Veredicto derivado de los dos booleanos del backend. No se inventa un
+ * puntaje de riesgo que el sistema no calcula.
  */
 function veredicto(c: Corrida) {
+  if (c.estado === 'error') {
+    return { clase: 'crit', titulo: 'EJECUCIÓN INCOMPLETA', nota: 'El análisis no llegó a terminar.' }
+  }
   if (c.hay_incidente) {
-    return {
-      clase: 'is-incidente',
-      titulo: 'INCIDENTE DE SEGURIDAD',
-      nota: 'El análisis concluyó que hay actividad maliciosa.',
-    }
+    return { clase: 'crit', titulo: 'INCIDENTE DE SEGURIDAD', nota: 'Se concluyó actividad maliciosa.' }
   }
   if (c.hay_anomalia) {
-    return {
-      clase: 'is-anomalia',
-      titulo: 'ANOMALÍA OPERATIVA',
-      nota: 'Hay comportamiento fuera de lo normal, sin evidencia de ataque.',
-    }
+    return { clase: 'warn', titulo: 'ANOMALÍA OPERATIVA', nota: 'Comportamiento fuera de lo normal, sin evidencia de ataque.' }
   }
-  return {
-    clase: 'is-limpio',
-    titulo: 'SIN HALLAZGOS',
-    nota: 'No se detectaron anomalías en el lote analizado.',
-  }
+  return { clase: 'ok', titulo: 'SIN HALLAZGOS', nota: 'No se detectaron anomalías en el lote.' }
 }
 
 /**
  * Limpia la descripción de una técnica para mostrarla.
  *
- * El `texto` que devuelve la API es el documento tal como se indexó desde el
- * bundle STIX: arranca repitiendo el nombre de la técnica y trae los enlaces
- * y citas en el marcado propio de ATT&CK
- * (`[Valid Accounts](https://…)`, `(Citation: …)`), que en pantalla se leen
- * como ruido.
+ * El `texto` de la API es el documento tal como se indexó desde el bundle
+ * STIX: repite el nombre al principio y trae los enlaces y citas en el
+ * marcado propio de ATT&CK, que en pantalla se leen como ruido.
  */
-function descripcionCorta(texto: string, nombre: string, largo = 260) {
+function descripcionCorta(texto: string, nombre: string, largo = 240) {
   let limpio = texto
-    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1') // enlaces de ATT&CK
-    .replace(/\(Citation:[^)]*\)/g, '') // citas bibliográficas
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+    .replace(/\(Citation:[^)]*\)/g, '')
     .replace(/<\/?code>/g, '')
     .replace(/\s+/g, ' ')
     .trim()
-  // El documento indexado empieza con "Nombre. descripción".
   if (limpio.startsWith(`${nombre}.`)) limpio = limpio.slice(nombre.length + 1).trim()
   return limpio.length > largo ? `${limpio.slice(0, largo).trim()}…` : limpio
 }
 
-/** `auth_log` -> `AUTH-LOG`, igual que en la vista de análisis. */
 function formatoLegible(formato: string | null) {
-  return (formato ?? 'sin determinar').toUpperCase().replace(/_/g, '-')
+  return (formato ?? '—').toUpperCase().replace(/_/g, '-')
 }
 
-function principales(dist: Record<string, number> | undefined, tope = 6) {
-  return Object.entries(dist ?? {})
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, tope)
+function ordenar(dist: Record<string, number> | undefined) {
+  return Object.entries(dist ?? {}).sort((a, b) => b[1] - a[1])
+}
+
+/** Distribución con barra proporcional al máximo de la serie. */
+function Distribucion({ datos, tope = 6 }: { datos: Record<string, number> | undefined; tope?: number }) {
+  const filas = ordenar(datos).slice(0, tope)
+  if (filas.length === 0) return <p className="prose empty">Sin datos.</p>
+  const max = filas[0][1] || 1
+  return (
+    <div className="dist">
+      {filas.map(([nombre, n]) => (
+        <div className="dist-row" key={nombre}>
+          <div>
+            <span>{nombre.replace(/_/g, ' ')}</span>
+            <div className="dist-bar">
+              <div style={{ width: `${Math.max(2, (n / max) * 100)}%` }} />
+            </div>
+          </div>
+          <b>{n.toLocaleString('es')}</b>
+        </div>
+      ))}
+    </div>
+  )
 }
 
 export function ReportView({
   corrida,
-  onReset,
+  onNuevo,
   onNavegar,
   onFeedback,
 }: {
   corrida: Corrida
-  onReset: () => void
+  onNuevo: () => void
   onNavegar: (vista: Vista) => void
   onFeedback?: (actualizada: Corrida) => void
 }) {
@@ -119,8 +121,10 @@ export function ReportView({
   const resumen = corrida.resumen_json ?? {}
   const tecnicas = corrida.tecnicas_mitre ?? []
   const comandos = reporte.comandos_mitigacion ?? []
+  const ips = Object.entries(resumen.reputacion_ips ?? {})
   const v = veredicto(corrida)
   const confianza = corrida.confianza ?? 0
+  const pctConfianza = Math.round(confianza * 100)
 
   const descargar = async () => {
     setDescargando(true)
@@ -158,329 +162,388 @@ export function ReportView({
   const yaRevisada = corrida.feedback_correcto !== null && corrida.feedback_correcto !== undefined
 
   return (
-    <main className="shell report-shell">
-      <Header vista="report" onNavegar={onNavegar} />
-      <section className="report-content">
-        <div className="report-top">
-          <div>
-            <div className="eyebrow">
-              {corrida.estado === 'error' ? (
-                <>
-                  <AlertTriangle size={15} /> ANÁLISIS INCOMPLETO
-                </>
-              ) : (
-                <>
-                  <CheckCircle2 size={15} /> ANÁLISIS COMPLETADO
-                </>
-              )}
-            </div>
-            <h1>Informe de seguridad</h1>
-            <p className="file-context">
-              <FileText size={15} /> {corrida.archivo_origen ?? 'sin nombre'} ·{' '}
-              {fechaLegible(corrida.timestamp)}
-            </p>
-            <p className="file-context">
-              <Info size={15} /> Formato detectado:{' '}
-              <strong>{formatoLegible(corrida.formato_detectado)}</strong> ·
-              Motor de preprocesamiento:{' '}
-              <strong>{corrida.motor_preprocesamiento ?? 'sin registrar'}</strong>
-            </p>
-          </div>
-          <div className="report-actions">
-            <button className="secondary-button" onClick={onReset}>
-              <RotateCcw size={16} /> Nuevo análisis
-            </button>
-            <button className="primary-button" onClick={descargar} disabled={descargando}>
-              {descargando ? (
-                <>
-                  <Loader2 size={16} className="spin" /> Generando...
-                </>
-              ) : (
-                <>
-                  <Download size={16} /> Descargar informe
-                </>
-              )}
-            </button>
-          </div>
+    <AppShell
+      vista="report"
+      onNavegar={onNavegar}
+      ruta={
+        <>
+          <span>Análisis</span>
+          <Sep />
+          <span className="mono">{corrida.archivo_origen ?? 'sin nombre'}</span>
+          <Sep />
+          <strong>Informe</strong>
+        </>
+      }
+      acciones={
+        <>
+          <button className="btn" onClick={onNuevo}>
+            <Plus size={14} /> Nuevo
+          </button>
+          <button className="btn btn-primary" onClick={descargar} disabled={descargando}>
+            {descargando ? (
+              <>
+                <Loader2 size={14} className="spin" /> Generando…
+              </>
+            ) : (
+              <>
+                <Download size={14} /> Informe PDF
+              </>
+            )}
+          </button>
+        </>
+      }
+    >
+      <div className="view-head">
+        <div>
+          <h1>Informe de análisis</h1>
+          <p>
+            <span className="mono">{corrida.job_id.slice(0, 12)}</span> · {fechaLegible(corrida.timestamp)}
+          </p>
         </div>
+      </div>
 
-        {errorDescarga && (
-          <div className="inline-error" role="alert">
-            <AlertTriangle size={16} />
-            <span>{errorDescarga}</span>
-          </div>
-        )}
-
-        {corrida.estado === 'error' && (
-          <div className="error-banner" role="alert">
-            <div className="error-icon">
-              <AlertTriangle size={19} />
-            </div>
-            <div>
-              <strong>El análisis no pudo completarse</strong>
-              <p>{corrida.error_mensaje ?? 'Error no especificado.'}</p>
-            </div>
-          </div>
-        )}
-
-        <div className={`risk-banner ${v.clase}`}>
-          <div className="risk-score">
-            <span>VEREDICTO</span>
-            <strong>{v.titulo}</strong>
-            <small>{v.nota}</small>
-          </div>
-          <div className="risk-summary">
-            {corrida.requiere_revision_humana
-              ? 'La confianza quedó bajo el umbral: este informe requiere la revisión de un analista humano antes de actuar.'
-              : 'La confianza del análisis es suficiente para resolver sin escalamiento.'}
-            <div className="badge-row">
-              <span className={corrida.hay_anomalia ? 'badge on' : 'badge'}>
-                Anomalía: {corrida.hay_anomalia ? 'sí' : 'no'}
-              </span>
-              <span className={corrida.hay_incidente ? 'badge on' : 'badge'}>
-                Incidente: {corrida.hay_incidente ? 'sí' : 'no'}
-              </span>
-              <span className={corrida.requiere_revision_humana ? 'badge warn' : 'badge'}>
-                Revisión humana: {corrida.requiere_revision_humana ? 'requerida' : 'no requerida'}
-              </span>
-            </div>
-          </div>
+      {errorDescarga && (
+        <div className="notice" role="alert" style={{ marginBottom: 14 }}>
+          <AlertTriangle size={15} />
+          <span>{errorDescarga}</span>
         </div>
+      )}
 
-        <div className="metrics-grid">
-          <div>
-            <span>Líneas analizadas</span>
-            <strong>{(corrida.total_lineas ?? 0).toLocaleString('es')}</strong>
-            <small>Del archivo cargado</small>
-          </div>
-          <div>
-            <span>IPs distintas</span>
-            <strong>{resumen.n_ips_distintas ?? 0}</strong>
-            <small>Origen y destino</small>
-          </div>
-          <div>
-            <span>Comandos propuestos</span>
-            <strong>{corrida.n_comandos_mitigacion ?? 0}</strong>
-            <small>{reporte.comandos_validos ? 'Validados' : 'Sin validar'}</small>
-          </div>
-          <div>
-            <span>Confianza del análisis</span>
-            <strong>{Math.round(confianza * 100)}%</strong>
-            <div className="confianza-track">
-              <div style={{ width: `${Math.round(confianza * 100)}%` }} />
-            </div>
-          </div>
+      <div className={`verdict ${v.clase}`}>
+        <div className="verdict-main">
+          <span className="label">Veredicto</span>
+          <strong>{v.titulo}</strong>
+          <p>{v.nota}</p>
         </div>
-
-        <div className="report-grid">
-          <section className="findings-card">
-            <div className="section-heading">
-              <div>
-                <span className="eyebrow">DIAGNÓSTICO</span>
-                <h2>Qué encontramos</h2>
+        <div className="verdict-meta">
+          <div>
+            <span className="label">Confianza</span>
+            <div className="meter">
+              <div className={`meter-track ${pctConfianza < 70 ? 'warn' : ''}`}>
+                <div style={{ width: `${pctConfianza}%` }} />
               </div>
-              <span className="plain-help">
-                <Info size={14} /> Redactado por el agente de triage
-              </span>
+              <b>{confianza.toFixed(2)}</b>
             </div>
-            <p className="prosa">{corrida.diagnostico || 'El sistema no registró un diagnóstico para esta corrida.'}</p>
-          </section>
-          <aside className="recommendation-card">
-            <div className="aside-card-title">
-              <ShieldCheck size={17} /> Evaluación del auditor
-            </div>
-            <p className="prosa">
-              {corrida.evaluacion_auditor ||
-                'El auditor no dejó una evaluación registrada para esta corrida.'}
-            </p>
-            <div className="report-footnote">
-              <ShieldCheck size={15} /> Informe generado por 7 agentes especializados
-              {reporte.intentos_correccion ? ` · ${reporte.intentos_correccion} ciclo(s) de corrección` : ''}
-            </div>
-          </aside>
-        </div>
-
-        <div className="events-card">
-          <div className="section-heading">
-            <div>
-              <span className="eyebrow">EVIDENCIA OBSERVADA</span>
-              <h2>Qué trae el archivo</h2>
-            </div>
-            <span className="plain-help">
-              <Clock3 size={14} />{' '}
-              {resumen.ventana_temporal?.inicio && resumen.ventana_temporal?.fin
-                ? `${resumen.ventana_temporal.inicio} → ${resumen.ventana_temporal.fin}`
-                : 'sin ventana temporal'}
+          </div>
+          <div>
+            <span className="label">Formato</span>
+            <b className="mono">{formatoLegible(corrida.formato_detectado)}</b>
+          </div>
+          <div>
+            <span className="label">Motor</span>
+            <b className="mono">{corrida.motor_preprocesamiento ?? '—'}</b>
+          </div>
+          <div className="verdict-chips">
+            <span className={corrida.hay_anomalia ? 'chip warn' : 'chip'}>
+              anomalía {corrida.hay_anomalia ? 'sí' : 'no'}
+            </span>
+            <span className={corrida.hay_incidente ? 'chip crit' : 'chip'}>
+              incidente {corrida.hay_incidente ? 'sí' : 'no'}
+            </span>
+            <span className={corrida.requiere_revision_humana ? 'chip warn' : 'chip ok'}>
+              {corrida.requiere_revision_humana ? 'escalado a analista' : 'auto-resuelto'}
             </span>
           </div>
-          <div className="events-table">
-            <div className="event-row event-head">
-              <span>CATEGORÍA</span>
-              <span>DETALLE</span>
-              <span>VALOR</span>
-              <span>ESTADO</span>
-            </div>
-            {principales(resumen.servicios).map(([nombre, n]) => (
-              <div className="event-row" key={`svc-${nombre}`}>
-                <span>Servicio</span>
-                <span>{nombre}</span>
-                <span>{n.toLocaleString('es')} evento(s)</span>
-                <span />
-              </div>
-            ))}
-            {principales(resumen.eventos).map(([nombre, n]) => (
-              <div className="event-row" key={`ev-${nombre}`}>
-                <span>Evento</span>
-                <span>{nombre.replace(/_/g, ' ')}</span>
-                <span>{n.toLocaleString('es')} línea(s)</span>
-                <span />
-              </div>
-            ))}
-            {Object.entries(resumen.reputacion_ips ?? {}).map(([ip, datos]) => {
-              const cat = datos?.categoria ?? 'desconocido'
-              return (
-                <div className="event-row" key={`ip-${ip}`}>
-                  <span>IP</span>
-                  <span className="mono">{ip}</span>
-                  <span>
-                    {datos?.score !== null && datos?.score !== undefined
-                      ? `score ${datos.score} · AbuseIPDB`
-                      : 'sin score'}
-                  </span>
-                  <span className={`event-status rep-${cat}`}>{cat}</span>
-                </div>
-              )
-            })}
+        </div>
+      </div>
+
+      {corrida.estado === 'error' && (
+        <div className="notice-block" role="alert">
+          <div className="modal-icon" style={{ margin: 0, color: 'var(--crit)', background: 'var(--crit-bg)', borderColor: 'var(--crit-line)' }}>
+            <AlertTriangle size={16} />
+          </div>
+          <div>
+            <strong>La ejecución no se completó</strong>
+            <p className="mono">{corrida.error_mensaje ?? 'Error no especificado.'}</p>
           </div>
         </div>
+      )}
 
-        {tecnicas.length > 0 && (
-          <div className="findings-card mitre-card">
-            <div className="section-heading">
+      <section className="panel">
+        <div className="panel-body tight">
+          <div className="stats">
+            <div>
+              <span className="label">Registros analizados</span>
+              <b>{(corrida.total_lineas ?? 0).toLocaleString('es')}</b>
+            </div>
+            <div>
+              <span className="label">IPs distintas</span>
+              <b>{resumen.n_ips_distintas ?? 0}</b>
+              <small>
+                {(() => {
+                  const n = ips.filter(([, d]) => d?.categoria === 'malicioso').length
+                  return n === 1 ? '1 maliciosa' : `${n} maliciosas`
+                })()}
+              </small>
+            </div>
+            <div>
+              <span className="label">Comandos propuestos</span>
+              <b>{corrida.n_comandos_mitigacion ?? 0}</b>
+              <small>{reporte.comandos_validos ? 'validados' : 'sin validar'}</small>
+            </div>
+            <div>
+              <span className="label">Técnicas ATT&amp;CK</span>
+              <b>{tecnicas.length}</b>
+            </div>
+            <div>
+              <span className="label">Ciclos de corrección</span>
+              <b>{reporte.intentos_correccion ?? 0}</b>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="grid-2">
+        <section className="panel">
+          <div className="panel-head">
+            <div>
+              <span className="label">Sección 1</span>
+              <h2>Diagnóstico</h2>
+            </div>
+            <span className="panel-note">agente de triage</span>
+          </div>
+          <div className="panel-body">
+            <p className="prose">
+              {corrida.diagnostico || 'El sistema no registró un diagnóstico para esta ejecución.'}
+            </p>
+          </div>
+        </section>
+
+        <section className="panel">
+          <div className="panel-head">
+            <div>
+              <span className="label">Sección 2</span>
+              <h2>Evaluación del auditor</h2>
+            </div>
+          </div>
+          <div className="panel-body">
+            <p className="prose">
+              {corrida.evaluacion_auditor || 'El auditor no dejó una evaluación registrada.'}
+            </p>
+          </div>
+        </section>
+      </div>
+
+      <section className="panel">
+        <div className="panel-head">
+          <div>
+            <span className="label">Sección 3</span>
+            <h2>Evidencia observada</h2>
+          </div>
+          <span className="panel-note">preprocesamiento determinístico, sin LLM</span>
+        </div>
+        <div className="panel-body">
+          <div className="grid-2">
+            <div className="facts">
               <div>
-                <span className="eyebrow">CONTEXTO DE AMENAZAS</span>
-                <h2>Técnicas MITRE ATT&amp;CK relacionadas</h2>
+                <dt>Archivo de origen</dt>
+                <dd className="mono">{corrida.archivo_origen ?? '—'}</dd>
               </div>
-              <span className="plain-help">
-                <Info size={14} /> Recuperadas por similitud, {tecnicas.length} de la base
-              </span>
+              <div>
+                <dt>Ventana temporal</dt>
+                <dd className="mono">
+                  {resumen.ventana_temporal?.inicio && resumen.ventana_temporal?.fin
+                    ? `${resumen.ventana_temporal.inicio} — ${resumen.ventana_temporal.fin}`
+                    : '—'}
+                </dd>
+              </div>
+              <div>
+                <dt>Formato / motor</dt>
+                <dd className="mono">
+                  {formatoLegible(corrida.formato_detectado)} · {corrida.motor_preprocesamiento ?? '—'}
+                </dd>
+              </div>
+              <div>
+                <dt>Firma del lote</dt>
+                <dd className="mono" style={{ wordBreak: 'break-all', fontSize: 11 }}>
+                  {reporte.firma ?? '—'}
+                </dd>
+              </div>
             </div>
-            <div className="mitre-list">
-              {tecnicas.map((t) => (
-                <article className="mitre-item" key={t.meta.technique_id}>
-                  <div className="mitre-id">{t.meta.technique_id}</div>
-                  <div>
-                    <div className="finding-meta">
-                      <strong>{t.meta.name}</strong>
-                      {t.meta.tactics && <span>· {t.meta.tactics.replace(/,/g, ', ')}</span>}
-                    </div>
-                    <p>{descripcionCorta(t.texto, t.meta.name)}</p>
-                    <a href={t.meta.url} target="_blank" rel="noreferrer noopener">
-                      Ver en attack.mitre.org
-                    </a>
+            <div>
+              <span className="label">Servicios</span>
+              <div style={{ marginTop: 9, marginBottom: 17 }}>
+                <Distribucion datos={resumen.servicios} />
+              </div>
+              <span className="label">Tipos de evento</span>
+              <div style={{ marginTop: 9 }}>
+                <Distribucion datos={resumen.eventos} />
+              </div>
+            </div>
+          </div>
+        </div>
+        {ips.length > 0 && (
+          <>
+            <div className="subhead">
+              <span className="label">Reputación de las direcciones observadas</span>
+            </div>
+          <div className="table-scroll">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Dirección IP</th>
+                  <th>Reputación</th>
+                  <th>Score</th>
+                  <th>Fuente</th>
+                </tr>
+              </thead>
+              <tbody>
+                {ips.map(([ip, datos]) => {
+                  const cat = datos?.categoria ?? 'desconocido'
+                  const clase = cat === 'malicioso' ? 'crit' : cat === 'sospechoso' ? 'warn' : cat === 'limpio' ? 'ok' : ''
+                  return (
+                    <tr key={ip}>
+                      <td className="mono">{ip}</td>
+                      <td>
+                        <span className={`chip ${clase}`}>{cat}</span>
+                      </td>
+                      <td className="num">{datos?.score ?? '—'}</td>
+                      <td className="mono" style={{ color: 'var(--text-muted)' }}>
+                        {datos?.fuente ?? '—'}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+          </>
+        )}
+      </section>
+
+      {tecnicas.length > 0 && (
+        <section className="panel">
+          <div className="panel-head">
+            <div>
+              <span className="label">Sección 4</span>
+              <h2>Técnicas MITRE ATT&amp;CK relacionadas</h2>
+            </div>
+            <span className="panel-note">
+              <Info size={13} /> recuperadas por similitud semántica
+            </span>
+          </div>
+          <div className="panel-body">
+            {tecnicas.map((t) => (
+              <article className="tech" key={t.meta.technique_id}>
+                <div className="tech-id">{t.meta.technique_id}</div>
+                <div>
+                  <div className="tech-head">
+                    <strong>{t.meta.name}</strong>
+                    {t.meta.tactics
+                      .split(',')
+                      .filter(Boolean)
+                      .map((tactica) => (
+                        <span className="chip" key={tactica}>
+                          {tactica.trim().replace(/-/g, ' ')}
+                        </span>
+                      ))}
+                    <span className="step-visits">sim {t.similitud.toFixed(3)}</span>
                   </div>
-                </article>
-              ))}
-            </div>
+                  <p>{descripcionCorta(t.texto, t.meta.name)}</p>
+                  <a href={t.meta.url} target="_blank" rel="noreferrer noopener">
+                    attack.mitre.org/techniques/{t.meta.technique_id.replace('.', '/')}
+                  </a>
+                </div>
+              </article>
+            ))}
             {/* Requisito de atribución de MITRE: solo corresponde si
                 efectivamente se muestran datos de ATT&CK. */}
-            <p className="mitre-attribution">{ATRIBUCION_MITRE}</p>
+            <p className="attribution">{ATRIBUCION_MITRE}</p>
           </div>
-        )}
+        </section>
+      )}
 
-        <div className="events-card">
-          <div className="section-heading">
-            <div>
-              <span className="eyebrow">MITIGACIÓN PROPUESTA</span>
-              <h2>Acciones recomendadas</h2>
-            </div>
-            <span className="plain-help">
-              <Zap size={14} /> NODEX no los ejecuta
-            </span>
+      <section className="panel">
+        <div className="panel-head">
+          <div>
+            <span className="label">Sección {tecnicas.length > 0 ? 5 : 4}</span>
+            <h2>Mitigación propuesta</h2>
           </div>
-          {comandos.length === 0 ? (
-            <p className="prosa vacio">
-              No se requieren acciones de mitigación. El análisis no identificó acciones
-              necesarias sobre la evidencia observada.
+          <span className="panel-note">NODEX no ejecuta estos comandos</span>
+        </div>
+        {comandos.length === 0 ? (
+          <div className="panel-body">
+            <p className="prose empty">
+              No se requieren acciones de mitigación sobre la evidencia observada.
             </p>
-          ) : (
-            <ul className="comandos-lista">
+          </div>
+        ) : (
+          <div className="panel-body tight">
+            <div className="cmds">
               {comandos.map((c, i) => (
-                <li key={`${i}-${c}`}>
-                  <code>{c}</code>
-                  <span className={reporte.comandos_validos ? 'cmd-ok' : 'cmd-warn'}>
+                <div key={`${i}-${c}`}>
+                  <span className="idx">{String(i + 1).padStart(2, '0')}</span>
+                  <code style={{ flex: 1 }}>{c}</code>
+                  <span className={reporte.comandos_validos ? 'chip ok' : 'chip warn'}>
                     {reporte.comandos_validos ? 'validado' : 'sin validar'}
                   </span>
-                </li>
+                </div>
               ))}
-            </ul>
-          )}
-        </div>
-
-        <div className="events-card feedback-card">
-          <div className="section-heading">
-            <div>
-              <span className="eyebrow">REVISIÓN DEL ANALISTA</span>
-              <h2>¿El diagnóstico es correcto?</h2>
             </div>
-            <span className="plain-help">
-              <Info size={14} /> Alimenta la memoria del sistema
-            </span>
           </div>
-          <p className="prosa">
-            Tu veredicto se guarda en la memoria de largo plazo y afecta las recomendaciones de
-            análisis futuros.
+        )}
+      </section>
+
+      <section className="panel">
+        <div className="panel-head">
+          <div>
+            <span className="label">Sección {tecnicas.length > 0 ? 6 : 5}</span>
+            <h2>Revisión del analista</h2>
+          </div>
+          <span className="panel-note">escribe en la memoria de largo plazo</span>
+        </div>
+        <div className="panel-body">
+          <p className="prose" style={{ marginBottom: 13 }}>
+            El veredicto se guarda en la memoria del sistema y se usa como referencia en
+            ejecuciones posteriores.
           </p>
-          <div className="feedback-actions">
+          <div className="review">
             <button
-              className={`feedback-button ok ${yaRevisada && corrida.feedback_correcto ? 'elegido' : ''}`}
+              className={`btn ${yaRevisada && corrida.feedback_correcto ? 'chosen-ok' : ''}`}
               disabled={enviando}
               onClick={() => setPendiente(true)}
             >
-              <ThumbsUp size={15} /> Diagnóstico correcto
+              <ThumbsUp size={14} /> Diagnóstico correcto
             </button>
             <button
-              className={`feedback-button no ${yaRevisada && corrida.feedback_correcto === false ? 'elegido' : ''}`}
+              className={`btn ${yaRevisada && corrida.feedback_correcto === false ? 'chosen-no' : ''}`}
               disabled={enviando}
               onClick={() => setPendiente(false)}
             >
-              <ThumbsDown size={15} /> Diagnóstico incorrecto
+              <ThumbsDown size={14} /> Diagnóstico incorrecto
             </button>
             {enviando && (
-              <span className="feedback-estado">
-                <Loader2 size={14} className="spin" /> Guardando...
+              <span className="review-note">
+                <Loader2 size={13} className="spin" /> guardando…
               </span>
             )}
           </div>
           <textarea
-            className="feedback-comentario"
+            className="field"
             placeholder="Comentario (opcional): qué falta, qué sobra, o qué era en realidad."
             value={comentario}
             onChange={(e) => setComentario(e.target.value)}
           />
           {yaRevisada && !resultado && (
-            <p className="feedback-estado ok">
-              <CheckCircle2 size={14} /> Ya revisada
-              {corrida.feedback_timestamp ? ` el ${fechaLegible(corrida.feedback_timestamp)}` : ''}. Se
-              puede corregir volviendo a elegir.
+            <p className="review-note ok" style={{ marginTop: 11 }}>
+              <CheckCircle2 size={13} /> Revisada
+              {corrida.feedback_timestamp ? ` el ${fechaLegible(corrida.feedback_timestamp)}` : ''} ·
+              se puede corregir volviendo a elegir
             </p>
           )}
           {resultado && (
-            <p className="feedback-estado ok">
-              <CheckCircle2 size={14} /> Veredicto registrado.
+            <p className="review-note ok" style={{ marginTop: 11 }}>
+              <CheckCircle2 size={13} />
               {resultado.memoria
-                ? ` Guardado en ${resultado.memoria.guardado_en}` +
-                  (resultado.memoria.promovido_a_attack_patterns
-                    ? ', promovido a attack_patterns'
-                    : '') +
-                  (resultado.memoria.error_registrado ? ', registrado en error_memory' : '') +
-                  '.'
-                : ` ${resultado.detalle ?? ''}`}
+                ? `Registrado en ${resultado.memoria.guardado_en}` +
+                  (resultado.memoria.promovido_a_attack_patterns ? ' · promovido a attack_patterns' : '') +
+                  (resultado.memoria.error_registrado ? ' · registrado en error_memory' : '')
+                : ` Registrado. ${resultado.detalle ?? ''}`}
             </p>
           )}
           {errorFeedback && (
-            <p className="feedback-estado error">
-              <AlertTriangle size={14} /> {errorFeedback}
+            <p className="review-note err" style={{ marginTop: 11 }}>
+              <AlertTriangle size={13} /> {errorFeedback}
             </p>
           )}
         </div>
@@ -488,17 +551,13 @@ export function ReportView({
 
       <ConfirmDialog
         abierto={pendiente !== null}
-        titulo={
-          pendiente
-            ? 'Marcar el diagnóstico como correcto'
-            : 'Marcar el diagnóstico como incorrecto'
-        }
+        titulo={pendiente ? 'Confirmar diagnóstico como correcto' : 'Confirmar diagnóstico como incorrecto'}
         descripcion="Esto va a afectar las recomendaciones futuras del sistema: el veredicto se guarda en la memoria de largo plazo y se usa como referencia en análisis posteriores."
-        textoConfirmar={pendiente ? 'Confirmar como correcto' : 'Confirmar como incorrecto'}
+        textoConfirmar={pendiente ? 'Marcar como correcto' : 'Marcar como incorrecto'}
         variante={pendiente ? 'primary' : 'danger'}
         onConfirmar={confirmar}
         onCancelar={() => setPendiente(null)}
       />
-    </main>
+    </AppShell>
   )
 }

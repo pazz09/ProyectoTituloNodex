@@ -6,7 +6,7 @@ import { AnalysisView } from '@/components/analysis-view'
 import { HistorialView } from '@/components/historial-view'
 import { ReportView } from '@/components/report-view'
 import { UploadView } from '@/components/upload-view'
-import type { Vista } from '@/components/header'
+import type { Vista } from '@/components/app-shell'
 import type { Corrida } from '@/lib/api'
 
 /**
@@ -57,7 +57,7 @@ export default function Page() {
     return (
       <ReportView
         corrida={corrida}
-        onReset={() => navegar('upload')}
+        onNuevo={() => navegar('upload')}
         onNavegar={navegar}
         onFeedback={setCorrida}
       />
@@ -71,6 +71,7 @@ export default function Page() {
         setNombreArchivo(nombre)
         setVista('analysis')
       }}
+      onAbrirCorrida={mostrarInforme}
       onNavegar={navegar}
     />
   )

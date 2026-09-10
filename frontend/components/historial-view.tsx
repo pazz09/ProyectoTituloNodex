@@ -5,27 +5,39 @@ import {
   AlertTriangle,
   ChevronLeft,
   ChevronRight,
-  Clock3,
   Loader2,
+  RotateCcw,
   ThumbsDown,
   ThumbsUp,
 } from 'lucide-react'
 
-import { Header, type Vista } from '@/components/header'
+import { AppShell, type Vista } from '@/components/app-shell'
 import { listarHistorial, type Corrida } from '@/lib/api'
 
-const POR_PAGINA = 15
+const POR_PAGINA = 20
 
 function fechaCorta(iso: string) {
   const d = new Date(iso)
-  return Number.isNaN(d.getTime())
-    ? iso
-    : d.toLocaleString('es', { dateStyle: 'short', timeStyle: 'short' })
+  if (Number.isNaN(d.getTime())) return iso
+  return d.toLocaleString('es', {
+    day: '2-digit',
+    month: '2-digit',
+    year: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
 }
 
-function recortar(texto: string | null, largo = 90) {
+function recortar(texto: string | null, largo = 110) {
   if (!texto) return '—'
   return texto.length > largo ? `${texto.slice(0, largo).trim()}…` : texto
+}
+
+function estadoDe(c: Corrida) {
+  if (c.estado === 'error') return { clase: 'crit', texto: 'error' }
+  if (c.hay_incidente) return { clase: 'crit', texto: 'incidente' }
+  if (c.hay_anomalia) return { clase: 'warn', texto: 'anomalía' }
+  return { clase: 'ok', texto: 'limpio' }
 }
 
 export function HistorialView({
@@ -63,137 +75,169 @@ export function HistorialView({
   const hasta = Math.min(offset + POR_PAGINA, total)
 
   return (
-    <main className="shell report-shell">
-      <Header vista="historial" onNavegar={onNavegar} />
-      <section className="report-content">
-        <div className="report-top">
+    <AppShell
+      vista="historial"
+      onNavegar={onNavegar}
+      ruta={
+        <>
+          <span>Historial</span>
+          <strong>Ejecuciones</strong>
+        </>
+      }
+      acciones={
+        <button className="btn" onClick={() => cargar(offset)} disabled={cargando}>
+          <RotateCcw size={14} /> Actualizar
+        </button>
+      }
+    >
+      <div className="view-head">
+        <div>
+          <h1>Historial de ejecuciones</h1>
+          <p>
+            Los resultados quedan persistidos localmente: revisar un informe anterior no vuelve
+            a ejecutar el grafo ni consume cuota del modelo.
+          </p>
+        </div>
+      </div>
+
+      {error && (
+        <div className="notice-block" role="alert">
+          <div className="modal-icon" style={{ margin: 0, color: 'var(--crit)', background: 'var(--crit-bg)', borderColor: 'var(--crit-line)' }}>
+            <AlertTriangle size={16} />
+          </div>
           <div>
-            <div className="eyebrow">
-              <Clock3 size={15} /> CORRIDAS ANTERIORES
-            </div>
-            <h1>Historial de análisis</h1>
-            <p className="file-context">
-              {total === 0
-                ? 'Todavía no hay corridas registradas.'
-                : `${total} corrida(s) · mostrando ${desde}–${hasta}`}
-            </p>
+            <strong>No se pudo cargar el historial</strong>
+            <p>{error}</p>
           </div>
+          <button className="btn" onClick={() => cargar(offset)}>
+            Reintentar
+          </button>
+        </div>
+      )}
+
+      <section className="panel">
+        <div className="panel-head">
+          <div>
+            <span className="label">Registro</span>
+            <h2>
+              {total} {total === 1 ? 'ejecución' : 'ejecuciones'}
+            </h2>
+          </div>
+          <span className="panel-note">clic en una fila para abrir el informe</span>
         </div>
 
-        {error && (
-          <div className="error-banner" role="alert">
-            <div className="error-icon">
-              <AlertTriangle size={19} />
-            </div>
-            <div>
-              <strong>No se pudo cargar el historial</strong>
-              <p>{error}</p>
-            </div>
-            <button className="secondary-button" onClick={() => cargar(offset)}>
-              Reintentar
-            </button>
-          </div>
-        )}
-
-        <div className="events-card">
-          <div className="section-heading">
-            <div>
-              <span className="eyebrow">REGISTRO</span>
-              <h2>Análisis ejecutados</h2>
-            </div>
-            <span className="plain-help">Hacé clic en una fila para ver el informe completo</span>
-          </div>
-
-          {cargando ? (
-            <p className="prosa vacio">
-              <Loader2 size={15} className="spin" /> Cargando historial...
+        {cargando ? (
+          <div className="panel-body">
+            <p className="prose empty">
+              <Loader2 size={14} className="spin" /> Cargando…
             </p>
-          ) : corridas.length === 0 && !error ? (
-            <p className="prosa vacio">
-              Todavía no hay corridas. Analizá un archivo y va a aparecer acá.
+          </div>
+        ) : corridas.length === 0 && !error ? (
+          <div className="panel-body">
+            <p className="prose empty">
+              Sin ejecuciones registradas. Analizá un archivo y va a aparecer acá.
             </p>
-          ) : (
-            <div className="events-table historial-table">
-              <div className="event-row event-head">
-                <span>FECHA</span>
-                <span>ARCHIVO</span>
-                <span>FORMATO</span>
-                <span>DIAGNÓSTICO</span>
-                <span>CONFIANZA</span>
-                <span>VEREDICTOS</span>
-              </div>
-              {corridas.map((c) => (
-                <div
-                  className="event-row fila-clickable"
-                  key={c.job_id}
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => onAbrir(c)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault()
-                      onAbrir(c)
-                    }
-                  }}
+          </div>
+        ) : (
+          <>
+            <div className="table-scroll">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Archivo</th>
+                    <th>Formato</th>
+                    <th>Diagnóstico</th>
+                    <th style={{ textAlign: 'right' }}>Conf.</th>
+                    <th>Estado</th>
+                    <th>Revisión</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {corridas.map((c) => {
+                    const e = estadoDe(c)
+                    return (
+                      <tr
+                        key={c.job_id}
+                        className="clickable"
+                        tabIndex={0}
+                        onClick={() => onAbrir(c)}
+                        onKeyDown={(ev) => {
+                          if (ev.key === 'Enter' || ev.key === ' ') {
+                            ev.preventDefault()
+                            onAbrir(c)
+                          }
+                        }}
+                      >
+                        <td className="mono" style={{ whiteSpace: 'nowrap' }}>
+                          {fechaCorta(c.timestamp)}
+                        </td>
+                        <td className="mono">{c.archivo_origen ?? '—'}</td>
+                        <td className="mono nowrap" style={{ color: 'var(--text-muted)' }}>
+                          {(c.formato_detectado ?? '—').toUpperCase().replace(/_/g, '-')}
+                        </td>
+                        <td style={{ minWidth: 280 }}>
+                          {c.estado === 'error' ? (
+                            <span style={{ color: 'var(--crit)' }}>Ejecución interrumpida</span>
+                          ) : (
+                            recortar(c.diagnostico)
+                          )}
+                        </td>
+                        <td className="num">{c.confianza === null ? '—' : c.confianza.toFixed(2)}</td>
+                        <td>
+                          <span className={`chip ${e.clase}`}>{e.texto}</span>
+                          {c.requiere_revision_humana && (
+                            <span className="chip warn" style={{ marginLeft: 5 }}>
+                              escalado
+                            </span>
+                          )}
+                        </td>
+                        <td>
+                          {c.feedback_correcto === true && (
+                            <span className="chip ok" title="Revisada: diagnóstico correcto">
+                              <ThumbsUp size={10} /> correcto
+                            </span>
+                          )}
+                          {c.feedback_correcto === false && (
+                            <span className="chip crit" title="Revisada: diagnóstico incorrecto">
+                              <ThumbsDown size={10} /> incorrecto
+                            </span>
+                          )}
+                          {c.feedback_correcto === null && (
+                            <span style={{ color: 'var(--text-faint)' }}>sin revisar</span>
+                          )}
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {total > POR_PAGINA && (
+              <div className="pager">
+                <button
+                  className="btn"
+                  disabled={offset === 0 || cargando}
+                  onClick={() => setOffset(Math.max(0, offset - POR_PAGINA))}
                 >
-                  <span>{fechaCorta(c.timestamp)}</span>
-                  <span className="mono">{c.archivo_origen ?? '—'}</span>
-                  <span>{(c.formato_detectado ?? '—').toUpperCase()}</span>
-                  <span className="celda-diagnostico">
-                    {c.estado === 'error' ? (
-                      <em>Análisis interrumpido</em>
-                    ) : (
-                      recortar(c.diagnostico)
-                    )}
-                  </span>
-                  <span>
-                    {c.confianza === null ? '—' : `${Math.round(c.confianza * 100)}%`}
-                  </span>
-                  <span className="celda-veredictos">
-                    {c.hay_incidente && <span className="badge on">incidente</span>}
-                    {c.hay_anomalia && !c.hay_incidente && (
-                      <span className="badge on">anomalía</span>
-                    )}
-                    {c.requiere_revision_humana && <span className="badge warn">escalada</span>}
-                    {c.feedback_correcto === true && (
-                      <span className="badge fb-ok" title="Revisada: diagnóstico correcto">
-                        <ThumbsUp size={11} />
-                      </span>
-                    )}
-                    {c.feedback_correcto === false && (
-                      <span className="badge fb-no" title="Revisada: diagnóstico incorrecto">
-                        <ThumbsDown size={11} />
-                      </span>
-                    )}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {total > POR_PAGINA && (
-            <div className="paginacion">
-              <button
-                className="secondary-button"
-                disabled={offset === 0 || cargando}
-                onClick={() => setOffset(Math.max(0, offset - POR_PAGINA))}
-              >
-                <ChevronLeft size={15} /> Anteriores
-              </button>
-              <span>
-                {desde}–{hasta} de {total}
-              </span>
-              <button
-                className="secondary-button"
-                disabled={hasta >= total || cargando}
-                onClick={() => setOffset(offset + POR_PAGINA)}
-              >
-                Siguientes <ChevronRight size={15} />
-              </button>
-            </div>
-          )}
-        </div>
+                  <ChevronLeft size={14} /> Anteriores
+                </button>
+                <span>
+                  {desde}–{hasta} de {total}
+                </span>
+                <button
+                  className="btn"
+                  disabled={hasta >= total || cargando}
+                  onClick={() => setOffset(offset + POR_PAGINA)}
+                >
+                  Siguientes <ChevronRight size={14} />
+                </button>
+              </div>
+            )}
+          </>
+        )}
       </section>
-    </main>
+    </AppShell>
   )
 }

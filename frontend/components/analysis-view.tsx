@@ -1,18 +1,16 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import {
-  Activity,
-  AlertTriangle,
-  Check,
-  Clock3,
-  FileText,
-  Info,
-  RotateCcw,
-} from 'lucide-react'
+import { AlertTriangle, Check, FileText, Info, RotateCcw } from 'lucide-react'
 
-import { Header, type Vista } from '@/components/header'
-import { obtenerCorrida, urlDelStream, type Corrida, type EventoSse, type ResumenLote } from '@/lib/api'
+import { AppShell, Sep, type Vista } from '@/components/app-shell'
+import {
+  obtenerCorrida,
+  urlDelStream,
+  type Corrida,
+  type EventoSse,
+  type ResumenLote,
+} from '@/lib/api'
 import {
   NODOS,
   aplicarNodo,
@@ -22,6 +20,10 @@ import {
   progreso,
   type Avance,
 } from '@/lib/nodos'
+
+function reloj(segundos: number) {
+  return `${String(Math.floor(segundos / 60)).padStart(2, '0')}:${String(segundos % 60).padStart(2, '0')}`
+}
 
 export function AnalysisView({
   jobId,
@@ -61,26 +63,19 @@ export function AnalysisView({
 
       if (evento.tipo === 'inicio') {
         setResumen(evento.resumen)
-        return
-      }
-      if (evento.tipo === 'nodo') {
+      } else if (evento.tipo === 'nodo') {
         setAvance((previo) => aplicarNodo(previo, evento.nombre))
-        return
-      }
-      if (evento.tipo === 'error') {
+      } else if (evento.tipo === 'error') {
         cerrado = true
         setError(evento.mensaje)
         fuente.close()
-        return
-      }
-      if (evento.tipo === 'final') {
+      } else if (evento.tipo === 'final') {
         cerrado = true
         setAvance(completarTodo)
         fuente.close()
         // El evento `final` no trae el job_id ni los datos del archivo: se
-        // pide la fila del historial, que es el mismo shape que consume el
-        // detalle del historial. Así la vista de informe tiene una sola
-        // forma de entrada.
+        // pide la fila del historial, el mismo shape que consume el detalle.
+        // Así la vista de informe tiene una sola forma de entrada.
         obtenerCorrida(jobId)
           .then(onCompletar)
           .catch((e) => setError(e instanceof Error ? e.message : String(e)))
@@ -90,8 +85,8 @@ export function AnalysisView({
     fuente.onerror = () => {
       if (!cerrado) {
         setError(
-          'Se perdió la conexión con el servidor mientras se ejecutaba el análisis. ' +
-            'El análisis puede haber seguido corriendo: revisá el historial antes de reintentar.',
+          'Se perdió la conexión con el servidor durante la ejecución. El análisis puede ' +
+            'haber continuado: revisá el historial antes de reintentar.',
         )
       }
       fuente.close()
@@ -104,150 +99,164 @@ export function AnalysisView({
   const ejecutados = nodosEjecutados(avance)
 
   return (
-    <main className="shell analysis-shell">
-      <Header vista="analysis" onNavegar={onNavegar} />
-      <section className="analysis-content">
-        <div className="analysis-heading">
-          <div>
-            <div className="eyebrow">
-              {error ? (
-                <>
-                  <AlertTriangle size={14} /> ANÁLISIS INTERRUMPIDO
-                </>
-              ) : (
-                <>
-                  <span className="live-dot" /> ANÁLISIS EN VIVO
-                </>
-              )}
-            </div>
-            <h1>{error ? 'El análisis se interrumpió' : 'Analizando tu archivo'}</h1>
-            <p className="file-context">
-              <FileText size={15} /> {nombreArchivo}
-            </p>
-          </div>
-          <div className="elapsed">
-            <Clock3 size={17} />
-            <span>Tiempo transcurrido</span>
-            <strong>
-              {String(Math.floor(elapsed / 60)).padStart(2, '0')}:
-              {String(elapsed % 60).padStart(2, '0')}
-            </strong>
-          </div>
+    <AppShell
+      vista="analysis"
+      onNavegar={onNavegar}
+      ruta={
+        <>
+          <span>Análisis</span>
+          <Sep />
+          <span className="mono">{nombreArchivo}</span>
+        </>
+      }
+      acciones={
+        <>
+          <span className="chip mono">{reloj(elapsed)}</span>
+          {error ? (
+            <span className="chip crit">interrumpido</span>
+          ) : (
+            <span className="chip info">en ejecución</span>
+          )}
+        </>
+      }
+    >
+      <div className="view-head">
+        <div>
+          <h1>{error ? 'Ejecución interrumpida' : 'Ejecución en curso'}</h1>
+          <p>
+            {ejecutados} de {NODOS.length} agentes ejecutados · {pct}% del recorrido
+          </p>
         </div>
+      </div>
 
-        {error && (
-          <div className="error-banner" role="alert">
-            <div className="error-icon">
-              <AlertTriangle size={19} />
-            </div>
+      {error && (
+        <div className="notice-block" role="alert">
+          <div className="modal-icon" style={{ margin: 0, color: 'var(--crit)', background: 'var(--crit-bg)', borderColor: 'var(--crit-line)' }}>
+            <AlertTriangle size={16} />
+          </div>
+          <div>
+            <strong>No se pudo completar el análisis</strong>
+            <p>{error}</p>
+          </div>
+          <button className="btn" onClick={onReintentar}>
+            <RotateCcw size={14} /> Reintentar
+          </button>
+        </div>
+      )}
+
+      <div className="grid-2">
+        <section className="panel">
+          <div className="panel-head">
             <div>
-              <strong>No se pudo completar el análisis</strong>
-              <p>{error}</p>
+              <span className="label">Grafo multiagente</span>
+              <h2>Recorrido de la ejecución</h2>
             </div>
-            <button className="secondary-button" onClick={onReintentar}>
-              <RotateCcw size={16} /> Reintentar
-            </button>
-          </div>
-        )}
-
-        <div className="progress-strip">
-          <div>
-            <span>Progreso del análisis</span>
-            <strong>{pct}%</strong>
-          </div>
-          <div className="progress-track">
-            <div className={error ? 'is-stopped' : ''} style={{ width: `${pct}%` }} />
-          </div>
-        </div>
-
-        <div className="analysis-grid">
-          <div className="agent-flow">
-            <div className="flow-header">
-              <span>Flujo de análisis</span>
-              <span className="flow-count">
-                {ejecutados} de {NODOS.length} agentes ejecutados
-              </span>
+            <div className="meter">
+              <div className={`meter-track ${error ? 'crit' : ''}`}>
+                <div style={{ width: `${pct}%` }} />
+              </div>
+              <b>{pct}%</b>
             </div>
-            <div className="agents-list">
+          </div>
+          <div className="panel-body">
+            <div className="flow">
               {NODOS.map((nodo, index) => {
                 const paso = avance[nodo.nombre]
                 const activo = paso.estado === 'activo'
                 const hecho = paso.estado === 'completado'
-                // Una revisita se anuncia distinto: "Procesando" daría a
+                // Una revisita se anuncia distinto: "ejecutando" daría a
                 // entender que es la primera pasada.
                 const revisita = activo && paso.visitas > 1
                 return (
                   <div
-                    className={`agent-row ${hecho ? 'done' : ''} ${activo ? 'current' : ''}`}
+                    className={`step ${hecho ? 'done' : ''} ${activo ? 'active' : ''}`}
                     key={nodo.nombre}
                   >
-                    <div className="agent-node">
+                    <div className="step-node">
                       {hecho ? (
-                        <Check size={16} />
+                        <Check size={13} />
                       ) : activo ? (
-                        <span className="node-pulse" />
+                        <span className="step-pulse" />
                       ) : (
-                        <span>{String(index + 1).padStart(2, '0')}</span>
+                        String(index + 1).padStart(2, '0')
                       )}
                     </div>
-                    <div className="agent-copy">
-                      <div className="agent-title">
+                    <div className="step-copy">
+                      <div className="step-title">
                         <strong>{nodo.titulo}</strong>
-                        {hecho && <span className="complete-label">Completado</span>}
-                        {activo && !revisita && <span className="active-label">Procesando</span>}
-                        {revisita && <span className="revisit-label">Revisando de nuevo</span>}
-                        {paso.visitas > 1 && (
-                          <span className="visit-count">×{paso.visitas}</span>
-                        )}
+                        {hecho && <span className="chip ok">completado</span>}
+                        {activo && !revisita && <span className="chip info">ejecutando</span>}
+                        {revisita && <span className="chip warn">revisando de nuevo</span>}
+                        {paso.visitas > 1 && <span className="step-visits">×{paso.visitas}</span>}
                         {nodo.opcional && paso.visitas === 0 && !error && (
-                          <span className="optional-label">Solo si se necesita</span>
+                          <span className="chip">condicional</span>
                         )}
                       </div>
                       {activo && <p>{nodo.descripcion}</p>}
                     </div>
-                    {index < NODOS.length - 1 && <div className="flow-line" />}
+                    {index < NODOS.length - 1 && <div className="step-line" />}
                   </div>
                 )
               })}
             </div>
           </div>
-          <aside className="analysis-aside">
-            <div className="aside-card">
-              <div className="aside-card-title">
-                <Activity size={17} /> Lectura del sistema
+        </section>
+
+        <div>
+          <section className="panel">
+            <div className="panel-head">
+              <div>
+                <span className="label">Lote</span>
+                <h2>Preprocesamiento</h2>
               </div>
-              <p>
-                Mientras NODEX trabaja, puede seguir cada etapa del análisis. No necesita
-                interpretar códigos: le explicaremos cada hallazgo en un lenguaje claro.
-              </p>
-              <div className="aside-note">
+            </div>
+            <div className="panel-body">
+              <div className="facts">
+                <div>
+                  <dt>Archivo</dt>
+                  <dd className="mono">{nombreArchivo}</dd>
+                </div>
+                <div>
+                  <dt>Formato detectado</dt>
+                  <dd className="mono">
+                    {resumen?.formato_detectado
+                      ? resumen.formato_detectado.toUpperCase().replace(/_/g, '-')
+                      : 'detectando…'}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Registros</dt>
+                  <dd className="mono">{resumen?.total_lineas?.toLocaleString('es') ?? '—'}</dd>
+                </div>
+                <div>
+                  <dt>IPs distintas</dt>
+                  <dd className="mono">{resumen?.n_ips_distintas ?? '—'}</dd>
+                </div>
+                <div>
+                  <dt>Ventana temporal</dt>
+                  <dd className="mono">
+                    {resumen?.ventana_temporal?.inicio && resumen?.ventana_temporal?.fin
+                      ? `${resumen.ventana_temporal.inicio} — ${resumen.ventana_temporal.fin}`
+                      : '—'}
+                  </dd>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="panel">
+            <div className="panel-body">
+              <div className="notice info">
                 <Info size={15} />
                 <span>
-                  Algunas etapas se ejecutan solo si el análisis las necesita, y otras pueden
-                  repetirse para revisar un resultado.
+                  Los pasos condicionales se ejecutan solo si el análisis los requiere, y
+                  algunos pueden repetirse para revisar un resultado. El recorrido no es lineal.
                 </span>
               </div>
             </div>
-            <div className="aside-card compact">
-              <span className="mini-label">ARCHIVO EN PROCESO</span>
-              <strong>{nombreArchivo}</strong>
-              <span>
-                Formato detectado:{' '}
-                {resumen?.formato_detectado
-                  ? resumen.formato_detectado.toUpperCase().replace(/_/g, '-')
-                  : 'detectando...'}
-              </span>
-            </div>
-            {resumen && (
-              <div className="aside-card compact">
-                <span className="mini-label">LOTE AGREGADO</span>
-                <strong>{resumen.total_lineas?.toLocaleString('es')} líneas</strong>
-                <span>{resumen.n_ips_distintas} IP(s) distinta(s)</span>
-              </div>
-            )}
-          </aside>
+          </section>
         </div>
-      </section>
-    </main>
+      </div>
+    </AppShell>
   )
 }

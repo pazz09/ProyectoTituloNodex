@@ -37,16 +37,16 @@ export function ConfirmDialog({
 }) {
   return (
     <Dialog open={abierto} onOpenChange={(open) => !open && onCancelar()}>
-      <DialogContent className="confirm-modal" showCloseButton={false}>
-        <div className="confirm-icon">
+      <DialogContent className="modal" showCloseButton={false}>
+        <div className="modal-icon">
           <AlertTriangle size={19} />
         </div>
-        <DialogTitle className="confirm-title">{titulo}</DialogTitle>
-        <DialogDescription className="confirm-text">{descripcion}</DialogDescription>
-        <div className="confirm-actions">
-          <DialogClose className="secondary-button">Cancelar</DialogClose>
+        <DialogTitle className="modal-title">{titulo}</DialogTitle>
+        <DialogDescription className="modal-text">{descripcion}</DialogDescription>
+        <div className="modal-actions">
+          <DialogClose className="btn">Cancelar</DialogClose>
           <button
-            className={variante === 'danger' ? 'danger-button' : 'primary-button'}
+            className={variante === 'danger' ? 'btn btn-danger' : 'btn btn-primary'}
             onClick={onConfirmar}
           >
             {textoConfirmar}
