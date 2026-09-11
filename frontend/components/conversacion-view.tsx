@@ -20,15 +20,8 @@ import {
 } from 'lucide-react'
 
 import { AppShell, type Vista } from '@/components/app-shell'
-import {
-  MAX_BYTES,
-  obtenerCorrida,
-  subirArchivo,
-  urlDelStream,
-  type Corrida,
-  type EventoSse,
-  type ResumenLote,
-} from '@/lib/api'
+import type { EstadoAnalisis } from '@/components/use-analisis'
+import { MAX_BYTES, type Corrida } from '@/lib/api'
 import { NODOS, type NombreNodo } from '@/lib/nodos'
 
 const EXTENSIONES = /\.(log|txt|csv)$/i
@@ -39,18 +32,6 @@ function pesoLegible(bytes: number) {
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
   return `${(bytes / 1024 / 1024).toFixed(1)} MB`
 }
-
-function hora() {
-  return new Date().toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
-}
-
-/** Un mensaje del hilo. El contenido lo arma el componente. */
-type Mensaje =
-  | { rol: 'usuario'; id: string; nombre: string; peso: number }
-  | { rol: 'inicio'; id: string; hora: string; resumen: ResumenLote }
-  | { rol: 'nodo'; id: string; hora: string; nodo: NombreNodo; visita: number; detalle: Record<string, unknown> }
-  | { rol: 'cierre'; id: string; hora: string; corrida: Corrida }
-  | { rol: 'error'; id: string; hora: string; mensaje: string }
 
 const ICONOS: Record<NombreNodo, typeof Sparkles> = {
   agente_analista_triage: ScanSearch,
@@ -239,142 +220,58 @@ function CuerpoNodo({ nodo, detalle, visita }: { nodo: NombreNodo; detalle: Reco
 }
 
 export function ConversacionView({
+  analisis,
   onAbrirInforme,
   onNavegar,
 }: {
+  analisis: EstadoAnalisis
   onAbrirInforme: (corrida: Corrida) => void
   onNavegar: (vista: Vista) => void
 }) {
+  // El estado del análisis vive por encima del cambio de vista (ver
+  // ): así el hilo sobrevive a ir a Resumen o Ejecuciones,
+  // y el stream sigue recibiendo mientras se mira otra pantalla.
+  const { mensajes, jobId, corriendo, errorCarga, analizar, reiniciar, setErrorCarga } = analisis
+
   const [archivo, setArchivo] = useState<File | null>(null)
   const [dragging, setDragging] = useState(false)
-  const [mensajes, setMensajes] = useState<Mensaje[]>([])
-  const [jobId, setJobId] = useState<string | null>(null)
-  const [corriendo, setCorriendo] = useState(false)
-  const [errorCarga, setErrorCarga] = useState<string | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const finRef = useRef<HTMLDivElement>(null)
-  const visitas = useRef<Record<string, number>>({})
 
   useEffect(() => {
     finRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
   }, [mensajes])
 
-  const elegir = useCallback((file?: File) => {
-    setErrorCarga(null)
-    if (!file) return
-    if (!EXTENSIONES.test(file.name)) {
-      setErrorCarga(`"${file.name}" no es un formato compatible. Se esperan .log, .txt o .csv.`)
-      return
-    }
-    // Se valida acá además del backend para no gastar la subida de un archivo
-    // que igual sería rechazado con 413.
-    if (file.size > MAX_BYTES) {
-      setErrorCarga(`El archivo pesa ${pesoLegible(file.size)} y el máximo es ${LIMITE_LEGIBLE}.`)
-      return
-    }
-    if (file.size === 0) {
-      setErrorCarga('El archivo está vacío.')
-      return
-    }
-    setArchivo(file)
-  }, [])
+  const elegir = useCallback(
+    (file?: File) => {
+      setErrorCarga(null)
+      if (!file) return
+      if (!EXTENSIONES.test(file.name)) {
+        setErrorCarga(`"${file.name}" no es un formato compatible. Se esperan .log, .txt o .csv.`)
+        return
+      }
+      // Se valida acá además del backend para no gastar la subida de un
+      // archivo que igual sería rechazado con 413.
+      if (file.size > MAX_BYTES) {
+        setErrorCarga(`El archivo pesa ${pesoLegible(file.size)} y el máximo es ${LIMITE_LEGIBLE}.`)
+        return
+      }
+      if (file.size === 0) {
+        setErrorCarga('El archivo está vacío.')
+        return
+      }
+      setArchivo(file)
+    },
+    [setErrorCarga],
+  )
 
   const enviar = async () => {
     if (!archivo || corriendo) return
-    setCorriendo(true)
-    setErrorCarga(null)
-    visitas.current = {}
-    setMensajes([{ rol: 'usuario', id: 'u0', nombre: archivo.name, peso: archivo.size }])
-
-    let id: string
-    try {
-      const r = await subirArchivo(archivo)
-      id = r.job_id
-      setJobId(id)
-    } catch (e) {
-      setErrorCarga(e instanceof Error ? e.message : String(e))
-      setMensajes([])
-      setCorriendo(false)
-      return
-    }
-
+    const elegido = archivo
     setArchivo(null)
-    const fuente = new EventSource(urlDelStream(id))
-    // El backend no emite `final` después de un `error`, así que este flag
-    // distingue "terminó" de "se cortó la conexión".
-    let cerrado = false
-
-    fuente.onmessage = (m) => {
-      const ev: EventoSse = JSON.parse(m.data)
-
-      if (ev.tipo === 'inicio') {
-        setMensajes((prev) => [...prev, { rol: 'inicio', id: 'inicio', hora: hora(), resumen: ev.resumen }])
-      } else if (ev.tipo === 'nodo') {
-        const visita = (visitas.current[ev.nombre] ?? 0) + 1
-        visitas.current[ev.nombre] = visita
-        setMensajes((prev) => [
-          ...prev,
-          {
-            rol: 'nodo',
-            id: `${ev.nombre}-${visita}`,
-            hora: hora(),
-            nodo: ev.nombre as NombreNodo,
-            visita,
-            detalle: ev.detalle,
-          },
-        ])
-      } else if (ev.tipo === 'error') {
-        cerrado = true
-        setMensajes((prev) => [...prev, { rol: 'error', id: 'err', hora: hora(), mensaje: ev.mensaje }])
-        setCorriendo(false)
-        fuente.close()
-      } else if (ev.tipo === 'final') {
-        cerrado = true
-        fuente.close()
-        // El evento `final` no trae el job_id ni los datos del archivo: se
-        // pide la fila del historial, el mismo shape que consume el informe.
-        obtenerCorrida(id)
-          .then((c) =>
-            setMensajes((prev) => [...prev, { rol: 'cierre', id: 'cierre', hora: hora(), corrida: c }]),
-          )
-          .catch((e) =>
-            setMensajes((prev) => [
-              ...prev,
-              { rol: 'error', id: 'err', hora: hora(), mensaje: e instanceof Error ? e.message : String(e) },
-            ]),
-          )
-          .finally(() => setCorriendo(false))
-      }
-    }
-
-    fuente.onerror = () => {
-      if (!cerrado) {
-        setMensajes((prev) => [
-          ...prev,
-          {
-            rol: 'error',
-            id: 'err',
-            hora: hora(),
-            mensaje:
-              'Se perdió la conexión con el servidor durante la ejecución. El análisis puede haber continuado: revisá las ejecuciones antes de reintentar.',
-          },
-        ])
-        setCorriendo(false)
-      }
-      fuente.close()
-    }
+    await analizar(elegido)
   }
 
-  const reiniciar = () => {
-    setMensajes([])
-    setJobId(null)
-    setArchivo(null)
-    setErrorCarga(null)
-    visitas.current = {}
-  }
-
-  // El nodo que está corriendo es el último que emitió: mientras no llegue el
-  // cierre, se muestra el indicador de actividad.
   const esperando = corriendo && mensajes.length > 0
 
   return (
@@ -527,6 +424,11 @@ export function ConversacionView({
                       <RotateCcw size={14} /> Analizar otro lote
                     </button>
                   </div>
+                  {/* Reiniciar el hilo no pierde nada: la ejecución quedó
+                      persistida y su informe se puede volver a abrir. */}
+                  <p className="faint" style={{ fontSize: 12.5 }}>
+                    Este informe queda guardado en Ejecuciones: analizar otro lote no lo borra.
+                  </p>
                 </div>
               </div>
             )

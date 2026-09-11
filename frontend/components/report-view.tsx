@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import {
   AlertTriangle,
+  ArrowLeft,
   CheckCircle2,
   Download,
   ExternalLink,
@@ -45,11 +46,14 @@ export function ReportView({
   grupo,
   onNavegar,
   onFeedback,
+  onVolverAlHilo,
 }: {
   corrida: Corrida
   grupo: Grupo
   onNavegar: (vista: Vista) => void
   onFeedback?: (actualizada: Corrida) => void
+  /** Presente solo si este informe es el de la conversación en curso. */
+  onVolverAlHilo?: () => void
 }) {
   const [descargando, setDescargando] = useState(false)
   const [errorDescarga, setErrorDescarga] = useState<string | null>(null)
@@ -124,10 +128,19 @@ export function ReportView({
           <a className="btn" href={urlVisor} target="_blank" rel="noreferrer noopener">
             <ExternalLink size={14} /> Abrir en otra pestaña
           </a>
-          <button className="btn" onClick={() => onNavegar('analisis')}>
-            <Plus size={14} /> Analizar otro lote
-          </button>
+          {onVolverAlHilo ? (
+            <button className="btn" onClick={onVolverAlHilo}>
+              <ArrowLeft size={14} /> Volver a la conversación
+            </button>
+          ) : (
+            <button className="btn" onClick={() => onNavegar('analisis')}>
+              <Plus size={14} /> Analizar otro lote
+            </button>
+          )}
         </div>
+        <p className="faint" style={{ fontSize: 12.5, marginTop: 12 }}>
+          Este informe está guardado en Ejecuciones: se puede volver a abrir cuando quieras.
+        </p>
       </div>
 
       {errorDescarga && (
