@@ -10,7 +10,6 @@ import {
   Gauge,
   Layers,
   Loader2,
-  Paperclip,
   RotateCcw,
   ScanSearch,
   ShieldCheck,
@@ -639,17 +638,6 @@ export function ConversacionView({
             )}
 
             <div className="compositor-pie">
-              <button
-                className="btn btn-quiet"
-                aria-label="Elegir archivo"
-                disabled={corriendo}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  inputRef.current?.click()
-                }}
-              >
-                <Paperclip size={15} />
-              </button>
               <button
                 className="btn btn-primary enviar"
                 disabled={!archivo || corriendo}
