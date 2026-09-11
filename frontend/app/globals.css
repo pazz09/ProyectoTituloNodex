@@ -58,6 +58,8 @@
   --r-lg: 16px;
 
   --rail-w: 232px;
+  --app-max: 1400px;
+  --marco-aire: 40px;
 }
 
 /* El informe, en claro. Mismos nombres de token, valores invertidos. */
@@ -117,13 +119,20 @@ body::before {
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(125% 88% at 50% 112%,
-      rgba(76, 118, 245, .85) 0%,
-      rgba(52, 84, 205, .6) 18%,
-      rgba(30, 52, 135, .38) 38%,
-      rgba(16, 26, 66, .2) 58%,
-      transparent 80%),
-    radial-gradient(80% 50% at 96% -14%, rgba(76, 118, 245, .18) 0%, transparent 70%);
+    /* Foco principal abajo, lo bastante alto y ancho para que el azul suba
+       por los costados de la superficie centrada. */
+    radial-gradient(150% 125% at 50% 118%,
+      rgba(86, 128, 250, .95) 0%,
+      rgba(56, 90, 215, .72) 16%,
+      rgba(34, 58, 148, .5) 34%,
+      rgba(18, 30, 76, .28) 54%,
+      rgba(10, 14, 34, .12) 72%,
+      transparent 88%),
+    /* Dos apoyos en las esquinas inferiores, para que el contorno no quede
+       oscuro a los lados. */
+    radial-gradient(70% 80% at -8% 108%, rgba(76, 118, 245, .5) 0%, transparent 62%),
+    radial-gradient(70% 80% at 108% 108%, rgba(76, 118, 245, .5) 0%, transparent 62%),
+    radial-gradient(80% 50% at 96% -14%, rgba(76, 118, 245, .16) 0%, transparent 70%);
 }
 /* El lienzo y la barra lateral dejan ver el ambiente; el borde de la barra
    sigue separando las dos zonas. */
@@ -151,19 +160,32 @@ code, .mono { font-family: var(--font-mono); font-size: .92em; }
 }
 
 /* --- Armazón --------------------------------------------------------------- */
+/* La aplicación es una superficie CENTRADA sobre el degradado, no un lienzo
+   a sangre. Por eso tiene altura fija y su propio scroll adentro: con
+   `min-height: 100vh` y scroll de página, todo lo pegajoso --la barra
+   lateral, el compositor-- se ancla al navegador y no al contenedor, y se
+   salía de la superficie al desplazarse. */
+.marco-app {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: var(--marco-aire);
+}
 .app {
   display: grid;
   grid-template-columns: var(--rail-w) minmax(0, 1fr);
-  min-height: 100vh;
+  width: 100%;
+  max-width: var(--app-max);
+  height: calc(100vh - var(--marco-aire) * 2);
+  background: var(--bg);
+  border: 1px solid rgba(255, 255, 255, .07);
+  border-radius: var(--r-lg);
+  overflow: hidden;
 }
 
-.rail { border-right: 1px solid var(--border); }
-/* El aside se estira con la grilla; lo que se fija al scrollear es su
-   contenido (si no, en una página larga el borde se cortaba a 100vh). */
+.rail { border-right: 1px solid var(--border); overflow: hidden; }
 .rail-inner {
-  position: sticky;
-  top: 0;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   padding: 30px 20px 26px;
@@ -198,7 +220,7 @@ code, .mono { font-family: var(--font-mono); font-size: .92em; }
 .rail-item.inerte { cursor: default; opacity: .55; }
 .rail-item.inerte:hover { background: transparent; color: var(--text-faint); }
 
-.workspace { min-width: 0; display: flex; flex-direction: column; }
+.workspace { min-width: 0; display: flex; flex-direction: column; overflow-y: auto; }
 .view { padding: 34px 38px 56px; max-width: 1180px; width: 100%; }
 .view-head { margin-bottom: 30px; }
 .view-head h1 { margin-bottom: 6px; }
@@ -345,7 +367,7 @@ code, .mono { font-family: var(--font-mono); font-size: .92em; }
 .chart-vacio { display: grid; place-items: center; min-height: 180px; color: var(--text-faint); font-size: 13px; text-align: center; padding: 0 24px; }
 
 /* --- Conversación --------------------------------------------------------- */
-.chat { display: flex; flex-direction: column; min-height: 100vh; }
+.chat { display: flex; flex-direction: column; min-height: 100%; flex: 1; }
 .chat-cabecera { padding: 34px 38px 0; max-width: 1020px; width: 100%; }
 /* Los mensajes se apoyan en el compositor y crecen hacia arriba, como en
    cualquier conversación: con el hilo anclado arriba, la pantalla vacía
@@ -532,10 +554,16 @@ textarea.field::placeholder { color: var(--text-faint); }
   .verdict-chips { margin-left: 0; }
 }
 @media (max-width: 880px) {
-  :root { --rail-w: 100%; }
-  .app { grid-template-columns: minmax(0, 1fr); }
+  :root { --rail-w: 100%; --marco-aire: 0px; }
+  .marco-app { min-height: auto; padding: 0; }
+  .app {
+    grid-template-columns: minmax(0, 1fr);
+    height: auto; min-height: 100vh;
+    border: 0; border-radius: 0;
+  }
+  .workspace { overflow-y: visible; }
   .rail { border-right: 0; border-bottom: 1px solid var(--border); }
-  .rail-inner { position: static; height: auto; flex-direction: row; align-items: center; gap: 10px; padding: 12px 18px; overflow-x: auto; }
+  .rail-inner { height: auto; flex-direction: row; align-items: center; gap: 10px; padding: 12px 18px; overflow-x: auto; }
   .wordmark { padding: 0 14px 0 6px; }
   .rail-nav { grid-auto-flow: column; }
   .rail-sep, .rail-foot { display: none; }

@@ -43,36 +43,38 @@ export function AppShell({
   )
 
   return (
-    <div className="app">
-      <aside className="rail">
-        <div className="rail-inner">
-          <div className="wordmark">NODEX</div>
+    <div className="marco-app">
+      <div className="app">
+        <aside className="rail">
+          <div className="rail-inner">
+            <div className="wordmark">NODEX</div>
 
-          <nav className="rail-nav">
-            {item('overview', 'Resumen', LayoutGrid, grupo === 'overview')}
-            {item('historial', 'Ejecuciones', Activity, grupo === 'historial')}
-          </nav>
+            <nav className="rail-nav">
+              {item('overview', 'Resumen', LayoutGrid, grupo === 'overview')}
+              {item('historial', 'Ejecuciones', Activity, grupo === 'historial')}
+            </nav>
 
-          <div className="rail-sep" />
-
-          <nav className="rail-nav">
-            {item('analisis', 'Multiagente', Sparkles, grupo === 'analisis')}
-          </nav>
-
-          <div className="rail-foot">
             <div className="rail-sep" />
-            {/* Presente porque la referencia lo tiene, e inerte porque el
-                prototipo no expone configuración desde la interfaz: se
-                configura por variables de entorno. */}
-            <button className="rail-item inerte" disabled title="El prototipo se configura por variables de entorno">
-              <Settings size={16} strokeWidth={1.6} /> Ajustes
-            </button>
-          </div>
-        </div>
-      </aside>
 
-      <div className="workspace">
-        {sinPadding ? children : <main className="view">{children}</main>}
+            <nav className="rail-nav">
+              {item('analisis', 'Multiagente', Sparkles, grupo === 'analisis')}
+            </nav>
+
+            <div className="rail-foot">
+              <div className="rail-sep" />
+              {/* Presente porque la referencia lo tiene, e inerte porque el
+                  prototipo no expone configuración desde la interfaz: se
+                  configura por variables de entorno. */}
+              <button className="rail-item inerte" disabled title="El prototipo se configura por variables de entorno">
+                <Settings size={16} strokeWidth={1.6} /> Ajustes
+              </button>
+            </div>
+          </div>
+        </aside>
+
+        <div className="workspace">
+          {sinPadding ? children : <main className="view">{children}</main>}
+        </div>
       </div>
     </div>
   )
