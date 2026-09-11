@@ -89,7 +89,10 @@
 html { background: var(--bg); }
 body {
   margin: 0;
-  background: var(--bg);
+  /* SIN fondo propio: el color base lo pone `html`. Un `background` acá
+     taparía el degradado del pseudo-elemento de abajo, porque un hijo con
+     z-index negativo se pinta detrás del fondo de su padre. */
+  background: transparent;
   color: var(--text-muted);
   font-family: var(--font-sans);
   font-size: 14px;
@@ -97,6 +100,35 @@ body {
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
 }
+
+/* --- Ambiente del fondo ---------------------------------------------------- */
+/* Degradado azul profundo, como el de la referencia. Va en un
+   pseudo-elemento FIJO y no en `background` del body a propósito: el informe
+   mide varias pantallas de alto, y un degradado que scrollea se estira o se
+   repite. Fijo, el ambiente queda quieto mientras el contenido pasa por
+   delante.
+   Los paneles siguen siendo opacos: el degradado es el lienzo, no el fondo
+   de las tarjetas. Un panel semitransparente sobre esto haría que el texto
+   cambie de contraste según por dónde vaya el scroll. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(125% 88% at 50% 112%,
+      rgba(76, 118, 245, .85) 0%,
+      rgba(52, 84, 205, .6) 18%,
+      rgba(30, 52, 135, .38) 38%,
+      rgba(16, 26, 66, .2) 58%,
+      transparent 80%),
+    radial-gradient(80% 50% at 96% -14%, rgba(76, 118, 245, .18) 0%, transparent 70%);
+}
+/* El lienzo y la barra lateral dejan ver el ambiente; el borde de la barra
+   sigue separando las dos zonas. */
+.app { background: transparent; }
+.rail { background: rgba(13, 13, 16, .55); backdrop-filter: blur(6px); }
 button, input, textarea, select { font: inherit; color: inherit; }
 button { cursor: pointer; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -247,7 +279,7 @@ code, .mono { font-family: var(--font-mono); font-size: .92em; }
 .kpi-top .marca.crit { color: var(--crit); }
 .kpi-top .marca.warn { color: var(--warn); }
 .kpi-top .marca.ok { color: var(--ok); }
-.kpi span { display: block; color: var(--text-muted); font-size: 13px; margin-top: 5px; }
+.kpi > span { display: block; color: var(--text-muted); font-size: 13px; margin-top: 5px; }
 
 /* --- Barras --------------------------------------------------------------- */
 /* Finas y redondeadas, con la etiqueta arriba y el valor a la derecha. */
@@ -361,7 +393,21 @@ code, .mono { font-family: var(--font-mono); font-size: .92em; }
 @keyframes puntos { 0%, 60%, 100% { opacity: .25; } 30% { opacity: 1; } }
 
 /* Compositor, pegado abajo. */
-.compositor-zona { position: sticky; bottom: 0; background: var(--bg); padding: 10px 38px 22px; max-width: 1020px; width: 100%; }
+/* Ocupa el ancho completo y se desvanece hacia arriba. Con `max-width` y un
+   fondo plano se dibujaba un rectángulo oscuro recortado contra el
+   degradado; el desvanecido sin bordes duros oculta lo que scrollea por
+   detrás sin cortar el ambiente. */
+.compositor-zona {
+  position: sticky; bottom: 0;
+  width: 100%;
+  background: linear-gradient(to top,
+    rgba(13, 13, 16, .97) 0%,
+    rgba(13, 13, 16, .9) 45%,
+    rgba(13, 13, 16, .55) 78%,
+    transparent 100%);
+  padding: 26px 38px 22px;
+}
+.compositor-caja { max-width: 1020px; width: 100%; }
 .compositor {
   background: var(--panel);
   border: 1px solid var(--border);

@@ -382,10 +382,10 @@ export function ConversacionView({
       <div className="chat">
         <div className="chat-cabecera">
           <div className="view-head" style={{ marginBottom: 0 }}>
-            <h1>Asistente de análisis</h1>
+            <h1>Multiagente NODEX</h1>
             <p>
               {mensajes.length === 0
-                ? 'Adjuntá un lote de registros y el grafo de 7 agentes lo va a analizar paso a paso.'
+                ? 'Adjunta un lote de registros y el grafo de 7 agentes lo va a analizar paso a paso.'
                 : 'Cada mensaje es lo que ese agente devolvió al estado del grafo.'}
             </p>
           </div>
@@ -401,7 +401,7 @@ export function ConversacionView({
               </div>
               <div className="msg-cuerpo">
                 <p>
-                  Soltá un archivo de registros en el campo de abajo. Formatos compatibles: .log,
+                  Ingresa tu archivo de registros en el campo de abajo. Formatos compatibles: .log,
                   .txt y .csv, hasta {LIMITE_LEGIBLE}.
                 </p>
                 <p className="faint">
@@ -554,6 +554,7 @@ export function ConversacionView({
         </div>
 
         <div className="compositor-zona">
+          <div className="compositor-caja">
           {errorCarga && (
             <div className="notice" role="alert" style={{ marginBottom: 12 }}>
               <AlertTriangle size={15} />
@@ -629,6 +630,7 @@ export function ConversacionView({
               'El lote se procesa de forma local; no se almacena el archivo original'
             )}
           </p>
+          </div>
         </div>
       </div>
     </AppShell>

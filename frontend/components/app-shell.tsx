@@ -56,7 +56,7 @@ export function AppShell({
           <div className="rail-sep" />
 
           <nav className="rail-nav">
-            {item('analisis', 'Asistente', Sparkles, grupo === 'analisis')}
+            {item('analisis', 'Multiagente', Sparkles, grupo === 'analisis')}
           </nav>
 
           <div className="rail-foot">
