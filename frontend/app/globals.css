@@ -432,24 +432,29 @@ code, .mono { font-family: var(--font-mono); font-size: .92em; }
 .compositor-caja { max-width: 1020px; width: 100%; }
 /* Zona de archivo, NO un campo de texto.
    Antes tenía borde sólido, un texto en color de placeholder y un botón de
-   enviar: la forma de un input de chat en el que no se puede escribir. El
-   borde punteado, el icono de subida y el texto con aspecto de acción dejan
-   claro de entrada que lo que se espera es un archivo. */
+   enviar en una banda aparte: la forma de un input de chat en el que no se
+   puede escribir. El borde punteado, el icono de subida y el texto con
+   aspecto de acción dejan claro de entrada que lo que se espera es un
+   archivo, y todo vive en UNA fila: sin banda inferior vacía. */
 .compositor {
+  display: flex;
+  align-items: center;
+  gap: 16px;
   background: var(--panel);
   border: 1px dashed #35353d;
   border-radius: var(--r);
-  padding: 14px 16px 12px;
+  padding: 14px 16px;
   transition: border-color .14s, background .14s;
   cursor: pointer;
 }
 .compositor:hover { border-color: #4a4a55; background: var(--block); }
 .compositor.dragging { border-color: var(--accent); background: var(--accent-soft); }
-/* Con un archivo ya elegido deja de ser zona de arrastre y pasa a ser una
-   ficha: borde sólido y cursor normal. */
-.compositor.con-archivo { border-style: solid; border-color: var(--accent-line); cursor: default; }
+/* Con un archivo elegido deja de ser zona de arrastre: borde sólido, cursor
+   normal, y el archivo pasa a ser una ficha propia adentro. */
+.compositor.con-archivo { border-style: solid; border-color: var(--border); cursor: default; }
 .compositor.inactivo { cursor: default; }
 .compositor.inactivo:hover { border-color: #35353d; background: var(--panel); }
+.compositor-contenido { flex: 1; min-width: 0; }
 
 .compositor-accion { display: flex; align-items: center; gap: 13px; }
 .compositor-accion .icono {
@@ -460,17 +465,32 @@ code, .mono { font-family: var(--font-mono); font-size: .92em; }
 .compositor-accion strong { display: block; color: var(--text); font-size: 13.5px; font-weight: 450; }
 .compositor-accion strong u { color: var(--accent); text-decoration-color: var(--accent); text-underline-offset: 3px; }
 .compositor-accion small { color: var(--text-faint); font-size: 12px; font-family: var(--font-mono); }
-.compositor-archivo { display: flex; align-items: center; gap: 13px; }
-.compositor-archivo > div:nth-child(2) { flex: 1; min-width: 0; }
-.compositor-archivo strong { display: block; color: var(--text); font-family: var(--font-mono); font-size: 13px; word-break: break-all; }
-.compositor-archivo span { color: var(--text-muted); font-size: 12px; }
-.compositor-pie { display: flex; align-items: center; gap: 4px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-soft); }
-.compositor-pie .btn-quiet { width: 30px; height: 30px; padding: 0; color: var(--text-faint); }
-.compositor-pie .enviar {
-  margin-left: auto; width: 34px; height: 34px; padding: 0;
+
+/* Ficha del archivo: un componente dentro del contenedor, con su propia
+   superficie y su botón de quitar adentro. */
+.compositor-ficha {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--block);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 10px 12px;
+}
+.compositor-ficha .icono {
+  width: 32px; height: 32px; flex: none; border-radius: 7px;
+  display: grid; place-items: center;
+  color: var(--accent); background: var(--accent-soft); border: 1px solid var(--accent-line);
+}
+.compositor-ficha > div:nth-child(2) { flex: 1; min-width: 0; }
+.compositor-ficha strong { display: block; color: var(--text); font-family: var(--font-mono); font-size: 13px; word-break: break-all; }
+.compositor-ficha span { color: var(--text-muted); font-size: 12px; }
+.compositor-ficha .quitar { width: 28px; height: 28px; padding: 0; flex: none; }
+
+.compositor .enviar {
+  flex: none;
+  width: 36px; height: 36px; padding: 0;
   border-radius: 50%;
 }
-.compositor-pie .enviar:disabled { background: var(--block); border-color: var(--border); color: var(--text-faint); opacity: 1; }
+.compositor .enviar:disabled { background: var(--block); border-color: var(--border); color: var(--text-faint); opacity: 1; }
 .compositor-nota { text-align: center; color: var(--text-faint); font-size: 11.5px; margin-top: 12px; }
 
 /* --- Avisos --------------------------------------------------------------- */

@@ -594,61 +594,62 @@ export function ConversacionView({
               onChange={(e) => elegir(e.target.files?.[0])}
             />
 
-            {archivo ? (
-              <div className="compositor-archivo">
+            <div className="compositor-contenido">
+              {archivo ? (
+                /* El archivo elegido es una ficha DENTRO del contenedor, con
+                   su propia superficie y su botón de quitar adentro. */
+                <div className="compositor-ficha">
+                  <span className="icono">
+                    <FileText size={15} />
+                  </span>
+                  <div>
+                    <strong>{archivo.name}</strong>
+                    <span>{pesoLegible(archivo.size)} · listo para analizar</span>
+                  </div>
+                  <button
+                    className="btn btn-quiet quitar"
+                    aria-label="Quitar archivo"
+                    disabled={corriendo}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setArchivo(null)
+                    }}
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              ) : (
                 <div className="compositor-accion">
                   <span className="icono">
-                    <FileText size={16} />
+                    {corriendo ? <Loader2 size={16} className="spin" /> : <Upload size={16} />}
                   </span>
+                  <div>
+                    <strong>
+                      {corriendo ? (
+                        'Analizando el lote…'
+                      ) : (
+                        <>
+                          Arrastrá un archivo de registros o <u>elegilo desde tu equipo</u>
+                        </>
+                      )}
+                    </strong>
+                    <small>.log · .txt · .csv — hasta {LIMITE_LEGIBLE}</small>
+                  </div>
                 </div>
-                <div>
-                  <strong>{archivo.name}</strong>
-                  <span>{pesoLegible(archivo.size)} · listo para analizar</span>
-                </div>
-                <button
-                  className="btn btn-quiet"
-                  aria-label="Quitar archivo"
-                  disabled={corriendo}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    setArchivo(null)
-                  }}
-                >
-                  <X size={15} />
-                </button>
-              </div>
-            ) : (
-              <div className="compositor-accion">
-                <span className="icono">
-                  {corriendo ? <Loader2 size={16} className="spin" /> : <Upload size={16} />}
-                </span>
-                <div>
-                  <strong>
-                    {corriendo ? (
-                      'Analizando el lote…'
-                    ) : (
-                      <>
-                        Arrastrá un archivo de registros o <u>elegilo desde tu equipo</u>
-                      </>
-                    )}
-                  </strong>
-                  <small>.log · .txt · .csv — hasta {LIMITE_LEGIBLE}</small>
-                </div>
-              </div>
-            )}
-
-            <div className="compositor-pie">
-              <button
-                className="btn btn-primary enviar"
-                disabled={!archivo || corriendo}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  enviar()
-                }}
-              >
-                {corriendo ? <Loader2 size={15} className="spin" /> : <ArrowUp size={15} />}
-              </button>
+              )}
             </div>
+
+            <button
+              className="btn btn-primary enviar"
+              aria-label="Analizar el lote"
+              disabled={!archivo || corriendo}
+              onClick={(e) => {
+                e.stopPropagation()
+                enviar()
+              }}
+            >
+              {corriendo ? <Loader2 size={15} className="spin" /> : <ArrowUp size={15} />}
+            </button>
           </div>
           <p className="compositor-nota">
             {jobId ? (
