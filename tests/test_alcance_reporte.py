@@ -282,10 +282,10 @@ def test_el_pdf_incluye_la_cronologia_y_las_entidades(monkeypatch):
                          "host": "web", "similitud": 0.88}],
     }
     texto = _texto_escrito(monkeypatch, corrida)
-    assert "Secuencia temporal" in texto
+    assert "SECUENCIA TEMPORAL" in texto.upper()
     assert "Failed password for root" in texto
-    assert "7 registro(s)" in texto          # el recorte queda declarado
-    assert "Entidades involucradas" in texto
+    assert "7 registros" in texto              # el recorte queda declarado
+    assert "ENTIDADES INVOLUCRADAS" in texto.upper()
     assert "root, admin" in texto            # usuarios objetivo de la entidad
     assert "401" in texto                    # códigos de respuesta
     assert "fuerza bruta previa" in texto    # precedentes
@@ -295,4 +295,4 @@ def test_el_pdf_omite_las_secciones_sin_datos(monkeypatch):
     from tests.test_informe_pdf import CORRIDA, _texto_escrito
 
     texto = _texto_escrito(monkeypatch, CORRIDA)
-    assert "Secuencia temporal" not in texto
+    assert "SECUENCIA TEMPORAL" not in texto.upper()

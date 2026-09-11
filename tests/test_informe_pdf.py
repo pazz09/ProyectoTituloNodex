@@ -206,12 +206,29 @@ def test_sin_tecnicas_no_se_menciona_la_atribucion(monkeypatch):
     assert "MITRE Corporation" not in texto
 
 
-def test_las_siete_secciones_aparecen(monkeypatch):
+# Títulos de sección de la plantilla del 11-sep-2026. Van en versales en el
+# documento, así que se comparan en mayúsculas.
+SECCIONES = (
+    "RESUMEN DEL ANÁLISIS",
+    "EVIDENCIA OBSERVADA",
+    "TÉCNICAS MITRE ATT&CK RELACIONADAS",
+    "EVALUACIÓN DEL AUDITOR",
+    "MITIGACIÓN PROPUESTA",
+)
+
+
+def test_las_secciones_aparecen(monkeypatch):
     texto = _texto_escrito(monkeypatch, CORRIDA)
-    for seccion in ("Informe de Análisis de Incidente", "Resumen ejecutivo",
-                    "Evidencia observada", "Contexto y técnicas relacionadas",
-                    "Evaluación del auditor", "Mitigación propuesta"):
+    assert "Informe de" in texto and "análisis" in texto    # portada
+    for seccion in SECCIONES:
         assert sanear(seccion) in texto, seccion
+
+
+def test_las_secciones_van_en_orden(monkeypatch):
+    """El orden importa: es un documento que se lee de corrido."""
+    texto = _texto_escrito(monkeypatch, CORRIDA)
+    posiciones = [texto.index(sanear(s)) for s in SECCIONES]
+    assert posiciones == sorted(posiciones), posiciones
 
 
 def test_sin_comandos_la_seccion_lo_explica(monkeypatch):
@@ -264,19 +281,39 @@ def test_el_endpoint_no_vuelve_a_correr_el_grafo(cliente, monkeypatch):
     assert cliente.get("/api/historial/abc123/pdf").status_code == 200
 
 
-def test_las_secciones_se_numeran_sin_saltos(monkeypatch):
-    """Las secciones opcionales se omiten según los datos; con números fijos
-    el informe saltaba de "2." a "4." y se leía como una página faltante."""
-    import re
+def test_las_secciones_condicionales_se_omiten_sin_datos(monkeypatch):
+    """Sin técnicas ni precedentes, esas secciones no se emiten: la
+    plantilla ya no numera, así que omitirlas no deja ningún hueco."""
     texto = _texto_escrito(monkeypatch, corrida(tecnicas_mitre=[], reporte_json={}))
-    numeros = [int(m) for m in re.findall(r"^(\d+)\. ", texto, re.M)]
-    assert numeros == list(range(1, len(numeros) + 1)), numeros
+    assert sanear("TÉCNICAS MITRE ATT&CK RELACIONADAS") not in texto
+    assert sanear("EVIDENCIAS EXTERNAS Y PRECEDENTES") not in texto
+    # Las obligatorias siguen estando.
+    assert sanear("RESUMEN DEL ANÁLISIS") in texto
+    assert sanear("MITIGACIÓN PROPUESTA") in texto
 
 
-def test_el_feedback_humano_ocupa_la_ultima_seccion(monkeypatch):
-    import re
+def test_el_feedback_humano_cierra_el_documento(monkeypatch):
     texto = _texto_escrito(monkeypatch, corrida(
         feedback_correcto=True, feedback_comentario="coincide"))
-    numeros = [int(m) for m in re.findall(r"^(\d+)\. ", texto, re.M)]
-    assert numeros == list(range(1, len(numeros) + 1)), numeros
-    assert re.search(r"^%d\. Revisión humana" % numeros[-1], texto, re.M)
+    assert sanear("REVISIÓN DEL ANALISTA") in texto
+    # Es la última sección: nada del resto aparece después de ella.
+    revision = texto.index(sanear("REVISIÓN DEL ANALISTA"))
+    for otra in SECCIONES:
+        assert texto.index(sanear(otra)) < revision, otra
+
+
+def test_el_endpoint_puede_servir_el_pdf_en_linea(cliente):
+    """La interfaz incrusta el documento para mostrar exactamente lo que se
+    descarga, y con `attachment` el navegador lo baja en vez de mostrarlo."""
+    historial.registrar_corrida("abc123", CORRIDA)
+    r = cliente.get("/api/historial/abc123/pdf?inline=1")
+    assert r.status_code == 200
+    assert r.headers["content-type"] == "application/pdf"
+    assert r.headers["content-disposition"].startswith("inline")
+    assert es_pdf(r.content)
+
+
+def test_por_defecto_sigue_siendo_una_descarga(cliente):
+    historial.registrar_corrida("abc123", CORRIDA)
+    r = cliente.get("/api/historial/abc123/pdf")
+    assert r.headers["content-disposition"].startswith("attachment")

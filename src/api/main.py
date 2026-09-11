@@ -169,20 +169,27 @@ def detalle_historial(job_id: str):
 
 
 @app.get("/api/historial/{job_id}/pdf")
-def descargar_informe(job_id: str):
+def descargar_informe(job_id: str, inline: bool = False):
     """Informe de la corrida en PDF.
 
     Se arma con lo que quedó persistido: NO vuelve a correr el grafo, así
-    que descargar el informe no cuesta cuota de LLM.
+    que emitir el informe no cuesta cuota de LLM.
+
+    `inline=1` cambia el `Content-Disposition` a `inline`. Hace falta para
+    que la interfaz pueda incrustar el documento y mostrar exactamente lo
+    que se descarga: con `attachment`, el navegador baja el archivo en vez
+    de renderizarlo dentro del visor. El valor por defecto sigue siendo
+    `attachment`, para que el botón de descarga no cambie de comportamiento.
     """
     corrida = historial.obtener_corrida(job_id)
     if corrida is None:
         raise HTTPException(404, f"No hay ninguna corrida con job_id {job_id}.")
     pdf = generar_informe_pdf(corrida)
+    disposicion = "inline" if inline else "attachment"
     return Response(
         content=pdf,
         media_type="application/pdf",
-        headers={"Content-Disposition": f'attachment; filename=informe_{job_id}.pdf'},
+        headers={"Content-Disposition": f'{disposicion}; filename=informe_{job_id}.pdf'},
     )
 
 

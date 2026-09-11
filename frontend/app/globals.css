@@ -20,10 +20,10 @@
       marcas de tiempo, comandos, IDs de ATT&CK.
    4. Pesos livianos. Nada por encima de 600, y los títulos van en 500.
 
-   **El informe va en claro.** `.document` redefine los mismos tokens con
-   valores claros, así que el subárbol del informe se lee como un documento
-   sobre el escritorio oscuro -- y coincide con el PDF que se descarga, que
-   también es claro. El marcado no cambia: solo los tokens.
+   **El informe no se maqueta acá.** La vista del informe incrusta el PDF
+   que genera `src/api/informe_pdf.py`, así que lo que se ve en pantalla es
+   exactamente lo que se descarga. Antes había una segunda maquetación en
+   HTML del mismo contenido, que podía divergir del documento.
    ========================================================================== */
 
 @theme inline {
@@ -60,31 +60,6 @@
   --rail-w: 232px;
   --app-max: 1260px;
   --marco-aire: 56px;
-}
-
-/* El informe, en claro. Mismos nombres de token, valores invertidos. */
-.document {
-  color-scheme: light;
-  --bg: #ffffff;
-  --panel: #ffffff;
-  --block: #f6f7f9;
-  --block-hover: #eef0f4;
-  --border: #e4e7ec;
-  --border-soft: #eef0f4;
-  --text: #14161a;
-  --text-muted: #5c6674;
-  --text-faint: #8b95a3;
-  --accent: #2a5fdd;
-  --accent-soft: rgba(42, 95, 221, .07);
-  --accent-line: rgba(42, 95, 221, .22);
-  --track: #e8ebf0;
-  --crit: #b8352c; --crit-soft: rgba(184, 53, 44, .07); --crit-line: rgba(184, 53, 44, .22);
-  --warn: #a3650f; --warn-soft: rgba(163, 101, 15, .07); --warn-line: rgba(163, 101, 15, .22);
-  --ok: #147547;   --ok-soft: rgba(20, 117, 71, .07);    --ok-line: rgba(20, 117, 71, .22);
-  background: var(--bg);
-  color: var(--text-muted);
-  border-radius: var(--r-lg);
-  border: 1px solid var(--border);
 }
 
 * { box-sizing: border-box; }
@@ -492,6 +467,18 @@ code, .mono { font-family: var(--font-mono); font-size: .92em; }
 }
 .compositor .enviar:disabled { background: var(--block); border-color: var(--border); color: var(--text-faint); opacity: 1; }
 .compositor-nota { text-align: center; color: var(--text-faint); font-size: 11.5px; margin-top: 12px; }
+
+.visor-pdf {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+  background: #2b2b30;
+  margin-bottom: 18px;
+}
+.visor-pdf iframe { position: relative; display: block; width: 100%; height: 78vh; border: 0; }
+/* Solo se ve si el navegador no puede incrustar el PDF: el iframe lo tapa. */
+.visor-alterna { position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; text-align: center; color: var(--text-muted); font-size: 13px; }
 
 /* --- Avisos --------------------------------------------------------------- */
 .notice {
