@@ -36,6 +36,7 @@ class LogGuardState(TypedDict):
     diagnostico: str
     necesita_rag: bool               # Router 1: ¿va a ChromaDB?
     usar_cve: bool                   # Router 2: ¿va a NVD?
+    razon_seleccion: str             # justificación del selector, para el reporte y la interfaz (10-sep-2026)
     contexto_rag: list
     tecnicas_mitre: list              # técnicas MITRE ATT&CK recuperadas por RAG estructurado (STIX) (3-sep-2026)
     cves_encontrados: list

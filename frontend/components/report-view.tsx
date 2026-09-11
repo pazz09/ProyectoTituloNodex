@@ -12,7 +12,7 @@ import {
   ThumbsUp,
 } from 'lucide-react'
 
-import { AppShell, Sep, type Vista } from '@/components/app-shell'
+import { AppShell, type Grupo, type Vista } from '@/components/app-shell'
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import {
   descargarInforme,
@@ -81,16 +81,16 @@ function Distribucion({ datos, tope = 6 }: { datos: Record<string, number> | und
   if (filas.length === 0) return <p className="prose empty">Sin datos.</p>
   const max = filas[0][1] || 1
   return (
-    <div className="dist">
+    <div className="bars">
       {filas.map(([nombre, n]) => (
-        <div className="dist-row" key={nombre}>
+        <div className="bar-row" key={nombre}>
           <div>
-            <span>{nombre.replace(/_/g, ' ')}</span>
-            <div className="dist-bar">
-              <div style={{ width: `${Math.max(2, (n / max) * 100)}%` }} />
-            </div>
+            <strong>{nombre.replace(/_/g, ' ')}</strong>
+            <b>{n.toLocaleString('es')}</b>
           </div>
-          <b>{n.toLocaleString('es')}</b>
+          <div className="bar-track">
+            <div style={{ width: `${Math.max(2, (n / max) * 100)}%` }} />
+          </div>
         </div>
       ))}
     </div>
@@ -99,12 +99,12 @@ function Distribucion({ datos, tope = 6 }: { datos: Record<string, number> | und
 
 export function ReportView({
   corrida,
-  onNuevo,
+  grupo,
   onNavegar,
   onFeedback,
 }: {
   corrida: Corrida
-  onNuevo: () => void
+  grupo: Grupo
   onNavegar: (vista: Vista) => void
   onFeedback?: (actualizada: Corrida) => void
 }) {
@@ -125,6 +125,7 @@ export function ReportView({
   const v = veredicto(corrida)
   const confianza = corrida.confianza ?? 0
   const pctConfianza = Math.round(confianza * 100)
+  const maliciosas = ips.filter(([, d]) => d?.categoria === 'malicioso').length
 
   const descargar = async () => {
     setDescargando(true)
@@ -174,23 +175,15 @@ export function ReportView({
   const seccion = () => ++n
 
   return (
-    <AppShell
-      vista="report"
-      onNavegar={onNavegar}
-      ruta={
-        <>
-          <span>Análisis</span>
-          <Sep />
-          <span className="mono">{corrida.archivo_origen ?? 'sin nombre'}</span>
-          <Sep />
-          <strong>Informe</strong>
-        </>
-      }
-      acciones={
-        <>
-          <button className="btn" onClick={onNuevo}>
-            <Plus size={14} /> Nuevo
-          </button>
+    <AppShell grupo={grupo} onNavegar={onNavegar}>
+      <div className="view-head">
+        <h1>Informe de análisis</h1>
+        <p>
+          <span className="mono">{corrida.archivo_origen ?? 'sin nombre'}</span> ·{' '}
+          {fechaLegible(corrida.timestamp)} ·{' '}
+          <span className="mono">{corrida.job_id.slice(0, 12)}</span>
+        </p>
+        <div className="acciones">
           <button className="btn btn-primary" onClick={descargar} disabled={descargando}>
             {descargando ? (
               <>
@@ -198,21 +191,20 @@ export function ReportView({
               </>
             ) : (
               <>
-                <Download size={14} /> Informe PDF
+                <Download size={14} /> Descargar PDF
               </>
             )}
           </button>
-        </>
-      }
-    >
-      <div className="view-head">
-        <div>
-          <h1>Informe de análisis</h1>
-          <p>
-            <span className="mono">{corrida.job_id.slice(0, 12)}</span> · {fechaLegible(corrida.timestamp)}
-          </p>
+          <button className="btn" onClick={() => onNavegar('analisis')}>
+            <Plus size={14} /> Analizar otro lote
+          </button>
         </div>
       </div>
+
+      {/* El informe se lee como un documento claro sobre el escritorio
+          oscuro, y así coincide con el PDF que se descarga. `.document`
+          redefine los mismos tokens de color: el marcado no cambia. */}
+      <div className="document" style={{ padding: 26 }}>
 
       {errorDescarga && (
         <div className="notice" role="alert" style={{ marginBottom: 14 }}>
@@ -231,7 +223,7 @@ export function ReportView({
           <div>
             <span className="label">Confianza</span>
             <div className="meter">
-              <div className={`meter-track ${pctConfianza < 70 ? 'warn' : ''}`}>
+              <div className={`bar-track ${pctConfianza < 70 ? 'warn' : ''}`}>
                 <div style={{ width: `${pctConfianza}%` }} />
               </div>
               <b>{confianza.toFixed(2)}</b>
@@ -271,48 +263,53 @@ export function ReportView({
         </div>
       )}
 
-      <section className="panel">
-        <div className="panel-body tight">
-          <div className="stats">
-            <div>
-              <span className="label">Registros analizados</span>
-              <b>{(corrida.total_lineas ?? 0).toLocaleString('es')}</b>
-            </div>
-            <div>
-              <span className="label">IPs distintas</span>
-              <b>{resumen.n_ips_distintas ?? 0}</b>
-              <small>
-                {(() => {
-                  const n = ips.filter(([, d]) => d?.categoria === 'malicioso').length
-                  return n === 1 ? '1 maliciosa' : `${n} maliciosas`
-                })()}
-              </small>
-            </div>
-            <div>
-              <span className="label">Comandos propuestos</span>
-              <b>{corrida.n_comandos_mitigacion ?? 0}</b>
-              <small>{reporte.comandos_validos ? 'validados' : 'sin validar'}</small>
-            </div>
-            <div>
-              <span className="label">Técnicas ATT&amp;CK</span>
-              <b>{tecnicas.length}</b>
-            </div>
-            <div>
-              <span className="label">Ciclos de corrección</span>
-              <b>{reporte.intentos_correccion ?? 0}</b>
-            </div>
+      <div className="kpis">
+        <div className="kpi">
+          <div className="kpi-top">
+            <b>{(corrida.total_lineas ?? 0).toLocaleString('es')}</b>
           </div>
+          <span>Registros analizados</span>
         </div>
-      </section>
+        <div className="kpi">
+          <div className="kpi-top">
+            <b>{resumen.n_ips_distintas ?? 0}</b>
+            {maliciosas > 0 && (
+              <span className="marca crit">{maliciosas === 1 ? '1 maliciosa' : `${maliciosas} maliciosas`}</span>
+            )}
+          </div>
+          <span>IPs distintas</span>
+        </div>
+        <div className="kpi">
+          <div className="kpi-top">
+            <b>{corrida.n_comandos_mitigacion ?? 0}</b>
+            <span className={reporte.comandos_validos ? 'marca ok' : 'marca warn'}>
+              {reporte.comandos_validos ? 'validados' : 'sin validar'}
+            </span>
+          </div>
+          <span>Comandos propuestos</span>
+        </div>
+        <div className="kpi">
+          <div className="kpi-top">
+            <b>{tecnicas.length}</b>
+          </div>
+          <span>Técnicas ATT&amp;CK</span>
+        </div>
+        <div className="kpi">
+          <div className="kpi-top">
+            <b>{reporte.intentos_correccion ?? 0}</b>
+          </div>
+          <span>Ciclos de corrección</span>
+        </div>
+      </div>
 
       <div className="grid-2">
         <section className="panel">
-          <div className="panel-head">
+          <div className="panel-head con-accion">
             <div>
               <span className="label">Sección {seccion()}</span>
               <h2>Diagnóstico</h2>
             </div>
-            <span className="panel-note">agente de triage</span>
+            <span className="faint" style={{ fontSize: 12.5, flex: "none" }}>agente de triage</span>
           </div>
           <div className="panel-body">
             <p className="prose">
@@ -322,7 +319,7 @@ export function ReportView({
         </section>
 
         <section className="panel">
-          <div className="panel-head">
+          <div className="panel-head con-accion">
             <div>
               <span className="label">Sección {seccion()}</span>
               <h2>Evaluación del auditor</h2>
@@ -337,12 +334,12 @@ export function ReportView({
       </div>
 
       <section className="panel">
-        <div className="panel-head">
+        <div className="panel-head con-accion">
           <div>
             <span className="label">Sección {seccion()}</span>
             <h2>Evidencia observada</h2>
           </div>
-          <span className="panel-note">preprocesamiento determinístico, sin LLM</span>
+          <span className="faint" style={{ fontSize: 12.5, flex: "none" }}>preprocesamiento determinístico, sin LLM</span>
         </div>
         <div className="panel-body">
           <div className="grid-2">
@@ -484,12 +481,12 @@ export function ReportView({
 
       {cronologia.length > 0 && (
         <section className="panel">
-          <div className="panel-head">
+          <div className="panel-head con-accion">
             <div>
               <span className="label">Sección {seccion()}</span>
               <h2>Secuencia temporal de los registros relevantes</h2>
             </div>
-            <span className="panel-note">selección determinística, sin LLM</span>
+            <span className="faint" style={{ fontSize: 12.5, flex: "none" }}>selección determinística, sin LLM</span>
           </div>
           <div className="table-scroll">
             <table className="table cronologia">
@@ -540,12 +537,12 @@ export function ReportView({
 
       {tecnicas.length > 0 && (
         <section className="panel">
-          <div className="panel-head">
+          <div className="panel-head con-accion">
             <div>
               <span className="label">Sección {seccion()}</span>
               <h2>Técnicas MITRE ATT&amp;CK relacionadas</h2>
             </div>
-            <span className="panel-note">
+            <span className="faint" style={{ fontSize: 12.5, flex: "none" }}>
               <Info size={13} /> recuperadas por similitud semántica
             </span>
           </div>
@@ -564,7 +561,7 @@ export function ReportView({
                           {tactica.trim().replace(/-/g, ' ')}
                         </span>
                       ))}
-                    <span className="step-visits">sim {t.similitud.toFixed(3)}</span>
+                    <span className="faint mono" style={{ fontSize: 11.5 }}>sim {t.similitud.toFixed(3)}</span>
                   </div>
                   <p>{descripcionCorta(t.texto, t.meta.name)}</p>
                   <a href={t.meta.url} target="_blank" rel="noreferrer noopener">
@@ -582,12 +579,12 @@ export function ReportView({
 
       {precedentes.length > 0 && (
         <section className="panel">
-          <div className="panel-head">
+          <div className="panel-head con-accion">
             <div>
               <span className="label">Sección {seccion()}</span>
               <h2>Precedentes considerados</h2>
             </div>
-            <span className="panel-note">memoria de largo plazo del sistema</span>
+            <span className="faint" style={{ fontSize: 12.5, flex: "none" }}>memoria de largo plazo del sistema</span>
           </div>
           <div className="panel-body">
             <p className="prose" style={{ marginBottom: 13 }}>
@@ -623,12 +620,12 @@ export function ReportView({
       )}
 
       <section className="panel">
-        <div className="panel-head">
+        <div className="panel-head con-accion">
           <div>
             <span className="label">Sección {seccion()}</span>
             <h2>Mitigación propuesta</h2>
           </div>
-          <span className="panel-note">NODEX no ejecuta estos comandos</span>
+          <span className="faint" style={{ fontSize: 12.5, flex: "none" }}>NODEX no ejecuta estos comandos</span>
         </div>
         {comandos.length === 0 ? (
           <div className="panel-body">
@@ -654,12 +651,12 @@ export function ReportView({
       </section>
 
       <section className="panel">
-        <div className="panel-head">
+        <div className="panel-head con-accion">
           <div>
             <span className="label">Sección {seccion()}</span>
             <h2>Revisión del analista</h2>
           </div>
-          <span className="panel-note">escribe en la memoria de largo plazo</span>
+          <span className="faint" style={{ fontSize: 12.5, flex: "none" }}>escribe en la memoria de largo plazo</span>
         </div>
         <div className="panel-body">
           <p className="prose" style={{ marginBottom: 13 }}>
@@ -717,6 +714,8 @@ export function ReportView({
           )}
         </div>
       </section>
+
+      </div>
 
       <ConfirmDialog
         abierto={pendiente !== null}

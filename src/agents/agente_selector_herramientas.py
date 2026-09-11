@@ -44,4 +44,9 @@ def agente_selector_herramientas(state: LogGuardState) -> dict:
     razon = respuesta.get("razon", "")
 
     print(f"   → usar_cve: {usar_cve} | Razón: {razon}")
-    return {"usar_cve": usar_cve}
+    # La razón se devuelve al estado, no solo a la consola: el §8.7.1 del
+    # informe nombra "la decisión sobre la necesidad de consultar memoria o
+    # conocimiento externo" como una tarea del flujo, y sin su justificación
+    # esa decisión no es auditable. La interfaz conversacional la muestra
+    # como el mensaje de este agente.
+    return {"usar_cve": usar_cve, "razon_seleccion": razon}

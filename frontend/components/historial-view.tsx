@@ -75,34 +75,23 @@ export function HistorialView({
   const hasta = Math.min(offset + POR_PAGINA, total)
 
   return (
-    <AppShell
-      vista="historial"
-      onNavegar={onNavegar}
-      ruta={
-        <>
-          <span>Historial</span>
-          <strong>Ejecuciones</strong>
-        </>
-      }
-      acciones={
-        <button className="btn" onClick={() => cargar(offset)} disabled={cargando}>
-          <RotateCcw size={14} /> Actualizar
-        </button>
-      }
-    >
+    <AppShell grupo="historial" onNavegar={onNavegar}>
       <div className="view-head">
-        <div>
-          <h1>Historial de ejecuciones</h1>
-          <p>
-            Los resultados quedan persistidos localmente: revisar un informe anterior no vuelve
-            a ejecutar el grafo ni consume cuota del modelo.
-          </p>
+        <h1>Ejecuciones</h1>
+        <p>
+          Los resultados quedan persistidos localmente: revisar un informe anterior no vuelve a
+          ejecutar el grafo ni consume cuota del modelo.
+        </p>
+        <div className="acciones">
+          <button className="btn" onClick={() => cargar(offset)} disabled={cargando}>
+            <RotateCcw size={14} /> Actualizar
+          </button>
         </div>
       </div>
 
       {error && (
         <div className="notice-block" role="alert">
-          <div className="modal-icon" style={{ margin: 0, color: 'var(--crit)', background: 'var(--crit-bg)', borderColor: 'var(--crit-line)' }}>
+          <div className="icono-aviso">
             <AlertTriangle size={16} />
           </div>
           <div>
@@ -116,14 +105,13 @@ export function HistorialView({
       )}
 
       <section className="panel">
-        <div className="panel-head">
+        <div className="panel-head con-accion">
           <div>
-            <span className="label">Registro</span>
             <h2>
               {total} {total === 1 ? 'ejecución' : 'ejecuciones'}
             </h2>
+            <p>Clic en una fila para abrir su informe.</p>
           </div>
-          <span className="panel-note">clic en una fila para abrir el informe</span>
         </div>
 
         {cargando ? (
@@ -140,7 +128,7 @@ export function HistorialView({
           </div>
         ) : (
           <>
-            <div className="table-scroll">
+            <div className="table-scroll" style={{ marginTop: 18 }}>
               <table className="table">
                 <thead>
                   <tr>

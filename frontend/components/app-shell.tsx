@@ -1,90 +1,79 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { ChevronRight, Clock3, LockKeyhole, Network, ScanSearch, ShieldCheck } from 'lucide-react'
+import { Activity, LayoutGrid, Settings, Sparkles } from 'lucide-react'
 
-export type Vista = 'upload' | 'analysis' | 'report' | 'historial'
+export type Vista = 'overview' | 'analisis' | 'informe' | 'historial'
 
-const SECCIONES = [
-  { id: 'upload' as Vista, etiqueta: 'Análisis', icono: ScanSearch },
-  { id: 'historial' as Vista, etiqueta: 'Historial', icono: Clock3 },
-]
+/** Grupo de la barra lateral que queda resaltado. */
+export type Grupo = 'overview' | 'historial' | 'analisis'
 
 /**
- * Armazón de la consola: barra lateral persistente + área de trabajo.
+ * Armazón de la aplicación.
  *
- * Reemplaza el flujo de tres pantallas sueltas del skeleton. La navegación
- * está siempre visible, y el contexto de lo que se está viendo va en la
- * barra superior como ruta, no como titular: una herramienta de análisis no
- * necesita presentarse en cada pantalla.
+ * La barra lateral sigue la referencia: logotipo espaciado, ítems callados con
+ * el activo en una caja rellena, un divisor antes del grupo del asistente y
+ * otro antes de Ajustes, que queda más apagado que el resto.
+ *
+ * El grupo resaltado se pasa desde afuera y no se deriva de la vista: al
+ * informe se llega por dos caminos —recién analizado desde el asistente, o
+ * abierto desde una ejecución anterior— y corresponde resaltar el camino por
+ * el que se entró.
  */
 export function AppShell({
-  vista,
-  ruta,
-  acciones,
+  grupo,
   onNavegar,
   children,
+  sinPadding = false,
 }: {
-  vista: Vista
-  ruta: ReactNode
-  acciones?: ReactNode
+  grupo: Grupo
   onNavegar: (vista: Vista) => void
   children: ReactNode
+  /** La conversación maneja su propio espaciado y el compositor pegado abajo. */
+  sinPadding?: boolean
 }) {
-  // El análisis y el informe pertenecen a la sección "Análisis".
-  const seccionActiva: Vista = vista === 'historial' ? 'historial' : 'upload'
+  const item = (id: Vista, etiqueta: string, Icono: typeof LayoutGrid, activo: boolean) => (
+    <button
+      className={`rail-item ${activo ? 'is-active' : ''}`}
+      onClick={() => onNavegar(id)}
+      aria-current={activo ? 'page' : undefined}
+    >
+      <Icono size={16} strokeWidth={1.6} /> {etiqueta}
+    </button>
+  )
 
   return (
     <div className="app">
       <aside className="rail">
         <div className="rail-inner">
-          <div className="rail-brand">
-            <div className="rail-mark">
-              <Network size={16} strokeWidth={2.5} />
-            </div>
-            <div>
-              <span>NODEX</span>
-              <small>INTELIGENCIA DE SEGURIDAD</small>
-            </div>
-          </div>
+          <div className="wordmark">NODEX</div>
 
-          <nav className="rail-group">
-            <span className="label">Operación</span>
-            {SECCIONES.map(({ id, etiqueta, icono: Icono }) => (
-              <button
-                key={id}
-                className={`rail-item ${seccionActiva === id ? 'is-active' : ''}`}
-                onClick={() => onNavegar(id)}
-                aria-current={seccionActiva === id ? 'page' : undefined}
-              >
-                <Icono size={15} /> {etiqueta}
-              </button>
-            ))}
+          <nav className="rail-nav">
+            {item('overview', 'Resumen', LayoutGrid, grupo === 'overview')}
+            {item('historial', 'Ejecuciones', Activity, grupo === 'historial')}
+          </nav>
+
+          <div className="rail-sep" />
+
+          <nav className="rail-nav">
+            {item('analisis', 'Asistente', Sparkles, grupo === 'analisis')}
           </nav>
 
           <div className="rail-foot">
-            <span>
-              <LockKeyhole size={12} /> Entorno local, sin salida a internet
-            </span>
-            <span>
-              <ShieldCheck size={12} /> NODEX v1.0 · 7 agentes
-            </span>
+            <div className="rail-sep" />
+            {/* Presente porque la referencia lo tiene, e inerte porque el
+                prototipo no expone configuración desde la interfaz: se
+                configura por variables de entorno. */}
+            <button className="rail-item inerte" disabled title="El prototipo se configura por variables de entorno">
+              <Settings size={16} strokeWidth={1.6} /> Ajustes
+            </button>
           </div>
         </div>
       </aside>
 
       <div className="workspace">
-        <header className="topbar">
-          <div className="crumbs">{ruta}</div>
-          {acciones && <div className="topbar-actions">{acciones}</div>}
-        </header>
-        <main className="view">{children}</main>
+        {sinPadding ? children : <main className="view">{children}</main>}
       </div>
     </div>
   )
-}
-
-/** Separador de ruta, para no repetir el icono en cada vista. */
-export function Sep() {
-  return <ChevronRight size={13} />
 }
