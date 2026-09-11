@@ -1,0 +1,65 @@
+\chapter{Evaluación Experimental}
+
+El presente capítulo describe la metodología definiada para la evaluación experimental de NODEX, con el propósito de analizar el desempeño del sistema en las principales tareas consideradas en su diseño. Para lograrlo, se establecieron objetivos de evaluación, condiciones bajo las cuales se ejecutarán los experimentos, descripción de los conjuntos de datos utilizados y los procedimientos empleados para la preparación y adaptación al flujo de procesamiento del sistema.
+
+Junto a lo anterior, se definen los escenarios experimentales orientados a evaluar la detección de anomalías, reconstrucción de incidentes de seguridad, identificación de tácticas y técnicas asociadas al marco MITRE ATT\&CK, generación de reportes y el rendimiento operativo de NODEX.
+
+Finalmente, se presentan los métodos de comparación, métricas empleadas para cuantificación del desempeño y el procedimiento experimantal utilizado para garantizar reproducibilidad y consistencia con los objetivos del proyecto.
+
+\section{Objetivos de la Evaluación}
+
+La evaluación experimental de NODEX tiene como objetivo analizar el desempeño del sistema en las principales características definidas durante su diseño e implementación, considerando tanto la caldad de los resultados como su comportamiento operativo.
+
+A partir de este propósito general, la evaluación se organiza en cinco dimensiones complementarias. La primera corresponde a determinar la capacidad de NODEX para distinguir eventos o secuencias que presentan comportamientos anómalos respecto de aquellas consideradas normales. Permitiendo evaluar la efectividad del sistema en una de las tareas fundamentales del análisis automatizado de logs.
+
+La segunda dimensión aborda la reconstrucción de incidentes de seguridad. En este caso, el interés no se limita a indentificar eventos individuales, sino a evaluar la capacidad del sistema para seleccionar evidencia relevante, establecer relaciones entre eventos, reconocer entidades involucradas y ordenar temporalmente los hechos para construir una secuencia coherente del incidente. De igual forma, se considera la necesidad de verificar que las conclusiones generadas se encuentren respaldadas por la evidencia disponible y que el sistema limite la incorporación de afirmaciones no sustentadas.
+
+La tercera dimensión considera la identificación de tácticas y técnicas asociadas al marco MITRE ATT&CK. Su evaluación busca determinar el grado de correspondencia entre las interpretaciones generadas por NODEX y las etiquetas de referencia disponibles para los eventos analizados, consdierando tanto la indentificación de tácticas como de técnicas.
+
+La cuarta dimensión está orientada a evaluar la calidad de los reportes generados por el sistema. Dado que NODEX no solo debe detectar y analizar eventos, sino también comunicar sus conclusiones de forma comprensible, se consideran aspectos relacionados con la fidelidad respecto de la evidencia analizada, la coherencia de la narrativa, la trazabilidad de las afirmaciones, la claridad de la información presentada y su utilidad para apoyar el análisis de un incidente.
+
+Por último, la quinta dimensión corresponde al rendimiento operativo del sistema. Con esto se busca caracterizar el comportamiento de NODEX durante la ejecución de los distintos escenarios experimentales, considerando aspectos como el tiempo de procesamiento, la latencia de respuesta y el consumo de recursos asociados a la inferencia y coordinación de los componentes del sistema.
+
+En conjunto, estas dimensiones permiten evaluar el sistema desde una perspectiva integral, considerando tanto su capacidad para identificar y explicar eventos de seguridad como la calidad y eficiencia con que ejecuta dichas tareas.
+
+\section{Entorno Experimental}
+
+\subsection{Configuración de Hardware y Software}
+
+\subsection{Configuración del Modelo de Lenguaje}
+
+\section{Conjuntos de Datos}
+
+\subsection{HDFS}
+
+\subsection{BGL}
+
+\subsection{UWF-ZeekDataFall22}
+
+\section{Preparación de los Datos}
+
+\section{Escenarios de Evaluación}
+
+\subsection{Detección de Anomalías}
+
+\subsection{Reconstrucción de Incidentes}
+
+\subsection{Identificación de Técnicas MITRE ATT\&CK}
+
+\subsection{Generación de Reportes}
+
+\section{Métodos de Comparación}
+
+\section{Métricas de Evaluación}
+
+\subsection{Métricas de Detección}
+
+\subsection{Métricas de Reconstrucción}
+
+\subsection{Métricas de Mapeo MITRE ATT\&CK}
+
+\subsection{Métricas de Calidad del Reporte}
+
+\subsection{Métricas de Rendimiento}
+
+\section{Procedimiento Experimental}

@@ -1,0 +1,76 @@
+\chapter{Objetivos}
+
+\section{Objetivo General}
+
+Diseñar un agente basado en modelos de lenguaje de gran escala
+para el análisis semántico de incidentes de seguridad a partir
+de logs heterogéneos, orientado a organizaciones sin equipos
+de seguridad especializados.
+
+\section{Objetivos Específicos}
+
+Los objetivos específicos se organizan en tres dimensiones metodológicas: 
+\textbf{Estudio}, \textbf{Desarrollo} y \textbf{Validación}, las cuales 
+cubren el ciclo completo del proyecto desde la revisión del conocimiento 
+existente hasta la evaluación empírica de la propuesta.
+
+% ── ESTUDIO ────────────────────────────────────────────────────
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.6}
+\begin{tabularx}{\textwidth}{| l | X |}
+  \hline
+  \multicolumn{2}{|l|}{\textbf{Dimensión: Estudio}} \\
+  \hline
+  \textbf{OE1} &
+  Realizar una revisión sistemática de literatura siguiendo la metodología PRISMA para identificar, analizar y sintetizar las principales contribuciones científicas sobre análisis automatizado de logs de seguridad, detección de anomalías semántica mediante LLMs y arquitecturas de agentes con razonamiento causal, identificando las limitaciones de los enfoques existentes y las brechas que justifican la propuesta. \\
+  \hline
+  \textbf{OE2} &
+  Definir un marco formal que caracterice las propiedades estructurales y semánticas de los logs de seguridad relevantes para la reconstrucción de incidentes, identificando los criterios que debe satisfacer el sistema para mapear eventos a tácticas.
+  \\
+  \hline
+  
+\end{tabularx}
+\caption{Objetivos específicos correspondientes a la dimensión de Estudio.}
+\label{tab:obj_estudio}
+\end{table}
+
+\vspace{0.4cm}
+
+% ── DESARROLLO ─────────────────────────────────────────────────
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.6}
+\begin{tabularx}{\textwidth}{| l | X |}
+  \hline
+  \multicolumn{2}{|l|}{\textbf{Dimensión: Desarrollo}} \\
+  \hline
+  \textbf{OE3} &
+  Diseñar la arquitectura del agente LLM para el análisis semántico 
+  de incidentes de seguridad, especificando sus módulos funcionales, junto con las interacciones, flujos de datos y tecnologías asociadas a cada componente.\\
+  \hline
+  \textbf{OE4} &
+  Implementar un prototipo funcional de un agente basado en modelos de lenguaje que procese logs de seguridad heterogéneos, ejecute mecanismos de razonamiento para la reconstrucción de incidentes y genere reportes interpretables en lenguaje natural.\\
+  \hline
+\end{tabularx}
+\caption{Objetivos específicos correspondientes a la dimensión de Desarrollo.}
+\label{tab:obj_desarrollo}
+\end{table}
+
+\vspace{0.4cm}
+
+% ── VALIDACIÓN ─────────────────────────────────────────────────
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.6}
+\begin{tabularx}{\textwidth}{| l | X |}
+  \hline
+  \multicolumn{2}{|l|}{\textbf{Dimensión: Validación}} \\
+  \hline
+  \textbf{OE5} &
+  Evaluar el desempeño del prototipo mediante experimentos controlados sobre datasets con ground truth, considerando métricas de precisión en la identificación de incidentes, coherencia de las narrativas generadas y comparación con enfoques tradicionales basados en reglas.\\
+  \hline
+\end{tabularx}
+\caption{Objetivo específico correspondiente a la dimensión de Validación.}
+\label{tab:obj_validacion}
+\end{table}

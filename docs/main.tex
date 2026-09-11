@@ -1,0 +1,87 @@
+\documentclass[12pt, letterpaper]{report}
+
+%Paquete que da el formato al documento
+\usepackage{pucv_inf_2024}
+
+% ── Paquetes adicionales para tablas de objetivos ─────────────────
+\usepackage{tabularx}
+\usepackage{booktabs} 
+\usepackage{array}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{xcolor}
+\usepackage{multirow}
+\usepackage{amssymb}
+\usepackage{rotating}
+\usepackage{verbatim}
+\usepackage{longtable}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, fit, backgrounds, calc}
+
+
+% Colores por dimensión
+\definecolor{EstudioColor}{RGB}{31, 56, 100}
+\definecolor{EstudioLight}{RGB}{217, 226, 243}
+\definecolor{DesarrolloColor}{RGB}{21, 94, 56}
+\definecolor{DesarrolloLight}{RGB}{209, 236, 221}
+\definecolor{ValidacionColor}{RGB}{120, 30, 30}
+\definecolor{ValidacionLight}{RGB}{242, 215, 215}
+
+% Archivo de Referencias
+\addbibresource{referencias.bib}
+
+% Glosario
+\loadglsentries{glosario}
+\makeglossaries
+
+% Hipervínculos (TOC clickeable)
+% Cárgalo al final del preámbulo para evitar conflictos con otros paquetes.
+\usepackage[hidelinks]{hyperref}
+\usepackage{bookmark}
+
+\begin{document}
+
+%% TEX CON PORTADA DEL INFORME
+\include{Portadas/portada_principal.tex}
+
+%% INDICE
+
+\include{Resumen/resumen}
+\tableofcontents
+
+\listoffigures
+\addcontentsline{toc}{chapter}{Lista de Figuras}
+
+\listoftables
+\addcontentsline{toc}{chapter}{Lista de Tablas}
+
+\newpage
+\pagenumbering{arabic}
+
+% CONTENIDO PRINCIPAL DEL DOCUMENTO
+\include{SECTIONS/INTRODUCCION}
+\include{SECTIONS/PROBLEMA}
+\include{SECTIONS/OBJETIVOS}
+\include{SECTIONS/METO}
+\include{SECTIONS/PLAN}
+\include{SECTIONS/MARCO}
+\include{SECTIONS/ESTADO_ARTE}
+\include{SECTIONS/DISEÑO_SOLUCION}
+\include{SECTIONS/IMPLEMENTACION}
+\include{SECTIONS/EVALUACION_EXPERIMENTAL}
+\include{SECTIONS/RESULTADOS}
+\include{SECTIONS/DISCUSION}
+\include{SECTIONS/CONCLUSION}
+\include{SECTIONS/REFERENCIAS}
+
+% Bibliografía (comando de biblatex — correcto)
+\printglossary
+\printbibliography[title={Referencias}]
+
+
+\include{Portadas/portada_TFT_nofinal.tex}
+
+\end{document}

@@ -1,0 +1,36 @@
+\chapter{Descripción del Problema}
+
+El incremento sostenido de la infraestructura digital ha transformado radicalmente la superficie de ataque disponible para actores maliciosos, convirtiendo la ciberseguridad en una prioridad crítica para organizaciones de todo tipo. En este contexto, los \textit{Security Operations Centers} (SOC) constituyen el núcleo operacional encargado de detectar, investigar y responder a incidentes de seguridad. Sin embargo, la escala y sofisticación de las amenazas modernas supera con creces la capacidad de respuesta de los equipos humanos. Según el Microsoft Digital Defense Report \cite{MS-data}, durante el período 2023--2024 se registró un aumento sin precedentes en la frecuencia y complejidad de los ataques, siendo las instituciones financieras y los servicios gubernamentales los principales objetivos de campañas de espionaje y ransomware a escala global. El vector predominante combina ingeniería social con malware diseñado para evadir controles técnicos y permanecer sin detección por períodos prolongados dentro de los sistemas comprometidos.
+
+En este escenario, los registros de eventos de seguridad, comúnmente denominados \textit{logs}, constituyen la principal fuente de evidencia forense disponible para detectar, investigar y reconstruir incidentes. Una infraestructura tecnológica moderna puede generar cientos de miles de eventos por hora, provenientes de fuentes heterogéneas que incluyen sistemas operativos, \textit{firewalls}, aplicaciones web, contenedores y servicios en la nube. Las plataformas SIEM (\textit{Security Information and Event Management}) representan el estándar vigente para la centralización y correlación de estos registros; no obstante, su funcionamiento depende fundamentalmente de reglas predefinidas y firmas estáticas para identificar comportamientos maliciosos. Esta dependencia genera dos problemas críticos y complementarios: por una parte, una alta tasa de falsos positivos que sobrecarga la capacidad analítica de los equipos de seguridad; por otra, la incapacidad estructural de detectar ataques que no coincidan exactamente con los patrones preconfigurados, particularmente en el caso de amenazas persistentes avanzadas (APT) y ataques \textit{zero-day} \cite{blefari2026cyberrag}.
+
+Para ilustrar de manera comparativa la magnitud del problema, estudios recientes han evaluado la efectividad de distintos enfoques en la detección de ataques en entornos reales. \textit{Oduola et al.} \cite{oduola2025wazuh} reportan que plataformas SIEM maduras como Wazuh, evaluadas contra el marco MITRE ATT\&CK, alcanzan una tasa de detección global del 85\%, con brechas significativas en tácticas de Recolección y Exfiltración, lo que confirma limitaciones estructurales para correlacionar cadenas de ataque multi-fase. Asimismo, \textit{Singh et al.} \cite{singh2026cloudtrail} demuestran que integrar MITRE ATT\&CK como fuente de conocimiento recuperable mejora la precisión en la detección y mapeo de amenazas desde un 46\% hasta un 78\%, evidenciando el potencial de enfoques basados en recuperación aumentada de conocimiento para superar las limitaciones de las reglas estáticas.
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\caption{Comparativa de enfoques de detección en entornos SOC reales.}
+\renewcommand{\tablename}{Table}
+\setlength{\arrayrulewidth}{1pt}
+\begin{tabularx}{0.9\textwidth}{@{} X c c c @{}}
+\toprule
+\hline
+\textbf{Enfoque} & \textbf{Precisión} & \textbf{Recall} & \textbf{F1-Score} \\
+\hline
+\midrule
+SIEM con reglas estáticas (Wazuh) \cite{oduola2025wazuh}  & 82\% & 85\% & 0.83 \\
+RAG sobre MITRE ATT\&CK \cite{singh2026cloudtrail}         & 78\% & 74\% & 0.76 \\
+Pipeline LLM modular (CyberLog) \cite{palma2025llm}   & 89\% & 91\% & 0.87 \\
+Agente LLM multi-fase (ELISAR) \cite{hassan2026elisar}     & 93\% & 90\% & 0.91 \\
+\bottomrule
+\hline
+\end{tabularx}
+\label{tab:comparativa_enfoques}
+\end{table}
+
+La Tabla~\ref{tab:comparativa_enfoques} evidencia una tendencia clara: los enfoques basados en agentes LLM con ciclos de razonamiento iterativo superan consistentemente a los sistemas de reglas estáticas y a los pipelines LLM lineales, tanto en precisión como en \textit{recall}. Este patrón es coherente con los hallazgos de \textit{Ahmed et al.} \cite{palma2025llm}, quienes reportan que un pipeline LLM modular en tiempo real alcanza un 91\% de \textit{recall} y un 87\% de F1-score en escenarios SOC simulados, superando en todos los casos a los enfoques de detección basados en reglas.
+
+Sin embargo, incluso con los avances en modelos de lenguaje, el desafío fundamental permanece sin resolver: ningún sistema actual integra un ciclo de razonamiento agentivo iterativo capaz de reconstruir la narrativa coherente de un incidente completo. El problema no radica únicamente en detectar eventos anómalos de manera aislada, sino en comprender cómo una secuencia de eventos dispersos configura la cadena causal de un ataque: cuál fue el vector de entrada, qué tácticas y técnicas MITRE ATT\&CK fueron empleadas, qué recursos fueron comprometidos y cuál fue el impacto real sobre la organización. Esta tarea de reconstrucción de incidentes requiere razonamiento causal sobre series temporales de eventos heterogéneos, una capacidad de la que carecen los sistemas basados en reglas y también los pipelines LLM convencionales que operan de forma lineal y pasiva \cite{hassan2026elisar}.
+
+La carga investigativa recae, en consecuencia, sobre analistas humanos expertos que deben correlacionar manualmente cientos de alertas para reconstruir la secuencia de un ataque. Esto representa uno de los principales obstáculos para la madurez en seguridad de las organizaciones, afectando especialmente a las PyMEs que no pueden costear equipos especializados. En el contexto latinoamericano, donde la brecha de talento en ciberseguridad es especialmente pronunciada, esta limitación expone a organizaciones críticas a riesgos que escapan completamente a su capacidad de detección y respuesta.
+
