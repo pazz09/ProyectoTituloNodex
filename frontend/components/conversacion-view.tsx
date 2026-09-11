@@ -16,6 +16,7 @@ import {
   ShieldCheck,
   Sparkles,
   Terminal,
+  Upload,
   X,
 } from 'lucide-react'
 
@@ -561,17 +562,29 @@ export function ConversacionView({
               <span>{errorCarga}</span>
             </div>
           )}
+          {/* La zona entera es el selector de archivo: hacer clic en cualquier
+              parte abre el diálogo, salvo cuando ya hay uno elegido o el
+              análisis está corriendo. */}
           <div
-            className={`compositor ${dragging ? 'dragging' : ''}`}
+            className={`compositor ${dragging ? 'dragging' : ''} ${archivo ? 'con-archivo' : ''} ${corriendo ? 'inactivo' : ''}`}
+            role={archivo || corriendo ? undefined : 'button'}
+            tabIndex={archivo || corriendo ? undefined : 0}
+            onClick={() => !archivo && !corriendo && inputRef.current?.click()}
+            onKeyDown={(e) => {
+              if ((e.key === 'Enter' || e.key === ' ') && !archivo && !corriendo) {
+                e.preventDefault()
+                inputRef.current?.click()
+              }
+            }}
             onDragOver={(e) => {
               e.preventDefault()
-              setDragging(true)
+              if (!corriendo) setDragging(true)
             }}
             onDragLeave={() => setDragging(false)}
             onDrop={(e) => {
               e.preventDefault()
               setDragging(false)
-              elegir(e.dataTransfer.files[0])
+              if (!corriendo) elegir(e.dataTransfer.files[0])
             }}
           >
             <input
@@ -581,43 +594,69 @@ export function ConversacionView({
               hidden
               onChange={(e) => elegir(e.target.files?.[0])}
             />
-            <div
-              className={`compositor-texto ${archivo ? 'con-archivo' : ''}`}
-              role="button"
-              tabIndex={0}
-              onClick={() => !corriendo && inputRef.current?.click()}
-              onKeyDown={(e) => {
-                if ((e.key === 'Enter' || e.key === ' ') && !corriendo) {
-                  e.preventDefault()
-                  inputRef.current?.click()
-                }
-              }}
-            >
-              {archivo
-                ? `${archivo.name} · ${pesoLegible(archivo.size)}`
-                : corriendo
-                  ? 'Analizando el lote…'
-                  : 'Adjuntá un lote de registros para analizar…'}
-            </div>
+
+            {archivo ? (
+              <div className="compositor-archivo">
+                <div className="compositor-accion">
+                  <span className="icono">
+                    <FileText size={16} />
+                  </span>
+                </div>
+                <div>
+                  <strong>{archivo.name}</strong>
+                  <span>{pesoLegible(archivo.size)} · listo para analizar</span>
+                </div>
+                <button
+                  className="btn btn-quiet"
+                  aria-label="Quitar archivo"
+                  disabled={corriendo}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setArchivo(null)
+                  }}
+                >
+                  <X size={15} />
+                </button>
+              </div>
+            ) : (
+              <div className="compositor-accion">
+                <span className="icono">
+                  {corriendo ? <Loader2 size={16} className="spin" /> : <Upload size={16} />}
+                </span>
+                <div>
+                  <strong>
+                    {corriendo ? (
+                      'Analizando el lote…'
+                    ) : (
+                      <>
+                        Arrastrá un archivo de registros o <u>elegilo desde tu equipo</u>
+                      </>
+                    )}
+                  </strong>
+                  <small>.log · .txt · .csv — hasta {LIMITE_LEGIBLE}</small>
+                </div>
+              </div>
+            )}
+
             <div className="compositor-pie">
               <button
                 className="btn btn-quiet"
-                aria-label="Adjuntar archivo"
+                aria-label="Elegir archivo"
                 disabled={corriendo}
-                onClick={() => inputRef.current?.click()}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  inputRef.current?.click()
+                }}
               >
                 <Paperclip size={15} />
               </button>
-              {archivo && (
-                <button className="btn btn-quiet" aria-label="Quitar archivo" onClick={() => setArchivo(null)}>
-                  <X size={15} />
-                </button>
-              )}
               <button
-                className="btn enviar"
-                aria-label="Analizar"
+                className="btn btn-primary enviar"
                 disabled={!archivo || corriendo}
-                onClick={enviar}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  enviar()
+                }}
               >
                 {corriendo ? <Loader2 size={15} className="spin" /> : <ArrowUp size={15} />}
               </button>
