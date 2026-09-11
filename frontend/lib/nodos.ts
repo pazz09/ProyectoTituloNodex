@@ -1,21 +1,27 @@
 /**
- * Los 7 nodos reales del grafo y el estado del avance.
+ * Catálogo de los 7 nodos reales del grafo: su nombre en el backend, cómo se
+ * llaman en pantalla y qué hacen, en lenguaje llano.
  *
- * El progreso NO es lineal, y el modelo de estado tiene que soportarlo:
+ * Acá no hay estado. El avance de una ejecución lo lleva
+ * `components/use-analisis.ts` como una lista de mensajes, con el número de
+ * visita en cada uno, porque el recorrido NO es lineal:
  *
  *  - `agente_analista_triage` se ejecuta de nuevo después del RAG (confirmado
- *    en corridas reales), así que un paso ya completado puede volver a estar
- *    activo.
+ *    en corridas reales), así que un paso ya "terminado" vuelve a hablar.
  *  - `tool_consultar_rag` y `tool_consultar_cve` pueden no ejecutarse nunca:
  *    lo decide `agente_selector_herramientas`.
  *  - `agente_ingeniero_mitigacion` y `tool_validar_comandos` pueden repetirse
  *    si el validador rechaza los comandos (ciclo de corrección).
  *
- * Por eso el estado es un mapa por nodo con visitas contadas, en vez de un
- * índice que solo avanza.
+ * Este archivo tenía además una máquina de estados por nodo
+ * (`pendiente`/`activo`/`completado` con contador de visitas) para la barra
+ * de progreso de la vista anterior. Se eliminó el 11-sep-2026 al reemplazar
+ * esa vista por la conversación, donde cada paso es un mensaje y no hay
+ * porcentaje que calcular.
  */
 
 export type NombreNodo =
+  | 'agente_planificador'
   | 'agente_analista_triage'
   | 'agente_selector_herramientas'
   | 'tool_consultar_rag'
@@ -34,6 +40,12 @@ export type Nodo = {
 }
 
 export const NODOS: Nodo[] = [
+  {
+    nombre: 'agente_planificador',
+    titulo: 'Plan de investigación',
+    descripcion:
+      'Decidiendo qué hace falta investigar antes de empezar el análisis...',
+  },
   {
     nombre: 'agente_analista_triage',
     titulo: 'Análisis inicial',
@@ -79,74 +91,3 @@ export const NODOS: Nodo[] = [
       'Revisando todo el análisis para emitir el veredicto final...',
   },
 ]
-
-export type EstadoNodo = 'pendiente' | 'activo' | 'completado'
-
-export type AvanceNodo = {
-  estado: EstadoNodo
-  /** Cuántas veces emitió evento este nodo. */
-  visitas: number
-}
-
-export type Avance = Record<string, AvanceNodo>
-
-export function avanceInicial(): Avance {
-  return Object.fromEntries(
-    NODOS.map((n) => [n.nombre, { estado: 'pendiente' as EstadoNodo, visitas: 0 }]),
-  )
-}
-
-/**
- * Aplica un evento `nodo` al avance.
- *
- * El nodo que emitió pasa a `activo` y suma una visita; cualquier OTRO nodo
- * que estuviera activo pasa a `completado`. Un nodo ya completado que vuelve
- * a emitir vuelve a `activo` **sin** resetear a los demás: los pasos
- * intermedios que ya corrieron conservan su estado.
- */
-export function aplicarNodo(avance: Avance, nombre: string): Avance {
-  const siguiente: Avance = { ...avance }
-  for (const clave of Object.keys(siguiente)) {
-    if (clave !== nombre && siguiente[clave].estado === 'activo') {
-      siguiente[clave] = { ...siguiente[clave], estado: 'completado' }
-    }
-  }
-  const previo = siguiente[nombre] ?? { estado: 'pendiente' as EstadoNodo, visitas: 0 }
-  siguiente[nombre] = { estado: 'activo', visitas: previo.visitas + 1 }
-  return siguiente
-}
-
-/** Al terminar el análisis, todo lo que se ejecutó queda completado. */
-export function completarTodo(avance: Avance): Avance {
-  return Object.fromEntries(
-    Object.entries(avance).map(([clave, valor]) => [
-      clave,
-      valor.visitas > 0 ? { ...valor, estado: 'completado' as EstadoNodo } : valor,
-    ]),
-  )
-}
-
-/**
- * Progreso en porcentaje.
- *
- * Se calcula sobre los nodos que YA se ejecutaron, no sobre un índice: con
- * pasos que se saltan y otros que se repiten, un porcentaje lineal mentiría.
- * Los dos nodos opcionales no cuentan en el denominador hasta que aparecen,
- * porque una corrida que no los usa igual está completa.
- */
-export function progreso(avance: Avance): number {
-  const obligatorios = NODOS.filter((n) => !n.opcional)
-  const opcionalesVistos = NODOS.filter((n) => n.opcional && avance[n.nombre]?.visitas > 0)
-  const total = obligatorios.length + opcionalesVistos.length
-  const hechos = [...obligatorios, ...opcionalesVistos].filter(
-    (n) => avance[n.nombre]?.estado === 'completado',
-  ).length
-  const enCurso = [...obligatorios, ...opcionalesVistos].some(
-    (n) => avance[n.nombre]?.estado === 'activo',
-  )
-  return Math.min(100, Math.round(((hechos + (enCurso ? 0.35 : 0)) / total) * 100))
-}
-
-export function nodosEjecutados(avance: Avance): number {
-  return Object.values(avance).filter((v) => v.visitas > 0).length
-}

@@ -5,6 +5,17 @@ Migrado desde la celda 22 del notebook de Colab.
 Analiza el resumen del lote de logs y decide si necesita contexto histórico
 (RAG). Si ya cuenta con contexto RAG, genera el diagnóstico. Alimenta el
 router `router_triage`.
+
+**Primera pasada real (11-sep-2026, Plan-and-Execute).** Antes, la primera
+vez que este nodo corría, `necesita_rag` se fijaba en `True` de forma
+incondicional -- sin llamar al LLM -- así que RAG se consultaba SIEMPRE,
+sin importar si el lote lo justificaba. Ahora la primera pasada es una
+llamada real al LLM que decide, informado por si el plan (`agente_
+planificador`) incluyó o no un paso "rag": si decide que no hace falta,
+diagnostica directamente en la misma llamada; si decide que sí, pide RAG
+sin diagnosticar todavía. El paso "rag" del plan (si existe) queda
+"omitido" con el motivo real cuando esto ocurre (ver
+`src/graph/plan_tracking.py`).
 """
 
 import json
@@ -15,19 +26,26 @@ from src.state import LogGuardState
 from src.tools.resumen_prompt import acotar_resumen_para_prompt
 
 
+def _contexto_plan_rag(state: LogGuardState) -> str:
+    """Qué dijo el plan sobre el paso 'rag', para informar (no dictar) la
+    decisión del triage -- el plan es guía, la evidencia real manda."""
+    plan = state.get("plan") or {}
+    for paso in plan.get("pasos", []):
+        if paso.get("accion") == "rag":
+            return f"El plan de investigación contempla consultar memoria histórica: {paso.get('objetivo')}"
+    return "El plan de investigación no contempla consultar memoria histórica para este caso."
+
+
 def agente_analista_triage(state: LogGuardState) -> dict:
     print("\n🧠 [Agente Triage] Analizando el incidente...")
 
-    # necesita_rag empieza en False (ver pipeline.py). La primera vez que
-    # este nodo corre, si no hay contexto lo pide (necesita_rag=True) y el
-    # router lo manda a tool_consultar_rag. Al volver, contexto_rag puede
-    # seguir vacío (ChromaDB sin patrones aún) -- sin este OR, una lista
-    # vacía nunca es "truthy" y el nodo vuelve a pedir RAG en un loop
-    # infinito con el router. necesita_rag=True en la segunda pasada es
-    # la señal de "el RAG ya corrió una vez", haya o no encontrado algo.
-    # Bug real heredado del notebook (celda 22) -- no es de la migración;
-    # el Algoritmo 8.3 del informe especifica "consultar RAG UNA vez, con
-    # o sin resultados", no un loop.
+    # necesita_rag empieza en None (ver pipeline.py). La primera vez que
+    # este nodo corre, `contexto_rag` está vacío Y `necesita_rag` es None
+    # (falsy) -- cae a la rama de abajo, que ahora SÍ decide con el LLM. Al
+    # volver desde RAG, `necesita_rag` ya quedó en True (lo puso esta misma
+    # función), y esa es la señal de "el RAG ya corrió una vez", haya o no
+    # encontrado algo -- sin este OR, una lista vacía nunca es "truthy" y el
+    # nodo pediría RAG de nuevo en un loop infinito con el router.
     if state.get("contexto_rag") or state.get("necesita_rag"):
         print("   → Contexto RAG disponible. Generando diagnóstico...")
         sys_instruction = (
@@ -73,8 +91,10 @@ def agente_analista_triage(state: LogGuardState) -> dict:
             state.get("raw_samples"),
             incluir_muestras=True,
         )
+        plan_objetivo = state.get("plan_objetivo")
         user_content = (
-            f"RESUMEN DEL LOTE:\n{json.dumps(resumen_para_llm, ensure_ascii=False)}\n\n"
+            (f"OBJETIVO DEL PLAN DE INVESTIGACIÓN: {plan_objetivo}\n\n" if plan_objetivo else "")
+            + f"RESUMEN DEL LOTE:\n{json.dumps(resumen_para_llm, ensure_ascii=False)}\n\n"
             + (f"{contexto_pre}\n\n" if contexto_pre else "")
             + f"CONTEXTO HISTÓRICO (RAG):\n{contexto_txt}\n\n"
             + f"TÉCNICAS MITRE ATT&CK RELACIONADAS:\n{tecnicas_txt}"
@@ -85,5 +105,32 @@ def agente_analista_triage(state: LogGuardState) -> dict:
             "necesita_rag": False,
         }
 
-    print("   → Sin contexto histórico. Solicitando RAG...")
+    print("   → Primera pasada: decidiendo si hace falta contexto histórico...")
+    sys_instruction = (
+        "Eres un analista SOC experto. A partir del resumen del lote, decide si "
+        "puedes diagnosticar directamente o si conviene primero consultar el "
+        "historial de casos similares y técnicas MITRE ATT&CK relacionadas "
+        "(memoria de largo plazo) antes de diagnosticar. Si decides que SÍ hace "
+        "falta ese contexto, no diagnostiques todavía: pide la consulta. Si "
+        "decides que NO hace falta, diagnostica directamente basándote solo en "
+        "el resumen. "
+        'Responde SOLO en JSON: {"necesita_rag": true/false, '
+        '"diagnostico": "..." (vacío si necesita_rag es true), "razon": "..."}'
+    )
+    resumen_para_llm = acotar_resumen_para_prompt(state["resumen_logs"])
+    plan_objetivo = state.get("plan_objetivo")
+    user_content = (
+        (f"OBJETIVO DEL PLAN DE INVESTIGACIÓN: {plan_objetivo}\n\n" if plan_objetivo else "")
+        + f"{_contexto_plan_rag(state)}\n\n"
+        + f"RESUMEN DEL LOTE:\n{json.dumps(resumen_para_llm, ensure_ascii=False)}"
+    )
+    respuesta = llm_json(user_content, system=sys_instruction)
+    necesita_rag = bool(respuesta.get("necesita_rag", True))
+    if not necesita_rag:
+        print(f"   → No hace falta RAG ({respuesta.get('razon', 'sin razón')}). Diagnosticando directo...")
+        return {
+            "diagnostico": respuesta.get("diagnostico") or "Ataque indeterminado",
+            "necesita_rag": False,
+        }
+    print(f"   → Solicitando RAG ({respuesta.get('razon', 'sin razón')})...")
     return {"necesita_rag": True}

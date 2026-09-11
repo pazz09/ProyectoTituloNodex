@@ -18,34 +18,53 @@ Sistema multi-agente basado en LLMs para análisis semántico y reconstrucción 
 
 ## Arquitectura
 
-Patrón **Plan-and-Execute** (no ReAct estándar): se separa pensar de hacer, y se antepone una capa de agregación determinística antes de involucrar al LLM.
+Patrón **Plan-and-Execute real** (11-sep-2026 — antes de esa fecha el nombre era aspiracional: el diagrama de abajo con un nodo "PLANIFICADOR" existía en este README desde el principio, pero el grafo nunca lo implementó. Ver "Plan-and-Execute real" más abajo para la migración completa): se separa planificar de ejecutar, con una capa de agregación determinística antes de involucrar al LLM.
 
 ```
 Entrada (lote de logs crudos)
  └─> AGREGACIÓN (código, sin LLM)
       └─> CORROBORACIÓN DE IPs (código + caché, AbuseIPDB)
-           └─> PLANIFICADOR (LLM) — arma plan sobre el resumen, no el log crudo
-                └─> EJECUTOR (function calling manual: query_cve, validate_solution)
-                     └─> SÍNTESIS (LLM) — diagnóstico + confianza + mitigación validada
-                          └─> SALIDA: JSON | escalamiento si confianza < 0.70
-                               └─> FEEDBACK → memoria (ChromaDB)
+           └─> agente_planificador (LLM) — plan de investigación sobre el resumen, no el log crudo
+                └─> agente_analista_triage (LLM, [PLAN: triage]) ⇄ tool_consultar_rag (Tool, [PLAN: rag])
+                     └─> agente_selector_herramientas (LLM, [interno]) ⇄ tool_consultar_cve (Tool, [PLAN: cve])
+                          └─> agente_ingeniero_mitigacion (LLM, [PLAN: mitigacion]) ⇄ tool_validar_comandos (Tool, [interno])
+                               └─> agente_auditor_final (LLM, [interno])
+                                    └─> ¿cobertura suficiente? NO → replanifica (máx. 1 vez) | SÍ → SALIDA
+                                         └─> FEEDBACK → memoria (ChromaDB)
 ```
 
-Implementado como un `StateGraph` de **LangGraph** con **7 nodos** (4 LLM + 3 Tool) y **3 aristas condicionales (routers)**:
+Implementado como un `StateGraph` de **LangGraph** con **8 nodos** (5 LLM + 3 Tool) y **4 aristas condicionales (routers)**. De los 5 agentes LLM, `agente_planificador` es el único que no corresponde a un "paso" fijo de la propuesta original: genera el plan de investigación, con un vocabulario cerrado de 4 acciones planificables (`triage`, `rag`, `cve`, `mitigacion` — ver "Plan-and-Execute real" más abajo para por qué exactamente estas 4 y no las 7 del grafo).
 
 | Nodo | Tipo | Función |
 |---|---|---|
+| `agente_planificador` | LLM | Genera el plan de investigación (qué analizar y en qué orden) ANTES del análisis especializado; replanifica si el ciclo no alcanza cobertura suficiente |
 | `agente_analista_triage` | LLM | Analiza el resumen del lote; decide si necesita contexto histórico (RAG) |
 | `tool_consultar_rag` | Tool | Recupera contexto histórico y técnicas MITRE ATT&CK relacionadas desde ChromaDB (ver "Integración MITRE ATT&CK" más abajo) |
-| `agente_selector_herramientas` | LLM | Decide qué herramienta usar a continuación |
+| `agente_selector_herramientas` | LLM | Decide qué herramienta usar a continuación (mecanismo interno del grafo, no un paso del plan) |
 | `tool_consultar_cve` | Tool | Consulta NVD por CVEs relacionados a los servicios afectados |
 | `agente_ingeniero_mitigacion` | LLM | Propone comandos de mitigación |
-| `tool_validar_comandos` | Tool | Valida los comandos propuestos (ciclo de corrección, máx. 2 intentos) |
-| `agente_auditor_final` | LLM | Diagnóstico global, confianza, hipótesis alternativa, justificación |
+| `tool_validar_comandos` | Tool | Valida los comandos propuestos (ciclo de corrección, máx. 2 intentos; mecanismo interno del grafo) |
+| `agente_auditor_final` | LLM | Diagnóstico global, confianza, hipótesis alternativa, justificación, y si la cobertura alcanza para cerrar el ciclo (mecanismo interno del grafo) |
 
-Routers: `router_triage`, `router_selector`, `router_validacion` (este último gestiona el ciclo de corrección de comandos, con `intentos_correccion` para evitar loops infinitos).
+Routers: `router_triage`, `router_selector`, `router_validacion` (este último gestiona el ciclo de corrección de comandos, con `intentos_correccion` para evitar loops infinitos) y `router_finalizacion` (nuevo, 11-sep-2026 — decide si el ciclo termina o replanifica, acotado por `MAX_REPLANS`).
 
 Checkpointer: `MemorySaver`.
+
+## Plan-and-Execute real (11-sep-2026)
+
+Hasta esta fecha, el nombre "Plan-and-Execute" era aspiracional: `MAX_PLAN_STEPS`/`MAX_REPLANS` existían en `config.py` sin un solo uso en el resto del código, no había ningún nodo planificador, y el diagrama de este mismo README con un paso "PLANIFICADOR" nunca correspondió al grafo real (7 nodos reactivos, cada router decidiendo solo con el resultado del nodo anterior). Esta sección documenta la migración a una arquitectura donde el plan es un artefacto real del estado, se usa durante la ejecución, y queda trazable.
+
+**Vocabulario cerrado, más chico que el grafo.** El plan no es un espejo de los 8 nodos: solo tiene 4 acciones planificables (`triage`, `rag`, `cve`, `mitigacion`). `agente_selector_herramientas`, `tool_validar_comandos` y `agente_auditor_final` son mecanismos internos del grafo — siempre se ejecutan, quedan trazados en `historial_ejecucion`, pero el planificador nunca los genera como pasos: planificar "si conviene usar el selector" no tendría contenido, porque el selector siempre corre. De las 4 acciones planificables, `triage` y `mitigacion` son obligatorias (el LLM decide su `objetivo`, no si ocurren); `rag` y `cve` son la única inclusión/exclusión real.
+
+**El plan gobierna, no solo acompaña.** Cada paso tiene un `estado` (`pendiente`/`ejecutado`/`omitido`/`fallido`) que se muta en vivo según lo que realmente ocurre en el grafo (`src/graph/plan_tracking.py::actualizar_plan`, invocada por el wrapper `_con_traza()` en `build_graph.py` sobre cada uno de los 7 nodos preexistentes, sin modificarlos). Una acción que se ejecuta sin estar contemplada en el plan (evidencia real la justifica pese a que el plan no la previó) **no se inserta retroactivamente**: queda registrada aparte, en `desviaciones_plan`, como una excepción explícita con acción/evidencia/motivo.
+
+**Bug real corregido de paso: RAG ya no se consulta siempre.** `agente_analista_triage` fijaba `necesita_rag=True` de forma incondicional en su primera pasada, sin llamar al LLM — así que la memoria histórica se consultaba en el 100% de las corridas, sin importar si el lote lo justificaba. Ahora esa primera pasada es una decisión real del LLM, informada por si el plan incluyó un paso `rag` (ver `agente_analista_triage.py`).
+
+**`paso_actual`** apunta al paso lógico que se ejecutó más recientemente, no "el primer pendiente": durante Triage → RAG → Triage, apunta a `rag` mientras ese nodo corre, y vuelve a `triage` en la segunda pasada — importante porque una misma etapa del plan puede implicar varias visitas a nodos.
+
+**Replanificación acotada por `MAX_REPLANS`** (default 1): la decide `router_finalizacion`, el nuevo router tras `agente_auditor_final`, y combina la señal semántica del auditor (`cobertura_auditor`, el juicio crudo del LLM) con una verificación determinística propia sobre `state["plan"]` (¿quedó algún paso `fallido` o `pendiente`?) — nunca depende únicamente del booleano del LLM. `cobertura_suficiente` es la señal ya combinada que produce el auditor; `router_finalizacion` la revisa igual con su propio chequeo, como defensa adicional. El segundo plan recibe el plan anterior, `historial_ejecucion`, diagnóstico, contexto RAG, CVEs y la evaluación del auditor — no repite la misma entrada esperando una respuesta distinta (`agente_planificador.py::_construir_prompt`, modo replan). Al replanificar, `preparar_replanificacion()` reinicia el estado de control de la ejecución (`comandos_validos`, `cobertura_auditor`, `cobertura_suficiente` quedan en `None` — "no evaluado", nunca en `True` por defecto) y conserva la evidencia ya obtenida; el ciclo que termina se archiva en `historial_planes` antes del reinicio.
+
+Sin infraestructura nueva: mismo `StateGraph` de LangGraph, mismo `MemorySaver`, mismo cliente LLM (`src/llm.py`). `MAX_TOOL_ITERS` se eliminó de `config.py` (0 usos en el código, apuntaba a un `src/legacy_agent.py` que nunca existió). Cobertura de tests: `tests/test_agente_planificador.py`, `tests/test_plan_tracking.py`, `tests/test_agente_analista_triage.py`, `tests/test_router_finalizacion.py`, `tests/test_build_graph.py`, y `tests/test_pipeline_plan.py` (el primer test end-to-end del grafo compilado vía `app.stream()`, incluido un caso que fuerza el tope de `MAX_REPLANS` y verifica que no hay loop infinito).
 
 ## Stack técnico
 
@@ -61,18 +80,32 @@ Checkpointer: `MemorySaver`.
 ```
 NODEX/
 ├── src/
-│   ├── config.py          # Carga de variables de entorno y constantes (umbrales, modelos)
-│   ├── state.py           # Definición de LogGuardState (TypedDict del grafo)
-│   ├── agents/             # Los 4 nodos LLM (triage, selector, mitigación, auditor)
-│   ├── tools/               # Los 3 nodos Tool (RAG, CVE, validación de comandos)
+│   ├── config.py            # Variables de entorno y constantes (umbrales, modelos, límites)
+│   ├── state.py             # LogGuardState: el TypedDict del grafo
+│   ├── llm.py               # Cliente del LLM, con reintentos y manejo de cuota
+│   ├── memory.py            # ChromaDB: 4 colecciones y el ciclo de feedback
+│   ├── pipeline.py          # Punto de entrada: analizar_lote, el stream SSE y commit_feedback
+│   ├── agents/              # Los 5 nodos LLM (planificador, triage, selector, mitigación, auditor)
+│   ├── tools/               # Los 3 nodos Tool (RAG, CVE, validación) + agregación y evaluación
+│   ├── preprocessing/       # Esquema v2: segmentación, decoders y enrichers por formato
 │   ├── graph/
-│   │   └── build_graph.py  # Construcción del StateGraph, routers y compilación
-│   └── api/                 # Interfaz web (FastAPI) — panel de análisis con progreso en vivo
-│       ├── main.py
-│       └── static/index.html
-├── notebooks/               # Notebook(s) original(es) de Colab, como referencia
-├── data/                    # Caché de reputación de IPs, colecciones ChromaDB (no versionar contenido real)
-├── tests/                   # Tests unitarios por nodo/tool
+│   │   ├── build_graph.py   # StateGraph, los 4 routers y la compilación
+│   │   ├── routers.py
+│   │   └── plan_tracking.py # Trazabilidad determinística del plan (sin LLM)
+│   └── api/                 # Backend web (FastAPI)
+│       ├── main.py          # Endpoints: analizar, stream SSE, historial, PDF, feedback
+│       ├── historial.py     # Persistencia de corridas en SQLite
+│       ├── informe_pdf.py   # Generador del informe en PDF
+│       └── static/index.html  # Interfaz anterior, sin build step
+├── frontend/                # Interfaz en Next.js (ver "Interfaz en Next.js")
+│   ├── app/                 # page.tsx (enrutado de vistas) y globals.css (sistema visual)
+│   ├── components/          # Las 4 vistas, el armazón y el hook del análisis
+│   └── lib/                 # Cliente de la API y catálogo de nodos
+├── docs/                    # Plan de preprocesamiento, baseline y contrato de la API
+├── notebooks/               # Notebook original de Colab, como referencia
+├── data/                    # Caché de reputación, ChromaDB, historial (no se versiona el contenido)
+├── results/                 # JSON de las corridas de evaluación
+├── tests/                   # Tests deterministas por nodo, tool y endpoint
 ├── requirements.txt
 ├── .env.example
 └── .gitignore
@@ -109,9 +142,9 @@ uvicorn src.api.main:app --reload                         # interfaz web (panel 
 
 `src/pipeline.py` es el punto de entrada: agrega el lote, corre el grafo de 7 nodos con streaming paso a paso, y expone `analizar_lote()` / `commit_feedback()` para integrarlo en otro script o notebook. `src/tools/log_runner.py` (24-ago-2026) es un wrapper de línea de comandos sobre `analizar_lote()` para correrlo directamente contra un archivo de logs (en vez del lote de ejemplo hardcodeado en `pipeline.py`) — guarda un resumen curado del resultado (diagnóstico, confianza, comandos, formato detectado, distribución de servicios/eventos) en `results/<nombre>_<timestamp>.json`, salvo que se pase `--no-guardar`. `data/logs/` trae `HDFS_2k.log` y `BGL_2k.log` (muestras de LogHub, Tabla 8.11 del informe) listas para probar.
 
-## Interfaz nueva en Next.js (`frontend/`, 9-sep-2026)
+## Interfaz en Next.js (`frontend/`)
 
-Interfaz definitiva, sobre un skeleton de diseño generado en v0 y aprobado por Antonia: Next.js 16 + React 19 + Tailwind 4 + shadcn. **No reemplaza todavía** a `src/api/static/index.html` (ver sección siguiente) — conviven hasta que se decida retirar la vieja.
+Interfaz definitiva: Next.js 16 + React 19 + Tailwind 4 + shadcn. Partió de un skeleton de diseño generado en v0 y se rehízo dos veces sobre referencias que eligió Antonia; esta sección describe el estado del 11-sep-2026. **No reemplaza todavía** a `src/api/static/index.html` (ver sección siguiente) — conviven hasta que se decida retirar la vieja.
 
 ```bash
 # terminal 1 -- backend
@@ -121,45 +154,68 @@ uvicorn src.api.main:app --reload
 cd frontend && pnpm install && pnpm dev      # http://localhost:3000
 ```
 
-El backend expone CORS para `http://localhost:3000` y `http://127.0.0.1:3000`, con `Content-Disposition` en `expose_headers` (el frontend lo lee para nombrar el PDF). La URL de la API se puede cambiar con `NEXT_PUBLIC_API_BASE`; por defecto apunta a `http://127.0.0.1:8000`.
+El backend expone CORS para `http://localhost:3000` y `http://127.0.0.1:3000`, con `Content-Disposition` en `expose_headers` (el frontend lo lee para nombrar el PDF). La URL de la API se cambia con `NEXT_PUBLIC_API_BASE`; por defecto apunta a `http://127.0.0.1:8000`.
 
-**Cuatro vistas**, en `frontend/components/`: carga (`upload-view`), análisis en vivo (`analysis-view`), informe (`report-view`) e historial (`historial-view`), todas dentro del armazón de `app-shell.tsx` (barra lateral persistente + área de trabajo).
+### Cuatro vistas
 
-### Sistema visual (rediseño del 10-sep-2026)
+En `frontend/components/`, todas dentro del armazón de `app-shell.tsx`:
 
-El skeleton de v0 era un flujo de tres pantallas con estética de landing de producto: titular de 51px, copy de venta ("Resultado en minutos, no horas") y el informe como una pila de tarjetas con títulos coloquiales. Se rehízo tomando como referencia las consolas de operaciones de seguridad actuales (Elastic Security, Wazuh, Sentinel) **en su modo claro**, con tres reglas que están documentadas en la cabecera de `app/globals.css`:
+| Vista | Archivo | Qué muestra |
+|---|---|---|
+| Multiagente | `conversacion-view.tsx` | La ejecución como conversación con los 7 agentes |
+| Resumen | `overview-view.tsx` | KPIs y actividad por día, desde el historial |
+| Ejecuciones | `historial-view.tsx` | Tabla paginada de corridas anteriores |
+| Informe | `report-view.tsx` | El PDF incrustado, más la revisión del analista |
 
-1. **Densidad antes que tamaño.** Nada supera los 22px; la jerarquía la dan el peso, el color y el espaciado. La escala anterior (51px de titular) hacía que una herramienta de análisis se leyera como un producto de consumo.
-2. **El color se reserva para el estado.** Neutros fríos y planos; el azul es solo acción y rojo/ámbar/verde solo severidad (`--crit`/`--warn`/`--ok`). Un informe donde todo llama la atención no comunica nada.
+### El análisis es una conversación
+
+La carga del archivo y el avance del grafo son un mismo hilo: se ingresa el lote en el compositor de abajo y cada agente publica su mensaje a medida que corre. **No es decoración**: cada mensaje se arma con lo que ese nodo devolvió de verdad al estado, que es lo que trae el `detalle` del evento SSE. El triage publica su diagnóstico, el RAG cuántos precedentes encontró y qué técnicas, el selector su justificación, mitigación los comandos, el validador si aprobó y por qué no, y el auditor su evaluación con la confianza.
+
+Eso vuelve legible el **recorrido no lineal**, que la barra de progreso de la versión anterior escondía detrás de un `x2`: se ve el triage salir sin diagnosticar porque le falta contexto, el RAG traer los precedentes, y el triage volver a hablar con el diagnóstico revisado. Es el proceso iterativo que pide el §8.7.1.
+
+Para que el selector pueda explicarse hizo falta un cambio en el backend: `agente_selector_herramientas` devuelve ahora `razon_seleccion` al estado en vez de imprimirla y descartarla. Sin eso ese agente diría "sí" o "no" sin motivo, y la alternativa era que la interfaz inventara el texto.
+
+**El hilo sobrevive a la navegación.** El estado vive en `use-analisis.ts`, un hook que se monta en el componente que enruta las vistas y no dentro de la conversación: si viviera ahí, ir a Resumen o a Ejecuciones desmontaría la vista y el hilo se perdería. Con el estado arriba, además, el `EventSource` sigue recibiendo mientras se mira otra pantalla, así que un análisis largo no se pierde por irse a revisar el historial.
+
+**La zona de carga no es un campo de texto.** Tenía borde sólido, texto en color de *placeholder* y botón de enviar: la forma de un input de chat en el que no se puede escribir. Ahora el borde punteado, el icono de subida y el texto con aspecto de acción dicen que lo que se espera es un archivo; con uno elegido pasa a ser una ficha con su botón de quitar adentro. No se volvió escribible a propósito: eso exigiría un endpoint conversacional que el sistema no tiene, y quedaría un campo que acepta texto y lo ignora.
+
+### El informe es el PDF
+
+La vista del informe **incrusta el documento** (`?inline=1` en el endpoint del PDF) en lugar de maquetar el mismo contenido en HTML. Lo que se ve en pantalla es exactamente lo que se descarga, y desaparece la segunda maquetación que podía divergir del documento. El precio es que dentro del visor no hay nada interactivo, así que lo que no puede vivir en un PDF queda afuera como controles de la aplicación: descargar, abrir en otra pestaña, volver a la conversación y la revisión del analista.
+
+El botón de volver al hilo aparece **solo** si el informe que se está viendo es el de la conversación en curso: volver desde una ejecución vieja llevaría a un hilo que no tiene nada que ver.
+
+### El Resumen sale del historial
+
+`GET /api/historial` alimenta cinco KPIs —ejecuciones registradas, con incidente, confianza promedio, escaladas a un analista y revisadas por un humano— y un gráfico de área con las ejecuciones por día. El gráfico es SVG propio (`area-chart.tsx`), sin librería, con interpolación monótona (Fritsch-Carlson): una spline cúbica común sobreimpulsa y dibujaría valores negativos donde el dato es cero.
+
+Dos decisiones del gráfico que conviene no deshacer: los días sin ejecuciones se rellenan con cero —si no, comprimiría el tiempo y haría parecer continua una actividad que no lo fue— y la clave de día se calcula en hora **local**, porque con `toISOString()` una corrida de las 23:31 caía en el día siguiente mientras el límite "hoy" se calculaba en local, y el gráfico mostraba un día que todavía no existía.
+
+### Sistema visual
+
+Réplica de la referencia que eligió Antonia (11-sep-2026), con las reglas documentadas en la cabecera de `app/globals.css`:
+
+1. **Fondo casi negro y cero sombras.** La separación la dan el color de superficie y un borde de 1px casi invisible; una sombra sobre ese fondo se ve como suciedad.
+2. **El color se reserva para el estado.** Los neutros son neutros, el azul es solo acción y foco, y rojo/ámbar/verde solo severidad (`--crit`/`--warn`/`--ok`).
 3. **Monoespaciado para todo lo que se lee como dato:** IPs, identificadores, marcas de tiempo, comandos, IDs de ATT&CK.
+4. **Pesos livianos y mucho aire.** Nada por encima de 600, títulos en 500.
 
-La barra lateral es slate profundo (`#17222f`), **no negro**: da el encuadre de consola sin el contraste del modo oscuro, y el área de trabajo queda clara para que el informe se lea como documento.
+**La aplicación es una superficie centrada sobre un degradado azul**, con el fondo alrededor. Eso no fue solo estilo: obligó a que la superficie tenga altura fija y su propio scroll adentro, porque con `min-height: 100vh` y scroll de página todo lo pegajoso —la barra lateral, el compositor— se ancla al navegador y no al contenedor, y se salía de la superficie al desplazarse. El ancho del contorno es responsivo (`--app-max`, `--marco-aire`): a 1920 px la superficie mide 1260 px con 330 px de fondo por lado, y a 1200 px se reduce a 56 px para no perder ancho útil en las tablas.
 
-Cambios de estructura respecto del skeleton:
+No lleva marco de ventana: sin semáforos ni barra de menú. NODEX es una interfaz web, y ese decorado afirmaría una aplicación nativa que no existe.
 
-- **La pantalla de inicio dejó de ser un hero.** Es un espacio de trabajo: zona de carga, las últimas cinco ejecuciones reales, y el recorrido del grafo de 7 nodos como referencia de arquitectura.
-- **El informe tiene secciones numeradas y estables** (diagnóstico, evaluación del auditor, evidencia, ATT&CK, mitigación, revisión) en vez de títulos coloquiales.
-- **La evidencia se separó en tres presentaciones distintas** según lo que es cada cosa: filas etiqueta/valor para los metadatos del lote, barras proporcionales para las distribuciones de servicios y eventos, y una tabla propia para la reputación de las IPs. Antes las tres iban en una sola tabla con una columna "categoría" para distinguirlas.
-- **El banner de veredicto es una barra de estado compacta** con la severidad en el borde izquierdo, en lugar de un bloque de color grande.
+### Detalles que conviene saber
 
-**El progreso del grafo no es lineal, y el estado lo refleja** (`lib/nodos.ts`). En vez de un índice que solo avanza, hay un mapa por nodo con estado (`pendiente`/`activo`/`completado`) y contador de visitas, porque en corridas reales:
+- El límite de archivo que muestra la interfaz es el real del backend (`LOG_MAX_FILE_BYTES`, 50 MiB), no el "500 MB" que traía el skeleton.
+- **El evento `final` del SSE no trae `job_id`** ni los datos del archivo, así que al recibirlo el frontend pide `GET /api/historial/{job_id}`: el mismo shape que consume el detalle del historial, para que el informe tenga una sola forma de entrada. Ver [`docs/contrato_api_frontend.md`](docs/contrato_api_frontend.md), que documenta los campos medidos contra respuestas reales.
+- El veredicto se deriva de `hay_incidente`/`hay_anomalia`. **No se inventa un puntaje de riesgo** que el sistema no calcula.
+- Las corridas anteriores **no se pueden reproducir como conversación**: solo se persisten el resumen del lote y el reporte final, no los eventos por nodo. Por eso el historial abre el informe y no el hilo.
+- "Ajustes" está en la barra lateral pero inerte: el prototipo se configura por variables de entorno.
+- `frontend/AGENTS.md` y `frontend/CLAUDE.md` los genera Next 16 en cada `pnpm dev`; borrarlos no sirve, vuelven a aparecer.
 
-- `agente_analista_triage` se ejecuta **de nuevo** después del RAG. Cuando eso pasa, el paso vuelve a mostrarse activo con la etiqueta "Revisando de nuevo" y un `×2`, **sin** resetear los pasos intermedios que ya corrieron.
-- `tool_consultar_rag` y `tool_consultar_cve` pueden **no ejecutarse nunca** (lo decide el selector): quedan marcados "Solo si se necesita" y no cuentan en el porcentaje hasta que aparecen.
-- `agente_ingeniero_mitigacion` y `tool_validar_comandos` pueden repetirse por el ciclo de corrección de comandos.
+## Interfaz web anterior (panel de análisis, 1-sep-2026)
 
-El orden en que se listan los 7 pasos es el de la topología del grafo, no el de ejecución (el RAG corre antes del selector): los números son etiquetas, no secuencia.
-
-**Una sola vista de informe para la corrida en vivo y para el detalle del historial.** El evento `final` del SSE no trae `job_id` ni los datos del archivo, así que al recibirlo el frontend pide `GET /api/historial/{job_id}` y alimenta `report-view` con esa fila — el mismo shape que usa el historial. Ver [`docs/contrato_api_frontend.md`](docs/contrato_api_frontend.md), que documenta los campos medidos contra respuestas reales.
-
-Detalles que conviene saber:
-
-- El límite de archivo que muestra la interfaz es el real del backend (`LOG_MAX_FILE_BYTES`, 50 MiB), no el "500 MB" del skeleton.
-- Las descripciones de las técnicas de ATT&CK se limpian antes de mostrarse: el `texto` indexado trae el marcado propio de MITRE (`[Valid Accounts](https://…)`, `(Citation: …)`) y repite el nombre de la técnica al principio.
-- El veredicto del banner se deriva de `hay_incidente`/`hay_anomalia`. **No se inventa un puntaje de riesgo** que el sistema no calcula.
-- `frontend/AGENTS.md` y `frontend/CLAUDE.md` los genera Next 16 solo en cada `pnpm dev`; borrarlos no sirve, vuelven a aparecer.
-
-## Interfaz web (panel de análisis, 1-sep-2026)
+> **Nota.** Esta sección describe la interfaz **anterior**, la de `src/api/static/index.html`, que sigue en el repositorio y funcionando. La definitiva es la de la sección de arriba (`frontend/`). Lo que se menciona acá como "el panel" o "el panel de reporte" es de esta interfaz, no de la nueva.
 
 `src/api/` agrega una interfaz web local (FastAPI + HTML/JS sin frameworks de frontend) sobre `src/pipeline.py`, pensada para demostración: subir un lote de logs, ver el grafo de 7 nodos ejecutarse en vivo (qué nodo está corriendo, qué devolvió, si entra al ciclo de RAG, CVE o de corrección de comandos) y el reporte final con confianza, diagnóstico, comandos de mitigación y CVEs. No reemplaza `log_runner.py` ni las corridas usadas para el informe — es una capa puramente visual sobre el mismo `analizar_lote()`.
 
@@ -185,17 +241,21 @@ Cada análisis lanzado desde el panel queda registrado en `data/historial.db` (S
 - Endpoints: `GET /api/historial` (lista paginada) y `GET /api/historial/{job_id}` (detalle).
 - Además de las columnas escalares, se guarda una copia íntegra del resumen del lote y del reporte final (`resumen_json`, `reporte_json`). Es lo que necesita el informe en PDF, que sin eso tendría que volver a correr el grafo para recuperar la ventana temporal, los servicios o la lista de comandos.
 
-### Informe descargable en PDF (9-sep-2026)
+### Informe en PDF (`src/api/informe_pdf.py`)
 
-El botón "Descargar informe (PDF)" del panel de reporte —y del detalle de cualquier corrida del historial— pide `GET /api/historial/{job_id}/pdf`, que arma el documento con `src/api/informe_pdf.py` a partir de lo ya persistido. **No genera contenido nuevo ni vuelve a correr el grafo**: descargar el informe no cuesta cuota.
+`GET /api/historial/{job_id}/pdf` arma el documento a partir de lo ya persistido. **No genera contenido nuevo ni vuelve a correr el grafo**: emitir el informe no cuesta cuota. Con `?inline=1` responde `Content-Disposition: inline`, que es lo que permite a la interfaz incrustarlo; sin ese parámetro sigue siendo una descarga.
 
-El documento tiene encabezado más cinco secciones fijas (resumen ejecutivo, evidencia observada, contexto y técnicas relacionadas, evaluación del auditor, mitigación propuesta) y una sexta opcional de revisión humana. Las secciones que dependen de datos ausentes se omiten y la numeración se lleva con un contador, para que el informe no salte de "2." a "4." como si faltara una página.
+**Plantilla (11-sep-2026).** Réplica de la plantilla editorial que eligió Antonia: portada con el título en cuerpo grande y un bloque de datos al pie en dos columnas; encabezado corrido de dos líneas en cada hoja; cada sección en su propia página, con el título en versales y una regla gruesa debajo; cuerpo justificado en monoespaciado; y los datos en filas etiqueta/valor separadas por reglas finas. Blanco y negro.
 
-Dos limitaciones documentadas:
+Secciones, en orden: resumen del análisis (con el veredicto y la serie temporal), evidencia observada, secuencia temporal de los registros relevantes, técnicas MITRE ATT&CK, evidencias externas y precedentes, evaluación del auditor, mitigación propuesta y revisión del analista. Las que dependen de datos ausentes se omiten; la plantilla **no numera** las secciones, así que omitirlas no deja ningún hueco. Con el lote de BGL el documento sale de 9 páginas.
 
-- **Texto latin-1.** `fpdf2` se eligió por ser Python puro (sin binarios de sistema, coherente con el modelo de distribución autohospedado), pero sus fuentes base codifican en latin-1 y los diagnósticos del LLM traen raya (—), puntos suspensivos (…) y comillas tipográficas, que no existen ahí. Verificado el 9-sep-2026: `multi_cell()` lanza `FPDFUnicodeEncodingException` con cualquiera de ellos. Se resuelve mapeándolos a su equivalente ASCII (`sanear()`) en vez de empotrar una fuente TTF Unicode de ~750 KB en el repositorio; los acentos del español sí están en latin-1 y se conservan intactos.
-- **Corridas anteriores a esta fase** no tienen `resumen_json`/`reporte_json`: su informe se genera igual, pero declara explícitamente qué no se conservó en lugar de dejar la sección vacía.
+La serie temporal se dibuja con primitivas de fpdf2 —ejes, guías y la curva— y agrupa los registros relevantes por **posición en la secuencia**, no por reloj: las marcas de tiempo vienen en el formato de cada origen (`Sep  9 03:12:01` en auth-log, `2005-06-04-00.24.32` en BGL) y normalizarlas ahí sería reimplementar el parseo que el preprocesamiento ya hizo. Lo que la curva muestra es la concentración de los registros relevantes a lo largo del lote, que es la forma del incidente.
 
+Tres limitaciones documentadas:
+
+- **Tipografías.** La referencia usa una grotesca para los títulos y una monoespaciada de palo seco para el cuerpo. Con las fuentes base de fpdf2 los equivalentes son Helvetica y Courier: reproducen la *estructura* tipográfica (contraste sans/mono, versales, jerarquía por peso) pero no el dibujo de las letras. Empotrar las reales serían ~750 KB de binario en el repositorio.
+- **Texto latin-1.** `fpdf2` se eligió por ser Python puro (sin binarios de sistema, coherente con el modelo de distribución autohospedado), pero sus fuentes base codifican en latin-1 y los diagnósticos del LLM traen raya (—), puntos suspensivos (…) y comillas tipográficas, que no existen ahí. Verificado el 9-sep-2026: `multi_cell()` lanza `FPDFUnicodeEncodingException` con cualquiera de ellos. Se resuelve mapeándolos a su equivalente ASCII (`sanear()`); los acentos del español sí están en latin-1 y se conservan intactos.
+- **Corridas anteriores al 9-sep-2026** no tienen `resumen_json`/`reporte_json`: su informe se genera igual, pero declara explícitamente qué no se conservó en lugar de dejar la sección vacía.
 
 ### Feedback humano conectado a la memoria (9-sep-2026)
 

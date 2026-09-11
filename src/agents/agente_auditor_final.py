@@ -50,6 +50,19 @@ el auditor clasificó cada lote como clasificó (necesario para explicar,
 p. ej., el falso positivo real de `hdfs_negativo_001` en el informe). Se
 propaga ahora por `LogGuardState`, `pipeline.py`, `log_runner.py` y se
 guarda en `results/eval_deteccion_*.json` junto al resto del veredicto.
+
+`cobertura_auditor` / `cobertura_suficiente` (agregados 11-sep-2026,
+Plan-and-Execute): el auditor es también quien decide si corresponde
+replanificar, pero esa decisión NO depende únicamente de su propio juicio.
+`cobertura_auditor` es el juicio semántico crudo del LLM ("¿la evidencia
+alcanza para una conclusión?"), sin mezclar con nada. `cobertura_suficiente`
+es la señal DERIVADA que de verdad usa `router_finalizacion`: combina ese
+juicio con una verificación determinística sobre `state["plan"]` (¿quedó
+algún paso "fallido" o "pendiente"?). Separarlas permite auditar después si
+una replanificación se disparó por el LLM, por la verificación
+determinística, o por ambas -- información que `hay_incidente`/`hay_anomalia`
+ya demostraron que vale la pena mantener separada en vez de colapsarla en
+un único booleano.
 """
 
 from src.llm import llm_json
@@ -63,7 +76,7 @@ def agente_auditor_final(state: LogGuardState) -> dict:
     sys_instruction = (
         "Evalúa la solución de seguridad propuesta. Considera: "
         "precisión del diagnóstico, relevancia de los comandos y evidencia disponible. "
-        "Responde TRES cosas por separado, sin confundirlas entre sí: "
+        "Responde CUATRO cosas por separado, sin confundirlas entre sí: "
         "(1) hay_anomalia: ¿el sistema se está comportando de forma anómala o "
         "irregular, sea o no un problema de seguridad? (p. ej. una falla de "
         "hardware, un error de infraestructura o un fallo de replicación "
@@ -74,10 +87,17 @@ def agente_auditor_final(state: LogGuardState) -> dict:
         "mantenimiento de hardware) es hay_anomalia=true pero hay_incidente=false. "
         "(3) confianza: qué tan seguro estás de tu propia evaluación -- un "
         "diagnóstico de 'todo normal' bien fundamentado debe tener confianza "
-        "alta y tanto hay_anomalia como hay_incidente en false; no confundas "
-        "estos tres campos entre sí. "
+        "alta y tanto hay_anomalia como hay_incidente en false. "
+        "(4) cobertura_auditor: ¿la evidencia reunida (diagnóstico, CVEs, "
+        "contexto histórico, comandos validados) alcanza para sostener esta "
+        "conclusión, o falta investigar algo concreto para poder afirmarla con "
+        "solidez? Esto es independiente de confianza: puedes estar muy seguro "
+        "de una conclusión basada en poca evidencia real. Si cobertura_auditor "
+        "es false, explica en motivo_cobertura qué falta investigar. "
+        "No confundas estos cuatro campos entre sí. "
         'Responde SOLO en JSON: {"confianza": 0.0-1.0, "hay_anomalia": true/false, '
-        '"hay_incidente": true/false, "evaluacion": "..."}'
+        '"hay_incidente": true/false, "evaluacion": "...", '
+        '"cobertura_auditor": true/false, "motivo_cobertura": "..."}'
     )
     # La calidad de la evidencia depende de cuánto del lote se entendió: un
     # diagnóstico sobre un lote con 30 % de cobertura no merece la misma
@@ -120,11 +140,38 @@ def agente_auditor_final(state: LogGuardState) -> dict:
         hay_anomalia = hay_incidente or (confianza >= 0.70)
 
     evaluacion = respuesta.get("evaluacion", "")
+
+    cobertura_auditor = respuesta.get("cobertura_auditor")
+    if not isinstance(cobertura_auditor, bool):
+        # Respaldo si el LLM no devuelve el campo (prompt viejo/respuesta
+        # malformada): asumir que sí alcanza, no al revés -- lo contrario
+        # dispararía una replanificación en cualquier respuesta que no siga
+        # el prompt al pie de la letra, y MAX_REPLANS=1 es un recurso escaso.
+        cobertura_auditor = True
+
+    plan = state.get("plan") or {}
+    pasos = plan.get("pasos", [])
+    fallidos = [p for p in pasos if p.get("estado") == "fallido"]
+    pendientes = [p for p in pasos if p.get("estado") == "pendiente"]
+    cobertura_suficiente = cobertura_auditor and not fallidos and not pendientes
+
+    notas_deterministicas = []
+    if fallidos:
+        notas_deterministicas.append(f"pasos fallidos: {[p['accion'] for p in fallidos]}")
+    if pendientes:
+        notas_deterministicas.append(f"pasos sin ejecutar: {[p['accion'] for p in pendientes]}")
+    motivo_llm = respuesta.get("motivo_cobertura") if not cobertura_auditor else None
+    motivo_replanificacion = " | ".join(filter(None, [motivo_llm, *notas_deterministicas]))
+
     print(f"   → Confianza final: {confianza:.2f} | hay_anomalia={hay_anomalia} | "
-          f"hay_incidente={hay_incidente} | {evaluacion}")
+          f"hay_incidente={hay_incidente} | cobertura_suficiente={cobertura_suficiente} | {evaluacion}")
     return {
         "confianza": confianza,
         "hay_anomalia": hay_anomalia,
         "hay_incidente": hay_incidente,
         "evaluacion_auditor": evaluacion,
+        "cobertura_auditor": cobertura_auditor,
+        "cobertura_suficiente": cobertura_suficiente,
+        "motivo_replanificacion": motivo_replanificacion,
+        "requiere_replanificacion": not cobertura_suficiente,
     }

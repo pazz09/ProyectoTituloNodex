@@ -160,3 +160,93 @@ def test_evaluacion_auditor_se_persiste(monkeypatch):
     )
     resultado = auditor_mod.agente_auditor_final(_estado_base())
     assert resultado["evaluacion_auditor"] == texto
+
+
+# --- cobertura_auditor / cobertura_suficiente (11-sep-2026, Plan-and-Execute) ---
+# Igual que hay_incidente/hay_anomalia, se mantienen separadas: la primera es
+# el juicio crudo del LLM, la segunda la señal derivada que de verdad
+# gobierna router_finalizacion (combinada con una verificación determinística
+# sobre state["plan"]). Ver src/graph/routers.py::router_finalizacion.
+
+def _plan_con(*estados):
+    return {"plan_version": 1, "pasos": [
+        {"id": i + 1, "accion": "x", "estado": e} for i, e in enumerate(estados)
+    ]}
+
+
+def test_cobertura_suficiente_true_cuando_llm_dice_si_y_plan_sin_pendientes(monkeypatch):
+    monkeypatch.setattr(
+        auditor_mod, "llm_json",
+        lambda *a, **k: {"confianza": 0.9, "hay_anomalia": True, "hay_incidente": True,
+                          "evaluacion": "...", "cobertura_auditor": True},
+    )
+    estado = {**_estado_base(), "plan": _plan_con("ejecutado", "ejecutado")}
+    resultado = auditor_mod.agente_auditor_final(estado)
+    assert resultado["cobertura_auditor"] is True
+    assert resultado["cobertura_suficiente"] is True
+    assert resultado["requiere_replanificacion"] is False
+
+
+def test_cobertura_suficiente_false_si_llm_dice_si_pero_hay_paso_fallido(monkeypatch):
+    """El caso central: cobertura_auditor (crudo, LLM) puede decir 'sí
+    alcanza' mientras cobertura_suficiente (derivada) dice que no, porque
+    hay un paso realmente fallido en el plan -- exactamente la separación
+    que permite auditar después si la replanificación la disparó el LLM,
+    lo determinístico, o ambos."""
+    monkeypatch.setattr(
+        auditor_mod, "llm_json",
+        lambda *a, **k: {"confianza": 0.8, "hay_anomalia": True, "hay_incidente": True,
+                          "evaluacion": "...", "cobertura_auditor": True},
+    )
+    estado = {**_estado_base(), "plan": _plan_con("ejecutado", "fallido")}
+    resultado = auditor_mod.agente_auditor_final(estado)
+    assert resultado["cobertura_auditor"] is True   # el LLM no vio problema
+    assert resultado["cobertura_suficiente"] is False  # pero lo determinístico sí
+    assert resultado["requiere_replanificacion"] is True
+    assert "fallidos" in resultado["motivo_replanificacion"]
+
+
+def test_cobertura_suficiente_false_cuando_el_llm_lo_indica(monkeypatch):
+    monkeypatch.setattr(
+        auditor_mod, "llm_json",
+        lambda *a, **k: {"confianza": 0.5, "hay_anomalia": False, "hay_incidente": False,
+                          "evaluacion": "...", "cobertura_auditor": False,
+                          "motivo_cobertura": "falta consultar CVEs del servicio identificado"},
+    )
+    estado = {**_estado_base(), "plan": _plan_con("ejecutado", "ejecutado")}
+    resultado = auditor_mod.agente_auditor_final(estado)
+    assert resultado["cobertura_suficiente"] is False
+    assert "falta consultar CVEs" in resultado["motivo_replanificacion"]
+
+
+def test_cobertura_auditor_ausente_usa_true_como_respaldo(monkeypatch):
+    """Prompt viejo o respuesta malformada sin el campo nuevo: no debe
+    disparar una replanificación solo porque el LLM no siguió el prompt --
+    MAX_REPLANS es un recurso escaso."""
+    monkeypatch.setattr(
+        auditor_mod, "llm_json",
+        lambda *a, **k: {"confianza": 0.9, "hay_anomalia": False, "hay_incidente": False, "evaluacion": "..."},
+    )
+    estado = {**_estado_base(), "plan": _plan_con("ejecutado")}
+    resultado = auditor_mod.agente_auditor_final(estado)
+    assert resultado["cobertura_auditor"] is True
+    assert resultado["cobertura_suficiente"] is True
+
+
+# --- L: hay_anomalia/hay_incidente siguen independientes de confianza,
+# incluso con los campos de cobertura presentes (no se mezclan). ----------
+
+def test_hay_anomalia_hay_incidente_confianza_siguen_independientes_de_cobertura(monkeypatch):
+    monkeypatch.setattr(
+        auditor_mod, "llm_json",
+        lambda *a, **k: {"confianza": 1.0, "hay_anomalia": False, "hay_incidente": False,
+                          "evaluacion": "todo normal", "cobertura_auditor": False,
+                          "motivo_cobertura": "falta ver el historial del host"},
+    )
+    # confianza alta + sin anomalía/incidente, PERO cobertura insuficiente:
+    # las cuatro señales deben poder variar en cualquier combinación.
+    resultado = auditor_mod.agente_auditor_final({**_estado_base(), "plan": _plan_con("ejecutado")})
+    assert resultado["confianza"] == 1.0
+    assert resultado["hay_anomalia"] is False
+    assert resultado["hay_incidente"] is False
+    assert resultado["cobertura_suficiente"] is False

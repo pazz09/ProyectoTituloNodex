@@ -72,9 +72,12 @@ TIMEOUT_SOLICITUD_SEG = float(os.environ.get("TIMEOUT_SOLICITUD_SEG", "300"))
 CONFIDENCE_THRESHOLD = float(os.environ.get("CONFIDENCE_THRESHOLD", "0.70"))  # bajo esto -> escala a humano
 AUTO_PROMOTE = float(os.environ.get("AUTO_PROMOTE", "0.90"))  # conf >= esto -> promueve a attack_patterns
 
-# --- Cotas del agente Plan-and-Execute de referencia (src/legacy_agent.py) ---
+# --- Cotas del ciclo Plan-and-Execute (agente_planificador, router_finalizacion) ---
+# MAX_PLAN_STEPS acota los pasos del plan: el vocabulario cerrado de acciones
+# planificables tiene 4 miembros (triage, rag, cve, mitigacion -- selector,
+# validacion y auditoria son mecanismos internos del grafo, no pasos del
+# plan), así que 6 deja margen de sobra sin necesidad de subirlo.
 MAX_PLAN_STEPS = int(os.environ.get("MAX_PLAN_STEPS", "6"))
-MAX_TOOL_ITERS = int(os.environ.get("MAX_TOOL_ITERS", "8"))
 MAX_REPLANS = int(os.environ.get("MAX_REPLANS", "1"))
 
 # --- Ciclo de corrección de comandos (router_validacion del grafo) ---

@@ -98,6 +98,14 @@ def _preparar_estado_inicial(raw_logs: str, thread_id: str | None = None):
         "parsing_warnings": advertencias,
         "raw_samples": muestras,
         "firma": firma,
+        # --- Plan-and-Execute (agente_planificador es el primer nodo) ---
+        "plan": {},
+        "plan_objetivo": "",
+        "paso_actual": 0,
+        "historial_ejecucion": [],
+        "desviaciones_plan": [],
+        "historial_planes": [],
+        "replan_count": 0,
         "diagnostico": "",
         "necesita_rag": False,
         "usar_cve": False,
@@ -105,13 +113,19 @@ def _preparar_estado_inicial(raw_logs: str, thread_id: str | None = None):
         "tecnicas_mitre": [],
         "cves_encontrados": [],
         "comandos_mitigacion": [],
-        "comandos_validos": True,
+        # None, no True: "aún no evaluado" -- nada lo lee antes de que
+        # tool_validar_comandos lo fije de verdad (ver src/state.py).
+        "comandos_validos": None,
         "motivos_rechazo": [],
         "confianza": 0.0,
         "hay_incidente": False,
         "hay_anomalia": False,
         "evaluacion_auditor": "",
         "intentos_correccion": 0,
+        "cobertura_auditor": None,
+        "cobertura_suficiente": None,
+        "motivo_replanificacion": "",
+        "requiere_replanificacion": False,
     }
     config = {"configurable": {"thread_id": thread_id or f"incidente_{int(time.time())}"}}
     return input_inicial, config, firma
@@ -243,6 +257,15 @@ def analizar_lote_stream(raw_logs: str, thread_id: str | None = None):
             # recuperó de la memoria y que el triage tuvo a la vista.
             "precedentes": _precedentes(estado_final.get("contexto_rag")),
             "n_precedentes": len(estado_final.get("contexto_rag") or []),
+            # Plan-and-Execute (11-sep-2026): campos aditivos, no rompen a
+            # ningún consumidor que solo lea las claves de arriba.
+            "plan": estado_final.get("plan"),
+            "historial_ejecucion": estado_final.get("historial_ejecucion"),
+            "desviaciones_plan": estado_final.get("desviaciones_plan"),
+            "historial_planes": estado_final.get("historial_planes"),
+            "replan_count": estado_final.get("replan_count"),
+            "cobertura_auditor": estado_final.get("cobertura_auditor"),
+            "cobertura_suficiente": estado_final.get("cobertura_suficiente"),
         },
     }
 

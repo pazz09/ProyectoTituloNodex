@@ -148,10 +148,16 @@ def test_dos_lotes_iguales_producen_la_misma_firma():
     assert a == b
 
 
-# --- criterio 1: el grafo conserva sus siete nodos ------------------------
+# --- criterio 1: el grafo conserva sus nodos (7 + agente_planificador, 11-sep-2026) ---
 
-def test_el_grafo_sigue_teniendo_siete_nodos():
+def test_el_grafo_sigue_teniendo_ocho_nodos():
+    """Guardia de regresión original (Fase 9): que el motor de
+    preprocesamiento heterogéneo no alterara accidentalmente la topología
+    del grafo. Actualizado a 8 tras Plan-and-Execute (11-sep-2026):
+    `agente_planificador` es una adición deliberada de esa migración, no
+    una regresión -- ver `src/graph/build_graph.py`."""
     from src.graph.build_graph import build_graph
     grafo = build_graph().get_graph()
     nodos = [n for n in grafo.nodes if n not in ("__start__", "__end__")]
-    assert len(nodos) == 7
+    assert len(nodos) == 8
+    assert "agente_planificador" in nodos

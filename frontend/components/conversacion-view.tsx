@@ -9,6 +9,7 @@ import {
   FileText,
   Gauge,
   Layers,
+  ListChecks,
   Loader2,
   RotateCcw,
   ScanSearch,
@@ -34,6 +35,7 @@ function pesoLegible(bytes: number) {
 }
 
 const ICONOS: Record<NombreNodo, typeof Sparkles> = {
+  agente_planificador: ListChecks,
   agente_analista_triage: ScanSearch,
   agente_selector_herramientas: Layers,
   tool_consultar_rag: BookMarked,
@@ -72,6 +74,29 @@ function Barras({ datos, tope = 4 }: { datos?: Record<string, number>; tope?: nu
  */
 function CuerpoNodo({ nodo, detalle, visita }: { nodo: NombreNodo; detalle: Record<string, unknown>; visita: number }) {
   const lista = (v: unknown) => (Array.isArray(v) ? v : [])
+
+  if (nodo === 'agente_planificador') {
+    const plan = (detalle.plan ?? {}) as { objetivo?: string; pasos?: { accion: string; objetivo?: string }[] }
+    const pasos = lista(plan.pasos) as { accion: string; objetivo?: string }[]
+    return (
+      <>
+        {visita > 1 && (
+          <p className="faint">La cobertura del plan anterior no alcanzó: este es el plan revisado.</p>
+        )}
+        <p>{plan.objetivo || 'Sin objetivo registrado.'}</p>
+        {pasos.length > 0 && (
+          <ul style={{ margin: '6px 0 0', paddingLeft: 18 }}>
+            {pasos.map((p) => (
+              <li key={p.accion}>
+                <strong>{p.accion}</strong>
+                {p.objetivo ? ` — ${p.objetivo}` : ''}
+              </li>
+            ))}
+          </ul>
+        )}
+      </>
+    )
+  }
 
   if (nodo === 'agente_analista_triage') {
     const diagnostico = String(detalle.diagnostico ?? '')
