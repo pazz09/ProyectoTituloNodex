@@ -1,26 +1,26 @@
 """Tests del soporte multi-formato de aggregate_logs() (HDFS, BGL, y el
-fallback a auth-log para formatos no reconocidos).
+respaldo de texto libre para formatos no reconocidos).
 
-Motivación (ver README, "Parsing multi-formato de logs"): al recibir los
-datasets HDFS_2k.log y BGL_2k.log (Tabla 8.11 del Informe), el parser
-original —diseñado para auth-log— fallaba en tres formas concretas:
+Motivación histórica (ver README, "Parsing multi-formato de logs"): al
+recibir los datasets HDFS_2k.log y BGL_2k.log (Tabla 8.11 del Informe), un
+parser pensado solo para auth-log fallaba en tres formas concretas:
 1) no reconocía los timestamps de ninguno de los dos formatos,
 2) HDFS caía 100% en servicio="desconocido",
 3) un falso positivo real: "PacketResponder ... for block blk_123..."
-   hacía que la regex de usuario auth-log capturara usuario="block".
+   hacía que la regex de usuario de auth-log capturara usuario="block".
 
 Las líneas de ejemplo abajo son fragmentos reales de HDFS_2k.log y
 BGL_2k.log (no sintéticos), elegidos para cubrir esos tres problemas.
+
+Importante (23-sep-2026): con el preprocesamiento heterogéneo, la
+criticidad de un evento (`evento_critico`) ya NO se deriva del flag de
+alerta de BGL ni de ninguna otra etiqueta del dataset -- se deriva de lo
+que el propio log declara (severidad, resultado de la operación). Ver
+`src/preprocessing/enrichers/bgl.py` y `_es_critico()` en
+`src/preprocessing/aggregation.py`.
 """
 
-# Estos tests describen el comportamiento del AGREGADOR v1, así que
-# invocan `aggregate_logs_v1` directamente en vez de pasar por la
-# fachada `aggregate_logs`, que despacha según
-# LOG_PREPROCESSING_ENGINE. De ese modo siguen verificando lo que
-# deben verificar aunque el entorno tenga el motor v2 activo -- la
-# fidelidad con el prototipo del Seminario se conserva en v1, no en
-# el esquema nuevo (ver docs/plan_accion_preprocesamiento_heterogeneo.md).
-from src.tools.aggregation import aggregate_logs_v1 as aggregate_logs
+from src.tools.aggregation import aggregate_logs
 
 HDFS_MUESTRA = (
     "081109 203615 148 INFO dfs.DataNode$PacketResponder: PacketResponder 1 for block blk_38865049064139660 terminating\n"
@@ -34,12 +34,12 @@ BGL_MUESTRA = (
     "APPREAD 1117869872 2005.06.04 R04-M1-N4-I:J18-U11 2005-06-04-00.24.32.432192 R04-M1-N4-I:J18-U11 RAS APP FATAL ciod: failed to read message prefix on control stream (CioStream socket to 172.16.96.116:33569\n"
 )
 
-BGL_MUESTRA_CON_ALERTA_SIN_RAS = (
+# Variante real de BGL sin el token "RAS" (usa "NULL DISCOVERY ..."). El
+# primer campo ("ALERTA" acá, inventado para el test) es el flag de alerta
+# del dataset -- ya no debe influir en evento_critico bajo ningún caso.
+BGL_MUESTRA_VARIANTE_SIN_RAS = (
     "- 1117838570 2005.06.03 R02-M1-N0-C:J12-U11 2005-06-03-15.42.50.675872 R02-M1-N0-C:J12-U11 RAS KERNEL INFO instruction cache parity error corrected\n"
     "- 1117842440 2005.06.03 R23-M0-NE-C:J05-U01 2005-06-03-16.47.20.730545 R23-M0-NE-C:J05-U01 RAS KERNEL INFO 63543 double-hummer alignment exceptions\n"
-    # variante real de BGL sin el token "RAS" (usa "NULL DISCOVERY ..."), con
-    # un flag de alerta inventado para el test -- en BGL_2k.log estas líneas
-    # siempre tienen flag "-", pero el parser no debe asumirlo.
     "ALERTA 1119977619 2005.06.28 R02-M1-NE 2005-06-28-09.53.39.479164 R02-M1-NE NULL DISCOVERY WARNING Node card is not fully functional\n"
 )
 
@@ -57,13 +57,15 @@ def test_detecta_formato_hdfs_y_evita_falso_positivo_block():
     resumen = aggregate_logs(HDFS_MUESTRA)
     assert resumen["formato_detectado"] == "hdfs"
     assert resumen["total_lineas"] == 3
-    # el falso positivo original: "for block blk_..." ya no se confunde con un usuario
+    # el falso positivo original: "for block blk_..." ya no se confunde con
+    # un usuario -- el block id ni siquiera ocupa ese campo (va a un
+    # atributo propio, no es una "persona"), así que "usuarios_objetivo"
+    # queda vacío para HDFS por diseño, no solo sin "block".
     todos_los_usuarios = {
         u for v in resumen["por_ip"].values() for u in v["usuarios_objetivo"]
     }
     assert "block" not in todos_los_usuarios
-    # en cambio, el block id real queda como el "actor" de la línea
-    assert any(u.startswith("blk_") for u in todos_los_usuarios)
+    assert todos_los_usuarios == set()
     assert resumen["servicios"]["hdfs.datanode"] == 2
     assert resumen["servicios"]["hdfs.fsnamesystem"] == 1
     # la línea WARN se marca como crítica; las dos INFO no
@@ -72,11 +74,14 @@ def test_detecta_formato_hdfs_y_evita_falso_positivo_block():
     assert resumen["ventana_temporal"]["inicio"] == "2008-11-09 20:36:15"
 
 
-def test_detecta_formato_bgl_y_usa_flag_de_alerta_como_ground_truth():
+def test_detecta_formato_bgl_y_la_criticidad_viene_de_la_severidad_declarada():
+    """La línea APPREAD es la única "alerta" real del flag de BGL, pero acá
+    se marca crítica porque su severidad declarada es FATAL (un dato del
+    propio log) -- NO porque el flag de alerta lo diga. Las dos líneas "-"
+    declaran severidad INFO y quedan normales por la misma razón."""
     resumen = aggregate_logs(BGL_MUESTRA)
     assert resumen["formato_detectado"] == "bgl"
     assert resumen["total_lineas"] == 3
-    # las dos líneas "-" son no-alerta; la línea APPREAD es la única alerta real
     assert resumen["eventos"]["evento_critico"] == 1
     assert resumen["eventos"]["evento_normal"] == 2
     assert resumen["servicios"]["bgl.kernel"] == 2
@@ -85,31 +90,31 @@ def test_detecta_formato_bgl_y_usa_flag_de_alerta_como_ground_truth():
     assert "172.16.96.116" in resumen["ips_distintas"]
 
 
-def test_bgl_no_pierde_alertas_en_lineas_que_no_matchean_el_patron_completo():
-    """Regresión sobre un hallazgo real (24-ago-2026, reportado por el
-    Claude Code local de Antonia): si el flag de alerta se leyera solo del
-    grupo capturado por un match exitoso de _BGL_RE, una línea de alerta
-    real que no matchea el patrón completo (p. ej. la variante "NULL
-    DISCOVERY ..." en vez de "RAS ...") se perdería como falso negativo.
-    El flag debe leerse del texto crudo, independiente del resto del match."""
-    resumen = aggregate_logs(BGL_MUESTRA_CON_ALERTA_SIN_RAS)
+def test_bgl_reconoce_una_variante_sin_el_token_ras_y_el_flag_no_influye():
+    """La variante "NULL DISCOVERY ..." (sin "RAS") se reconoce igual y
+    queda mapeada a su propio subsistema (bgl.discovery). El flag de alerta
+    del primer campo -- "ALERTA" en esta muestra, inventado a propósito para
+    el test -- NO debe influir en evento_critico bajo ningún caso: acá la
+    línea es crítica porque declara severidad WARNING, no por el flag."""
+    resumen = aggregate_logs(BGL_MUESTRA_VARIANTE_SIN_RAS)
     assert resumen["formato_detectado"] == "bgl"
-    assert resumen["eventos"]["evento_critico"] == 1  # la línea sin RAS, pero con flag de alerta
+    assert resumen["servicios"]["bgl.discovery"] == 1
+    assert resumen["eventos"]["evento_critico"] == 1  # por severidad WARNING, no por el flag
     assert resumen["eventos"]["evento_normal"] == 2
-    assert resumen["servicios"]["bgl.otro"] == 1  # se pierde la etiqueta de servicio, no la alerta
 
 
-def test_formato_no_reconocido_cae_a_auth_log_sin_perder_las_lineas():
+def test_formato_no_reconocido_cae_a_texto_libre_sin_perder_las_lineas():
     resumen = aggregate_logs(TEXTO_NO_RECONOCIDO)
-    assert resumen["formato_detectado"] == "auth_log"
+    assert resumen["formato_detectado"] == "text"
     assert resumen["total_lineas"] == 2
     assert resumen["servicios"]["desconocido"] == 2
 
 
-def test_auth_log_sigue_funcionando_igual_que_antes():
-    """Regresión: un lote 100% auth-log debe seguir detectándose como tal
-    y con exactamente el mismo comportamiento que antes de esta migración."""
+def test_auth_log_se_detecta_y_marca_los_fallos_como_criticos():
+    """Auth-log usa el mismo vocabulario unificado que HDFS/BGL
+    (evento_critico/evento_normal), no el acceso_fallido/evento_generico
+    de una versión anterior del preprocesamiento."""
     resumen = aggregate_logs(AUTH_LOG_MUESTRA)
     assert resumen["formato_detectado"] == "auth_log"
     assert resumen["servicios"]["sshd"] == 1
-    assert resumen["eventos"]["acceso_fallido"] == 1
+    assert resumen["eventos"]["evento_critico"] == 1

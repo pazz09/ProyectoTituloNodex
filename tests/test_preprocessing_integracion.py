@@ -2,7 +2,7 @@
 (Fase 9 del plan) y del enriquecedor de autenticación (Fase 6).
 
 Criterios de aceptación de la Fase 9:
-1. El grafo conserva siete nodos.
+1. El grafo conserva sus nodos (originalmente siete; ocho desde Plan-and-Execute).
 2. Los lotes sin IP pueden analizarse.
 3. El estado no crece proporcionalmente al contenido completo del archivo.
 4. El streaming informa correctamente el preprocesamiento.
@@ -10,7 +10,7 @@ Criterios de aceptación de la Fase 9:
 
 import src.pipeline as pipeline_mod
 from src.preprocessing.pipeline import preprocesar
-from src.tools.aggregation import aggregate_logs_v1, firma_lote
+from src.tools.aggregation import aggregate_logs, firma_lote
 
 AUTH = ("Jan 10 13:55:36 srv sshd[1]: Failed password for invalid user admin "
         "from 203.0.113.10 port 22 ssh2")
@@ -35,16 +35,13 @@ def test_una_autenticacion_exitosa_no_se_marca_como_fallo():
 
 
 def test_el_usuario_se_extrae_de_la_alternativa_mas_especifica():
-    """Divergencia deliberada con v1. `parse_log()` capturaba la
-    alternativa que apareciera primero en el TEXTO, así que en "for invalid
-    user admin" devolvía "invalid" -- particularidad documentada en el
-    README y preservada en el motor v1. El motor v2 prueba los patrones del
-    más específico al más general y devuelve "admin", que es el usuario
-    real. Ambos comportamientos conviven: cada motor conserva el suyo.
-    """
+    """En "for invalid user admin", el usuario real es "admin", no
+    "invalid" (la alternativa que aparece primero en el texto, sin ser la
+    más específica). El enriquecedor de autenticación prueba los patrones
+    del más específico al más general."""
     assert preprocesar(AUTH + "\n", modo="line").events[0].source_user == "admin"
-    v1 = aggregate_logs_v1(AUTH + "\n")
-    assert v1["por_ip"]["203.0.113.10"]["usuarios_objetivo"] == ["invalid"]
+    resumen = aggregate_logs(AUTH + "\n")
+    assert resumen["por_ip"]["203.0.113.10"]["usuarios_objetivo"] == ["admin"]
 
 
 def test_el_enriquecedor_no_decide_que_hay_un_ataque():
@@ -90,13 +87,9 @@ def test_la_reputacion_no_se_consulta_si_no_hay_ips(monkeypatch):
 
 # --- criterio 3: el estado no crece con el archivo ------------------------
 
-def test_el_estado_no_guarda_los_eventos_normalizados(monkeypatch):
+def test_el_estado_no_guarda_los_eventos_normalizados():
     """El estado se serializa en cada checkpoint del grafo: guardar los
     eventos lo haría crecer en proporción al archivo de entrada."""
-    monkeypatch.setenv("LOG_PREPROCESSING_ENGINE", "v2")
-    import src.config as cfg
-    monkeypatch.setattr(cfg, "LOG_PREPROCESSING_ENGINE", "v2")
-
     lote = "".join(f"{AUTH}\n" for _ in range(500))
     estado, _, _ = pipeline_mod._preparar_estado_inicial(lote, "t2")
     meta = estado["preprocessing_metadata"]
@@ -106,13 +99,13 @@ def test_el_estado_no_guarda_los_eventos_normalizados(monkeypatch):
     assert len(estado["raw_samples"]) <= 5
 
 
-def test_los_metadatos_van_vacios_con_el_motor_v1():
-    """Fabricar metadatos que el esquema v1 no tiene sería peor que no
-    tenerlos."""
+def test_los_metadatos_siempre_se_pueblan():
+    """Con un único motor de preprocesamiento, los metadatos (esquema,
+    cobertura, decoders) siempre están disponibles -- no dependen de un
+    motor activo distinto."""
     estado, _, _ = pipeline_mod._preparar_estado_inicial(AUTH + "\n", "t3")
-    assert estado["preprocessing_metadata"] == {}
-    assert estado["parsing_warnings"] == []
-    assert estado["raw_samples"] == []
+    assert estado["preprocessing_metadata"] != {}
+    assert estado["preprocessing_metadata"]["total_eventos"] == 1
 
 
 # --- firma versionada (Fase 11) -------------------------------------------
@@ -121,13 +114,13 @@ def test_la_firma_lleva_prefijo_de_version():
     """Una firma v1 y una v2 describen el mismo lote con vocabularios
     distintos: sus embeddings no son comparables y no deben mezclarse en la
     misma búsqueda de ChromaDB."""
-    resumen = aggregate_logs_v1(AUTH + "\n")
+    resumen = aggregate_logs(AUTH + "\n")
     assert firma_lote(resumen).startswith("v1|")
     assert firma_lote(resumen, {"total_eventos": 1}).startswith("v2|")
 
 
 def test_la_firma_v2_incorpora_las_senales_nuevas():
-    resumen = aggregate_logs_v1(AUTH + "\n")
+    resumen = aggregate_logs(AUTH + "\n")
     metadatos = {
         "total_eventos": 1,
         "decoder_distribution": {"syslog": 1},
@@ -143,8 +136,8 @@ def test_la_firma_v2_incorpora_las_senales_nuevas():
 
 
 def test_dos_lotes_iguales_producen_la_misma_firma():
-    a = firma_lote(aggregate_logs_v1(AUTH + "\n"))
-    b = firma_lote(aggregate_logs_v1(AUTH + "\n"))
+    a = firma_lote(aggregate_logs(AUTH + "\n"))
+    b = firma_lote(aggregate_logs(AUTH + "\n"))
     assert a == b
 
 

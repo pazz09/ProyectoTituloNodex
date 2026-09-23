@@ -19,7 +19,7 @@ AUTH = {
     "formato_detectado": "auth_log",
     "total_lineas": 23,
     "servicios": {"sshd": 18, "apache": 2, "kernel": 1},
-    "eventos": {"acceso_fallido": 13, "evento_generico": 10},
+    "eventos": {"evento_critico": 13, "evento_normal": 10},
     "n_ips_distintas": 3,
     "por_ip": {
         "45.155.205.233": {"intentos_fallidos": 12},
@@ -49,7 +49,7 @@ def resumen(base, **cambios):
 def test_describe_formato_evento_y_servicio_dominantes():
     p = describir_lote_en_prosa(AUTH)
     assert p.startswith("Lote de tipo auth_log.")
-    assert "acceso_fallido" in p
+    assert "evento_critico" in p
     assert "sshd" in p
 
 

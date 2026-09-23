@@ -99,7 +99,7 @@ def test_se_registra_el_motor_de_preprocesamiento(cliente, monkeypatch):
     campo el historial no permitiría distinguirlas."""
     _mock_stream(monkeypatch, EVENTOS_OK)
     job_id = _correr(cliente)
-    assert historial.obtener_corrida(job_id)["motor_preprocesamiento"] in ("v1", "v2")
+    assert historial.obtener_corrida(job_id)["motor_preprocesamiento"] == "heterogeneo"
 
 
 # --- registro de una corrida que falla ------------------------------------

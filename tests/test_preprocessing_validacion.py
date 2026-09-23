@@ -136,22 +136,14 @@ def test_el_streaming_emite_inicio_nodos_y_final(grafo_simulado):
     assert tipos.count("nodo") == 7
 
 
-def test_el_evento_inicial_informa_el_preprocesamiento(monkeypatch, grafo_simulado):
+def test_el_evento_inicial_informa_el_preprocesamiento(grafo_simulado):
     """Criterio de la Fase 12: la interfaz debe poder distinguir un parsing
     completo de uno parcial."""
-    import src.config as cfg
-    monkeypatch.setattr(cfg, "LOG_PREPROCESSING_ENGINE", "v2")
     eventos = list(pipeline_mod.analizar_lote_stream(AUTH, thread_id="t2"))
     inicio = eventos[0]
     assert "preprocesamiento" in inicio
     assert inicio["preprocesamiento"]["parsing"]["coverage"] == 1.0
     assert inicio["preprocesamiento"]["decoder_distribution"] == {"syslog": 1}
-
-
-def test_con_el_motor_v1_el_evento_inicial_no_inventa_metadatos(grafo_simulado):
-    eventos = list(pipeline_mod.analizar_lote_stream(AUTH, thread_id="t3"))
-    assert eventos[0]["preprocesamiento"] == {}
-    assert eventos[0]["advertencias"] == []
 
 
 def test_el_reporte_final_del_streaming_es_serializable(grafo_simulado):
@@ -165,7 +157,7 @@ def test_analizar_lote_devuelve_el_estado_final(grafo_simulado):
     estado = pipeline_mod.analizar_lote(AUTH, thread_id="t5")
     assert estado["diagnostico"] == "fuerza bruta SSH"
     assert estado["requiere_revision_humana"] is False
-    assert estado["_firma"].startswith("v1|")
+    assert estado["_firma"].startswith("v2|")
 
 
 # --- pérdida de información ----------------------------------------------

@@ -1,19 +1,18 @@
 """Enriquecedor de Hadoop HDFS (Fase 6 del plan).
 
-Recupera lo que el adaptador `_HdfsAdapter` del esquema v1 extraía —
-timestamp, clase Java, nivel y block id — pero ahora como una capa
-**opcional** sobre un evento ya decodificado, no como el parser que define
-el lote.
+Extrae del log de HDFS: timestamp, clase Java, nivel y block id — como una
+capa **opcional** sobre un evento ya decodificado, no como el parser que
+define el lote.
 
-Dos diferencias con v1 que importan:
+Dos decisiones que importan:
 
-- El `blk_...` deja de ocupar el campo `usuario`. Un block id no es una
-  persona; va a `attributes["block_id"]`, que además es la clave con la que
-  el ground truth oficial de HDFS etiqueta (por bloque, no por línea).
+- El `blk_...` no ocupa el campo `usuario`. Un block id no es una persona;
+  va a `attributes["block_id"]`, que además es la clave con la que el
+  ground truth oficial de HDFS etiqueta (por bloque, no por línea).
 - El nivel `WARN`/`ERROR`/`FATAL` se guarda como `severity`, que es lo que
-  el log declara, y ya no se convierte en `evento_critico`. Esa traducción
-  de "nivel alto" a "evento crítico" era una decisión de detección tomada
-  en el preprocesamiento, y es justamente lo que el plan saca de acá.
+  el log declara, y no se convierte en `evento_critico`. Esa traducción de
+  "nivel alto" a "evento crítico" sería una decisión de detección tomada en
+  el preprocesamiento, y es justamente lo que este enriquecedor evita.
 """
 
 import re

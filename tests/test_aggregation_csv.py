@@ -1,25 +1,20 @@
-"""Tests del adaptador CSV/TSV genérico de aggregate_logs().
+"""Tests del decodificador CSV/TSV y el enriquecedor de Zeek sobre
+aggregate_logs() (motor de preprocesamiento heterogéneo).
 
-A diferencia de los adaptadores de HDFS y BGL —atados al formato de un
-dataset concreto—, este se guía por los NOMBRES DE COLUMNA de la cabecera,
-así que un mismo código cubre exportaciones de Zeek, Suricata, firewalls y
-SIEMs. Los tests reflejan eso: además de la muestra real de
-UWF-ZeekDataFall22 (Tabla 8.11 del Informe), se cubren variantes de
-delimitador, esquemas de columnas distintos y el fallback cuando el CSV no
-trae columnas de IP reconocibles.
+El decodificador CSV se guía por los NOMBRES DE COLUMNA de la cabecera, así
+que un mismo código cubre exportaciones de Zeek, Suricata, firewalls y
+SIEMs; el enriquecedor de Zeek se aplica encima cuando reconoce columnas de
+flujo (conn_state, uid, community_id...). Los tests reflejan eso: además de
+la muestra real de UWF-ZeekDataFall22 (Tabla 8.11 del Informe), se cubren
+variantes de delimitador, esquemas de columnas distintos, el respaldo
+cuando el CSV no trae columnas de IP reconocibles, y que las columnas de
+etiqueta del dataset (ground truth) nunca lleguen al evento agregado.
 
 La primera muestra es una fila real del dataset (archivo
 `part-00000-...csv`, export Parquet→CSV vía Spark).
 """
 
-# Estos tests describen el comportamiento del AGREGADOR v1, así que
-# invocan `aggregate_logs_v1` directamente en vez de pasar por la
-# fachada `aggregate_logs`, que despacha según
-# LOG_PREPROCESSING_ENGINE. De ese modo siguen verificando lo que
-# deben verificar aunque el entorno tenga el motor v2 activo -- la
-# fidelidad con el prototipo del Seminario se conserva en v1, no en
-# el esquema nuevo (ver docs/plan_accion_preprocesamiento_heterogeneo.md).
-from src.tools.aggregation import aggregate_logs_v1 as aggregate_logs
+from src.tools.aggregation import aggregate_logs
 
 _UWF_CABECERA = (
     "community_id,conn_state,duration,history,src_ip_zeek,src_port_zeek,dest_ip_zeek,"
@@ -58,8 +53,8 @@ TSV_MUESTRA = (
     "2024-01-02T10:00:05Z\t198.51.100.8\t10.0.0.5\t445\tsmb\n"
 )
 
-# CSV sin ninguna columna de IP reconocible: debe caer al adaptador auth-log
-# en vez de reclamar el formato y producir un resumen vacío.
+# CSV sin ninguna columna de IP reconocible: debe caer al respaldo de texto
+# libre en vez de reclamar el formato y producir un resumen vacío.
 CSV_SIN_IPS = (
     "fecha,modulo,mensaje\n"
     "2024-01-02,facturacion,se genero el comprobante 1234\n"
@@ -73,7 +68,10 @@ AUTH_LOG_MUESTRA = (
 
 def test_detecta_csv_y_no_cuenta_la_cabecera_como_evento():
     resumen = aggregate_logs(UWF_MUESTRA)
-    assert resumen["formato_detectado"] == "csv"
+    # "zeek", no "csv": el enriquecedor de Zeek reconoce las columnas de
+    # flujo (conn_state, uid, community_id...) y formato_detectado nombra el
+    # PRODUCTO, no la estructura -- igual que "hdfs"/"bgl" para esos logs.
+    assert resumen["formato_detectado"] == "zeek"
     # 3 líneas en el archivo, pero solo 2 son registros: la cabecera no lo es.
     assert resumen["total_lineas"] == 2
 
@@ -90,18 +88,31 @@ def test_captura_las_dos_puntas_del_flujo_con_su_rol():
 
     destino = resumen["por_ip"]["143.88.20.1"]
     assert destino["n_como_destino"] == 2 and destino["n_como_origen"] == 0
-    # los intentos fallidos se acreditan al que inicia, no al que recibe
+    # Ambas filas de la muestra tienen conn_state="SF" (conexión establecida
+    # con éxito) -- "intentos_fallidos" se lee de esa señal real, nunca de
+    # label_tactic, así que las dos quedan en 0 pese a que una fila está
+    # etiquetada "Credential Access" en el ground truth (ver el test de
+    # no-fuga más abajo).
     assert destino["intentos_fallidos"] == 0
-    assert origen["intentos_fallidos"] == 1
+    assert origen["intentos_fallidos"] == 0
 
 
-def test_usa_label_tactic_como_ground_truth_y_lo_expone():
-    """UWF-ZeekDataFall22 trae la táctica MITRE ATT&CK etiquetada por fila.
-    'Credential Access' es alerta; 'none' es tráfico benigno."""
+def test_label_tactic_no_se_filtra_al_evento_ni_a_intentos_fallidos():
+    """UWF-ZeekDataFall22 trae la táctica MITRE ATT&CK etiquetada por fila
+    (label_tactic), pero esa columna es ground truth -- el motor de
+    adaptadores que existió durante el desarrollo la leía para calcular
+    'evento_critico', el mismo tipo de fuga que tenía BGL (ver
+    src/preprocessing/enrichers/bgl.py). El enriquecedor de Zeek actual la
+    envía al canal de ground truth separado y nunca la deja en el evento:
+    con las dos filas de la muestra en conn_state="SF" (éxito), ninguna debe
+    contar como evento_critico pese a que una está etiquetada 'Credential
+    Access'. La extracción de la etiqueta hacia el canal separado ya se
+    prueba en tests/test_preprocessing_ground_truth.py -- acá se verifica
+    específicamente que NO llega al resumen agregado."""
     resumen = aggregate_logs(UWF_MUESTRA)
-    assert resumen["eventos"]["evento_critico"] == 1
-    assert resumen["eventos"]["evento_normal"] == 1
-    assert resumen["etiquetas"] == {"Credential Access": 1, "none": 1}
+    assert resumen["eventos"].get("evento_critico", 0) == 0
+    assert resumen["eventos"]["evento_normal"] == 2
+    assert "etiquetas" not in resumen
 
 
 def test_prefiere_el_timestamp_legible_al_epoch_en_notacion_cientifica():
@@ -113,9 +124,11 @@ def test_prefiere_el_timestamp_legible_al_epoch_en_notacion_cientifica():
 
 
 def test_sin_columna_de_etiqueta_la_anomalia_sale_de_conn_state():
-    """REJ y S0 son conexiones rechazadas o nunca establecidas; SF es normal."""
+    """REJ y S0 son conexiones rechazadas o nunca establecidas; SF es normal.
+    Esta es una señal legítima que el propio log declara (no una etiqueta
+    del dataset), así que sí debe llegar al evento."""
     resumen = aggregate_logs(ZEEK_CONN_MUESTRA)
-    assert resumen["formato_detectado"] == "csv"
+    assert resumen["formato_detectado"] == "zeek"
     assert resumen["eventos"]["evento_critico"] == 2
     assert resumen["eventos"]["evento_normal"] == 1
     assert "etiquetas" not in resumen  # este esquema no trae ground truth
@@ -124,11 +137,14 @@ def test_sin_columna_de_etiqueta_la_anomalia_sale_de_conn_state():
 
 
 def test_soporta_punto_y_coma_y_columna_label_generica():
+    """La columna "label" ("attack"/"benign") es ground truth genérico -- no
+    hay conn_state ni otra señal de resultado en esta muestra, así que
+    ningún registro debe contar como evento_critico sobre esa sola base."""
     resumen = aggregate_logs(CSV_PUNTO_Y_COMA)
     assert resumen["formato_detectado"] == "csv"
-    assert resumen["eventos"]["evento_critico"] == 1
-    assert resumen["eventos"]["evento_normal"] == 1
-    assert resumen["servicios"]["rdp:3389"] == 2
+    assert resumen["eventos"].get("evento_critico", 0) == 0
+    assert resumen["eventos"]["evento_normal"] == 2
+    assert resumen["servicios"]["rdp"] == 2
 
 
 def test_soporta_tabulador():
@@ -138,11 +154,11 @@ def test_soporta_tabulador():
     assert resumen["por_ip"]["10.0.0.5"]["n_como_destino"] == 2
 
 
-def test_csv_sin_columnas_de_ip_cae_a_auth_log():
-    """Mejor el fallback —que al menos saca IPs por regex del texto libre—
-    que reclamar el formato y devolver un resumen sin IPs."""
+def test_csv_sin_columnas_de_ip_cae_a_texto_libre():
+    """Mejor el respaldo de texto libre —que al menos saca IPs por regex—
+    que reclamar el formato CSV y devolver un resumen sin IPs."""
     resumen = aggregate_logs(CSV_SIN_IPS)
-    assert resumen["formato_detectado"] == "auth_log"
+    assert resumen["formato_detectado"] == "text"
 
 
 def test_formatos_de_una_sola_ip_no_cambian_de_comportamiento():

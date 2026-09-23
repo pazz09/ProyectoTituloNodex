@@ -86,14 +86,12 @@ def clasificar_texto(raw_logs: str) -> dict:
     resumen = aggregate_logs(raw_logs)
     metadatos = {}
     try:
-        from src.config import LOG_PREPROCESSING_ENGINE
-        if LOG_PREPROCESSING_ENGINE == "v2":
-            from src.preprocessing.aggregation import agregar_v2
-            from src.preprocessing.pipeline import preprocesar
-            metadatos = agregar_v2(preprocesar(raw_logs))
+        from src.preprocessing.aggregation import agregar_v2
+        from src.preprocessing.pipeline import preprocesar
+        metadatos = agregar_v2(preprocesar(raw_logs))
     except Exception:
-        # El baseline no debe caerse por un problema del motor nuevo: si no
-        # hay metadatos, clasifica con el resumen v1 solo.
+        # El baseline no debe caerse por un problema del preprocesamiento:
+        # si no hay metadatos, clasifica con el resumen estructurado solo.
         metadatos = {}
     return clasificar(resumen, metadatos)
 

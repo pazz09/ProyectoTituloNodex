@@ -1,12 +1,11 @@
 """Enriquecedor de autenticación: sshd, sudo, PAM (Fase 6 del plan).
 
 No estaba en la lista original del plan, que nombra HDFS, BGL y Zeek. Se
-agrega porque sin él la migración **regresiona sobre el caso de uso
-principal del sistema**: en el esquema v1, `parse_log()` reconocía
-"Failed password" y contaba el evento como `acceso_fallido`; el decoder de
-syslog no hace eso, porque clasificar el resultado de una operación a
-partir del texto del mensaje es conocimiento del producto, no de la
-estructura del formato.
+agrega porque sin él el preprocesamiento **no cubre el caso de uso
+principal del sistema**: hace falta reconocer "Failed password" y contar
+el evento como `acceso_fallido`; el decoder de syslog no hace eso, porque
+clasificar el resultado de una operación a partir del texto del mensaje es
+conocimiento del producto, no de la estructura del formato.
 
 Sin este perfil, un lote de auth-log —el escenario de fuerza bruta SSH que
 usa el informe— reportaría cero eventos críticos.
@@ -37,11 +36,10 @@ _EXITO_RE = re.compile(
     re.IGNORECASE,
 )
 
-# Usuario objetivo. A diferencia de `parse_log()` de v1 —que capturaba la
-# alternativa que apareciera primero en el texto y por eso devolvía
-# "invalid" en vez de "admin" (particularidad documentada en el README)—
-# acá se prueban los patrones del más específico al más general, así que
-# "for invalid user admin" devuelve "admin".
+# Usuario objetivo. Se prueban los patrones del más específico al más
+# general, así que "for invalid user admin" devuelve "admin" (no "invalid",
+# que sería el resultado de capturar la primera alternativa que aparece en
+# el texto en vez de la más específica).
 _USUARIO_RES = (
     re.compile(r"invalid user\s+([A-Za-z0-9._\-]+)", re.IGNORECASE),
     re.compile(r"user\s+([A-Za-z0-9._\-]+)", re.IGNORECASE),

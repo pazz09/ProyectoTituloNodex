@@ -45,23 +45,26 @@ Dos datasets, dos fuentes de ground truth distintas:
   truth del lote es "anomalo" si alguna línea de la ventana trae el flag
   de alerta.
 
-  **Advertencia metodológica, no un bug**: `_BglAdapter` (`src/tools/aggregation.py`)
-  lee ese mismo flag de alerta para calcular `evento_critico` ANTES de que
-  el LLM vea nada -- la agregación determinística ya le entrega al modelo
-  una señal derivada directamente del ground truth. Esta evaluación sobre
-  BGL mide, en rigor, "¿el LLM transmite correctamente una señal que el
-  parser ya calculó?", no "¿el sistema detecta anomalías de forma
-  independiente?". Vale la pena citarlo así en el informe -- no invalida
-  el resultado (el LLM igual podría ignorar o contradecir esa señal, y no
-  lo hace, lo cual es información real), pero es una limitación real de lo
-  que esta evaluación específica puede afirmar.
+  **Ya no es una fuga de ground truth (corregido en el preprocesamiento
+  heterogéneo, Fase 7 del plan).** El motor de adaptadores que existió
+  durante el desarrollo leía ese mismo flag de alerta para calcular
+  `evento_critico` ANTES de que el LLM viera nada -- la agregación
+  determinística le entregaba al modelo una señal derivada directamente
+  del ground truth, lo que producía un F1 = 1.00 artificial. El
+  enriquecedor de BGL actual (`src/preprocessing/enrichers/bgl.py`) extrae
+  ese flag hacia un canal de ground truth separado (`extraer_ground_truth()`)
+  y nunca lo deja en el evento que el detector observa -- la evaluación
+  sobre BGL mide detección real, no si el LLM repite una señal que el
+  parser ya calculó.
 
 - **HDFS**: el ground truth es por BLOQUE (`block_id` -> Normal/Anomaly),
-  no está en el archivo de logs en sí, y el parser (`_HdfsAdapter`) NO lo
-  deriva de ahí (usa WARN/ERROR/FATAL como heurística de evento crítico,
-  algo distinto e independiente del label real) -- por eso la evaluación
-  sobre HDFS sí es independiente de lo que la agregación determinística ya
-  sabe, a diferencia de BGL. Requiere `anomaly_label.csv`, el dataset
+  no está en el archivo de logs en sí, y el enriquecedor de HDFS
+  (`src/preprocessing/enrichers/hdfs.py`) no deriva ninguna criticidad de
+  ahí: guarda el nivel (`WARN`/`ERROR`/`FATAL`) como `severity`, tal cual
+  lo declara el log, y esa traducción a "evento crítico" ya no ocurre en
+  el preprocesamiento -- queda enteramente para el razonamiento del LLM.
+  Por eso la evaluación sobre HDFS es independiente de lo que la
+  agregación determinística ya sabe. Requiere `anomaly_label.csv`, el dataset
   canónico de ground truth para HDFS usado en la literatura (el mismo que
   citan varios papers del SLR de la Tabla 7.1, p. ej. el trabajo original
   de Loglizer/He et al.) -- ver `src/tools/preparar_labels_hdfs.py` para
@@ -359,10 +362,10 @@ def correr_evaluacion(
         })
 
     metricas = _metricas(resultados)
-    # El motor de preprocesamiento cambia lo que el detector observa: con
-    # v1, el flag de alerta de BGL alimentaba `evento_critico` y las
-    # métricas salían infladas por esa fuga. Sin registrar cuál se usó, dos
-    # archivos de `results/` parecen comparables y no lo son.
+    # Se registra la configuración efectiva del preprocesamiento (no solo el
+    # nombre del motor, que ahora es único) para que dos archivos de
+    # `results/` con umbrales de detección distintos no parezcan comparables
+    # sin serlo.
     from src.config import LOG_PREPROCESSING_ENGINE, config_preprocesamiento_efectiva
 
     salida = {
@@ -373,10 +376,7 @@ def correr_evaluacion(
         "campo_veredicto": campo_veredicto,
         "prop_positivos": prop_positivos if dataset == "hdfs" else None,
         "motor_preprocesamiento": LOG_PREPROCESSING_ENGINE,
-        "config_preprocesamiento": (
-            config_preprocesamiento_efectiva()
-            if LOG_PREPROCESSING_ENGINE == "v2" else None
-        ),
+        "config_preprocesamiento": config_preprocesamiento_efectiva(),
         "metricas": metricas,
         "resultados": resultados,
     }

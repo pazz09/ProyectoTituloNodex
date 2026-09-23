@@ -1,14 +1,14 @@
 """Enriquecedor de BlueGene/L (Fase 6 del plan).
 
-Extrae lo que el adaptador `_BglAdapter` del esquema v1 conocía: nodo del
-clúster, subsistema RAS y severidad declarada.
+Extrae del log de BGL: nodo del clúster, subsistema RAS y severidad
+declarada.
 
-**El cambio más importante de toda la migración está acá.** En v1, el
-primer campo de la línea —el flag de alerta que los curadores del dataset
-agregaron: `-` para no-alerta, un código como `KERNDTLB` para alerta— se
-traducía directamente en `evento_critico`, o sea en la feature que el
-detector observa. Eso es fuga de ground truth: el sistema "detectaba"
-anomalías leyendo la respuesta que el dataset traía escrita.
+**El punto más importante de este enriquecedor.** El primer campo de la
+línea —el flag de alerta que los curadores del dataset agregaron: `-` para
+no-alerta, un código como `KERNDTLB` para alerta— NO se traduce en
+`evento_critico`, la feature que el detector observa. Traducirlo así sería
+fuga de ground truth: el sistema "detectaría" anomalías leyendo la
+respuesta que el dataset trae escrita, en vez de razonar sobre el log.
 
 Y no era una sutileza teórica. Explicaba el F1 = 1.00 medido sobre BGL,
 que parecía una detección perfecta y en realidad medía si el LLM repetía

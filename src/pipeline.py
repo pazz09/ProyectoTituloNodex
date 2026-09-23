@@ -33,20 +33,16 @@ def get_ip_cache():
 
 
 def _metadatos_preprocesamiento(raw_logs: str) -> tuple[dict, list, list]:
-    """Metadatos del preprocesamiento v2 para el estado del grafo.
+    """Metadatos del preprocesamiento heterogéneo para el estado del grafo:
+    esquema, cobertura, decoders y productos empleados.
 
-    Devuelve (metadatos, advertencias, muestras). Con el motor v1 activo
-    devuelve estructuras vacías: la información no existe en ese esquema y
-    fabricarla sería peor que no tenerla.
+    Devuelve (metadatos, advertencias, muestras).
 
     **No se devuelven los eventos normalizados.** El estado de LangGraph se
     serializa en cada checkpoint, así que guardarlos haría crecer el estado
     en proporción al archivo (§14 del plan). Solo agregados y muestras.
     """
-    from src.config import LOG_MAX_RAW_SAMPLES, LOG_PREPROCESSING_ENGINE
-
-    if LOG_PREPROCESSING_ENGINE != "v2":
-        return {}, [], []
+    from src.config import LOG_MAX_RAW_SAMPLES
 
     from src.preprocessing.aggregation import agregar_v2
     from src.preprocessing.pipeline import preprocesar

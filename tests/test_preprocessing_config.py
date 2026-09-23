@@ -68,12 +68,6 @@ def test_modo_de_parsing_invalido_lista_los_admitidos(monkeypatch):
     assert "hybrid" in str(exc.value)  # enumera las opciones válidas
 
 
-def test_motor_invalido_se_rechaza(monkeypatch):
-    monkeypatch.setattr(cfg, "LOG_PREPROCESSING_ENGINE", "v3")
-    with pytest.raises(ValueError, match="LOG_PREPROCESSING_ENGINE inválido"):
-        cfg.validar_config_preprocesamiento()
-
-
 def test_umbral_fuera_de_rango_se_rechaza(monkeypatch):
     monkeypatch.setattr(cfg, "LOG_FORMAT_CONFIDENCE_THRESHOLD", 1.4)
     with pytest.raises(ValueError, match="entre 0.0 y 1.0"):
@@ -165,19 +159,6 @@ def test_config_efectiva_incluye_todas_las_variables_log(monkeypatch):
 
 
 # --- criterio 3: el parser v1 no cambia -----------------------------------
-
-def test_el_motor_por_defecto_sigue_siendo_v1(monkeypatch):
-    """Bandera de migración del §12: el DEFAULT no debe pasar a v2 hasta
-    completar la Fase 13.
-
-    Se comprueba el valor por defecto —el que toma un clon sin configurar—
-    y no la constante ya resuelta: con LOG_PREPROCESSING_ENGINE=v2 en el
-    entorno, esta última vale "v2" legítimamente, y el test fallaría por
-    estar mirando otra cosa."""
-    monkeypatch.delenv("LOG_PREPROCESSING_ENGINE", raising=False)
-    recargado = importlib.reload(cfg)
-    assert recargado.LOG_PREPROCESSING_ENGINE == "v1"
-
 
 def test_la_config_nueva_no_altera_el_comportamiento_del_parser_v1():
     """Regresión explícita: agregar variables LOG_* no debe mover ni un

@@ -250,12 +250,16 @@ def _env_bool(nombre: str, default: bool) -> bool:
 #   hybrid  -- bloques, reprocesando individualmente los registros rechazados
 MODOS_PARSING = ("batch", "chunked", "line", "hybrid")
 
-# Motor de preprocesamiento activo. Bandera de migración (§12 del plan): NO
-# debe pasar a "v2" hasta que la Fase 8 derive los campos v1 desde la
-# agregación nueva, ni eliminarse "v1" antes de completar la Fase 13.
-MOTORES_PREPROCESAMIENTO = ("v1", "v2")
+# Motor de preprocesamiento. Único (23-sep-2026): el sistema tuvo, durante
+# el desarrollo, un motor de adaptadores por formato más simple ("v1" en la
+# bitácora del proyecto) que se retiró por ineficiente frente a lotes que
+# mezclan formatos -- ver "Preprocesamiento heterogéneo" en el README. No es
+# una variable de entorno: no hay entre qué elegir. Se mantiene como
+# constante (no como valor hardcodeado disperso) porque `motor_preprocesamiento`
+# se persiste como campo de procedencia en el historial, los resultados de
+# evaluación y el informe en PDF.
+LOG_PREPROCESSING_ENGINE = "heterogeneo"
 
-LOG_PREPROCESSING_ENGINE = os.environ.get("LOG_PREPROCESSING_ENGINE", "v1")
 LOG_PARSING_MODE = os.environ.get("LOG_PARSING_MODE", "hybrid")
 LOG_DETECTION_CHUNK_SIZE = _env_int("LOG_DETECTION_CHUNK_SIZE", 50)
 # Confianza mínima para aceptar un decoder como dominante de un bloque.
@@ -291,11 +295,6 @@ def validar_config_preprocesamiento() -> None:
     """
     problemas: list[str] = []
 
-    if LOG_PREPROCESSING_ENGINE not in MOTORES_PREPROCESAMIENTO:
-        problemas.append(
-            f"LOG_PREPROCESSING_ENGINE inválido: {LOG_PREPROCESSING_ENGINE!r}. "
-            f"Valores admitidos: {', '.join(MOTORES_PREPROCESAMIENTO)}"
-        )
     if LOG_PARSING_MODE not in MODOS_PARSING:
         problemas.append(
             f"LOG_PARSING_MODE inválido: {LOG_PARSING_MODE!r}. "
