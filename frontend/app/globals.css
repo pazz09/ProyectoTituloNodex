@@ -344,6 +344,33 @@ code, .mono { font-family: var(--font-mono); font-size: .92em; }
 /* --- Conversación --------------------------------------------------------- */
 .chat { display: flex; flex-direction: column; min-height: 100%; flex: 1; }
 .chat-cabecera { padding: 34px 38px 0; max-width: 1020px; width: 100%; }
+
+/* Rastreador de avance del grafo + hallazgos en vivo: pegado arriba del
+   hilo (dentro de .workspace, que es el que hace scroll), para que en
+   cualquier punto de un análisis largo se vea de un vistazo en qué nodo
+   está y qué encontró, sin tener que scrollear el hilo de mensajes. */
+.rastreador {
+  position: sticky; top: 0; z-index: 5;
+  display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+  padding: 12px 38px; max-width: 1020px; width: 100%;
+  background: var(--bg); border-bottom: 1px solid var(--border);
+}
+.rastreador-nodos { display: flex; align-items: center; gap: 6px; }
+.rastreador-nodo {
+  display: grid; place-items: center; width: 26px; height: 26px;
+  border-radius: 999px; color: var(--text-faint); background: var(--block);
+  border: 1px solid var(--border); transition: color .15s, background .15s, border-color .15s;
+}
+.rastreador-nodo.hecho { color: var(--accent); background: var(--accent-soft); border-color: var(--accent-line); }
+.rastreador-nodo.activo {
+  color: #fff; background: var(--accent); border-color: var(--accent);
+  animation: rastreador-pulso 1.4s ease-in-out infinite;
+}
+@keyframes rastreador-pulso {
+  0%, 100% { box-shadow: 0 0 0 0 var(--accent-soft); }
+  50% { box-shadow: 0 0 0 5px var(--accent-soft); }
+}
+.rastreador-hallazgos { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 /* Los mensajes se apoyan en el compositor y crecen hacia arriba, como en
    cualquier conversación: con el hilo anclado arriba, la pantalla vacía
    dejaba un hueco de media página entre el saludo y el campo de entrada. */

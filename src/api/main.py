@@ -33,18 +33,29 @@ from src.pipeline import analizar_lote_stream, commit_feedback
 
 app = FastAPI(title="NODEX — Panel de análisis")
 
-# CORS para el frontend de desarrollo (Next.js en :3000), que corre en otro
-# origen que esta API. Se listan orígenes explícitos en vez de "*": con
+# CORS para el frontend de desarrollo (Next.js), que corre en otro origen
+# que esta API. Se listan orígenes explícitos en vez de "*": con
 # `allow_credentials` el navegador rechaza el comodín, y de paso deja claro
 # que esto es para desarrollo local. La interfaz servida desde `/` es del
 # mismo origen y no pasa por acá.
+#
+# :3010 es el puerto fijo del frontend (ver frontend/package.json, "dev"):
+# antes usaba el default de Next.js (:3000), pero eso lo hacía saltar a un
+# puerto distinto en cualquier máquina donde :3000/:3001 ya estuvieran
+# ocupados por otro proyecto -- el navegador bloquea el pedido por CORS
+# aunque el backend responda bien, y el síntoma en la interfaz ("no se pudo
+# leer el historial") no deja ver que la causa es esta. Se mantiene :3000
+# como respaldo por si alguna vez corre ahí.
 #
 # `expose_headers` incluye Content-Disposition porque el frontend necesita
 # leerlo para nombrar el PDF que descarga: por defecto el navegador no
 # expone esa cabecera a JavaScript en una respuesta de otro origen.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=[
+        "http://localhost:3010", "http://127.0.0.1:3010",
+        "http://localhost:3000", "http://127.0.0.1:3000",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

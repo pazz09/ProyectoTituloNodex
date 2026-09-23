@@ -13,6 +13,7 @@ import {
   Loader2,
   RotateCcw,
   ScanSearch,
+  ShieldAlert,
   ShieldCheck,
   Sparkles,
   Terminal,
@@ -223,24 +224,124 @@ function CuerpoNodo({ nodo, detalle, visita }: { nodo: NombreNodo; detalle: Reco
 
   // agente_auditor_final
   const confianza = Number(detalle.confianza ?? 0)
+  const hayIncidente = Boolean(detalle.hay_incidente)
+  const hayAnomalia = Boolean(detalle.hay_anomalia)
+  const nivel = hayIncidente ? 'crit' : hayAnomalia ? 'warn' : 'ok'
+  const titulo = hayIncidente
+    ? 'Incidente de seguridad'
+    : hayAnomalia
+      ? 'Anomalía operativa (sin evidencia de seguridad)'
+      : 'Sin anomalías'
+  const IconoVeredicto = hayIncidente ? ShieldAlert : hayAnomalia ? AlertTriangle : ShieldCheck
   return (
     <>
-      <p>{String(detalle.evaluacion_auditor ?? 'Sin evaluación registrada.')}</p>
-      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
-        <div className="meter">
-          <div className="bar-track">
-            <div style={{ width: `${Math.round(confianza * 100)}%` }} />
-          </div>
-          <b>{confianza.toFixed(2)}</b>
+      <div className={`verdict ${nivel}`} style={{ margin: '0 -20px 0', borderRadius: 0, borderTop: 0, borderRight: 0, borderBottom: 0 }}>
+        <div className="verdict-main">
+          <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <IconoVeredicto size={16} />
+            <strong>{titulo}</strong>
+          </span>
+          <p>{detalle.requiere_revision_humana ? 'Confianza bajo el umbral: requiere revisión humana.' : 'Confianza sobre el umbral de escalamiento.'}</p>
         </div>
-        <span className={detalle.hay_anomalia ? 'chip warn' : 'chip'}>
-          anomalía {detalle.hay_anomalia ? 'sí' : 'no'}
-        </span>
-        <span className={detalle.hay_incidente ? 'chip crit' : 'chip'}>
-          incidente {detalle.hay_incidente ? 'sí' : 'no'}
-        </span>
+        <div className="verdict-meta">
+          <div>
+            <span className="faint" style={{ fontSize: 11.5 }}>Confianza</span>
+            <div className="meter">
+              <div className="bar-track">
+                <div style={{ width: `${Math.round(confianza * 100)}%` }} />
+              </div>
+              <b>{confianza.toFixed(2)}</b>
+            </div>
+          </div>
+          <div className="verdict-chips">
+            <span className={hayAnomalia ? 'chip warn' : 'chip'}>anomalía {hayAnomalia ? 'sí' : 'no'}</span>
+            <span className={hayIncidente ? 'chip crit' : 'chip'}>incidente {hayIncidente ? 'sí' : 'no'}</span>
+          </div>
+        </div>
       </div>
+      <p>{String(detalle.evaluacion_auditor ?? 'Sin evaluación registrada.')}</p>
     </>
+  )
+}
+
+/**
+ * Rastreador de avance + hallazgos en vivo.
+ *
+ * Complementa el hilo (que hay que leer mensaje a mensaje) con una franja
+ * fija arriba: en qué nodo del grafo está ahora mismo, cuáles ya pasaron, y
+ * un conteo de lo que el análisis ya encontró (técnicas MITRE, CVEs, IPs
+ * con mala reputación, comandos propuestos) -- para que de un vistazo, sin
+ * leer nada, se note que el multiagente está avanzando y encontrando
+ * evidencia real, no solo "pensando".
+ */
+function RastreadorGrafo({ mensajes, corriendo }: { mensajes: EstadoAnalisis['mensajes']; corriendo: boolean }) {
+  const nodosVistos = new Set<NombreNodo>()
+  let nodoActual: NombreNodo | null = null
+  let replans = 0
+  let nTecnicas = 0
+  let nCves = 0
+  let nComandos = 0
+  let nIpsMalas = 0
+
+  for (const m of mensajes) {
+    if (m.rol === 'inicio') {
+      const reputacion = (m.resumen.reputacion_ips ?? {}) as Record<string, { categoria?: string }>
+      nIpsMalas = Object.values(reputacion).filter(
+        (d) => d?.categoria === 'malicioso' || d?.categoria === 'sospechoso',
+      ).length
+    }
+    if (m.rol !== 'nodo') continue
+    if (m.nodo === 'agente_planificador' && nodosVistos.has('agente_planificador')) replans += 1
+    nodosVistos.add(m.nodo)
+    nodoActual = m.nodo
+    if (m.nodo === 'tool_consultar_rag') {
+      nTecnicas = (m.detalle.tecnicas_mitre as unknown[] | undefined)?.length ?? nTecnicas
+    }
+    if (m.nodo === 'tool_consultar_cve') {
+      nCves = (m.detalle.cves_encontrados as unknown[] | undefined)?.length ?? nCves
+    }
+    if (m.nodo === 'agente_ingeniero_mitigacion') {
+      nComandos = (m.detalle.comandos_mitigacion as unknown[] | undefined)?.length ?? nComandos
+    }
+  }
+
+  if (nodosVistos.size === 0) return null
+
+  const hallazgos: { texto: string; clase: string }[] = []
+  if (nIpsMalas > 0) hallazgos.push({ texto: `${nIpsMalas} IP con reputación mala`, clase: 'crit' })
+  if (nTecnicas > 0) hallazgos.push({ texto: `${nTecnicas} técnica(s) MITRE`, clase: 'warn' })
+  if (nCves > 0) hallazgos.push({ texto: `${nCves} CVE(s)`, clase: 'warn' })
+  if (nComandos > 0) hallazgos.push({ texto: `${nComandos} comando(s) propuestos`, clase: 'info' })
+  if (replans > 0) hallazgos.push({ texto: `replanificado ${replans}×`, clase: 'info' })
+
+  return (
+    <div className="rastreador">
+      <div className="rastreador-nodos">
+        {NODOS.map((n) => {
+          const Icono = ICONOS[n.nombre] ?? Sparkles
+          const activo = n.nombre === nodoActual && corriendo
+          const hecho = nodosVistos.has(n.nombre)
+          return (
+            <span
+              key={n.nombre}
+              className={`rastreador-nodo ${activo ? 'activo' : ''} ${hecho ? 'hecho' : ''}`}
+              title={n.titulo}
+            >
+              <Icono size={14} />
+            </span>
+          )
+        })}
+      </div>
+      {hallazgos.length > 0 && (
+        <div className="rastreador-hallazgos">
+          {hallazgos.map((h) => (
+            <span className={`chip ${h.clase}`} key={h.texto}>
+              {h.texto}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -307,11 +408,12 @@ export function ConversacionView({
             <h1>Multiagente NODEX</h1>
             <p>
               {mensajes.length === 0
-                ? 'Adjunta un lote de registros y el grafo de 7 agentes lo va a analizar paso a paso.'
-                : 'Cada mensaje es lo que ese agente devolvió al estado del grafo.'}
+                ? 'Adjunta un lote de registros: primero se arma un plan de investigación y después el grafo de agentes lo ejecuta paso a paso.'
+                : 'Cada mensaje es lo que ese nodo devolvió al estado del grafo.'}
             </p>
           </div>
         </div>
+        <RastreadorGrafo mensajes={mensajes} corriendo={corriendo} />
         <div className="chat-hilo">
           {mensajes.length === 0 && (
             <div className="msg msg-agente">
