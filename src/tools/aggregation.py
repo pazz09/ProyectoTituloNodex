@@ -14,18 +14,53 @@ firma de embedding del lote, y la descripción en prosa para la recuperación
 de técnicas MITRE ATT&CK.
 """
 
-def aggregate_logs(raw: str) -> dict:
-    """Preprocesa el lote completo y devuelve el resumen estructurado que
-    consume el resto del sistema (agentes, evaluación, interfaz).
+def _preprocesar_y_agregar(raw: str):
+    """`preprocesar()` + `agregar_v2()`, cada uno UNA sola vez.
 
-    Import diferido a propósito: `src.preprocessing.aggregation` importa
+    Núcleo compartido de `aggregate_logs()` y `preprocesar_lote()`. Import
+    diferido a propósito: `src.preprocessing.aggregation` importa
     `_entidades`/`_top`/`_CRONOLOGIA_MAX_MENSAJE` DESDE este módulo (son
-    ayudantes compartidos, no exclusivos de un formato); importar `derivar_v1`
-    a nivel de módulo acá arriba crearía un ciclo de imports entre ambos.
+    ayudantes compartidos, no exclusivos de un formato); importar a nivel de
+    módulo acá arriba crearía un ciclo de imports entre ambos.
+    """
+    from src.config import LOG_MAX_RAW_SAMPLES
+    from src.preprocessing.aggregation import agregar_v2
+    from src.preprocessing.pipeline import preprocesar
+
+    resultado = preprocesar(raw)
+    v2 = agregar_v2(resultado, max_muestras=LOG_MAX_RAW_SAMPLES)
+    return resultado, v2
+
+
+def aggregate_logs(raw: str) -> dict:
+    """Preprocesa el lote completo y devuelve el resumen estructurado (v1)
+    que consume el resto del sistema (agentes, evaluación, interfaz).
+
+    Para quien necesite además el resumen v2 (metadatos de preprocesamiento
+    para el estado del grafo, p. ej. `pipeline.py`), usar `preprocesar_lote()`
+    en vez de esta función seguida de un segundo cálculo: `preprocesar()` no
+    debe correr dos veces sobre el mismo lote (hallazgo A1 de la auditoría
+    del 23-sep-2026).
     """
     from src.preprocessing.aggregation import derivar_v1
-    from src.preprocessing.pipeline import preprocesar
-    return derivar_v1(preprocesar(raw))
+    resultado, v2 = _preprocesar_y_agregar(raw)
+    return derivar_v1(resultado, v2)
+
+
+def preprocesar_lote(raw: str):
+    """`preprocesar()` UNA sola vez, con las tres vistas que el sistema usa.
+
+    Devuelve `(resultado, v2, resumen_v1)`: el resultado crudo del
+    preprocesamiento (`PreprocessingResult`), el resumen genérico v2
+    (`agregar_v2`) y el resumen compatible v1 (`derivar_v1`), los tres
+    derivados de la MISMA pasada -- no de parseos independientes que podrían
+    divergir. Punto de entrada para `pipeline.py` y `baseline_reglas.py`,
+    que necesitan más de una vista del mismo lote.
+    """
+    from src.preprocessing.aggregation import derivar_v1
+    resultado, v2 = _preprocesar_y_agregar(raw)
+    resumen_v1 = derivar_v1(resultado, v2)
+    return resultado, v2, resumen_v1
 
 
 def _top(conteos: dict, n: int) -> dict:

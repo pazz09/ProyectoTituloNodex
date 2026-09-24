@@ -8,7 +8,7 @@ import time
 
 from src.config import CONFIDENCE_THRESHOLD
 from src.graph.build_graph import build_graph
-from src.tools.aggregation import aggregate_logs, firma_lote
+from src.tools.aggregation import firma_lote, preprocesar_lote
 from src.tools.reputation import ReputationCache, corroborar_ips
 from src.tools.tool_consultar_rag import ltm  # instancia compartida de LongTermMemory
 
@@ -32,24 +32,22 @@ def get_ip_cache():
     return _ip_cache
 
 
-def _metadatos_preprocesamiento(raw_logs: str) -> tuple[dict, list, list]:
+def _metadatos_desde_v2(resultado, v2: dict) -> tuple[dict, list, list]:
     """Metadatos del preprocesamiento heterogéneo para el estado del grafo:
     esquema, cobertura, decoders y productos empleados.
 
     Devuelve (metadatos, advertencias, muestras).
 
+    Recibe `resultado`/`v2` ya calculados por `preprocesar_lote()` (una sola
+    vez por lote, ver `_preparar_estado_inicial`) en vez de recalcularlos a
+    partir del raw -- antes esta función volvía a llamar `preprocesar()`
+    sobre el mismo texto que `aggregate_logs()` ya había procesado
+    (hallazgo A1 de la auditoría del 23-sep-2026).
+
     **No se devuelven los eventos normalizados.** El estado de LangGraph se
     serializa en cada checkpoint, así que guardarlos haría crecer el estado
     en proporción al archivo (§14 del plan). Solo agregados y muestras.
     """
-    from src.config import LOG_MAX_RAW_SAMPLES
-
-    from src.preprocessing.aggregation import agregar_v2
-    from src.preprocessing.pipeline import preprocesar
-
-    resultado = preprocesar(raw_logs)
-    v2 = agregar_v2(resultado, max_muestras=LOG_MAX_RAW_SAMPLES)
-
     metadatos = {
         "schema_version": v2["schema_version"],
         "total_lineas_fisicas": v2["total_lineas_fisicas"],
@@ -75,8 +73,12 @@ def _metadatos_preprocesamiento(raw_logs: str) -> tuple[dict, list, list]:
 def _preparar_estado_inicial(raw_logs: str, thread_id: str | None = None):
     """Agregación determinística + corroboración de IPs, común a
     `analizar_lote` (CLI/informe) y `analizar_lote_stream` (interfaz web,
-    ver `src/api/main.py`). Devuelve (input_inicial, config, firma)."""
-    resumen = aggregate_logs(raw_logs)
+    ver `src/api/main.py`). Devuelve (input_inicial, config, firma).
+
+    `preprocesar()` corre UNA sola vez por lote (`preprocesar_lote()`): antes
+    `aggregate_logs()` y `_metadatos_preprocesamiento()` procesaban el mismo
+    raw por separado (hallazgo A1 de la auditoría del 23-sep-2026)."""
+    _resultado, v2, resumen = preprocesar_lote(raw_logs)
 
     # La reputación se consulta SOLO sobre entidades de tipo IP. Con el
     # esquema v2 un lote puede no tener ninguna —un log de aplicación, por
@@ -85,7 +87,7 @@ def _preparar_estado_inicial(raw_logs: str, thread_id: str | None = None):
     ips = resumen.get("ips_distintas") or []
     resumen["reputacion_ips"] = corroborar_ips(ips, get_ip_cache()) if ips else {}
 
-    metadatos, advertencias, muestras = _metadatos_preprocesamiento(raw_logs)
+    metadatos, advertencias, muestras = _metadatos_desde_v2(_resultado, v2)
     firma = firma_lote(resumen, metadatos)
 
     input_inicial = {

@@ -80,19 +80,20 @@ def clasificar(resumen_v1: dict, metadatos_v2: dict | None = None) -> dict:
 
 
 def clasificar_texto(raw_logs: str) -> dict:
-    """Clasifica un lote a partir de su texto crudo."""
-    from src.tools.aggregation import aggregate_logs
+    """Clasifica un lote a partir de su texto crudo.
 
-    resumen = aggregate_logs(raw_logs)
-    metadatos = {}
-    try:
-        from src.preprocessing.aggregation import agregar_v2
-        from src.preprocessing.pipeline import preprocesar
-        metadatos = agregar_v2(preprocesar(raw_logs))
-    except Exception:
-        # El baseline no debe caerse por un problema del preprocesamiento:
-        # si no hay metadatos, clasifica con el resumen estructurado solo.
-        metadatos = {}
+    `preprocesar()` corre UNA sola vez (`preprocesar_lote()`): antes este
+    módulo agregaba el lote con `aggregate_logs()` y volvía a preprocesarlo
+    aparte para los metadatos v2, dos parseos completos del mismo raw
+    (hallazgo A1 de la auditoría del 23-sep-2026). Ya no hay un try/except
+    alrededor del cálculo de metadatos: antes protegía contra un fallo en
+    ese segundo parseo independiente, pero con una sola pasada un fallo del
+    preprocesamiento le impide al baseline clasificar de cualquier forma, no
+    solo perder los metadatos -- degradarlo en silencio ocultaría el error.
+    """
+    from src.tools.aggregation import preprocesar_lote
+
+    _resultado, metadatos, resumen = preprocesar_lote(raw_logs)
     return clasificar(resumen, metadatos)
 
 
