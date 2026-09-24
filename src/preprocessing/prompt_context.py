@@ -14,12 +14,28 @@ forma de saberlo y responde con la misma seguridad en ambos casos.
 
 Con el motor v1 devuelve cadena vacía: esos metadatos no existen y
 fabricarlos sería peor que omitirlos.
+
+**Allowlist (Fase 2 del cierre de auditoría, 23-sep-2026, hallazgo A2).**
+Esta función solo lee: esquema/totales, distribución de decoders,
+productos, perfiles, severidad, categorías de evento, cobertura del
+parsing, cantidad de segmentos, advertencias graves y muestras normalizadas
+(truncadas). Nunca lee `cronologia`, `entidades` ni ningún campo de
+verdad-terreno -- ni siquiera si `metadatos` los trajera colgando, porque
+ninguna línea de acá abajo los referencia. Ver
+tests/test_triage_contexto_v2.py.
 """
 
 # Por debajo de esta cobertura, el lote se declara explícitamente poco
 # confiable en vez de solo informar el número: un agente que lee "0.28"
 # puede no dimensionar lo que significa.
 COBERTURA_BAJA = 0.60
+
+
+def _truncar(texto: str) -> str:
+    from src.config import CONTEXTO_PREPROCESAMIENTO_MAX_CHARS
+    if len(texto) <= CONTEXTO_PREPROCESAMIENTO_MAX_CHARS:
+        return texto
+    return texto[:CONTEXTO_PREPROCESAMIENTO_MAX_CHARS].rstrip() + "\n[…contexto recortado por presupuesto de caracteres]"
 
 
 def contexto_preprocesamiento(metadatos: dict | None,
@@ -34,6 +50,9 @@ def contexto_preprocesamiento(metadatos: dict | None,
     cobertura = parsing.get("coverage")
     decoders = metadatos.get("decoder_distribution") or {}
     productos = metadatos.get("product_distribution") or {}
+    perfiles = metadatos.get("profile_distribution") or {}
+    severidades = metadatos.get("severity_distribution") or {}
+    categorias = metadatos.get("event_categories") or {}
     segmentos = metadatos.get("segments") or []
 
     lineas = ["CÓMO SE INTERPRETÓ EL LOTE (preprocesamiento determinístico):"]
@@ -53,6 +72,21 @@ def contexto_preprocesamiento(metadatos: dict | None,
         lineas.append(
             f"- Productos reconocidos: "
             f"{', '.join(f'{k} ({v})' for k, v in productos.items())}."
+        )
+    if perfiles:
+        lineas.append(
+            f"- Perfiles de enriquecimiento aplicados: "
+            f"{', '.join(f'{k} ({v})' for k, v in perfiles.items())}."
+        )
+    if severidades:
+        lineas.append(
+            f"- Severidad declarada por el propio log: "
+            f"{', '.join(f'{k}={v}' for k, v in severidades.items())}."
+        )
+    if categorias:
+        lineas.append(
+            f"- Categorías de evento: "
+            f"{', '.join(f'{k}={v}' for k, v in categorias.items())}."
         )
 
     if cobertura is not None:
@@ -83,4 +117,4 @@ def contexto_preprocesamiento(metadatos: dict | None,
             etiqueta = m.get("decoder") or "nota"
             lineas.append(f"    [{etiqueta}] {str(m.get('texto', ''))[:300]}")
 
-    return "\n".join(lineas)
+    return _truncar("\n".join(lineas))

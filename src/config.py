@@ -101,6 +101,19 @@ IP_CACHE_PATH = os.environ.get("IP_CACHE_PATH", "./data/ip_reputation_cache.json
 # la escala real del incidente.
 TOP_N_IPS_PROMPT = int(os.environ.get("TOP_N_IPS_PROMPT", "20"))
 
+# --- Acotamiento del contexto de preprocesamiento en el prompt (Fase 2 del
+# cierre de auditoría, 23-sep-2026, hallazgo A2) ---
+# Tope de caracteres para `contexto_preprocesamiento()`
+# (src/preprocessing/prompt_context.py), que ahora se adjunta también en la
+# PRIMERA pasada del triage, no solo en la segunda. Sus campos son
+# distribuciones de baja cardinalidad (decoders, severidades, categorías,
+# perfiles) que no escalan con el tamaño del lote -- a diferencia de
+# TOP_N_IPS_PROMPT arriba, que sí existe porque `por_ip` escala con la
+# cantidad de IPs distintas. Esta cota es una garantía explícita y
+# auditable (ver tests/test_triage_contexto_v2.py), no una que el contenido
+# actual necesite para no crecer sin techo.
+CONTEXTO_PREPROCESAMIENTO_MAX_CHARS = int(os.environ.get("CONTEXTO_PREPROCESAMIENTO_MAX_CHARS", "2000"))
+
 # --- Memoria (ChromaDB) ---
 TOP_K_FEWSHOT = int(os.environ.get("TOP_K_FEWSHOT", "3"))
 TOP_K_ERRORS = int(os.environ.get("TOP_K_ERRORS", "3"))

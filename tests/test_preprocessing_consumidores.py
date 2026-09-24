@@ -92,6 +92,56 @@ def test_el_contexto_declara_un_lote_heterogeneo():
     assert "2 segmentos" in texto
 
 
+def test_el_contexto_informa_severidad_categorias_y_perfiles():
+    """Fase 2 del cierre de auditoría (23-sep-2026): antes solo se
+    informaban decoders y productos -- severidad, categorías y perfiles de
+    enriquecimiento quedaban fuera aunque `agregar_v2` ya los calculaba."""
+    texto = contexto_preprocesamiento({
+        "total_eventos": 10, "total_lineas_fisicas": 10,
+        "decoder_distribution": {"text": 10},
+        "profile_distribution": {"bgl": 10},
+        "severity_distribution": {"FATAL": 2, "INFO": 8},
+        "event_categories": {"hardware": 10},
+        "parsing": {"coverage": 1.0, "parsed_events": 10, "fallback_events": 0},
+    })
+    assert "bgl (10)" in texto
+    assert "FATAL=2" in texto
+    assert "hardware=10" in texto
+
+
+def test_el_contexto_solo_lee_la_allowlist_ignora_lo_demas():
+    """Aunque `metadatos` traiga colgando un campo fuera de la allowlist
+    (cronología, entidades, o directamente una etiqueta de verdad-terreno),
+    `contexto_preprocesamiento` no lo referencia -- no hay forma de que
+    aparezca en el texto porque ninguna línea de la función lo lee."""
+    texto = contexto_preprocesamiento({
+        "total_eventos": 1, "total_lineas_fisicas": 1,
+        "decoder_distribution": {"text": 1},
+        "parsing": {"coverage": 1.0, "parsed_events": 1, "fallback_events": 0},
+        # campos fuera de la allowlist, deliberadamente sospechosos:
+        "cronologia": [{"mensaje": "SECRETO_DE_CRONOLOGIA"}],
+        "etiqueta_real_del_dataset": "ANOMALIA_CRITICA_XYZ",
+        "entities": {"ip": {"198.51.100.7": 1}},
+    })
+    assert "SECRETO_DE_CRONOLOGIA" not in texto
+    assert "ANOMALIA_CRITICA_XYZ" not in texto
+    assert "198.51.100.7" not in texto
+
+
+def test_el_contexto_se_recorta_al_presupuesto_configurado(monkeypatch):
+    import src.config as cfg
+    monkeypatch.setattr(cfg, "CONTEXTO_PREPROCESAMIENTO_MAX_CHARS", 200)
+    texto = contexto_preprocesamiento(
+        {"total_eventos": 1, "total_lineas_fisicas": 1,
+         "decoder_distribution": {"text": 1},
+         "parsing": {"coverage": 0.0, "parsed_events": 0, "fallback_events": 1}},
+        muestras=[{"decoder": "text", "texto": "x" * 5000}],
+        incluir_muestras=True,
+    )
+    assert len(texto) <= 200 + len("\n[…contexto recortado por presupuesto de caracteres]")
+    assert texto.endswith("recortado por presupuesto de caracteres]")
+
+
 def test_sin_metadatos_el_contexto_es_vacio():
     """Con el motor v1 no hay nada que informar, y fabricarlo sería peor."""
     assert contexto_preprocesamiento({}) == ""
