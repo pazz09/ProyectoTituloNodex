@@ -46,6 +46,38 @@ def test_un_servicio_buscable_se_usa_si_no_hay_producto():
     assert elegir_keyword({"servicios": {"sshd": 3}}, {}) == "sshd"
 
 
+# --- M2 (Fase 4 del cierre de auditoría, 23-sep-2026): versión conectada
+# a la búsqueda -----------------------------------------------------------
+
+def test_la_version_dominante_se_agrega_al_termino_de_busqueda():
+    keyword = elegir_keyword(
+        {"servicios": {}},
+        {"product_distribution": {"FortiGate": 5}, "version_distribution": {"7.0": 5}},
+    )
+    assert keyword == "FortiGate 7.0"
+
+
+def test_sin_version_distribution_el_termino_no_cambia():
+    """La mayoría de los lotes no declaran versión (solo CEF/LEEF la
+    pueblan hoy) -- no debe romperse ni inventar nada."""
+    keyword = elegir_keyword(
+        {"servicios": {}},
+        {"product_distribution": {"HDFS": 5}},
+    )
+    assert keyword == "HDFS"
+
+
+def test_la_version_no_se_agrega_al_termino_por_servicio():
+    """Un servicio ("sshd") no tiene una versión de producto asociada de
+    forma confiable -- solo se conecta la versión cuando el término viene
+    de producto/fabricante."""
+    keyword = elegir_keyword(
+        {"servicios": {"sshd": 3}},
+        {"version_distribution": {"9.2": 3}},
+    )
+    assert keyword == "sshd"
+
+
 def test_el_nodo_cve_no_llama_a_la_nvd_sin_termino(monkeypatch):
     import src.tools.tool_consultar_cve as mod
     llamadas = []
