@@ -8,6 +8,7 @@ manualmente contra la API real, no en CI.
 import csv
 
 import src.tools.eval_deteccion as ev
+from src.preprocessing.pipeline import PreprocesamientoError
 
 
 # --- _metricas() ---
@@ -18,7 +19,8 @@ def test_metricas_caso_perfecto():
         {"ground_truth": "normal", "prediccion": "normal"},
     ]
     m = ev._metricas(resultados)
-    assert m == {"tp": 1, "fp": 0, "fn": 0, "tn": 1, "precision": 1.0, "recall": 1.0, "f1": 1.0}
+    assert m == {"tp": 1, "fp": 0, "fn": 0, "tn": 1, "precision": 1.0, "recall": 1.0, "f1": 1.0,
+                "n_evaluados": 2, "n_fallidos": 0}
 
 
 def test_metricas_con_falsos_positivos_y_negativos():
@@ -57,6 +59,22 @@ def test_metricas_sin_anomalos_reales_recall_none():
     m = ev._metricas(resultados)
     assert m["recall"] is None
     assert m["precision"] == 0.0
+
+
+def test_metricas_excluye_los_lotes_fallidos_de_la_matriz(monkeypatch):
+    """Revisión del camino productivo (cierre de auditoría, 23-sep-2026):
+    un lote que falló al preprocesarse no trae 'prediccion' -- no debe
+    contar como TN/FN por descarte silencioso, y `n_fallidos` debe dejarlo
+    visible en el resultado."""
+    resultados = [
+        {"ground_truth": "anomalo", "prediccion": "anomalo"},
+        {"ground_truth": "normal", "prediccion": "normal"},
+        {"ground_truth": "anomalo", "estado": "error", "error_mensaje": "boom"},
+    ]
+    m = ev._metricas(resultados)
+    assert m["tp"] == 1 and m["fp"] == 0 and m["fn"] == 0 and m["tn"] == 1
+    assert m["n_evaluados"] == 2
+    assert m["n_fallidos"] == 1
 
 
 # --- _construir_lotes_bgl() ---
@@ -292,3 +310,44 @@ def test_construir_lotes_hdfs_prop_positivos_muy_baja_respeta_piso_de_1(tmp_path
     lotes = ev._construir_lotes_hdfs(log, labels, n_lotes=10, lineas_por_lote=5, prop_positivos=0.01)
     positivos = [l for l in lotes if l["ground_truth"] == "anomalo"]
     assert len(positivos) == 1  # round(10 * 0.01) = 0, pero el piso lo sube a 1
+
+
+# --- correr_evaluacion(): un lote que falla no aborta la corrida ----------
+#
+# Revisión del camino productivo (cierre de auditoría, 23-sep-2026): antes,
+# un `PreprocesamientoError` en CUALQUIER lote tumbaba `correr_evaluacion()`
+# entero -- se perdían los resultados de los lotes ya evaluados y no
+# quedaba ningún registro de cuál había fallado ni por qué.
+
+def test_correr_evaluacion_sigue_tras_un_lote_fallido(tmp_path, monkeypatch):
+    lotes_falsos = [
+        {"id": "bgl_0", "texto": "log 0", "ground_truth": "normal"},
+        {"id": "bgl_1", "texto": "log 1", "ground_truth": "anomalo"},
+        {"id": "bgl_2", "texto": "log 2", "ground_truth": "normal"},
+    ]
+    monkeypatch.setattr(ev, "_construir_lotes_bgl", lambda *a, **k: lotes_falsos)
+    monkeypatch.setattr(ev, "_RESULTS_DIR", tmp_path)
+
+    def falso_analizar_lote(texto, thread_id=None):
+        if texto == "log 1":
+            raise PreprocesamientoError("No se pudo preprocesar el lote (ValueError: boom)")
+        return {"confianza": 0.9, "hay_incidente": False, "hay_anomalia": False,
+                "diagnostico": "todo normal", "evaluacion_auditor": "ok",
+                "comandos_mitigacion": []}
+    monkeypatch.setattr(ev, "analizar_lote", falso_analizar_lote)
+
+    salida = ev.correr_evaluacion(dataset="bgl", n_lotes=3, lineas_por_lote=10)
+
+    # Los otros dos lotes se evaluaron igual -- no abortó la corrida.
+    assert len(salida["resultados"]) == 3
+    fallido = next(r for r in salida["resultados"] if r["id"] == "bgl_1")
+    assert fallido["estado"] == "error"
+    assert "No se pudo preprocesar el lote" in fallido["error_mensaje"]
+    assert "prediccion" not in fallido
+
+    exitosos = [r for r in salida["resultados"] if r["id"] != "bgl_1"]
+    assert all(r["estado"] == "completo" for r in exitosos)
+
+    # Excluido explícitamente de la matriz de confusión, y contado.
+    assert salida["metricas"]["n_evaluados"] == 2
+    assert salida["metricas"]["n_fallidos"] == 1
