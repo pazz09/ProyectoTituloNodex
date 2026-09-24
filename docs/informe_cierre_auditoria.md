@@ -149,6 +149,86 @@
   PDF (no revuelve a tocar el raw, solo lee lo ya persistido), y forma de
   la respuesta del historial sin cambios cuando no hay raw.
 
+## Fase 4 — Enriquecer trazabilidad y metadatos
+
+### M1 — Perfiles, outcomes, entidades, ventana, vendor/versión/protocolo
+
+**Estado: resuelto.** Commit `fase4-m1` (`6f2ddca`).
+
+`agregar_v2()` ya calculaba `profile_distribution`, `event_outcomes`,
+`entities` (ricas) y `time_window`, pero `_metadatos_desde_v2()`
+(`src/pipeline.py`) nunca los propagaba al estado del grafo -- se agregan
+ahí. Nuevas `vendor_distribution`, `version_distribution` y
+`protocol_distribution` en `agregar_v2()` (solo las pueblan hoy CEF/LEEF
+y el mapeo genérico clave-valor de Zeek).
+
+**Hallazgo real durante la verificación**: `profile_distribution` estaba
+en la allowlist del prompt del Triage desde la Fase 2 (el código ya la
+leía), pero como el estado nunca la poblaba, la línea "Perfiles de
+enriquecimiento aplicados" NUNCA apareció en un prompt real -- un cable
+suelto que los tests de la Fase 2 no detectaron porque pasaban metadatos
+sintéticos directo a la función, sin pasar por el estado real. Este
+commit lo conecta por primera vez.
+
+**Impacto medido en el presupuesto del prompt** (contradice la
+expectativa inicial de "M1 no toca el prompt" -- corregido apenas se
+midió, ver más abajo):
+
+| Dataset | `contexto_preprocesamiento()` (Fase 2 → post-M1) | 1ª pasada (Fase 2 → post-M1) |
+|---|---|---|
+| HDFS_2k | 484 → 538 car. | 7 935 → 8 121 car. |
+| BGL_2k  | 541 → 594 car. | 4 275 → 4 460 car. |
+
+El delta completo (~53-54 caracteres en ambos) es la línea "Perfiles de
+enriquecimiento aplicados" apareciendo por primera vez -- no un campo
+nuevo agregado al prompt a propósito en la Fase 4. `entities`,
+`time_window`, `event_outcomes` y las tres distribuciones nuevas SÍ están
+en el estado pero NO se agregaron a la allowlist del prompt (confirmado
+por test: `tests/test_triage_contexto_v2.py::
+test_los_campos_nuevos_de_m1_no_llegan_al_prompt`). Ambos casos siguen
+muy por debajo del presupuesto de 2000 caracteres. Test de fuga de ground
+truth con BGL_2k real, vuelto a correr después de los cambios: sigue en
+verde.
+
+### M2 — Versión conectada a la búsqueda de CVEs
+
+**Estado: resuelto.** Commit `fase4-m2` (`b5fa272`).
+
+`elegir_keyword()` (`src/tools/tool_consultar_cve.py`) ya leía
+`vendor_distribution` desde antes del cierre (esperando un dato que nunca
+existía); M1 lo generó, y este commit conecta la versión dominante al
+término de búsqueda ("FortiGate 7.0" en vez de "FortiGate"), solo cuando
+el término viene de producto/fabricante. No se arma un CPE estructurado
+-- exigiría normalizar al vocabulario exacto del diccionario CPE de NIST,
+que no se justifica mientras `version_distribution` solo la pueblen
+CEF/LEEF.
+
+### M3 — Segmentos híbridos
+
+**Estado: pendiente de decisión de Antonia** (opción entre dividir
+segmentos o publicar la distribución efectiva de decoders junto al
+dominante). No implementado todavía.
+
+### M5 — Procedencia del baseline
+
+**Estado: resuelto.** Commit `fase4-m5` (`d2b999c`).
+
+`baseline_reglas.py` no registraba nada de procedencia; `eval_
+deteccion.py` ya registraba motor/configuración desde la Fase 11 del plan
+original. A los dos les faltaba el commit. Nuevas `_procedencia()` y
+`_commit_git()` (`git rev-parse HEAD`, `None` si falla) en
+`baseline_reglas.py`, agregadas al JSON que se guarda en `results/`.
+
+### M6 — Política de tamaño unificada
+
+**Estado: pendiente de decisión de Antonia** (rechazar en todos los
+caminos vs. truncar con advertencia en todos). No implementado todavía.
+
+### Golden tests heterogéneos y contratos de esquema v2
+
+**Estado: pendiente** -- depende de la decisión de M3 (afecta la forma
+esperada de `segments` en un lote heterogéneo).
+
 ## Limitaciones conocidas y trabajo futuro
 
 - **Exposición al LLM no cubierta por `LOG_PRESERVE_RAW`.** La variable
