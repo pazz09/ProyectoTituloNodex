@@ -34,9 +34,11 @@
   propio (`PreprocesamientoError`) en vez del prefijo genérico. El CLI
   (`log_runner.py`) no tenía ningún try/except — corregido, termina con
   mensaje claro por stderr y código de salida 1. El evaluador
-  (`eval_deteccion.py`) tiene el mismo problema, pendiente — se corrige
-  como parte de la Fase 6 (ver más abajo).
-- Suite: 499/499 tras el cierre de A1.
+  (`eval_deteccion.py`) tenía el mismo problema — resuelto por separado,
+  ver la sección "Evaluador" más abajo.
+- Suite: 499/499 tras el cierre de A1 (499 en el momento; la suite total
+  creció con las fases y hallazgos siguientes -- ver el conteo de cada
+  commit).
 
 ### A2 — Contexto v2 en la primera pasada del triage
 
@@ -140,8 +142,7 @@
   estructurados, no reproducción del log) NO se redactan y siguen
   mostrando las IPs -- es el comportamiento correcto: son hallazgos del
   sistema, no una copia del raw.
-- Commit: pendiente de confirmar hash (ver el mensaje que sigue a este
-  informe).
+- Commit: `fase3: LOG_PRESERVE_RAW tiene efecto real (opción A)` (`c8bcc0b`).
 - Pruebas: cronología con/sin raw (IP, usuario, host), `raw_procedencia`
   con hash/líneas/bytes verificados, persistencia real vía el flujo
   completo (subida → stream → historial) con LLM simulado, exportación en
@@ -150,9 +151,14 @@
 
 ## Evaluador (`eval_deteccion.py`)
 
+**Estado: resuelto.** Commit: `eval: un lote fallido no aborta la corrida
+ni se salta en silencio` (`7cd0c06`).
+
 Decisión (23-sep-2026): un fallo de preprocesamiento en un lote no debe
-abortar la corrida completa ni saltarse en silencio. Se registra como
-error en los resultados (con su mensaje), se excluye explícitamente de la
-matriz de confusión, y se informa cuántos lotes fallaron. Se implementa
-como parte del cierre (no se espera a la Fase 6 para el código, solo para
-correrla con datos reales).
+abortar la corrida completa ni saltarse en silencio. `correr_evaluacion()`
+atrapa `PreprocesamientoError` por lote, sigue con el resto, y registra el
+lote fallido con `estado="error"` y su mensaje. `_metricas()` excluye
+explícitamente de la matriz de confusión los resultados sin `prediccion`
+válida e informa `n_evaluados`/`n_fallidos`. Implementado ahora (no se
+espera a la Fase 6 para el código, solo para correrla con datos reales).
+Suite: 509/509 tras este commit.
