@@ -189,13 +189,37 @@ def test_modo_batch_usa_un_unico_decoder_para_todo_el_lote():
 
 def test_modo_hybrid_reprocesa_el_registro_que_el_dominante_no_explica():
     """Un JSON intercalado en un bloque mayoritariamente syslog debe
-    decodificarse como JSON, no forzarse al decoder dominante."""
+    decodificarse como JSON, no forzarse al decoder dominante. Acá el
+    dominante inicial y el efectivo coinciden (syslog sigue siendo
+    mayoría incluso entre los eventos ya decodificados) -- el caso donde
+    DIVERGEN está en el test siguiente (M3)."""
     lote = "\n".join([SYSLOG] * 4 + [JSON_L]) + "\n"
     res = preprocesar(lote, modo="hybrid", chunk_size=10)
-    assert res.segments[0].decoder == "syslog"       # dominante del bloque
+    assert res.segments[0].decoder == "syslog"       # efectivo
+    assert res.segments[0].decoder_inicial == "syslog"  # y también el inicial
     decoders = [e.decoder for e in res.events]
     assert decoders == ["syslog"] * 4 + ["json"]     # el intruso se reprocesó
     assert res.events[4].source_ip == "10.0.0.1"
+
+
+def test_m3_la_etiqueta_del_segmento_refleja_el_resultado_efectivo_no_el_intento_inicial():
+    """Hallazgo M3 de la auditoría técnica (23-sep-2026, Fase 4): antes de
+    este cierre, `segments[i].decoder` quedaba en el intento INICIAL sobre
+    el bloque completo -- acá "json" con confianza 0.5, el decoder que
+    "ganó" promediando sobre el bloque entero antes del reproceso -- aunque
+    el reproceso individual (hybrid) terminara decodificando la MAYORÍA
+    de los eventos del segmento con syslog. Ahora `decoder`/`confidence`
+    se recalculan desde los eventos ya decodificados; el intento inicial
+    queda aparte, en `decoder_inicial`/`confidence_inicial`, para
+    trazabilidad -- no se pierde el dato, solo deja de ser el principal."""
+    lote = "\n".join([JSON_L, SYSLOG, TEXTO, JSON_L, SYSLOG]) + "\n"
+    res = preprocesar(lote, modo="hybrid", chunk_size=10)
+
+    segmento = res.segments[0]
+    assert segmento.decoder_inicial == "json"
+    assert segmento.decoder == "syslog"              # efectivo: syslog es mayoría real
+    assert segmento.decoder != segmento.decoder_inicial  # el caso que M3 describe
+    assert segmento.confidence != segmento.confidence_inicial
 
 
 def test_modo_chunked_no_reprocesa_y_por_eso_pierde_el_intruso():

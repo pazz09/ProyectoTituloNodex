@@ -20,6 +20,13 @@ Cuatro modos, configurables por `LOG_PARSING_MODE`:
 El contexto CSV (cabecera y delimitador) vive en el `RecordSegment`, no en
 el decoder: por eso dos segmentos con cabeceras distintas conviven, y por
 eso dos análisis simultáneos no se pisan.
+
+`RecordSegment.decoder`/`.confidence` son el resultado EFECTIVO del
+segmento (M3, Fase 4 del cierre de auditoría, 23-sep-2026): se calculan
+sobre los eventos ya decodificados, después del reproceso individual del
+modo `hybrid` -- no sobre el intento inicial del bloque completo, que ese
+mismo reproceso puede haber superado registro por registro. El intento
+inicial queda en `decoder_inicial`/`confidence_inicial`.
 """
 
 from dataclasses import dataclass, field
@@ -55,6 +62,27 @@ def _decodificar_con(decoder, registro: RawRecord, contexto: dict,
     ev = decoder.decodificar(registro, contexto)
     ev.segment_index = segment_index
     return ev
+
+
+def _decoder_efectivo(eventos: list[NormalizedEvent]) -> tuple[str, float]:
+    """Decoder y confianza REALES de un segmento, recalculados desde sus
+    eventos ya decodificados (M3, Fase 4 del cierre de auditoría,
+    23-sep-2026) -- no desde el intento inicial sobre el bloque completo,
+    que el reproceso individual del modo `hybrid` puede haber superado
+    registro por registro. El decoder que explica más eventos del
+    segmento gana; su confianza es el promedio de `parsing_confidence`
+    entre esos eventos, no la del bloque completo.
+    """
+    if not eventos:
+        return DECODER_TEXTO.nombre, 0.0
+    conteo: dict[str, int] = {}
+    confianzas: dict[str, list[float]] = {}
+    for e in eventos:
+        conteo[e.decoder] = conteo.get(e.decoder, 0) + 1
+        confianzas.setdefault(e.decoder, []).append(e.parsing_confidence)
+    dominante = max(conteo, key=lambda k: (conteo[k], k))
+    confianza = sum(confianzas[dominante]) / len(confianzas[dominante])
+    return dominante, round(min(max(confianza, 0.0), 1.0), 4)
 
 
 def _dominante_del_bloque(bloque: list[RawRecord], contexto: dict
@@ -135,17 +163,9 @@ def detectar_y_decodificar(
         dominante, confianza = _dominante_del_bloque(pendientes, contexto)
         if confianza < umbral_formato:
             dominante, confianza = DECODER_TEXTO, confianza
+        confianza_inicial = round(min(max(confianza, 0.0), 1.0), 4)
 
-        segmento = RecordSegment(
-            index=indice,
-            decoder=dominante.nombre,
-            line_start=pendientes[0].line_start,
-            line_end=pendientes[-1].line_end,
-            n_records=len(pendientes),
-            confidence=round(min(max(confianza, 0.0), 1.0), 4),
-            context={k: v for k, v in contexto.items() if k != "max_no_mapeados"},
-        )
-
+        eventos_segmento: list[NormalizedEvent] = []
         for registro in pendientes:
             conf_registro = dominante.detectar(registro.raw, contexto)
             usar = dominante
@@ -164,9 +184,27 @@ def detectar_y_decodificar(
                 # respuesta honesta.
                 if conf_candidato > conf_registro and conf_candidato >= umbral_formato:
                     usar = candidato
-            res.events.append(
-                _decodificar_con(usar, registro, contexto, indice))
+            evento = _decodificar_con(usar, registro, contexto, indice)
+            res.events.append(evento)
+            eventos_segmento.append(evento)
 
-        res.segments.append(segmento)
+        # M3 (Fase 4 del cierre de auditoría, 23-sep-2026): `decoder`/
+        # `confidence` del segmento se recalculan desde sus eventos YA
+        # decodificados -- no desde el intento inicial sobre el bloque
+        # completo, que el reproceso de arriba puede haber superado
+        # registro por registro. El intento inicial queda en `decoder_
+        # inicial`/`confidence_inicial`, para trazabilidad.
+        decoder_efectivo, confianza_efectiva = _decoder_efectivo(eventos_segmento)
+        res.segments.append(RecordSegment(
+            index=indice,
+            decoder=decoder_efectivo,
+            confidence=confianza_efectiva,
+            decoder_inicial=dominante.nombre,
+            confidence_inicial=confianza_inicial,
+            line_start=pendientes[0].line_start,
+            line_end=pendientes[-1].line_end,
+            n_records=len(pendientes),
+            context={k: v for k, v in contexto.items() if k != "max_no_mapeados"},
+        ))
 
     return res

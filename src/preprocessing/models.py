@@ -75,11 +75,25 @@ class RecordSegment:
     """
 
     index: int
+    # `decoder`/`confidence` son el resultado EFECTIVO del segmento,
+    # recalculado desde sus eventos ya decodificados (M3, Fase 4 del
+    # cierre de auditoría, 23-sep-2026) -- no el intento inicial sobre el
+    # bloque completo, que en modo `hybrid` el reproceso individual puede
+    # haber superado registro por registro. Antes de M3 estos dos campos
+    # SÍ eran el intento inicial; un lote con eventos JSON/syslog/texto
+    # mezclados en un mismo bloque podía quedar reportado como "text @
+    # 0.33" aunque casi todos sus registros se hubieran decodificado bien.
     decoder: str
     line_start: int
     line_end: int
     n_records: int = 0
     confidence: float = 0.0
+    # El intento inicial (antes del reproceso individual), conservado
+    # para trazabilidad -- decisión de Antonia: recalcular la etiqueta
+    # principal en vez de agregar un campo aparte con la distribución
+    # efectiva, pero sin perder el dato del primer intento.
+    decoder_inicial: str | None = None
+    confidence_inicial: float | None = None
     # Contexto propio del segmento: p. ej. la cabecera de un CSV. Que viva
     # acá y no en el decoder evita el estado compartido entre análisis
     # concurrentes que hubo que resolver en el adaptador CSV v1.
@@ -92,6 +106,9 @@ class RecordSegment:
                 f"anterior a line_start ({self.line_start})"
             )
         _validar_confianza(self.confidence, f"RecordSegment {self.index}.confidence")
+        if self.confidence_inicial is not None:
+            _validar_confianza(self.confidence_inicial,
+                              f"RecordSegment {self.index}.confidence_inicial")
 
     def to_dict(self) -> dict:
         d = asdict(self)
