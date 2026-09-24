@@ -205,9 +205,19 @@ CEF/LEEF.
 
 ### M3 — Segmentos híbridos
 
-**Estado: pendiente de decisión de Antonia** (opción entre dividir
-segmentos o publicar la distribución efectiva de decoders junto al
-dominante). No implementado todavía.
+**Estado: resuelto.** Commit `fase4-m3` (`10070e7`).
+
+Decisión de Antonia: no dividir segmentos (cambiaría la trazabilidad y
+la salida esperada de los golden tests, sin una ganancia que lo
+justifique) ni publicar una distribución efectiva aparte -- en vez de
+eso, **recalcular** `RecordSegment.decoder`/`.confidence` desde los
+eventos ya decodificados del segmento (después del reproceso individual
+del modo `hybrid`), y conservar el intento inicial sobre el bloque
+completo en `decoder_inicial`/`confidence_inicial`, para trazabilidad.
+Antes, un segmento con eventos JSON/syslog/texto mezclados podía
+reportarse como "text @ 0.33" aunque la mayoría de sus registros se
+hubiera decodificado bien -- probado con un caso real donde diverge
+(json @ 0.5 inicial vs. syslog @ 0.95 efectivo).
 
 ### M5 — Procedencia del baseline
 
@@ -221,13 +231,31 @@ original. A los dos les faltaba el commit. Nuevas `_procedencia()` y
 
 ### M6 — Política de tamaño unificada
 
-**Estado: pendiente de decisión de Antonia** (rechazar en todos los
-caminos vs. truncar con advertencia en todos). No implementado todavía.
+**Estado: resuelto.** Commit `fase4-m6` (`2360092`).
+
+Decisión de Antonia: rechazar en todos los caminos. Antes de este
+cierre, el mismo archivo daba dos respuestas distintas según la puerta
+de entrada: la API (`/api/analizar`) ya rechazaba con HTTP 413 un
+archivo sobre `LOG_MAX_FILE_BYTES`, pero `preprocesar()` (el único
+chequeo que tienen el CLI y el evaluador, que no validan nada por su
+cuenta) truncaba el texto y seguía analizando, con una advertencia de
+severidad "error" en vez de detenerse. `LOG_MAX_EVENTS` tenía el mismo
+patrón un nivel más abajo, en `segmentar()`. Los dos ahora rechazan
+(`PreprocesamientoError`/`ValueError`, envuelto igual por la
+infraestructura de la Fase 1) -- el CLI y el evaluador ya sabían
+manejar esa excepción, no hizo falta tocarlos.
 
 ### Golden tests heterogéneos y contratos de esquema v2
 
-**Estado: pendiente** -- depende de la decisión de M3 (afecta la forma
-esperada de `segments` en un lote heterogéneo).
+**Estado: resuelto.** Commit `fase4` (`f2d3e90`).
+
+`tests/golden/*_esperado.json` (lote mixto sintético, HDFS_2k, BGL_2k
+reales): subconjunto curado de `agregar_v2()` -- distribuciones y
+agregados, no los eventos crudos ni las muestras (2000 eventos por
+dataset harían un archivo enorme e ilegible en el diff, y esos campos no
+son deterministas de forma útil de versionar). `test_contrato_de_
+esquema_v2` fija la forma completa de `agregar_v2()` (18 claves con su
+tipo) sobre tres entradas distintas.
 
 ## Limitaciones conocidas y trabajo futuro
 
