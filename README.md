@@ -210,6 +210,7 @@ Todas las variables viven en `.env.example`, con sus defaults. Esta tabla docume
 | `CONTEXTO_PREPROCESAMIENTO_MAX_CHARS` | `2000` | Presupuesto de caracteres para el segundo texto que ve el Triage (`contexto_preprocesamiento()`: esquema, cobertura, decoders, severidad, muestras). Si se supera, se recortan primero las muestras y las distribuciones; los conteos globales, la cobertura y las advertencias nunca se recortan. |
 | `CONFIDENCE_THRESHOLD` | `0.70` | Por debajo de esta confianza, el auditor marca `requiere_revision_humana=true`. |
 | `AUTO_PROMOTE` | `0.90` | Confianza a partir de la cual un diagnóstico confirmado por un analista se promueve a `attack_patterns` (few-shot para casos futuros). |
+| `SCORE_MALICIOSO` / `SCORE_SOSPECHOSO` | `75` / `25` | Score de AbuseIPDB (0-100) a partir del cual una IP se categoriza como "malicioso"/"sospechoso" — esa categoría es la que decide qué IPs de cola larga igual entran en detalle al prompt acotado (ver `TOP_N_IPS_PROMPT`). |
 | `MAX_PLAN_STEPS` / `MAX_REPLANS` | `6` / `1` | Cotas del ciclo Plan-and-Execute: pasos máximos del plan y replanificaciones máximas si la cobertura de evidencia no alcanza. |
 | `MAX_INTENTOS_CORRECCION` | `2` | Reintentos del ingeniero de mitigación si el validador rechaza los comandos propuestos. |
 
