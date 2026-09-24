@@ -95,6 +95,39 @@ def test_el_contexto_no_supera_el_presupuesto_con_hdfs_real():
     assert len(resumen_txt) + len(contexto_pre) < 10_000
 
 
+def test_los_campos_nuevos_de_m1_no_llegan_al_prompt(monkeypatch):
+    """M1 (Fase 4 del cierre de auditoría, 23-sep-2026): `entities`,
+    `time_window`, `event_outcomes` y las distribuciones de vendor/
+    version/protocol ahora viven en `preprocessing_metadata` (el estado),
+    pero `contexto_preprocesamiento()` sigue leyendo la misma allowlist de
+    la Fase 2 -- que un campo esté en el estado no implica que esté en el
+    prompt. Antonia pidió esto explícito: la ventana temporal (y la
+    cronología, que comparte la misma fuente) quedan fuera del prompt por
+    riesgo de fuga del ground truth."""
+    raw = (_DATA_DIR / "BGL_2k.log").read_text(encoding="utf-8", errors="replace")
+    estado, _config, _firma = pipeline_mod._preparar_estado_inicial(raw, "test_m1_no_al_prompt")
+    metadatos = estado["preprocessing_metadata"]
+
+    # los campos nuevos SÍ están en el estado (M1 cumplido)
+    for clave in ("entities", "time_window", "event_outcomes",
+                 "vendor_distribution", "version_distribution", "protocol_distribution"):
+        assert clave in metadatos
+
+    contexto_pre = triage_mod._contexto_pre(estado)
+    # las claves temporales/de entidad no dejan rastro textual en el prompt
+    inicio = metadatos["time_window"].get("inicio")
+    if inicio:
+        assert inicio not in contexto_pre
+    # "producto" se excluye a propósito: coincide con `product_distribution`,
+    # que SÍ está en la allowlist desde la Fase 2 (no es una fuga de
+    # `entities`, es el mismo dato contado dos veces por caminos distintos).
+    for tipo, valores in metadatos["entities"].items():
+        if tipo == "producto":
+            continue
+        for clave_entidad in valores:
+            assert str(clave_entidad) not in contexto_pre
+
+
 def test_ambos_prompts_de_triage_bgl_no_filtran_las_etiquetas_del_dataset(monkeypatch):
     """BGL trae la etiqueta de alerta como primer token de cada línea. Si
     se filtrara al prompt (por las muestras crudas, por ejemplo), el LLM

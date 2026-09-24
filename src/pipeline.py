@@ -47,6 +47,20 @@ def _metadatos_desde_v2(resultado, v2: dict) -> tuple[dict, list, list]:
     **No se devuelven los eventos normalizados.** El estado de LangGraph se
     serializa en cada checkpoint, así que guardarlos haría crecer el estado
     en proporción al archivo (§14 del plan). Solo agregados y muestras.
+
+    **M1 (Fase 4 del cierre de auditoría, 23-sep-2026).** `agregar_v2()` ya
+    calculaba `profile_distribution`, `event_outcomes`, `entities` (ricas,
+    no solo el conteo) y `time_window`, pero esta función no los propagaba
+    al estado -- se agregan acá, junto con las tres distribuciones nuevas
+    (`vendor_distribution`, `version_distribution`, `protocol_distribution`,
+    ver `agregar_v2`). **Ninguno de estos campos se agrega al prompt del
+    Triage**: `contexto_preprocesamiento()` sigue leyendo exactamente la
+    misma allowlist de la Fase 2 -- en particular, ni `time_window` ni
+    `entities` entran ahí, porque la auditoría los marca como riesgo de
+    fuga del ground truth (la cronología, que comparte la misma fuente
+    temporal/de entidades, es la que reabrió esa fuga en el pasado). Que
+    un campo esté en el estado no implica que esté en el prompt -- lo
+    prueba tests/test_triage_contexto_v2.py.
     """
     metadatos = {
         "schema_version": v2["schema_version"],
@@ -54,8 +68,15 @@ def _metadatos_desde_v2(resultado, v2: dict) -> tuple[dict, list, list]:
         "total_eventos": v2["total_eventos"],
         "decoder_distribution": v2["decoder_distribution"],
         "product_distribution": v2["product_distribution"],
+        "vendor_distribution": v2["vendor_distribution"],
+        "version_distribution": v2["version_distribution"],
+        "protocol_distribution": v2["protocol_distribution"],
+        "profile_distribution": v2["profile_distribution"],
         "severity_distribution": v2["severity_distribution"],
         "event_categories": v2["event_categories"],
+        "event_outcomes": v2["event_outcomes"],
+        "entities": v2["entities"],
+        "time_window": v2["time_window"],
         "parsing": v2["parsing"],
         "segments": v2["segments"],
         "entities_resumen": {k: len(v) for k, v in v2["entities"].items()},

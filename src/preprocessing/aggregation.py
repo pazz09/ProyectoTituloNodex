@@ -198,6 +198,19 @@ def agregar_v2(resultado: PreprocessingResult, max_muestras: int = 20) -> dict:
         "total_eventos": resultado.total_eventos,
         "decoder_distribution": resultado.distribucion_decoders(),
         "product_distribution": _contar(e.product for e in eventos),
+        # M2 (Fase 4 del cierre de auditoría, 23-sep-2026): fabricante,
+        # para que tool_consultar_cve.py tenga un término de búsqueda
+        # buscable en la NVD cuando el producto interno no lo sea (p. ej.
+        # "hdfs.datanode"). Poblado hoy por CEF/LEEF (evento.vendor del
+        # decoder) y por los enriquecedores de Zeek/HDFS/BGL.
+        "vendor_distribution": _contar(e.vendor for e in eventos),
+        # M1: solo lo puebla hoy CEF/LEEF (evento.version del decoder) --
+        # vacío para el resto de los formatos, no es un defecto de esta
+        # agregación.
+        "version_distribution": _contar(e.version for e in eventos),
+        # M1: lo puebla el mapeo genérico clave-valor (proto/protocol/
+        # transport, ver normalization.py) -- típicamente Zeek conn logs.
+        "protocol_distribution": _contar(e.protocol for e in eventos),
         "profile_distribution": _contar(e.attributes.get("perfil") for e in eventos),
         "severity_distribution": _contar(e.severity for e in eventos),
         "event_categories": _contar(e.event_category for e in eventos),
