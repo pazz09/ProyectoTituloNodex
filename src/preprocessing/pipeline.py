@@ -33,6 +33,17 @@ from src.preprocessing.result import PreprocessingResult
 from src.preprocessing.segmentation import segmentar
 
 
+class PreprocesamientoError(Exception):
+    """El preprocesamiento determinístico falló sobre el lote.
+
+    Mensaje pensado para mostrarse tal cual al usuario -- interfaz web, CLI
+    o evaluador (§ cierre de auditoría, 23-sep-2026, revisión del camino
+    productivo tras la Fase 1): no es un detalle interno de depuración, es
+    la explicación de por qué el lote no se pudo analizar. Quien la atrapa
+    no debe envolverla en un "error inesperado del servidor" genérico.
+    """
+
+
 def preprocesar(
     texto: str,
     modo: str | None = None,

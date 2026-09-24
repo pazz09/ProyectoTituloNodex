@@ -14,9 +14,12 @@ el mismo resultado -- así que un test que solo mirara la salida no habría
 detectado la duplicación que el hallazgo A1 describe.
 """
 
+import pytest
+
 import src.pipeline as pipeline_mod
 import src.preprocessing.aggregation as preprocessing_aggregation_mod
 import src.preprocessing.pipeline as preprocessing_pipeline_mod
+from src.preprocessing.pipeline import PreprocesamientoError
 from src.tools.baseline_reglas import clasificar_texto
 
 LOTE = "\n".join([
@@ -87,3 +90,19 @@ def test_el_baseline_clasifica_con_metadatos_reales_no_vacios():
     veredicto = clasificar_texto(LOTE)
     assert veredicto["prediccion"] in ("anomalo", "normal")
     assert veredicto["regla"] != ""
+
+
+def test_el_baseline_propaga_un_fallo_de_preprocesamiento(monkeypatch):
+    """Decisión explícita (confirmada por Antonia): en una herramienta de
+    evaluación es preferible que el error se propague a clasificar con
+    metadatos vacíos -- el `try/except` que hacía eso se retiró en la
+    Fase 1. `preprocesar_lote()` envuelve la excepción original en
+    `PreprocesamientoError` (mensaje claro, ver aggregation.py), pero sigue
+    siendo una propagación real: no se atrapa ni se swallow acá."""
+    def _falla(*args, **kwargs):
+        raise ValueError("boom")
+
+    monkeypatch.setattr(preprocessing_pipeline_mod, "preprocesar", _falla)
+
+    with pytest.raises(PreprocesamientoError, match="boom"):
+        clasificar_texto(LOTE)

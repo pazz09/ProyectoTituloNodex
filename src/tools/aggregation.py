@@ -25,10 +25,23 @@ def _preprocesar_y_agregar(raw: str):
     """
     from src.config import LOG_MAX_RAW_SAMPLES
     from src.preprocessing.aggregation import agregar_v2
-    from src.preprocessing.pipeline import preprocesar
+    from src.preprocessing.pipeline import PreprocesamientoError, preprocesar
 
-    resultado = preprocesar(raw)
-    v2 = agregar_v2(resultado, max_muestras=LOG_MAX_RAW_SAMPLES)
+    try:
+        resultado = preprocesar(raw)
+        v2 = agregar_v2(resultado, max_muestras=LOG_MAX_RAW_SAMPLES)
+    except PreprocesamientoError:
+        raise
+    except Exception as e:
+        # Punto único donde se envuelve la falla (revisión del camino
+        # productivo, cierre de auditoría 23-sep-2026): tanto el pipeline
+        # como el baseline pasan por acá, así que web, CLI y evaluador
+        # reciben el mismo mensaje claro en vez de cada uno formatear su
+        # propia versión del error. Se sigue PROPAGANDO -- no se swallow
+        # acá; cada consumidor decide cómo mostrarlo o si aborta.
+        raise PreprocesamientoError(
+            f"No se pudo preprocesar el lote ({type(e).__name__}: {e})"
+        ) from e
     return resultado, v2
 
 

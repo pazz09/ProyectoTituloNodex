@@ -16,9 +16,11 @@ después sin arrastrar el detalle interno del grafo.
 import argparse
 import json
 import os
+import sys
 import time
 
 from src.pipeline import analizar_lote
+from src.preprocessing.pipeline import PreprocesamientoError
 
 RESULTS_DIR = "results"
 
@@ -89,7 +91,16 @@ def _main():
     )
     args = parser.parse_args()
 
-    salida = run_from_file(args.archivo, thread_id=args.thread_id, guardar=not args.no_guardar)
+    # Antes de este cierre, un fallo de `preprocesar()` acá no tenía ningún
+    # try/except propio: se propagaba como traceback crudo de Python hasta
+    # la terminal (revisión del camino productivo, cierre de auditoría
+    # 23-sep-2026). `run_from_file` no atrapa nada -- corresponde acá,
+    # al borde de la interfaz de usuario del CLI.
+    try:
+        salida = run_from_file(args.archivo, thread_id=args.thread_id, guardar=not args.no_guardar)
+    except PreprocesamientoError as e:
+        print(f"\n❌ {e}", file=sys.stderr)
+        raise SystemExit(1)
 
     print("\n📋 REPORTE FINAL")
     print(json.dumps(salida, ensure_ascii=False, indent=2))
