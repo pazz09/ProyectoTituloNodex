@@ -199,6 +199,7 @@ def test_modo_hybrid_reprocesa_el_registro_que_el_dominante_no_explica():
     res = preprocesar(lote, modo="hybrid", chunk_size=10)
     assert res.segments[0].decoder == "syslog"       # efectivo
     assert res.segments[0].decoder_inicial == "syslog"  # y también el inicial
+    assert res.segments[0].decoder_distribution == {"syslog": 4, "json": 1}
     decoders = [e.decoder for e in res.events]
     assert decoders == ["syslog"] * 4 + ["json"]     # el intruso se reprocesó
     assert res.events[4].source_ip == "10.0.0.1"
@@ -208,20 +209,28 @@ def test_m3_la_etiqueta_del_segmento_refleja_el_resultado_efectivo_no_el_intento
     """Hallazgo M3 de la auditoría técnica (23-sep-2026, Fase 4): antes de
     este cierre, `segments[i].decoder` quedaba en el intento INICIAL sobre
     el bloque completo -- acá "json" con confianza 0.5, el decoder que
-    "ganó" promediando sobre el bloque entero antes del reproceso -- aunque
-    el reproceso individual (hybrid) terminara decodificando la MAYORÍA
-    de los eventos del segmento con syslog. Ahora `decoder`/`confidence`
-    se recalculan desde los eventos ya decodificados; el intento inicial
-    queda aparte, en `decoder_inicial`/`confidence_inicial`, para
-    trazabilidad -- no se pierde el dato, solo deja de ser el principal."""
+    "ganó" promediando sobre el bloque entero antes del reproceso.
+
+    **Corrección (revisión de Antonia, 23-sep-2026): este caso es un
+    EMPATE real entre los eventos ya decodificados (2 json, 2 syslog),
+    no una mayoría de syslog como decía la primera versión de este test
+    y del mensaje del commit.** `_decoder_efectivo()` desempata por orden
+    alfabético del nombre del decoder -- "syslog" > "json" -- únicamente
+    para que el resultado sea determinista, no porque syslog sea más
+    frecuente. Por eso el campo principal por sí solo puede ser engañoso
+    en un empate: `decoder_distribution` trae el conteo completo, y ESTE
+    test verifica que el empate quede visible ahí, no solo el ganador
+    arbitrario."""
     lote = "\n".join([JSON_L, SYSLOG, TEXTO, JSON_L, SYSLOG]) + "\n"
     res = preprocesar(lote, modo="hybrid", chunk_size=10)
 
     segmento = res.segments[0]
     assert segmento.decoder_inicial == "json"
-    assert segmento.decoder == "syslog"              # efectivo: syslog es mayoría real
+    assert segmento.decoder == "syslog"                  # efectivo: gana el desempate alfabético
     assert segmento.decoder != segmento.decoder_inicial  # el caso que M3 describe
     assert segmento.confidence != segmento.confidence_inicial
+    # el empate real queda visible acá, no escondido detrás de "syslog"
+    assert segmento.decoder_distribution == {"json": 2, "syslog": 2}
 
 
 def test_modo_chunked_no_reprocesa_y_por_eso_pierde_el_intruso():

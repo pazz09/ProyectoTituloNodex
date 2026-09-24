@@ -64,17 +64,29 @@ def _decodificar_con(decoder, registro: RawRecord, contexto: dict,
     return ev
 
 
-def _decoder_efectivo(eventos: list[NormalizedEvent]) -> tuple[str, float]:
-    """Decoder y confianza REALES de un segmento, recalculados desde sus
-    eventos ya decodificados (M3, Fase 4 del cierre de auditoría,
-    23-sep-2026) -- no desde el intento inicial sobre el bloque completo,
-    que el reproceso individual del modo `hybrid` puede haber superado
-    registro por registro. El decoder que explica más eventos del
-    segmento gana; su confianza es el promedio de `parsing_confidence`
-    entre esos eventos, no la del bloque completo.
+def _decoder_efectivo(eventos: list[NormalizedEvent]) -> tuple[str, float, dict[str, int]]:
+    """Decoder, confianza y distribución REALES de un segmento,
+    recalculados desde sus eventos ya decodificados (M3, Fase 4 del
+    cierre de auditoría, 23-sep-2026) -- no desde el intento inicial
+    sobre el bloque completo, que el reproceso individual del modo
+    `hybrid` puede haber superado registro por registro.
+
+    El decoder devuelto es el que tiene MÁS eventos en el segmento -- no
+    necesariamente mayoría absoluta: con empate (p. ej. 2 eventos json y
+    2 syslog en un segmento de 4), se desempata por orden alfabético del
+    nombre, solo para que el resultado sea determinista. La distribución
+    completa se devuelve aparte para que un empate quede visible en vez
+    de escondido detrás de una sola etiqueta -- corregido tras una
+    revisión de Antonia (23-sep-2026): la primera versión de esta
+    función no exponía la distribución, y el mensaje del commit original
+    describía el resultado como "la mayoría real" incluso en el caso de
+    empate usado como test.
+
+    La confianza es el promedio de `parsing_confidence` entre los
+    eventos que usan ESE decoder específico, no la del segmento entero.
     """
     if not eventos:
-        return DECODER_TEXTO.nombre, 0.0
+        return DECODER_TEXTO.nombre, 0.0, {}
     conteo: dict[str, int] = {}
     confianzas: dict[str, list[float]] = {}
     for e in eventos:
@@ -82,7 +94,8 @@ def _decoder_efectivo(eventos: list[NormalizedEvent]) -> tuple[str, float]:
         confianzas.setdefault(e.decoder, []).append(e.parsing_confidence)
     dominante = max(conteo, key=lambda k: (conteo[k], k))
     confianza = sum(confianzas[dominante]) / len(confianzas[dominante])
-    return dominante, round(min(max(confianza, 0.0), 1.0), 4)
+    distribucion = dict(sorted(conteo.items(), key=lambda kv: (-kv[1], kv[0])))
+    return dominante, round(min(max(confianza, 0.0), 1.0), 4), distribucion
 
 
 def _dominante_del_bloque(bloque: list[RawRecord], contexto: dict
@@ -193,14 +206,16 @@ def detectar_y_decodificar(
         # decodificados -- no desde el intento inicial sobre el bloque
         # completo, que el reproceso de arriba puede haber superado
         # registro por registro. El intento inicial queda en `decoder_
-        # inicial`/`confidence_inicial`, para trazabilidad.
-        decoder_efectivo, confianza_efectiva = _decoder_efectivo(eventos_segmento)
+        # inicial`/`confidence_inicial`, para trazabilidad; la distribución
+        # completa (no solo el ganador) queda en `decoder_distribution`.
+        decoder_efectivo, confianza_efectiva, distribucion = _decoder_efectivo(eventos_segmento)
         res.segments.append(RecordSegment(
             index=indice,
             decoder=decoder_efectivo,
             confidence=confianza_efectiva,
             decoder_inicial=dominante.nombre,
             confidence_inicial=confianza_inicial,
+            decoder_distribution=distribucion,
             line_start=pendientes[0].line_start,
             line_end=pendientes[-1].line_end,
             n_records=len(pendientes),

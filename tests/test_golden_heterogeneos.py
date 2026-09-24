@@ -135,12 +135,15 @@ def test_contrato_de_esquema_v2(raw, modo):
 
 
 def test_contrato_de_segmento_incluye_decoder_inicial_y_confidence_inicial():
-    """M3 agregó dos campos al contrato de `RecordSegment` -- confirma que
-    todo segmento los trae, aunque sean `None` (lote sin heterogeneidad)."""
+    """M3 agregó tres campos al contrato de `RecordSegment` -- confirma
+    que todo segmento los trae (decoder_distribution al menos con el
+    propio `decoder` como única clave, si no hubo empate ni reproceso)."""
     v2 = agregar_v2(preprocesar(MIXTO, modo="hybrid", chunk_size=10))
     for segmento in v2["segments"]:
         assert "decoder_inicial" in segmento
         assert "confidence_inicial" in segmento
+        assert "decoder_distribution" in segmento
+        assert segmento["decoder"] in segmento["decoder_distribution"]
 
 
 def _regenerar() -> None:  # pragma: no cover -- utilidad manual, no se corre en la suite

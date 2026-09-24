@@ -83,6 +83,16 @@ class RecordSegment:
     # SÍ eran el intento inicial; un lote con eventos JSON/syslog/texto
     # mezclados en un mismo bloque podía quedar reportado como "text @
     # 0.33" aunque casi todos sus registros se hubieran decodificado bien.
+    #
+    # `decoder` es el decoder con MÁS eventos en el segmento -- no
+    # necesariamente una mayoría: con un empate (p. ej. 2 json / 2
+    # syslog), se desempata por orden alfabético del nombre del decoder,
+    # únicamente para que el resultado sea determinista, no porque uno
+    # sea "mejor". `decoder_distribution` trae el conteo completo, así
+    # que un empate queda visible en vez de escondido detrás de una sola
+    # etiqueta (corregido tras una revisión de Antonia: la primera
+    # versión de este campo no existía, y el mensaje del commit describía
+    # el resultado como "la mayoría real" incluso en casos de empate).
     decoder: str
     line_start: int
     line_end: int
@@ -90,10 +100,17 @@ class RecordSegment:
     confidence: float = 0.0
     # El intento inicial (antes del reproceso individual), conservado
     # para trazabilidad -- decisión de Antonia: recalcular la etiqueta
-    # principal en vez de agregar un campo aparte con la distribución
+    # principal en vez de agregar SOLO un campo aparte con la distribución
     # efectiva, pero sin perder el dato del primer intento.
     decoder_inicial: str | None = None
     confidence_inicial: float | None = None
+    # Conteo real de decoders entre los eventos del segmento, de mayor a
+    # menor -- p. ej. {"syslog": 3, "json": 1}. `decoder` es simplemente
+    # la primera clave de este dict; se guarda aparte para no obligar a
+    # quien lo consume a asumir un orden de iteración de dict, y porque
+    # "el segmento tiene distribución de decoders X" es, en sí, un dato
+    # más informativo que solo el ganador.
+    decoder_distribution: dict = field(default_factory=dict)
     # Contexto propio del segmento: p. ej. la cabecera de un CSV. Que viva
     # acá y no en el decoder evita el estado compartido entre análisis
     # concurrentes que hubo que resolver en el adaptador CSV v1.
