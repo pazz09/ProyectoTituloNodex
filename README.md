@@ -91,7 +91,9 @@ NODEX/
 ├── docs/                           # Referencia técnica (pipeline de preprocesamiento, cierre de auditoría)
 ├── results/                        # JSON de corridas de evaluación
 ├── tests/                           # Suite de pruebas deterministas
+├── .github/workflows/ci.yml           # Backend (pytest) + frontend (lint/typecheck/test/build)
 ├── requirements.txt
+├── constraints.txt                      # Lock completo (directas + transitivas) para reproducibilidad
 ├── .env.example
 └── .gitignore
 ```
@@ -103,9 +105,11 @@ NODEX/
 ```bash
 python -m venv .venv
 # Windows: .venv\Scripts\activate   |   Unix: source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements.txt -c constraints.txt
 cp .env.example .env   # completar con tus API keys
 ```
+
+`requirements.txt` fija cada dependencia directa a la versión exacta con la que corre la suite hoy; `constraints.txt` es el `pip freeze` completo (directas + transitivas), para que el entorno se pueda reproducir igual en cualquier máquina — importante para que las métricas de evaluación (`results/`) sean comparables entre corridas. Sin `-c constraints.txt` igual instala (`requirements.txt` solo no falla), pero sin la garantía de reproducibilidad total.
 
 ### API keys necesarias
 
@@ -141,8 +145,11 @@ python -m src.tools.log_runner data/logs/HDFS_2k.log
 **Pruebas**:
 
 ```bash
-pytest tests/ -q
+pytest tests/ -q                # backend
+cd frontend && pnpm lint && pnpm typecheck && pnpm test && pnpm build   # frontend
 ```
+
+CI (`.github/workflows/ci.yml`) corre ambos en cada push/PR.
 
 ## Preprocesamiento
 
