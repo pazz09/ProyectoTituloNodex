@@ -7,7 +7,9 @@ Criterios de aceptación de la fase:
 4. No se comparte estado CSV entre análisis concurrentes.
 """
 
-from src.preprocessing.pipeline import preprocesar
+import pytest
+
+from src.preprocessing.pipeline import PreprocesamientoError, preprocesar
 
 SYSLOG = "<38>Jan 10 13:55:36 srv sshd[1]: Failed password for root from 203.0.113.10 port 22 ssh2"
 JSON_L = '{"@timestamp": "2024-01-02T10:00:00Z", "src_ip": "10.0.0.1", "msg": "conexion"}'
@@ -231,18 +233,20 @@ def test_modo_chunked_no_reprocesa_y_por_eso_pierde_el_intruso():
 
 # --- límites de volumen ---------------------------------------------------
 
-def test_limite_de_eventos_corta_y_avisa():
+def test_limite_de_eventos_rechaza_el_lote():
+    """M6 (Fase 4 del cierre de auditoría, 23-sep-2026): antes truncaba
+    con una advertencia; ahora rechaza, la misma política que ya usaba la
+    API (HTTP 413) para el límite de bytes -- nunca se analiza "una
+    parte" del lote sin que quien lo pidió lo sepa de antemano."""
     lote = "".join(f"{JSON_L}\n" for _ in range(30))
-    res = preprocesar(lote, modo="line", max_eventos=10)
-    assert res.total_eventos == 10
-    assert "limite_de_eventos" in [w.codigo for w in res.warnings]
+    with pytest.raises(ValueError, match="LOG_MAX_EVENTS"):
+        preprocesar(lote, modo="line", max_eventos=10)
 
 
-def test_limite_de_bytes_recorta_y_avisa():
+def test_limite_de_bytes_rechaza_el_lote():
     lote = "".join(f"{JSON_L}\n" for _ in range(100))
-    res = preprocesar(lote, modo="line", max_bytes=500)
-    assert "limite_de_bytes" in [w.codigo for w in res.warnings]
-    assert res.total_eventos < 100
+    with pytest.raises(PreprocesamientoError, match="LOG_MAX_FILE_BYTES"):
+        preprocesar(lote, modo="line", max_bytes=500)
 
 
 # --- procedencia ----------------------------------------------------------

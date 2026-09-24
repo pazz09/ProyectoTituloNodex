@@ -79,22 +79,21 @@ def preprocesar(
     warnings: list[ParsingWarning] = []
 
     # --- ingesta: límite de tamaño ---
+    # M6 (Fase 4 del cierre de auditoría, 23-sep-2026): rechaza, no trunca.
+    # Antes, un lote sobre LOG_MAX_FILE_BYTES se recortaba y se seguía
+    # analizando -- inconsistente con la API (`/api/analizar`), que
+    # siempre rechazó con HTTP 413 el mismo caso. Ambos caminos ahora dan
+    # la misma respuesta: nunca se analiza "una parte" del lote sin que
+    # quien lo pidió lo sepa de antemano. `PreprocesamientoError` ya la
+    # atrapan el CLI (mensaje claro + exit 1) y el evaluador (se registra
+    # el lote como error y sigue con el resto) desde la Fase 1.
     bytes_entrada = len(texto.encode("utf-8", errors="replace"))
     if bytes_entrada > max_bytes:
-        # Se recorta por caracteres y se avisa: procesar medio archivo con
-        # constancia es preferible a rechazarlo entero o a agotar memoria.
-        proporcion = max_bytes / bytes_entrada
-        corte = int(len(texto) * proporcion)
-        texto = texto[:corte]
-        warnings.append(ParsingWarning(
-            codigo="limite_de_bytes",
-            mensaje=(
-                f"La entrada superaba LOG_MAX_FILE_BYTES ({max_bytes}); se "
-                f"procesaron los primeros {corte} caracteres de "
-                f"{bytes_entrada} bytes."
-            ),
-            severidad="error",
-        ))
+        raise PreprocesamientoError(
+            f"El lote pesa {bytes_entrada} bytes y supera el límite de "
+            f"{max_bytes} (LOG_MAX_FILE_BYTES). Subí un lote más chico o "
+            "ajustá esa variable."
+        )
 
     # --- segmentación ---
     seg = segmentar(texto, enable_multiline=enable_multiline,
