@@ -257,6 +257,61 @@ son deterministas de forma útil de versionar). `test_contrato_de_
 esquema_v2` fija la forma completa de `agregar_v2()` (18 claves con su
 tipo) sobre tres entradas distintas.
 
+### Corrección post-cierre de M3 (revisión de Antonia)
+
+El commit original de M3 (`10070e7`) no incluía `decoder_distribution`
+por segmento -- la propuesta original ("publicar la distribución
+efectiva junto al dominante") quedó implícita en la decisión de
+recalcular, pero nunca se agregó como campo. Además, el mensaje del
+commit y el test describían el caso de prueba como "syslog es mayoría
+real" cuando en realidad es un EMPATE (2 json, 2 syslog) que
+`_decoder_efectivo()` desempata por orden alfabético del nombre del
+decoder, no por frecuencia. Corregido en `dde2250`: se agregó
+`decoder_distribution` al contrato de `RecordSegment`, y se corrigió el
+lenguaje en código y tests para no describir un empate como mayoría.
+
+## Fase 5 — Documentación
+
+**Estado: resuelto.**
+
+- `docs/pipeline_preprocesamiento.md` (nuevo, commit `36a2d9e`): flujo
+  completo, actores y responsabilidades por etapa, contrato v2→v1, qué
+  llega al prompt del Triage (la allowlist) y qué no, con el motivo, y
+  la explicación de `decoder` vs. producto/perfil.
+- **M4** (commit `9df108c`): 6 archivos con docstrings de módulo
+  desactualizados (describían una migración v1→v2 en curso que terminó
+  hace tiempo) y 7 referencias a `docs/*.md` eliminados, corregidas o
+  redirigidas a rutas reales (`data/labels/hdfs_anomaly_label_2k.csv`
+  en vez de un documento que explicaba cómo conseguirlo). No se tocaron
+  las menciones históricas a "esquema v1"/"adaptador" que explican por
+  qué una decisión de diseño vigente es como es -- esas siguen siendo
+  ciertas.
+- **M7** (commit `71f2c6e`): investigado antes de tocar código -- el
+  frontend hoy NUNCA muestra el decoder crudo en ninguna vista;
+  `formato_detectado` (lo único que se muestra) ya resuelve al
+  producto/perfil cuando existe, así que HDFS/BGL ya se ven como tales,
+  no como "TEXT". El caso literal que M7 describe no tiene hoy una
+  ubicación en la UI. Se agregó igual un tooltip explicativo en las tres
+  vistas que muestran `formato_detectado`, cubriendo el espíritu del
+  hallazgo. Verificado con `npx tsc --noEmit` (limpio) y `npx next
+  build` (build de producción completo sin errores).
+- README (commits `36a2d9e`... `0696ae7`): nueva sección "Configuración"
+  con el efecto real de 17 variables; "Alcance y limitaciones conocidas"
+  con la tercera limitación de privacidad (exposición al LLM); mención
+  de decoder vs. producto/perfil en "Preprocesamiento"; `docs/` agregado
+  al árbol de "Estructura del proyecto".
+- **Revisión cruzada README ↔ código ↔ .env.example**: verificado que
+  las 33 variables de `.env.example` están documentadas (17 en la tabla
+  nueva; el resto -- modelo LLM, reintentos/backoff, memoria, MITRE --
+  ya cubiertas en otras secciones o de bajo impacto de comportamiento) y
+  que no hay contradicciones de valores. Verificado contra el código:
+  8 nodos del grafo (5 LLM + 3 Tool) y 4 aristas condicionales
+  (`src/graph/build_graph.py`), 31 campos de `LogGuardState`
+  (`src/state.py`), puerto 3010 del frontend (`frontend/package.json`).
+  Se encontró y corrigió un hueco real: `SCORE_MALICIOSO`/
+  `SCORE_SOSPECHOSO` no estaban documentados en ningún lado (commit
+  `0696ae7`).
+
 ## Limitaciones conocidas y trabajo futuro
 
 - **Exposición al LLM no cubierta por `LOG_PRESERVE_RAW`.** La variable
