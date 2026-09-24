@@ -165,6 +165,21 @@ export function useAnalisis() {
     }
   }, [])
 
+  // El mensaje `cierre` guarda una foto fija de la corrida tomada al
+  // terminar el stream. Si después se da feedback desde el informe, esa foto
+  // queda desactualizada: al volver al hilo y reabrir "Ver el informe" se
+  // vuelve a ver la corrida sin revisar. Esto la mantiene al día.
+  const actualizarCorrida = useCallback((actualizada: Corrida) => {
+    setCorrida((prev) => (prev && prev.job_id === actualizada.job_id ? actualizada : prev))
+    setMensajes((prev) =>
+      prev.map((m) =>
+        m.rol === 'cierre' && m.corrida.job_id === actualizada.job_id
+          ? { ...m, corrida: actualizada }
+          : m,
+      ),
+    )
+  }, [])
+
   const reiniciar = useCallback(() => {
     fuente.current?.close()
     fuente.current = null
@@ -187,6 +202,7 @@ export function useAnalisis() {
     corrida,
     analizar,
     reiniciar,
+    actualizarCorrida,
     setErrorCarga,
     /** Hay un hilo al que se puede volver. */
     hayHilo: mensajes.length > 0,

@@ -44,6 +44,18 @@ export default function Page() {
     setVista('informe')
   }, [])
 
+  // El feedback actualiza el informe que se está viendo Y la foto que el
+  // hilo guardó al terminar el análisis -- si no, volver a "Ver el informe"
+  // desde la conversación muestra otra vez la corrida como si no se hubiera
+  // revisado.
+  const registrarFeedback = useCallback(
+    (datos: Corrida) => {
+      setCorrida(datos)
+      analisis.actualizarCorrida(datos)
+    },
+    [analisis],
+  )
+
   if (vista === 'informe' && corrida) {
     return (
       <ReportView
@@ -58,7 +70,7 @@ export default function Page() {
             : undefined
         }
         onNavegar={navegar}
-        onFeedback={setCorrida}
+        onFeedback={registrarFeedback}
       />
     )
   }
