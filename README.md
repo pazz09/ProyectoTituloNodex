@@ -88,6 +88,7 @@ NODEX/
 │   ├── components/                   # Resumen, Multiagente, Informe, Ejecuciones
 │   └── lib/                            # Cliente de la API y catálogo de nodos
 ├── data/                          # Caché de reputación, ChromaDB, historial (no se versiona el contenido real)
+├── docs/                           # Referencia técnica (pipeline de preprocesamiento, cierre de auditoría)
 ├── results/                        # JSON de corridas de evaluación
 ├── tests/                           # Suite de pruebas deterministas
 ├── requirements.txt
@@ -156,6 +157,8 @@ ingesta → segmentación → detección y decodificación → enriquecimiento �
 - **Enriquecimiento**: 4 enriquecedores de producto (HDFS, BGL, Zeek, autenticación) añaden contexto específico y separan cualquier etiqueta de verdad de referencia del dataset hacia un canal aparte — el detector nunca ve la respuesta que se usa para evaluarlo.
 - **Agregación**: produce el resumen estructurado que llega a los agentes (nunca los eventos crudos completos).
 
+`decoder` (la sintaxis reconocida) y `product`/`perfil` (qué producto reconoció un enriquecedor) son dos cosas distintas: HDFS y BGL aparecen con `decoder=text` —ningún decodificador genérico reconoce sus columnas fijas— pero igual llegan a 100% de cobertura, porque el enriquecedor de producto sí las entiende. Ver "`decoder` vs. producto/perfil" en [`docs/pipeline_preprocesamiento.md`](docs/pipeline_preprocesamiento.md) para el detalle completo del flujo, el contrato v2↔v1 y qué campos llegan al prompt del Triage.
+
 **Limitación conocida**: no hay todavía un decodificador para logs de acceso web estilo Apache/NCSA combined, así que el campo `codigo_respuesta` queda vacío para ese estilo de log.
 
 ## Memoria de largo plazo
@@ -186,6 +189,34 @@ El reporte final se persiste en SQLite (`data/historial.db`) y se sirve en dos f
 
 `LOG_PRESERVE_RAW` (default `true`) controla si la secuencia temporal persistida y exportada conserva el texto crudo o una versión redactada (IPs/usuarios/hosts enmascarados), con un hash SHA-256 del lote en su lugar. **No controla lo que se envía al LLM**: las muestras del prompt del Triage llegan a la API de Gemini sin pasar por esta variable, con `true` o con `false` — ver el comentario junto a su declaración en `src/config.py`.
 
+## Configuración
+
+Todas las variables viven en `.env.example`, con sus defaults. Esta tabla documenta el **efecto real** de las que más cambian el comportamiento del sistema — el resto son ajustes finos con nombre autoexplicativo.
+
+| Variable | Default | Efecto real |
+|---|---|---|
+| `LOG_PARSING_MODE` | `hybrid` | Cómo se agrupan los registros para detectar formato: `batch` (un decoder para todo el lote, comportamiento de control), `chunked` (un decoder por bloque, sin reproceso), `line` (detección por registro, el más lento), `hybrid` (bloques + reproceso individual de los registros que el dominante no explica bien — el recomendado). |
+| `LOG_DETECTION_CHUNK_SIZE` | `50` | Tamaño del bloque en modo `chunked`/`hybrid`. |
+| `LOG_FORMAT_CONFIDENCE_THRESHOLD` | `0.50` | Confianza mínima para aceptar un decoder como dominante de un bloque; por debajo, el bloque cae a texto libre. |
+| `LOG_LINE_FALLBACK_THRESHOLD` | `0.70` | En modo `hybrid`, por debajo de esta confianza un registro se reprocesa individualmente en vez de aceptarse con el decoder dominante del bloque. Debe ser mayor que `LOG_FORMAT_CONFIDENCE_THRESHOLD`, si no el modo `hybrid` se comporta como `chunked` y la validación lo rechaza. |
+| `LOG_ENABLE_MULTILINE` | `true` | Si `false`, cada línea física es un registro (comportamiento de control, sin agrupar *stack traces*). |
+| `LOG_PRESERVE_RAW` | `true` | Controla la **persistencia** (`data/historial.db`) y la **exportación** (PDF) del texto crudo en la cronología del reporte. Con `false`: se redactan IPs/usuarios/hosts en el mensaje y se guarda un hash SHA-256 + líneas + tamaño en su lugar (`raw_procedencia`). **No controla lo que se envía al LLM** — ver más abajo. |
+| `LOG_MAX_RAW_SAMPLES` | `20` | Cuántas muestras de texto crudo (una por decoder distinto, hasta 500 caracteres cada una) se calculan durante el preprocesamiento. Estas muestras SÍ llegan al prompt del Triage (`contexto_preprocesamiento()`, ver `docs/pipeline_preprocesamiento.md`), sin pasar por `LOG_PRESERVE_RAW` — es la vía real por la que hoy sale texto crudo hacia Gemini. |
+| `LOG_MAX_UNMAPPED_FIELDS` | `100` | Tope de campos sin mapear que se conservan en `attributes` por evento, antes de descartar el resto silenciosamente. |
+| `LOG_MAX_FILE_BYTES` | `52428800` (50 MiB) | Tamaño máximo de un lote. Si se supera, el lote se **rechaza** (`PreprocesamientoError`) — no se trunca. Mismo límite que ya aplicaba la API al subir un archivo (HTTP 413); desde el cierre de auditoría del 23-sep-2026 (M6), CLI y evaluador también rechazan en vez de analizar una parte. |
+| `LOG_MAX_EVENTS` | `100000` | Igual que `LOG_MAX_FILE_BYTES`, pero por cantidad de eventos lógicos en vez de bytes. |
+| `CRONOLOGIA_MAX_EVENTOS` | `40` | Tope de entradas en la secuencia temporal del reporte (`cronologia`). Es un recorte de presentación: los conteos y distribuciones siguen calculándose sobre el lote completo. |
+| `TOP_N_IPS_PROMPT` | `20` | Cuántas IPs se detallan individualmente en el resumen que ve el Triage; el resto se agrega en `ips_resumidas`. Existe porque el costo en tokens del prompt escala con la cantidad de IPs distintas, no con las líneas del lote. |
+| `CONTEXTO_PREPROCESAMIENTO_MAX_CHARS` | `2000` | Presupuesto de caracteres para el segundo texto que ve el Triage (`contexto_preprocesamiento()`: esquema, cobertura, decoders, severidad, muestras). Si se supera, se recortan primero las muestras y las distribuciones; los conteos globales, la cobertura y las advertencias nunca se recortan. |
+| `CONFIDENCE_THRESHOLD` | `0.70` | Por debajo de esta confianza, el auditor marca `requiere_revision_humana=true`. |
+| `AUTO_PROMOTE` | `0.90` | Confianza a partir de la cual un diagnóstico confirmado por un analista se promueve a `attack_patterns` (few-shot para casos futuros). |
+| `MAX_PLAN_STEPS` / `MAX_REPLANS` | `6` / `1` | Cotas del ciclo Plan-and-Execute: pasos máximos del plan y replanificaciones máximas si la cobertura de evidencia no alcanza. |
+| `MAX_INTENTOS_CORRECCION` | `2` | Reintentos del ingeniero de mitigación si el validador rechaza los comandos propuestos. |
+
+### Lo que `LOG_PRESERVE_RAW` no cubre
+
+`LOG_PRESERVE_RAW=false` controla la persistencia local y la exportación en PDF — no lo que se envía a la API de Gemini. Las muestras de texto crudo que arma `contexto_preprocesamiento()` para el prompt del Triage (acotadas por `LOG_MAX_RAW_SAMPLES`) llegan al modelo sin pasar por esta variable, con `true` o con `false`. Es una limitación conocida y documentada a propósito (ver "Alcance y limitaciones conocidas" más abajo), no un descuido: cerrarla exigiría decidir si el Triage puede seguir diagnosticando con muestras redactadas, y es un cambio aparte del alcance de este README.
+
 ## Pruebas
 
 Suite determinista (`pytest tests/ -q`), sin costo de cuota de LLM ni credenciales reales — cubre agentes (con el LLM simulado), routers, el grafo compilado, preprocesamiento, memoria, y los endpoints de la API.
@@ -194,4 +225,9 @@ Suite determinista (`pytest tests/ -q`), sin costo de cuota de LLM ni credencial
 
 Por diseño (ver Capítulo 8 del informe, §8.7.2): no incluye despliegue productivo, integración con SIEM, ingesta en tiempo real, ejecución automática de comandos, ni fine-tuning del modelo de lenguaje. La validación final y la toma de decisiones operacionales quedan bajo responsabilidad humana — el sistema propone, no ejecuta.
 
-Limitaciones técnicas conocidas, ya documentadas en el código: sin decodificador para logs de acceso web (ver "Preprocesamiento" arriba); variabilidad menor entre corridas idénticas pese a operar con temperatura 0; el enlace formal entre CVEs y técnicas MITRE ATT&CK no está implementado.
+Limitaciones técnicas conocidas, ya documentadas en el código:
+
+- Sin decodificador para logs de acceso web estilo Apache/NCSA combined (ver "Preprocesamiento" arriba) — el campo `codigo_respuesta` queda vacío para ese estilo de log.
+- El enlace formal entre CVEs y técnicas MITRE ATT&CK no está implementado — ambos se recuperan por separado, sin relacionarse entre sí en el reporte.
+- **Exposición de muestras al LLM**: `LOG_PRESERVE_RAW=false` evita persistir/exportar texto crudo, pero no evita que las muestras acotadas (`LOG_MAX_RAW_SAMPLES`) lleguen al prompt del Triage y salgan hacia la API de Gemini — ver "Configuración" arriba. Es la brecha de privacidad más relevante hoy entre las tres (persistencia, exportación, LLM): las dos primeras tienen control real, la tercera todavía no.
+- Variabilidad menor entre corridas idénticas pese a operar con temperatura 0.
