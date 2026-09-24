@@ -1,9 +1,12 @@
-"""Preprocesamiento heterogéneo de logs (esquema v2).
+"""Preprocesamiento heterogéneo de logs (esquema v2) -- único motor del
+sistema desde el 23-sep-2026 (el motor anterior de adaptadores por
+formato se retiró; ver "Preprocesamiento" en el README).
 
-Implementa el plan de `docs/plan_accion_preprocesamiento_heterogeneo.md`.
-Durante la migración este paquete convive con `src/tools/aggregation.py`
-(esquema v1): los modelos y la tubería nuevos se construyen aparte y no
-alteran ningún contrato existente hasta la Fase 8.
+Flujo: ingesta -> segmentación -> detección y decodificación ->
+enriquecimiento -> agregación (ver `docs/pipeline_preprocesamiento.md`
+para el detalle de cada etapa). `src/tools/aggregation.py` sigue siendo
+la fachada que el resto del sistema usa (`aggregate_logs()`,
+`preprocesar_lote()`), pero por debajo corre exclusivamente esta tubería.
 """
 
 from src.preprocessing.models import (

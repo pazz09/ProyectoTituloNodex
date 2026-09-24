@@ -382,13 +382,22 @@ def _veredicto(corrida: dict) -> str:
     return "SIN HALLAZGOS"
 
 
-def generar_informe_pdf(corrida: dict) -> bytes:
-    """Arma el informe de una corrida. Nunca lanza por datos faltantes."""
+def generar_informe_pdf(corrida: dict, comprimir: bool = True) -> bytes:
+    """Arma el informe de una corrida. Nunca lanza por datos faltantes.
+
+    `comprimir=False` desactiva la compresión FlateDecode del contenido
+    (`pdf.set_compression`, ver fpdf2). Existe para poder auditar el PDF
+    por bytes en las pruebas (Fase 3 del cierre de auditoría, 23-sep-2026):
+    con la compresión activa -- el default en producción, sin cambios --
+    ni un string tan obvio como el nombre del archivo aparece como
+    substring literal en la salida.
+    """
     corrida = corrida or {}
     resumen = _como_dict(corrida.get("resumen_json"))
     reporte = _como_dict(corrida.get("reporte_json"))
 
     pdf = _Informe()
+    pdf.set_compression(comprimir)
     _portada(pdf, corrida)
 
     # --- Resumen del análisis ---------------------------------------------

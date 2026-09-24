@@ -101,6 +101,19 @@ IP_CACHE_PATH = os.environ.get("IP_CACHE_PATH", "./data/ip_reputation_cache.json
 # la escala real del incidente.
 TOP_N_IPS_PROMPT = int(os.environ.get("TOP_N_IPS_PROMPT", "20"))
 
+# --- Acotamiento del contexto de preprocesamiento en el prompt (Fase 2 del
+# cierre de auditoría, 23-sep-2026, hallazgo A2) ---
+# Tope de caracteres para `contexto_preprocesamiento()`
+# (src/preprocessing/prompt_context.py), que ahora se adjunta también en la
+# PRIMERA pasada del triage, no solo en la segunda. Sus campos son
+# distribuciones de baja cardinalidad (decoders, severidades, categorías,
+# perfiles) que no escalan con el tamaño del lote -- a diferencia de
+# TOP_N_IPS_PROMPT arriba, que sí existe porque `por_ip` escala con la
+# cantidad de IPs distintas. Esta cota es una garantía explícita y
+# auditable (ver tests/test_triage_contexto_v2.py), no una que el contenido
+# actual necesite para no crecer sin techo.
+CONTEXTO_PREPROCESAMIENTO_MAX_CHARS = int(os.environ.get("CONTEXTO_PREPROCESAMIENTO_MAX_CHARS", "2000"))
+
 # --- Memoria (ChromaDB) ---
 TOP_K_FEWSHOT = int(os.environ.get("TOP_K_FEWSHOT", "3"))
 TOP_K_ERRORS = int(os.environ.get("TOP_K_ERRORS", "3"))
@@ -189,20 +202,22 @@ MITRE_ATTACK_ATTRIBUTION = (
 )
 
 
-# --- Preprocesamiento heterogéneo de logs, esquema v2 (Fase 2 del plan;
-# ver docs/plan_accion_preprocesamiento_heterogeneo.md §9) ---
+# --- Preprocesamiento heterogéneo de logs (esquema v2, único motor desde
+# el 23-sep-2026 -- ver "Preprocesamiento" en el README y
+# docs/pipeline_preprocesamiento.md para el flujo completo) ---
 #
-# Estas variables NO afectan todavía al parser v1: `src/tools/aggregation.py`
-# sigue funcionando exactamente igual. Se externalizan acá para que la
-# tubería nueva, cuando exista, no tenga decisiones cableadas en el código y
-# para poder registrar la configuración efectiva de cada corrida (sin eso,
-# dos corridas con resultados distintos no son comparables).
+# Estas variables configuran la tubería determinística de `src/preprocessing/`
+# (segmentación, detección, decodificación, enriquecimiento, agregación), que
+# es el único camino de preprocesamiento del sistema. Se externalizan acá,
+# en vez de cablearse en el código, para poder registrar la configuración
+# efectiva de cada corrida -- sin eso, dos corridas con resultados distintos
+# no son comparables.
 #
 # A diferencia del resto del archivo, este bloque parsea con helpers que
 # validan: un valor presente pero inválido lanza un error que NOMBRA la
 # variable, en vez de un `ValueError: invalid literal for int()` sin
 # contexto. Una variable ausente usa su default y no lanza -- importar
-# `src.config` en un clon limpio no debe fallar (lección de la Fase 0).
+# `src.config` en un clon limpio no debe fallar.
 
 
 def _env_int(nombre: str, default: int) -> int:
@@ -269,6 +284,28 @@ LOG_FORMAT_CONFIDENCE_THRESHOLD = _env_float("LOG_FORMAT_CONFIDENCE_THRESHOLD", 
 LOG_LINE_FALLBACK_THRESHOLD = _env_float("LOG_LINE_FALLBACK_THRESHOLD", 0.70)
 
 LOG_ENABLE_MULTILINE = _env_bool("LOG_ENABLE_MULTILINE", True)
+# Controla la PERSISTENCIA y la EXPORTACIÓN del raw -- no lo que se envía
+# al LLM (Fase 3 del cierre de auditoría, 23-sep-2026, hallazgo A3: estaba
+# declarada, documentada y persistida, pero ningún componente la leía; el
+# raw se conservaba siempre).
+#
+# Default `true` para no romper el historial existente. Con `false`:
+#   - La cronología del resumen (persistida en `data/historial.db` y en el
+#     PDF, ver `src/preprocessing/aggregation.py::_cronologia_v2`) arma su
+#     `mensaje` desde el evento ya decodificado, nunca desde el texto
+#     crudo, y enmascara IPs/usuarios/hosts (`_redactar_mensaje`) -- una
+#     redacción por sustitución de lo que el propio preprocesamiento ya
+#     extrajo, no un análisis de texto libre en busca de PII.
+#   - En su lugar se guarda `raw_procedencia`: hash SHA-256, líneas y
+#     tamaño del lote (`src/tools/aggregation.py::_procedencia_raw`).
+#
+# **Lo que esta variable NO controla**: las muestras de texto crudo que
+# `contexto_preprocesamiento()` arma para el prompt del Triage
+# (`src/preprocessing/prompt_context.py`, ver también Fase 2 del cierre)
+# se construyen a partir de `raw_samples`, que llega al LLM SIN pasar por
+# acá -- ni persistido ni redactado. Si se necesita que ningún log crudo
+# salga hacia la API de Gemini, ese es un cambio aparte, no cubierto por
+# esta variable ni por el cierre de esta auditoría.
 LOG_PRESERVE_RAW = _env_bool("LOG_PRESERVE_RAW", True)
 LOG_MAX_RAW_SAMPLES = _env_int("LOG_MAX_RAW_SAMPLES", 20)
 LOG_MAX_UNMAPPED_FIELDS = _env_int("LOG_MAX_UNMAPPED_FIELDS", 100)
@@ -288,10 +325,10 @@ LOG_MAX_EVENTS = _env_int("LOG_MAX_EVENTS", 100000)
 def validar_config_preprocesamiento() -> None:
     """Valida rangos y combinaciones de las variables `LOG_*`.
 
-    Se invoca explícitamente desde la tubería de preprocesamiento, NO al
-    importar el módulo: importar `src.config` con una configuración
-    incompleta no debe romper la suite (ver `docs/preprocessing_baseline.md`,
-    "Ejecución de la suite").
+    Se invoca explícitamente desde la tubería de preprocesamiento
+    (`preprocesar()`, ver `src/preprocessing/pipeline.py`), NO al importar
+    el módulo: importar `src.config` con una configuración incompleta no
+    debe romper la suite.
     """
     problemas: list[str] = []
 

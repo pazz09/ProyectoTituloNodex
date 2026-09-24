@@ -14,18 +14,87 @@ firma de embedding del lote, y la descripción en prosa para la recuperación
 de técnicas MITRE ATT&CK.
 """
 
-def aggregate_logs(raw: str) -> dict:
-    """Preprocesa el lote completo y devuelve el resumen estructurado que
-    consume el resto del sistema (agentes, evaluación, interfaz).
+import hashlib
 
-    Import diferido a propósito: `src.preprocessing.aggregation` importa
+
+def _procedencia_raw(raw: str) -> dict:
+    """Hash, cantidad de líneas y tamaño del raw -- lo que se persiste EN
+    VEZ del contenido cuando `LOG_PRESERVE_RAW=false` (Fase 3 del cierre de
+    auditoría, 23-sep-2026, hallazgo A3). Se calcula siempre, tenga o no
+    efecto la variable: es barato y sirve de procedencia incluso cuando el
+    raw sí se conserva.
+    """
+    datos = raw.encode("utf-8", errors="replace")
+    return {
+        "sha256": hashlib.sha256(datos).hexdigest(),
+        "lineas": raw.count("\n") + (1 if raw and not raw.endswith("\n") else 0),
+        "bytes": len(datos),
+    }
+
+
+def _preprocesar_y_agregar(raw: str):
+    """`preprocesar()` + `agregar_v2()`, cada uno UNA sola vez.
+
+    Núcleo compartido de `aggregate_logs()` y `preprocesar_lote()`. Import
+    diferido a propósito: `src.preprocessing.aggregation` importa
     `_entidades`/`_top`/`_CRONOLOGIA_MAX_MENSAJE` DESDE este módulo (son
-    ayudantes compartidos, no exclusivos de un formato); importar `derivar_v1`
-    a nivel de módulo acá arriba crearía un ciclo de imports entre ambos.
+    ayudantes compartidos, no exclusivos de un formato); importar a nivel de
+    módulo acá arriba crearía un ciclo de imports entre ambos.
+    """
+    from src.config import LOG_MAX_RAW_SAMPLES
+    from src.preprocessing.aggregation import agregar_v2
+    from src.preprocessing.pipeline import PreprocesamientoError, preprocesar
+
+    try:
+        resultado = preprocesar(raw)
+        v2 = agregar_v2(resultado, max_muestras=LOG_MAX_RAW_SAMPLES)
+    except PreprocesamientoError:
+        raise
+    except Exception as e:
+        # Punto único donde se envuelve la falla (revisión del camino
+        # productivo, cierre de auditoría 23-sep-2026): tanto el pipeline
+        # como el baseline pasan por acá, así que web, CLI y evaluador
+        # reciben el mismo mensaje claro en vez de cada uno formatear su
+        # propia versión del error. Se sigue PROPAGANDO -- no se swallow
+        # acá; cada consumidor decide cómo mostrarlo o si aborta.
+        raise PreprocesamientoError(
+            f"No se pudo preprocesar el lote ({type(e).__name__}: {e})"
+        ) from e
+    return resultado, v2
+
+
+def aggregate_logs(raw: str) -> dict:
+    """Preprocesa el lote completo y devuelve el resumen estructurado (v1)
+    que consume el resto del sistema (agentes, evaluación, interfaz).
+
+    Para quien necesite además el resumen v2 (metadatos de preprocesamiento
+    para el estado del grafo, p. ej. `pipeline.py`), usar `preprocesar_lote()`
+    en vez de esta función seguida de un segundo cálculo: `preprocesar()` no
+    debe correr dos veces sobre el mismo lote (hallazgo A1 de la auditoría
+    del 23-sep-2026).
     """
     from src.preprocessing.aggregation import derivar_v1
-    from src.preprocessing.pipeline import preprocesar
-    return derivar_v1(preprocesar(raw))
+    resultado, v2 = _preprocesar_y_agregar(raw)
+    resumen = derivar_v1(resultado, v2)
+    resumen["raw_procedencia"] = _procedencia_raw(raw)
+    return resumen
+
+
+def preprocesar_lote(raw: str):
+    """`preprocesar()` UNA sola vez, con las tres vistas que el sistema usa.
+
+    Devuelve `(resultado, v2, resumen_v1)`: el resultado crudo del
+    preprocesamiento (`PreprocessingResult`), el resumen genérico v2
+    (`agregar_v2`) y el resumen compatible v1 (`derivar_v1`), los tres
+    derivados de la MISMA pasada -- no de parseos independientes que podrían
+    divergir. Punto de entrada para `pipeline.py` y `baseline_reglas.py`,
+    que necesitan más de una vista del mismo lote.
+    """
+    from src.preprocessing.aggregation import derivar_v1
+    resultado, v2 = _preprocesar_y_agregar(raw)
+    resumen_v1 = derivar_v1(resultado, v2)
+    resumen_v1["raw_procedencia"] = _procedencia_raw(raw)
+    return resultado, v2, resumen_v1
 
 
 def _top(conteos: dict, n: int) -> dict:

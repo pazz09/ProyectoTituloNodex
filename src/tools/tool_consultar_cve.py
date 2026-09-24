@@ -39,19 +39,42 @@ def _es_buscable(termino: str) -> bool:
     return True
 
 
+def _con_version(keyword: str, metadatos: dict) -> str:
+    """Agrega la versión dominante al término de búsqueda, si el lote
+    declara una (M2, Fase 4 del cierre de auditoría, 23-sep-2026):
+    "FortiGate 7.0" acota mucho mejor en la NVD que "FortiGate" solo.
+
+    No arma un CPE estructurado (`cpe:2.3:...`, que la NVD también acepta
+    vía `cpeName`/`virtualMatchString`): eso exigiría normalizar
+    vendor/producto al vocabulario exacto del diccionario CPE de NIST, un
+    trabajo de mapeo aparte que hoy no se justifica -- `version_
+    distribution` solo lo pueblan los decoders CEF/LEEF (ver
+    `agregar_v2`), así que la mayoría de los lotes no tienen versión que
+    conectar de todos modos.
+    """
+    versiones = metadatos.get("version_distribution") or {}
+    if not versiones:
+        return keyword
+    version = max(versiones, key=lambda v: versiones[v])
+    return f"{keyword} {version}"
+
+
 def elegir_keyword(resumen: dict, metadatos: dict | None = None) -> str | None:
     """Término de búsqueda para la NVD, o `None` si no hay uno razonable.
 
     Orden de preferencia: producto, fabricante y por último servicio. La
     NVD indexa por producto y proveedor, así que un nombre de producto
     ("Apache", "OpenSSH") encuentra mucho más que el nombre interno de un
-    componente.
+    componente. Cuando el lote declara una versión dominante, se agrega
+    al término (`_con_version`) -- solo para producto/fabricante: un
+    servicio ("sshd") no tiene una versión de producto asociada de forma
+    confiable.
     """
     metadatos = metadatos or {}
     for clave in ("product_distribution", "vendor_distribution"):
         for candidato in (metadatos.get(clave) or {}):
             if _es_buscable(candidato):
-                return candidato
+                return _con_version(candidato, metadatos)
     for servicio in (resumen.get("servicios") or {}):
         if _es_buscable(servicio):
             return servicio

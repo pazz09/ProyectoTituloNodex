@@ -289,7 +289,11 @@ export function OverviewView({
                         }}
                       >
                         <td className="mono">{c.archivo_origen ?? '—'}</td>
-                        <td className="mono nowrap" style={{ color: 'var(--text-muted)' }}>
+                        <td
+                          className="mono nowrap"
+                          style={{ color: 'var(--text-muted)' }}
+                          title="Producto o perfil reconocido, no la sintaxis de la línea: HDFS y BGL, por ejemplo, se decodifican como texto plano pero igual se identifican por su propio formato de columnas."
+                        >
                           {(c.formato_detectado ?? '—').toUpperCase().replace(/_/g, '-')}
                         </td>
                         <td className="num">{c.confianza === null ? '—' : c.confianza.toFixed(2)}</td>

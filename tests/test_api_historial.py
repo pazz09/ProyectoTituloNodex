@@ -15,6 +15,7 @@ from fastapi.testclient import TestClient
 
 import src.api.main as api
 from src.api import historial
+from src.preprocessing.pipeline import PreprocesamientoError
 
 AUTH = ("Jan 10 13:55:36 srv sshd[1]: Failed password for root "
         "from 203.0.113.10 port 22 ssh2\n")
@@ -126,6 +127,40 @@ def test_una_excepcion_inesperada_tambien_queda_registrada(cliente, monkeypatch)
     c = historial.obtener_corrida(job_id)
     assert c["estado"] == "error"
     assert "fallo de la agregación" in c["error_mensaje"]
+
+
+def test_un_fallo_de_preprocesamiento_da_un_mensaje_claro_no_generico(cliente, monkeypatch):
+    """Revisión del camino productivo (cierre de auditoría, 23-sep-2026):
+    `preprocesar()` falla ANTES del evento "inicio" -- el generador de
+    `analizar_lote_stream` revienta en la primerísima iteración, sin haber
+    emitido nada todavía. El navegador debe recibir el mensaje propio de
+    `PreprocesamientoError`, no el prefijo genérico "Error inesperado del
+    servidor" que se antepone a cualquier otra excepción sin clasificar.
+
+    SSE ya comprometió la respuesta a HTTP 200 en cuanto StreamingResponse
+    empezó a transmitir (no hay forma de dar un código de error distinto a
+    mitad de un stream ya iniciado -- ver la nota de diseño en main.py): la
+    señal de error va en el evento, y este test lo confirma en vez de
+    asumirlo.
+    """
+    def revienta(raw_logs, thread_id=None):
+        raise PreprocesamientoError("No se pudo preprocesar el lote (ValueError: boom)")
+        yield  # pragma: no cover -- hace de esto un generador
+    monkeypatch.setattr(api, "analizar_lote_stream", revienta)
+
+    r = cliente.post("/api/analizar",
+                     files={"archivo": ("x.log", AUTH.encode(), "text/plain")})
+    stream = cliente.get(f"/api/stream/{r.json()['job_id']}")
+    cuerpo = stream.read().decode("utf-8")
+
+    assert stream.status_code == 200
+    assert '"tipo": "error"' in cuerpo
+    assert "No se pudo preprocesar el lote" in cuerpo
+    assert "Error inesperado del servidor" not in cuerpo
+
+    c = historial.obtener_corrida(r.json()["job_id"])
+    assert c["estado"] == "error"
+    assert "No se pudo preprocesar el lote" in c["error_mensaje"]
 
 
 def test_un_fallo_al_guardar_no_rompe_el_stream(cliente, monkeypatch, capsys):

@@ -8,7 +8,7 @@ import time
 
 from src.config import CONFIDENCE_THRESHOLD
 from src.graph.build_graph import build_graph
-from src.tools.aggregation import aggregate_logs, firma_lote
+from src.tools.aggregation import firma_lote, preprocesar_lote
 from src.tools.reputation import ReputationCache, corroborar_ips
 from src.tools.tool_consultar_rag import ltm  # instancia compartida de LongTermMemory
 
@@ -32,32 +32,51 @@ def get_ip_cache():
     return _ip_cache
 
 
-def _metadatos_preprocesamiento(raw_logs: str) -> tuple[dict, list, list]:
+def _metadatos_desde_v2(resultado, v2: dict) -> tuple[dict, list, list]:
     """Metadatos del preprocesamiento heterogéneo para el estado del grafo:
     esquema, cobertura, decoders y productos empleados.
 
     Devuelve (metadatos, advertencias, muestras).
 
+    Recibe `resultado`/`v2` ya calculados por `preprocesar_lote()` (una sola
+    vez por lote, ver `_preparar_estado_inicial`) en vez de recalcularlos a
+    partir del raw -- antes esta función volvía a llamar `preprocesar()`
+    sobre el mismo texto que `aggregate_logs()` ya había procesado
+    (hallazgo A1 de la auditoría del 23-sep-2026).
+
     **No se devuelven los eventos normalizados.** El estado de LangGraph se
     serializa en cada checkpoint, así que guardarlos haría crecer el estado
     en proporción al archivo (§14 del plan). Solo agregados y muestras.
+
+    **M1 (Fase 4 del cierre de auditoría, 23-sep-2026).** `agregar_v2()` ya
+    calculaba `profile_distribution`, `event_outcomes`, `entities` (ricas,
+    no solo el conteo) y `time_window`, pero esta función no los propagaba
+    al estado -- se agregan acá, junto con las tres distribuciones nuevas
+    (`vendor_distribution`, `version_distribution`, `protocol_distribution`,
+    ver `agregar_v2`). **Ninguno de estos campos se agrega al prompt del
+    Triage**: `contexto_preprocesamiento()` sigue leyendo exactamente la
+    misma allowlist de la Fase 2 -- en particular, ni `time_window` ni
+    `entities` entran ahí, porque la auditoría los marca como riesgo de
+    fuga del ground truth (la cronología, que comparte la misma fuente
+    temporal/de entidades, es la que reabrió esa fuga en el pasado). Que
+    un campo esté en el estado no implica que esté en el prompt -- lo
+    prueba tests/test_triage_contexto_v2.py.
     """
-    from src.config import LOG_MAX_RAW_SAMPLES
-
-    from src.preprocessing.aggregation import agregar_v2
-    from src.preprocessing.pipeline import preprocesar
-
-    resultado = preprocesar(raw_logs)
-    v2 = agregar_v2(resultado, max_muestras=LOG_MAX_RAW_SAMPLES)
-
     metadatos = {
         "schema_version": v2["schema_version"],
         "total_lineas_fisicas": v2["total_lineas_fisicas"],
         "total_eventos": v2["total_eventos"],
         "decoder_distribution": v2["decoder_distribution"],
         "product_distribution": v2["product_distribution"],
+        "vendor_distribution": v2["vendor_distribution"],
+        "version_distribution": v2["version_distribution"],
+        "protocol_distribution": v2["protocol_distribution"],
+        "profile_distribution": v2["profile_distribution"],
         "severity_distribution": v2["severity_distribution"],
         "event_categories": v2["event_categories"],
+        "event_outcomes": v2["event_outcomes"],
+        "entities": v2["entities"],
+        "time_window": v2["time_window"],
         "parsing": v2["parsing"],
         "segments": v2["segments"],
         "entities_resumen": {k: len(v) for k, v in v2["entities"].items()},
@@ -75,8 +94,12 @@ def _metadatos_preprocesamiento(raw_logs: str) -> tuple[dict, list, list]:
 def _preparar_estado_inicial(raw_logs: str, thread_id: str | None = None):
     """Agregación determinística + corroboración de IPs, común a
     `analizar_lote` (CLI/informe) y `analizar_lote_stream` (interfaz web,
-    ver `src/api/main.py`). Devuelve (input_inicial, config, firma)."""
-    resumen = aggregate_logs(raw_logs)
+    ver `src/api/main.py`). Devuelve (input_inicial, config, firma).
+
+    `preprocesar()` corre UNA sola vez por lote (`preprocesar_lote()`): antes
+    `aggregate_logs()` y `_metadatos_preprocesamiento()` procesaban el mismo
+    raw por separado (hallazgo A1 de la auditoría del 23-sep-2026)."""
+    _resultado, v2, resumen = preprocesar_lote(raw_logs)
 
     # La reputación se consulta SOLO sobre entidades de tipo IP. Con el
     # esquema v2 un lote puede no tener ninguna —un log de aplicación, por
@@ -85,7 +108,7 @@ def _preparar_estado_inicial(raw_logs: str, thread_id: str | None = None):
     ips = resumen.get("ips_distintas") or []
     resumen["reputacion_ips"] = corroborar_ips(ips, get_ip_cache()) if ips else {}
 
-    metadatos, advertencias, muestras = _metadatos_preprocesamiento(raw_logs)
+    metadatos, advertencias, muestras = _metadatos_desde_v2(_resultado, v2)
     firma = firma_lote(resumen, metadatos)
 
     input_inicial = {
@@ -211,6 +234,10 @@ def analizar_lote_stream(raw_logs: str, thread_id: str | None = None):
             "entidades": input_inicial["resumen_logs"].get("entidades") or [],
             "cronologia": input_inicial["resumen_logs"].get("cronologia") or [],
             "cronologia_omitidos": input_inicial["resumen_logs"].get("cronologia_omitidos") or 0,
+            # Procedencia del raw (Fase 3 del cierre de auditoría,
+            # 23-sep-2026, hallazgo A3): hash, líneas y tamaño -- lo que
+            # queda en vez del contenido cuando LOG_PRESERVE_RAW=false.
+            "raw_procedencia": input_inicial["resumen_logs"].get("raw_procedencia"),
         },
         # Cómo se interpretó el archivo (Fase 12 del plan): permite que la
         # interfaz distinga un parsing completo de uno parcial o en

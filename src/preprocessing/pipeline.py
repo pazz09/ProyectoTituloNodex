@@ -1,16 +1,17 @@
-"""Tubería de preprocesamiento v2 (Fase 5 del plan).
+"""Tubería de preprocesamiento (esquema v2, único motor del sistema).
 
-Ensambla las etapas en el orden del §6 del plan:
+Ensambla las etapas en orden:
 
-    ingesta -> segmentación -> detección -> decodificación -> resultado
+    ingesta -> segmentación -> detección -> decodificación -> enriquecimiento -> resultado
 
-Nada de esto está conectado todavía al grafo multiagente: `aggregate_logs()`
-sigue siendo el camino productivo hasta la Fase 8. Esta función existe para
-poder comparar salidas v1 y v2 sobre las mismas entradas, que es lo que la
-estrategia de migración del §12 pide antes de cambiar de motor.
+`preprocesar()` es el único camino de preprocesamiento hacia el grafo
+multiagente: `src/tools/aggregation.py::preprocesar_lote()` y
+`aggregate_logs()` lo llaman exactamente una vez por lote (ver
+docs/pipeline_preprocesamiento.md para el flujo completo y quién llama a
+quién).
 
 Ningún agente participa acá: el preprocesamiento es determinístico y no
-usa LLM (principio 1 del plan).
+usa LLM.
 """
 
 from src.config import (
@@ -31,6 +32,17 @@ from src.preprocessing.enrichers import ENRICHERS
 from src.preprocessing.models import ParsingWarning
 from src.preprocessing.result import PreprocessingResult
 from src.preprocessing.segmentation import segmentar
+
+
+class PreprocesamientoError(Exception):
+    """El preprocesamiento determinístico falló sobre el lote.
+
+    Mensaje pensado para mostrarse tal cual al usuario -- interfaz web, CLI
+    o evaluador (§ cierre de auditoría, 23-sep-2026, revisión del camino
+    productivo tras la Fase 1): no es un detalle interno de depuración, es
+    la explicación de por qué el lote no se pudo analizar. Quien la atrapa
+    no debe envolverla en un "error inesperado del servidor" genérico.
+    """
 
 
 def preprocesar(
@@ -68,22 +80,21 @@ def preprocesar(
     warnings: list[ParsingWarning] = []
 
     # --- ingesta: límite de tamaño ---
+    # M6 (Fase 4 del cierre de auditoría, 23-sep-2026): rechaza, no trunca.
+    # Antes, un lote sobre LOG_MAX_FILE_BYTES se recortaba y se seguía
+    # analizando -- inconsistente con la API (`/api/analizar`), que
+    # siempre rechazó con HTTP 413 el mismo caso. Ambos caminos ahora dan
+    # la misma respuesta: nunca se analiza "una parte" del lote sin que
+    # quien lo pidió lo sepa de antemano. `PreprocesamientoError` ya la
+    # atrapan el CLI (mensaje claro + exit 1) y el evaluador (se registra
+    # el lote como error y sigue con el resto) desde la Fase 1.
     bytes_entrada = len(texto.encode("utf-8", errors="replace"))
     if bytes_entrada > max_bytes:
-        # Se recorta por caracteres y se avisa: procesar medio archivo con
-        # constancia es preferible a rechazarlo entero o a agotar memoria.
-        proporcion = max_bytes / bytes_entrada
-        corte = int(len(texto) * proporcion)
-        texto = texto[:corte]
-        warnings.append(ParsingWarning(
-            codigo="limite_de_bytes",
-            mensaje=(
-                f"La entrada superaba LOG_MAX_FILE_BYTES ({max_bytes}); se "
-                f"procesaron los primeros {corte} caracteres de "
-                f"{bytes_entrada} bytes."
-            ),
-            severidad="error",
-        ))
+        raise PreprocesamientoError(
+            f"El lote pesa {bytes_entrada} bytes y supera el límite de "
+            f"{max_bytes} (LOG_MAX_FILE_BYTES). Subí un lote más chico o "
+            "ajustá esa variable."
+        )
 
     # --- segmentación ---
     seg = segmentar(texto, enable_multiline=enable_multiline,

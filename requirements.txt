@@ -1,23 +1,37 @@
+# Versiones fijadas al commit del cierre de auditoría (23-sep-2026), tomadas
+# de `pip freeze` sobre el .venv donde corre la suite completa y donde se
+# van a regenerar las métricas de la Fase 6 -- necesario para que esas
+# métricas sean reproducibles (Fase 7 del cierre de auditoría, hallazgo M6
+# original: "fijar las dependencias de Python").
+#
+# Este archivo lista los paquetes DIRECTOS, con un comentario de por qué
+# cada uno está. Para reproducir el entorno completo -- incluidas las
+# dependencias transitivas -- instalar con:
+#   pip install -r requirements.txt -c constraints.txt
+# `constraints.txt` es el `pip freeze` completo (141 paquetes); no agrega
+# nada que este archivo no pida, solo fija con qué versión exacta de cada
+# transitiva se probó.
+
 # --- Dependencias oficiales (Tabla 8.9 del Informe de Seminario) ---
-google-genai>=1.0.0
-chromadb>=0.5.0
-sentence-transformers>=2.7.0
-langgraph>=0.2.0
-requests>=2.31.0
-typing-extensions>=4.0.0
+google-genai==2.25.0
+chromadb==1.5.9
+sentence-transformers==6.1.0
+langgraph==1.2.12
+requests==2.34.2
+typing-extensions==4.16.0
 
 # --- Extras usados en este repo, no listados en la Tabla 8.9 ---
-python-dotenv>=1.0.0          # carga de .env (el notebook usaba google.colab.userdata)
-graphviz>=0.20.0              # opcional, para draw_mermaid_png en notebooks
-pandas>=2.2.0                 # notebook de experimentos / comparación de baselines
-matplotlib>=3.9.0
-xlrd>=2.0.0
-pytest>=8.3.0                 # testing
+python-dotenv==1.2.3          # carga de .env (el notebook usaba google.colab.userdata)
+graphviz==0.21                # opcional, para draw_mermaid_png en notebooks
+pandas==3.0.6                 # notebook de experimentos / comparación de baselines
+matplotlib==3.11.2
+xlrd==2.0.2
+pytest==9.1.1                 # testing
 
 # --- Interfaz web (panel de análisis, src/api/), 1-sep-2026 ---
-fastapi>=0.110.0
-uvicorn[standard]>=0.29.0
-python-multipart>=0.0.9       # necesario para UploadFile (subida de archivos) en FastAPI
-fpdf2>=2.7.0                  # informe descargable en PDF (src/api/informe_pdf.py);
+fastapi==0.141.1
+uvicorn[standard]==0.53.0
+python-multipart==0.0.32      # necesario para UploadFile (subida de archivos) en FastAPI
+fpdf2==2.8.8                  # informe descargable en PDF (src/api/informe_pdf.py);
                               # Python puro, sin binarios de sistema, para que el
                               # despliegue autohospedado no dependa de librerías nativas

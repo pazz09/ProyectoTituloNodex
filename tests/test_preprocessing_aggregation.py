@@ -188,3 +188,35 @@ def test_un_lote_sin_servicios_no_deja_el_campo_vacio():
     dejaría sin nada que decidir."""
     v1 = derivar_v1(preprocesar("texto suelto\n", modo="line"))
     assert v1["servicios"] == {"desconocido": 1}
+
+
+# --- M1 (Fase 4 del cierre de auditoría, 23-sep-2026): vendor/version/
+# protocol_distribution -----------------------------------------------------
+
+CEF = ("CEF:0|Fortinet|FortiGate|7.0|100|Trafico denegado|8|"
+      "src=10.0.0.1 dst=10.0.0.2 dpt=443")
+
+ZEEK_CONN = ("ts,uid,src_ip,dest_ip,dest_port,proto,conn_state\n"
+            "1667212800,C1,192.168.1.50,203.0.113.10,22,tcp,REJ\n"
+            "1667212801,C2,192.168.1.50,203.0.113.10,53,udp,SF\n")
+
+
+def test_agregar_v2_genera_vendor_y_version_distribution_desde_cef():
+    v2 = agregar_v2(preprocesar(CEF + "\n", modo="line"))
+    assert v2["vendor_distribution"] == {"Fortinet": 1}
+    assert v2["version_distribution"] == {"7.0": 1}
+
+
+def test_agregar_v2_genera_protocol_distribution_desde_zeek():
+    v2 = agregar_v2(preprocesar(ZEEK_CONN, modo="line"))
+    assert v2["protocol_distribution"] == {"tcp": 1, "udp": 1}
+
+
+def test_agregar_v2_sin_vendor_version_protocol_da_distribuciones_vacias():
+    """La mayoría de los formatos (auth_log, HDFS, BGL) no declaran
+    fabricante/versión/protocolo -- un dict vacío, no un error ni un
+    valor inventado."""
+    v2 = agregar_v2(preprocesar(SYSLOG + "\n", modo="line"))
+    assert v2["vendor_distribution"] == {}
+    assert v2["version_distribution"] == {}
+    assert v2["protocol_distribution"] == {}

@@ -19,6 +19,8 @@ registro, así que mandar `raw` al LLM reabriría exactamente la fuga que la
 Fase 7 cerró.
 """
 
+import re
+
 from src.config import CRONOLOGIA_MAX_EVENTOS
 from src.tools.aggregation import (
     _CRONOLOGIA_MAX_MENSAJE,
@@ -27,6 +29,38 @@ from src.tools.aggregation import (
 )
 from src.preprocessing.models import NormalizedEvent
 from src.preprocessing.result import PreprocessingResult
+
+_IP_RE = re.compile(r"\b(?:\d{1,3}\.){3}\d{1,3}\b")
+
+
+def _redactar_mensaje(texto: str, evento: NormalizedEvent) -> str:
+    """Enmascara IPs, usuarios y hosts en un mensaje antes de persistirlo.
+
+    Usado cuando `LOG_PRESERVE_RAW=false` (Fase 3 del cierre de auditoría,
+    23-sep-2026, hallazgo A3). Las IPs se enmascaran por patrón (cualquier
+    IPv4 en el texto); usuarios y hosts se enmascaran por SUSTITUCIÓN de los
+    valores que el propio preprocesamiento ya extrajo para ese evento
+    (`source_user`, `destination_user`, `source_host`, `destination_host`).
+
+    **Límite real, no ocultarlo**: esto no es una redacción exhaustiva de
+    PII. Si el mensaje nombra un usuario u host que el enriquecedor no
+    reconoció como tal (le falta un patrón, o el dato viene en un campo que
+    ningún decoder mapea), ese valor queda tal cual. Cubre lo que el propio
+    sistema ya sabe que es un usuario/host; no analiza el texto libre en
+    busca de PII no estructurada.
+    """
+    if not texto:
+        return texto
+    texto = _IP_RE.sub("[IP-REDACTADA]", texto)
+    for valor, marca in (
+        (evento.source_user, "[USUARIO-REDACTADO]"),
+        (evento.destination_user, "[USUARIO-REDACTADO]"),
+        (evento.source_host, "[HOST-REDACTADO]"),
+        (evento.destination_host, "[HOST-REDACTADO]"),
+    ):
+        if valor:
+            texto = texto.replace(valor, marca)
+    return texto
 
 # Campos del evento que aportan una "entidad" al resumen, y el nombre con
 # el que se agrupan.
@@ -164,6 +198,19 @@ def agregar_v2(resultado: PreprocessingResult, max_muestras: int = 20) -> dict:
         "total_eventos": resultado.total_eventos,
         "decoder_distribution": resultado.distribucion_decoders(),
         "product_distribution": _contar(e.product for e in eventos),
+        # M2 (Fase 4 del cierre de auditoría, 23-sep-2026): fabricante,
+        # para que tool_consultar_cve.py tenga un término de búsqueda
+        # buscable en la NVD cuando el producto interno no lo sea (p. ej.
+        # "hdfs.datanode"). Poblado hoy por CEF/LEEF (evento.vendor del
+        # decoder) y por los enriquecedores de Zeek/HDFS/BGL.
+        "vendor_distribution": _contar(e.vendor for e in eventos),
+        # M1: solo lo puebla hoy CEF/LEEF (evento.version del decoder) --
+        # vacío para el resto de los formatos, no es un defecto de esta
+        # agregación.
+        "version_distribution": _contar(e.version for e in eventos),
+        # M1: lo puebla el mapeo genérico clave-valor (proto/protocol/
+        # transport, ver normalization.py) -- típicamente Zeek conn logs.
+        "protocol_distribution": _contar(e.protocol for e in eventos),
         "profile_distribution": _contar(e.attributes.get("perfil") for e in eventos),
         "severity_distribution": _contar(e.severity for e in eventos),
         "event_categories": _contar(e.event_category for e in eventos),
@@ -256,7 +303,17 @@ def _cronologia_v2(eventos: list[NormalizedEvent], gt_embebido: bool = False) ->
     Con `gt_embebido` NO se reproduce `raw`: la etiqueta del dataset vive en
     la línea y copiarla al resumen reabriría la fuga de la Fase 7. Se usa
     `message`, que es la parte del registro ya separada por el decoder.
+
+    Con `LOG_PRESERVE_RAW=false` (Fase 3 del cierre de auditoría,
+    23-sep-2026, hallazgo A3) el mensaje se arma SIEMPRE desde `message`
+    (nunca `raw`, tenga o no ground truth embebido) y se redacta
+    (`_redactar_mensaje`); los campos `ip`/`ip_destino`/`usuario` de la
+    entrada, que son la misma información en forma estructurada, se
+    enmascaran junto con el texto -- redactar el mensaje y dejar el mismo
+    valor dos campos más abajo sería una redacción a medias.
     """
+    from src.config import LOG_PRESERVE_RAW
+
     entradas, omitidos = [], 0
     for e in eventos:
         if not _es_critico(e):
@@ -264,7 +321,12 @@ def _cronologia_v2(eventos: list[NormalizedEvent], gt_embebido: bool = False) ->
         if len(entradas) >= CRONOLOGIA_MAX_EVENTOS:
             omitidos += 1
             continue
-        crudo = e.message if gt_embebido else (e.raw or e.message)
+        if not LOG_PRESERVE_RAW:
+            crudo = _redactar_mensaje(e.message, e)
+        elif gt_embebido:
+            crudo = e.message
+        else:
+            crudo = e.raw or e.message
         mensaje = (crudo or "").strip()
         if len(mensaje) > _CRONOLOGIA_MAX_MENSAJE:
             mensaje = f"{mensaje[:_CRONOLOGIA_MAX_MENSAJE].rstrip()}…"
@@ -275,10 +337,20 @@ def _cronologia_v2(eventos: list[NormalizedEvent], gt_embebido: bool = False) ->
             "evento": "evento_critico",
             "mensaje": mensaje,
         }
-        for clave, valor in (("ip", e.source_ip), ("ip_destino", e.destination_ip),
-                             ("usuario", e.source_user), ("codigo_respuesta", e.event_code)):
-            if valor:
-                entrada[clave] = valor
+        if LOG_PRESERVE_RAW:
+            for clave, valor in (("ip", e.source_ip), ("ip_destino", e.destination_ip),
+                                 ("usuario", e.source_user), ("codigo_respuesta", e.event_code)):
+                if valor:
+                    entrada[clave] = valor
+        else:
+            if e.source_ip:
+                entrada["ip"] = "[IP-REDACTADA]"
+            if e.destination_ip:
+                entrada["ip_destino"] = "[IP-REDACTADA]"
+            if e.source_user:
+                entrada["usuario"] = "[USUARIO-REDACTADO]"
+            if e.event_code:
+                entrada["codigo_respuesta"] = e.event_code  # no es PII
         entradas.append(entrada)
     return {"cronologia": entradas, "cronologia_omitidos": omitidos}
 

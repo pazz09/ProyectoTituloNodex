@@ -30,6 +30,7 @@ from pydantic import BaseModel
 from src.api import historial
 from src.api.informe_pdf import generar_informe_pdf
 from src.pipeline import analizar_lote_stream, commit_feedback
+from src.preprocessing.pipeline import PreprocesamientoError
 
 app = FastAPI(title="NODEX — Panel de análisis")
 
@@ -312,6 +313,18 @@ def stream_analisis(job_id: str):
                 elif evento.get("tipo") == "error":
                     error = evento.get("mensaje")
                 yield _sse(evento)
+        except PreprocesamientoError as e:
+            # El preprocesamiento falla ANTES del primer evento ("inicio"):
+            # no hay nada del grafo que rescatar. Mensaje propio, sin el
+            # prefijo "error inesperado del servidor" de abajo -- esto no es
+            # un bug, es el lote que no se pudo interpretar (revisión del
+            # camino productivo, cierre de auditoría 23-sep-2026). SSE ya
+            # comprometió la respuesta a HTTP 200 en cuanto empezó a
+            # transmitir, así que la señal de error va en el evento, no en
+            # el código de estado -- ver la nota de diseño al inicio del
+            # archivo.
+            error = str(e)
+            yield _sse({"tipo": "error", "mensaje": error})
         except Exception as e:
             # Salvaguarda: analizar_lote_stream ya captura errores de la API
             # del LLM y emite su propio evento "error", pero esto cubre

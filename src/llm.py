@@ -38,10 +38,8 @@ from src.config import (
 # importación, y eso hacía fallar la COLECCIÓN de pytest en cualquier clon
 # sin `.env` -- 44 de los 85 tests (test_llm, test_eval_deteccion,
 # test_ciclo_correccion, test_agente_auditor_final) solo importan este
-# módulo para simular el LLM, nunca lo llaman de verdad. Bloqueo real
-# reportado en la Fase 0 del plan de preprocesamiento heterogéneo
-# (docs/plan_accion_preprocesamiento_heterogeneo.md §18) y reproducido el
-# 4-sep-2026 sobre un clon limpio.
+# módulo para simular el LLM, nunca lo llaman de verdad. Bloqueo real,
+# reproducido el 4-sep-2026 sobre un clon limpio.
 #
 # El cliente se construye igual al importar -- `genai.Client` no valida la
 # credencial ni toca la red al crearse -- para que siga siendo un objeto de

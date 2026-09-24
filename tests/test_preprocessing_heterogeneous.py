@@ -7,7 +7,9 @@ Criterios de aceptación de la fase:
 4. No se comparte estado CSV entre análisis concurrentes.
 """
 
-from src.preprocessing.pipeline import preprocesar
+import pytest
+
+from src.preprocessing.pipeline import PreprocesamientoError, preprocesar
 
 SYSLOG = "<38>Jan 10 13:55:36 srv sshd[1]: Failed password for root from 203.0.113.10 port 22 ssh2"
 JSON_L = '{"@timestamp": "2024-01-02T10:00:00Z", "src_ip": "10.0.0.1", "msg": "conexion"}'
@@ -189,13 +191,46 @@ def test_modo_batch_usa_un_unico_decoder_para_todo_el_lote():
 
 def test_modo_hybrid_reprocesa_el_registro_que_el_dominante_no_explica():
     """Un JSON intercalado en un bloque mayoritariamente syslog debe
-    decodificarse como JSON, no forzarse al decoder dominante."""
+    decodificarse como JSON, no forzarse al decoder dominante. Acá el
+    dominante inicial y el efectivo coinciden (syslog sigue siendo
+    mayoría incluso entre los eventos ya decodificados) -- el caso donde
+    DIVERGEN está en el test siguiente (M3)."""
     lote = "\n".join([SYSLOG] * 4 + [JSON_L]) + "\n"
     res = preprocesar(lote, modo="hybrid", chunk_size=10)
-    assert res.segments[0].decoder == "syslog"       # dominante del bloque
+    assert res.segments[0].decoder == "syslog"       # efectivo
+    assert res.segments[0].decoder_inicial == "syslog"  # y también el inicial
+    assert res.segments[0].decoder_distribution == {"syslog": 4, "json": 1}
     decoders = [e.decoder for e in res.events]
     assert decoders == ["syslog"] * 4 + ["json"]     # el intruso se reprocesó
     assert res.events[4].source_ip == "10.0.0.1"
+
+
+def test_m3_la_etiqueta_del_segmento_refleja_el_resultado_efectivo_no_el_intento_inicial():
+    """Hallazgo M3 de la auditoría técnica (23-sep-2026, Fase 4): antes de
+    este cierre, `segments[i].decoder` quedaba en el intento INICIAL sobre
+    el bloque completo -- acá "json" con confianza 0.5, el decoder que
+    "ganó" promediando sobre el bloque entero antes del reproceso.
+
+    **Corrección (revisión de Antonia, 23-sep-2026): este caso es un
+    EMPATE real entre los eventos ya decodificados (2 json, 2 syslog),
+    no una mayoría de syslog como decía la primera versión de este test
+    y del mensaje del commit.** `_decoder_efectivo()` desempata por orden
+    alfabético del nombre del decoder -- "syslog" > "json" -- únicamente
+    para que el resultado sea determinista, no porque syslog sea más
+    frecuente. Por eso el campo principal por sí solo puede ser engañoso
+    en un empate: `decoder_distribution` trae el conteo completo, y ESTE
+    test verifica que el empate quede visible ahí, no solo el ganador
+    arbitrario."""
+    lote = "\n".join([JSON_L, SYSLOG, TEXTO, JSON_L, SYSLOG]) + "\n"
+    res = preprocesar(lote, modo="hybrid", chunk_size=10)
+
+    segmento = res.segments[0]
+    assert segmento.decoder_inicial == "json"
+    assert segmento.decoder == "syslog"                  # efectivo: gana el desempate alfabético
+    assert segmento.decoder != segmento.decoder_inicial  # el caso que M3 describe
+    assert segmento.confidence != segmento.confidence_inicial
+    # el empate real queda visible acá, no escondido detrás de "syslog"
+    assert segmento.decoder_distribution == {"json": 2, "syslog": 2}
 
 
 def test_modo_chunked_no_reprocesa_y_por_eso_pierde_el_intruso():
@@ -207,18 +242,20 @@ def test_modo_chunked_no_reprocesa_y_por_eso_pierde_el_intruso():
 
 # --- límites de volumen ---------------------------------------------------
 
-def test_limite_de_eventos_corta_y_avisa():
+def test_limite_de_eventos_rechaza_el_lote():
+    """M6 (Fase 4 del cierre de auditoría, 23-sep-2026): antes truncaba
+    con una advertencia; ahora rechaza, la misma política que ya usaba la
+    API (HTTP 413) para el límite de bytes -- nunca se analiza "una
+    parte" del lote sin que quien lo pidió lo sepa de antemano."""
     lote = "".join(f"{JSON_L}\n" for _ in range(30))
-    res = preprocesar(lote, modo="line", max_eventos=10)
-    assert res.total_eventos == 10
-    assert "limite_de_eventos" in [w.codigo for w in res.warnings]
+    with pytest.raises(ValueError, match="LOG_MAX_EVENTS"):
+        preprocesar(lote, modo="line", max_eventos=10)
 
 
-def test_limite_de_bytes_recorta_y_avisa():
+def test_limite_de_bytes_rechaza_el_lote():
     lote = "".join(f"{JSON_L}\n" for _ in range(100))
-    res = preprocesar(lote, modo="line", max_bytes=500)
-    assert "limite_de_bytes" in [w.codigo for w in res.warnings]
-    assert res.total_eventos < 100
+    with pytest.raises(PreprocesamientoError, match="LOG_MAX_FILE_BYTES"):
+        preprocesar(lote, modo="line", max_bytes=500)
 
 
 # --- procedencia ----------------------------------------------------------

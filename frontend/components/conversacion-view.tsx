@@ -465,7 +465,13 @@ export function ConversacionView({
                   </div>
                   <div className="msg-cuerpo">
                     <p>
-                      Reconocí el lote como <strong className="mono">{(r.formato_detectado ?? '—').toUpperCase().replace(/_/g, '-')}</strong>:{' '}
+                      Reconocí el lote como{' '}
+                      <strong
+                        className="mono"
+                        title="Producto o perfil reconocido, no la sintaxis de la línea: HDFS y BGL, por ejemplo, se decodifican como texto plano pero igual se identifican por su propio formato de columnas."
+                      >
+                        {(r.formato_detectado ?? '—').toUpperCase().replace(/_/g, '-')}
+                      </strong>:{' '}
                       {r.total_lineas?.toLocaleString('es')} registros, {r.n_ips_distintas} IP(s) distinta(s)
                       {r.n_usuarios_distintos ? `, ${r.n_usuarios_distintos} actor(es)` : ''}
                       {ventana?.inicio && ventana?.fin ? `, entre ${ventana.inicio} y ${ventana.fin}` : ''}.

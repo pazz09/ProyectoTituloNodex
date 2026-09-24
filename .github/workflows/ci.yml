@@ -1,0 +1,69 @@
+name: CI
+
+# Fase 7 del cierre de auditoría técnica (23-sep-2026): backend y frontend
+# en verde antes de regenerar la evidencia experimental de la Fase 6, para
+# que las métricas corran sobre un commit reproducible.
+
+on:
+  push:
+    branches: [main, cierre-auditoria]
+  pull_request:
+
+jobs:
+  backend:
+    name: Backend (pytest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: "pip"
+
+      # `-c constraints.txt` fija también las dependencias transitivas, no
+      # solo las directas de requirements.txt -- ver el comentario al
+      # principio de ese archivo.
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt -c constraints.txt
+
+      # Credenciales vacías a propósito: la suite es determinista y no debe
+      # gastar cuota de LLM ni depender de una API key real en CI (mismo
+      # criterio que "Suite en cada fase" del cierre de auditoría).
+      - name: Ejecutar la suite
+        env:
+          GEMINI_API_KEY: ""
+          GOOGLE_API_KEY: ""
+        run: pytest tests/ -q
+
+  frontend:
+    name: Frontend (lint, typecheck, test, build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "pnpm"
+          cache-dependency-path: frontend/pnpm-lock.yaml
+
+      - name: Instalar dependencias
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Typecheck
+        run: pnpm run typecheck
+
+      - name: Test
+        run: pnpm run test
+
+      - name: Build
+        run: pnpm run build

@@ -6,6 +6,8 @@ Criterios de aceptación de la fase:
 3. Se conservan posiciones y contenido original.
 """
 
+import pytest
+
 from src.preprocessing.segmentation import segmentar
 
 AUTH_LOG = (
@@ -156,14 +158,13 @@ def test_continuacion_huerfana_se_emite_sola_y_avisa():
     assert res.lineas_contabilizadas == res.total_lineas_fisicas
 
 
-def test_limite_de_eventos_corta_y_deja_constancia():
-    """Un archivo desmedido no debe procesarse en silencio."""
+def test_limite_de_eventos_rechaza_el_lote():
+    """M6 (Fase 4 del cierre de auditoría, 23-sep-2026): un archivo
+    desmedido no debe procesarse en silencio ni "a medias" -- se rechaza,
+    no se trunca."""
     texto = "".join(f"linea {i}\n" for i in range(1, 51))
-    res = segmentar(texto, max_eventos=10)
-    assert res.truncado is True
-    assert len(res.records) == 10
-    assert res.warnings[0].codigo == "limite_de_eventos"
-    assert res.warnings[0].severidad == "error"
+    with pytest.raises(ValueError, match="LOG_MAX_EVENTS"):
+        segmentar(texto, max_eventos=10)
 
 
 def test_sin_limite_no_se_trunca():

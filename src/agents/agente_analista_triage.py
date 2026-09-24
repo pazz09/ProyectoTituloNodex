@@ -36,6 +36,22 @@ def _contexto_plan_rag(state: LogGuardState) -> str:
     return "El plan de investigación no contempla consultar memoria histórica para este caso."
 
 
+def _contexto_pre(state: LogGuardState) -> str:
+    """Cómo se interpretó el lote (esquema, cobertura, advertencias,
+    muestras acotadas) -- ver `contexto_preprocesamiento`. Antes solo se
+    adjuntaba en la SEGUNDA pasada del triage (después del RAG); un
+    diagnóstico de primera pasada podía cerrarse sin haber visto la
+    cobertura del parsing ni las advertencias (hallazgo A2 de la auditoría
+    del 23-sep-2026). Va vacío con el motor v1, donde estos metadatos no
+    existen."""
+    return contexto_preprocesamiento(
+        state.get("preprocessing_metadata"),
+        state.get("parsing_warnings"),
+        state.get("raw_samples"),
+        incluir_muestras=True,
+    )
+
+
 def agente_analista_triage(state: LogGuardState) -> dict:
     print("\n🧠 [Agente Triage] Analizando el incidente...")
 
@@ -85,12 +101,7 @@ def agente_analista_triage(state: LogGuardState) -> dict:
         # resumen incompleto y responde con la misma seguridad que si todo
         # se hubiera decodificado (Fase 10 del plan). Va vacío con el motor
         # v1, donde estos metadatos no existen.
-        contexto_pre = contexto_preprocesamiento(
-            state.get("preprocessing_metadata"),
-            state.get("parsing_warnings"),
-            state.get("raw_samples"),
-            incluir_muestras=True,
-        )
+        contexto_pre = _contexto_pre(state)
         plan_objetivo = state.get("plan_objetivo")
         user_content = (
             (f"OBJETIVO DEL PLAN DE INVESTIGACIÓN: {plan_objetivo}\n\n" if plan_objetivo else "")
@@ -113,15 +124,22 @@ def agente_analista_triage(state: LogGuardState) -> dict:
         "(memoria de largo plazo) antes de diagnosticar. Si decides que SÍ hace "
         "falta ese contexto, no diagnostiques todavía: pide la consulta. Si "
         "decides que NO hace falta, diagnostica directamente basándote solo en "
-        "el resumen. "
+        "el resumen. Si el lote se interpretó con baja cobertura o trae "
+        "advertencias de parsing, tenlo en cuenta: puede convenir pedir "
+        "contexto histórico aunque el resumen por sí solo parezca alcanzar. "
         'Responde SOLO en JSON: {"necesita_rag": true/false, '
         '"diagnostico": "..." (vacío si necesita_rag es true), "razon": "..."}'
     )
     resumen_para_llm = acotar_resumen_para_prompt(state["resumen_logs"])
+    # Antes esta primera pasada no recibía el contexto v2 (esquema, cobertura,
+    # advertencias): podía cerrar un diagnóstico sin haberlo visto (hallazgo
+    # A2 de la auditoría del 23-sep-2026, Fase 2 del cierre).
+    contexto_pre = _contexto_pre(state)
     plan_objetivo = state.get("plan_objetivo")
     user_content = (
         (f"OBJETIVO DEL PLAN DE INVESTIGACIÓN: {plan_objetivo}\n\n" if plan_objetivo else "")
         + f"{_contexto_plan_rag(state)}\n\n"
+        + (f"{contexto_pre}\n\n" if contexto_pre else "")
         + f"RESUMEN DEL LOTE:\n{json.dumps(resumen_para_llm, ensure_ascii=False)}"
     )
     respuesta = llm_json(user_content, system=sys_instruction)

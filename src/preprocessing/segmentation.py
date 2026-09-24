@@ -187,8 +187,11 @@ def segmentar(
     Con `enable_multiline=False` cada línea no vacía es un registro, que es
     el comportamiento del esquema v1 y sirve de control para comparar.
 
-    `max_eventos` corta la segmentación y deja una advertencia explícita en
-    vez de procesar un archivo desmedido en silencio (§14 del plan).
+    `max_eventos` RECHAZA el lote (lanza `ValueError`) en vez de procesar
+    un archivo desmedido en silencio (§14 del plan) -- misma política que
+    el límite de bytes en `preprocesar()` (M6, Fase 4 del cierre de
+    auditoría, 23-sep-2026: antes truncaba con una advertencia, la API
+    ya rechazaba el mismo caso por bytes; ahora los dos caminos coinciden).
     """
     lineas = texto.splitlines()
     res = SegmentationResult(total_lineas_fisicas=len(lineas))
@@ -222,17 +225,19 @@ def segmentar(
             continue
 
         if max_eventos is not None and len(res.records) >= max_eventos:
-            res.truncado = True
-            res.warnings.append(ParsingWarning(
-                codigo="limite_de_eventos",
-                mensaje=(
-                    f"Se alcanzó LOG_MAX_EVENTS ({max_eventos}); la "
-                    f"segmentación se detuvo en la línea {i} de {len(lineas)}."
-                ),
-                severidad="error",
-                line_start=i,
-            ))
-            break
+            # M6 (Fase 4 del cierre de auditoría, 23-sep-2026): rechaza, no
+            # trunca -- misma política que el límite de bytes en
+            # preprocesar(). `ValueError` porque este módulo no depende de
+            # `pipeline.py` (evitaría un import circular); el llamador
+            # (_preprocesar_y_agregar, src/tools/aggregation.py) ya envuelve
+            # cualquier excepción del preprocesamiento en
+            # `PreprocesamientoError` con un mensaje claro.
+            raise ValueError(
+                f"El lote tiene más de {max_eventos} eventos "
+                f"(LOG_MAX_EVENTS); se alcanzó el límite en la línea {i} "
+                f"de {len(lineas)}. Subí un lote más chico o ajustá esa "
+                "variable."
+            )
 
         if not enable_multiline:
             actual = RawRecord(raw=linea, line_start=i, line_end=i)

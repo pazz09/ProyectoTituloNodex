@@ -116,6 +116,7 @@ from pathlib import Path
 
 from src.config import CONFIDENCE_THRESHOLD
 from src.pipeline import analizar_lote
+from src.preprocessing.pipeline import PreprocesamientoError
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 _DATA_DIR = _REPO_ROOT / "data" / "logs"
@@ -226,7 +227,7 @@ def _construir_lotes_hdfs(
         raise ValueError(
             f"Ningún block_id de {path.name} tiene label 'Anomaly' en {labels_csv} -- "
             "revisa que sea el archivo de labels correcto y que cubra estos block_id "
-            "(ver docs/como_obtener_labels_hdfs.md)."
+            "(ver data/labels/hdfs_anomaly_label_2k.csv, formato BlockId,Label)."
         )
     if not normales:
         raise ValueError(f"Ningún block_id de {path.name} tiene label 'Normal' en {labels_csv}.")
@@ -264,15 +265,25 @@ def _construir_lotes_hdfs(
 def _metricas(resultados: list[dict]) -> dict:
     """`resultados`: lista de dicts con 'ground_truth' y 'prediccion',
     cada uno 'anomalo' o 'normal'. Positivo = 'anomalo' (§8.6.2: incidente
-    confirmado)."""
-    tp = sum(1 for r in resultados if r["ground_truth"] == "anomalo" and r["prediccion"] == "anomalo")
-    fp = sum(1 for r in resultados if r["ground_truth"] == "normal" and r["prediccion"] == "anomalo")
-    fn = sum(1 for r in resultados if r["ground_truth"] == "anomalo" and r["prediccion"] == "normal")
-    tn = sum(1 for r in resultados if r["ground_truth"] == "normal" and r["prediccion"] == "normal")
+    confirmado).
+
+    Un lote que falló al preprocesarse (revisión del camino productivo,
+    cierre de auditoría 23-sep-2026) no trae 'prediccion' -- no hubo
+    veredicto que evaluar, así que se EXCLUYE explícitamente de la matriz
+    de confusión en vez de contar como un TN/FN implícito por descarte
+    silencioso. `n_fallidos` deja esa exclusión visible en el resultado,
+    no solo en el log de la corrida.
+    """
+    validos = [r for r in resultados if r.get("prediccion") in ("anomalo", "normal")]
+    tp = sum(1 for r in validos if r["ground_truth"] == "anomalo" and r["prediccion"] == "anomalo")
+    fp = sum(1 for r in validos if r["ground_truth"] == "normal" and r["prediccion"] == "anomalo")
+    fn = sum(1 for r in validos if r["ground_truth"] == "anomalo" and r["prediccion"] == "normal")
+    tn = sum(1 for r in validos if r["ground_truth"] == "normal" and r["prediccion"] == "normal")
     precision = (tp / (tp + fp)) if (tp + fp) else None
     recall = (tp / (tp + fn)) if (tp + fn) else None
     f1 = (2 * precision * recall / (precision + recall)) if (precision and recall and (precision + recall)) else None
-    return {"tp": tp, "fp": fp, "fn": fn, "tn": tn, "precision": precision, "recall": recall, "f1": f1}
+    return {"tp": tp, "fp": fp, "fn": fn, "tn": tn, "precision": precision, "recall": recall, "f1": f1,
+            "n_evaluados": len(validos), "n_fallidos": len(resultados) - len(validos)}
 
 
 def _prediccion_desde_estado(estado: dict, confianza: float, campo: str = "hay_incidente") -> str:
@@ -322,7 +333,10 @@ def correr_evaluacion(
         lotes = _construir_lotes_bgl(_DATA_DIR / "BGL_2k.log", n_lotes, lineas_por_lote)
     elif dataset == "hdfs":
         if not labels_csv:
-            raise ValueError("--labels es obligatorio para --dataset hdfs (ver docs/como_obtener_labels_hdfs.md)")
+            raise ValueError(
+                "--labels es obligatorio para --dataset hdfs "
+                "(usa data/labels/hdfs_anomaly_label_2k.csv, ya incluido en el repo)"
+            )
         lotes = _construir_lotes_hdfs(
             _DATA_DIR / "HDFS_2k.log", Path(labels_csv), n_lotes, lineas_por_lote, prop_positivos
         )
@@ -339,7 +353,25 @@ def correr_evaluacion(
     for i, lote in enumerate(lotes):
         print(f"\n[{i + 1}/{len(lotes)}] {lote['id']} (ground truth: {lote['ground_truth']}) ...")
         t0 = time.time()
-        estado = analizar_lote(lote["texto"], thread_id=f"eval_{lote['id']}")
+        # Un fallo de preprocesamiento en UN lote no debe abortar la corrida
+        # completa (perdería los resultados de los lotes ya evaluados) ni
+        # saltarse en silencio (falsearía las métricas por descarte tácito)
+        # -- revisión del camino productivo, cierre de auditoría 23-sep-2026.
+        # Se registra como error, con su mensaje, y `_metricas()` lo excluye
+        # explícitamente de la matriz de confusión.
+        try:
+            estado = analizar_lote(lote["texto"], thread_id=f"eval_{lote['id']}")
+        except PreprocesamientoError as e:
+            dt = time.time() - t0
+            print(f"   ⚠️ Lote falló al preprocesar ({dt:.1f}s): {e}")
+            resultados.append({
+                "id": lote["id"],
+                "ground_truth": lote["ground_truth"],
+                "estado": "error",
+                "error_mensaje": str(e),
+                "duracion_seg": round(dt, 1),
+            })
+            continue
         dt = time.time() - t0
         confianza = float(estado.get("confianza", 0) or 0)
         prediccion = _prediccion_desde_estado(estado, confianza, campo=campo_veredicto)
@@ -351,6 +383,7 @@ def correr_evaluacion(
         resultados.append({
             "id": lote["id"],
             "ground_truth": lote["ground_truth"],
+            "estado": "completo",
             "confianza": confianza,
             "hay_anomalia": estado.get("hay_anomalia"),
             "hay_incidente": estado.get("hay_incidente"),
@@ -387,6 +420,8 @@ def correr_evaluacion(
     print(f"\n{'=' * 60}")
     print(f"Precisión={metricas['precision']}  Recall={metricas['recall']}  F1={metricas['f1']}")
     print(f"TP={metricas['tp']}  FP={metricas['fp']}  FN={metricas['fn']}  TN={metricas['tn']}")
+    print(f"Evaluados={metricas['n_evaluados']}  Fallidos={metricas['n_fallidos']} "
+          f"(excluidos de la matriz de confusión)")
     print(f"Guardado en {destino}")
     return salida
 
