@@ -1,12 +1,14 @@
-"""Modelos normalizados del preprocesamiento v2 (Fase 1 del plan).
+"""Modelos normalizados del preprocesamiento (esquema v2).
 
-Estas estructuras reemplazan, a futuro, al dict por línea que devuelven hoy
-los adaptadores de `src/tools/aggregation.py`. En esta fase solo se definen:
-NADA en el sistema las consume todavía y el contrato v1 queda intacto.
+`NormalizedEvent` es el evento lógico que produce toda la tubería de
+`src/preprocessing/` -- lo que decodifican y enriquecen los módulos de
+`decoders/` y `enrichers/`, lo que agrega `aggregation.py`, y de donde
+`src/tools/aggregation.py` deriva el resumen compatible v1 que consumen
+los agentes.
 
 Tres decisiones de diseño que vale la pena dejar explícitas, porque
-corrigen problemas concretos de la línea base (ver
-`docs/preprocessing_baseline.md`, "Riesgos confirmados"):
+corrigen problemas concretos del motor de adaptadores que este esquema
+reemplazó:
 
 1. **Un campo por concepto.** El esquema v1 reutiliza `usuario` para un
    usuario real, un `blk_...` de HDFS, un nodo de BGL y un id de flujo de

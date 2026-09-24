@@ -227,7 +227,7 @@ def _construir_lotes_hdfs(
         raise ValueError(
             f"Ningún block_id de {path.name} tiene label 'Anomaly' en {labels_csv} -- "
             "revisa que sea el archivo de labels correcto y que cubra estos block_id "
-            "(ver docs/como_obtener_labels_hdfs.md)."
+            "(ver data/labels/hdfs_anomaly_label_2k.csv, formato BlockId,Label)."
         )
     if not normales:
         raise ValueError(f"Ningún block_id de {path.name} tiene label 'Normal' en {labels_csv}.")
@@ -333,7 +333,10 @@ def correr_evaluacion(
         lotes = _construir_lotes_bgl(_DATA_DIR / "BGL_2k.log", n_lotes, lineas_por_lote)
     elif dataset == "hdfs":
         if not labels_csv:
-            raise ValueError("--labels es obligatorio para --dataset hdfs (ver docs/como_obtener_labels_hdfs.md)")
+            raise ValueError(
+                "--labels es obligatorio para --dataset hdfs "
+                "(usa data/labels/hdfs_anomaly_label_2k.csv, ya incluido en el repo)"
+            )
         lotes = _construir_lotes_hdfs(
             _DATA_DIR / "HDFS_2k.log", Path(labels_csv), n_lotes, lineas_por_lote, prop_positivos
         )

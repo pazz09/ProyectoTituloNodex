@@ -1,16 +1,17 @@
-"""Tubería de preprocesamiento v2 (Fase 5 del plan).
+"""Tubería de preprocesamiento (esquema v2, único motor del sistema).
 
-Ensambla las etapas en el orden del §6 del plan:
+Ensambla las etapas en orden:
 
-    ingesta -> segmentación -> detección -> decodificación -> resultado
+    ingesta -> segmentación -> detección -> decodificación -> enriquecimiento -> resultado
 
-Nada de esto está conectado todavía al grafo multiagente: `aggregate_logs()`
-sigue siendo el camino productivo hasta la Fase 8. Esta función existe para
-poder comparar salidas v1 y v2 sobre las mismas entradas, que es lo que la
-estrategia de migración del §12 pide antes de cambiar de motor.
+`preprocesar()` es el único camino de preprocesamiento hacia el grafo
+multiagente: `src/tools/aggregation.py::preprocesar_lote()` y
+`aggregate_logs()` lo llaman exactamente una vez por lote (ver
+docs/pipeline_preprocesamiento.md para el flujo completo y quién llama a
+quién).
 
 Ningún agente participa acá: el preprocesamiento es determinístico y no
-usa LLM (principio 1 del plan).
+usa LLM.
 """
 
 from src.config import (

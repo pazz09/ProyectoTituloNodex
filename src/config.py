@@ -202,20 +202,22 @@ MITRE_ATTACK_ATTRIBUTION = (
 )
 
 
-# --- Preprocesamiento heterogéneo de logs, esquema v2 (Fase 2 del plan;
-# ver docs/plan_accion_preprocesamiento_heterogeneo.md §9) ---
+# --- Preprocesamiento heterogéneo de logs (esquema v2, único motor desde
+# el 23-sep-2026 -- ver "Preprocesamiento" en el README y
+# docs/pipeline_preprocesamiento.md para el flujo completo) ---
 #
-# Estas variables NO afectan todavía al parser v1: `src/tools/aggregation.py`
-# sigue funcionando exactamente igual. Se externalizan acá para que la
-# tubería nueva, cuando exista, no tenga decisiones cableadas en el código y
-# para poder registrar la configuración efectiva de cada corrida (sin eso,
-# dos corridas con resultados distintos no son comparables).
+# Estas variables configuran la tubería determinística de `src/preprocessing/`
+# (segmentación, detección, decodificación, enriquecimiento, agregación), que
+# es el único camino de preprocesamiento del sistema. Se externalizan acá,
+# en vez de cablearse en el código, para poder registrar la configuración
+# efectiva de cada corrida -- sin eso, dos corridas con resultados distintos
+# no son comparables.
 #
 # A diferencia del resto del archivo, este bloque parsea con helpers que
 # validan: un valor presente pero inválido lanza un error que NOMBRA la
 # variable, en vez de un `ValueError: invalid literal for int()` sin
 # contexto. Una variable ausente usa su default y no lanza -- importar
-# `src.config` en un clon limpio no debe fallar (lección de la Fase 0).
+# `src.config` en un clon limpio no debe fallar.
 
 
 def _env_int(nombre: str, default: int) -> int:
@@ -323,10 +325,10 @@ LOG_MAX_EVENTS = _env_int("LOG_MAX_EVENTS", 100000)
 def validar_config_preprocesamiento() -> None:
     """Valida rangos y combinaciones de las variables `LOG_*`.
 
-    Se invoca explícitamente desde la tubería de preprocesamiento, NO al
-    importar el módulo: importar `src.config` con una configuración
-    incompleta no debe romper la suite (ver `docs/preprocessing_baseline.md`,
-    "Ejecución de la suite").
+    Se invoca explícitamente desde la tubería de preprocesamiento
+    (`preprocesar()`, ver `src/preprocessing/pipeline.py`), NO al importar
+    el módulo: importar `src.config` con una configuración incompleta no
+    debe romper la suite.
     """
     problemas: list[str] = []
 
