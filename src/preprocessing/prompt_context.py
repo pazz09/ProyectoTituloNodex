@@ -31,20 +31,29 @@ tests/test_triage_contexto_v2.py.
 COBERTURA_BAJA = 0.60
 
 
-def _truncar(texto: str) -> str:
-    from src.config import CONTEXTO_PREPROCESAMIENTO_MAX_CHARS
-    if len(texto) <= CONTEXTO_PREPROCESAMIENTO_MAX_CHARS:
-        return texto
-    return texto[:CONTEXTO_PREPROCESAMIENTO_MAX_CHARS].rstrip() + "\n[…contexto recortado por presupuesto de caracteres]"
+_MARCA_OMITIDO = "[…se omitieron algunos detalles del preprocesamiento por presupuesto de caracteres]"
+_MARCA_RECORTADO = "[…contexto recortado por presupuesto de caracteres]"
 
 
 def contexto_preprocesamiento(metadatos: dict | None,
                               advertencias: list | None = None,
                               muestras: list | None = None,
                               incluir_muestras: bool = False) -> str:
-    """Párrafo con cómo se interpretó el lote, o `""` si no hay metadatos."""
+    """Párrafo con cómo se interpretó el lote, o `""` si no hay metadatos.
+
+    **Prioridad de recorte (confirmada por Antonia, cierre de auditoría,
+    23-sep-2026).** Si el resultado supera `CONTEXTO_PREPROCESAMIENTO_MAX_CHARS`,
+    lo primero que se quita son las muestras crudas y las distribuciones
+    (listas que pueden crecer); los conteos globales, la cobertura del
+    parsing y las advertencias de parsing NUNCA se recortan -- son la
+    señal de incertidumbre que esta función existe para transmitir (ver
+    docstring del módulo), así que quitarlas primero sería contradecir su
+    propio propósito.
+    """
     if not metadatos:
         return ""
+
+    from src.config import CONTEXTO_PREPROCESAMIENTO_MAX_CHARS
 
     parsing = metadatos.get("parsing") or {}
     cobertura = parsing.get("coverage")
@@ -55,40 +64,12 @@ def contexto_preprocesamiento(metadatos: dict | None,
     categorias = metadatos.get("event_categories") or {}
     segmentos = metadatos.get("segments") or []
 
-    lineas = ["CÓMO SE INTERPRETÓ EL LOTE (preprocesamiento determinístico):"]
-    lineas.append(
+    # --- núcleo: protegido, nunca se recorta ---
+    nucleo = ["CÓMO SE INTERPRETÓ EL LOTE (preprocesamiento determinístico):"]
+    nucleo.append(
         f"- {metadatos.get('total_eventos')} eventos lógicos a partir de "
         f"{metadatos.get('total_lineas_fisicas')} líneas físicas."
     )
-    if len(decoders) > 1:
-        lineas.append(
-            f"- Lote HETEROGÉNEO: convivieron {len(decoders)} formatos "
-            f"({', '.join(f'{k}={v}' for k, v in decoders.items())}) "
-            f"en {len(segmentos)} segmentos."
-        )
-    elif decoders:
-        lineas.append(f"- Formato único: {next(iter(decoders))}.")
-    if productos:
-        lineas.append(
-            f"- Productos reconocidos: "
-            f"{', '.join(f'{k} ({v})' for k, v in productos.items())}."
-        )
-    if perfiles:
-        lineas.append(
-            f"- Perfiles de enriquecimiento aplicados: "
-            f"{', '.join(f'{k} ({v})' for k, v in perfiles.items())}."
-        )
-    if severidades:
-        lineas.append(
-            f"- Severidad declarada por el propio log: "
-            f"{', '.join(f'{k}={v}' for k, v in severidades.items())}."
-        )
-    if categorias:
-        lineas.append(
-            f"- Categorías de evento: "
-            f"{', '.join(f'{k}={v}' for k, v in categorias.items())}."
-        )
-
     if cobertura is not None:
         detalle = (
             f"- Cobertura del parsing: {cobertura:.0%} "
@@ -101,20 +82,71 @@ def contexto_preprocesamiento(metadatos: dict | None,
                 "estructuralmente, así que el resumen puede estar incompleto. "
                 "Tenlo en cuenta al fijar tu nivel de confianza."
             )
-        lineas.append(detalle)
-
+        nucleo.append(detalle)
     graves = [w for w in (advertencias or [])
               if w.get("severidad") in ("warning", "error")]
     if graves:
-        lineas.append(
+        nucleo.append(
             f"- {len(graves)} advertencia(s) de parsing: "
             + "; ".join(w.get("mensaje", "") for w in graves[:3])
         )
 
+    # --- bloques recortables, de MENOR a MAYOR prioridad de conservación:
+    # si no alcanza el presupuesto, se quita primero el bloque 0 (muestras),
+    # después el 1, y así sucesivamente. ---
+    bloques: list[list[str]] = []
     if incluir_muestras and muestras:
-        lineas.append("- Muestras de registros crudos, una por formato:")
+        lineas_m = ["- Muestras de registros crudos, una por formato:"]
         for m in muestras[:5]:
             etiqueta = m.get("decoder") or "nota"
-            lineas.append(f"    [{etiqueta}] {str(m.get('texto', ''))[:300]}")
+            lineas_m.append(f"    [{etiqueta}] {str(m.get('texto', ''))[:300]}")
+        bloques.append(lineas_m)
+    if categorias:
+        bloques.append([
+            f"- Categorías de evento: "
+            f"{', '.join(f'{k}={v}' for k, v in categorias.items())}."
+        ])
+    if severidades:
+        bloques.append([
+            f"- Severidad declarada por el propio log: "
+            f"{', '.join(f'{k}={v}' for k, v in severidades.items())}."
+        ])
+    if perfiles:
+        bloques.append([
+            f"- Perfiles de enriquecimiento aplicados: "
+            f"{', '.join(f'{k} ({v})' for k, v in perfiles.items())}."
+        ])
+    if productos:
+        bloques.append([
+            f"- Productos reconocidos: "
+            f"{', '.join(f'{k} ({v})' for k, v in productos.items())}."
+        ])
+    if len(decoders) > 1:
+        bloques.append([
+            f"- Lote HETEROGÉNEO: convivieron {len(decoders)} formatos "
+            f"({', '.join(f'{k}={v}' for k, v in decoders.items())}) "
+            f"en {len(segmentos)} segmentos."
+        ])
+    elif decoders:
+        bloques.append([f"- Formato único: {next(iter(decoders))}."])
 
-    return _truncar("\n".join(lineas))
+    # Se intenta con todos los bloques; si sobra presupuesto se van quitando
+    # de a uno, del de menor prioridad al de mayor, hasta que entre.
+    restantes = list(bloques)
+    while True:
+        lineas = list(nucleo)
+        for bloque in restantes:
+            lineas.extend(bloque)
+        texto = "\n".join(lineas)
+        if len(texto) <= CONTEXTO_PREPROCESAMIENTO_MAX_CHARS or not restantes:
+            break
+        restantes.pop(0)
+
+    if len(texto) > CONTEXTO_PREPROCESAMIENTO_MAX_CHARS:
+        # Caso extremo: incluso el núcleo solo (p. ej. muchas advertencias
+        # largas) supera el presupuesto. Único caso con recorte ciego --
+        # ya no queda nada de menor prioridad que quitar.
+        return texto[:CONTEXTO_PREPROCESAMIENTO_MAX_CHARS].rstrip() + "\n" + _MARCA_RECORTADO
+    if len(restantes) < len(bloques):
+        texto += "\n" + _MARCA_OMITIDO
+    return texto

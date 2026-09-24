@@ -128,18 +128,55 @@ def test_el_contexto_solo_lee_la_allowlist_ignora_lo_demas():
     assert "198.51.100.7" not in texto
 
 
-def test_el_contexto_se_recorta_al_presupuesto_configurado(monkeypatch):
+def test_el_recorte_quita_primero_las_muestras_y_las_listas(monkeypatch):
+    """Prioridad de recorte (confirmada por Antonia, cierre de auditoría):
+    con presupuesto insuficiente para todo, lo primero que se quita son las
+    muestras y las distribuciones -- los conteos globales, la cobertura y
+    las advertencias NUNCA se recortan."""
     import src.config as cfg
-    monkeypatch.setattr(cfg, "CONTEXTO_PREPROCESAMIENTO_MAX_CHARS", 200)
-    texto = contexto_preprocesamiento(
-        {"total_eventos": 1, "total_lineas_fisicas": 1,
-         "decoder_distribution": {"text": 1},
-         "parsing": {"coverage": 0.0, "parsed_events": 0, "fallback_events": 1}},
-        muestras=[{"decoder": "text", "texto": "x" * 5000}],
-        incluir_muestras=True,
-    )
-    assert len(texto) <= 200 + len("\n[…contexto recortado por presupuesto de caracteres]")
-    assert texto.endswith("recortado por presupuesto de caracteres]")
+    # El núcleo (eventos + cobertura + advertencia) de este escenario mide
+    # ~410 caracteres: el presupuesto queda por encima para que el núcleo
+    # entre siempre entero, y por debajo del total con todos los bloques
+    # (~1120) para forzar que se descarte al menos alguno.
+    monkeypatch.setattr(cfg, "CONTEXTO_PREPROCESAMIENTO_MAX_CHARS", 500)
+    metadatos = {
+        "total_eventos": 500, "total_lineas_fisicas": 500,
+        "decoder_distribution": {"text": 300, "json": 150, "syslog": 50},
+        "product_distribution": {"HDFS": 300, "OpenSSH": 200},
+        "profile_distribution": {"hdfs": 300, "auth": 200},
+        "severity_distribution": {"FATAL": 3, "ERROR": 47, "WARN": 100, "INFO": 350},
+        "event_categories": {"hardware": 300, "authentication": 200},
+        "segments": [{"index": i} for i in range(30)],
+        "parsing": {"coverage": 0.30, "parsed_events": 150, "fallback_events": 350},
+    }
+    advertencias = [{"severidad": "error", "mensaje": "se alcanzó el límite de eventos"}]
+    muestras = [{"decoder": "text", "texto": "x" * 2000}]
+
+    texto = contexto_preprocesamiento(metadatos, advertencias, muestras, incluir_muestras=True)
+
+    # núcleo protegido: siempre presente, pase lo que pase con el presupuesto
+    assert "500 eventos lógicos" in texto
+    assert "Cobertura del parsing: 30%" in texto
+    assert "ATENCIÓN" in texto          # cobertura baja (< COBERTURA_BAJA)
+    assert "límite de eventos" in texto  # advertencia grave
+
+    # lo primero que se sacrifica: las muestras (2000 caracteres) no caben
+    # en un presupuesto de 250 junto con el núcleo, y no aparecen
+    assert "x" * 50 not in texto
+    assert "[…se omitieron algunos detalles" in texto
+
+
+def test_el_recorte_ciego_solo_ocurre_si_el_nucleo_por_si_solo_ya_excede(monkeypatch):
+    """Caso extremo: ni sacando todos los bloques recortables alcanza. Ahí
+    sí se recorta el núcleo, como último recurso -- no antes."""
+    import src.config as cfg
+    monkeypatch.setattr(cfg, "CONTEXTO_PREPROCESAMIENTO_MAX_CHARS", 40)
+    texto = contexto_preprocesamiento({
+        "total_eventos": 1, "total_lineas_fisicas": 1,
+        "decoder_distribution": {"text": 1},
+        "parsing": {"coverage": 1.0, "parsed_events": 1, "fallback_events": 0},
+    })
+    assert texto.endswith("[…contexto recortado por presupuesto de caracteres]")
 
 
 def test_sin_metadatos_el_contexto_es_vacio():
