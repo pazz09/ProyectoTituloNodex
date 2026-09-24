@@ -149,6 +149,24 @@
   PDF (no revuelve a tocar el raw, solo lee lo ya persistido), y forma de
   la respuesta del historial sin cambios cuando no hay raw.
 
+## Limitaciones conocidas y trabajo futuro
+
+- **Exposición al LLM no cubierta por `LOG_PRESERVE_RAW`.** La variable
+  controla la persistencia local (`data/historial.db`) y la exportación
+  (PDF) del raw -- **no** lo que se envía a Gemini. Las muestras que
+  `contexto_preprocesamiento()` arma para el prompt del Triage (Fase 2)
+  llegan a la API de Gemini sin pasar por esta variable, con `true` o con
+  `false`. Decisión explícita de Antonia (23-sep-2026): no se implementa
+  como parte de este cierre -- queda documentada como trabajo futuro. Si
+  se necesita que ningún log crudo salga hacia el LLM, es un cambio
+  aparte y más invasivo (tocaría qué ve el modelo para diagnosticar, no
+  solo qué se guarda), a decidir por separado.
+- **Estimación de tokens.** Los números de tokens que aparecen en este
+  informe (p. ej. la tabla de la Fase 2) usan la heurística
+  ~4 caracteres/token, no un conteo del tokenizer real de Gemini -- no
+  hay forma de medirlo sin gastar cuota de API. Son una aproximación para
+  dimensionar el orden de magnitud, no una cifra exacta.
+
 ## Evaluador (`eval_deteccion.py`)
 
 **Estado: resuelto.** Commit: `eval: un lote fallido no aborta la corrida

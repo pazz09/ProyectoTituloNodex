@@ -153,26 +153,46 @@ def test_con_preserve_raw_true_el_historial_si_guarda_la_ip(cliente, monkeypatch
     assert "203.0.113.10" in str(c["resumen_json"])
 
 
-def test_el_pdf_se_arma_solo_desde_lo_ya_persistido(cliente, monkeypatch):
-    """Exportación: `generar_informe_pdf()` no vuelve a tocar el raw ni el
-    preprocesamiento -- solo lee `corrida["resumen_json"]`/`["reporte_json"]`
-    (ver informe_pdf.py). Si esos ya llegaron redactados (probado arriba,
-    en la persistencia), el PDF sale redactado sin lógica propia que
-    también haya que auditar.
+def test_el_pdf_no_incluye_la_ip_ni_el_usuario_sin_enmascarar(cliente, monkeypatch):
+    """Exportación, verificada de verdad en los bytes del PDF.
 
-    No se busca el string de la IP en los bytes del PDF: fpdf2 comprime el
-    contenido (FlateDecode) y no venía ninguna librería de lectura de PDF
-    en el entorno -- se comprobó que ni siquiera "auth.log" (el nombre de
-    archivo, sin duda renderizado) aparece como substring literal. Una
-    búsqueda así daría un falso "no está" sin importar si de verdad se
-    redactó o no."""
+    fpdf2 comprime el contenido por defecto (FlateDecode): una búsqueda de
+    substring sobre la salida normal no encuentra ni "auth.log" (el nombre
+    del archivo, sin duda renderizado), así que un "no está" ahí no
+    demostraría nada. `generar_informe_pdf(comprimir=False)` desactiva esa
+    compresión (parámetro agregado para esto).
+
+    La búsqueda se hace sobre la FRASE del mensaje crudo ("Failed password
+    for invalid user admin from 203.0.113.10"), no sobre la IP ni el
+    usuario sueltos: el informe también tiene una sección de entidades/
+    reputación que muestra la IP y el usuario de forma agregada (a
+    propósito -- son hallazgos del sistema, no una copia del raw, ver el
+    commit de la Fase 3) y buscar el valor suelto daría un falso "sí está"
+    sin importar si la cronología quedó redactada. La frase completa, en
+    cambio, solo puede venir de reproducir el mensaje crudo."""
     monkeypatch.setattr(cfg, "LOG_PRESERVE_RAW", False)
     job_id = _correr(cliente)
 
     c = historial.obtener_corrida(job_id)
-    assert "203.0.113.10" not in str(c["resumen_json"]["cronologia"])  # la fuente ya viene redactada
-    pdf_bytes = generar_informe_pdf(c)  # no debe fallar ni tocar nada fuera de `c`
+    pdf_bytes = generar_informe_pdf(c, comprimir=False)
     assert pdf_bytes[:4] == b"%PDF"
+    texto = pdf_bytes.decode("latin1")
+    assert "Failed password for invalid user admin" not in texto
+    assert "[IP-REDACTADA]" in texto
+    assert "[USUARIO-REDACTADO]" in texto
+
+
+def test_el_pdf_si_incluye_la_frase_cruda_con_preserve_raw_true(cliente, monkeypatch):
+    """Control positivo: confirma que la búsqueda por bytes SÍ encuentra la
+    frase cuando el dato no está redactado -- sin esto, el test anterior
+    podría estar pasando por la razón equivocada (p. ej. si la sección de
+    cronología no se renderizara en absoluto)."""
+    monkeypatch.setattr(cfg, "LOG_PRESERVE_RAW", True)
+    job_id = _correr(cliente)
+
+    c = historial.obtener_corrida(job_id)
+    pdf_bytes = generar_informe_pdf(c, comprimir=False)
+    assert "Failed password for invalid user admin" in pdf_bytes.decode("latin1")
 
 
 def test_la_respuesta_del_historial_conserva_su_forma_sin_raw(cliente, monkeypatch):
