@@ -1,9 +1,13 @@
 # Informe de cierre de la auditoría técnica (23-sep-2026)
 
 > Borrador vivo, actualizado fase por fase. La versión final (con la tabla
-> completa de hallazgos, resultados de la suite y métricas) se cierra en la
-> Fase 7. Hasta entonces, este documento registra hechos confirmados para no
-> depender de la memoria de la conversación entre fases.
+> completa de hallazgos, resultados de la suite y métricas) se cierra al
+> terminar todas las fases. Hasta entonces, este documento registra hechos
+> confirmados para no depender de la memoria de la conversación entre fases.
+>
+> Orden real de ejecución (decisión de Antonia, 24-sep-2026): Fase 7 antes
+> que Fase 6 -- la evaluación debe correr sobre un commit con CI en verde y
+> dependencias fijadas, para que las métricas sean reproducibles.
 
 ## Hallazgos
 
@@ -311,6 +315,38 @@ lenguaje en código y tests para no describir un empate como mayoría.
   Se encontró y corrigió un hueco real: `SCORE_MALICIOSO`/
   `SCORE_SOSPECHOSO` no estaban documentados en ningún lado (commit
   `0696ae7`).
+
+## Fase 7 — CI y dependencias fijadas
+
+**Estado: resuelto.** Adelantada antes de la Fase 6 (decisión de Antonia,
+24-sep-2026): la evaluación debe correr sobre un commit reproducible.
+
+- **Dependencias de Python** (commit `bfce055`): `requirements.txt` pasa
+  de rangos `>=` a versiones exactas (`==`), tomadas de `pip freeze`
+  sobre el `.venv` donde corre la suite. Nuevo `constraints.txt`: el
+  `pip freeze` completo (141 paquetes, directas + transitivas), usado
+  como restricción (`pip install -r requirements.txt -c
+  constraints.txt`) -- mecanismo estándar de pip, sin sumar una
+  herramienta de lock nueva (poetry/pip-tools). Verificado de verdad: se
+  instaló en un venv nuevo y se corrió la suite completa ahí --
+  537/537, mismo resultado que en desarrollo.
+- **CI** (commit `5765816`): `.github/workflows/ci.yml`, dos jobs --
+  `backend` (`pip install -r requirements.txt -c constraints.txt` +
+  `pytest tests/ -q` con credenciales de Gemini vacías) y `frontend`
+  (`pnpm install --frozen-lockfile` + lint + typecheck + test + build).
+- **Frontend, scripts nuevos**: `lint` (ESLint, `eslint-config-next`),
+  `typecheck` (`tsc --noEmit`), `test` (Vitest, un test mínimo real que
+  verifica que el catálogo de 8 nodos del frontend siga sincronizado con
+  el grafo del backend). Encontró 2 hallazgos reales pre-existentes
+  (`react-hooks/set-state-in-effect` en `historial-view.tsx` y
+  `overview-view.tsx`) -- bajados a warning, fuera de alcance de este
+  cierre reescribir el patrón de carga de esas vistas.
+- **Límite de esta verificación**: los cuatro pasos (lint, typecheck,
+  test, build) y la suite del backend se corrieron y confirmaron en
+  verde LOCALMENTE, con los mismos comandos que usa el workflow. No se
+  hizo push a GitHub durante este cierre, así que el workflow de Actions
+  en sí no se vio correr de verdad -- es la validación pendiente en
+  cuanto se suba la rama.
 
 ## Limitaciones conocidas y trabajo futuro
 
