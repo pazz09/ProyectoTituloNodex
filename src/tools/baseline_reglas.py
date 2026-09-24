@@ -26,6 +26,7 @@ recibe el detector, que es lo que hace la comparación honesta.
 
 import argparse
 import json
+import subprocess
 import time
 from pathlib import Path
 
@@ -95,6 +96,41 @@ def clasificar_texto(raw_logs: str) -> dict:
 
     _resultado, metadatos, resumen = preprocesar_lote(raw_logs)
     return clasificar(resumen, metadatos)
+
+
+def _commit_git() -> str | None:
+    """Hash del commit sobre el que corrió el baseline, o `None` si no se
+    pudo obtener (p. ej. corriendo fuera de un checkout de git). `None` en
+    vez de lanzar: la corrida ya generó resultados reales y no debe
+    perderlos por no poder identificar el commit."""
+    try:
+        return subprocess.check_output(
+            ["git", "rev-parse", "HEAD"],
+            cwd=Path(__file__).resolve().parents[2],
+            stderr=subprocess.DEVNULL, text=True,
+        ).strip()
+    except Exception:
+        return None
+
+
+def _procedencia() -> dict:
+    """Motor, versión de esquema, configuración y commit (M5, Fase 4 del
+    cierre de auditoría, 23-sep-2026): sin esto, dos archivos de
+    `results/` con umbrales o código distintos parecían comparables sin
+    serlo -- `eval_deteccion.py` ya registraba motor/configuración desde
+    la Fase 11 del plan original; al baseline le faltaba, y a los dos les
+    faltaba el commit."""
+    from src.config import (
+        LOG_NORMALIZATION_SCHEMA_VERSION,
+        LOG_PREPROCESSING_ENGINE,
+        config_preprocesamiento_efectiva,
+    )
+    return {
+        "motor_preprocesamiento": LOG_PREPROCESSING_ENGINE,
+        "schema_version": LOG_NORMALIZATION_SCHEMA_VERSION,
+        "config_preprocesamiento": config_preprocesamiento_efectiva(),
+        "commit": _commit_git(),
+    }
 
 
 def _main() -> None:
@@ -169,6 +205,7 @@ def _main() -> None:
                     "proporcion_fallidos": UMBRAL_PROPORCION_FALLIDOS,
                     "fallidos_por_ip": UMBRAL_FALLIDOS_POR_IP,
                 },
+                **_procedencia(),
                 "duracion_seg": round(duracion, 3),
                 "llamadas_llm": 0,
                 "metricas": m,
