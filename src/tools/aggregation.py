@@ -14,6 +14,24 @@ firma de embedding del lote, y la descripción en prosa para la recuperación
 de técnicas MITRE ATT&CK.
 """
 
+import hashlib
+
+
+def _procedencia_raw(raw: str) -> dict:
+    """Hash, cantidad de líneas y tamaño del raw -- lo que se persiste EN
+    VEZ del contenido cuando `LOG_PRESERVE_RAW=false` (Fase 3 del cierre de
+    auditoría, 23-sep-2026, hallazgo A3). Se calcula siempre, tenga o no
+    efecto la variable: es barato y sirve de procedencia incluso cuando el
+    raw sí se conserva.
+    """
+    datos = raw.encode("utf-8", errors="replace")
+    return {
+        "sha256": hashlib.sha256(datos).hexdigest(),
+        "lineas": raw.count("\n") + (1 if raw and not raw.endswith("\n") else 0),
+        "bytes": len(datos),
+    }
+
+
 def _preprocesar_y_agregar(raw: str):
     """`preprocesar()` + `agregar_v2()`, cada uno UNA sola vez.
 
@@ -57,7 +75,9 @@ def aggregate_logs(raw: str) -> dict:
     """
     from src.preprocessing.aggregation import derivar_v1
     resultado, v2 = _preprocesar_y_agregar(raw)
-    return derivar_v1(resultado, v2)
+    resumen = derivar_v1(resultado, v2)
+    resumen["raw_procedencia"] = _procedencia_raw(raw)
+    return resumen
 
 
 def preprocesar_lote(raw: str):
@@ -73,6 +93,7 @@ def preprocesar_lote(raw: str):
     from src.preprocessing.aggregation import derivar_v1
     resultado, v2 = _preprocesar_y_agregar(raw)
     resumen_v1 = derivar_v1(resultado, v2)
+    resumen_v1["raw_procedencia"] = _procedencia_raw(raw)
     return resultado, v2, resumen_v1
 
 

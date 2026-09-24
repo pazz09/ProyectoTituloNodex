@@ -282,6 +282,28 @@ LOG_FORMAT_CONFIDENCE_THRESHOLD = _env_float("LOG_FORMAT_CONFIDENCE_THRESHOLD", 
 LOG_LINE_FALLBACK_THRESHOLD = _env_float("LOG_LINE_FALLBACK_THRESHOLD", 0.70)
 
 LOG_ENABLE_MULTILINE = _env_bool("LOG_ENABLE_MULTILINE", True)
+# Controla la PERSISTENCIA y la EXPORTACIÓN del raw -- no lo que se envía
+# al LLM (Fase 3 del cierre de auditoría, 23-sep-2026, hallazgo A3: estaba
+# declarada, documentada y persistida, pero ningún componente la leía; el
+# raw se conservaba siempre).
+#
+# Default `true` para no romper el historial existente. Con `false`:
+#   - La cronología del resumen (persistida en `data/historial.db` y en el
+#     PDF, ver `src/preprocessing/aggregation.py::_cronologia_v2`) arma su
+#     `mensaje` desde el evento ya decodificado, nunca desde el texto
+#     crudo, y enmascara IPs/usuarios/hosts (`_redactar_mensaje`) -- una
+#     redacción por sustitución de lo que el propio preprocesamiento ya
+#     extrajo, no un análisis de texto libre en busca de PII.
+#   - En su lugar se guarda `raw_procedencia`: hash SHA-256, líneas y
+#     tamaño del lote (`src/tools/aggregation.py::_procedencia_raw`).
+#
+# **Lo que esta variable NO controla**: las muestras de texto crudo que
+# `contexto_preprocesamiento()` arma para el prompt del Triage
+# (`src/preprocessing/prompt_context.py`, ver también Fase 2 del cierre)
+# se construyen a partir de `raw_samples`, que llega al LLM SIN pasar por
+# acá -- ni persistido ni redactado. Si se necesita que ningún log crudo
+# salga hacia la API de Gemini, ese es un cambio aparte, no cubierto por
+# esta variable ni por el cierre de esta auditoría.
 LOG_PRESERVE_RAW = _env_bool("LOG_PRESERVE_RAW", True)
 LOG_MAX_RAW_SAMPLES = _env_int("LOG_MAX_RAW_SAMPLES", 20)
 LOG_MAX_UNMAPPED_FIELDS = _env_int("LOG_MAX_UNMAPPED_FIELDS", 100)

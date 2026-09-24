@@ -184,6 +184,8 @@ El reporte final se persiste en SQLite (`data/historial.db`) y se sirve en dos f
 - **Estructurado** (JSON): expuesto por la API y por el modo de línea de comandos.
 - **PDF**: documento único con plantilla propia (portada, una sección por página, serie temporal de eventos relevantes); la interfaz lo incrusta directamente, no lo vuelve a maquetar.
 
+`LOG_PRESERVE_RAW` (default `true`) controla si la secuencia temporal persistida y exportada conserva el texto crudo o una versión redactada (IPs/usuarios/hosts enmascarados), con un hash SHA-256 del lote en su lugar. **No controla lo que se envía al LLM**: las muestras del prompt del Triage llegan a la API de Gemini sin pasar por esta variable, con `true` o con `false` — ver el comentario junto a su declaración en `src/config.py`.
+
 ## Pruebas
 
 Suite determinista (`pytest tests/ -q`), sin costo de cuota de LLM ni credenciales reales — cubre agentes (con el LLM simulado), routers, el grafo compilado, preprocesamiento, memoria, y los endpoints de la API.

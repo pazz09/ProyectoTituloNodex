@@ -54,6 +54,9 @@ def run_from_file(path: str, thread_id: str | None = None, guardar: bool = True)
         "ventana_temporal": resumen_logs.get("ventana_temporal"),
         "servicios": resumen_logs.get("servicios"),
         "eventos": resumen_logs.get("eventos"),
+        # Procedencia del raw (Fase 3 del cierre de auditoría, 23-sep-2026,
+        # hallazgo A3): hash, líneas y tamaño -- no el contenido.
+        "raw_procedencia": resumen_logs.get("raw_procedencia"),
         "diagnostico": resultado.get("diagnostico"),
         "confianza": resultado.get("confianza"),
         "hay_incidente": resultado.get("hay_incidente"),

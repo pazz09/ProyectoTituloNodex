@@ -213,6 +213,10 @@ def analizar_lote_stream(raw_logs: str, thread_id: str | None = None):
             "entidades": input_inicial["resumen_logs"].get("entidades") or [],
             "cronologia": input_inicial["resumen_logs"].get("cronologia") or [],
             "cronologia_omitidos": input_inicial["resumen_logs"].get("cronologia_omitidos") or 0,
+            # Procedencia del raw (Fase 3 del cierre de auditoría,
+            # 23-sep-2026, hallazgo A3): hash, líneas y tamaño -- lo que
+            # queda en vez del contenido cuando LOG_PRESERVE_RAW=false.
+            "raw_procedencia": input_inicial["resumen_logs"].get("raw_procedencia"),
         },
         # Cómo se interpretó el archivo (Fase 12 del plan): permite que la
         # interfaz distinga un parsing completo de uno parcial o en

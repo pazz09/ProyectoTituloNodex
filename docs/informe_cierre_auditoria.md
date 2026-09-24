@@ -42,9 +42,9 @@
 
 **Estado: resuelto.**
 
-- Commit: `fase2: contexto v2 en la primera pasada del triage` (`128bd86`),
-  en `cierre-auditoria`. Ajustes de prioridad de recorte y numeros
-  concretos: commit pendiente de confirmar hash (ver más abajo).
+- Commits: `fase2: contexto v2 en la primera pasada del triage` (`128bd86`)
+  y `fase2: prioridad de recorte explícita en contexto_preprocesamiento`
+  (`0619751`), ambos en `cierre-auditoria`.
 - `contexto_preprocesamiento()` (`src/preprocessing/prompt_context.py`) se
   adjunta ahora en AMBAS pasadas del triage, no solo en la segunda. De
   paso se le agregaron los campos que la allowlist mínima pedía y que
@@ -81,14 +81,72 @@
   truth en ambos prompts con BGL real (etiquetas reales del archivo, no
   sintéticas), allowlist (campos sospechosos no leídos), recorte por
   prioridad (núcleo protegido) y recorte ciego solo como último recurso.
-- Suite: 506/506 tras el commit `128bd86`; pendiente de re-confirmar tras
-  el ajuste de prioridad de recorte.
+- Prioridad de recorte confirmada por Antonia: si el texto supera el
+  presupuesto, se arma un núcleo protegido (eventos/líneas totales,
+  cobertura, advertencias) que nunca se recorta, y se van quitando los
+  bloques recortables (muestras primero, después distribuciones) de menor
+  a mayor prioridad hasta que quepa. Recorte ciego solo si el núcleo por
+  sí solo ya excede el presupuesto (no se dio en ninguna medición real).
+- Suite: 507/507 tras el commit `0619751`.
 
 ### A3 — `LOG_PRESERVE_RAW`
 
-**Estado: en curso (Opción A, aprobada).**
+**Estado: resuelto (Opción A).**
 
-(se completa al cerrar la Fase 3)
+- Antes de este cierre, `LOG_PRESERVE_RAW` estaba declarada, documentada y
+  persistida en la configuración efectiva de cada corrida, pero ningún
+  componente la leía — el raw se conservaba siempre.
+- **Dónde se persistía/exportaba el raw** (relevado antes de implementar):
+  - `data/historial.db`, columna `resumen_json` → `cronologia[].mensaje`
+    (hasta 40 entradas por corrida, texto crudo truncado a 180
+    caracteres) y los campos `ip`/`ip_destino`/`usuario` de cada entrada.
+    Es el punto de persistencia real — el único encontrado.
+  - El informe en PDF (`/api/historial/{job_id}/pdf`) renderiza esa misma
+    cronología: es una exportación de lo ya persistido, no una fuente de
+    raw aparte.
+  - `results/*.json` (CLI `log_runner.py`, `eval_deteccion.py`,
+    `baseline_reglas.py`): **no** incluían cronología ni raw en ningún
+    campo — confirmado por revisión de código, no solo supuesto.
+  - `raw_samples` (muestras de hasta 500 caracteres por decoder): se
+    envían al navegador durante el streaming en vivo, pero **nunca se
+    persisten a disco** — quedan fuera del alcance de "persistencia y
+    exportación".
+  - Logs de aplicación (stdout): no imprimen contenido crudo del lote.
+- **Implementación**: default `LOG_PRESERVE_RAW=true` (compatibilidad con
+  el historial existente). Con `false`, `_cronologia_v2()`
+  (`src/preprocessing/aggregation.py`) arma el mensaje siempre desde el
+  evento ya decodificado (nunca `raw`) y lo redacta (`_redactar_mensaje`):
+  IPs por patrón, usuarios/hosts por sustitución de los valores que el
+  propio preprocesamiento ya extrajo para ese evento. Los campos
+  `ip`/`ip_destino`/`usuario` de cada entrada de cronología se enmascaran
+  igual — redactar el texto y dejar el mismo valor en un campo estructurado
+  al lado habría sido una redacción a medias. En su lugar se persiste
+  `raw_procedencia` (hash SHA-256, líneas, tamaño), calculado siempre
+  (`src/tools/aggregation.py::_procedencia_raw`), tenga o no efecto la
+  variable.
+- **Límite de la redacción, documentado a propósito**: no es un análisis
+  de PII en texto libre — cubre lo que el propio sistema ya identificó
+  como IP/usuario/host para ese evento. Un valor que el enriquecedor no
+  reconoció como tal queda tal cual.
+- **Lo que la variable NO controla, aclarado en `src/config.py`,
+  `.env.example` y el README**: las muestras que `contexto_
+  preprocesamiento()` arma para el prompt del Triage (Fase 2) llegan a la
+  API de Gemini sin pasar por acá, con `true` o con `false`. Si se
+  necesita que ningún log crudo salga hacia el LLM, es un cambio aparte,
+  no cubierto por este cierre — dejado explícito, no descubierto por
+  accidente.
+- **Alcance de la redacción confirmado por diseño, no por accidente**:
+  `reputacion_ips`, `ips_distintas`, `por_ip` y `usuarios` (agregados
+  estructurados, no reproducción del log) NO se redactan y siguen
+  mostrando las IPs -- es el comportamiento correcto: son hallazgos del
+  sistema, no una copia del raw.
+- Commit: pendiente de confirmar hash (ver el mensaje que sigue a este
+  informe).
+- Pruebas: cronología con/sin raw (IP, usuario, host), `raw_procedencia`
+  con hash/líneas/bytes verificados, persistencia real vía el flujo
+  completo (subida → stream → historial) con LLM simulado, exportación en
+  PDF (no revuelve a tocar el raw, solo lee lo ya persistido), y forma de
+  la respuesta del historial sin cambios cuando no hay raw.
 
 ## Evaluador (`eval_deteccion.py`)
 
