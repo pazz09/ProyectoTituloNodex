@@ -316,6 +316,64 @@ lenguaje en código y tests para no describir un empate como mayoría.
   `SCORE_SOSPECHOSO` no estaban documentados en ningún lado (commit
   `0696ae7`).
 
+## Fase 6 — Regeneración de evidencia experimental
+
+**Estado: bloqueada por crédito de Gemini; cierre no emitido.**
+
+El 24-sep-2026 se incorporó el contrato de procedencia que faltaba en
+`eval_deteccion.py` y se centralizó para baseline y multiagente en
+`src/tools/provenance.py`. Cada resultado nuevo incluye:
+
+- versión del contrato de resultados y fecha UTC;
+- motor y esquema de normalización;
+- configuración efectiva del preprocesamiento;
+- commit, rama y estado limpio/sucio del árbol;
+- versión/plataforma de Python;
+- hashes de `requirements.txt`, `constraints.txt`, logs y labels;
+- modelos LLM configurados en la evaluación multiagente.
+
+`src/tools/fase6.py` incorpora el procedimiento repetible completo. El
+manifiesto `results/fase6_manifest.json` solo se genera cuando encuentra seis
+artefactos válidos —baseline y multiagente para BGL, HDFS balanceado y HDFS
+3,1%—, todos completos, sin lotes fallidos, sobre árbol limpio y el mismo
+commit.
+
+### Baselines preliminares ejecutados
+
+Se ejecutaron sobre el código de esta fase, pero con árbol sucio porque los
+cambios aún no estaban confirmados; por ello son evidencia preliminar y deben
+repetirse mediante el orquestador después del commit final.
+
+| Dataset | TP | FP | FN | TN | Precisión | Recall | F1 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| BGL | 10 | 4 | 0 | 2 | 0,7143 | 1,0000 | 0,8333 |
+| HDFS balanceado | 0 | 0 | 10 | 10 | no definida | 0,0000 | no definido |
+| HDFS 3,1% | 0 | 0 | 1 | 19 | no definida | 0,0000 | no definido |
+
+### Hallazgo durante la corrida multiagente
+
+La evaluación BGL alcanzó 12 lotes antes de que Gemini devolviera
+`402 RESOURCE_EXHAUSTED` por agotamiento de créditos. Principal y fallback
+quedaron indisponibles. El pipeline rescató el checkpoint parcial con los
+valores iniciales `False`/`0.0`, y el evaluador anterior los contó como una
+predicción normal válida.
+
+Esto se corrigió en dos capas:
+
+1. `analizar_lote()` devuelve `_error_api` cuando el grafo colapsa.
+2. `eval_deteccion.py` rechaza estados con error, sin diagnóstico, sin
+   evaluación del auditor o sin veredicto booleano; los registra con
+   `estado="error"` y los excluye de la matriz de confusión.
+
+El JSON producido antes de la corrección quedó marcado como
+`evaluation_status="invalid_infrastructure_failure"`; sus métricas no son
+evidencia final. No se ejecutaron HDFS ni una segunda BGL para no producir
+resultados artificiales mientras la cuenta continuaba sin crédito.
+
+Para cerrar la fase faltan: confirmar estos cambios en un commit limpio,
+restablecer crédito de Gemini y ejecutar `python -m src.tools.fase6 --modo
+todo`. Solo la creación automática del manifiesto certifica el cierre.
+
 ## Fase 7 — CI y dependencias fijadas
 
 **Estado: resuelto.** Adelantada antes de la Fase 6 (decisión de Antonia,

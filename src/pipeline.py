@@ -161,6 +161,7 @@ def analizar_lote(raw_logs: str, thread_id: str | None = None) -> dict:
 
     print("🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...")
     print("=" * 60)
+    error_api = None
     try:
         for update in app.stream(input_inicial, config=config, stream_mode="updates"):
             for nodo in update:
@@ -168,11 +169,18 @@ def analizar_lote(raw_logs: str, thread_id: str | None = None) -> dict:
         print("=" * 60)
         print("🎯 Ejecución finalizada de manera segura.")
     except Exception as e:
+        error_api = str(e)
         print(f"\n💥 ¡Alerta! El agente colapsó por un error de API: {e}")
         print("🕵️‍♂️ Rescatando los datos forenses de la memoria (Caja Negra)...")
 
     estado_final = app.get_state(config).values
     estado_final["_firma"] = firma
+    # `analizar_lote()` conserva el estado parcial para uso forense, pero debe
+    # señalar inequívocamente que no representa un análisis terminado. Sin
+    # esta marca, el evaluador interpretaba los valores iniciales False/0.0
+    # como una predicción normal válida cuando la API colapsaba a mitad del
+    # grafo (hallazgo real de la Fase 6, 24-sep-2026).
+    estado_final["_error_api"] = error_api
     estado_final["requiere_revision_humana"] = float(estado_final.get("confianza", 0)) < CONFIDENCE_THRESHOLD
     return estado_final
 

@@ -151,6 +151,26 @@ cd frontend && pnpm lint && pnpm typecheck && pnpm test && pnpm build   # fronte
 
 CI (`.github/workflows/ci.yml`) corre ambos en cada push/PR.
 
+### Evaluación reproducible (Fase 6)
+
+La evaluación final se orquesta desde un único comando y debe ejecutarse
+sobre un commit limpio, con `GEMINI_API_KEY` activa y crédito disponible:
+
+```bash
+python -m src.tools.fase6 --modo todo
+```
+
+Modos disponibles: `baselines`, `multiagente`, `verificar` y `todo`. El modo
+`todo` genera los baselines y las evaluaciones multiagente de BGL, HDFS
+balanceado y HDFS con prevalencia 3,1%. Cada JSON registra commit, rama,
+estado del árbol, versiones, configuración, modelos y hashes SHA-256 de los
+datasets. `results/fase6_manifest.json` solo se crea si existen las seis
+corridas completas, sin lotes fallidos y correspondientes al mismo commit.
+
+Un error de API o un estado sin diagnóstico/veredicto se registra como lote
+fallido y se excluye de precisión, recall y F1; nunca se convierte por defecto
+en una predicción `normal`.
+
 ## Preprocesamiento
 
 Un único motor, determinístico y sin LLM, que reemplaza «detectar dataset → un parser → todo el lote» por una tubería genérica:

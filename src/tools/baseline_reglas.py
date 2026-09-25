@@ -26,9 +26,10 @@ recibe el detector, que es lo que hace la comparación honesta.
 
 import argparse
 import json
-import subprocess
 import time
 from pathlib import Path
+
+from src.tools.provenance import commit_git, procedencia_archivos, procedencia_ejecucion
 
 # Severidades que el propio log declara como graves.
 SEVERIDADES_GRAVES = {"fatal", "error", "critical", "crit", "severe", "emerg",
@@ -103,14 +104,7 @@ def _commit_git() -> str | None:
     pudo obtener (p. ej. corriendo fuera de un checkout de git). `None` en
     vez de lanzar: la corrida ya generó resultados reales y no debe
     perderlos por no poder identificar el commit."""
-    try:
-        return subprocess.check_output(
-            ["git", "rev-parse", "HEAD"],
-            cwd=Path(__file__).resolve().parents[2],
-            stderr=subprocess.DEVNULL, text=True,
-        ).strip()
-    except Exception:
-        return None
+    return commit_git(Path(__file__).resolve().parents[2])
 
 
 def _procedencia() -> dict:
@@ -120,17 +114,7 @@ def _procedencia() -> dict:
     serlo -- `eval_deteccion.py` ya registraba motor/configuración desde
     la Fase 11 del plan original; al baseline le faltaba, y a los dos les
     faltaba el commit."""
-    from src.config import (
-        LOG_NORMALIZATION_SCHEMA_VERSION,
-        LOG_PREPROCESSING_ENGINE,
-        config_preprocesamiento_efectiva,
-    )
-    return {
-        "motor_preprocesamiento": LOG_PREPROCESSING_ENGINE,
-        "schema_version": LOG_NORMALIZATION_SCHEMA_VERSION,
-        "config_preprocesamiento": config_preprocesamiento_efectiva(),
-        "commit": _commit_git(),
-    }
+    return procedencia_ejecucion(Path(__file__).resolve().parents[2])
 
 
 def _main() -> None:
@@ -154,13 +138,18 @@ def _main() -> None:
 
     raiz = Path(__file__).resolve().parents[2]
     if args.dataset == "bgl":
-        lotes = _construir_lotes_bgl(raiz / "data" / "logs" / "BGL_2k.log",
+        dataset_paths = [raiz / "data" / "logs" / "BGL_2k.log"]
+        lotes = _construir_lotes_bgl(dataset_paths[0],
                                      args.n_lotes, args.lineas_por_lote)
     else:
         if not args.labels:
             parser.error("hdfs requiere --labels")
+        dataset_paths = [
+            raiz / "data" / "logs" / "HDFS_2k.log",
+            Path(args.labels),
+        ]
         lotes = _construir_lotes_hdfs(
-            raiz / "data" / "logs" / "HDFS_2k.log", Path(args.labels),
+            dataset_paths[0], dataset_paths[1],
             args.n_lotes, args.lineas_por_lote, args.prop_positivos)
 
     print(f"Baseline de reglas sobre {len(lotes)} lotes de "
@@ -206,6 +195,8 @@ def _main() -> None:
                     "fallidos_por_ip": UMBRAL_FALLIDOS_POR_IP,
                 },
                 **_procedencia(),
+                "dataset_provenance": procedencia_archivos(dataset_paths, raiz),
+                "evaluation_status": "complete",
                 "duracion_seg": round(duracion, 3),
                 "llamadas_llm": 0,
                 "metricas": m,

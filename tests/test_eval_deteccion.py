@@ -351,3 +351,57 @@ def test_correr_evaluacion_sigue_tras_un_lote_fallido(tmp_path, monkeypatch):
     # Excluido explícitamente de la matriz de confusión, y contado.
     assert salida["metricas"]["n_evaluados"] == 2
     assert salida["metricas"]["n_fallidos"] == 1
+    assert salida["result_schema_version"] == "2.0"
+    assert salida["motor_preprocesamiento"] == "heterogeneo"
+    assert "commit" in salida
+    assert isinstance(salida["working_tree_dirty"], (bool, type(None)))
+    assert salida["dataset_provenance"][0]["sha256"]
+    assert salida["llm_config"]["primary_model"]
+
+
+def test_correr_evaluacion_excluye_estado_rescatado_tras_error_api(tmp_path, monkeypatch):
+    """Un checkpoint parcial no es una predicción normal válida.
+
+    Hallazgo real de la Fase 6: Gemini agotó créditos en BGL y el pipeline
+    devolvió el estado inicial con ``hay_anomalia=False``. Antes se contaba
+    como TN/FN; ahora queda visible como lote fallido y fuera de métricas.
+    """
+    lotes_falsos = [
+        {"id": "bgl_0", "texto": "log 0", "ground_truth": "normal"},
+        {"id": "bgl_1", "texto": "log 1", "ground_truth": "anomalo"},
+    ]
+    monkeypatch.setattr(ev, "_construir_lotes_bgl", lambda *a, **k: lotes_falsos)
+    monkeypatch.setattr(ev, "_RESULTS_DIR", tmp_path)
+
+    def falso_analizar_lote(texto, thread_id=None):
+        if texto == "log 1":
+            return {
+                "_error_api": "402 RESOURCE_EXHAUSTED",
+                "confianza": 0.0,
+                "hay_anomalia": False,
+                "hay_incidente": False,
+                "diagnostico": "",
+                "evaluacion_auditor": "",
+            }
+        return {
+            "_error_api": None,
+            "confianza": 1.0,
+            "hay_anomalia": False,
+            "hay_incidente": False,
+            "diagnostico": "normal",
+            "evaluacion_auditor": "correcto",
+            "comandos_mitigacion": [],
+        }
+
+    monkeypatch.setattr(ev, "analizar_lote", falso_analizar_lote)
+
+    salida = ev.correr_evaluacion(dataset="bgl", n_lotes=2, lineas_por_lote=10)
+
+    assert salida["evaluation_status"] == "partial"
+    assert salida["metricas"]["n_evaluados"] == 1
+    assert salida["metricas"]["n_fallidos"] == 1
+    assert salida["metricas"]["tn"] == 1
+    assert salida["metricas"]["fn"] == 0
+    fallido = next(r for r in salida["resultados"] if r["id"] == "bgl_1")
+    assert fallido["estado"] == "error"
+    assert "RESOURCE_EXHAUSTED" in fallido["error_mensaje"]

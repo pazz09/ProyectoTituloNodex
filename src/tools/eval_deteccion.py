@@ -114,9 +114,15 @@ import re
 import time
 from pathlib import Path
 
-from src.config import CONFIDENCE_THRESHOLD
+from src.config import (
+    CONFIDENCE_THRESHOLD,
+    LLM_MODEL_FALLBACK,
+    LLM_MODEL_PRIMARY,
+    TEMPERATURE,
+)
 from src.pipeline import analizar_lote
 from src.preprocessing.pipeline import PreprocesamientoError
+from src.tools.provenance import procedencia_archivos, procedencia_ejecucion
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 _DATA_DIR = _REPO_ROOT / "data" / "logs"
@@ -319,6 +325,25 @@ def _prediccion_desde_estado(estado: dict, confianza: float, campo: str = "hay_i
     return "anomalo" if valor else "normal"
 
 
+def _error_evaluacion_desde_estado(estado: dict, campo_veredicto: str) -> str | None:
+    """Devuelve por qué un estado no contiene un veredicto evaluable.
+
+    El pipeline puede rescatar un checkpoint parcial después de un error de
+    API. Ese estado conserva los valores iniciales (``False``/``0.0``), que
+    no son una predicción. La Fase 6 detectó que contarlos como ``normal``
+    ocultaba el agotamiento de cuota y alteraba TP/FN/TN.
+    """
+    if estado.get("_error_api"):
+        return f"Error de API durante el pipeline: {estado['_error_api']}"
+    if not isinstance(estado.get(campo_veredicto), bool):
+        return f"El estado final no contiene un veredicto booleano válido en {campo_veredicto!r}."
+    if not str(estado.get("diagnostico") or "").strip():
+        return "El estado final no contiene diagnóstico; se considera ejecución incompleta."
+    if not str(estado.get("evaluacion_auditor") or "").strip():
+        return "El agente auditor no produjo una evaluación final."
+    return None
+
+
 def correr_evaluacion(
     dataset: str,
     n_lotes: int,
@@ -330,15 +355,17 @@ def correr_evaluacion(
         if prop_positivos != 0.5:
             print("   ⚠️ --prop-positivos no aplica a BGL (los lotes son ventanas contiguas "
                   "muestreadas al azar, no se balancean artificialmente) -- se ignora.")
-        lotes = _construir_lotes_bgl(_DATA_DIR / "BGL_2k.log", n_lotes, lineas_por_lote)
+        dataset_paths = [_DATA_DIR / "BGL_2k.log"]
+        lotes = _construir_lotes_bgl(dataset_paths[0], n_lotes, lineas_por_lote)
     elif dataset == "hdfs":
         if not labels_csv:
             raise ValueError(
                 "--labels es obligatorio para --dataset hdfs "
                 "(usa data/labels/hdfs_anomaly_label_2k.csv, ya incluido en el repo)"
             )
+        dataset_paths = [_DATA_DIR / "HDFS_2k.log", Path(labels_csv)]
         lotes = _construir_lotes_hdfs(
-            _DATA_DIR / "HDFS_2k.log", Path(labels_csv), n_lotes, lineas_por_lote, prop_positivos
+            dataset_paths[0], dataset_paths[1], n_lotes, lineas_por_lote, prop_positivos
         )
     else:
         raise ValueError(f"dataset desconocido: {dataset!r} (usa 'hdfs' o 'bgl')")
@@ -350,6 +377,7 @@ def correr_evaluacion(
           f"usando '{campo_veredicto}' como veredicto...")
 
     resultados = []
+    inicio_corrida = time.perf_counter()
     for i, lote in enumerate(lotes):
         print(f"\n[{i + 1}/{len(lotes)}] {lote['id']} (ground truth: {lote['ground_truth']}) ...")
         t0 = time.time()
@@ -373,6 +401,17 @@ def correr_evaluacion(
             })
             continue
         dt = time.time() - t0
+        error_estado = _error_evaluacion_desde_estado(estado, campo_veredicto)
+        if error_estado:
+            print(f"   ⚠️ Lote sin veredicto evaluable ({dt:.1f}s): {error_estado}")
+            resultados.append({
+                "id": lote["id"],
+                "ground_truth": lote["ground_truth"],
+                "estado": "error",
+                "error_mensaje": error_estado,
+                "duracion_seg": round(dt, 1),
+            })
+            continue
         confianza = float(estado.get("confianza", 0) or 0)
         prediccion = _prediccion_desde_estado(estado, confianza, campo=campo_veredicto)
         n_comandos = len(estado.get("comandos_mitigacion") or [])
@@ -395,12 +434,6 @@ def correr_evaluacion(
         })
 
     metricas = _metricas(resultados)
-    # Se registra la configuración efectiva del preprocesamiento (no solo el
-    # nombre del motor, que ahora es único) para que dos archivos de
-    # `results/` con umbrales de detección distintos no parezcan comparables
-    # sin serlo.
-    from src.config import LOG_PREPROCESSING_ENGINE, config_preprocesamiento_efectiva
-
     salida = {
         "dataset": dataset,
         "n_lotes": len(lotes),
@@ -408,8 +441,15 @@ def correr_evaluacion(
         "umbral_confianza": CONFIDENCE_THRESHOLD,
         "campo_veredicto": campo_veredicto,
         "prop_positivos": prop_positivos if dataset == "hdfs" else None,
-        "motor_preprocesamiento": LOG_PREPROCESSING_ENGINE,
-        "config_preprocesamiento": config_preprocesamiento_efectiva(),
+        **procedencia_ejecucion(_REPO_ROOT),
+        "dataset_provenance": procedencia_archivos(dataset_paths, _REPO_ROOT),
+        "llm_config": {
+            "primary_model": LLM_MODEL_PRIMARY,
+            "fallback_model": LLM_MODEL_FALLBACK,
+            "temperature": TEMPERATURE,
+        },
+        "evaluation_status": "complete" if metricas["n_fallidos"] == 0 else "partial",
+        "duracion_seg": round(time.perf_counter() - inicio_corrida, 3),
         "metricas": metricas,
         "resultados": resultados,
     }

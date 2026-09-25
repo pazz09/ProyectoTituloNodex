@@ -14,6 +14,10 @@ def test_procedencia_incluye_motor_esquema_configuracion_y_commit():
     assert isinstance(proc["config_preprocesamiento"], dict)
     assert "LOG_PARSING_MODE" in proc["config_preprocesamiento"]
     assert "commit" in proc  # puede ser None fuera de un checkout de git
+    assert proc["result_schema_version"] == "2.0"
+    assert isinstance(proc["working_tree_dirty"], (bool, type(None)))
+    assert proc["requirements_sha256"]
+    assert proc["constraints_sha256"]
 
 
 def test_commit_git_no_lanza_si_falla(monkeypatch):
