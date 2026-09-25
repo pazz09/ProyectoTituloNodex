@@ -1,0 +1,176 @@
+{
+  "baseline": "reglas_deterministicas",
+  "dataset": "bgl",
+  "n_lotes": 16,
+  "lineas_por_lote": 120,
+  "prop_positivos": null,
+  "umbrales": {
+    "proporcion_fallidos": 0.1,
+    "fallidos_por_ip": 5
+  },
+  "result_schema_version": "2.0",
+  "generated_at_utc": "2026-09-25T04:40:17.082314+00:00",
+  "motor_preprocesamiento": "heterogeneo",
+  "schema_version": "2.0",
+  "config_preprocesamiento": {
+    "LOG_DETECTION_CHUNK_SIZE": 50,
+    "LOG_ENABLE_MULTILINE": true,
+    "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+    "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+    "LOG_MAX_EVENTS": 100000,
+    "LOG_MAX_FILE_BYTES": 52428800,
+    "LOG_MAX_RAW_SAMPLES": 20,
+    "LOG_MAX_UNMAPPED_FIELDS": 100,
+    "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+    "LOG_PARSING_MODE": "hybrid",
+    "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+    "LOG_PRESERVE_RAW": true
+  },
+  "commit": "1dc2dfe70a52c04659c6f2d94f1058217d99cfa0",
+  "git_branch": "main",
+  "working_tree_dirty": false,
+  "working_tree_ignored_paths": [
+    "results/"
+  ],
+  "python_version": "3.12.10",
+  "python_implementation": "CPython",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "requirements_sha256": "b825a311f2b2dc2f30e76a162623508442f4970b921bb36ebaa7e5e29a9402e0",
+  "constraints_sha256": "6c2712a888b40fabdcf8f0bf5444a2ee64daf24844f85c1efca15752d08386a6",
+  "python_executable": "python.exe",
+  "dataset_provenance": [
+    {
+      "path": "data/logs/BGL_2k.log",
+      "bytes": 317150,
+      "sha256": "2a819ea540909db682005c9cf948387a40729b5c2e9f19d430e29ce704825496"
+    }
+  ],
+  "evaluation_status": "complete",
+  "duracion_seg": 0.128,
+  "llamadas_llm": 0,
+  "metricas": {
+    "tp": 10,
+    "fp": 4,
+    "fn": 0,
+    "tn": 2,
+    "precision": 0.7142857142857143,
+    "recall": 1.0,
+    "f1": 0.8333333333333333,
+    "n_evaluados": 16,
+    "n_fallidos": 0
+  },
+  "resultados": [
+    {
+      "id": "bgl_ventana_0000",
+      "ground_truth": "anomalo",
+      "prediccion": "anomalo",
+      "regla": "severidad_grave",
+      "detalle": "21 evento(s) con severidad grave declarada"
+    },
+    {
+      "id": "bgl_ventana_0001",
+      "ground_truth": "anomalo",
+      "prediccion": "anomalo",
+      "regla": "severidad_grave",
+      "detalle": "113 evento(s) con severidad grave declarada"
+    },
+    {
+      "id": "bgl_ventana_0002",
+      "ground_truth": "anomalo",
+      "prediccion": "anomalo",
+      "regla": "severidad_grave",
+      "detalle": "74 evento(s) con severidad grave declarada"
+    },
+    {
+      "id": "bgl_ventana_0003",
+      "ground_truth": "anomalo",
+      "prediccion": "anomalo",
+      "regla": "severidad_grave",
+      "detalle": "4 evento(s) con severidad grave declarada"
+    },
+    {
+      "id": "bgl_ventana_0004",
+      "ground_truth": "normal",
+      "prediccion": "anomalo",
+      "regla": "severidad_grave",
+      "detalle": "2 evento(s) con severidad grave declarada"
+    },
+    {
+      "id": "bgl_ventana_0005",
+      "ground_truth": "normal",
+      "prediccion": "anomalo",
+      "regla": "severidad_grave",
+      "detalle": "1 evento(s) con severidad grave declarada"
+    },
+    {
+      "id": "bgl_ventana_0006",
+      "ground_truth": "anomalo",
+      "prediccion": "anomalo",
+      "regla": "severidad_grave",
+      "detalle": "3 evento(s) con severidad grave declarada"
+    },
+    {
+      "id": "bgl_ventana_0007",
+      "ground_truth": "normal",
+      "prediccion": "anomalo",
+      "regla": "severidad_grave",
+      "detalle": "1 evento(s) con severidad grave declarada"
+    },
+    {
+      "id": "bgl_ventana_0008",
+      "ground_truth": "anomalo",
+      "prediccion": "anomalo",
+      "regla": "severidad_grave",
+      "detalle": "2 evento(s) con severidad grave declarada"
+    },
+    {
+      "id": "bgl_ventana_0009",
+      "ground_truth": "normal",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "bgl_ventana_0010",
+      "ground_truth": "anomalo",
+      "prediccion": "anomalo",
+      "regla": "severidad_grave",
+      "detalle": "44 evento(s) con severidad grave declarada"
+    },
+    {
+      "id": "bgl_ventana_0011",
+      "ground_truth": "anomalo",
+      "prediccion": "anomalo",
+      "regla": "severidad_grave",
+      "detalle": "45 evento(s) con severidad grave declarada"
+    },
+    {
+      "id": "bgl_ventana_0012",
+      "ground_truth": "anomalo",
+      "prediccion": "anomalo",
+      "regla": "severidad_grave",
+      "detalle": "36 evento(s) con severidad grave declarada"
+    },
+    {
+      "id": "bgl_ventana_0013",
+      "ground_truth": "normal",
+      "prediccion": "normal",
+      "regla": "ninguna",
+      "detalle": "ninguna regla se disparó"
+    },
+    {
+      "id": "bgl_ventana_0014",
+      "ground_truth": "anomalo",
+      "prediccion": "anomalo",
+      "regla": "severidad_grave",
+      "detalle": "24 evento(s) con severidad grave declarada"
+    },
+    {
+      "id": "bgl_ventana_0015",
+      "ground_truth": "normal",
+      "prediccion": "anomalo",
+      "regla": "severidad_grave",
+      "detalle": "2 evento(s) con severidad grave declarada"
+    }
+  ]
+}

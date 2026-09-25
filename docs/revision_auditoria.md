@@ -1,8 +1,8 @@
 # Revision auditoria
 
-Fecha de revisión: 24 de septiembre de 2026  
-Rama revisada: `main`  
-Commit revisado: `b30aa0a`  
+Fecha de revisión: 25 de septiembre de 2026
+Rama revisada: `main`
+Commit experimental: `1dc2dfe70a52c04659c6f2d94f1058217d99cfa0`
 Referencia de la auditoría anterior: `c5bb1fe`
 
 ## 1. Resumen ejecutivo
@@ -16,9 +16,9 @@ Las dos correcciones que motivaron esta revisión están implementadas y verific
 
 La fase 7 también fue incorporada antes de la fase 6. Ese cambio de orden es técnicamente razonable: fijar dependencias y configurar CI antes de regenerar métricas mejora la reproducibilidad de la evaluación.
 
-La fase 6 fue iniciada después de esta revisión: se agregó trazabilidad reproducible, un orquestador de cierre y se ejecutaron los tres baselines. La evaluación multiagente BGL se interrumpió al agotarse los créditos de Gemini y reveló un defecto adicional en el tratamiento de estados parciales, que ya fue corregido. Por tanto, la fase está desarrollada pero todavía no puede declararse cerrada.
+La fase 6 fue completada después de esta revisión: se agregó trazabilidad reproducible, un orquestador de cierre y se ejecutaron los tres baselines y las tres evaluaciones multiagente. Las corridas descubrieron y permitieron corregir dos defectos: el tratamiento de checkpoints parciales como predicciones normales y la aceptación de listas JSON donde los agentes requerían objetos.
 
-Dictamen general actualizado: **las fases 1 a 5 están implementadas, la fase 7 está implementada y la fase 6 está en ejecución bloqueada por crédito externo; faltan las tres corridas multiagente válidas y el manifiesto final**.
+Dictamen general actualizado: **las fases 1 a 7 están implementadas; la fase 6 dispone de seis artefactos finales reproducibles y de un manifiesto automático de cierre**.
 
 ## 2. Evidencia utilizada
 
@@ -26,14 +26,14 @@ La revisión consideró:
 
 - Inspección del historial Git y comparación entre `c5bb1fe` y `b30aa0a`.
 - Inspección del pipeline productivo, baseline, agente de triage, contexto v2 y evaluador.
-- Revisión de los 33 archivos JSON existentes en `results/`.
+- Revisión de los 33 JSON históricos y de los seis artefactos finales más el manifiesto de fase 6.
 - Revisión de `requirements.txt`, `constraints.txt`, `frontend/package.json` y `.github/workflows/ci.yml`.
 - Ejecución completa de la suite backend con credenciales Gemini vacías.
 
 Resultado de la suite actual:
 
 ```text
-537 passed, 1 warning in 81.27s
+544 passed, 1 warning in 51.43s
 ```
 
 La única advertencia proviene de `starlette.testclient` por el alias deprecado `anyio.abc.BlockingPortal`. No bloquea la ejecución, pero conviene corregirla mediante una actualización compatible de dependencias cuando se planifique mantenimiento técnico.
@@ -47,7 +47,7 @@ La única advertencia proviene de `starlette.testclient` por el alias deprecado 
 | 3 | Hacer efectivo `LOG_PRESERVE_RAW` | Resuelta con alcance limitado | Controla persistencia/exportación, pero no las muestras enviadas al LLM |
 | 4 | Completar metadatos, trazabilidad y contratos | Resuelta en su alcance | Se agregaron metadatos, golden tests, política de tamaño y procedencia del baseline |
 | 5 | Actualizar documentación y presentación | Resuelta con residuos menores | README y documentación principal actualizados; persisten algunas referencias históricas a v1 |
-| 6 | Regenerar la evidencia experimental final | **En curso / bloqueada** | Baselines y mecanismo de cierre listos; Gemini agotó créditos durante BGL |
+| 6 | Regenerar la evidencia experimental final | **Resuelta** | Seis corridas completas, cero lotes fallidos y manifiesto reproducible para `1dc2dfe` |
 | 7 | Incorporar CI y fijar dependencias | Implementada | Archivos y scripts presentes; backend verificado localmente; ejecución remota no comprobada en esta revisión |
 
 ## 4. Cambios solucionados
@@ -179,13 +179,13 @@ Por lo tanto, la formulación precisa es:
 
 Sí. El cambio de orden es correcto porque la fase 6 genera evidencia que debe ser reproducible. Fijar primero dependencias, comandos y CI reduce el riesgo de obtener métricas que después no puedan reconstruirse.
 
-El problema no fue adelantar la fase 7. El problema es que, una vez completada, no se continuó con la ejecución efectiva de la fase 6.
+Adelantar la fase 7 permitió ejecutar después la fase 6 sobre dependencias fijadas y un commit identificable. La secuencia quedó finalmente completada.
 
 ## 6. Evaluación específica de la fase 6
 
-Estado actualizado: **desarrollada, parcialmente ejecutada y bloqueada por crédito de Gemini**.
+Estado actualizado: **completa y certificada por manifiesto**.
 
-Desde la revisión inicial se incorporaron `src/tools/provenance.py` y `src/tools/fase6.py`, se añadieron pruebas y se generaron baselines nuevos con el motor `heterogeneo`. La corrida multiagente BGL se interrumpió por `402 RESOURCE_EXHAUSTED`; HDFS no se inició para evitar artefactos artificiales.
+Desde la revisión inicial se incorporaron `src/tools/provenance.py` y `src/tools/fase6.py`, se añadieron pruebas y se generaron seis artefactos finales con el motor `heterogeneo`. El cierre corresponde al commit `1dc2dfe70a52c04659c6f2d94f1058217d99cfa0`; todas las corridas declaran `evaluation_status="complete"`, árbol limpio y `n_fallidos=0`.
 
 ### 6.1. Evidencia histórica que motivó la corrección
 
@@ -234,27 +234,31 @@ Durante BGL se encontró otro defecto: cuando la API colapsaba, `analizar_lote()
 
 El artefacto BGL interrumpido fue marcado como inválido y no debe citarse como métrica.
 
-### 6.4. Trabajo requerido para cerrar la fase 6
+También se corrigió el contrato JSON: `llm_json()` ya no entrega listas a agentes que esperan objetos. La suite final quedó en **544 pruebas aprobadas** y una advertencia externa de Starlette/AnyIO.
 
-Para completar la fase 6 todavía se debe ejecutar y guardar, sobre un commit limpio y fijado:
+### 6.4. Resultados finales
 
-1. Baseline determinístico sobre BGL.
-2. Baseline determinístico sobre HDFS balanceado.
-3. Baseline determinístico sobre HDFS con prevalencia real aproximada de 3,1%.
-4. Evaluación multiagente sobre BGL.
-5. Evaluación multiagente sobre HDFS balanceado.
-6. Evaluación multiagente sobre HDFS con prevalencia real.
-7. Registro separado y auditable de lotes fallidos.
-8. Comparación con las métricas históricas, explicando que el contexto de triage cambió y que la comparación no es completamente 1:1.
-9. Actualización de `docs/informe_cierre_auditoria.md`, reemplazando el estado de borrador por un cierre con métricas, commit y configuración.
+| Sistema | Dataset | TP | FP | FN | TN | Precisión | Recall | F1 |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| Baseline | BGL | 10 | 4 | 0 | 2 | 0,7143 | 1,0000 | 0,8333 |
+| Multiagente | BGL | 10 | 4 | 0 | 2 | 0,7143 | 1,0000 | 0,8333 |
+| Baseline | HDFS balanceado | 0 | 0 | 10 | 10 | no definida | 0,0000 | no definido |
+| Multiagente | HDFS balanceado | 1 | 3 | 9 | 7 | 0,2500 | 0,1000 | 0,1429 |
+| Baseline | HDFS 3,1% | 0 | 0 | 1 | 19 | no definida | 0,0000 | no definido |
+| Multiagente | HDFS 3,1% | 0 | 6 | 1 | 13 | 0,0000 | 0,0000 | no definido |
+
+`results/fase6_manifest.json` referencia los seis JSON y sus SHA-256. La
+conmutación automática desde `gemini-3.1-pro-preview`, que alcanzó su cuota
+diaria durante BGL, hacia `gemini-3.6-flash` permitió completar HDFS sin
+lotes fallidos. La baja sensibilidad en HDFS es una limitación medida del
+sistema y queda como línea de mejora posterior.
 
 ## 7. Elementos aún ausentes o pendientes
 
 ### Prioridad alta
 
-1. **Fase 6 bloqueada por crédito externo.** Los baselines están disponibles, pero faltan BGL y las dos evaluaciones HDFS multiagente válidas.
-2. **Commit limpio pendiente.** Los baselines preliminares registran `working_tree_dirty=true` y deben repetirse después de confirmar los cambios.
-3. **Validación remota de CI no comprobada.** El workflow existe, pero esta revisión no pudo confirmar una ejecución de GitHub Actions.
+1. **Rendimiento HDFS insuficiente.** Recall 0,10 en el conjunto balanceado y 0,00 con prevalencia 3,1%; requiere investigación antes de uso operativo.
+2. **Validación remota de CI no comprobada.** El workflow existe, pero esta revisión no confirmó una ejecución de GitHub Actions.
 
 ### Prioridad media
 
@@ -281,25 +285,23 @@ Los cambios realizados no reemplazan la arquitectura general. La consolidan:
 - Las correcciones no reintroducen adaptadores HDFS/BGL como motor principal.
 - HDFS y BGL siguen funcionando como enriquecimientos de producto/perfil sobre decoders genéricos.
 
-La principal consecuencia pendiente es metodológica: sin fase 6, la arquitectura actual está verificada por pruebas, pero no por una nueva evaluación experimental comparable y trazable.
+La arquitectura actual queda respaldada tanto por pruebas automatizadas como por una evaluación experimental trazable. Esa evidencia también revela que la calidad de detección no es uniforme: BGL conserva recall 1,00, mientras HDFS alcanza solo 0,10 en balanceado y 0,00 con prevalencia 3,1%.
 
 ## 9. Recomendación de cierre
 
-Orden recomendado desde el estado actual:
+Siguientes acciones recomendadas, fuera del cierre de fase 6:
 
-1. Confirmar los cambios de procedencia, evaluación y orquestación en un commit limpio.
-2. Restablecer crédito de Gemini y confirmar una ejecución verde del workflow de GitHub Actions sobre `main`.
-3. Ejecutar `python -m src.tools.fase6 --modo todo` sobre el commit resultante.
-4. Revisar lotes fallidos y evitar mezclar fallos de infraestructura con predicciones.
-5. Comparar resultados actuales con los históricos, explicitando cambios de contexto y esquema.
-6. Finalizar `docs/informe_cierre_auditoria.md` con métricas, commit, configuración y fecha.
-7. Mantener como trabajo futuro las limitaciones de privacidad frente al LLM, Apache/NCSA y CVE-ATT&CK.
+1. Investigar por qué las etiquetas de bloque HDFS no quedan reflejadas con suficiente señal en ventanas de 120 líneas y evaluar agregación por ciclo completo de bloque.
+2. Calibrar el veredicto para reducir falsos positivos ante advertencias operativas comunes de HDFS.
+3. Registrar explícitamente por llamada el modelo efectivo cuando actúa el fallback, además de los modelos configurados.
+4. Confirmar una ejecución verde del workflow de GitHub Actions sobre `main` después del próximo push.
+5. Mantener como trabajo futuro las limitaciones de privacidad frente al LLM, Apache/NCSA y CVE-ATT&CK.
 
 ## 10. Dictamen final
 
 El proyecto avanzó de forma efectiva y resolvió los dos problemas principales consultados: doble preprocesamiento y falta de contexto v2 en la primera pasada del triage.
 
-La fase 7 fue implementada antes que la fase 6 por una razón válida de reproducibilidad. La fase 6 ya tiene implementación, baselines y controles de cierre, pero la evaluación multiagente no terminó porque Gemini agotó sus créditos. Los resultados históricos y la corrida BGL inválida no deben utilizarse como evidencia final del pipeline actual.
+La fase 7 fue implementada antes que la fase 6 por una razón válida de reproducibilidad. La fase 6 quedó posteriormente completada sobre el commit `1dc2dfe70a52c04659c6f2d94f1058217d99cfa0`, con seis artefactos completos y `results/fase6_manifest.json`. Los resultados históricos, preliminares y la corrida BGL inválida no forman parte de la evidencia final.
 
 Por lo tanto, el cierre técnico puede resumirse así:
 
@@ -307,5 +309,5 @@ Por lo tanto, el cierre técnico puede resumirse así:
 - Doble preprocesamiento: **resuelto**.
 - Contexto v2 en triage: **resuelto**.
 - Metadatos, documentación y CI: **considerablemente mejorados**.
-- Fase 6 y métricas finales reproducibles: **en curso; bloqueadas por crédito y commit limpio**.
-- Cierre completo de auditoría: **todavía no alcanzado**.
+- Fase 6 y métricas finales reproducibles: **completadas y certificadas**.
+- Cierre completo de auditoría: **alcanzado**, con rendimiento HDFS pendiente de mejora.

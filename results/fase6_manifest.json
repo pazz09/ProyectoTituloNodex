@@ -1,0 +1,105 @@
+{
+  "fase": 6,
+  "estado": "complete",
+  "verified_at_utc": "2026-09-25T05:22:52.841080+00:00",
+  "commit": "1dc2dfe70a52c04659c6f2d94f1058217d99cfa0",
+  "artefactos": {
+    "baseline_bgl": {
+      "archivo": "baseline_reglas_bgl_1790311216.json",
+      "sha256": "d2eca1ef3c285ca4d7dfa9f9557a41cd069fb6569de51ccd9ec9436bbe9697d7",
+      "commit": "1dc2dfe70a52c04659c6f2d94f1058217d99cfa0",
+      "metricas": {
+        "tp": 10,
+        "fp": 4,
+        "fn": 0,
+        "tn": 2,
+        "precision": 0.7142857142857143,
+        "recall": 1.0,
+        "f1": 0.8333333333333333,
+        "n_evaluados": 16,
+        "n_fallidos": 0
+      }
+    },
+    "baseline_hdfs_balanceado": {
+      "archivo": "baseline_reglas_hdfs_1790311264.json",
+      "sha256": "950b55d8b4574ed502db114fa55a91d4eb984b2ba6d7cb0c6e2e32a74ccaa1f8",
+      "commit": "1dc2dfe70a52c04659c6f2d94f1058217d99cfa0",
+      "metricas": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 10,
+        "tn": 10,
+        "precision": null,
+        "recall": 0.0,
+        "f1": null,
+        "n_evaluados": 20,
+        "n_fallidos": 0
+      }
+    },
+    "baseline_hdfs_real": {
+      "archivo": "baseline_reglas_hdfs_1790311313.json",
+      "sha256": "73c5d4b985b9b1f63c6202f3060a22a397630a6a80aa49de83543cbb896261bb",
+      "commit": "1dc2dfe70a52c04659c6f2d94f1058217d99cfa0",
+      "metricas": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "tn": 19,
+        "precision": null,
+        "recall": 0.0,
+        "f1": null,
+        "n_evaluados": 20,
+        "n_fallidos": 0
+      }
+    },
+    "multiagente_bgl": {
+      "archivo": "eval_deteccion_bgl_1790312424.json",
+      "sha256": "f626eda27569f4e58cf0e7e9256c7ad136c20d6179372092013d1f6eb2bd0eed",
+      "commit": "1dc2dfe70a52c04659c6f2d94f1058217d99cfa0",
+      "metricas": {
+        "tp": 10,
+        "fp": 4,
+        "fn": 0,
+        "tn": 2,
+        "precision": 0.7142857142857143,
+        "recall": 1.0,
+        "f1": 0.8333333333333333,
+        "n_evaluados": 16,
+        "n_fallidos": 0
+      }
+    },
+    "multiagente_hdfs_balanceado": {
+      "archivo": "eval_deteccion_hdfs_1790313092.json",
+      "sha256": "659b15fc8df18fb1033c431697034f0fde490ca289703d6ec335da364cf6b3bd",
+      "commit": "1dc2dfe70a52c04659c6f2d94f1058217d99cfa0",
+      "metricas": {
+        "tp": 1,
+        "fp": 3,
+        "fn": 9,
+        "tn": 7,
+        "precision": 0.25,
+        "recall": 0.1,
+        "f1": 0.14285714285714288,
+        "n_evaluados": 20,
+        "n_fallidos": 0
+      }
+    },
+    "multiagente_hdfs_real": {
+      "archivo": "eval_deteccion_hdfs_1790313771.json",
+      "sha256": "475b56fddf99fcf40bf058af70b8a00715bc4c70c4c998fff5c8f1361125bf3e",
+      "commit": "1dc2dfe70a52c04659c6f2d94f1058217d99cfa0",
+      "metricas": {
+        "tp": 0,
+        "fp": 6,
+        "fn": 1,
+        "tn": 13,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": null,
+        "n_evaluados": 20,
+        "n_fallidos": 0
+      }
+    }
+  },
+  "diagnostico": {}
+}

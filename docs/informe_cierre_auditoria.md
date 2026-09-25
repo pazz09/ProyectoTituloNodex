@@ -318,7 +318,8 @@ lenguaje en código y tests para no describir un empate como mayoría.
 
 ## Fase 6 — Regeneración de evidencia experimental
 
-**Estado: bloqueada por crédito de Gemini; cierre no emitido.**
+**Estado: resuelto.** Cierre emitido el 25-sep-2026 para el commit
+`1dc2dfe70a52c04659c6f2d94f1058217d99cfa0`.
 
 El 24-sep-2026 se incorporó el contrato de procedencia que faltaba en
 `eval_deteccion.py` y se centralizó para baseline y multiagente en
@@ -338,19 +339,41 @@ artefactos válidos —baseline y multiagente para BGL, HDFS balanceado y HDFS
 3,1%—, todos completos, sin lotes fallidos, sobre árbol limpio y el mismo
 commit.
 
-### Baselines preliminares ejecutados
+### Resultados finales certificados
 
-Se ejecutaron sobre el código de esta fase, pero con árbol sucio porque los
-cambios aún no estaban confirmados; por ello son evidencia preliminar y deben
-repetirse mediante el orquestador después del commit final.
+Las seis corridas se ejecutaron mediante `python -m src.tools.fase6 --modo
+todo` sobre árbol limpio. Todas registran el motor `heterogeneo`, contrato de
+resultados 2.0, hashes de datasets y dependencias, y cero lotes fallidos.
 
-| Dataset | TP | FP | FN | TN | Precisión | Recall | F1 |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| BGL | 10 | 4 | 0 | 2 | 0,7143 | 1,0000 | 0,8333 |
-| HDFS balanceado | 0 | 0 | 10 | 10 | no definida | 0,0000 | no definido |
-| HDFS 3,1% | 0 | 0 | 1 | 19 | no definida | 0,0000 | no definido |
+| Sistema | Dataset | TP | FP | FN | TN | Precisión | Recall | F1 |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| Baseline | BGL | 10 | 4 | 0 | 2 | 0,7143 | 1,0000 | 0,8333 |
+| Multiagente | BGL | 10 | 4 | 0 | 2 | 0,7143 | 1,0000 | 0,8333 |
+| Baseline | HDFS balanceado | 0 | 0 | 10 | 10 | no definida | 0,0000 | no definido |
+| Multiagente | HDFS balanceado | 1 | 3 | 9 | 7 | 0,2500 | 0,1000 | 0,1429 |
+| Baseline | HDFS 3,1% | 0 | 0 | 1 | 19 | no definida | 0,0000 | no definido |
+| Multiagente | HDFS 3,1% | 0 | 6 | 1 | 13 | 0,0000 | 0,0000 | no definido |
 
-### Hallazgo durante la corrida multiagente
+El manifiesto `results/fase6_manifest.json` certifica los nombres y SHA-256
+de los seis artefactos. El BGL multiagente tardó 1063,368 s; HDFS balanceado,
+620,818 s; y HDFS 3,1%, 635,963 s. El modelo configurado fue
+`gemini-3.1-pro-preview`, con `gemini-3.6-flash` como respaldo. Durante BGL
+el principal alcanzó su cuota diaria de 250 solicitudes; la conmutación
+prevista al respaldo completó el resto de la evaluación sin lotes fallidos.
+
+### Interpretación
+
+- En BGL, multiagente y baseline coinciden: recall perfecto, pero cuatro
+  falsos positivos en ventanas normales con eventos graves aislados.
+- En HDFS balanceado, el multiagente detecta un positivo que el baseline no
+  detecta, pero el recall 0,10 sigue siendo insuficiente para uso operativo.
+- En HDFS 3,1%, ninguno detecta el único positivo. El multiagente agrega seis
+  falsos positivos, por lo que no mejora el baseline bajo esta prevalencia.
+- La fase queda cerrada como procedimiento y evidencia reproducible; las
+  métricas revelan una limitación de calidad en HDFS que debe tratarse como
+  trabajo futuro, no como un defecto del cierre experimental.
+
+### Hallazgos durante las corridas multiagente
 
 La evaluación BGL alcanzó 12 lotes antes de que Gemini devolviera
 `402 RESOURCE_EXHAUSTED` por agotamiento de créditos. Principal y fallback
@@ -367,12 +390,16 @@ Esto se corrigió en dos capas:
 
 El JSON producido antes de la corrección quedó marcado como
 `evaluation_status="invalid_infrastructure_failure"`; sus métricas no son
-evidencia final. No se ejecutaron HDFS ni una segunda BGL para no producir
-resultados artificiales mientras la cuenta continuaba sin crédito.
+evidencia final.
 
-Para cerrar la fase faltan: confirmar estos cambios en un commit limpio,
-restablecer crédito de Gemini y ejecutar `python -m src.tools.fase6 --modo
-todo`. Solo la creación automática del manifiesto certifica el cierre.
+En la primera ejecución HDFS posterior apareció un segundo defecto: Gemini
+devolvió un JSON de nivel superior con forma de lista, aunque los agentes
+esperan un objeto y usan `.get()`. `llm_json()` aceptaba tanto listas como
+objetos y el grafo colapsó con `'list' object has no attribute 'get'`. El
+wrapper ahora acepta únicamente objetos, solicita una regeneración ante una
+lista y conserva siempre el contrato `dict`. Se añadieron dos pruebas de
+regresión. Tras la corrección, la suite completa quedó en **544 aprobadas** y
+las seis corridas finales terminaron sin fallos.
 
 ## Fase 7 — CI y dependencias fijadas
 
