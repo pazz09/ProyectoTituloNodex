@@ -253,7 +253,7 @@ def _generate_con_fallback(msg: str, cfg, **kwargs):
 
 
 def llm_json(prompt: str, system: str = None, retries: int = 1) -> dict:
-    """Llama a Gemini y devuelve un dict.
+    """Llama a Gemini y devuelve siempre un objeto JSON (``dict``).
 
     Mecanismos de reintento/resiliencia, de más al menos granular:
     - `retries`: si el JSON de la respuesta viene inválido, se le pide de nuevo
@@ -288,6 +288,12 @@ def llm_json(prompt: str, system: str = None, retries: int = 1) -> dict:
                   f"total={getattr(um, 'total_token_count', '?')}")
         last_text = resp.text or ""
         parsed = _safe_json_parse(last_text)
-        if isinstance(parsed, (dict, list)):
+        # Todos los agentes consumen contratos con campos nombrados y llaman
+        # ``respuesta.get(...)``. Aunque una lista sea JSON sintácticamente
+        # válida, no satisface ese contrato. Una respuesta real de Gemini con
+        # forma de lista hizo colapsar un lote HDFS de la Fase 6 con
+        # ``'list' object has no attribute 'get'``. Se trata igual que cualquier
+        # salida JSON inválida para el contrato y se solicita una corrección.
+        if isinstance(parsed, dict):
             return parsed
     return {"error": "json_invalido", "raw": last_text}

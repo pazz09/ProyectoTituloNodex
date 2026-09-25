@@ -15,8 +15,46 @@ cuota ni tiempo real de espera.
 """
 
 import ssl
+from types import SimpleNamespace
 
 import src.llm as llm_mod
+
+
+def _respuesta_llm(texto: str):
+    return SimpleNamespace(text=texto, usage_metadata=None)
+
+
+def test_llm_json_reintenta_si_gemini_devuelve_una_lista(monkeypatch):
+    """Los agentes esperan objetos y usan ``.get``; una lista no es válida.
+
+    Regresión del cierre de Fase 6: un lote HDFS colapsó porque Gemini
+    devolvió JSON de nivel superior con forma de lista. El wrapper debe pedir
+    una corrección y entregar a los agentes únicamente un diccionario.
+    """
+    respuestas = iter([
+        _respuesta_llm('[{"diagnostico": "forma incorrecta"}]'),
+        _respuesta_llm('{"diagnostico": "forma correcta"}'),
+    ])
+    monkeypatch.setattr(llm_mod, "_asegurar_credenciales", lambda: None)
+    monkeypatch.setattr(llm_mod, "_generate_con_fallback", lambda *a, **k: next(respuestas))
+
+    resultado = llm_mod.llm_json("analiza", retries=1)
+
+    assert resultado == {"diagnostico": "forma correcta"}
+
+
+def test_llm_json_no_expone_lista_si_agota_reintentos(monkeypatch):
+    respuestas = iter([
+        _respuesta_llm('[{"diagnostico": "incorrecto 1"}]'),
+        _respuesta_llm('[{"diagnostico": "incorrecto 2"}]'),
+    ])
+    monkeypatch.setattr(llm_mod, "_asegurar_credenciales", lambda: None)
+    monkeypatch.setattr(llm_mod, "_generate_con_fallback", lambda *a, **k: next(respuestas))
+
+    resultado = llm_mod.llm_json("analiza", retries=1)
+
+    assert isinstance(resultado, dict)
+    assert resultado["error"] == "json_invalido"
 
 
 class _ErrorFalso(Exception):
