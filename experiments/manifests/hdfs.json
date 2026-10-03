@@ -1,0 +1,333 @@
+{
+  "dataset": "hdfs",
+  "protocolo_version": "1.0",
+  "tipo_deteccion": "operativa",
+  "agrupacion": {
+    "unidad": "componente_conexo_bloque_linea",
+    "n_grupos": 1994,
+    "n_grupos_positivos": 69,
+    "prevalencia_natural_de_grupos": 0.034604,
+    "grupos_con_varios_miembros": 3
+  },
+  "particion": {
+    "proporcion_desarrollo": 0.3,
+    "semilla": 20261003,
+    "estratificada_por": "es_positivo",
+    "resumen": {
+      "desarrollo": {
+        "n_grupos": 599,
+        "n_grupos_positivos": 21,
+        "n_lineas": 601,
+        "prevalencia_de_grupos": 0.035058
+      },
+      "evaluacion": {
+        "n_grupos": 1395,
+        "n_grupos_positivos": 48,
+        "n_lineas": 1399,
+        "prevalencia_de_grupos": 0.034409
+      }
+    }
+  },
+  "condiciones": {
+    "desarrollo": {
+      "natural": {
+        "especificacion": {
+          "dataset": "hdfs",
+          "tipo_deteccion": "operativa",
+          "particion": "desarrollo",
+          "condicion": "natural",
+          "n_casos": 30,
+          "grupos_por_caso": 10,
+          "prevalencia_solicitada": 0.0346,
+          "semilla": 20261684
+        },
+        "protocolo_version": "1.0",
+        "campo_veredicto": "hay_anomalia",
+        "n_casos": 30,
+        "prevalencia_efectiva": {
+          "solicitada": 0.0346,
+          "efectiva": 0.033333,
+          "n_casos": 30,
+          "n_casos_positivos": 1,
+          "delta_por_redondeo": -0.001267
+        },
+        "grupos_sobrantes": {
+          "positivos": 20,
+          "negativos": 279
+        },
+        "dimensiones_aplicables": [
+          "deteccion",
+          "reporte",
+          "consumo"
+        ],
+        "case_ids": [
+          "hdfs_des_natural_0000",
+          "hdfs_des_natural_0001",
+          "hdfs_des_natural_0002",
+          "hdfs_des_natural_0003",
+          "hdfs_des_natural_0004",
+          "hdfs_des_natural_0005",
+          "hdfs_des_natural_0006",
+          "hdfs_des_natural_0007",
+          "hdfs_des_natural_0008",
+          "hdfs_des_natural_0009",
+          "hdfs_des_natural_0010",
+          "hdfs_des_natural_0011",
+          "hdfs_des_natural_0012",
+          "hdfs_des_natural_0013",
+          "hdfs_des_natural_0014",
+          "hdfs_des_natural_0015",
+          "hdfs_des_natural_0016",
+          "hdfs_des_natural_0017",
+          "hdfs_des_natural_0018",
+          "hdfs_des_natural_0019",
+          "hdfs_des_natural_0020",
+          "hdfs_des_natural_0021",
+          "hdfs_des_natural_0022",
+          "hdfs_des_natural_0023",
+          "hdfs_des_natural_0024",
+          "hdfs_des_natural_0025",
+          "hdfs_des_natural_0026",
+          "hdfs_des_natural_0027",
+          "hdfs_des_natural_0028",
+          "hdfs_des_natural_0029"
+        ]
+      },
+      "balanceado": {
+        "especificacion": {
+          "dataset": "hdfs",
+          "tipo_deteccion": "operativa",
+          "particion": "desarrollo",
+          "condicion": "balanceado",
+          "n_casos": 16,
+          "grupos_por_caso": 10,
+          "prevalencia_solicitada": 0.5,
+          "semilla": 20261456
+        },
+        "protocolo_version": "1.0",
+        "campo_veredicto": "hay_anomalia",
+        "n_casos": 16,
+        "prevalencia_efectiva": {
+          "solicitada": 0.5,
+          "efectiva": 0.5,
+          "n_casos": 16,
+          "n_casos_positivos": 8,
+          "delta_por_redondeo": 0.0
+        },
+        "grupos_sobrantes": {
+          "positivos": 12,
+          "negativos": 127
+        },
+        "dimensiones_aplicables": [
+          "deteccion",
+          "reporte",
+          "consumo"
+        ],
+        "case_ids": [
+          "hdfs_des_balanceado_0000",
+          "hdfs_des_balanceado_0001",
+          "hdfs_des_balanceado_0002",
+          "hdfs_des_balanceado_0003",
+          "hdfs_des_balanceado_0004",
+          "hdfs_des_balanceado_0005",
+          "hdfs_des_balanceado_0006",
+          "hdfs_des_balanceado_0007",
+          "hdfs_des_balanceado_0008",
+          "hdfs_des_balanceado_0009",
+          "hdfs_des_balanceado_0010",
+          "hdfs_des_balanceado_0011",
+          "hdfs_des_balanceado_0012",
+          "hdfs_des_balanceado_0013",
+          "hdfs_des_balanceado_0014",
+          "hdfs_des_balanceado_0015"
+        ]
+      }
+    },
+    "evaluacion": {
+      "natural": {
+        "especificacion": {
+          "dataset": "hdfs",
+          "tipo_deteccion": "operativa",
+          "particion": "evaluacion",
+          "condicion": "natural",
+          "n_casos": 60,
+          "grupos_por_caso": 10,
+          "prevalencia_solicitada": 0.0346,
+          "semilla": 20262002
+        },
+        "protocolo_version": "1.0",
+        "campo_veredicto": "hay_anomalia",
+        "n_casos": 60,
+        "prevalencia_efectiva": {
+          "solicitada": 0.0346,
+          "efectiva": 0.033333,
+          "n_casos": 60,
+          "n_casos_positivos": 2,
+          "delta_por_redondeo": -0.001267
+        },
+        "grupos_sobrantes": {
+          "positivos": 46,
+          "negativos": 749
+        },
+        "dimensiones_aplicables": [
+          "deteccion",
+          "reporte",
+          "consumo"
+        ],
+        "case_ids": [
+          "hdfs_eva_natural_0000",
+          "hdfs_eva_natural_0001",
+          "hdfs_eva_natural_0002",
+          "hdfs_eva_natural_0003",
+          "hdfs_eva_natural_0004",
+          "hdfs_eva_natural_0005",
+          "hdfs_eva_natural_0006",
+          "hdfs_eva_natural_0007",
+          "hdfs_eva_natural_0008",
+          "hdfs_eva_natural_0009",
+          "hdfs_eva_natural_0010",
+          "hdfs_eva_natural_0011",
+          "hdfs_eva_natural_0012",
+          "hdfs_eva_natural_0013",
+          "hdfs_eva_natural_0014",
+          "hdfs_eva_natural_0015",
+          "hdfs_eva_natural_0016",
+          "hdfs_eva_natural_0017",
+          "hdfs_eva_natural_0018",
+          "hdfs_eva_natural_0019",
+          "hdfs_eva_natural_0020",
+          "hdfs_eva_natural_0021",
+          "hdfs_eva_natural_0022",
+          "hdfs_eva_natural_0023",
+          "hdfs_eva_natural_0024",
+          "hdfs_eva_natural_0025",
+          "hdfs_eva_natural_0026",
+          "hdfs_eva_natural_0027",
+          "hdfs_eva_natural_0028",
+          "hdfs_eva_natural_0029",
+          "hdfs_eva_natural_0030",
+          "hdfs_eva_natural_0031",
+          "hdfs_eva_natural_0032",
+          "hdfs_eva_natural_0033",
+          "hdfs_eva_natural_0034",
+          "hdfs_eva_natural_0035",
+          "hdfs_eva_natural_0036",
+          "hdfs_eva_natural_0037",
+          "hdfs_eva_natural_0038",
+          "hdfs_eva_natural_0039",
+          "hdfs_eva_natural_0040",
+          "hdfs_eva_natural_0041",
+          "hdfs_eva_natural_0042",
+          "hdfs_eva_natural_0043",
+          "hdfs_eva_natural_0044",
+          "hdfs_eva_natural_0045",
+          "hdfs_eva_natural_0046",
+          "hdfs_eva_natural_0047",
+          "hdfs_eva_natural_0048",
+          "hdfs_eva_natural_0049",
+          "hdfs_eva_natural_0050",
+          "hdfs_eva_natural_0051",
+          "hdfs_eva_natural_0052",
+          "hdfs_eva_natural_0053",
+          "hdfs_eva_natural_0054",
+          "hdfs_eva_natural_0055",
+          "hdfs_eva_natural_0056",
+          "hdfs_eva_natural_0057",
+          "hdfs_eva_natural_0058",
+          "hdfs_eva_natural_0059"
+        ]
+      },
+      "balanceado": {
+        "especificacion": {
+          "dataset": "hdfs",
+          "tipo_deteccion": "operativa",
+          "particion": "evaluacion",
+          "condicion": "balanceado",
+          "n_casos": 40,
+          "grupos_por_caso": 10,
+          "prevalencia_solicitada": 0.5,
+          "semilla": 20261646
+        },
+        "protocolo_version": "1.0",
+        "campo_veredicto": "hay_anomalia",
+        "n_casos": 40,
+        "prevalencia_efectiva": {
+          "solicitada": 0.5,
+          "efectiva": 0.5,
+          "n_casos": 40,
+          "n_casos_positivos": 20,
+          "delta_por_redondeo": 0.0
+        },
+        "grupos_sobrantes": {
+          "positivos": 26,
+          "negativos": 369
+        },
+        "dimensiones_aplicables": [
+          "deteccion",
+          "reporte",
+          "consumo"
+        ],
+        "case_ids": [
+          "hdfs_eva_balanceado_0000",
+          "hdfs_eva_balanceado_0001",
+          "hdfs_eva_balanceado_0002",
+          "hdfs_eva_balanceado_0003",
+          "hdfs_eva_balanceado_0004",
+          "hdfs_eva_balanceado_0005",
+          "hdfs_eva_balanceado_0006",
+          "hdfs_eva_balanceado_0007",
+          "hdfs_eva_balanceado_0008",
+          "hdfs_eva_balanceado_0009",
+          "hdfs_eva_balanceado_0010",
+          "hdfs_eva_balanceado_0011",
+          "hdfs_eva_balanceado_0012",
+          "hdfs_eva_balanceado_0013",
+          "hdfs_eva_balanceado_0014",
+          "hdfs_eva_balanceado_0015",
+          "hdfs_eva_balanceado_0016",
+          "hdfs_eva_balanceado_0017",
+          "hdfs_eva_balanceado_0018",
+          "hdfs_eva_balanceado_0019",
+          "hdfs_eva_balanceado_0020",
+          "hdfs_eva_balanceado_0021",
+          "hdfs_eva_balanceado_0022",
+          "hdfs_eva_balanceado_0023",
+          "hdfs_eva_balanceado_0024",
+          "hdfs_eva_balanceado_0025",
+          "hdfs_eva_balanceado_0026",
+          "hdfs_eva_balanceado_0027",
+          "hdfs_eva_balanceado_0028",
+          "hdfs_eva_balanceado_0029",
+          "hdfs_eva_balanceado_0030",
+          "hdfs_eva_balanceado_0031",
+          "hdfs_eva_balanceado_0032",
+          "hdfs_eva_balanceado_0033",
+          "hdfs_eva_balanceado_0034",
+          "hdfs_eva_balanceado_0035",
+          "hdfs_eva_balanceado_0036",
+          "hdfs_eva_balanceado_0037",
+          "hdfs_eva_balanceado_0038",
+          "hdfs_eva_balanceado_0039"
+        ]
+      }
+    }
+  },
+  "inventario_fuentes": {
+    "hdfs_log": [
+      {
+        "ruta_relativa": "data/logs/HDFS_2k.log",
+        "bytes": 287848,
+        "sha256": "7c967000980c086ed55fa6544ba4f05fe66d44622795e890c68caf8bbb635035",
+        "lineas": 2000
+      }
+    ],
+    "hdfs_labels": [
+      {
+        "ruta_relativa": "data/labels/hdfs_anomaly_label_2k.csv",
+        "bytes": 71307,
+        "sha256": "beea376284b45dcc26f7168932e04f6253ad7d9766596a3affed9959490f3b27",
+        "lineas": 2201
+      }
+    ]
+  }
+}

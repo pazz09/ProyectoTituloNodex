@@ -1,0 +1,27 @@
+{
+  "case_id": "hdfs_eva_balanceado_0008",
+  "estado_dimension": {
+    "deteccion": "evaluable",
+    "reconstruccion": "no_aplica",
+    "mitre": "no_aplica",
+    "reporte": "referencia_pendiente",
+    "consumo": "evaluable"
+  },
+  "etiqueta_deteccion": "anomalo",
+  "etiqueta_original": "Anomaly",
+  "core_event_uids": [],
+  "referencias_mitre": [],
+  "rubrica_aplicada": false,
+  "rubrica_ref": null,
+  "anotacion": {
+    "fuente": "dataset",
+    "regla": "el caso es positivo si alguno de sus grupos lo es; el grupo es positivo según la regla documentada del dataset",
+    "grupos_positivos": [
+      "blk_-6486714614940767660"
+    ],
+    "etiquetas_originales": [
+      "Anomaly"
+    ],
+    "aprobada": true
+  }
+}

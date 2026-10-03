@@ -1,0 +1,266 @@
+{
+  "dataset": "bgl",
+  "protocolo_version": "1.0",
+  "tipo_deteccion": "operativa",
+  "agrupacion": {
+    "unidad": "ventana_contigua_disjunta",
+    "tamano_ventana": 20,
+    "n_grupos": 100,
+    "n_grupos_positivos": 28,
+    "prevalencia_natural_de_grupos": 0.28,
+    "grupos_con_varios_miembros": 0
+  },
+  "particion": {
+    "proporcion_desarrollo": 0.3,
+    "semilla": 20261003,
+    "estratificada_por": "es_positivo",
+    "resumen": {
+      "desarrollo": {
+        "n_grupos": 30,
+        "n_grupos_positivos": 8,
+        "n_lineas": 600,
+        "prevalencia_de_grupos": 0.266667
+      },
+      "evaluacion": {
+        "n_grupos": 70,
+        "n_grupos_positivos": 20,
+        "n_lineas": 1400,
+        "prevalencia_de_grupos": 0.285714
+      }
+    }
+  },
+  "condiciones": {
+    "desarrollo": {
+      "natural": {
+        "especificacion": {
+          "dataset": "bgl",
+          "tipo_deteccion": "operativa",
+          "particion": "desarrollo",
+          "condicion": "natural",
+          "n_casos": 20,
+          "grupos_por_caso": 1,
+          "prevalencia_solicitada": 0.28,
+          "semilla": 20261684
+        },
+        "protocolo_version": "1.0",
+        "campo_veredicto": "hay_anomalia",
+        "n_casos": 20,
+        "prevalencia_efectiva": {
+          "solicitada": 0.28,
+          "efectiva": 0.3,
+          "n_casos": 20,
+          "n_casos_positivos": 6,
+          "delta_por_redondeo": 0.02
+        },
+        "grupos_sobrantes": {
+          "positivos": 2,
+          "negativos": 8
+        },
+        "dimensiones_aplicables": [
+          "deteccion",
+          "reporte",
+          "consumo"
+        ],
+        "case_ids": [
+          "bgl_des_natural_0000",
+          "bgl_des_natural_0001",
+          "bgl_des_natural_0002",
+          "bgl_des_natural_0003",
+          "bgl_des_natural_0004",
+          "bgl_des_natural_0005",
+          "bgl_des_natural_0006",
+          "bgl_des_natural_0007",
+          "bgl_des_natural_0008",
+          "bgl_des_natural_0009",
+          "bgl_des_natural_0010",
+          "bgl_des_natural_0011",
+          "bgl_des_natural_0012",
+          "bgl_des_natural_0013",
+          "bgl_des_natural_0014",
+          "bgl_des_natural_0015",
+          "bgl_des_natural_0016",
+          "bgl_des_natural_0017",
+          "bgl_des_natural_0018",
+          "bgl_des_natural_0019"
+        ]
+      },
+      "balanceado": {
+        "especificacion": {
+          "dataset": "bgl",
+          "tipo_deteccion": "operativa",
+          "particion": "desarrollo",
+          "condicion": "balanceado",
+          "n_casos": 4,
+          "grupos_por_caso": 1,
+          "prevalencia_solicitada": 0.5,
+          "semilla": 20261456
+        },
+        "protocolo_version": "1.0",
+        "campo_veredicto": "hay_anomalia",
+        "n_casos": 4,
+        "prevalencia_efectiva": {
+          "solicitada": 0.5,
+          "efectiva": 0.5,
+          "n_casos": 4,
+          "n_casos_positivos": 2,
+          "delta_por_redondeo": 0.0
+        },
+        "grupos_sobrantes": {
+          "positivos": 0,
+          "negativos": 6
+        },
+        "dimensiones_aplicables": [
+          "deteccion",
+          "reporte",
+          "consumo"
+        ],
+        "case_ids": [
+          "bgl_des_balanceado_0000",
+          "bgl_des_balanceado_0001",
+          "bgl_des_balanceado_0002",
+          "bgl_des_balanceado_0003"
+        ]
+      }
+    },
+    "evaluacion": {
+      "natural": {
+        "especificacion": {
+          "dataset": "bgl",
+          "tipo_deteccion": "operativa",
+          "particion": "evaluacion",
+          "condicion": "natural",
+          "n_casos": 50,
+          "grupos_por_caso": 1,
+          "prevalencia_solicitada": 0.28,
+          "semilla": 20262002
+        },
+        "protocolo_version": "1.0",
+        "campo_veredicto": "hay_anomalia",
+        "n_casos": 50,
+        "prevalencia_efectiva": {
+          "solicitada": 0.28,
+          "efectiva": 0.28,
+          "n_casos": 50,
+          "n_casos_positivos": 14,
+          "delta_por_redondeo": 0.0
+        },
+        "grupos_sobrantes": {
+          "positivos": 6,
+          "negativos": 14
+        },
+        "dimensiones_aplicables": [
+          "deteccion",
+          "reporte",
+          "consumo"
+        ],
+        "case_ids": [
+          "bgl_eva_natural_0000",
+          "bgl_eva_natural_0001",
+          "bgl_eva_natural_0002",
+          "bgl_eva_natural_0003",
+          "bgl_eva_natural_0004",
+          "bgl_eva_natural_0005",
+          "bgl_eva_natural_0006",
+          "bgl_eva_natural_0007",
+          "bgl_eva_natural_0008",
+          "bgl_eva_natural_0009",
+          "bgl_eva_natural_0010",
+          "bgl_eva_natural_0011",
+          "bgl_eva_natural_0012",
+          "bgl_eva_natural_0013",
+          "bgl_eva_natural_0014",
+          "bgl_eva_natural_0015",
+          "bgl_eva_natural_0016",
+          "bgl_eva_natural_0017",
+          "bgl_eva_natural_0018",
+          "bgl_eva_natural_0019",
+          "bgl_eva_natural_0020",
+          "bgl_eva_natural_0021",
+          "bgl_eva_natural_0022",
+          "bgl_eva_natural_0023",
+          "bgl_eva_natural_0024",
+          "bgl_eva_natural_0025",
+          "bgl_eva_natural_0026",
+          "bgl_eva_natural_0027",
+          "bgl_eva_natural_0028",
+          "bgl_eva_natural_0029",
+          "bgl_eva_natural_0030",
+          "bgl_eva_natural_0031",
+          "bgl_eva_natural_0032",
+          "bgl_eva_natural_0033",
+          "bgl_eva_natural_0034",
+          "bgl_eva_natural_0035",
+          "bgl_eva_natural_0036",
+          "bgl_eva_natural_0037",
+          "bgl_eva_natural_0038",
+          "bgl_eva_natural_0039",
+          "bgl_eva_natural_0040",
+          "bgl_eva_natural_0041",
+          "bgl_eva_natural_0042",
+          "bgl_eva_natural_0043",
+          "bgl_eva_natural_0044",
+          "bgl_eva_natural_0045",
+          "bgl_eva_natural_0046",
+          "bgl_eva_natural_0047",
+          "bgl_eva_natural_0048",
+          "bgl_eva_natural_0049"
+        ]
+      },
+      "balanceado": {
+        "especificacion": {
+          "dataset": "bgl",
+          "tipo_deteccion": "operativa",
+          "particion": "evaluacion",
+          "condicion": "balanceado",
+          "n_casos": 12,
+          "grupos_por_caso": 1,
+          "prevalencia_solicitada": 0.5,
+          "semilla": 20261646
+        },
+        "protocolo_version": "1.0",
+        "campo_veredicto": "hay_anomalia",
+        "n_casos": 12,
+        "prevalencia_efectiva": {
+          "solicitada": 0.5,
+          "efectiva": 0.5,
+          "n_casos": 12,
+          "n_casos_positivos": 6,
+          "delta_por_redondeo": 0.0
+        },
+        "grupos_sobrantes": {
+          "positivos": 0,
+          "negativos": 8
+        },
+        "dimensiones_aplicables": [
+          "deteccion",
+          "reporte",
+          "consumo"
+        ],
+        "case_ids": [
+          "bgl_eva_balanceado_0000",
+          "bgl_eva_balanceado_0001",
+          "bgl_eva_balanceado_0002",
+          "bgl_eva_balanceado_0003",
+          "bgl_eva_balanceado_0004",
+          "bgl_eva_balanceado_0005",
+          "bgl_eva_balanceado_0006",
+          "bgl_eva_balanceado_0007",
+          "bgl_eva_balanceado_0008",
+          "bgl_eva_balanceado_0009",
+          "bgl_eva_balanceado_0010",
+          "bgl_eva_balanceado_0011"
+        ]
+      }
+    }
+  },
+  "inventario_fuentes": {
+    "bgl_log": [
+      {
+        "ruta_relativa": "data/logs/BGL_2k.log",
+        "bytes": 317150,
+        "sha256": "2a819ea540909db682005c9cf948387a40729b5c2e9f19d430e29ce704825496",
+        "lineas": 2000
+      }
+    ]
+  }
+}

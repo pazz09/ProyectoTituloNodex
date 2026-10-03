@@ -35,14 +35,27 @@ aparece un ZIP que represente otra versión, la diferencia debe
 reconciliarse explícitamente **antes** de la Fase 2, porque afectaría la
 procedencia de los casos.
 
+### Actualización del punto de partida (3-oct-2026, al abrir la Fase 2)
+
+`origin/main` avanzó a **`b0fe5de` "Dataset UWF"** (Felipe Bravo Romo), que
+agrega los 13 archivos Parquet de UWF-ZeekDataFall22 en
+`data/logs/UWF-ZeekDataFall22-parquet/` (44 862 135 bytes). Se trajo con
+`git merge --ff-only` al `main` local y se integró a esta rama con un merge
+(`bbec894`), de modo que el dataset está disponible tanto en el checkout
+original como en el worktree de preparación.
+
+El punto de partida de la Fase 2 en adelante es por lo tanto `b0fe5de`, no
+`6adc343`. La Fase 0 y la Fase 1 se cerraron sobre `6adc343` y no se
+rehacen: no dependen del dataset.
+
 ## 2. Registro de fases
 
 | Fase | Estado | Autorización recibida | Entregables | Commit | Pendientes |
 |---|---|---|---|---|---|
 | 0 — Aislar el trabajo y fijar el punto de partida | PREPARADA_SIN_EJECUTAR | Sí (3-oct-2026) | Rama `preparacion-entorno-pruebas`, worktree aislado, commit de origen documentado, este registro | `26832c2` | Verificaciones de entorno que exigen ejecución (§6) |
 | 1 — Definir el protocolo y los contratos experimentales | PREPARADA_SIN_EJECUTAR | Sí (3-oct-2026) | `docs/experimentacion/protocolo.md`; contratos en `src/experimentation/contracts/`; 4 archivos de prueba en `tests/experimentation/` (escritos, sin ejecutar) | `d3a3234` | 6 decisiones académicas pendientes (§8) |
-| 2 — Preparar datasets y casos con segmentación válida | PENDIENTE_AUTORIZACION | No | — | — | UWF-ZeekDataFall22 no incorporado localmente |
-| 3 — Preparar ground truth y conocimiento aislado | PENDIENTE_AUTORIZACION | No | — | — | Catálogo MITRE no versionado; ChromaDB sin documentos |
+| 2 — Preparar datasets y casos con segmentación válida | PREPARADA_SIN_EJECUTAR (HDFS y BGL); UWF BLOQUEADA | Sí (3-oct-2026) | `docs/experimentacion/hallazgos_datasets.md`; `src/experimentation/datasets/` (6 módulos); 232 casos + 232 referencias + 3 manifiestos en `experiments/`; 2 archivos de prueba (escritos, sin ejecutar) | (se registra abajo) | UWF requiere un motor Parquet (autorización de instalación); D-7 a D-10 |
+| 3 — Preparar ground truth y conocimiento aislado | PENDIENTE_AUTORIZACION | No | — | — | Catálogo MITRE no versionado; ChromaDB sin documentos. **Menos trabajo del previsto:** UWF trae `label_binary`, `label_tactic`, `label_technique` y `uid`, así que D1, D2 y D3 son derivables del dataset (ver hallazgos §4) |
 | 4 — Hacer evaluables las salidas de NODEX | PENDIENTE_AUTORIZACION | No | — | — | — |
 | 5 — Implementar los evaluadores externos | PENDIENTE_AUTORIZACION | No | — | — | Rúbrica humana del reporte por definir |
 | 6 — Preparar telemetría y configuración congelable | PENDIENTE_AUTORIZACION | No | — | — | — |
@@ -134,19 +147,38 @@ y no debe presentarse como verificado:
    requiere autorización en la fase correspondiente.
 8. Ejecución remota del workflow de CI sobre esta rama.
 
+Agregado al cerrar la Fase 2:
+
+9. Que los 232 casos generados pasen por el preprocesamiento de NODEX.
+   Llamar a `preprocesar()` sobre un caso es ejecutar NODEX sobre un caso de
+   prueba, que el protocolo prohíbe sin autorización. La segmentación se
+   validó contra el archivo original, no contra el pipeline.
+10. Que las pruebas de `tests/experimentation/` pasen. Son 4 + 2 archivos
+    escritos y revisados estáticamente, nunca ejecutados.
+11. Nada de los **datos** de UWF: solo se leyeron los metadatos del footer
+    Parquet. No se leyó una sola fila.
+12. Que las etiquetas de HDFS, BGL y UWF sean correctas. Se toman tal como
+    vienen; auditar la curaduría de los datasets está fuera de alcance.
+
 ## 7. Pendientes y riesgos registrados al cierre de la Fase 0
 
-- **UWF-ZeekDataFall22 no está incorporado localmente.** Queda como
-  dependencia bloqueante para su dimensión hasta que se disponga del
-  dataset y sus etiquetas (Fase 2).
+- **UWF-ZeekDataFall22 no está incorporado localmente.** *Resuelto el
+  3-oct-2026:* llegó en `b0fe5de`. Lo que queda es poder leerlo (viene en
+  Parquet y falta un motor).
 - **Catálogo MITRE no versionado y ChromaDB sin documentos.** La Fase 3
   necesitará una decisión explícita: descargar el catálogo (con
-  autorización) o declarar la dimensión MITRE como no preparable.
-- **Rendimiento HDFS del detector.** Limitación conocida y medida en la
-  evidencia de la fase 6 anterior (recall 0,10 en balanceado; 0,00 a
-  prevalencia 3,1%). Por indicación de la usuaria (3-oct-2026) **no es
-  bloqueante** de esta preparación; se registra como riesgo a considerar al
-  interpretar la campaña futura, no como defecto a corregir acá.
+  autorización) o declarar la dimensión MITRE como no preparable. *Matizado
+  el 3-oct-2026:* la **referencia** MITRE de UWF ya no depende del catálogo
+  —viene en `label_tactic` / `label_technique`—; el catálogo sigue haciendo
+  falta para el RAG que usa NODEX, no para evaluar.
+- **Rendimiento HDFS del detector.** *Reinterpretado el 3-oct-2026, con
+  medición:* no es un problema de rendimiento. `HDFS_2k.log` tiene 1,00
+  líneas por bloque, así que la secuencia de eventos que define la etiqueta
+  de anomalía no está en el archivo y la tarea no es resoluble por ningún
+  sistema. Es una amenaza a la **validez** de esa medición, no una
+  limitación del detector. Detalle y las tres salidas posibles en
+  `hallazgos_datasets.md` §1 (decisión D-7). Sigue sin ser bloqueante de la
+  preparación, por indicación de la usuaria.
 - **Referencias humanas pendientes.** Las anotaciones semánticas que el
   dataset no provee requieren revisión humana. El plan considera el ERR de
   UWF ya revisado; el resto queda como `referencia_pendiente` hasta su
@@ -167,7 +199,13 @@ suplirlas con un valor por defecto. Detalle y justificación en
 | D-4 | Escala de la rúbrica de reporte y nº de evaluadores humanos | 3 y 5 |
 | D-5 | Comparación externa: experimental o bibliográfica | 9 |
 | D-6 | Tamaño de la submuestra de D4 (reporte) por dataset | 3 |
+| D-7 | Qué hacer con la detección en HDFS: muestra nueva, `no_aplica`, o reportar con la limitación | Interpretación de D1 en HDFS |
+| D-8 | Si los casos de UWF se componen (malicioso de 2022 sobre fondo benigno de 2021) y si se rebasan los timestamps | Generación de casos de UWF |
+| D-9 | Si los registros `Duplicate` de UWF se excluyen del caso o solo del ground truth | Ground truth de UWF (Fase 3) |
+| D-10 | Si se amplía a muestras mayores de HDFS/BGL o se acepta el techo de 2 000 líneas | Tamaño de la campaña |
 
-D-1 y D-6 son las únicas que bloquean el avance inmediato: la Fase 2 no
-puede particionar sin D-1, y la Fase 3 no puede dimensionar la anotación
-humana sin D-6.
+D-1 quedó resuelta (30/70) y la Fase 2 ya particionó con ella. D-6 sigue
+bloqueando la Fase 3. D-7 a D-10 abrieron en la Fase 2 y están
+fundamentadas con medición en `hallazgos_datasets.md`; D-8 y D-9 bloquean
+la generación de casos de UWF, y D-7 y D-10 afectan la interpretación, no
+el avance.

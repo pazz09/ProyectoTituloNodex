@@ -1,0 +1,103 @@
+{
+  "case_id": "hdfs_des_balanceado_0009",
+  "dataset": "hdfs",
+  "tipo_deteccion": "operativa",
+  "particion": "desarrollo",
+  "dimensiones_aplicables": [
+    "deteccion",
+    "reporte",
+    "consumo"
+  ],
+  "procedencia": [
+    {
+      "indice_en_caso": 0,
+      "archivo_origen": "hdfs",
+      "linea_original": 133,
+      "grupo": "blk_-7436749154361133879",
+      "uid": null
+    },
+    {
+      "indice_en_caso": 1,
+      "archivo_origen": "hdfs",
+      "linea_original": 341,
+      "grupo": "blk_4357276972386184626",
+      "uid": null
+    },
+    {
+      "indice_en_caso": 2,
+      "archivo_origen": "hdfs",
+      "linea_original": 565,
+      "grupo": "blk_-2600305892036631113",
+      "uid": null
+    },
+    {
+      "indice_en_caso": 3,
+      "archivo_origen": "hdfs",
+      "linea_original": 674,
+      "grupo": "blk_7345322407792942877",
+      "uid": null
+    },
+    {
+      "indice_en_caso": 4,
+      "archivo_origen": "hdfs",
+      "linea_original": 888,
+      "grupo": "blk_6695517786834913217",
+      "uid": null
+    },
+    {
+      "indice_en_caso": 5,
+      "archivo_origen": "hdfs",
+      "linea_original": 1206,
+      "grupo": "blk_6055109613223910610",
+      "uid": null
+    },
+    {
+      "indice_en_caso": 6,
+      "archivo_origen": "hdfs",
+      "linea_original": 1215,
+      "grupo": "blk_-7637577152926063076",
+      "uid": null
+    },
+    {
+      "indice_en_caso": 7,
+      "archivo_origen": "hdfs",
+      "linea_original": 1491,
+      "grupo": "blk_2151150262081352617",
+      "uid": null
+    },
+    {
+      "indice_en_caso": 8,
+      "archivo_origen": "hdfs",
+      "linea_original": 1516,
+      "grupo": "blk_7463248820468902190",
+      "uid": null
+    },
+    {
+      "indice_en_caso": 9,
+      "archivo_origen": "hdfs",
+      "linea_original": 1918,
+      "grupo": "blk_-3967261531426400230",
+      "uid": null
+    }
+  ],
+  "grupos": [
+    "blk_-2600305892036631113",
+    "blk_-3967261531426400230",
+    "blk_-7436749154361133879",
+    "blk_-7637577152926063076",
+    "blk_2151150262081352617",
+    "blk_4357276972386184626",
+    "blk_6055109613223910610",
+    "blk_6695517786834913217",
+    "blk_7345322407792942877",
+    "blk_7463248820468902190"
+  ],
+  "notas": {
+    "n_lineas": 10,
+    "n_grupos": 10,
+    "prevalencia_solicitada_del_lote": 0.5,
+    "semilla": 20261456,
+    "protocolo_version": "1.0"
+  },
+  "archivo_contenido": "hdfs_des_balanceado_0009.log"
+}

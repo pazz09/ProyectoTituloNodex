@@ -1,0 +1,27 @@
+{
+  "case_id": "bgl_eva_balanceado_0001",
+  "estado_dimension": {
+    "deteccion": "evaluable",
+    "reconstruccion": "no_aplica",
+    "mitre": "no_aplica",
+    "reporte": "referencia_pendiente",
+    "consumo": "evaluable"
+  },
+  "etiqueta_deteccion": "anomalo",
+  "etiqueta_original": "APPSEV",
+  "core_event_uids": [],
+  "referencias_mitre": [],
+  "rubrica_aplicada": false,
+  "rubrica_ref": null,
+  "anotacion": {
+    "fuente": "dataset",
+    "regla": "el caso es positivo si alguno de sus grupos lo es; el grupo es positivo según la regla documentada del dataset",
+    "grupos_positivos": [
+      "bgl_l01461-01480"
+    ],
+    "etiquetas_originales": [
+      "APPSEV"
+    ],
+    "aprobada": true
+  }
+}
