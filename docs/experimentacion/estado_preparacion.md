@@ -39,7 +39,7 @@ procedencia de los casos.
 
 | Fase | Estado | Autorización recibida | Entregables | Commit | Pendientes |
 |---|---|---|---|---|---|
-| 0 — Aislar el trabajo y fijar el punto de partida | PREPARADA_SIN_EJECUTAR | Sí (3-oct-2026) | Rama `preparacion-entorno-pruebas`, worktree aislado, commit de origen documentado, este registro | `(se registra al cerrar la fase)` | Verificaciones de entorno que exigen ejecución (§6) |
+| 0 — Aislar el trabajo y fijar el punto de partida | PREPARADA_SIN_EJECUTAR | Sí (3-oct-2026) | Rama `preparacion-entorno-pruebas`, worktree aislado, commit de origen documentado, este registro | `26832c2` | Verificaciones de entorno que exigen ejecución (§6) |
 | 1 — Definir el protocolo y los contratos experimentales | PENDIENTE_AUTORIZACION | No | — | — | — |
 | 2 — Preparar datasets y casos con segmentación válida | PENDIENTE_AUTORIZACION | No | — | — | UWF-ZeekDataFall22 no incorporado localmente |
 | 3 — Preparar ground truth y conocimiento aislado | PENDIENTE_AUTORIZACION | No | — | — | Catálogo MITRE no versionado; ChromaDB sin documentos |
