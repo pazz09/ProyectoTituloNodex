@@ -40,7 +40,7 @@ procedencia de los casos.
 | Fase | Estado | Autorización recibida | Entregables | Commit | Pendientes |
 |---|---|---|---|---|---|
 | 0 — Aislar el trabajo y fijar el punto de partida | PREPARADA_SIN_EJECUTAR | Sí (3-oct-2026) | Rama `preparacion-entorno-pruebas`, worktree aislado, commit de origen documentado, este registro | `26832c2` | Verificaciones de entorno que exigen ejecución (§6) |
-| 1 — Definir el protocolo y los contratos experimentales | PENDIENTE_AUTORIZACION | No | — | — | — |
+| 1 — Definir el protocolo y los contratos experimentales | PREPARADA_SIN_EJECUTAR | Sí (3-oct-2026) | `docs/experimentacion/protocolo.md`; contratos en `src/experimentation/contracts/`; 4 archivos de prueba en `tests/experimentation/` (escritos, sin ejecutar) | `(se registra al cerrar la fase)` | 6 decisiones académicas pendientes (§8) |
 | 2 — Preparar datasets y casos con segmentación válida | PENDIENTE_AUTORIZACION | No | — | — | UWF-ZeekDataFall22 no incorporado localmente |
 | 3 — Preparar ground truth y conocimiento aislado | PENDIENTE_AUTORIZACION | No | — | — | Catálogo MITRE no versionado; ChromaDB sin documentos |
 | 4 — Hacer evaluables las salidas de NODEX | PENDIENTE_AUTORIZACION | No | — | — | — |
@@ -151,3 +151,23 @@ y no debe presentarse como verificado:
   dataset no provee requieren revisión humana. El plan considera el ERR de
   UWF ya revisado; el resto queda como `referencia_pendiente` hasta su
   aprobación.
+
+## 8. Decisiones académicas pendientes
+
+Registradas en la Fase 1. El protocolo las trata como
+`DECISION_PENDIENTE`: **ningún umbral está fijado** y el código no debe
+suplirlas con un valor por defecto. Detalle y justificación en
+`docs/experimentacion/protocolo.md` §10.
+
+| # | Decisión | Fase que la necesita |
+|---|---|---|
+| D-1 | Proporción desarrollo / evaluación | 2 |
+| D-2 | Número de repeticiones `N` por caso | 7 |
+| D-3 | Umbrales de aceptación por dimensión | 5 (y la interpretación final) |
+| D-4 | Escala de la rúbrica de reporte y nº de evaluadores humanos | 3 y 5 |
+| D-5 | Comparación externa: experimental o bibliográfica | 9 |
+| D-6 | Tamaño de la submuestra de D4 (reporte) por dataset | 3 |
+
+D-1 y D-6 son las únicas que bloquean el avance inmediato: la Fase 2 no
+puede particionar sin D-1, y la Fase 3 no puede dimensionar la anotación
+humana sin D-6.
