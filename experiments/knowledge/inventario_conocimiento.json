@@ -1,0 +1,215 @@
+{
+  "protocolo_version": "1.0",
+  "configuracion_aislada": {
+    "raiz": "C:\\Users\\antop\\Desktop\\ProyectoTituloNodex-pruebas\\experiments\\knowledge",
+    "chroma": "C:\\Users\\antop\\Desktop\\ProyectoTituloNodex-pruebas\\experiments\\knowledge\\chroma",
+    "cache_ip": "C:\\Users\\antop\\Desktop\\ProyectoTituloNodex-pruebas\\experiments\\knowledge\\ip_reputation_cache.json",
+    "historial": {
+      "ruta": "C:\\Users\\antop\\Desktop\\ProyectoTituloNodex-pruebas\\experiments\\knowledge\\historial.db",
+      "mecanismo": "parámetro `ruta` explícito, no variable de entorno",
+      "detalle": {
+        "constante": "src/api/historial.py::RUTA_DB",
+        "derivada_de": "raíz del repositorio",
+        "mecanismo_de_aislamiento": "parámetro `ruta` explícito en cada llamada",
+        "riesgo_si_se_omite": "la campaña escribiría en el data/historial.db del checkout donde se la invoque"
+      }
+    },
+    "inventario": "C:\\Users\\antop\\Desktop\\ProyectoTituloNodex-pruebas\\experiments\\knowledge\\inventario_conocimiento.json",
+    "variables_entorno": {
+      "CHROMA_PATH": "C:\\Users\\antop\\Desktop\\ProyectoTituloNodex-pruebas\\experiments\\knowledge\\chroma",
+      "IP_CACHE_PATH": "C:\\Users\\antop\\Desktop\\ProyectoTituloNodex-pruebas\\experiments\\knowledge\\ip_reputation_cache.json"
+    }
+  },
+  "variables_que_config_lee_del_entorno": {
+    "CHROMA_PATH": "./data/chroma",
+    "IP_CACHE_PATH": "./data/ip_reputation_cache.json"
+  },
+  "historial": {
+    "constante": "src/api/historial.py::RUTA_DB",
+    "derivada_de": "raíz del repositorio",
+    "mecanismo_de_aislamiento": "parámetro `ruta` explícito en cada llamada",
+    "riesgo_si_se_omite": "la campaña escribiría en el data/historial.db del checkout donde se la invoque"
+  },
+  "politica_recursos_externos": {
+    "abuseipdb": {
+      "estado": "congelado_antes_de_ejecutar",
+      "cache": "experiments/knowledge/ip_reputation_cache.json",
+      "modo_durante_campana": "solo_lectura",
+      "si_falta_una_ip": "registrar el fallo en la telemetría del caso y marcar la dimensión afectada, no inventar una reputación por omisión",
+      "consultas_de_prueba": "prohibidas en la preparación"
+    },
+    "nvd": {
+      "estado": "congelado_antes_de_ejecutar",
+      "modo_durante_campana": "solo_lectura",
+      "consultas_de_prueba": "prohibidas en la preparación"
+    },
+    "gemini": {
+      "estado": "sin_cache",
+      "nota": "no se cachea: el modelo es la variable que se está midiendo. Las llamadas se registran con modelo efectivo, tokens y reintentos (Fase 6)",
+      "consultas_de_prueba": "prohibidas en la preparación"
+    }
+  },
+  "conocimiento": {
+    "chroma_origen": {
+      "existe": true,
+      "ruta": "C:\\Users\\antop\\Desktop\\NODEX\\data\\chroma",
+      "bytes_sqlite": 7258112,
+      "sha256_sqlite": "4a93749aa6015f3c0b7d62d684b3bedb8cf6649ed345131957bd4015b9ea6a3b",
+      "colecciones": [
+        {
+          "nombre": "attack_patterns",
+          "dimension": 384,
+          "n_embeddings": 1,
+          "rol": "memoria",
+          "claves_metadata": {
+            "host": 1,
+            "confianza": 1,
+            "clasificacion": 1,
+            "chroma:document": 1
+          }
+        },
+        {
+          "nombre": "attack_techniques",
+          "dimension": 384,
+          "n_embeddings": 697,
+          "rol": "conocimiento",
+          "claves_metadata": {
+            "url": 697,
+            "technique_id": 697,
+            "tactics": 697,
+            "name": 697,
+            "is_subtechnique": 697,
+            "chroma:document": 697
+          }
+        },
+        {
+          "nombre": "error_memory",
+          "dimension": null,
+          "n_embeddings": 0,
+          "rol": "memoria",
+          "claves_metadata": {}
+        },
+        {
+          "nombre": "host_history",
+          "dimension": 384,
+          "n_embeddings": 1,
+          "rol": "memoria",
+          "claves_metadata": {
+            "host": 1,
+            "confianza": 1,
+            "clasificacion": 1,
+            "chroma:document": 1
+          }
+        }
+      ],
+      "catalogo_mitre": {
+        "tecnicas_padre": 222,
+        "subtecnicas": 475,
+        "total": 697,
+        "nota": "el campo is_subtechnique está vacío en las 697 filas; el desglose se deriva del punto en technique_id"
+      }
+    },
+    "modelo_embeddings": {
+      "modelo": "all-MiniLM-L6-v2",
+      "en_cache": true,
+      "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "bytes_totales": 91578225,
+      "archivos": [
+        {
+          "nombre": "config.json",
+          "bytes": 612,
+          "sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41"
+        },
+        {
+          "nombre": "config_sentence_transformers.json",
+          "bytes": 116,
+          "sha256": "061ca9d39661d6c6d6de5ba27f79a1cd5770ea247f8d46412a68a498dc5ac9f3"
+        },
+        {
+          "nombre": "model.safetensors",
+          "bytes": 90868376,
+          "sha256": "53aa51172d142c89d9012cce15ae4d6cc0ca6895895114379cacb4fab128d9db"
+        },
+        {
+          "nombre": "modules.json",
+          "bytes": 349,
+          "sha256": "84e40c8e006c9b1d6c122e02cba9b02458120b5fb0c87b746c41e0207cf642cf"
+        },
+        {
+          "nombre": "README.md",
+          "bytes": 10502,
+          "sha256": "dcd602d2fd35c203a247304a06fec6654a12f7941b739f9221a064fe8dc3b7f0"
+        },
+        {
+          "nombre": "sentence_bert_config.json",
+          "bytes": 53,
+          "sha256": "fc1993fde0a95c24ec6c022539d41cf6e2f7c9721e5415d6fb6897472a9cd4b7"
+        },
+        {
+          "nombre": "special_tokens_map.json",
+          "bytes": 112,
+          "sha256": "303df45a03609e4ead04bc3dc1536d0ab19b5358db685b6f3da123d05ec200e3"
+        },
+        {
+          "nombre": "tokenizer.json",
+          "bytes": 466247,
+          "sha256": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037"
+        },
+        {
+          "nombre": "tokenizer_config.json",
+          "bytes": 350,
+          "sha256": "acb92769e8195aabd29b7b2137a9e6d6e25c476a4f15aa4355c233426c61576b"
+        },
+        {
+          "nombre": "vocab.txt",
+          "bytes": 231508,
+          "sha256": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3"
+        }
+      ]
+    },
+    "catalogo_mitre": {
+      "directorio": "data/mitre_attack",
+      "procedencia_presente": true,
+      "stix_presente": false,
+      "archivos_stix": [],
+      "procedencia": {
+        "fuente_url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack.json",
+        "version_attack": "19.2",
+        "n_tecnicas": 697,
+        "n_subtecnicas": 475,
+        "fecha_corrida_utc": "2026-09-11T06:07:16Z",
+        "atribucion": "MITRE ATT&CK® data reproduced and distributed with the permission of The MITRE Corporation. © The MITRE Corporation."
+      },
+      "sha256_procedencia": "c94eb812e9151b798560d91c70e0b30406952aada2ce4b0a0be8ef0202328243",
+      "nota": "el JSON STIX no está versionado en el repositorio. No hace falta para el experimento: el catálogo ya está embebido en ChromaDB y la base experimental se puebla copiando esos vectores, sin recalcularlos ni volver a descargar el catálogo. Haría falta solo para reconstruir la base desde cero."
+    },
+    "colecciones_de_conocimiento": [
+      "attack_techniques"
+    ],
+    "colecciones_de_memoria_excluidas": [
+      "host_history",
+      "error_memory",
+      "attack_patterns"
+    ]
+  },
+  "poblado_chroma": {
+    "origen": "C:\\Users\\antop\\Desktop\\NODEX\\data\\chroma",
+    "destino": "C:\\Users\\antop\\Desktop\\ProyectoTituloNodex-pruebas\\experiments\\knowledge\\chroma",
+    "colecciones_a_copiar": [
+      "attack_techniques"
+    ],
+    "colecciones_a_excluir": [
+      "host_history",
+      "error_memory",
+      "attack_patterns"
+    ],
+    "metodo": "copiar embeddings, documentos y metadata ya almacenados; no recalcular vectores ni cargar el modelo de embeddings",
+    "requiere_autorizacion": true,
+    "estado": "NO_EJECUTADO"
+  },
+  "chroma_experimental": {
+    "existe": false,
+    "ruta": "C:\\Users\\antop\\Desktop\\ProyectoTituloNodex-pruebas\\experiments\\knowledge\\chroma",
+    "colecciones": []
+  }
+}

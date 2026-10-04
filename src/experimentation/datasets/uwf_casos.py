@@ -477,6 +477,16 @@ def componer_caso(
         etiqueta_original=VALOR_MALICIOSO if incidente else VALOR_BENIGNO,
         core_event_uids=uids_nucleo,
         referencias_mitre=referencias_mitre,
+        # UWF etiqueta táctica y técnica, nunca subtécnica: las 22 etiquetas
+        # de `label_technique` del dataset son todas `T####` sin punto. La
+        # subtécnica queda `no_aplica` y **no se infiere** desde la técnica.
+        estado_mitre_por_nivel=(
+            {"tactica": "evaluable", "tecnica": "evaluable",
+             "subtecnica": "no_aplica"}
+            if incidente else
+            {"tactica": "no_aplica", "tecnica": "no_aplica",
+             "subtecnica": "no_aplica"}
+        ),
         anotacion={
             "fuente": "dataset",
             "regla": (

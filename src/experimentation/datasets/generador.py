@@ -254,6 +254,12 @@ def _materializar(
             )
             for dimension in _ESTADO_INICIAL
         },
+        # HDFS y BGL no traen ninguna referencia ATT&CK, en ningún nivel.
+        estado_mitre_por_nivel={
+            "tactica": "no_aplica",
+            "tecnica": "no_aplica",
+            "subtecnica": "no_aplica",
+        },
         etiqueta_deteccion="anomalo" if positivos else "normal",
         etiqueta_original=(
             positivos[0].etiqueta_original if positivos else

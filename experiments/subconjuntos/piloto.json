@@ -1,0 +1,125 @@
+{
+  "proposito": "verificar que el pipeline experimental funciona de punta a punta. NO produce métricas reportables",
+  "particion": "desarrollo",
+  "por_que_solo_desarrollo": "depurar contra los casos de evaluación los deja de ser datos reservados",
+  "semilla": 20261004,
+  "protocolo_version": "1.0",
+  "datasets": {
+    "hdfs": {
+      "balanceado": {
+        "composicion": {
+          "solicitados": 4,
+          "entregados": 4,
+          "positivos": 2,
+          "negativos": 2,
+          "positivos_objetivo": 2,
+          "positivos_disponibles": 8,
+          "negativos_disponibles": 8
+        },
+        "case_ids": [
+          "hdfs_des_balanceado_0004",
+          "hdfs_des_balanceado_0005",
+          "hdfs_des_balanceado_0010",
+          "hdfs_des_balanceado_0014"
+        ]
+      },
+      "natural": {
+        "composicion": {
+          "solicitados": 4,
+          "entregados": 4,
+          "positivos": 1,
+          "negativos": 3,
+          "positivos_objetivo": 2,
+          "positivos_disponibles": 1,
+          "negativos_disponibles": 29,
+          "advertencia": "se pedían 2 positivos y solo había 1: la submuestra queda desbalanceada y su recall no es interpretable por separado"
+        },
+        "case_ids": [
+          "hdfs_des_natural_0000",
+          "hdfs_des_natural_0002",
+          "hdfs_des_natural_0007",
+          "hdfs_des_natural_0018"
+        ]
+      }
+    },
+    "bgl": {
+      "balanceado": {
+        "composicion": {
+          "solicitados": 4,
+          "entregados": 4,
+          "positivos": 2,
+          "negativos": 2,
+          "positivos_objetivo": 2,
+          "positivos_disponibles": 2,
+          "negativos_disponibles": 2
+        },
+        "case_ids": [
+          "bgl_des_balanceado_0000",
+          "bgl_des_balanceado_0001",
+          "bgl_des_balanceado_0002",
+          "bgl_des_balanceado_0003"
+        ]
+      },
+      "natural": {
+        "composicion": {
+          "solicitados": 4,
+          "entregados": 4,
+          "positivos": 2,
+          "negativos": 2,
+          "positivos_objetivo": 2,
+          "positivos_disponibles": 6,
+          "negativos_disponibles": 14
+        },
+        "case_ids": [
+          "bgl_des_natural_0001",
+          "bgl_des_natural_0005",
+          "bgl_des_natural_0008",
+          "bgl_des_natural_0013"
+        ]
+      }
+    },
+    "uwf": {
+      "sigiloso": {
+        "composicion": {
+          "solicitados": 4,
+          "entregados": 4,
+          "positivos": 2,
+          "negativos": 2,
+          "positivos_objetivo": 2,
+          "positivos_disponibles": 6,
+          "negativos_disponibles": 6
+        },
+        "case_ids": [
+          "uwf_des_sigiloso_0004",
+          "uwf_des_sigiloso_0005",
+          "uwf_des_sigiloso_0008",
+          "uwf_des_sigiloso_0010"
+        ]
+      },
+      "visible": {
+        "composicion": {
+          "solicitados": 4,
+          "entregados": 4,
+          "positivos": 2,
+          "negativos": 2,
+          "positivos_objetivo": 2,
+          "positivos_disponibles": 6,
+          "negativos_disponibles": 6
+        },
+        "case_ids": [
+          "uwf_des_visible_0000",
+          "uwf_des_visible_0001",
+          "uwf_des_visible_0007",
+          "uwf_des_visible_0009"
+        ]
+      }
+    }
+  },
+  "n_casos": 24,
+  "costo_estimado": {
+    "casos": 24,
+    "arquitecturas_llm": 2,
+    "corridas_sin_repeticiones": 48,
+    "nota": "el baseline de reglas no consume LLM. El número de llamadas por corrida depende del grafo y se estima en la Fase 6, no acá"
+  }
+}

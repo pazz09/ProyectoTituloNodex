@@ -55,7 +55,7 @@ rehacen: no dependen del dataset.
 | 0 — Aislar el trabajo y fijar el punto de partida | PREPARADA_SIN_EJECUTAR | Sí (3-oct-2026) | Rama `preparacion-entorno-pruebas`, worktree aislado, commit de origen documentado, este registro | `26832c2` | Verificaciones de entorno que exigen ejecución (§6) |
 | 1 — Definir el protocolo y los contratos experimentales | PREPARADA_SIN_EJECUTAR | Sí (3-oct-2026) | `docs/experimentacion/protocolo.md`; contratos en `src/experimentation/contracts/`; 4 archivos de prueba en `tests/experimentation/` (escritos, sin ejecutar) | `d3a3234` | 6 decisiones académicas pendientes (§8) |
 | 2 — Preparar datasets y casos con segmentación válida | PREPARADA_SIN_EJECUTAR (HDFS, BGL y UWF) | Sí (3-oct-2026) | `hallazgos_datasets.md`, `regenerar_uwf.md`; `src/experimentation/datasets/` (8 módulos); **336 casos + 336 referencias** y 5 manifiestos en `experiments/`; `requirements-experimentacion.txt`; 3 archivos de prueba (escritos, sin ejecutar) | `fb77559`, UWF en `d467486` | UWF requiere un motor Parquet (autorización de instalación); D-7 a D-10 |
-| 3 — Preparar ground truth y conocimiento aislado | PENDIENTE_AUTORIZACION | No | — | — | Catálogo MITRE no versionado; ChromaDB sin documentos. **Menos trabajo del previsto:** UWF trae `label_binary`, `label_tactic`, `label_technique` y `uid`, así que D1, D2 y D3 son derivables del dataset (ver hallazgos §4) |
+| 3 — Preparar ground truth y conocimiento aislado | PREPARADA_SIN_EJECUTAR, salvo el poblado de ChromaDB | Sí (4-oct-2026) | `anotacion_ground_truth.md`; `src/experimentation/knowledge/` (4 módulos) y `subconjuntos.py`; `estado_mitre_por_nivel` en las 336 referencias; `experiments/knowledge/inventario_conocimiento.json`; subconjuntos piloto (24) y rúbrica (24); 1 archivo de controles de aislamiento (escrito, sin ejecutar) | (se registra abajo) | Poblar la base vectorial del experimento requiere autorización (acción 6) |
 | 4 — Hacer evaluables las salidas de NODEX | PENDIENTE_AUTORIZACION | No | — | — | — |
 | 5 — Implementar los evaluadores externos | PENDIENTE_AUTORIZACION | No | — | — | Rúbrica humana del reporte por definir |
 | 6 — Preparar telemetría y configuración congelable | PENDIENTE_AUTORIZACION | No | — | — | — |
@@ -165,12 +165,16 @@ Agregado al cerrar la Fase 2:
 - **UWF-ZeekDataFall22 no está incorporado localmente.** *Resuelto el
   3-oct-2026:* llegó en `b0fe5de`. Lo que queda es poder leerlo (viene en
   Parquet y falta un motor).
-- **Catálogo MITRE no versionado y ChromaDB sin documentos.** La Fase 3
-  necesitará una decisión explícita: descargar el catálogo (con
-  autorización) o declarar la dimensión MITRE como no preparable. *Matizado
-  el 3-oct-2026:* la **referencia** MITRE de UWF ya no depende del catálogo
-  —viene en `label_tactic` / `label_technique`—; el catálogo sigue haciendo
-  falta para el RAG que usa NODEX, no para evaluar.
+- **Catálogo MITRE no versionado y ChromaDB sin documentos.** *Resuelto el
+  4-oct-2026, y el diagnóstico del plan era incorrecto.* Medido leyendo
+  `data/chroma/chroma.sqlite3` en solo lectura: la base de producción tiene
+  **4 colecciones y 697 documentos MITRE** cargados en `attack_techniques`
+  (222 técnicas padre y 475 subtécnicas, ATT&CK v19.2), y el modelo
+  `all-MiniLM-L6-v2` está en la caché local de HuggingFace (91,6 MB, 11
+  archivos hasheados). **No hace falta descargar nada.** El JSON STIX sigue
+  sin versionar, pero solo se necesitaría para reconstruir la base desde
+  cero: la base experimental se puebla copiando los vectores ya calculados.
+  Lo único pendiente es la autorización para ese poblado.
 - **Rendimiento HDFS del detector.** *Reinterpretado el 3-oct-2026, con
   medición:* no es un problema de rendimiento. `HDFS_2k.log` tiene 1,00
   líneas por bloque, así que la secuencia de eventos que define la etiqueta
@@ -237,6 +241,27 @@ tamaño del incidente dentro del caso (8–20% en `visible`, 1,0–1,67% en
 `sigiloso`).
 
 **Advertencia de costo.** 336 casos × 2 arquitecturas LLM × `N`
-repeticiones es mucho más de lo que conviene correr en un piloto. La Fase 7
-tiene que definir un subconjunto piloto; el pool grande existe para que la
-campaña final tenga de dónde sacar, no para ejecutarlo completo de entrada.
+repeticiones es mucho más de lo que conviene correr de entrada. El pool
+grande existe para que la campaña final tenga de dónde sacar.
+
+## 10. Subconjuntos preseleccionados (Fase 3)
+
+Fijados **antes** de que exista cualquier resultado, con semilla registrada
+(`20261004`). Elegir después qué casos se miran, viendo ya cómo le fue al
+sistema, sería cherry-picking.
+
+| Subconjunto | Partición | Casos | Para qué |
+|---|---|---|---|
+| `experiments/subconjuntos/piloto.json` | desarrollo | 24 (4 por dataset × condición) | Verificar el pipeline de punta a punta. **No produce métricas reportables.** 48 corridas con 2 arquitecturas LLM |
+| `experiments/subconjuntos/rubrica.json` | evaluación | 24 (12 BGL + 12 UWF) | Rúbrica humana de D4. **48 reportes a puntuar**, porque cada caso se evalúa en las dos arquitecturas |
+
+El piloto sale solo de `desarrollo`: depurar contra los casos de evaluación
+los deja de ser datos reservados. La rúbrica excluye HDFS por la decisión
+D-7 (es auxiliar, no principal).
+
+Una advertencia sobre el costo de D-6: son **48 reportes**, no 24. La
+rúbrica se aplica por (caso, arquitectura), porque comparar arquitecturas es
+el objetivo de esa dimensión. Con 2 evaluadores a ~10 min por reporte son
+~16 horas-persona, el doble de lo estimado al decidir D-6. Si eso no es
+viable, la salida es bajar a 6 casos por dataset (24 reportes), no reducir
+los evaluadores a uno: sin el segundo no hay concordancia que informar.

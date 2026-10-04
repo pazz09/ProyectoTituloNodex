@@ -164,6 +164,17 @@ class GroundTruth:
 
     # --- D3 MITRE ---
     referencias_mitre: list[ReferenciaMitre] = field(default_factory=list)
+    #: Estado por **nivel** de la dimensión MITRE, que el plan exige llevar
+    #: separado (Fase 3, acción 2): táctica presente → `evaluable`; técnica
+    #: presente → `evaluable`; subtécnica ausente → `no_aplica`.
+    #:
+    #: Un solo estado para toda la dimensión no alcanza. En UWF las 22
+    #: etiquetas de técnica son todas `T####` sin subtécnica, así que el
+    #: nivel de subtécnica no es puntuable mientras los otros dos sí lo son.
+    #: Sin esta separación, el evaluador tendría que elegir entre declarar
+    #: la dimensión completa no evaluable (perdiendo táctica y técnica) o
+    #: inferir una subtécnica, que el plan prohíbe expresamente.
+    estado_mitre_por_nivel: dict = field(default_factory=dict)
 
     # --- D4 reporte ---
     #: El plan prohíbe expresamente ampliar el ERR con `gold_claims`,
@@ -190,6 +201,19 @@ class GroundTruth:
         for dimension, estado in self.estado_dimension.items():
             _validar_en(dimension, DIMENSIONES, "estado_dimension (clave)")
             _validar_en(estado, ESTADOS_DIMENSION, f"estado_dimension[{dimension}]")
+        for nivel, estado in self.estado_mitre_por_nivel.items():
+            _validar_en(nivel, NIVELES_MITRE, "estado_mitre_por_nivel (clave)")
+            _validar_en(
+                estado, ESTADOS_DIMENSION, f"estado_mitre_por_nivel[{nivel}]"
+            )
+        niveles_con_referencia = {r.nivel for r in self.referencias_mitre}
+        for nivel in niveles_con_referencia:
+            if self.estado_mitre_por_nivel.get(nivel) == "no_aplica":
+                raise ValueError(
+                    f"el nivel {nivel!r} está marcado no_aplica pero hay "
+                    f"{sum(1 for r in self.referencias_mitre if r.nivel == nivel)} "
+                    "referencia(s) de ese nivel: una de las dos cosas está mal"
+                )
         if self.anotacion.get("fuente") == "nodex":
             raise ValueError(
                 "La referencia no puede provenir de NODEX: usar la salida del "
