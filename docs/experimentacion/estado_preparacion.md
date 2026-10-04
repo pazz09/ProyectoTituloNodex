@@ -56,7 +56,7 @@ rehacen: no dependen del dataset.
 | 1 — Definir el protocolo y los contratos experimentales | PREPARADA_SIN_EJECUTAR | Sí (3-oct-2026) | `docs/experimentacion/protocolo.md`; contratos en `src/experimentation/contracts/`; 4 archivos de prueba en `tests/experimentation/` (escritos, sin ejecutar) | `d3a3234` | 6 decisiones académicas pendientes (§8) |
 | 2 — Preparar datasets y casos con segmentación válida | PREPARADA_SIN_EJECUTAR (HDFS, BGL y UWF) | Sí (3-oct-2026) | `hallazgos_datasets.md`, `regenerar_uwf.md`; `src/experimentation/datasets/` (8 módulos); **336 casos + 336 referencias** y 5 manifiestos en `experiments/`; `requirements-experimentacion.txt`; 3 archivos de prueba (escritos, sin ejecutar) | `fb77559`, UWF en `d467486` | UWF requiere un motor Parquet (autorización de instalación); D-7 a D-10 |
 | 3 — Preparar ground truth y conocimiento aislado | PREPARADA_SIN_EJECUTAR, salvo el poblado de ChromaDB | Sí (4-oct-2026) | `anotacion_ground_truth.md`; `src/experimentation/knowledge/` (4 módulos) y `subconjuntos.py`; `estado_mitre_por_nivel` en las 336 referencias; `experiments/knowledge/inventario_conocimiento.json`; subconjuntos piloto (24) y rúbrica (24); 1 archivo de controles de aislamiento (escrito, sin ejecutar) | `114b32d` | Poblar la base vectorial del experimento requiere autorización (acción 6) |
-| 4 — Hacer evaluables las salidas de NODEX | PENDIENTE_AUTORIZACION | No | — | — | — |
+| 4 — Hacer evaluables las salidas de NODEX | PREPARADA_SIN_EJECUTAR, con **D2 y D3 bloqueadas por una decisión** | Sí (4-oct-2026) | `src/experimentation/adapters/` (4 módulos); extensión de contrato de agentes propuesta y **sin conectar**; 1 archivo de pruebas (escrito, sin ejecutar) | (se registra abajo) | NODEX no produce reconstrucción ni atribución MITRE: ver §11 |
 | 5 — Implementar los evaluadores externos | PENDIENTE_AUTORIZACION | No | — | — | Rúbrica humana del reporte por definir |
 | 6 — Preparar telemetría y configuración congelable | PENDIENTE_AUTORIZACION | No | — | — | — |
 | 7 — Preparar almacenamiento y orquestación sin ejecución | PENDIENTE_AUTORIZACION | No | — | — | — |
@@ -265,3 +265,58 @@ el objetivo de esa dimensión. Con 2 evaluadores a ~10 min por reporte son
 ~16 horas-persona, el doble de lo estimado al decidir D-6. Si eso no es
 viable, la salida es bajar a 6 casos por dataset (24 reportes), no reducir
 los evaluadores a uno: sin el segundo no hay concordancia que informar.
+
+## 11. Dos dimensiones que el sistema no produce (Fase 4)
+
+Hallazgo de la Fase 4, y es el más importante hasta ahora para decidir qué
+puede afirmar la tesis.
+
+De las cinco dimensiones del protocolo, **dos no se pueden medir** porque
+NODEX no genera la salida correspondiente. No es un problema de desempeño:
+no hay nada que puntuar.
+
+| Dimensión | Qué produce NODEX hoy | Medible |
+|---|---|---|
+| D1 detección | `hay_anomalia` / `hay_incidente`, booleanos del auditor final | **Sí** |
+| D2 reconstrucción | Nada | **No** |
+| D3 MITRE | Solo candidatas del RAG (`tecnicas_mitre`); el agente de triage cita IDs dentro del texto libre de `diagnostico`, sin evidencia | **No** |
+| D4 reporte | `diagnostico` + `evaluacion_auditor` + comandos de mitigación | **Sí** |
+| D5 consumo | Telemetría (Fase 6) | **Sí** |
+
+Dos aclaraciones sobre por qué no se puede rellenar el hueco:
+
+- **La cronología del preprocesamiento no es la reconstrucción.**
+  `resumen_logs["cronologia"]` la arma `src/preprocessing/aggregation.py` de
+  forma determinística, sin LLM. Entregarla como `reconstructed_events`
+  haría que D2 midiera al preprocesador mientras el informe dice que mide
+  al sistema multiagente. El adaptador la pasa en `_meta`, etiquetada.
+- **Un ID citado en prosa no es una atribución puntuable.** El agente de
+  triage recibe la instrucción de citar IDs en el texto
+  (`agente_analista_triage.py:71`), pero sin `evidence_uids`. El protocolo
+  no puntúa una atribución sin evidencia: una técnica adivinada y una
+  fundamentada no son el mismo resultado. Los IDs en prosa se registran en
+  `_meta` como señal de que la capacidad existe en alguna forma.
+
+### La decisión que falta
+
+Hay dos caminos y los dos son defendibles; lo que no se puede es dejarlo
+sin declarar.
+
+**(A) Extender el contrato de salida de los agentes.** Está escrito y sin
+conectar en `src/experimentation/adapters/contrato_agentes.py`: tres campos
+nuevos (`eventos_reconstruidos`, `secuencia_temporal`,
+`tecnicas_atribuidas`) y el añadido de prompt que los pide. El adaptador ya
+sabe leerlos. Habilita D2 y D3.
+
+Lo que cuesta: **cambia el sistema evaluado**. Pedirle al agente que
+enumere eventos y atribuya técnicas con evidencia modifica su tarea y puede
+mejorar o empeorar el diagnóstico. La campaña mediría esa versión y la
+tesis tiene que describirla. Además el agente único debe recibir el mismo
+contrato de salida, o la comparación entre arquitecturas mediría el
+contrato y no la arquitectura.
+
+**(B) No extenderlo.** La campaña mide detección, calidad de reporte y
+consumo. Reconstrucción y atribución MITRE quedan declaradas como
+**capacidades no medidas**, con la razón, en los 336 casos.
+
+Es la decisión **D-11** y bloquea el cierre completo de la Fase 4.
