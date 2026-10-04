@@ -150,8 +150,12 @@ def plan_poblado_chroma(
     El poblado copia los vectores **ya calculados** de la colección
     `attack_techniques` de la base de origen a la base del experimento. No
     recalcula embeddings, así que no carga el modelo ni necesita el JSON
-    STIX, y los vectores quedan bit a bit idénticos a los de producción, que
-    es lo que hace comparable un resultado con otro.
+    STIX.
+
+    La copia no es bit a bit idéntica: Chroma guarda en `float32` y
+    devuelve `float64`, y ese viaje mueve el último bit del 6,8% de las
+    componentes (diferencia máxima medida 1,49e-08, coseno fila a fila 1,0
+    con 12 decimales). Es el mismo catálogo a efectos de recuperación.
 
     Las colecciones de memoria (`host_history`, `error_memory`,
     `attack_patterns`) **no** se copian: son residuo de corridas previas.

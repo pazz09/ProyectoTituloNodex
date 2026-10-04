@@ -1,0 +1,88 @@
+{
+  "origen": "C:\\Users\\antop\\AppData\\Local\\Temp\\claude\\c--Users-antop-Desktop-NODEX\\15506048-55f4-434d-a0d1-d2beed18511f\\scratchpad\\chroma_copia",
+  "destino": "C:\\Users\\antop\\Desktop\\ProyectoTituloNodex-pruebas\\experiments\\knowledge\\chroma",
+  "colecciones_copiadas": {
+    "attack_techniques": {
+      "documentos_origen": 697,
+      "documentos_destino": 697,
+      "dimension": 384
+    }
+  },
+  "colecciones_omitidas": [
+    "attack_patterns",
+    "error_memory",
+    "host_history"
+  ],
+  "metodo": "copia de vectores ya calculados; no se recalcula ninguno",
+  "original_sin_modificar": true,
+  "sha256_original_antes": "4a93749aa6015f3c0b7d62d684b3bedb8cf6649ed345131957bd4015b9ea6a3b",
+  "sha256_original_despues": "4a93749aa6015f3c0b7d62d684b3bedb8cf6649ed345131957bd4015b9ea6a3b",
+  "inventario_resultante": {
+    "existe": true,
+    "ruta": "C:\\Users\\antop\\Desktop\\ProyectoTituloNodex-pruebas\\experiments\\knowledge\\chroma",
+    "bytes_sqlite": 7229440,
+    "sha256_sqlite": "190b9285048d772ad6599196c2f225042e0148c9635f2df00579d7a4be469a4d",
+    "colecciones": [
+      {
+        "nombre": "attack_techniques",
+        "dimension": 384,
+        "n_embeddings": 697,
+        "rol": "conocimiento",
+        "claves_metadata": {
+          "url": 697,
+          "technique_id": 697,
+          "tactics": 697,
+          "name": 697,
+          "is_subtechnique": 697,
+          "chroma:document": 697
+        }
+      }
+    ],
+    "catalogo_mitre": {
+      "tecnicas_padre": 222,
+      "subtecnicas": 475,
+      "total": 697,
+      "nota": "el campo is_subtechnique está vacío en las 697 filas; el desglose se deriva del punto en technique_id"
+    }
+  },
+  "fidelidad_de_la_copia": {
+    "bit_a_bit_identico": false,
+    "causa": "Chroma almacena en float32 y devuelve float64; el viaje de ida y vuelta mueve el ultimo bit",
+    "componentes_distintas": 18076,
+    "componentes_totales": 267648,
+    "fraccion_distinta": 0.067536,
+    "diferencia_absoluta_maxima": 1.49e-08,
+    "similitud_coseno_fila_a_fila_minima": 1.0,
+    "decimales_verificados_del_coseno": 12,
+    "norma_de_los_vectores": 1.0,
+    "ids_identicos": true,
+    "documentos_identicos": true,
+    "metadata_identica": true,
+    "conclusion": "mismo catalogo a efectos de recuperacion; el ranking solo podria cambiar en un empate exacto"
+  },
+  "snapshot": {
+    "archivos": {
+      "chroma.sqlite3": {
+        "bytes": 7229440,
+        "sha256": "799afe23130225e6d54d4b773b751c66f1452ac4839d748306b954fb65291548"
+      },
+      "f82baf8f-e707-4f8b-88be-4e7834d93c20/data_level0.bin": {
+        "bytes": 167600,
+        "sha256": "a1201fd9ee25dcfc7297a98904a9b693ea886e35b9068743828f39c37e138285"
+      },
+      "f82baf8f-e707-4f8b-88be-4e7834d93c20/header.bin": {
+        "bytes": 100,
+        "sha256": "a0e81c3b22454233bc12d0762f06dcca48261a75231cf87c79b75e69a6c00150"
+      },
+      "f82baf8f-e707-4f8b-88be-4e7834d93c20/length.bin": {
+        "bytes": 400,
+        "sha256": "71c94c397db441faac38e8764ce5b801c494d772b5e1db67bbee51bf92f192d5"
+      },
+      "f82baf8f-e707-4f8b-88be-4e7834d93c20/link_lists.bin": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "bytes_totales": 7397540
+  }
+}
