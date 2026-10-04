@@ -1,0 +1,51 @@
+{
+  "case_id": "uwf_eva_sigiloso_0000",
+  "estado_dimension": {
+    "deteccion": "evaluable",
+    "reconstruccion": "evaluable",
+    "mitre": "evaluable",
+    "reporte": "referencia_pendiente",
+    "consumo": "evaluable"
+  },
+  "etiqueta_deteccion": "anomalo",
+  "etiqueta_original": "True",
+  "core_event_uids": [
+    "COxAIT0YWlIOcOhJ5",
+    "C3OrIg3iXsEXJ8aEYe",
+    "CBHLjm1pAjZmXgcunc",
+    "Cw6lSqW00UI8cuPic"
+  ],
+  "referencias_mitre": [
+    {
+      "nivel": "tactica",
+      "id": "Discovery",
+      "nombre": null,
+      "evidence_uids": [
+        "COxAIT0YWlIOcOhJ5",
+        "C3OrIg3iXsEXJ8aEYe",
+        "CBHLjm1pAjZmXgcunc",
+        "Cw6lSqW00UI8cuPic"
+      ]
+    },
+    {
+      "nivel": "tecnica",
+      "id": "T1046",
+      "nombre": null,
+      "evidence_uids": [
+        "COxAIT0YWlIOcOhJ5",
+        "C3OrIg3iXsEXJ8aEYe",
+        "CBHLjm1pAjZmXgcunc",
+        "Cw6lSqW00UI8cuPic"
+      ]
+    }
+  ],
+  "rubrica_aplicada": false,
+  "rubrica_ref": null,
+  "anotacion": {
+    "fuente": "dataset",
+    "regla": "label_binary del dataset UWF, por uid; el caso es malicioso si contiene el incidente inyectado",
+    "incidente": "2022-09-25_2022-10-02__Discovery__143.88.10.11__0000#r4",
+    "tactica_del_incidente": "Discovery",
+    "aprobada": true
+  }
+}

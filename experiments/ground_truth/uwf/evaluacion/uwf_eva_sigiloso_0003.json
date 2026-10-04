@@ -1,0 +1,68 @@
+{
+  "case_id": "uwf_eva_sigiloso_0003",
+  "estado_dimension": {
+    "deteccion": "evaluable",
+    "reconstruccion": "evaluable",
+    "mitre": "evaluable",
+    "reporte": "referencia_pendiente",
+    "consumo": "evaluable"
+  },
+  "etiqueta_deteccion": "anomalo",
+  "etiqueta_original": "True",
+  "core_event_uids": [
+    "CLYk4I27rAEVW4e10i",
+    "C09sql3BPVNvfrWI8i",
+    "CJJOXm1QCwuhSjp4Rj"
+  ],
+  "referencias_mitre": [
+    {
+      "nivel": "tactica",
+      "id": "Execution",
+      "nombre": null,
+      "evidence_uids": [
+        "CLYk4I27rAEVW4e10i",
+        "C09sql3BPVNvfrWI8i",
+        "CJJOXm1QCwuhSjp4Rj"
+      ]
+    },
+    {
+      "nivel": "tactica",
+      "id": "Resource Development",
+      "nombre": null,
+      "evidence_uids": [
+        "CLYk4I27rAEVW4e10i",
+        "C09sql3BPVNvfrWI8i",
+        "CJJOXm1QCwuhSjp4Rj"
+      ]
+    },
+    {
+      "nivel": "tecnica",
+      "id": "T1203",
+      "nombre": null,
+      "evidence_uids": [
+        "CLYk4I27rAEVW4e10i",
+        "C09sql3BPVNvfrWI8i",
+        "CJJOXm1QCwuhSjp4Rj"
+      ]
+    },
+    {
+      "nivel": "tecnica",
+      "id": "T1587",
+      "nombre": null,
+      "evidence_uids": [
+        "CLYk4I27rAEVW4e10i",
+        "C09sql3BPVNvfrWI8i",
+        "CJJOXm1QCwuhSjp4Rj"
+      ]
+    }
+  ],
+  "rubrica_aplicada": false,
+  "rubrica_ref": null,
+  "anotacion": {
+    "fuente": "dataset",
+    "regla": "label_binary del dataset UWF, por uid; el caso es malicioso si contiene el incidente inyectado",
+    "incidente": "2022-10-09_2022-10-16__Execution|Resource Development__143.88.9.12__0006#r3",
+    "tactica_del_incidente": "Execution|Resource Development",
+    "aprobada": true
+  }
+}

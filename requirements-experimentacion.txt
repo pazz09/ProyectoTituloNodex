@@ -1,0 +1,24 @@
+# Dependencias EXCLUSIVAS de la preparación experimental.
+#
+# Autorizadas el 3-oct-2026 con una condición explícita: no modificar
+# `requirements.txt` ni `constraints.txt` ni las dependencias de producción
+# de NODEX. Este archivo se instala en un entorno virtual aparte
+# (`.venv-preparacion`), nunca en el `.venv` de producción, y el CI no lo
+# usa.
+#
+# Instalación:
+#
+#     py -3.13 -m venv .venv-preparacion
+#     .venv-preparacion\Scripts\python -m pip install -r requirements-experimentacion.txt
+#
+# NODEX en producción no depende de nada de acá. `pyarrow` sirve para un
+# único paso OFFLINE de preparación: convertir los 13 Parquet de
+# UWF-ZeekDataFall22 a CSV. Después de esa conversión, los experimentos
+# consumen solamente los CSV generados y sus SHA-256; ni el pipeline, ni
+# los agentes, ni los evaluadores importan pyarrow.
+#
+# Verificable con:
+#
+#     grep -rn "import pyarrow" src/ | grep -v experimentation/datasets/uwf
+
+pyarrow==25.0.1

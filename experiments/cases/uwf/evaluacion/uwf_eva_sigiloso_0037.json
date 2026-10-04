@@ -1,0 +1,2137 @@
+{
+  "case_id": "uwf_eva_sigiloso_0037",
+  "dataset": "uwf",
+  "tipo_deteccion": "seguridad",
+  "particion": "evaluacion",
+  "dimensiones_aplicables": [
+    "deteccion",
+    "reconstruccion",
+    "mitre",
+    "reporte",
+    "consumo"
+  ],
+  "procedencia": [
+    {
+      "indice_en_caso": 0,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97719,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CIKu2CWOLrQNv27P1"
+    },
+    {
+      "indice_en_caso": 1,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48682,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CXemrqbnozUP4n5hf"
+    },
+    {
+      "indice_en_caso": 2,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81258,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CSph9iqDtN9uII3x3"
+    },
+    {
+      "indice_en_caso": 3,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15945,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Ce4SmBAlOUAngAMVl"
+    },
+    {
+      "indice_en_caso": 4,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32300,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "ChCHqm1blqSP1Oo8Mg"
+    },
+    {
+      "indice_en_caso": 5,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48653,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CLxBpu3rd6hofiEsc4"
+    },
+    {
+      "indice_en_caso": 6,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48762,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CxR30c2wWcPZhJ6yWi"
+    },
+    {
+      "indice_en_caso": 7,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65132,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CtsEgF3WddetD3Ldj5"
+    },
+    {
+      "indice_en_caso": 8,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15891,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CJd4ye4L7EjROf6fY4"
+    },
+    {
+      "indice_en_caso": 9,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65204,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CFGhT4jcqpjgMbDQd"
+    },
+    {
+      "indice_en_caso": 10,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65191,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CqAxN44gZeDsj5rehg"
+    },
+    {
+      "indice_en_caso": 11,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65156,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CyTI0J17KbDM4DqPWl"
+    },
+    {
+      "indice_en_caso": 12,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81221,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CETp2k1Xh7SSeYrk1"
+    },
+    {
+      "indice_en_caso": 13,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32340,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CMbBVu48PhiRtMyxRd"
+    },
+    {
+      "indice_en_caso": 14,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32386,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Cl1la332WioK6eMwLe"
+    },
+    {
+      "indice_en_caso": 15,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65129,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Cguuje3wqj5gs60mUi"
+    },
+    {
+      "indice_en_caso": 16,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81232,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CYGSNL1x60YoDT7X8k"
+    },
+    {
+      "indice_en_caso": 17,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81237,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C3djik3Tn7rtrpDHt4"
+    },
+    {
+      "indice_en_caso": 18,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32283,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Csty9J8CgadZPO9Ye"
+    },
+    {
+      "indice_en_caso": 19,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32394,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Cb49vWiUT8zzEwgwa"
+    },
+    {
+      "indice_en_caso": 20,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48722,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CeJDzr2fHiU5vGxM9c"
+    },
+    {
+      "indice_en_caso": 21,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48652,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C9oNwp1nh71Lkln4fg"
+    },
+    {
+      "indice_en_caso": 22,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97671,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CHMs1rh6VwkMKeL5b"
+    },
+    {
+      "indice_en_caso": 23,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32247,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Cccd0hqQGwirHao7h"
+    },
+    {
+      "indice_en_caso": 24,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48649,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CxRx7Y3TlBM6VeuD88"
+    },
+    {
+      "indice_en_caso": 25,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81238,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CUCQZXeQ2dclIqId4"
+    },
+    {
+      "indice_en_caso": 26,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97639,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Ctnk4t2ah66wLJHmBc"
+    },
+    {
+      "indice_en_caso": 27,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97641,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CcrCeh4b916Z7C2ia8"
+    },
+    {
+      "indice_en_caso": 28,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32269,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CWlOWc1MewJLqtyyDg"
+    },
+    {
+      "indice_en_caso": 29,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81278,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CsNQGx4w1ZQNmI1Ec7"
+    },
+    {
+      "indice_en_caso": 30,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32404,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Cu4qft4jtxe2PvenDb"
+    },
+    {
+      "indice_en_caso": 31,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15973,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CBCbP74tUFa8X1OIF3"
+    },
+    {
+      "indice_en_caso": 32,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81366,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CCsobd4jpAWKmC1BSh"
+    },
+    {
+      "indice_en_caso": 33,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48737,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CtBHDjWRtAGuQq0Sl"
+    },
+    {
+      "indice_en_caso": 34,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65051,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CqCjPF4YykddE0HHY5"
+    },
+    {
+      "indice_en_caso": 35,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32366,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CMryoubvuhuvb3Ed"
+    },
+    {
+      "indice_en_caso": 36,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97776,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Cl8wJoe9IWR7LqSf5"
+    },
+    {
+      "indice_en_caso": 37,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97803,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CKkc1D1BJPXXIJj68d"
+    },
+    {
+      "indice_en_caso": 38,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32291,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C1co4c4xKFOjxMVgTk"
+    },
+    {
+      "indice_en_caso": 39,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32293,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CahDP21hHWVu3PDjjk"
+    },
+    {
+      "indice_en_caso": 40,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65167,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C11SM02RWkZWijtegl"
+    },
+    {
+      "indice_en_caso": 41,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48772,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CrMddl40J5b4bMMXy9"
+    },
+    {
+      "indice_en_caso": 42,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32336,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CGXUTk2F5ooogmodfa"
+    },
+    {
+      "indice_en_caso": 43,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32284,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CLgUBG2XgIQVsVpyOd"
+    },
+    {
+      "indice_en_caso": 44,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65105,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CcH2711RT4tLU3EE67"
+    },
+    {
+      "indice_en_caso": 45,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65104,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CpyztE1gHdjZpzCRTe"
+    },
+    {
+      "indice_en_caso": 46,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97770,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C8uc5O3FCZrhbHcLd4"
+    },
+    {
+      "indice_en_caso": 47,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15932,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Cfk4IN2gWgGFuHuX6l"
+    },
+    {
+      "indice_en_caso": 48,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97785,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CSSDCF2ska9EfOLnh"
+    },
+    {
+      "indice_en_caso": 49,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97696,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CSYA9OqE0pedM5o02"
+    },
+    {
+      "indice_en_caso": 50,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 16018,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "ClkFIi1WVLLn6eKEtf"
+    },
+    {
+      "indice_en_caso": 51,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65173,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CSflvB34VRzdlZV7mi"
+    },
+    {
+      "indice_en_caso": 52,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48667,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CFa3tU25ApxbWB1G48"
+    },
+    {
+      "indice_en_caso": 53,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48734,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CkOdsD2eDhDbCcrQxa"
+    },
+    {
+      "indice_en_caso": 54,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15904,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CU124kS1KlZ6YWlM7"
+    },
+    {
+      "indice_en_caso": 55,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32256,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Cci5ffQLCs9ZZeVbh"
+    },
+    {
+      "indice_en_caso": 56,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48757,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C78R1kymjD3Un6utc"
+    },
+    {
+      "indice_en_caso": 57,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65087,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CMcj5twQ8gOFdUQHd"
+    },
+    {
+      "indice_en_caso": 58,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 16044,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CoLbsN3vdbV8DejYBa"
+    },
+    {
+      "indice_en_caso": 59,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97709,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CGivZn2zznZU9ddta4"
+    },
+    {
+      "indice_en_caso": 60,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97701,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C7BtLd2yWWxHPVnlb4"
+    },
+    {
+      "indice_en_caso": 61,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48769,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CFboqP3nqzSHpnfqY1"
+    },
+    {
+      "indice_en_caso": 62,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81312,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CIMZg6NDiGGhA7Na5"
+    },
+    {
+      "indice_en_caso": 63,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48622,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CMpxd3rKRkgpSMqA1"
+    },
+    {
+      "indice_en_caso": 64,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15926,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CQ6LJD2woEjFHHHlQ6"
+    },
+    {
+      "indice_en_caso": 65,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48613,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CmzpOl1LiHmHN59An2"
+    },
+    {
+      "indice_en_caso": 66,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97689,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CVQvUC2QfnhQcIkFik"
+    },
+    {
+      "indice_en_caso": 67,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32270,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C6NYT74J50PveXKatc"
+    },
+    {
+      "indice_en_caso": 68,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48707,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CPzalf4ALXpbgVHU4b"
+    },
+    {
+      "indice_en_caso": 69,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65068,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CSVJFD3sS4IvBMMZx8"
+    },
+    {
+      "indice_en_caso": 70,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97708,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CGeQP81yW55qNURLm2"
+    },
+    {
+      "indice_en_caso": 71,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65089,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C1AHx34Sy6aq28Psvd"
+    },
+    {
+      "indice_en_caso": 72,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97657,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Co41LC4xc2jpmSz0e1"
+    },
+    {
+      "indice_en_caso": 73,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48594,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Cfdqyw1yknH9GGhrr9"
+    },
+    {
+      "indice_en_caso": 74,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97720,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CDPOG24Mo6OCJz5Bcl"
+    },
+    {
+      "indice_en_caso": 75,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48599,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Ca6o082Mv1We5OyJVj"
+    },
+    {
+      "indice_en_caso": 76,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15977,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CSN8vi2ypMCP7NikY7"
+    },
+    {
+      "indice_en_caso": 77,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97686,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C8CSRP3cAo7Zaka7eb"
+    },
+    {
+      "indice_en_caso": 78,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81226,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CGzTlV1OPU3YnY3a84"
+    },
+    {
+      "indice_en_caso": 79,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48736,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Ck9UHX1h1PkTNZKy4"
+    },
+    {
+      "indice_en_caso": 80,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81395,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "COzxNz3a2xb2FAIKj"
+    },
+    {
+      "indice_en_caso": 81,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97780,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CoNNKw1bjvFeWxAuL8"
+    },
+    {
+      "indice_en_caso": 82,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32389,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "ChsbqJGlnDKyyuE0b"
+    },
+    {
+      "indice_en_caso": 83,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 16023,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CdDPOZ2Cx4UvWfMyj1"
+    },
+    {
+      "indice_en_caso": 84,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97762,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CVOJib3EMNiTFau16f"
+    },
+    {
+      "indice_en_caso": 85,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65052,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CvKkDk2cseaBktbAkg"
+    },
+    {
+      "indice_en_caso": 86,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48662,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CbTiVA2VW16PMcKwjh"
+    },
+    {
+      "indice_en_caso": 87,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81376,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CuZHUn1VHALgrL16t7"
+    },
+    {
+      "indice_en_caso": 88,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81242,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C7qwan1080QkYd2rEe"
+    },
+    {
+      "indice_en_caso": 89,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32362,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CUXZSJxrXqZ9qxuF2"
+    },
+    {
+      "indice_en_caso": 90,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 16081,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C66oQv4FlqPM15TRm4"
+    },
+    {
+      "indice_en_caso": 91,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97728,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CgoTBjMShpIrVjf45"
+    },
+    {
+      "indice_en_caso": 92,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97775,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CDkpaL2qPhM4qYORMd"
+    },
+    {
+      "indice_en_caso": 93,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15871,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Crk9IG3Ez2VesujOjl"
+    },
+    {
+      "indice_en_caso": 94,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81394,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CMvQ621ZqZtRqr0TOe"
+    },
+    {
+      "indice_en_caso": 95,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81290,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C2hdgn27tzjSTmNlog"
+    },
+    {
+      "indice_en_caso": 96,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65060,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CswC453edoHUJS0tg4"
+    },
+    {
+      "indice_en_caso": 97,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32330,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CBgH2W3bdklfgwu1Fc"
+    },
+    {
+      "indice_en_caso": 98,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 16021,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CDbwWd3EhOmnVoHiy8"
+    },
+    {
+      "indice_en_caso": 99,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65023,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CsTU3o2ZmaDzxlXqR4"
+    },
+    {
+      "indice_en_caso": 100,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97651,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CD3ELO2nOVA1fyRMpk"
+    },
+    {
+      "indice_en_caso": 101,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65200,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CRULJT1B5RY7poUZ6g"
+    },
+    {
+      "indice_en_caso": 102,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81246,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Ce6arV147cdzLnuL9j"
+    },
+    {
+      "indice_en_caso": 103,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32229,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C6oNVZ2HAD7pg6xG7"
+    },
+    {
+      "indice_en_caso": 104,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 16073,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CVlGrB3EK5psteHAZc"
+    },
+    {
+      "indice_en_caso": 105,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32319,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CBZXgmBK90ShNih1c"
+    },
+    {
+      "indice_en_caso": 106,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 16007,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C9obyp1jcKuRKyJYX9"
+    },
+    {
+      "indice_en_caso": 107,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15952,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CIbWp83mG8iGACubX8"
+    },
+    {
+      "indice_en_caso": 108,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97668,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CMo4gw3eNrqs8Zc9Q1"
+    },
+    {
+      "indice_en_caso": 109,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48749,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CiM3Zg2Mkql1r8iR56"
+    },
+    {
+      "indice_en_caso": 110,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65057,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CxEhPm43kNJ4c0w7q5"
+    },
+    {
+      "indice_en_caso": 111,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48611,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CRhJNA2Si6yrG6e3Be"
+    },
+    {
+      "indice_en_caso": 112,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 16008,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Cbk3aFoOSJq88wUJ"
+    },
+    {
+      "indice_en_caso": 113,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48735,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CVKhqG4oJKDLCjBBW9"
+    },
+    {
+      "indice_en_caso": 114,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81354,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C0oTV038CGlEjBzF9a"
+    },
+    {
+      "indice_en_caso": 115,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15931,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CFL2ei2B7zDHukyGhb"
+    },
+    {
+      "indice_en_caso": 116,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15924,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Cfxuze1TfXiIr9aO37"
+    },
+    {
+      "indice_en_caso": 117,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15979,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CE143t4mOt2VoLNyxe"
+    },
+    {
+      "indice_en_caso": 118,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65161,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C2e8Ea1qQLz4CFuHaf"
+    },
+    {
+      "indice_en_caso": 119,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65177,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CawNxr2eB5P24GJedh"
+    },
+    {
+      "indice_en_caso": 120,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32334,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Cc6EeAJmCHBmYM4wa"
+    },
+    {
+      "indice_en_caso": 121,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32321,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CtZgUH28xnHANYi9hg"
+    },
+    {
+      "indice_en_caso": 122,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65020,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Cok4k3csJkm7vKrdi"
+    },
+    {
+      "indice_en_caso": 123,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97806,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C3SyQHUVP1691414"
+    },
+    {
+      "indice_en_caso": 124,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65150,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CAy8gC49n4K3PCf3Mf"
+    },
+    {
+      "indice_en_caso": 125,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 16019,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CmxYjC1R5ep9ssUWR8"
+    },
+    {
+      "indice_en_caso": 126,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65190,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CokDJP1K15h0thf2A6"
+    },
+    {
+      "indice_en_caso": 127,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32252,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CHQUNT3ZBPmY7wqlHj"
+    },
+    {
+      "indice_en_caso": 128,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81347,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CaIie52h19LjG0QKz5"
+    },
+    {
+      "indice_en_caso": 129,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32351,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CdJR4t1sHcqBW7abP8"
+    },
+    {
+      "indice_en_caso": 130,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32337,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CRuoQe2utCSZNRkOY3"
+    },
+    {
+      "indice_en_caso": 131,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65170,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CEkJinuwfo3Hqqh6"
+    },
+    {
+      "indice_en_caso": 132,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15910,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CROa4725Wd1ULstxC9"
+    },
+    {
+      "indice_en_caso": 133,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65041,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Cn4XTFpyOTm9SWlcd"
+    },
+    {
+      "indice_en_caso": 134,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65176,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CpYujy3fc0aOMBshtk"
+    },
+    {
+      "indice_en_caso": 135,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81245,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CjXZqd2EHJZ4HBBSpj"
+    },
+    {
+      "indice_en_caso": 136,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15900,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CtosDl4D4etzu7k7ve"
+    },
+    {
+      "indice_en_caso": 137,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81297,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CgN12Z2gUL0rm3bQ6h"
+    },
+    {
+      "indice_en_caso": 138,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81300,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CnYb0g2MIkq0KCTgJk"
+    },
+    {
+      "indice_en_caso": 139,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81323,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C69i5b4P4qhyfChk57"
+    },
+    {
+      "indice_en_caso": 140,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32266,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CCpPsQ1DjjAsrlxVji"
+    },
+    {
+      "indice_en_caso": 141,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81241,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C4Qrkg3bE83fQS9bLb"
+    },
+    {
+      "indice_en_caso": 142,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81341,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CGZIIl1NCWvNLyANM3"
+    },
+    {
+      "indice_en_caso": 143,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 16009,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Ci9MUa39X9H072hAWb"
+    },
+    {
+      "indice_en_caso": 144,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81330,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CjRF7BNlz8XYT5FMi"
+    },
+    {
+      "indice_en_caso": 145,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 16071,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C53Nzz1mz7MhrGzic"
+    },
+    {
+      "indice_en_caso": 146,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65088,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CV0Xbq4QD9dPhi6Qwh"
+    },
+    {
+      "indice_en_caso": 147,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32243,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C7wDa31O7Ry3CcTKW1"
+    },
+    {
+      "indice_en_caso": 148,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81236,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Cr98EX3RIsQehS65ra"
+    },
+    {
+      "indice_en_caso": 149,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15872,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "ClJnG5OC6LJZh005a"
+    },
+    {
+      "indice_en_caso": 150,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81285,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CUKBMW3D5lLSqwkKH1"
+    },
+    {
+      "indice_en_caso": 151,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81250,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C7HWpCRbSsd96G9tc"
+    },
+    {
+      "indice_en_caso": 152,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97742,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CBYxFAFzm8RBOEFS"
+    },
+    {
+      "indice_en_caso": 153,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65118,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C0rumB3sBPlTWnQss"
+    },
+    {
+      "indice_en_caso": 154,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65032,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CeqvQi30zhbDPJSM87"
+    },
+    {
+      "indice_en_caso": 155,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81255,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CFWtODNlmY5Hfi4p9"
+    },
+    {
+      "indice_en_caso": 156,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65064,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CSZ6Io4mI0oLXtcZnd"
+    },
+    {
+      "indice_en_caso": 157,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 16036,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Cr2viG4OrblOKVcPma"
+    },
+    {
+      "indice_en_caso": 158,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48656,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CLjVAM25TDOv52EU6f"
+    },
+    {
+      "indice_en_caso": 159,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97722,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CDS6xtRaTuctnysGc"
+    },
+    {
+      "indice_en_caso": 160,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15894,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CBVsAQ3l2rLzc2nQh"
+    },
+    {
+      "indice_en_caso": 161,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32320,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CZG1Fw3nuH5zBx2OZ9"
+    },
+    {
+      "indice_en_caso": 162,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15968,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CaknaC6RmRnHPrtke"
+    },
+    {
+      "indice_en_caso": 163,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32222,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Cy9sSO30T9IGFwKFVk"
+    },
+    {
+      "indice_en_caso": 164,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65014,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CRfEIy4yarhLHdWAXj"
+    },
+    {
+      "indice_en_caso": 165,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32324,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CIyB4I2eRdaiU8vTVk"
+    },
+    {
+      "indice_en_caso": 166,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97739,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CNf09h3FBPjmlWTmqa"
+    },
+    {
+      "indice_en_caso": 167,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65123,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Cf2asR1vUEpFMAaCv6"
+    },
+    {
+      "indice_en_caso": 168,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48633,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CmeB3vYm6jZ6HV6ni"
+    },
+    {
+      "indice_en_caso": 169,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81280,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C3MhYW2jJMRv0pLLY6"
+    },
+    {
+      "indice_en_caso": 170,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32277,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CfiJRP3iAYbmDdoCB6"
+    },
+    {
+      "indice_en_caso": 171,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81374,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CC0lM527uNYZ5lq4Ma"
+    },
+    {
+      "indice_en_caso": 172,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 16027,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CzXm9G4zkfNObLJY0b"
+    },
+    {
+      "indice_en_caso": 173,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65112,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CWHUGA3XyS7LQ7LQye"
+    },
+    {
+      "indice_en_caso": 174,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97765,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C57TQ52644lr5C6ti8"
+    },
+    {
+      "indice_en_caso": 175,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97784,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CYOVFu2YaDHjtBsPP7"
+    },
+    {
+      "indice_en_caso": 176,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81328,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CqNqPu3RwXnxMaWB25"
+    },
+    {
+      "indice_en_caso": 177,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81304,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C9L3wG2i2FoQbtiG84"
+    },
+    {
+      "indice_en_caso": 178,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97729,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CY9fJM1pM3i8MK8UM2"
+    },
+    {
+      "indice_en_caso": 179,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81265,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CHbdjh3YLdofrd420d"
+    },
+    {
+      "indice_en_caso": 180,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81392,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CsZ6er4IYb7Tf6dEIk"
+    },
+    {
+      "indice_en_caso": 181,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15949,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CZtkZZ1lTbaFxs1Hyb"
+    },
+    {
+      "indice_en_caso": 182,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65040,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Cu704e2VtcdUXLWdSg"
+    },
+    {
+      "indice_en_caso": 183,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15935,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C37mvv4dpji2NB1Zyd"
+    },
+    {
+      "indice_en_caso": 184,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15887,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CwGzoy3oHHSEUfmoR7"
+    },
+    {
+      "indice_en_caso": 185,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65110,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CdqCqb1S7cdr2lGCzk"
+    },
+    {
+      "indice_en_caso": 186,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97665,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Cq1zEJ16gN6HUFe26"
+    },
+    {
+      "indice_en_caso": 187,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 16051,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C2xZst1JCggCswoF9"
+    },
+    {
+      "indice_en_caso": 188,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32207,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C4KRs51TuxbY92f4y5"
+    },
+    {
+      "indice_en_caso": 189,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81249,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CwjcEu2RwBj3kLVWQc"
+    },
+    {
+      "indice_en_caso": 190,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32273,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C9u3PiczXUqN9Pqz7"
+    },
+    {
+      "indice_en_caso": 191,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65189,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C606nT1Zs0zmubIfQ9"
+    },
+    {
+      "indice_en_caso": 192,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32307,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CwW3284uzwpSxp2Bkj"
+    },
+    {
+      "indice_en_caso": 193,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81343,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CDE40e1kisdmnDDDEd"
+    },
+    {
+      "indice_en_caso": 194,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32265,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Closyv1NMVgAEnfWKc"
+    },
+    {
+      "indice_en_caso": 195,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65037,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "COLdhb42w8NHaE7ajl"
+    },
+    {
+      "indice_en_caso": 196,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65093,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CrUwcI13sI3ZrTk3ye"
+    },
+    {
+      "indice_en_caso": 197,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 16046,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CdS50C39dULkHpIjj"
+    },
+    {
+      "indice_en_caso": 198,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48610,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CIifc2dtarpIxs3C"
+    },
+    {
+      "indice_en_caso": 199,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97716,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CUV9dO1MlqtPh3Yex3"
+    },
+    {
+      "indice_en_caso": 200,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97674,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C8n50v2jnJKxjm1KK"
+    },
+    {
+      "indice_en_caso": 201,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48623,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CVQnSj1sIrp5DVUZ92"
+    },
+    {
+      "indice_en_caso": 202,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65120,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CWsUv3enDQ0ufKH44"
+    },
+    {
+      "indice_en_caso": 203,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15967,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CPoE3a2PRvIHdUWWgb"
+    },
+    {
+      "indice_en_caso": 204,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97680,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CbzT2p4D97e2KrA1Oi"
+    },
+    {
+      "indice_en_caso": 205,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81352,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CDZsSw2p6qHstQaeYl"
+    },
+    {
+      "indice_en_caso": 206,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65099,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CIHOTP1uFEDfNkBGf3"
+    },
+    {
+      "indice_en_caso": 207,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32225,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CxQEgZ35N4SSkaOno4"
+    },
+    {
+      "indice_en_caso": 208,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65074,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CfsskTkiQqheGc4pd"
+    },
+    {
+      "indice_en_caso": 209,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48638,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CbYxUO1DXyDHAXVGrl"
+    },
+    {
+      "indice_en_caso": 210,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32211,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CMnxwD1RD7J9r4gAk5"
+    },
+    {
+      "indice_en_caso": 211,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97723,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CL47nO1K225WF86Azk"
+    },
+    {
+      "indice_en_caso": 212,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15981,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C95jO02NFXbaxqxiDk"
+    },
+    {
+      "indice_en_caso": 213,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97707,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CRueHMbURdojVliZ5"
+    },
+    {
+      "indice_en_caso": 214,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65153,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Cjj0ep4XQZqmwc2ia2"
+    },
+    {
+      "indice_en_caso": 215,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65155,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CoKKSa2va2wwYfBjHi"
+    },
+    {
+      "indice_en_caso": 216,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81318,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CUaQNzUE57i24vbvl"
+    },
+    {
+      "indice_en_caso": 217,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32213,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CO9LD52tZSidw9Utl4"
+    },
+    {
+      "indice_en_caso": 218,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81320,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CuUJkr3CUl02YO2lK6"
+    },
+    {
+      "indice_en_caso": 219,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81310,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CokoF72gDWufmiX9Ad"
+    },
+    {
+      "indice_en_caso": 220,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32365,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CvsUbB3Ibs4Nucqcuh"
+    },
+    {
+      "indice_en_caso": 221,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32220,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CQyTKM2EWzHDKa5Vgi"
+    },
+    {
+      "indice_en_caso": 222,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97658,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C5xwex1h0eMK8f8sxb"
+    },
+    {
+      "indice_en_caso": 223,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81370,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CJwFA045HPSASrQMLa"
+    },
+    {
+      "indice_en_caso": 224,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15947,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CLzkL1w1BtvHsy3nf"
+    },
+    {
+      "indice_en_caso": 225,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81353,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CSedK64mQvuG6OIH04"
+    },
+    {
+      "indice_en_caso": 226,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48616,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CqhMxc385o41KTnnHh"
+    },
+    {
+      "indice_en_caso": 227,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 16026,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CPPZVl3PIapiFpV6h3"
+    },
+    {
+      "indice_en_caso": 228,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65101,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CYbgHb4yFUlNFuP7Uf"
+    },
+    {
+      "indice_en_caso": 229,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48661,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CuGfG33vSPjcZo5mr9"
+    },
+    {
+      "indice_en_caso": 230,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15987,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CvWEFj1GdeYVXOQJG1"
+    },
+    {
+      "indice_en_caso": 231,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15974,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CajFNu4Lke5VmxVCT8"
+    },
+    {
+      "indice_en_caso": 232,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 16064,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C5AVpL1g8r8hqTIKLa"
+    },
+    {
+      "indice_en_caso": 233,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81270,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Ct5Zfn2qAVkhp10Cm8"
+    },
+    {
+      "indice_en_caso": 234,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97807,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CndWbq2Uf8ieeBmxS3"
+    },
+    {
+      "indice_en_caso": 235,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15930,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CpjtNG2gmvD8nbwykf"
+    },
+    {
+      "indice_en_caso": 236,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15925,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C0eVVu42jKHoKnHa14"
+    },
+    {
+      "indice_en_caso": 237,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81327,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CPY0Uk45pCNHMR7Yx8"
+    },
+    {
+      "indice_en_caso": 238,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81279,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C7H5XN3Wh8rJBa4bha"
+    },
+    {
+      "indice_en_caso": 239,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32374,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CuUOmw2KDc8bEpUfK7"
+    },
+    {
+      "indice_en_caso": 240,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97802,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Cwvujv3hFGzISMU4bk"
+    },
+    {
+      "indice_en_caso": 241,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32398,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CEqvWI2zetcbVGP9I4"
+    },
+    {
+      "indice_en_caso": 242,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81254,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CMVUjTqadK2rZMEuf"
+    },
+    {
+      "indice_en_caso": 243,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81383,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CqRcO33h6hwM7gNZPa"
+    },
+    {
+      "indice_en_caso": 244,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81371,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CWT2031r8PHbiTe1Ak"
+    },
+    {
+      "indice_en_caso": 245,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97679,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CTZXgg3EcUqAShDgy4"
+    },
+    {
+      "indice_en_caso": 246,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97746,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CaaBK50K5Mt9ujpFh"
+    },
+    {
+      "indice_en_caso": 247,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81275,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Cfm1o53Za9Dc0yolI2"
+    },
+    {
+      "indice_en_caso": 248,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81229,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "COpi3O2Q8lPJzBAhU8"
+    },
+    {
+      "indice_en_caso": 249,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15990,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Csv78n2XdZmHg97wp2"
+    },
+    {
+      "indice_en_caso": 250,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97655,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CpJieA4pvDL1hqTis6"
+    },
+    {
+      "indice_en_caso": 251,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97796,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CN8Ajb3HAJL5dniwr2"
+    },
+    {
+      "indice_en_caso": 252,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32331,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C5kdGbzKHYjykSB4k"
+    },
+    {
+      "indice_en_caso": 253,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48626,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CZmxDG1ehGknZ0EzQi"
+    },
+    {
+      "indice_en_caso": 254,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81261,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CvQGp21GOZgvjTOuwa"
+    },
+    {
+      "indice_en_caso": 255,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15897,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Cm2kfs2ln3MB9Pp9Wd"
+    },
+    {
+      "indice_en_caso": 256,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81322,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CCsDHx1Ojl5HLyXNIi"
+    },
+    {
+      "indice_en_caso": 257,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65021,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CGcYvn1yZfTEhwk8Ga"
+    },
+    {
+      "indice_en_caso": 258,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81368,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C0qlKo3fKlgjbJqKZc"
+    },
+    {
+      "indice_en_caso": 259,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32325,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CPgG4o4h7qVlkTbwKb"
+    },
+    {
+      "indice_en_caso": 260,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97635,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Co5RlC3ivu7TuUQTg"
+    },
+    {
+      "indice_en_caso": 261,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65208,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CQY3zr1fegG5D02Ly6"
+    },
+    {
+      "indice_en_caso": 262,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65102,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CdhQAsmE2JLzDUgr4"
+    },
+    {
+      "indice_en_caso": 263,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97774,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CSBCZl1mmSW79PXum8"
+    },
+    {
+      "indice_en_caso": 264,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32328,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Cy7Cp34dZRPkSutdm8"
+    },
+    {
+      "indice_en_caso": 265,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32212,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CfPg4s34QoCc36oI28"
+    },
+    {
+      "indice_en_caso": 266,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15984,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CjUh503h7W6pMDymnf"
+    },
+    {
+      "indice_en_caso": 267,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32383,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CvsqG12LqxM0TzIhw2"
+    },
+    {
+      "indice_en_caso": 268,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48675,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Cl0B8j1kjcghbFE46d"
+    },
+    {
+      "indice_en_caso": 269,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 16011,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CMrOOIElEHxMht2Ak"
+    },
+    {
+      "indice_en_caso": 270,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97768,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "ChS3Mk1XzPXsZOtf8h"
+    },
+    {
+      "indice_en_caso": 271,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65183,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CI5Jw3gPGZ0O9325i"
+    },
+    {
+      "indice_en_caso": 272,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15889,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Ccy9Y44d163VgZiIP9"
+    },
+    {
+      "indice_en_caso": 273,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65214,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CEWktO2c1oclzy1jHa"
+    },
+    {
+      "indice_en_caso": 274,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32245,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Cv1pB61jdxO50k7b53"
+    },
+    {
+      "indice_en_caso": 275,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32379,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CdoJeH3GsefhJssCr9"
+    },
+    {
+      "indice_en_caso": 276,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97678,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CG5s6G26ouWfXwuqEc"
+    },
+    {
+      "indice_en_caso": 277,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48694,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C3khT84eaS9bUj0XA4"
+    },
+    {
+      "indice_en_caso": 278,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48710,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CMziWg4xO66ZCWERml"
+    },
+    {
+      "indice_en_caso": 279,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97647,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CvTTTD1ybvH5S7jHzi"
+    },
+    {
+      "indice_en_caso": 280,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65203,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CP88Rx3EkXDir3EOT3"
+    },
+    {
+      "indice_en_caso": 281,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 32364,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CT2AUw2S4MSh1Iswri"
+    },
+    {
+      "indice_en_caso": 282,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 16034,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "ChlE1p4Rh2Rh7i68Md"
+    },
+    {
+      "indice_en_caso": 283,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48706,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CnoVOm4uYuJlHnDabe"
+    },
+    {
+      "indice_en_caso": 284,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 16054,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C0GL7y325YThQkDxr2"
+    },
+    {
+      "indice_en_caso": 285,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97749,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CMqQJp45VDW97arG9f"
+    },
+    {
+      "indice_en_caso": 286,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48721,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CQuYZQ2MtNNinRaNZj"
+    },
+    {
+      "indice_en_caso": 287,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48615,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CicfUi2DdAQS6Wkv7j"
+    },
+    {
+      "indice_en_caso": 288,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65049,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C29dYM2xDpBDz7W5m4"
+    },
+    {
+      "indice_en_caso": 289,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 15895,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "COC0IquRUreLUauAh"
+    },
+    {
+      "indice_en_caso": 290,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48654,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C60n5z1LPQrOViNJ0i"
+    },
+    {
+      "indice_en_caso": 291,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 48684,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "C9ud7R2mmTd18Kj2ck"
+    },
+    {
+      "indice_en_caso": 292,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97782,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "Czvz5o1YJfvdeDBFj9"
+    },
+    {
+      "indice_en_caso": 293,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81305,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CUQeVarwuXgI4TJud"
+    },
+    {
+      "indice_en_caso": 294,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97692,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "ChvOWoVaxUwOvHqdc"
+    },
+    {
+      "indice_en_caso": 295,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81288,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CFvvg1Dx5VVtQ1F71"
+    },
+    {
+      "indice_en_caso": 296,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 81357,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CJgrxm36GAe3oJwNPi"
+    },
+    {
+      "indice_en_caso": 297,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65205,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "ChSg7S1nVNjx851Xw4"
+    },
+    {
+      "indice_en_caso": 298,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 97766,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CCD8Av4JcOhnw8wQpi"
+    },
+    {
+      "indice_en_caso": 299,
+      "archivo_origen": "data/experimentacion/uwf_csv/eventos/2021-12-19_2021-12-26.csv",
+      "linea_original": 65151,
+      "grupo": "fondo:2021-12-19_2021-12-26",
+      "uid": "CjnVbQmBfinquFM1i"
+    }
+  ],
+  "grupos": [
+    "fondo:2021-12-19_2021-12-26"
+  ],
+  "notas": {
+    "escenario": "sintetico_controlado",
+    "composicion": "fondo benigno contiguo de UWF (dic-2021) con un incidente malicioso de UWF (ago-oct 2022) rebasado a la ventana del fondo; ningún registro se reutiliza entre casos",
+    "n_registros": 300,
+    "n_registros_benignos": 300,
+    "n_registros_maliciosos": 0,
+    "proporcion_maliciosa": 0.0,
+    "shards_fondo": [
+      "2021-12-19_2021-12-26"
+    ],
+    "shard_incidente": null,
+    "offset_rebase_segundos": 0.0,
+    "ts_original_recuperable": "ts_original = ts_del_caso - offset_rebase_segundos, solo para las filas del incidente",
+    "datetime_recomputado": false,
+    "condicion": "sigiloso",
+    "semilla": 20261003,
+    "protocolo_version": "1.0"
+  },
+  "archivo_contenido": "uwf_eva_sigiloso_0037.csv"
+}

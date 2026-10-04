@@ -1,0 +1,58 @@
+{
+  "case_id": "uwf_eva_sigiloso_0014",
+  "estado_dimension": {
+    "deteccion": "evaluable",
+    "reconstruccion": "evaluable",
+    "mitre": "evaluable",
+    "reporte": "referencia_pendiente",
+    "consumo": "evaluable"
+  },
+  "etiqueta_deteccion": "anomalo",
+  "etiqueta_original": "True",
+  "core_event_uids": [
+    "COTrEl1U8gaBQliFQ8",
+    "CKAsJb44aUjfUW0hM7",
+    "C2r8Ni2Vg1aPzboRWd"
+  ],
+  "referencias_mitre": [
+    {
+      "nivel": "tactica",
+      "id": "Reconnaissance",
+      "nombre": null,
+      "evidence_uids": [
+        "COTrEl1U8gaBQliFQ8",
+        "CKAsJb44aUjfUW0hM7",
+        "C2r8Ni2Vg1aPzboRWd"
+      ]
+    },
+    {
+      "nivel": "tecnica",
+      "id": "T1590",
+      "nombre": null,
+      "evidence_uids": [
+        "COTrEl1U8gaBQliFQ8",
+        "CKAsJb44aUjfUW0hM7",
+        "C2r8Ni2Vg1aPzboRWd"
+      ]
+    },
+    {
+      "nivel": "tecnica",
+      "id": "T1592",
+      "nombre": null,
+      "evidence_uids": [
+        "COTrEl1U8gaBQliFQ8",
+        "CKAsJb44aUjfUW0hM7",
+        "C2r8Ni2Vg1aPzboRWd"
+      ]
+    }
+  ],
+  "rubrica_aplicada": false,
+  "rubrica_ref": null,
+  "anotacion": {
+    "fuente": "dataset",
+    "regla": "label_binary del dataset UWF, por uid; el caso es malicioso si contiene el incidente inyectado",
+    "incidente": "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0004#r3",
+    "tactica_del_incidente": "Reconnaissance",
+    "aprobada": true
+  }
+}

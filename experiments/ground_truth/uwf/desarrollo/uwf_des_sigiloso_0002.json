@@ -1,0 +1,54 @@
+{
+  "case_id": "uwf_des_sigiloso_0002",
+  "estado_dimension": {
+    "deteccion": "evaluable",
+    "reconstruccion": "evaluable",
+    "mitre": "evaluable",
+    "reporte": "referencia_pendiente",
+    "consumo": "evaluable"
+  },
+  "etiqueta_deteccion": "anomalo",
+  "etiqueta_original": "True",
+  "core_event_uids": [
+    "CF2QwN2P0GmXfDfAT9",
+    "CllTNX1RZS5y6Dknsi",
+    "Chd2IoGabCj20NJLc",
+    "CSSKcr21e4JjeJFPq5",
+    "CXmMTF2OTv69BR3JT9"
+  ],
+  "referencias_mitre": [
+    {
+      "nivel": "tactica",
+      "id": "Resource Development",
+      "nombre": null,
+      "evidence_uids": [
+        "CF2QwN2P0GmXfDfAT9",
+        "CllTNX1RZS5y6Dknsi",
+        "Chd2IoGabCj20NJLc",
+        "CSSKcr21e4JjeJFPq5",
+        "CXmMTF2OTv69BR3JT9"
+      ]
+    },
+    {
+      "nivel": "tecnica",
+      "id": "T1587",
+      "nombre": null,
+      "evidence_uids": [
+        "CF2QwN2P0GmXfDfAT9",
+        "CllTNX1RZS5y6Dknsi",
+        "Chd2IoGabCj20NJLc",
+        "CSSKcr21e4JjeJFPq5",
+        "CXmMTF2OTv69BR3JT9"
+      ]
+    }
+  ],
+  "rubrica_aplicada": false,
+  "rubrica_ref": null,
+  "anotacion": {
+    "fuente": "dataset",
+    "regla": "label_binary del dataset UWF, por uid; el caso es malicioso si contiene el incidente inyectado",
+    "incidente": "2022-09-18_2022-09-25__Resource Development__143.88.5.11__0014#r5",
+    "tactica_del_incidente": "Resource Development",
+    "aprobada": true
+  }
+}

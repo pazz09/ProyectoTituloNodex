@@ -266,26 +266,153 @@ Las etiquetas de HDFS cuadran exactamente con el log: 2 200 bloques
 etiquetados, 2 200 presentes, ninguno huérfano en ninguna dirección. 69
 `Anomaly` y 2 131 `Normal` (3,14%).
 
-## 6. Decisiones académicas que abrió esta fase
+## 6. Decisiones tomadas el 3 de octubre de 2026
 
-Se suman a las seis de la Fase 1. Ninguna está resuelta y el código no
-suple ninguna con un valor por omisión.
+Las cuatro que abrió esta fase quedaron resueltas, más dos pendientes desde
+la Fase 1.
 
-| # | Decisión | Qué bloquea |
+| # | Decisión tomada |
+|---|---|
+| D-4 | Rúbrica de reporte **0–3 por criterio**, con **2 evaluadores** y la concordancia entre ellos reportada. Cuatro niveles anclados sobre los 5 criterios ya definidos. |
+| D-6 | **12 casos por dataset principal** reciben la rúbrica humana: 12 de BGL + 12 de UWF = 24 reportes. Submuestra estratificada por veredicto esperado y por condición, con la semilla registrada. |
+| D-7 | HDFS **no** se usa como métrica principal de desempeño. Queda como dataset **auxiliar / de validación técnica**, porque el archivo no contiene la secuencia completa por bloque. BGL y UWF son los datasets principales de evaluación, salvo que más adelante se incorpore un HDFS completo que preserve las secuencias por `blk_id`. |
+| D-8 | Los casos de UWF se **componen**: registros benignos y maliciosos mezclados, con trazabilidad a los registros originales y declarando en metadatos que son escenarios sintéticos controlados. Los timestamps del incidente se **rebasan** a la ventana del fondo conservando los deltas internos, con el offset registrado por caso para que el `ts` original sea recuperable. |
+| D-9 | Los registros con `label_binary == "Duplicate"` se **excluyen** del conjunto experimental, y la cantidad descartada queda en el manifiesto. |
+| D-10 | El techo de 2 000 líneas **se mantiene durante el piloto** y se reevalúa después de verificar el pipeline experimental. No bloquea la continuación. |
+
+### 6.1 Costo medido de la decisión D-9
+
+Excluir los `Duplicate` tiene una consecuencia que conviene tener presente
+al interpretar D3. Las filas `Duplicate` son la **segunda atribución de
+táctica** de una conexión que ya aparece con su táctica principal: el par
+más frecuente es `Defense Evasion / T1548` junto con
+`Duplicate / Privilege Escalation` (3 397 casos).
+
+Medido sobre la conversión:
+
+| | |
+|---|---|
+| Filas excluidas por `Duplicate` | 3 068 |
+| `uid` que desaparecen del conjunto | **0** |
+| `uid` que pierden una táctica secundaria | 2 899 |
+| `uid` que conservan más de una táctica | 33 |
+
+Ningún evento se pierde: la conexión permanece a través de su fila gemela.
+Lo que se pierde es la táctica secundaria de 2 899 conexiones, así que la
+referencia de D3 para esas queda con una sola táctica. Es una referencia
+**conservadora**: puede subcontar un acierto, nunca inventarlo.
+
+## 7. Conversión de UWF y casos compuestos
+
+Ejecutado el 3-oct-2026 con `pyarrow==25.0.1` en `.venv-preparacion`, con la
+autorización que exigía no tocar las dependencias de producción.
+`requirements.txt` y `constraints.txt` quedaron sin modificar, y `pyarrow`
+solo lo importa `src/experimentation/datasets/uwf.py`, de forma diferida.
+
+### 7.1 Conversión Parquet → CSV
+
+| | |
+|---|---|
+| Filas en los 13 Parquet | 700 340 |
+| Excluidas (`Duplicate`) | 3 068 |
+| Colapsadas al deduplicar por `uid` | 36 899 |
+| **Eventos emitidos** | **660 373** |
+| &nbsp;&nbsp;benignos | 350 339 |
+| &nbsp;&nbsp;maliciosos | 310 034 |
+
+La deduplicación por `uid` es correcta y no pierde eventos. Se verificó
+comparando los 9 campos que identifican el flujo (`ts`, IPs, puertos,
+`proto`, duración, bytes) en las 37 423 filas que comparten `uid`:
+**cero colisiones reales**. Todas son la misma conexión etiquetada más de
+una vez, así que se emite un evento y las etiquetas se **unen**.
+
+Salida en dos árboles separados físicamente:
+
+- `data/experimentacion/uwf_csv/eventos/` — 22 columnas de Zeek. Es lo único
+  que puede llegar a una arquitectura o al RAG.
+- `data/experimentacion/uwf_csv/etiquetas/` — `uid`, `label_binary`,
+  `label_tactic`, `label_technique`. Solo para evaluadores.
+
+La separación se verificó **sobre los artefactos**, no sobre el código: la
+cabecera de los 13 CSV de eventos es exactamente la allowlist de 22
+columnas, y ninguno contiene los valores de etiqueta.
+
+Los CSV (138 MB) no están versionados; sí lo están sus SHA-256 en
+`experiments/manifests/uwf_conversion.json` y las instrucciones de
+regeneración en `regenerar_uwf.md`.
+
+### 7.2 Casos compuestos
+
+La unidad de agrupación es el **incidente**: una ráfaga de conexiones
+maliciosas del mismo origen y la misma táctica, con huecos de a lo más 60 s.
+Resultan **349 incidentes** (103 en desarrollo, 246 en evaluación), de 3 a
+60 conexiones y de a lo más 600 s de duración.
+
+Un caso tiene 300 registros: un tramo contiguo de tráfico benigno de
+dic-2021, con un incidente de 2022 insertado en el 70% central de su
+ventana temporal. Dos condiciones, ambas con prevalencia de casos 0,5 —
+así que lo que varía no es el balance sino **cuán enterrado está el
+incidente**:
+
+| Partición | Condición | n | Incidente / caso |
+|---|---|---|---|
+| desarrollo | visible | 12 | 9,3% – 20,0% (media 18,2%) |
+| desarrollo | sigiloso | 12 | 1,00% – 1,67% (media 1,33%) |
+| evaluación | visible | 40 | 8,0% – 20,0% (media 18,3%) |
+| evaluación | sigiloso | 40 | 1,00% – 1,67% (media 1,18%) |
+
+104 casos, 31 200 registros, **ningún `uid` repetido ni entre casos ni
+dentro de un caso** — condición necesaria para que `uid` sirva como clave
+de matching exacto de la reconstrucción.
+
+Tácticas cubiertas por las referencias de los 52 casos positivos:
+`Reconnaissance` 28, `Resource Development` 12, `Discovery` 10,
+`Execution` 2, `Initial Access` 1, `Defense Evasion` 1. Y 8 técnicas:
+T1592, T1590, T1587, T1046, T1548, T1566, T1203, T1059.
+
+Esa diversidad no salió sola. En una primera versión **51 de los 52 casos
+positivos eran `Reconnaissance`**, porque la selección tomaba los
+incidentes por orden de identificador y el pool está dominado por esa
+táctica (227 de 246 en evaluación). D3 habría medido una sola táctica. Se
+corrigió seleccionando por rondas, empezando por las tácticas más escasas.
+
+### 7.3 Dos defectos propios encontrados y corregidos
+
+Quedan anotados porque los dos habrían sesgado resultados en silencio:
+
+1. **Semilla derivada de `hash()`.** El hash de un `str` en Python cambia
+   entre procesos por `PYTHONHASHSEED`, así que la generación no habría
+   sido reproducible: cada corrida habría dado casos distintos. Se cambió a
+   `zlib.crc32`, en `preparar.py` y en `uwf_casos.py`.
+2. **Incidente desbordado por el final.** Un incidente de 37 minutos no
+   cabía en la ventana de fondo y terminaba siendo los últimos registros
+   del caso: una pista posicional que permitiría acertar sin analizar nada.
+   Lo detectó la verificación de artefactos, no una prueba. Se corrigió
+   exigiendo que la ventana de fondo abarque el incidente con margen, y
+   limitando la duración del incidente a 600 s, lo que descarta **1 de 350**
+   (los demás duran 0,4 s en la mediana y 46 s en el percentil 90).
+
+## 8. Lo que sigue pendiente
+
+| # | Decisión | Fase que la necesita |
 |---|---|---|
-| D-7 | Qué hacer con la detección en HDFS dado §1: muestra nueva, `no_aplica`, o reportar con la limitación | La interpretación de D1 en HDFS; si es "muestra nueva", vuelve a abrir la Fase 2 |
-| D-8 | Si los casos de UWF se componen (malicioso de 2022 sobre fondo benigno de 2021) y si se rebasan los timestamps | La generación de casos de UWF |
-| D-9 | Si los registros `Duplicate` se excluyen del caso o solo del ground truth | El ground truth de UWF (Fase 3) |
-| D-10 | Si se amplía a muestras mayores (HDFS/BGL completos) o se acepta el techo de 2 000 líneas | El tamaño de la campaña: hoy el techo son 146 casos de HDFS y 86 de BGL |
+| D-2 | Número de repeticiones `N` por caso | 7 |
+| D-3 | Umbrales de aceptación por dimensión | 5 |
+| D-5 | Comparación externa: experimental o bibliográfica | 9 |
 
-## 7. Lo que esta fase **no** verificó
+## 9. Lo que esta fase **no** verificó
 
 1. Que los casos generados pasen por el preprocesamiento de NODEX. Pasar un
    caso por `preprocesar()` es ejecutar NODEX sobre un caso de prueba, que
    el protocolo prohíbe sin autorización. La segmentación de los casos se
-   validó contra el archivo original, no contra el pipeline.
-2. Que las pruebas de `tests/experimentation/` pasen. Están escritas y
-   revisadas estáticamente; no se ejecutaron.
-3. Nada de UWF más allá de sus metadatos: no se leyó una sola fila de datos.
-4. Que las etiquetas de HDFS y BGL sean correctas. Se tomaron tal como
-   vienen; verificar la curaduría del dataset está fuera de alcance.
+   validó contra el archivo original, no contra el pipeline. Para UWF esto
+   importa más que para los otros dos: el enricher Zeek existe y está
+   escrito para este dataset, pero **no se comprobó corriéndolo**.
+2. Que las pruebas de `tests/experimentation/` pasen. Son 7 archivos
+   escritos y revisados estáticamente; no se ejecutaron.
+3. Que las etiquetas de HDFS, BGL y UWF sean correctas. Se tomaron tal como
+   vienen; verificar la curaduría de los datasets está fuera de alcance.
+4. Que los casos sean "difíciles" o "realistas" en algún sentido medido. Se
+   verificó que el incidente no esté en los extremos y que no haya rastro
+   de etiquetas, pero si una proporción maliciosa del 1% es detectable o no
+   es justamente lo que el experimento tiene que responder.

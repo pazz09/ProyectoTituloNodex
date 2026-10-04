@@ -54,7 +54,7 @@ rehacen: no dependen del dataset.
 |---|---|---|---|---|---|
 | 0 — Aislar el trabajo y fijar el punto de partida | PREPARADA_SIN_EJECUTAR | Sí (3-oct-2026) | Rama `preparacion-entorno-pruebas`, worktree aislado, commit de origen documentado, este registro | `26832c2` | Verificaciones de entorno que exigen ejecución (§6) |
 | 1 — Definir el protocolo y los contratos experimentales | PREPARADA_SIN_EJECUTAR | Sí (3-oct-2026) | `docs/experimentacion/protocolo.md`; contratos en `src/experimentation/contracts/`; 4 archivos de prueba en `tests/experimentation/` (escritos, sin ejecutar) | `d3a3234` | 6 decisiones académicas pendientes (§8) |
-| 2 — Preparar datasets y casos con segmentación válida | PREPARADA_SIN_EJECUTAR (HDFS y BGL); UWF BLOQUEADA | Sí (3-oct-2026) | `docs/experimentacion/hallazgos_datasets.md`; `src/experimentation/datasets/` (6 módulos); 232 casos + 232 referencias + 3 manifiestos en `experiments/`; 2 archivos de prueba (escritos, sin ejecutar) | `fb77559` | UWF requiere un motor Parquet (autorización de instalación); D-7 a D-10 |
+| 2 — Preparar datasets y casos con segmentación válida | PREPARADA_SIN_EJECUTAR (HDFS, BGL y UWF) | Sí (3-oct-2026) | `hallazgos_datasets.md`, `regenerar_uwf.md`; `src/experimentation/datasets/` (8 módulos); **336 casos + 336 referencias** y 5 manifiestos en `experiments/`; `requirements-experimentacion.txt`; 3 archivos de prueba (escritos, sin ejecutar) | `fb77559`, UWF en `(se registra abajo)` | UWF requiere un motor Parquet (autorización de instalación); D-7 a D-10 |
 | 3 — Preparar ground truth y conocimiento aislado | PENDIENTE_AUTORIZACION | No | — | — | Catálogo MITRE no versionado; ChromaDB sin documentos. **Menos trabajo del previsto:** UWF trae `label_binary`, `label_tactic`, `label_technique` y `uid`, así que D1, D2 y D3 son derivables del dataset (ver hallazgos §4) |
 | 4 — Hacer evaluables las salidas de NODEX | PENDIENTE_AUTORIZACION | No | — | — | — |
 | 5 — Implementar los evaluadores externos | PENDIENTE_AUTORIZACION | No | — | — | Rúbrica humana del reporte por definir |
@@ -184,28 +184,59 @@ Agregado al cerrar la Fase 2:
   UWF ya revisado; el resto queda como `referencia_pendiente` hasta su
   aprobación.
 
-## 8. Decisiones académicas pendientes
+## 8. Decisiones académicas
 
-Registradas en la Fase 1. El protocolo las trata como
-`DECISION_PENDIENTE`: **ningún umbral está fijado** y el código no debe
-suplirlas con un valor por defecto. Detalle y justificación en
-`docs/experimentacion/protocolo.md` §10.
+El protocolo trata las pendientes como `DECISION_PENDIENTE`: **ningún
+umbral está fijado** y el código no debe suplirlas con un valor por
+defecto. Detalle en `protocolo.md` §10 y en `hallazgos_datasets.md` §6.
+
+### Resueltas (3-oct-2026)
+
+| # | Decisión | Dónde quedó implementada |
+|---|---|---|
+| D-1 | Partición **30% desarrollo / 70% evaluación**, por grupo y estratificada | `datasets/particion.py`; manifiestos |
+| D-4 | Rúbrica **0–3 por criterio**, **2 evaluadores**, concordancia reportada | pendiente de implementar en la Fase 3 |
+| D-6 | **12 casos por dataset principal** con rúbrica humana (12 BGL + 12 UWF = 24 reportes) | pendiente de implementar en la Fase 3 |
+| D-7 | HDFS es **auxiliar / de validación técnica**, no métrica principal. BGL y UWF son los datasets principales | `hallazgos_datasets.md` §1 y §6 |
+| D-8 | Casos de UWF **compuestos**, declarados sintéticos, con timestamps **rebasados** y offset registrado | `datasets/uwf_casos.py` |
+| D-9 | `label_binary == "Duplicate"` **excluido**, con la cantidad en el manifiesto | `datasets/uwf.py`; `uwf_conversion.json` |
+| D-10 | El techo de 2 000 líneas **se mantiene en el piloto** y se reevalúa después | — |
+
+### Pendientes
 
 | # | Decisión | Fase que la necesita |
 |---|---|---|
-| D-1 | Proporción desarrollo / evaluación | 2 |
 | D-2 | Número de repeticiones `N` por caso | 7 |
 | D-3 | Umbrales de aceptación por dimensión | 5 (y la interpretación final) |
-| D-4 | Escala de la rúbrica de reporte y nº de evaluadores humanos | 3 y 5 |
 | D-5 | Comparación externa: experimental o bibliográfica | 9 |
-| D-6 | Tamaño de la submuestra de D4 (reporte) por dataset | 3 |
-| D-7 | Qué hacer con la detección en HDFS: muestra nueva, `no_aplica`, o reportar con la limitación | Interpretación de D1 en HDFS |
-| D-8 | Si los casos de UWF se componen (malicioso de 2022 sobre fondo benigno de 2021) y si se rebasan los timestamps | Generación de casos de UWF |
-| D-9 | Si los registros `Duplicate` de UWF se excluyen del caso o solo del ground truth | Ground truth de UWF (Fase 3) |
-| D-10 | Si se amplía a muestras mayores de HDFS/BGL o se acepta el techo de 2 000 líneas | Tamaño de la campaña |
 
-D-1 quedó resuelta (30/70) y la Fase 2 ya particionó con ella. D-6 sigue
-bloqueando la Fase 3. D-7 a D-10 abrieron en la Fase 2 y están
-fundamentadas con medición en `hallazgos_datasets.md`; D-8 y D-9 bloquean
-la generación de casos de UWF, y D-7 y D-10 afectan la interpretación, no
-el avance.
+Ninguna de las tres bloquea la Fase 3. D-2 y D-3 se necesitan antes de
+ejecutar; D-5 recién en la Fase 9.
+
+## 9. Inventario de casos preparados
+
+336 casos, con su referencia en un árbol separado. Ninguno fue ejecutado.
+
+| Dataset | Rol | Partición | Condición | Casos | Prevalencia efectiva |
+|---|---|---|---|---|---|
+| HDFS | auxiliar (D-7) | desarrollo | natural | 30 | 0,0333 |
+| HDFS | auxiliar | desarrollo | balanceado | 16 | 0,5000 |
+| HDFS | auxiliar | evaluación | natural | 60 | 0,0333 |
+| HDFS | auxiliar | evaluación | balanceado | 40 | 0,5000 |
+| BGL | principal | desarrollo | natural | 20 | 0,3000 |
+| BGL | principal | desarrollo | balanceado | 4 | 0,5000 |
+| BGL | principal | evaluación | natural | 50 | 0,2800 |
+| BGL | principal | evaluación | balanceado | 12 | 0,5000 |
+| UWF | principal | desarrollo | visible | 12 | 0,5000 |
+| UWF | principal | desarrollo | sigiloso | 12 | 0,5000 |
+| UWF | principal | evaluación | visible | 40 | 0,5000 |
+| UWF | principal | evaluación | sigiloso | 40 | 0,5000 |
+
+En UWF las dos condiciones tienen prevalencia 0,5: lo que varía es el
+tamaño del incidente dentro del caso (8–20% en `visible`, 1,0–1,67% en
+`sigiloso`).
+
+**Advertencia de costo.** 336 casos × 2 arquitecturas LLM × `N`
+repeticiones es mucho más de lo que conviene correr en un piloto. La Fase 7
+tiene que definir un subconjunto piloto; el pool grande existe para que la
+campaña final tenga de dónde sacar, no para ejecutarlo completo de entrada.

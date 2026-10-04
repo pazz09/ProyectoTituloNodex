@@ -1,0 +1,48 @@
+{
+  "case_id": "uwf_eva_sigiloso_0013",
+  "estado_dimension": {
+    "deteccion": "evaluable",
+    "reconstruccion": "evaluable",
+    "mitre": "evaluable",
+    "reporte": "referencia_pendiente",
+    "consumo": "evaluable"
+  },
+  "etiqueta_deteccion": "anomalo",
+  "etiqueta_original": "True",
+  "core_event_uids": [
+    "CqHhox4PPPkSEfGI17",
+    "CFAv3e4gyM90vj7vOg",
+    "C76A982iyHWnei7Vw"
+  ],
+  "referencias_mitre": [
+    {
+      "nivel": "tactica",
+      "id": "Resource Development",
+      "nombre": null,
+      "evidence_uids": [
+        "CqHhox4PPPkSEfGI17",
+        "CFAv3e4gyM90vj7vOg",
+        "C76A982iyHWnei7Vw"
+      ]
+    },
+    {
+      "nivel": "tecnica",
+      "id": "T1587",
+      "nombre": null,
+      "evidence_uids": [
+        "CqHhox4PPPkSEfGI17",
+        "CFAv3e4gyM90vj7vOg",
+        "C76A982iyHWnei7Vw"
+      ]
+    }
+  ],
+  "rubrica_aplicada": false,
+  "rubrica_ref": null,
+  "anotacion": {
+    "fuente": "dataset",
+    "regla": "label_binary del dataset UWF, por uid; el caso es malicioso si contiene el incidente inyectado",
+    "incidente": "2022-09-18_2022-09-25__Resource Development__143.88.5.11__0016#r3",
+    "tactica_del_incidente": "Resource Development",
+    "aprobada": true
+  }
+}

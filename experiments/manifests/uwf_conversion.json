@@ -1,0 +1,278 @@
+{
+  "dataset": "uwf",
+  "origen": "data/logs/UWF-ZeekDataFall22-parquet",
+  "destino": "data/experimentacion/uwf_csv",
+  "motor": "pyarrow==25.0.1 (requirements-experimentacion.txt)",
+  "decisiones_aplicadas": {
+    "D-9_excluir_duplicate": "los registros con label_binary='Duplicate' se excluyen del conjunto experimental; su conexión permanece a través de la fila gemela, de modo que no desaparece ningún uid",
+    "etiquetas_separadas": "label_binary, label_tactic y label_technique se escriben SOLO en etiquetas/; eventos/ lleva una allowlist de 22 columnas de Zeek",
+    "uid_clave_de_referencia": "uid es la clave de matching de reconstrucción; se dedupica por uid porque las filas que lo comparten son la misma conexión (firma de flujo idéntica en 9 campos, 0 colisiones)"
+  },
+  "totales": {
+    "filas_parquet": 700340,
+    "filas_excluidas_duplicate": 3068,
+    "filas_colapsadas_por_uid": 36899,
+    "eventos_emitidos": 660373,
+    "eventos_benignos": 350339,
+    "eventos_maliciosos": 310034,
+    "uids_con_tactica_perdida": 2899,
+    "uids_desaparecidos": 0
+  },
+  "separacion_verificada": {
+    "archivos_revisados": 13,
+    "hallazgos": []
+  },
+  "shards": [
+    {
+      "semana": "2021-12-12_2021-12-19",
+      "archivo_parquet": "data/logs/UWF-ZeekDataFall22-parquet/2021-12-12%20-%202021-12-19/part-00000-d512890f-d1e9-49d5-a136-f87f0183cb4d-c000.snappy.parquet",
+      "sha256_parquet": "d05f33c87a4f66f24ea8216f33ceb0bf2e47324a15cd5763de85f6d1dd61b3ff",
+      "filas_parquet": 20745,
+      "filas_excluidas_duplicate": 0,
+      "filas_colapsadas_por_uid": 0,
+      "eventos_emitidos": 20745,
+      "eventos_benignos": 20745,
+      "eventos_maliciosos": 0,
+      "uids_con_tactica_perdida": 0,
+      "uids_desaparecidos": 0,
+      "sha256_eventos": "d1f51d90c92fa4c139c16fc8e93b11b2ae84527734359589e21e596f580f4b99",
+      "sha256_etiquetas": "6fe3b916c9e7fadfd022d46abfd44244655d33ed3e468c8e248315433b3351ae",
+      "tacticas": {
+        "none": 20745
+      }
+    },
+    {
+      "semana": "2021-12-19_2021-12-26",
+      "archivo_parquet": "data/logs/UWF-ZeekDataFall22-parquet/2021-12-19%20-%202021-12-26/part-00000-d28b031b-bff1-4e16-853a-9b7d896627e7-c000.snappy.parquet",
+      "sha256_parquet": "da251e027b535e643a602c221693c68ff8c38b1139c0e119a2397cb277907878",
+      "filas_parquet": 97807,
+      "filas_excluidas_duplicate": 0,
+      "filas_colapsadas_por_uid": 0,
+      "eventos_emitidos": 97807,
+      "eventos_benignos": 97807,
+      "eventos_maliciosos": 0,
+      "uids_con_tactica_perdida": 0,
+      "uids_desaparecidos": 0,
+      "sha256_eventos": "ead19a02db4682b31635854f9ac993448112f4bc0bcf0bd1b026cb9993620ae5",
+      "sha256_etiquetas": "7b650ae2feba266d91c16c1cfe114752164290f568de86fb133cc4ea0bf1f9b3",
+      "tacticas": {
+        "none": 97807
+      }
+    },
+    {
+      "semana": "2021-12-26_2022-01-02",
+      "archivo_parquet": "data/logs/UWF-ZeekDataFall22-parquet/2021-12-26%20-%202022-01-02/part-00000-94d13437-ae00-4a8c-9f38-edd0196cfdee-c000.snappy.parquet",
+      "sha256_parquet": "18eda10d9ee3816380d448b86c440d55dc337ff4df5d8ac568cf7173ae61af60",
+      "filas_parquet": 98290,
+      "filas_excluidas_duplicate": 0,
+      "filas_colapsadas_por_uid": 0,
+      "eventos_emitidos": 98290,
+      "eventos_benignos": 98290,
+      "eventos_maliciosos": 0,
+      "uids_con_tactica_perdida": 0,
+      "uids_desaparecidos": 0,
+      "sha256_eventos": "ae16afb8a4446893903bbbbf2e7aa1faafda96ba9dd7fe28d3259c3d1857561c",
+      "sha256_etiquetas": "4669dbebcf763f587d4653063ec70692a7aad8bc4ded516f4c4df1701fa3298d",
+      "tacticas": {
+        "none": 98290
+      }
+    },
+    {
+      "semana": "2022-01-02_2022-01-09",
+      "archivo_parquet": "data/logs/UWF-ZeekDataFall22-parquet/2022-01-02%20-%202022-01-09/part-00000-745e350a-da9e-4619-bd52-8cc23bb41ad5-c000.snappy.parquet",
+      "sha256_parquet": "12d79987c631e9a5f54ca786cbaa77ae71d6c4e6e29153962a815fb816f6ad47",
+      "filas_parquet": 133497,
+      "filas_excluidas_duplicate": 0,
+      "filas_colapsadas_por_uid": 0,
+      "eventos_emitidos": 133497,
+      "eventos_benignos": 133497,
+      "eventos_maliciosos": 0,
+      "uids_con_tactica_perdida": 0,
+      "uids_desaparecidos": 0,
+      "sha256_eventos": "15d9fb09e6c99e600d9c40fe4e399ae9a387b484433a4eacc25b5cbba36e386d",
+      "sha256_etiquetas": "309ba5e384934798bf5ac27e68129ba8427148534def0dcf25750dbe157304a4",
+      "tacticas": {
+        "none": 133497
+      }
+    },
+    {
+      "semana": "2022-08-28_2022-09-04",
+      "archivo_parquet": "data/logs/UWF-ZeekDataFall22-parquet/2022-08-28%20-%202022-09-04/part-00000-9a46dd05-4b06-4a39-a45b-5c8460b6c37b-c000.snappy.parquet",
+      "sha256_parquet": "1c3a244a9ba247bb44693debf406459a2f59cc10135adfedef75421fe5e6a915",
+      "filas_parquet": 47227,
+      "filas_excluidas_duplicate": 3061,
+      "filas_colapsadas_por_uid": 21661,
+      "eventos_emitidos": 22505,
+      "eventos_benignos": 0,
+      "eventos_maliciosos": 22505,
+      "uids_con_tactica_perdida": 2893,
+      "uids_desaparecidos": 0,
+      "sha256_eventos": "871039f47fbb4f5a2322b94bbc3d3e46d337f1309e0b840044b77c4904c15358",
+      "sha256_etiquetas": "7852cf3d70a5bf81eb89fb7e71d02e2dc5ef907663e1dccc288f45464018cea5",
+      "tacticas": {
+        "Reconnaissance": 19612,
+        "Defense Evasion": 2893
+      }
+    },
+    {
+      "semana": "2022-09-04_2022-09-11",
+      "archivo_parquet": "data/logs/UWF-ZeekDataFall22-parquet/2022-09-04%20-%202022-09-11/part-00000-ea53b0e8-d346-44e3-9a87-1f60ac35c610-c000.snappy.parquet",
+      "sha256_parquet": "c583e77ffad0980f44bb56ae76e508ea1890cb080a0c5d1c1172f66135ed6c24",
+      "filas_parquet": 1762,
+      "filas_excluidas_duplicate": 0,
+      "filas_colapsadas_por_uid": 847,
+      "eventos_emitidos": 915,
+      "eventos_benignos": 0,
+      "eventos_maliciosos": 915,
+      "uids_con_tactica_perdida": 0,
+      "uids_desaparecidos": 0,
+      "sha256_eventos": "b0e4bda40b35fc6f2e82b544d16ee46a127908857d8034cc1576cb2c4c2bdd32",
+      "sha256_etiquetas": "3234c4a4ed606546f4d72550b72d9bad0a1ef5a14d4f97ae632cc41c679959d8",
+      "tacticas": {
+        "Reconnaissance": 915
+      }
+    },
+    {
+      "semana": "2022-09-11_2022-09-18",
+      "archivo_parquet": "data/logs/UWF-ZeekDataFall22-parquet/2022-09-11%20-%202022-09-18/part-00000-f9afaec0-242e-41e7-906d-a42681515d75-c000.snappy.parquet",
+      "sha256_parquet": "a4d475844d4ceeb63cc49e873e88de5f6fb3c6112dffe7946c574844b4d22eb8",
+      "filas_parquet": 16871,
+      "filas_excluidas_duplicate": 0,
+      "filas_colapsadas_por_uid": 794,
+      "eventos_emitidos": 16077,
+      "eventos_benignos": 0,
+      "eventos_maliciosos": 16077,
+      "uids_con_tactica_perdida": 0,
+      "uids_desaparecidos": 0,
+      "sha256_eventos": "a132150bee08dca1eac99f23700e7133075d55fdd4aa5fc590e717a24df9c3e7",
+      "sha256_etiquetas": "6e4a4fde03c515a863daa574b25bcf1197c623609f22d9550d4cfb43b214e7b0",
+      "tacticas": {
+        "Discovery": 16016,
+        "Reconnaissance": 61
+      }
+    },
+    {
+      "semana": "2022-09-18_2022-09-25",
+      "archivo_parquet": "data/logs/UWF-ZeekDataFall22-parquet/2022-09-18%20-%202022-09-25/part-00000-9ac876be-c07d-4a18-878d-959efa26f484-c000.snappy.parquet",
+      "sha256_parquet": "479cbe60a948beccc9514f23b4b3fa1b05b82c4faf1c5f15b49158e7639c51ce",
+      "filas_parquet": 284004,
+      "filas_excluidas_duplicate": 0,
+      "filas_colapsadas_por_uid": 13557,
+      "eventos_emitidos": 270447,
+      "eventos_benignos": 0,
+      "eventos_maliciosos": 270447,
+      "uids_con_tactica_perdida": 0,
+      "uids_desaparecidos": 0,
+      "sha256_eventos": "5745e89425668c45f26248b7ca9b968e9ae0b94c710eb398d3eb7de03aaf5060",
+      "sha256_etiquetas": "93dbe07dff1e17b88ea8e095bf3c40f7d3ee72a4d4b3b772ad1779b384c1de54",
+      "tacticas": {
+        "Resource Development": 262384,
+        "Reconnaissance": 8063,
+        "Execution": 4
+      }
+    },
+    {
+      "semana": "2022-09-25_2022-10-02",
+      "archivo_parquet": "data/logs/UWF-ZeekDataFall22-parquet/2022-09-25%20-%202022-10-02/part-00000-be6d0798-554d-4c7a-9fef-d4c07aa0ce19-c000.snappy.parquet",
+      "sha256_parquet": "170e9d825a90500e8bc18109162c54dd0472cd2741820df26108330ad1bb3969",
+      "filas_parquet": 66,
+      "filas_excluidas_duplicate": 1,
+      "filas_colapsadas_por_uid": 17,
+      "eventos_emitidos": 48,
+      "eventos_benignos": 0,
+      "eventos_maliciosos": 48,
+      "uids_con_tactica_perdida": 1,
+      "uids_desaparecidos": 0,
+      "sha256_eventos": "21b1e8a4ada91fb00ef69ef9575e68680f350a4d8bf437ec1774b984e1bdf26f",
+      "sha256_etiquetas": "96580c7090f7a29bf4a118d5bf260a7d1a7ea1361d64a5f4c98ea2aad4aa7a3d",
+      "tacticas": {
+        "Command and Control": 14,
+        "Initial Access": 13,
+        "Lateral Movement": 10,
+        "Reconnaissance": 10,
+        "Discovery": 9,
+        "Execution": 2,
+        "Persistence": 1
+      }
+    },
+    {
+      "semana": "2022-10-02_2022-10-09",
+      "archivo_parquet": "data/logs/UWF-ZeekDataFall22-parquet/2022-10-02%20-%202022-10-09/part-00000-2b76f9cc-0710-45e4-9e33-98ad5808ee79-c000.snappy.parquet",
+      "sha256_parquet": "9bf459b484a3d923df8522018d3778ca6a56208a4b119398010e85ba6ef4488c",
+      "filas_parquet": 5,
+      "filas_excluidas_duplicate": 1,
+      "filas_colapsadas_por_uid": 0,
+      "eventos_emitidos": 4,
+      "eventos_benignos": 0,
+      "eventos_maliciosos": 4,
+      "uids_con_tactica_perdida": 1,
+      "uids_desaparecidos": 0,
+      "sha256_eventos": "e23f698642466c2ea4e6ee726e79b73f2d9be05866a9235e2db265a459488282",
+      "sha256_etiquetas": "cb5553b16e581c365c7e6e7434b0febd06c7f845e8e3aeb388e1963eed121fae",
+      "tacticas": {
+        "Execution": 3,
+        "Collection": 1
+      }
+    },
+    {
+      "semana": "2022-10-09_2022-10-16",
+      "archivo_parquet": "data/logs/UWF-ZeekDataFall22-parquet/2022-10-09%20-%202022-10-16/part-00000-b2b625bc-5816-4586-b977-35f9ed4487fd-c000.snappy.parquet",
+      "sha256_parquet": "74e7f6a4073fefefc40171c9011a7ee01d52da97be605d5ea81b332feef0f99e",
+      "filas_parquet": 39,
+      "filas_excluidas_duplicate": 0,
+      "filas_colapsadas_por_uid": 15,
+      "eventos_emitidos": 24,
+      "eventos_benignos": 0,
+      "eventos_maliciosos": 24,
+      "uids_con_tactica_perdida": 0,
+      "uids_desaparecidos": 0,
+      "sha256_eventos": "79c1204468af9ac304b438125fb6fc224628db0458159813f6939c340690934d",
+      "sha256_etiquetas": "5e8d503b62b336daa7edbe277ba03d2c0cc6c616e1c66091027bb01b28967501",
+      "tacticas": {
+        "Resource Development": 22,
+        "Execution": 17
+      }
+    },
+    {
+      "semana": "2022-10-16_2022-10-23",
+      "archivo_parquet": "data/logs/UWF-ZeekDataFall22-parquet/2022-10-16%20-%202022-10-23/part-00000-9aeb279c-81c6-4481-9b30-d35d4d194fea-c000.snappy.parquet",
+      "sha256_parquet": "72999bb46deffdd0dfb32f96d81588d440f24ffbeef19147909cf9fc6c32afc9",
+      "filas_parquet": 22,
+      "filas_excluidas_duplicate": 3,
+      "filas_colapsadas_por_uid": 6,
+      "eventos_emitidos": 13,
+      "eventos_benignos": 0,
+      "eventos_maliciosos": 13,
+      "uids_con_tactica_perdida": 3,
+      "uids_desaparecidos": 0,
+      "sha256_eventos": "7ed6120bb51fa0346fc49722435e8378c5515f5990c831ab749150b482e6a628",
+      "sha256_etiquetas": "a4649c6dc92c62d3787b343b26868fc60e21b7d2f98289b3f248e54793b9e2fd",
+      "tacticas": {
+        "Initial Access": 5,
+        "Resource Development": 3,
+        "Persistence": 3,
+        "Execution": 3,
+        "Defense Evasion": 1
+      }
+    },
+    {
+      "semana": "2022-10-23_2022-10-30",
+      "archivo_parquet": "data/logs/UWF-ZeekDataFall22-parquet/2022-10-23%20-%202022-10-30/part-00000-23fdcfa3-9dd3-4c72-886c-e945bfcf92e1-c000.snappy.parquet",
+      "sha256_parquet": "7dcbdf2812f9dc70c342f11a4af0182e725bb9f8b72eed9c20353979fdf308fd",
+      "filas_parquet": 5,
+      "filas_excluidas_duplicate": 2,
+      "filas_colapsadas_por_uid": 2,
+      "eventos_emitidos": 1,
+      "eventos_benignos": 0,
+      "eventos_maliciosos": 1,
+      "uids_con_tactica_perdida": 1,
+      "uids_desaparecidos": 0,
+      "sha256_eventos": "b66a0d2f0bd10bfcf5042166cd5a8e33221a6a53b12aac34033031d34a2ce826",
+      "sha256_etiquetas": "fd8107344cf475bcae7030eff941c1d3a67ded598028df0db6b67e5f1e00a5a3",
+      "tacticas": {
+        "Defense Evasion": 1,
+        "Persistence": 1
+      }
+    }
+  ]
+}

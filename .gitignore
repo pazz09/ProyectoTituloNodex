@@ -3,6 +3,12 @@
 venv/
 # venv de Linux inservible en Windows (ver README)
 .venv.linux-broken/
+# Entorno aparte de la preparación experimental (requirements-experimentacion.txt)
+.venv-preparacion/
+# CSV intermedios de UWF (138 MB). Son derivados regenerables: el Parquet de
+# origen SÍ está versionado y los SHA-256 de cada CSV quedan en
+# experiments/manifests/uwf_conversion.json. Ver data/experimentacion/README.md
+data/experimentacion/
 __pycache__/
 *.pyc
 .pytest_cache/

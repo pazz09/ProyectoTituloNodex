@@ -1,0 +1,311 @@
+{
+  "dataset": "uwf",
+  "protocolo_version": "1.0",
+  "tipo_deteccion": "seguridad",
+  "escenario": "sintetico_controlado",
+  "decisiones_aplicadas": {
+    "D-8_composicion": "casos compuestos: fondo benigno contiguo de dic-2021 con un incidente malicioso de ago-oct 2022; no se construyen casos por shard por la separación temporal del dataset",
+    "D-8_timestamps": "el incidente se rebasa a la ventana del fondo conservando sus deltas internos; el offset queda en cada caso y datetime se recalcula desde el ts rebasado",
+    "D-9_duplicate": "los registros label_binary='Duplicate' ya fueron excluidos en la conversión (ver uwf_conversion.json)",
+    "uid_referencia": "core_event_uids son los uid del incidente"
+  },
+  "agrupacion": {
+    "unidad": "incidente (ráfaga por shard+táctica+IP origen)",
+    "gap_segundos": 60.0,
+    "min_conexiones": 3,
+    "max_conexiones": 60,
+    "max_duracion_segundos": 600.0,
+    "n_incidentes": 349,
+    "n_incidentes_por_particion": {
+      "desarrollo": 103,
+      "evaluacion": 246
+    },
+    "tacticas": {
+      "Reconnaissance": 324,
+      "Resource Development": 11,
+      "Discovery": 9,
+      "Defense Evasion": 1,
+      "Execution|Resource Development": 1,
+      "Discovery|Reconnaissance": 1,
+      "Execution": 1,
+      "Initial Access": 1
+    }
+  },
+  "riesgo_residual": "UWF tiene solo 10 IP de origen maliciosas, así que un mismo host atacante aparece en desarrollo y en evaluación. Los incidentes son episodios disjuntos y ningún registro se reutiliza, pero el patrón del atacante se repite entre particiones. No es eliminable con este dataset.",
+  "benigno": {
+    "registros_disponibles": 350339,
+    "shards": [
+      "2021-12-12_2021-12-19",
+      "2021-12-19_2021-12-26",
+      "2021-12-26_2022-01-02",
+      "2022-01-02_2022-01-09"
+    ],
+    "registros_consumidos": 29681,
+    "ventanas_descartadas_por_extension": 0
+  },
+  "condiciones": {
+    "desarrollo": {
+      "visible": {
+        "n_casos": 12,
+        "prevalencia_solicitada": 0.5,
+        "prevalencia_efectiva": 0.5,
+        "delta_por_redondeo": 0.0,
+        "min_conexiones_incidente": 20,
+        "recorte_incidente": null,
+        "tamano_caso": 300,
+        "proporcion_maliciosa_en_casos_positivos": {
+          "min": 0.093333,
+          "max": 0.2,
+          "media": 0.182222
+        },
+        "tacticas_de_los_positivos": {
+          "Discovery": 3,
+          "Reconnaissance": 2,
+          "Resource Development": 1
+        },
+        "incidentes_usados": [
+          "2022-09-11_2022-09-18__Discovery__143.88.18.12__0004",
+          "2022-09-18_2022-09-25__Resource Development__143.88.5.11__0003",
+          "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0014",
+          "2022-09-11_2022-09-18__Discovery__143.88.18.12__0005",
+          "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0058",
+          "2022-09-11_2022-09-18__Discovery__143.88.18.12__0007"
+        ],
+        "case_ids": [
+          "uwf_des_visible_0000",
+          "uwf_des_visible_0001",
+          "uwf_des_visible_0002",
+          "uwf_des_visible_0003",
+          "uwf_des_visible_0004",
+          "uwf_des_visible_0005",
+          "uwf_des_visible_0006",
+          "uwf_des_visible_0007",
+          "uwf_des_visible_0008",
+          "uwf_des_visible_0009",
+          "uwf_des_visible_0010",
+          "uwf_des_visible_0011"
+        ]
+      },
+      "sigiloso": {
+        "n_casos": 12,
+        "prevalencia_solicitada": 0.5,
+        "prevalencia_efectiva": 0.5,
+        "delta_por_redondeo": 0.0,
+        "min_conexiones_incidente": 3,
+        "recorte_incidente": [
+          3,
+          5
+        ],
+        "tamano_caso": 300,
+        "proporcion_maliciosa_en_casos_positivos": {
+          "min": 0.01,
+          "max": 0.016667,
+          "media": 0.013333
+        },
+        "tacticas_de_los_positivos": {
+          "Reconnaissance": 4,
+          "Resource Development": 2
+        },
+        "incidentes_usados": [
+          "2022-09-18_2022-09-25__Resource Development__143.88.5.11__0001#r3",
+          "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0005#r5",
+          "2022-09-18_2022-09-25__Resource Development__143.88.5.11__0014#r5",
+          "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0006#r5",
+          "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0010#r3",
+          "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0021#r3"
+        ],
+        "case_ids": [
+          "uwf_des_sigiloso_0000",
+          "uwf_des_sigiloso_0001",
+          "uwf_des_sigiloso_0002",
+          "uwf_des_sigiloso_0003",
+          "uwf_des_sigiloso_0004",
+          "uwf_des_sigiloso_0005",
+          "uwf_des_sigiloso_0006",
+          "uwf_des_sigiloso_0007",
+          "uwf_des_sigiloso_0008",
+          "uwf_des_sigiloso_0009",
+          "uwf_des_sigiloso_0010",
+          "uwf_des_sigiloso_0011"
+        ]
+      }
+    },
+    "evaluacion": {
+      "visible": {
+        "n_casos": 40,
+        "prevalencia_solicitada": 0.5,
+        "prevalencia_efectiva": 0.5,
+        "delta_por_redondeo": 0.0,
+        "min_conexiones_incidente": 20,
+        "recorte_incidente": null,
+        "tamano_caso": 300,
+        "proporcion_maliciosa_en_casos_positivos": {
+          "min": 0.08,
+          "max": 0.2,
+          "media": 0.182667
+        },
+        "tacticas_de_los_positivos": {
+          "Reconnaissance": 12,
+          "Discovery": 5,
+          "Resource Development": 2,
+          "Defense Evasion": 1
+        },
+        "incidentes_usados": [
+          "2022-08-28_2022-09-04__Defense Evasion__143.88.18.12__0000",
+          "2022-09-11_2022-09-18__Discovery__143.88.18.12__0000",
+          "2022-09-18_2022-09-25__Resource Development__143.88.5.11__0004",
+          "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0028",
+          "2022-09-11_2022-09-18__Discovery__143.88.18.12__0001",
+          "2022-09-18_2022-09-25__Resource Development__143.88.5.11__0015",
+          "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0041",
+          "2022-09-11_2022-09-18__Discovery__143.88.18.12__0002",
+          "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0043",
+          "2022-09-11_2022-09-18__Discovery__143.88.18.12__0003",
+          "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0049",
+          "2022-09-11_2022-09-18__Discovery__143.88.18.12__0006",
+          "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0053",
+          "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0057",
+          "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0070",
+          "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0072",
+          "2022-08-28_2022-09-04__Reconnaissance__143.88.3.12__0000",
+          "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0000",
+          "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0002",
+          "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0011"
+        ],
+        "case_ids": [
+          "uwf_eva_visible_0000",
+          "uwf_eva_visible_0001",
+          "uwf_eva_visible_0002",
+          "uwf_eva_visible_0003",
+          "uwf_eva_visible_0004",
+          "uwf_eva_visible_0005",
+          "uwf_eva_visible_0006",
+          "uwf_eva_visible_0007",
+          "uwf_eva_visible_0008",
+          "uwf_eva_visible_0009",
+          "uwf_eva_visible_0010",
+          "uwf_eva_visible_0011",
+          "uwf_eva_visible_0012",
+          "uwf_eva_visible_0013",
+          "uwf_eva_visible_0014",
+          "uwf_eva_visible_0015",
+          "uwf_eva_visible_0016",
+          "uwf_eva_visible_0017",
+          "uwf_eva_visible_0018",
+          "uwf_eva_visible_0019",
+          "uwf_eva_visible_0020",
+          "uwf_eva_visible_0021",
+          "uwf_eva_visible_0022",
+          "uwf_eva_visible_0023",
+          "uwf_eva_visible_0024",
+          "uwf_eva_visible_0025",
+          "uwf_eva_visible_0026",
+          "uwf_eva_visible_0027",
+          "uwf_eva_visible_0028",
+          "uwf_eva_visible_0029",
+          "uwf_eva_visible_0030",
+          "uwf_eva_visible_0031",
+          "uwf_eva_visible_0032",
+          "uwf_eva_visible_0033",
+          "uwf_eva_visible_0034",
+          "uwf_eva_visible_0035",
+          "uwf_eva_visible_0036",
+          "uwf_eva_visible_0037",
+          "uwf_eva_visible_0038",
+          "uwf_eva_visible_0039"
+        ]
+      },
+      "sigiloso": {
+        "n_casos": 40,
+        "prevalencia_solicitada": 0.5,
+        "prevalencia_efectiva": 0.5,
+        "delta_por_redondeo": 0.0,
+        "min_conexiones_incidente": 3,
+        "recorte_incidente": [
+          3,
+          5
+        ],
+        "tamano_caso": 300,
+        "proporcion_maliciosa_en_casos_positivos": {
+          "min": 0.01,
+          "max": 0.016667,
+          "media": 0.011833
+        },
+        "tacticas_de_los_positivos": {
+          "Reconnaissance": 9,
+          "Resource Development": 6,
+          "Execution|Resource Development": 1,
+          "Discovery|Reconnaissance": 1,
+          "Execution": 1,
+          "Discovery": 1,
+          "Initial Access": 1
+        },
+        "incidentes_usados": [
+          "2022-09-25_2022-10-02__Discovery__143.88.10.11__0000#r4",
+          "2022-09-25_2022-10-02__Discovery|Reconnaissance__143.88.6.11__0000#r4",
+          "2022-10-02_2022-10-09__Execution__143.88.10.11__0000#r3",
+          "2022-10-09_2022-10-16__Execution|Resource Development__143.88.9.12__0006#r3",
+          "2022-09-25_2022-10-02__Initial Access__143.88.9.12__0001#r4",
+          "2022-09-18_2022-09-25__Resource Development__143.88.5.11__0000#r3",
+          "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0000#r3",
+          "2022-09-18_2022-09-25__Resource Development__143.88.5.11__0002#r4",
+          "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0001#r4",
+          "2022-09-18_2022-09-25__Resource Development__143.88.5.11__0005#r3",
+          "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0002#r4",
+          "2022-09-18_2022-09-25__Resource Development__143.88.5.11__0013#r4",
+          "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0003#r5",
+          "2022-09-18_2022-09-25__Resource Development__143.88.5.11__0016#r3",
+          "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0004#r3",
+          "2022-10-09_2022-10-16__Resource Development__143.88.5.11__0002#r3",
+          "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0007#r3",
+          "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0008#r4",
+          "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0009#r3",
+          "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0011#r4"
+        ],
+        "case_ids": [
+          "uwf_eva_sigiloso_0000",
+          "uwf_eva_sigiloso_0001",
+          "uwf_eva_sigiloso_0002",
+          "uwf_eva_sigiloso_0003",
+          "uwf_eva_sigiloso_0004",
+          "uwf_eva_sigiloso_0005",
+          "uwf_eva_sigiloso_0006",
+          "uwf_eva_sigiloso_0007",
+          "uwf_eva_sigiloso_0008",
+          "uwf_eva_sigiloso_0009",
+          "uwf_eva_sigiloso_0010",
+          "uwf_eva_sigiloso_0011",
+          "uwf_eva_sigiloso_0012",
+          "uwf_eva_sigiloso_0013",
+          "uwf_eva_sigiloso_0014",
+          "uwf_eva_sigiloso_0015",
+          "uwf_eva_sigiloso_0016",
+          "uwf_eva_sigiloso_0017",
+          "uwf_eva_sigiloso_0018",
+          "uwf_eva_sigiloso_0019",
+          "uwf_eva_sigiloso_0020",
+          "uwf_eva_sigiloso_0021",
+          "uwf_eva_sigiloso_0022",
+          "uwf_eva_sigiloso_0023",
+          "uwf_eva_sigiloso_0024",
+          "uwf_eva_sigiloso_0025",
+          "uwf_eva_sigiloso_0026",
+          "uwf_eva_sigiloso_0027",
+          "uwf_eva_sigiloso_0028",
+          "uwf_eva_sigiloso_0029",
+          "uwf_eva_sigiloso_0030",
+          "uwf_eva_sigiloso_0031",
+          "uwf_eva_sigiloso_0032",
+          "uwf_eva_sigiloso_0033",
+          "uwf_eva_sigiloso_0034",
+          "uwf_eva_sigiloso_0035",
+          "uwf_eva_sigiloso_0036",
+          "uwf_eva_sigiloso_0037",
+          "uwf_eva_sigiloso_0038",
+          "uwf_eva_sigiloso_0039"
+        ]
+      }
+    }
+  },
+  "uids_usados": 31200
+}

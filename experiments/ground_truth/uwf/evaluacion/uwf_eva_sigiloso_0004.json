@@ -1,0 +1,51 @@
+{
+  "case_id": "uwf_eva_sigiloso_0004",
+  "estado_dimension": {
+    "deteccion": "evaluable",
+    "reconstruccion": "evaluable",
+    "mitre": "evaluable",
+    "reporte": "referencia_pendiente",
+    "consumo": "evaluable"
+  },
+  "etiqueta_deteccion": "anomalo",
+  "etiqueta_original": "True",
+  "core_event_uids": [
+    "CVB9Kd2fWGqsArSpmg",
+    "CgaJHD1nX3hJTVHWyi",
+    "CfSFyT122OUWVSHAF6",
+    "CqCJ7n4TMdQi6ayvzc"
+  ],
+  "referencias_mitre": [
+    {
+      "nivel": "tactica",
+      "id": "Initial Access",
+      "nombre": null,
+      "evidence_uids": [
+        "CVB9Kd2fWGqsArSpmg",
+        "CgaJHD1nX3hJTVHWyi",
+        "CfSFyT122OUWVSHAF6",
+        "CqCJ7n4TMdQi6ayvzc"
+      ]
+    },
+    {
+      "nivel": "tecnica",
+      "id": "T1566",
+      "nombre": null,
+      "evidence_uids": [
+        "CVB9Kd2fWGqsArSpmg",
+        "CgaJHD1nX3hJTVHWyi",
+        "CfSFyT122OUWVSHAF6",
+        "CqCJ7n4TMdQi6ayvzc"
+      ]
+    }
+  ],
+  "rubrica_aplicada": false,
+  "rubrica_ref": null,
+  "anotacion": {
+    "fuente": "dataset",
+    "regla": "label_binary del dataset UWF, por uid; el caso es malicioso si contiene el incidente inyectado",
+    "incidente": "2022-09-25_2022-10-02__Initial Access__143.88.9.12__0001#r4",
+    "tactica_del_incidente": "Initial Access",
+    "aprobada": true
+  }
+}
