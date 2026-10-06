@@ -57,7 +57,7 @@ rehacen: no dependen del dataset.
 | 2 — Preparar datasets y casos con segmentación válida | PREPARADA_SIN_EJECUTAR (HDFS, BGL y UWF) | Sí (3-oct-2026) | `hallazgos_datasets.md`, `regenerar_uwf.md`; `src/experimentation/datasets/` (8 módulos); **336 casos + 336 referencias** y 5 manifiestos en `experiments/`; `requirements-experimentacion.txt`; 3 archivos de prueba (escritos, sin ejecutar) | `fb77559`, UWF en `d467486` | UWF requiere un motor Parquet (autorización de instalación); D-7 a D-10 |
 | 3 — Preparar ground truth y conocimiento aislado | PREPARADA_SIN_EJECUTAR, salvo el poblado de ChromaDB | Sí (4-oct-2026) | `anotacion_ground_truth.md`; `src/experimentation/knowledge/` (4 módulos) y `subconjuntos.py`; `estado_mitre_por_nivel` en las 336 referencias; `experiments/knowledge/inventario_conocimiento.json`; subconjuntos piloto (24) y rúbrica (24); 1 archivo de controles de aislamiento (escrito, sin ejecutar) | `114b32d` | Poblar la base vectorial del experimento requiere autorización (acción 6) |
 | 4 — Hacer evaluables las salidas de NODEX | PREPARADA_SIN_EJECUTAR, con **D2 y D3 bloqueadas por una decisión** | Sí (4-oct-2026) | `src/experimentation/adapters/` (4 módulos); extensión de contrato de agentes propuesta y **sin conectar**; 1 archivo de pruebas (escrito, sin ejecutar) | `192d181` | NODEX no produce reconstrucción ni atribución MITRE: ver §11 |
-| 5 — Implementar los evaluadores externos | PENDIENTE_AUTORIZACION | No | — | — | Rúbrica humana del reporte por definir |
+| 5 — Implementar los evaluadores externos | PREPARADA_SIN_EJECUTAR | Sí (5-oct-2026) | `src/experimentation/evaluators/` (8 módulos); fixtures con la aritmética hecha a mano (`tests/experimentation/fixtures/`); 1 archivo de pruebas (escrito, sin ejecutar) | (se registra abajo) | D-12: qué coeficiente de concordancia informar |
 | 6 — Preparar telemetría y configuración congelable | PENDIENTE_AUTORIZACION | No | — | — | — |
 | 7 — Preparar almacenamiento y orquestación sin ejecución | PENDIENTE_AUTORIZACION | No | — | — | — |
 | 8 — Implementar el agente único de comparación | PENDIENTE_AUTORIZACION | No | — | — | — |
@@ -320,3 +320,51 @@ consumo. Reconstrucción y atribución MITRE quedan declaradas como
 **capacidades no medidas**, con la razón, en los 336 casos.
 
 Es la decisión **D-11** y bloquea el cierre completo de la Fase 4.
+
+## 12. Evaluadores (Fase 5)
+
+Ocho módulos en `src/experimentation/evaluators/`, **ninguno ejecutado**: la
+acción 7 de la Fase 5 lo prohíbe expresamente. Por eso los valores esperados
+viven en `tests/experimentation/fixtures/metricas_esperadas.md`, con la
+aritmética escrita paso a paso, y en el `.json` que leen las pruebas.
+
+Verifiqué esa aritmética recalculándola de forma independiente, con fórmulas
+en línea y **sin importar los evaluadores**: 0 discrepancias sobre los 5
+grupos de fixtures.
+
+### El defecto de F1 que se corrige
+
+Fórmula nueva: `F1 = 2·TP / (2·TP + FP + FN)`.
+
+El evaluador anterior usaba `2·P·R/(P+R)` con la guarda
+`if precision and recall`. Como `0.0` es falso en Python, un conjunto con
+**TP=0, FP=6, FN=1** devolvía F1 indefinido cuando el valor correcto es
+**0,0**. Con la forma directa el único indefinido real es `2TP+FP+FN == 0`.
+
+Esto importa para leer la evidencia anterior: el informe de la fase 6 mostró
+como "no definido" algunos valores que eran ceros reales.
+
+### Separaciones que los evaluadores respetan
+
+| Separación | Por qué |
+|---|---|
+| Ningún evaluador importa `src.pipeline`, `src.agents` ni `src.graph` (verificado por AST) | Un evaluador que pudiera invocar al sistema podría evaluar una corrida nueva en vez de la guardada |
+| Micro y macro se informan los dos | Eligen distinto: si micro ≫ macro, el sistema acierta en los casos grandes y falla en los chicos |
+| Las corridas fallidas no entran en los promedios de consumo | Una corrida cortada consumió menos; incluirla haría parecer más eficiente a la arquitectura que falló más (en la fixture, 1 050 en vez de 1 500 tokens) |
+| Un `uid` inventado se cuenta aparte del falso positivo | Proponer un evento que no existe no es lo mismo que elegir mal un evento real |
+| Una subtécnica no se convierte en su técnica padre para acertar | Sería inferir la referencia, que el plan prohíbe |
+| Los resultados no se sobrescriben | Un informe que cita un resultado tiene que poder seguir citándolo |
+
+### Decisión nueva: D-12
+
+La concordancia entre evaluadores se informa con tres medidas simples y
+verificables a mano: acuerdo exacto, acuerdo hasta un nivel y diferencia
+absoluta media. **No se calcula ningún kappa.** Elegir el coeficiente
+(Cohen simple, ponderado lineal, ponderado cuadrático) es una decisión
+metodológica, y publicar uno calculado con una fórmula que nunca se ejecutó
+sería peor que no publicarlo.
+
+| # | Decisión | Fase que la necesita |
+|---|---|---|
+| D-11 | Si se extiende el contrato de salida de los agentes para habilitar D2 y D3 | 4 (bloquea su cierre completo) |
+| D-12 | Qué coeficiente de concordancia informar en D4, si alguno | 5 (interpretación final) |

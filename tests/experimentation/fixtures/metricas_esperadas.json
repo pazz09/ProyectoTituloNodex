@@ -1,0 +1,130 @@
+{
+  "_fuente": "tests/experimentation/fixtures/metricas_esperadas.md",
+  "_nota": "Valores calculados A MANO. Los evaluadores no se ejecutaron (Fase 5, accion 7). null significa indefinida por denominador cero, nunca cero.",
+  "deteccion": {
+    "f1_cero_no_indefinido": {
+      "_por_que": "escenario exacto que rompia el evaluador anterior: F1 debe ser 0, no indefinido",
+      "conteos": {"tp": 0, "fp": 6, "fn": 1, "tn": 13},
+      "esperado": {
+        "accuracy": 0.65,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "fpr": 0.3157894736842105,
+        "fnr": 1.0
+      }
+    },
+    "genuinamente_indefinido": {
+      "_por_que": "sin positivos reales ni predichos, F1 si es indefinido",
+      "conteos": {"tp": 0, "fp": 0, "fn": 0, "tn": 5},
+      "esperado": {
+        "accuracy": 1.0,
+        "precision": null,
+        "recall": null,
+        "f1": null,
+        "fpr": 0.0,
+        "fnr": null
+      }
+    },
+    "normal": {
+      "_por_que": "control positivo: la forma directa coincide con la media armonica",
+      "conteos": {"tp": 14, "fp": 3, "fn": 6, "tn": 27},
+      "esperado": {
+        "accuracy": 0.82,
+        "precision": 0.8235294117647058,
+        "recall": 0.7,
+        "f1": 0.7567567567567568,
+        "fpr": 0.1,
+        "fnr": 0.3
+      }
+    }
+  },
+  "conjuntos": {
+    "tres_casos": {
+      "casos": [
+        {"case_id": "A", "propuesto": ["u1", "u2", "u3"], "referencia": ["u1", "u2", "u4"],
+         "tp": 2, "fp": 1, "fn": 1, "coincide_exacto": false},
+        {"case_id": "B", "propuesto": ["u5"], "referencia": ["u5"],
+         "tp": 1, "fp": 0, "fn": 0, "coincide_exacto": true},
+        {"case_id": "C", "propuesto": [], "referencia": ["u6", "u7"],
+         "tp": 0, "fp": 0, "fn": 2, "coincide_exacto": false}
+      ],
+      "esperado": {
+        "conteos_totales": {"tp": 3, "fp": 1, "fn": 3},
+        "micro": {"precision": 0.75, "recall": 0.5, "f1": 0.6},
+        "macro": {
+          "precision": 0.8333333333333333,
+          "recall": 0.5555555555555555,
+          "f1": 0.5555555555555555
+        },
+        "exact_match": 0.3333333333333333,
+        "n_casos": 3,
+        "_nota_macro_precision": "promedia 2 valores y no 3: el caso C tiene precision indefinida y contarlo como 0 castigaria al sistema por no haber afirmado nada"
+      }
+    }
+  },
+  "rubrica": {
+    "un_reporte_dos_evaluadores": {
+      "puntuaciones": [
+        {"evaluador": "E1", "puntajes": {"completitud": 3, "correccion_factual": 2,
+          "coherencia_con_evidencia": 2, "claridad": 3, "informacion_no_sustentada": 3}},
+        {"evaluador": "E2", "puntajes": {"completitud": 2, "correccion_factual": 2,
+          "coherencia_con_evidencia": 0, "claridad": 3, "informacion_no_sustentada": 3}}
+      ],
+      "esperado": {
+        "por_criterio": {
+          "completitud": 2.5,
+          "correccion_factual": 2.0,
+          "coherencia_con_evidencia": 1.0,
+          "claridad": 3.0,
+          "informacion_no_sustentada": 3.0
+        },
+        "promedio_global": 2.3,
+        "n_reportes": 1,
+        "n_evaluadores": 2,
+        "concordancia": {
+          "reportes_con_dos_evaluadores": 1,
+          "reportes_con_un_evaluador": 0,
+          "n_comparaciones": 5,
+          "acuerdo_exacto": 0.6,
+          "acuerdo_hasta_un_nivel": 0.8,
+          "diferencia_absoluta_media": 0.6,
+          "n_desacuerdos_relevantes": 1
+        },
+        "desacuerdo_en": "coherencia_con_evidencia"
+      }
+    }
+  },
+  "consumo": {
+    "dos_completas_una_fallida": {
+      "corridas": [
+        {"estado": "completa", "telemetria": {"tokens_entrada": 1000, "latencia_total_s": 10.0}},
+        {"estado": "completa", "telemetria": {"tokens_entrada": 2000, "latencia_total_s": 30.0}},
+        {"estado": "error_api", "telemetria": {"tokens_entrada": 150, "latencia_total_s": 2.0}}
+      ],
+      "esperado": {
+        "n_corridas_completas": 2,
+        "n_por_estado_ejecucion": {"error_api": 1},
+        "tokens_entrada": {"media": 1500.0, "mediana": 1500.0, "min": 1000.0,
+                           "max": 2000.0, "total": 3000.0, "n": 2},
+        "latencia_total_s": {"media": 20.0, "mediana": 20.0, "min": 10.0,
+                             "max": 30.0, "total": 40.0, "n": 2},
+        "_nota": "incluir la fallida daria 1050.0 de media en tokens_entrada, un 30% menos: la arquitectura que falla mas pareceria la mas eficiente"
+      }
+    }
+  },
+  "contabilidad": {
+    "veinte_casos": {
+      "estados": {"evaluable": 14, "no_aplica": 2, "referencia_pendiente": 1,
+                  "fallido": 2, "no_evaluable": 1},
+      "esperado": {
+        "n_casos": 20,
+        "n_evaluables": 14,
+        "n_por_estado": {"no_aplica": 2, "referencia_pendiente": 1,
+                         "fallido": 2, "no_evaluable": 1},
+        "suma_verificada": 20,
+        "matriz_debe_sumar": 14
+      }
+    }
+  }
+}
