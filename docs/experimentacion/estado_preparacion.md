@@ -718,3 +718,133 @@ más se deja de leer, y entonces no sirve.
 | Integración externa de D-11 → Fase D | Proceso externo |
 | Ejecutar el piloto N=1 (168 llamadas), **después** de la Fase D | Decisión de la autora |
 | HDFS con N=3 | Se decide después del piloto principal |
+
+## 17. Fase D: integración de D-11 (7-oct-2026)
+
+D-11 llegó en `9cac64f` (Felipe Bravo Romo), contrato `d11-v1`. Se integró a
+esta rama resolviendo el conflicto **a favor del núcleo**, y la capa
+experimental se adaptó a él.
+
+### El bloqueante que se encontró y se resolvió
+
+`CRONOLOGIA_MAX_EVENTOS` valía **40**: la evidencia citable eran los primeros
+40 registros del lote. Medido sobre los 104 casos de UWF, que tienen 300
+registros con el incidente insertado en el 70% central:
+
+| | Antes (40) | Ahora (300) |
+|---|---|---|
+| Casos positivos con **algún** evento del incidente en la ventana | **0 de 52** | **52 de 52** |
+| Posición del primer evento del incidente | mín. 49, mediana 139 | — |
+
+Con 40, D2 y D3 eran **estructuralmente imposibles** en UWF y D1 quedaba
+degradado: el agente solo veía tráfico benigno. El resultado se habría leído
+como que NODEX no detecta nada, cuando la restricción era de posición.
+
+Decisión del 7-oct-2026: subir a 300 y **no** tocar los casos. Prioriza
+mantener la dificultad original del escenario, a costa de ~18 000 tokens de
+entrada más por llamada en un caso de UWF (estimado por conteo de
+caracteres, no medido).
+
+### Qué se adaptó, y un error que habría pasado desapercibido
+
+**El matching de D2 va por `evidence_uids`, no por `event_id`.** Es la
+diferencia que decide si D2 mide algo:
+
+- `evidence_uids` se valida contra el catálogo de evidencia, indexado por el
+  `uid` real del registro —el de Zeek en UWF—. Los inventados se descartan y
+  se cuentan en `invalid_evidence_uid_count`.
+- `event_id` es la etiqueta que el sistema le pone al evento, y
+  `normalizar_d11` la reemplaza por una sintética (`event_001`) si falta **o
+  si colisiona con un uid**.
+
+Mi versión inicial leía `event_id`. No habría fallado con error: habría
+comparado etiquetas contra uids y dado recall 0 en todos los casos. Lo
+detectó la lectura de `normalizar_d11`, no una prueba.
+
+**Nombres del contrato**: `technique_id` / `technique_name`, no `id`.
+Leer `id` habría dado una lista vacía en silencio.
+
+**D3 solo a nivel técnica.** `TecnicaAtribuida` no lleva nivel, y la decisión
+fija el scoring en `label_technique` y los identificadores `Txxxx` /
+`Txxxx.xxx`. `label_tactic` queda como información complementaria del
+dataset y no entra. El contrato D-11 **no** se extiende para tácticas.
+
+### Pseudo-ablación: Gemini externo, no el agente único integrado
+
+La comparación del proyecto es una pseudo-ablación **declarada**:
+
+    NODEX completo                 VERSUS   Gemini directo
+      + arquitectura                          + un único prompt
+      + RAG                                   + sin arquitectura
+      + herramientas                          + sin herramientas
+      + coordinación                          + sin estado LangGraph
+
+La pregunta es *"¿qué diferencia hay entre usar NODEX como sistema completo y
+usar el modelo directamente?"*, **no** *"¿qué aporta la división en agentes
+manteniendo todo lo demás constante?"*.
+
+Consecuencia: se retiró `runners/agente_unico.py`, que replicaba el contexto
+de NODEX y le daba el mismo RAG — eso contradecía el diseño. En su lugar,
+`runners/gemini_externo.py`: cliente propio (no `src/llm.py`, que arrastra
+instrumentación, fallback y reintentos), log **crudo** del caso, un solo
+prompt, sin RAG ni herramientas, mismo modelo y temperatura. Si un caso
+excede el tope de caracteres **falla** en vez de recortarse: recortar en
+silencio haría que Gemini viera menos caso que NODEX.
+
+`src/single_agent.py` sigue en el sistema y no se toca; la campaña
+simplemente no lo usa como implementación experimental principal.
+
+### Telemetría: se retiró la mía en favor de la de D-11
+
+`src/telemetria_llm.py` se eliminó y `src/llm.py` quedó **byte a byte igual**
+al de `origin/main`. La telemetría la produce ahora el propio sistema:
+`analizar_lote()` envuelve el grafo en `medir_ejecucion()` y deja el resumen
+en `estado["telemetry"]`.
+
+Su versión tiene algo que la mía no tenía, y era un error mío:
+`resumen_telemetria` **acumula `intentos_correccion` a través de
+`historial_planes`**, no solo el del estado final. Tras un replan, mi versión
+habría subcontado. Verificado: con 1 en el estado y 3 en el historial,
+devuelve 4.
+
+Dos huecos de su versión quedan **reportados y no parcheados**, porque
+`src/telemetry.py` es del núcleo:
+
+1. **No registra las llamadas fallidas ni el error.** `registrar_consumo`
+   solo corre en el camino de éxito.
+2. **No guarda el modelo solicitado**, solo el efectivo, así que no detecta
+   el fallback de modelo — que con `gemini-3.1-pro-preview` deprecado es un
+   riesgo vivo.
+
+Y un criterio a revisar, no un bug: los totales son todo-o-nada
+(`all(c[k] is not None)`). Un solo 503 transitorio deja los tokens de **toda**
+la corrida en `None`, perdiendo el consumo medido de las llamadas exitosas.
+
+### Campaña: NODEX + baseline
+
+La pseudo-ablación es un procedimiento **separado**, así que la campaña
+automatizada ya no exige el agente único en toda corrida. El piloto baja de
+72 a **48 corridas** y de 168 a **144 llamadas** (piso).
+
+### Las siete verificaciones del §7
+
+Corridas el 7-oct-2026 sobre un estado sintético con la forma de `d11-v1`.
+**0 fallos.** No se ejecutó NODEX ni se llamó al modelo.
+
+| # | Verificación | Resultado |
+|---|---|---|
+| 1 | Los 300 registros son accesibles | `CRONOLOGIA_MAX_EVENTOS=300`; **52/52** casos positivos con el incidente completo dentro |
+| 2 | D2 y D3 llegan al adaptador | evaluables; técnica leída; atribución sin evidencia descartada; candidata del RAG en `_meta` |
+| 3 | `evidence_uids` comparables con el ground truth | matching exacto por uid: tp/fp/fn = 1/1/1 |
+| 4 | `tecnicas_atribuidas` vs `label_technique` | coincide; 22 técnicas en el vocabulario del dataset, 0 subtécnicas |
+| 5 | Sin acceso a ground truth en inferencia | solo `_cargar_referencia` arma la ruta; ningún runner la arma; el adaptador no la recibe |
+| 6 | Telemetría con `d11-v1` | D-11 detectado; `intentos_correccion` acumulado = 4; tokens `None` sin llamadas |
+| 7 | Persistencia y evaluación | `run_id` de `gemini_externo` válido; campaña = NODEX + baseline; plan en seco sin ejecutar |
+
+### Lo que falta
+
+| Pendiente | Quién |
+|---|---|
+| Ejecutar el piloto N=1: **48 corridas, 144 llamadas** | Autorización de la autora |
+| Los dos huecos de `src/telemetry.py` | Decisión sobre si se parchean en el núcleo |
+| HDFS con N=3 | Se decide después del piloto principal |

@@ -316,7 +316,20 @@ LOG_NORMALIZATION_SCHEMA_VERSION = os.environ.get("LOG_NORMALIZATION_SCHEMA_VERS
 # conteos y distribuciones siguen calculándose sobre el lote completo, y lo
 # que se recorta queda declarado en `cronologia_omitidos`. Con 40 entradas
 # el JSON del historial y la sección del PDF se mantienen legibles.
-CRONOLOGIA_MAX_EVENTOS = _env_int("CRONOLOGIA_MAX_EVENTOS", 40)
+# Subido de 40 a 300 el 7-oct-2026 (AJUSTES_FASE_D_NODEX.md §1).
+#
+# Con 40, la evidencia citable eran los primeros 40 registros del lote.
+# Medido sobre los 104 casos de UWF (300 registros cada uno, con el
+# incidente insertado en el 70% central): en 52 de 52 casos positivos
+# NINGUN evento del incidente caia dentro de esos 40. El primero
+# aparecia en la posicion 49 como minimo, mediana 139. D2 y D3 eran
+# estructuralmente imposibles y D1 quedaba degradado, no por el
+# sistema sino por una restriccion de posicion.
+#
+# La decision prioriza mantener la dificultad original del escenario,
+# aun a costa de mas tokens de entrada (~18.000 por llamada en un caso
+# de UWF, estimados por conteo de caracteres).
+CRONOLOGIA_MAX_EVENTOS = _env_int("CRONOLOGIA_MAX_EVENTOS", 300)
 
 LOG_MAX_FILE_BYTES = _env_int("LOG_MAX_FILE_BYTES", 52428800)   # 50 MiB
 LOG_MAX_EVENTS = _env_int("LOG_MAX_EVENTS", 100000)

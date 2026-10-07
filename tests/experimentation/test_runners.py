@@ -19,7 +19,7 @@ from pathlib import Path
 
 import pytest
 
-from src.experimentation.runners import agente_unico, baseline, nodex
+from src.experimentation.runners import baseline, gemini_externo, nodex
 
 RAIZ = Path(__file__).resolve().parents[2]
 #: El checkout de producción, donde viven `src/pipeline.py` y los agentes.
@@ -28,7 +28,7 @@ RAIZ_PRODUCCION = RAIZ.parent / "NODEX"
 
 # --- ninguna arquitectura ve el ground truth ----------------------------
 
-@pytest.mark.parametrize("modulo", [nodex, agente_unico, baseline])
+@pytest.mark.parametrize("modulo", [nodex, gemini_externo, baseline])
 def test_ninguna_funcion_del_runner_recibe_ground_truth(modulo):
     prohibidos = {"ground_truth", "referencia", "etiqueta",
                   "etiqueta_deteccion", "core_event_uids", "referencias_mitre"}
@@ -39,7 +39,7 @@ def test_ninguna_funcion_del_runner_recibe_ground_truth(modulo):
         assert not prohibidos & parametros, f"{nombre}: {prohibidos & parametros}"
 
 
-@pytest.mark.parametrize("modulo", [nodex, agente_unico, baseline])
+@pytest.mark.parametrize("modulo", [nodex, gemini_externo, baseline])
 def test_los_tres_runners_leen_el_caso_con_la_misma_firma(modulo):
     """Si recibieran entradas distintas, la comparación entre arquitecturas
     mediría la entrada y no la arquitectura."""
@@ -47,7 +47,7 @@ def test_los_tres_runners_leen_el_caso_con_la_misma_firma(modulo):
     assert parametros == ["raiz_repo", "dataset", "particion", "case_id"]
 
 
-@pytest.mark.parametrize("modulo", [nodex, agente_unico, baseline])
+@pytest.mark.parametrize("modulo", [nodex, gemini_externo, baseline])
 def test_cargar_caso_no_construye_ninguna_ruta_al_ground_truth(modulo):
     """Verifica el invariante, no el docstring.
 
@@ -96,50 +96,61 @@ def test_una_prediccion_ausente_del_baseline_deja_la_deteccion_no_evaluable():
     assert estados["deteccion"] == "no_evaluable"
 
 
-# --- agente único --------------------------------------------------------
+# --- Gemini externo (pseudo-ablación) ----------------------------------
 
-def test_el_agente_unico_pide_las_mismas_claves_que_produce_nodex():
-    """Así el MISMO adaptador sirve para las dos arquitecturas. Dos
-    adaptadores podrían diferir en cómo interpretan un veredicto ausente, y
-    esa diferencia se confundiría con una diferencia entre arquitecturas."""
-    instruccion = agente_unico.INSTRUCCION_SISTEMA
-    for clave in ("diagnostico", "hay_anomalia", "hay_incidente", "confianza",
-                  "evaluacion_auditor", "comandos_mitigacion"):
-        assert f'"{clave}"' in instruccion, clave
-
-
-def test_el_agente_unico_distingue_anomalia_de_incidente():
-    """Comparar `hay_incidente` contra etiquetas de anomalía de sistema mide
-    la pregunta equivocada; en este proyecto ya dio recall 0,0 por eso."""
-    instruccion = agente_unico.INSTRUCCION_SISTEMA
-    assert "ANOMALÍA DE SISTEMA" in instruccion
-    assert "INCIDENTE DE SEGURIDAD" in instruccion
+def test_el_gemini_externo_no_usa_rag_ni_herramientas_y_lo_declara():
+    """No es un defecto: es el diseño. La comparación del proyecto es una
+    pseudo-ablación declarada —sistema completo contra modelo desnudo—, no
+    una ablación de una sola variable."""
+    codigo = inspect.getsource(gemini_externo)
+    assert "tool_consultar_rag" not in codigo
+    assert "tool_consultar_cve" not in codigo
+    assert "sin_rag" in codigo
 
 
-def test_el_contrato_de_d11_sigue_marcado_como_pendiente():
-    """El texto lo define la implementación externa. Rellenarlo acá sería
-    duplicar una implementación que no es de este módulo."""
-    assert agente_unico.contrato_d11_pendiente() is True
-    assert agente_unico.MARCADOR_CONTRATO_D11 in agente_unico.INSTRUCCION_SISTEMA
+def test_el_gemini_externo_no_usa_el_cliente_llm_de_nodex():
+    """`src/llm.py` arrastra la instrumentación, el fallback de modelo y los
+    reintentos de NODEX. La pseudo-ablación quiere el modelo desnudo."""
+    arbol = ast.parse(inspect.getsource(gemini_externo))
+    modulos = {
+        nodo.module for nodo in ast.walk(arbol)
+        if isinstance(nodo, ast.ImportFrom) and nodo.module
+    }
+    assert "src.llm" not in modulos
+    assert not any(m.startswith("src.tools") for m in modulos)
 
 
-def test_el_agente_unico_replica_el_camino_de_entrada_del_pipeline():
-    """Incluye las muestras crudas y `incluir_muestras=True`: sin eso vería
-    menos que NODEX y la comparación estaría sesgada a favor del
-    multiagente."""
-    codigo = inspect.getsource(agente_unico.construir_entrada)
-    assert "_metadatos_desde_v2" in codigo
-    assert "incluir_muestras=True" in codigo
-    assert "preprocesar_lote" in codigo
+def test_el_gemini_externo_usa_el_mismo_modelo_y_temperatura():
+    """Lo que se compara es el sistema, no el proveedor."""
+    codigo = inspect.getsource(gemini_externo.ejecutar)
+    assert "LLM_MODEL_PRIMARY" in codigo
+    assert "TEMPERATURE" in codigo
 
 
-def test_el_agente_unico_consulta_el_mismo_rag():
-    """Con el mismo acceso al conocimiento, la diferencia medida es la
-    arquitectura y no el conocimiento disponible."""
-    codigo = inspect.getsource(agente_unico.ejecutar)
-    assert "tool_consultar_rag" in codigo
-    # El RAG exige `state["firma"]` y lanza KeyError si falta.
-    assert "firma" in codigo
+def test_el_gemini_externo_pide_los_campos_del_contrato_d11():
+    """Con los nombres de `d11-v1` y no con otros: dos vocabularios
+    obligarían a traducir un lado, con riesgo de traducir mal."""
+    instruccion = gemini_externo.INSTRUCCION_SISTEMA
+    for clave in ("event_id", "evidence_uids", "technique_id",
+                  "eventos_reconstruidos", "tecnicas_atribuidas",
+                  "secuencia_temporal"):
+        assert clave in instruccion, clave
+
+
+def test_un_caso_demasiado_grande_falla_en_vez_de_recortarse():
+    """Recortar en silencio haría que Gemini viera menos caso que NODEX."""
+    codigo = inspect.getsource(gemini_externo.ejecutar)
+    assert "no se recorta" in codigo
+    assert gemini_externo.MAX_CARACTERES_PROMPT > 100_000
+
+
+def test_el_gemini_externo_no_informa_replan_ni_correccion():
+    """No hay grafo que replanifique ni comandos que corregir. Van `None` y
+    no 0, porque 0 afirmaría que hubo cero replanificaciones en un sistema
+    que no replanifica."""
+    codigo = inspect.getsource(gemini_externo.ejecutar)
+    assert '"replan_count": None' in codigo
+    assert '"intentos_correccion": None' in codigo
 
 
 # --- NODEX ---------------------------------------------------------------

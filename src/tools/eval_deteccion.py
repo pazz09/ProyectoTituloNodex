@@ -121,6 +121,7 @@ from src.config import (
     TEMPERATURE,
 )
 from src.pipeline import analizar_lote
+from src.output_contract import OUTPUT_CONTRACT_VERSION, campos_d11, normalizar_salida_experimental
 from src.preprocessing.pipeline import PreprocesamientoError
 from src.tools.provenance import procedencia_archivos, procedencia_ejecucion
 
@@ -350,7 +351,14 @@ def correr_evaluacion(
     lineas_por_lote: int,
     labels_csv: str | None = None,
     prop_positivos: float = 0.5,
+    arquitectura: str = "multiagente",
 ) -> dict:
+    if arquitectura not in ("multiagente", "agente_unico"):
+        raise ValueError(f"arquitectura desconocida: {arquitectura!r}")
+    analizar = analizar_lote
+    if arquitectura == "agente_unico":
+        from src.single_agent import analizar_lote_agente_unico
+        analizar = analizar_lote_agente_unico
     if dataset == "bgl":
         if prop_positivos != 0.5:
             print("   ⚠️ --prop-positivos no aplica a BGL (los lotes son ventanas contiguas "
@@ -388,7 +396,7 @@ def correr_evaluacion(
         # Se registra como error, con su mensaje, y `_metricas()` lo excluye
         # explícitamente de la matriz de confusión.
         try:
-            estado = analizar_lote(lote["texto"], thread_id=f"eval_{lote['id']}")
+            estado = analizar(lote["texto"], thread_id=f"eval_{lote['id']}")
         except PreprocesamientoError as e:
             dt = time.time() - t0
             print(f"   ⚠️ Lote falló al preprocesar ({dt:.1f}s): {e}")
@@ -405,6 +413,7 @@ def correr_evaluacion(
         if error_estado:
             print(f"   ⚠️ Lote sin veredicto evaluable ({dt:.1f}s): {error_estado}")
             resultados.append({
+                **campos_d11(estado),
                 "id": lote["id"],
                 "ground_truth": lote["ground_truth"],
                 "estado": "error",
@@ -420,6 +429,8 @@ def correr_evaluacion(
               f"confianza={confianza:.2f} -> predicción={prediccion} "
               f"({'acierto' if acierto else 'ERROR'}, {dt:.1f}s)")
         resultados.append({
+            **campos_d11(estado),
+            "output_normalizado": normalizar_salida_experimental(estado),
             "id": lote["id"],
             "ground_truth": lote["ground_truth"],
             "estado": "completo",
@@ -435,6 +446,8 @@ def correr_evaluacion(
 
     metricas = _metricas(resultados)
     salida = {
+        "output_contract_version": OUTPUT_CONTRACT_VERSION,
+        "arquitectura": arquitectura,
         "dataset": dataset,
         "n_lotes": len(lotes),
         "lineas_por_lote": lineas_por_lote,
@@ -454,7 +467,8 @@ def correr_evaluacion(
         "resultados": resultados,
     }
     _RESULTS_DIR.mkdir(exist_ok=True)
-    destino = _RESULTS_DIR / f"eval_deteccion_{dataset}_{int(time.time())}.json"
+    sufijo = "_agente_unico" if arquitectura == "agente_unico" else ""
+    destino = _RESULTS_DIR / f"eval_deteccion_{dataset}{sufijo}_{int(time.time())}.json"
     destino.write_text(json.dumps(salida, ensure_ascii=False, indent=2), encoding="utf-8")
 
     print(f"\n{'=' * 60}")
@@ -469,6 +483,7 @@ def correr_evaluacion(
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--dataset", choices=["hdfs", "bgl"], required=True)
+    ap.add_argument("--arquitectura", choices=["multiagente", "agente_unico"], default="multiagente")
     ap.add_argument("--n-lotes", type=int, default=20, help="Cantidad total de lotes a evaluar (default 20)")
     ap.add_argument("--lineas-por-lote", type=int, default=120, help="Tamaño aproximado de cada lote (default 120)")
     ap.add_argument("--labels", type=str, default=None, help="Ruta al CSV de labels (obligatorio para --dataset hdfs)")
@@ -479,4 +494,5 @@ if __name__ == "__main__":
              "(69/2200 block_id) -- pasar ese valor para un reporte con prevalencia realista.",
     )
     args = ap.parse_args()
-    correr_evaluacion(args.dataset, args.n_lotes, args.lineas_por_lote, args.labels, args.prop_positivos)
+    correr_evaluacion(args.dataset, args.n_lotes, args.lineas_por_lote, args.labels, args.prop_positivos,
+                     arquitectura=args.arquitectura)

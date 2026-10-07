@@ -66,6 +66,7 @@ un único booleano.
 """
 
 from src.llm import llm_json
+from src.output_contract import PROMPT_D11, contexto_d11, normalizar_d11
 from src.preprocessing.prompt_context import contexto_preprocesamiento
 from src.state import LogGuardState
 
@@ -99,6 +100,7 @@ def agente_auditor_final(state: LogGuardState) -> dict:
         '"hay_incidente": true/false, "evaluacion": "...", '
         '"cobertura_auditor": true/false, "motivo_cobertura": "..."}'
     )
+    sys_instruction += PROMPT_D11
     # La calidad de la evidencia depende de cuánto del lote se entendió: un
     # diagnóstico sobre un lote con 30 % de cobertura no merece la misma
     # confianza que uno sobre un lote completamente decodificado. Sin este
@@ -115,7 +117,13 @@ def agente_auditor_final(state: LogGuardState) -> dict:
         + (f"\n\n{contexto_pre}" if contexto_pre else "")
     )
 
+    user_content += contexto_d11(state)
     respuesta = llm_json(user_content, system=sys_instruction)
+    d11 = normalizar_d11(respuesta, state.get("evidencia_logs"))
+    d11["invalid_evidence_uid_count"] += state.get("invalid_evidence_uid_count", 0) or 0
+    d11["d11_warnings"] = list(state.get("d11_warnings") or []) + d11["d11_warnings"]
+    if not isinstance(respuesta, dict):
+        respuesta = {}
     try:
         confianza = float(respuesta.get("confianza", 0.5))
     except Exception:
@@ -166,6 +174,7 @@ def agente_auditor_final(state: LogGuardState) -> dict:
     print(f"   → Confianza final: {confianza:.2f} | hay_anomalia={hay_anomalia} | "
           f"hay_incidente={hay_incidente} | cobertura_suficiente={cobertura_suficiente} | {evaluacion}")
     return {
+        **d11,
         "confianza": confianza,
         "hay_anomalia": hay_anomalia,
         "hay_incidente": hay_incidente,

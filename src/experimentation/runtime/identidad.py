@@ -29,12 +29,13 @@ from src.experimentation.contracts.enums import ARQUITECTURAS, DATASETS
 #: cortos para que el identificador quepa en un nombre de archivo.
 ABREVIATURA_ARQUITECTURA = {
     "nodex_multiagente": "nodex",
+    "gemini_externo": "gemext",
     "agente_unico": "unico",
     "baseline_reglas": "reglas",
 }
 
 _RUN_ID = re.compile(
-    r"^(?P<case_id>[a-z0-9_]+)__(?P<arquitectura>nodex|unico|reglas)"
+    r"^(?P<case_id>[a-z0-9_]+)__(?P<arquitectura>nodex|gemext|unico|reglas)"
     r"__r(?P<repeticion>\d+)__(?P<sufijo>[0-9a-f]{8})$"
 )
 

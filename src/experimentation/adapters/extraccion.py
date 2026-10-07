@@ -99,110 +99,163 @@ def extraer_candidatas_mitre(estado: dict) -> list[MitreCandidate]:
 def extraer_atribuciones_mitre(
     estado: dict,
 ) -> tuple[list[MitreItem], list[MitreItem], dict]:
-    """Técnicas y tácticas que el sistema **atribuye al caso**.
+    """Técnicas que el sistema **atribuye al caso**, del contrato `d11-v1`.
 
-    Devuelve `(tacticas, tecnicas, diagnostico)`, donde `diagnostico` son
-    metadatos sobre por qué la lista puede estar vacía.
+    Devuelve `(tacticas, tecnicas, diagnostico)`.
 
-    Hoy NODEX no produce atribuciones estructuradas. El agente de triage
-    recibe la instrucción de *citar* IDs de técnica dentro del texto libre
-    de `diagnostico` (`agente_analista_triage.py:71`), sin campo propio y
-    sin evidencia asociada. Una atribución sin `evidence_uids` no es
-    puntuable según el protocolo, así que los IDs citados en prosa **no** se
-    devuelven como atribuciones: se registran aparte, como señal de que la
-    capacidad existe en alguna forma.
+    Lee `tecnicas_atribuidas`, con los nombres del contrato:
+    `technique_id`, `technique_name`, `evidence_uids`, `justification`.
+    **No** `id` ni `nivel`: esos eran los nombres de una propuesta anterior
+    que quedó superada, y leerlos daría una lista vacía en silencio.
 
-    Si el estado trae el campo estructurado `tecnicas_atribuidas` —que es la
-    extensión propuesta en `contrato_agentes.py`— se usa ese.
+    ## Solo nivel técnica
+
+    `TecnicaAtribuida` no tiene nivel, y la decisión del 7-oct-2026 fija el
+    scoring principal de D3 en `label_technique` y los identificadores
+    `Txxxx` / `Txxxx.xxx`. `label_tactic` queda como información
+    complementaria del dataset y **no** entra al scoring, así que la lista de
+    tácticas va siempre vacía y el nivel de táctica se informa como no
+    aplicable, no como fallo del sistema.
+
+    ## Una atribución sin evidencia no cuenta
+
+    `normalizar_d11` ya descarta las que no citan evidencia válida, pero acá
+    se vuelve a verificar: el evaluador no debe confiar en que la capa
+    anterior filtró bien.
     """
     tacticas: list[MitreItem] = []
     tecnicas: list[MitreItem] = []
-    diagnostico: dict = {}
+    diagnostico: dict = {
+        "fuente": "contrato_d11",
+        "nivel_tactica": "no_aplica",
+        "motivo_nivel_tactica": (
+            "el contrato d11-v1 no lleva nivel y la decisión del 7-oct-2026 "
+            "fija el scoring de D3 en label_technique; label_tactic queda "
+            "como información complementaria"
+        ),
+    }
 
-    estructuradas = estado.get("tecnicas_atribuidas")
-    if isinstance(estructuradas, list) and estructuradas:
-        for item in estructuradas:
-            if not isinstance(item, dict) or not item.get("id"):
-                continue
-            evidencias = tuple(
-                str(u) for u in (item.get("evidence_uids") or [])
-            )
-            if not evidencias:
-                # Se conserva, pero fuera de las atribuciones puntuables.
-                diagnostico.setdefault("atribuciones_sin_evidencia", []).append(
-                    str(item["id"])
-                )
-                continue
-            destino = tacticas if item.get("nivel") == "tactica" else tecnicas
-            destino.append(MitreItem(
-                id=str(item["id"]),
-                name=item.get("name"),
-                evidence_uids=evidencias,
-                nivel=item.get("nivel") or "tecnica",
-            ))
-        diagnostico["fuente"] = "campo_estructurado"
-        return tacticas, tecnicas, diagnostico
+    atribuidas = estado.get("tecnicas_atribuidas")
+    if not isinstance(atribuidas, list):
+        diagnostico["motivo"] = (
+            "el estado no trae `tecnicas_atribuidas` como lista"
+        )
+        return [], [], diagnostico
 
-    # Camino de hoy: IDs citados en prosa, sin evidencia.
-    texto = " ".join(
-        str(estado.get(campo) or "")
-        for campo in ("diagnostico", "evaluacion_auditor")
+    sin_evidencia: list[str] = []
+    for item in atribuidas:
+        if not isinstance(item, dict):
+            continue
+        identificador = item.get("technique_id")
+        if not isinstance(identificador, str) or not identificador.strip():
+            continue
+        identificador = identificador.strip()
+        evidencias = tuple(
+            str(u) for u in (item.get("evidence_uids") or []) if u
+        )
+        if not evidencias:
+            sin_evidencia.append(identificador)
+            continue
+        tecnicas.append(MitreItem(
+            id=identificador,
+            name=item.get("technique_name"),
+            evidence_uids=evidencias,
+            nivel="tecnica",
+        ))
+
+    diagnostico["atribuciones_sin_evidencia"] = sorted(sin_evidencia)
+    diagnostico["n_atribuidas"] = len(tecnicas)
+    # Conteo que produce `normalizar_d11` al descartar uids inventados. Es
+    # una señal de calidad de la atribución, no un error de ejecución.
+    diagnostico["invalid_evidence_uid_count"] = estado.get(
+        "invalid_evidence_uid_count"
     )
-    citados = sorted(set(_ID_TECNICA.findall(texto)))
-    diagnostico["fuente"] = "prosa_sin_evidencia"
-    diagnostico["ids_citados_en_prosa"] = citados
-    diagnostico["motivo"] = (
-        "NODEX no produce atribuciones MITRE estructuradas: el agente de "
-        "triage cita IDs dentro del texto de `diagnostico` y no hay "
-        "evidence_uids. Una atribución sin evidencia no es puntuable, así "
-        "que la dimensión queda no evaluable"
-    )
-    return [], [], diagnostico
+    diagnostico["d11_warnings"] = list(estado.get("d11_warnings") or [])
+    return tacticas, tecnicas, diagnostico
 
 
 def extraer_reconstruccion(
     estado: dict,
 ) -> tuple[list[ReconstructedEvent], tuple[str, ...], dict]:
-    """Eventos que el sistema **reconstruye** como núcleo del incidente.
+    """Eventos que el sistema reconstruye, del contrato `d11-v1`.
 
     Devuelve `(eventos, secuencia_temporal, diagnostico)`.
 
-    Hoy NODEX no produce ninguno. Lo único parecido es la cronología que
-    arma el preprocesamiento, que es determinística y no es una afirmación
-    del sistema: entregarla como reconstrucción mediría al preprocesador.
-    Por eso se devuelve vacío con el motivo, y la cronología viaja en
-    `_meta`.
-    """
-    estructurada = estado.get("eventos_reconstruidos")
-    if isinstance(estructurada, list) and estructurada:
-        eventos = []
-        for item in estructurada:
-            if not isinstance(item, dict):
-                continue
-            eventos.append(ReconstructedEvent(
-                uid=(str(item["uid"]) if item.get("uid") else None),
-                timestamp=item.get("timestamp"),
-                entities=tuple(str(e) for e in (item.get("entities") or ())),
-                event_type=item.get("event_type") or item.get("tipo"),
-                evidence_uids=tuple(
-                    str(u) for u in (item.get("evidence_uids") or ())
-                ),
-            ))
-        # La secuencia solo puede citar uids que existan entre los eventos.
-        uids = {e.uid for e in eventos if e.uid}
-        secuencia = tuple(
-            str(u) for u in (estado.get("secuencia_temporal") or ())
-            if str(u) in uids
-        )
-        return eventos, secuencia, {"fuente": "campo_estructurado"}
+    ## Cuál es la clave de matching
 
-    return [], (), {
-        "fuente": "ausente",
-        "motivo": (
-            "NODEX no produce eventos reconstruidos. La cronología de "
-            "`resumen_logs` la arma el preprocesamiento sin LLM, así que no "
-            "es la reconstrucción del sistema y no se usa como tal"
-        ),
+    **`evidence_uids`, no `event_id`.** Es la diferencia que decide si D2
+    mide algo:
+
+    - `evidence_uids` se valida contra el catálogo de evidencia, que está
+      indexado por el `uid` real del registro —el `uid` de Zeek en UWF—.
+      Los inventados se descartan y se cuentan en
+      `invalid_evidence_uid_count`.
+    - `event_id` es la etiqueta que el propio sistema le pone al evento
+      reconstruido, y `normalizar_d11` la reemplaza por una sintética
+      (`event_001`) si falta **o si colisiona con un uid de evidencia**.
+
+    Así que comparar `event_id` contra `core_event_uids` no coincidiría con
+    nada. El conjunto que se compara es la **unión de los `evidence_uids`**
+    de todos los eventos reconstruidos.
+
+    ## La cronología del preprocesamiento sigue sin ser la reconstrucción
+
+    `resumen_logs["cronologia"]` la arma `src/preprocessing/aggregation.py`
+    sin LLM. Entregarla como `reconstructed_events` haría que D2 midiera al
+    preprocesador mientras el informe dice que mide al sistema multiagente.
+    Viaja en `_meta`, etiquetada.
+    """
+    reconstruidos = estado.get("eventos_reconstruidos")
+    if not isinstance(reconstruidos, list) or not reconstruidos:
+        return [], (), {
+            "fuente": "ausente",
+            "motivo": (
+                "el estado no trae `eventos_reconstruidos`. Con el contrato "
+                "d11-v1 integrado, una lista vacía significa que el sistema "
+                "no reconstruyó nada, no que falte el campo"
+            ),
+            "campo_presente": isinstance(reconstruidos, list),
+        }
+
+    eventos: list[ReconstructedEvent] = []
+    uids_de_evidencia: list[str] = []
+    for item in reconstruidos:
+        if not isinstance(item, dict):
+            continue
+        evidencias = tuple(
+            str(u) for u in (item.get("evidence_uids") or []) if u
+        )
+        for uid in evidencias:
+            if uid not in uids_de_evidencia:
+                uids_de_evidencia.append(uid)
+        eventos.append(ReconstructedEvent(
+            # `uid` del contrato común guarda el `event_id` del sistema, que
+            # es su etiqueta; la clave de matching son las evidencias.
+            uid=(str(item["event_id"]) if item.get("event_id") else None),
+            timestamp=item.get("timestamp"),
+            entities=(),
+            event_type=item.get("event_type"),
+            evidence_uids=evidencias,
+        ))
+
+    # La secuencia solo puede citar `event_id` que existan entre los eventos.
+    etiquetas = {e.uid for e in eventos if e.uid}
+    secuencia = tuple(
+        str(u) for u in (estado.get("secuencia_temporal") or [])
+        if str(u) in etiquetas
+    )
+    descartados = [
+        str(u) for u in (estado.get("secuencia_temporal") or [])
+        if str(u) not in etiquetas
+    ]
+    return eventos, secuencia, {
+        "fuente": "contrato_d11",
+        "n_eventos": len(eventos),
+        # Lo que el evaluador tiene que comparar contra `core_event_uids`.
+        "uids_de_evidencia": uids_de_evidencia,
+        "n_uids_de_evidencia": len(uids_de_evidencia),
+        "secuencia_descartada": descartados,
+        "invalid_evidence_uid_count": estado.get("invalid_evidence_uid_count"),
     }
 
 

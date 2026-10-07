@@ -184,6 +184,10 @@ def _archivar_plan_anterior(state: LogGuardState, motivo: str) -> dict:
         "plan": plan,
         "motivo_reemplazo": motivo,
         "resultados_asociados": {
+            "eventos_reconstruidos": state.get("eventos_reconstruidos") or [],
+            "secuencia_temporal": state.get("secuencia_temporal") or [],
+            "tecnicas_atribuidas": state.get("tecnicas_atribuidas") or [],
+            "intentos_correccion": state.get("intentos_correccion", 0),
             "diagnostico": state.get("diagnostico"),
             "evaluacion_auditor": state.get("evaluacion_auditor"),
             "hay_anomalia": state.get("hay_anomalia"),
@@ -209,6 +213,9 @@ def preparar_replanificacion(state: LogGuardState) -> dict:
     de verdad, así que no hay riesgo de que un `None` se malinterprete como
     "ya validado"."""
     return {
+        "eventos_reconstruidos": [],
+        "secuencia_temporal": [],
+        "tecnicas_atribuidas": [],
         "necesita_rag": False,
         "usar_cve": False,
         "comandos_mitigacion": [],

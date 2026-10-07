@@ -13,12 +13,18 @@ un criterio** cuando reciba un valor inesperado: lo rechaza.
 # --- arquitecturas comparadas (la variable experimental) -------------------
 # `nodex_multiagente`: el grafo completo de 8 nodos (5 agentes LLM + 3
 #   herramientas), tal como corre en producción.
-# `agente_unico`: un solo agente LLM responsable de todo el análisis, con
-#   el mismo modelo, temperatura, casos y recursos externos disponibles.
-#   Es el baseline que pide el formulario; NO es el baseline de reglas.
+# `gemini_externo`: Gemini usado DIRECTAMENTE, con un solo prompt y sin
+#   RAG, sin herramientas y sin estado LangGraph. Es la pseudo-ablación que
+#   define el proyecto (decisión del 7-oct-2026): compara el sistema
+#   completo contra el modelo desnudo, no aísla una variable.
+# `agente_unico`: el agente único INTEGRADO (`src/single_agent.py`), que sí
+#   vive dentro de NODEX y reutiliza su preprocesamiento. Se conserva en el
+#   vocabulario porque existe en el sistema, pero la campaña automatizada no
+#   lo corre: la pseudo-ablación se hace con `gemini_externo`.
 # `baseline_reglas`: el clasificador determinístico sin LLM
-#   (`src/tools/baseline_reglas.py`), conservado como comparación adicional.
-ARQUITECTURAS = ("nodex_multiagente", "agente_unico", "baseline_reglas")
+#   (`src/tools/baseline_reglas.py`), comparación interna determinística.
+ARQUITECTURAS = ("nodex_multiagente", "gemini_externo", "agente_unico",
+                 "baseline_reglas")
 
 # --- datasets --------------------------------------------------------------
 DATASETS = ("hdfs", "bgl", "uwf")

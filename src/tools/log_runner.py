@@ -20,6 +20,7 @@ import sys
 import time
 
 from src.pipeline import analizar_lote
+from src.output_contract import campos_d11
 from src.preprocessing.pipeline import PreprocesamientoError
 
 RESULTS_DIR = "results"
@@ -42,6 +43,7 @@ def run_from_file(path: str, thread_id: str | None = None, guardar: bool = True)
     from src.config import LOG_PREPROCESSING_ENGINE
     metadatos = resultado.get("preprocessing_metadata") or {}
     salida = {
+        **campos_d11(resultado),
         "archivo_origen": path,
         "motor_preprocesamiento": LOG_PREPROCESSING_ENGINE,
         "schema_version": metadatos.get("schema_version", "1.0"),

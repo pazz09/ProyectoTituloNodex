@@ -54,7 +54,16 @@ REPETICIONES = {"desarrollo": 1, "evaluacion": 3}
 REPETICIONES_BASELINE = 1
 
 #: Arquitecturas que consumen LLM.
-ARQUITECTURAS_LLM = ("nodex_multiagente", "agente_unico")
+#:
+#: `gemini_externo` es la pseudo-ablacion y se maneja como **procedimiento
+#: experimental separado** (decision del 7-oct-2026, §4 y §5): no es
+#: obligatorio que la campana automatizada lo corra.
+ARQUITECTURAS_LLM = ("nodex_multiagente",)
+
+#: Arquitecturas por omision de la campana automatizada: NODEX y el baseline
+#: determinista. Antes incluia el agente unico integrado como requisito de
+#: toda corrida, lo que duplicaba el costo sin que la decision lo pidiera.
+ARQUITECTURAS_CAMPANA = ("nodex_multiagente", "baseline_reglas")
 
 #: Llamadas al modelo por corrida, para estimar el costo del plan en seco.
 #:
@@ -65,7 +74,8 @@ ARQUITECTURAS_LLM = ("nodex_multiagente", "agente_unico")
 #: medir. Es un **piso**, no una estimación.
 LLAMADAS_POR_CORRIDA = {
     "nodex_multiagente": 6,
-    "agente_unico": 1,
+    # Pseudo-ablacion: un solo prompt, sin reintentos ni fallback.
+    "gemini_externo": 1,
     "baseline_reglas": 0,
 }
 
@@ -186,7 +196,7 @@ def planificar(
     raiz_repo: Path,
     subconjunto: dict,
     config_version: str,
-    arquitecturas: tuple[str, ...] = ARQUITECTURAS_LLM + ("baseline_reglas",),
+    arquitecturas: tuple[str, ...] = ARQUITECTURAS_CAMPANA,
 ) -> PlanCampana:
     """Enumera las corridas. No ejecuta ninguna."""
     particion = subconjunto["particion"]
@@ -234,13 +244,13 @@ def _correr_una(
     ejecución habilitada.
     """
     from src.experimentation.adapters.nodex import adaptar
-    from src.experimentation.runners import agente_unico, baseline, nodex
+    from src.experimentation.runners import baseline, gemini_externo, nodex
 
     tipo_deteccion = metadatos_caso["tipo_deteccion"]
     dimensiones = tuple(metadatos_caso.get("dimensiones_aplicables") or ())
     modulo = {
         "nodex_multiagente": nodex,
-        "agente_unico": agente_unico,
+        "gemini_externo": gemini_externo,
         "baseline_reglas": baseline,
     }[identidad.arquitectura]
 
@@ -261,27 +271,23 @@ def _correr_una(
         crudo = {"diagnostico_baseline": diagnostico}
         telemetria_dict = telemetria.to_dict()
     else:
-        from src import telemetria_llm
         from src.experimentation.runtime.configuracion import detectar_d11
 
-        # El grabador se activa justo antes de la corrida y se apaga después,
-        # en un `finally`: si quedara activo, la corrida siguiente sumaría sus
-        # llamadas a las de esta.
-        grabador = telemetria_llm.activar(identidad.run_id)
-        try:
-            if identidad.arquitectura == "nodex_multiagente":
-                estado, diagnostico = nodex.ejecutar(contenido, identidad.run_id)
-                estado_ejecucion = nodex.estado_de_ejecucion(diagnostico, estado)
-            else:
-                estado, diagnostico = agente_unico.ejecutar(
-                    contenido, identidad.run_id
-                )
-                estado_ejecucion = (
-                    "error_api" if diagnostico.get("error_llm") else "completa"
-                )
-        finally:
-            medido = grabador.to_dict()
-            telemetria_llm.desactivar()
+        if identidad.arquitectura == "nodex_multiagente":
+            estado, diagnostico = nodex.ejecutar(contenido, identidad.run_id)
+            estado_ejecucion = nodex.estado_de_ejecucion(diagnostico, estado)
+        else:
+            estado, diagnostico = gemini_externo.ejecutar(
+                contenido, identidad.run_id
+            )
+            estado_ejecucion = (
+                "error_api" if diagnostico.get("error") else "completa"
+            )
+        # La telemetría la produce el propio sistema: `analizar_lote()`
+        # envuelve el grafo en `medir_ejecucion()` y deja el resumen en
+        # `estado["telemetry"]` (src/telemetry.py). El orquestador no la
+        # recalcula: duplicarla daría dos números para lo mismo.
+        medido = dict(estado.get("telemetry") or diagnostico.get("telemetry") or {})
         resultado = adaptar(
             estado,
             case_id=identidad.case_id,
@@ -294,22 +300,21 @@ def _correr_una(
         salida_dict = resultado.salida.to_dict()
         estados = resultado.estado_por_dimension
         crudo = estado
-        # La telemetría por llamada la aporta el grabador de
-        # `src/telemetria_llm.py`: modelo solicitado y efectivo, tokens de
-        # entrada, salida y razonamiento, latencia, agente y errores. Lo que
-        # el proveedor no informa queda `None`, nunca estimado.
-        #
-        # `replan_count` e `intentos_correccion` no salen del grabador sino
-        # del estado del grafo, así que se agregan acá: son contadores de la
-        # corrida, no de una llamada.
+        # `resumen_telemetria` ya trae llm_call_count, tokens,
+        # execution_time, replan_count, intentos_correccion (acumulado a
+        # través de `historial_planes`, no solo el del estado final),
+        # invalid_evidence_uid_count y d11_warning_count. No se recalcula
+        # ninguno: el orquestador solo agrega lo que mide él mismo.
         telemetria_dict = dict(
             medido,
-            execution_time=diagnostico.get("execution_time"),
-            replan_count=diagnostico.get("replan_count"),
-            intentos_correccion=diagnostico.get("intentos_correccion"),
+            # Tiempo de pared del runner, que incluye la lectura del caso y
+            # la adaptación. Distinto del `execution_time` del grafo, así que
+            # lleva otro nombre en vez de sobreescribirlo.
+            tiempo_total_runner_s=diagnostico.get("execution_time"),
             # §11 del plan: no mezclar telemetría previa a D-11 con la
             # posterior. El valor se mide, no se asume.
             previa_a_d11=not detectar_d11(raiz_repo).get("integrado", False),
+            output_contract_version=estado.get("output_contract_version"),
             diagnostico_runner=diagnostico,
         )
 
@@ -338,7 +343,7 @@ def ejecutar_campana(
     raiz_repo: Path,
     subconjunto_nombre: str,
     config_version: str,
-    arquitecturas: tuple[str, ...] = ARQUITECTURAS_LLM + ("baseline_reglas",),
+    arquitecturas: tuple[str, ...] = ARQUITECTURAS_CAMPANA,
     ejecucion_habilitada: bool = False,
 ) -> dict:
     """Plan en seco por omisión; corre la campaña solo si se habilita.
@@ -445,7 +450,7 @@ def evaluar_campana(
     raiz_repo: Path,
     subconjunto_nombre: str,
     config_version: str,
-    arquitecturas: tuple[str, ...] = ARQUITECTURAS_LLM + ("baseline_reglas",),
+    arquitecturas: tuple[str, ...] = ARQUITECTURAS_CAMPANA,
 ) -> dict:
     """Evalúa las corridas **ya guardadas** contra el ground truth.
 
@@ -477,7 +482,8 @@ def evaluar_campana(
         estados_d1: list[str] = []
         comparaciones_d2: list = []
         estados_d2: list[str] = []
-        comparaciones_d3: dict[str, list] = {"tactica": [], "tecnica": []}
+        # Solo `tecnica`: ver el comentario del bloque D3 mas abajo.
+        comparaciones_d3: dict[str, list] = {"tecnica": []}
         estados_d3: list[str] = []
         detalle: list = []
 
@@ -525,10 +531,22 @@ def evaluar_campana(
                 )
                 estados_d2.append(estado_d2)
                 if estado_d2 == "evaluable":
+                    # El matching va por `evidence_uids`, NO por el `uid`
+                    # del evento. En el contrato d11-v1, `event_id` es la
+                    # etiqueta que el sistema le pone al evento y
+                    # `normalizar_d11` la reemplaza por una sintetica si
+                    # colisiona con un uid; los `evidence_uids` son los que
+                    # se validan contra el catalogo de evidencia, indexado
+                    # por el uid real del registro. Comparar `event_id`
+                    # contra `core_event_uids` no coincidiria con nada.
+                    citados: list[str] = []
+                    for evento in salida.get("reconstructed_events") or []:
+                        for uid in evento.get("evidence_uids") or []:
+                            if uid not in citados:
+                                citados.append(str(uid))
                     comparacion, _ = comparar_reconstruccion(
                         case_id,
-                        [e.get("uid")
-                         for e in salida.get("reconstructed_events") or []],
+                        citados,
                         tuple(referencia.get("core_event_uids") or ()),
                     )
                     comparaciones_d2.append(comparacion)
@@ -540,23 +558,23 @@ def evaluar_campana(
                 )
                 estados_d3.append(estado_d3)
                 if estado_d3 == "evaluable":
+                    # Solo nivel TECNICA. El contrato d11-v1 no lleva nivel y
+                    # la decision del 7-oct-2026 fija el scoring de D3 en
+                    # `label_technique`; `label_tactic` queda como
+                    # informacion complementaria del dataset y no entra.
                     mitre = salida.get("mitre") or {}
                     atribuciones = [
-                        dict(item, nivel="tactica")
-                        for item in (mitre.get("tactics") or [])
-                    ] + [
                         dict(item, nivel="tecnica")
                         for item in (mitre.get("techniques") or [])
                     ]
-                    for nivel in ("tactica", "tecnica"):
-                        por_nivel = referencia.get("estado_mitre_por_nivel") or {}
-                        if por_nivel.get(nivel) != "evaluable":
-                            continue
+                    por_nivel = referencia.get("estado_mitre_por_nivel") or {}
+                    if por_nivel.get("tecnica") == "evaluable":
                         comparacion, _ = comparar_mitre(
                             case_id, atribuciones,
-                            referencia.get("referencias_mitre") or [], nivel,
+                            referencia.get("referencias_mitre") or [],
+                            "tecnica",
                         )
-                        comparaciones_d3[nivel].append(comparacion)
+                        comparaciones_d3["tecnica"].append(comparacion)
 
                 detalle.append({
                     "run_id": identidad.run_id,
