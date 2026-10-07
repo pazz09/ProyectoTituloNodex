@@ -515,3 +515,90 @@ tupla como `VALOR_BENIGNO, VALOR_MALICIOSO = "False", "True"`).
 |---|---|
 | Orquestador que recorra el subconjunto piloto con N=1, persista y exporte | Sí |
 | Integración externa de D-11 → Fase D | Solo para D2 y D3 |
+
+## 15. Orquestador y plan en seco (Fase C, cerrada)
+
+`src/experimentation/orquestador.py`. Es la última pieza antes del piloto.
+
+### La ejecución viene deshabilitada
+
+`ejecutar_campana()` **no corre nada** salvo que se le pase
+`ejecucion_habilitada=True` de forma explícita. Con el valor por omisión
+hace un **plan en seco**: enumera qué corridas haría, cuántas llamadas
+implican y qué ya está hecho, sin tocar el modelo ni el preprocesamiento.
+
+### Plan en seco del piloto (medido el 7-oct-2026)
+
+| Arquitectura | Corridas | Llamadas LLM (piso) |
+|---|---|---|
+| `nodex_multiagente` | 24 | 144 |
+| `agente_unico` | 24 | 24 |
+| `baseline_reglas` | 24 | 0 |
+| **Total** | **72** | **168** |
+
+24 casos (8 por dataset), N=1, los tres datasets. El baseline corre una sola
+vez por ser determinístico.
+
+### Plan en seco de la campaña final (N=3, datasets principales)
+
+| Dataset | Casos | Corridas | Llamadas (piso) |
+|---|---|---|---|
+| BGL | 62 | 434 | 1 302 |
+| UWF | 80 | 560 | 1 680 |
+| **Total** | **142** | **994** | **2 982** |
+
+HDFS auxiliar, aparte del agregado principal: 100 casos, 2 100 llamadas más
+si se corriera con N=3.
+
+«Piso» es literal: NODEX tiene 6 puntos de llamada y sube con los bucles de
+replanificación y de corrección de comandos, que no se pueden acotar sin
+medir. No es una estimación de consumo.
+
+### Las dos mitades no se tocan
+
+    ejecutar_campana()   -> corre arquitecturas. NO abre ground_truth/.
+    evaluar_campana()    -> lee las salidas guardadas + ground_truth/.
+
+Verificado por AST: **una sola** función del módulo construye una ruta a
+`ground_truth` (`_cargar_referencia`), y **una sola** la llama
+(`evaluar_campana`). Mientras una corrida está en curso, la referencia no
+está cargada en ninguna variable del proceso.
+
+`evaluar_campana()` tampoco importa los runners: si una corrida no está
+guardada se cuenta como **ausente**, no se ejecuta. Así la evaluación no
+depende de cuándo se la invoque.
+
+Para cada dimensión combina **dos** estados y se queda con el más
+restrictivo: el de la salida (¿el sistema produjo algo que puntuar?) y el de
+la referencia (¿hay una referencia aprobada?).
+
+### Reanudación
+
+El `run_id` es determinístico, así que una campaña interrumpida se reanuda
+sola: las corridas guardadas se detectan por la existencia del archivo y se
+omiten. Y como la `config_version` entra en el hash del `run_id`, una
+campaña nueva no pisa los artefactos de la anterior — verificado.
+
+### Dos defectos propios corregidos
+
+1. Quedó una expresión sin sentido de una edición anterior
+   (`crudo=preservar_estado_crudo.__name__ and crudo`). Funcionaba por
+   accidente, porque el nombre de la función es una cadena verdadera.
+2. La exportación buscaba el `dataset` y la `repeticion` recorriendo el plan
+   por `run_id`: O(n²) y se rompe si el plan cambia entre la corrida y la
+   exportación. Ahora la identidad viaja con el resultado.
+
+Y un falso positivo de mi propio control: la auditoría de acceso al ground
+truth buscaba la subcadena `ground_truth` y marcaba tres funciones, porque
+sus docstrings la mencionan para declarar que **no** la abren. Corregido a
+buscar la constante exacta de ruta.
+
+### Estado: listo para el piloto, salvo D-11
+
+Lo que falta ya no es código de la capa experimental:
+
+| Pendiente | Quién |
+|---|---|
+| Integración externa de D-11 → Fase D | Proceso externo |
+| Autorización para ejecutar el piloto (168 llamadas) | Decisión de la autora |
+| Instrumentación de tokens y modelo efectivo (Fase 6) | Pendiente; hoy la telemetría no inventa tokens, los deja en `None` |
