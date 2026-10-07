@@ -36,8 +36,16 @@ SEMILLA_SUBCONJUNTOS = 20261004
 #: por lo tanto fuera de la submuestra de rúbrica.
 DATASETS_PRINCIPALES = ("bgl", "uwf")
 
-#: Decisión D-6: 12 casos por dataset principal reciben la rúbrica humana.
-CASOS_RUBRICA_POR_DATASET = 12
+#: Decisión D-6, consolidada el 7-oct-2026: **6 casos por dataset
+#: principal**, no 12.
+#:
+#:   6 BGL + 6 UWF = 12 casos
+#:   12 casos x 2 arquitecturas LLM = 24 reportes
+#:   24 reportes x 2 evaluadores = 48 evaluaciones
+#:
+#: La versión anterior de este módulo usaba 12 por dataset, lo que daba 48
+#: reportes y 96 evaluaciones: el doble del presupuesto decidido.
+CASOS_RUBRICA_POR_DATASET = 6
 
 #: Casos de piloto por dataset y condición. 4 × 2 condiciones × 3 datasets
 #: = 24 casos; con dos arquitecturas LLM son 48 corridas, que es un piloto
@@ -127,6 +135,69 @@ def _estratificar(
     return seleccion, detalle
 
 
+def _repartir_cupos(n_condiciones: int, total: int) -> list[dict]:
+    """Reparte `total` casos entre las condiciones, balanceado por veredicto.
+
+    El resto de cada clase se reparte en sentido opuesto, así cada condición
+    recibe la misma cantidad de casos y el dataset queda balanceado entre
+    positivos y negativos. Con 2 condiciones y 6 casos: positivos [2, 1] y
+    negativos [1, 2], o sea 3 casos por condición y 3+/3- en el dataset.
+    """
+    mitad = total // 2
+    sobrante = total - mitad  # si `total` es impar, los negativos llevan uno más
+    base_pos, resto_pos = divmod(mitad, n_condiciones)
+    base_neg, resto_neg = divmod(sobrante, n_condiciones)
+    cupos = []
+    for i in range(n_condiciones):
+        cupos.append({
+            "anomalo": base_pos + (1 if i < resto_pos else 0),
+            # El resto de negativos se asigna desde el final, para compensar.
+            "normal": base_neg + (1 if i >= n_condiciones - resto_neg else 0),
+        })
+    return cupos
+
+
+def _estratificar_exacto(
+    casos: list[CasoSeleccionado], cuantos_positivos: int,
+    cuantos_negativos: int, semilla: int,
+) -> tuple[list[CasoSeleccionado], dict]:
+    """Toma exactamente la cantidad pedida de cada clase.
+
+    Si falta de una clase, toma los que haya y **lo registra** en vez de
+    completar con la otra en silencio.
+    """
+    import random
+
+    positivos = sorted((c for c in casos if c.etiqueta_deteccion == "anomalo"),
+                       key=lambda c: c.case_id)
+    negativos = sorted((c for c in casos if c.etiqueta_deteccion == "normal"),
+                       key=lambda c: c.case_id)
+    azar = random.Random(semilla)
+    azar.shuffle(positivos)
+    azar.shuffle(negativos)
+
+    tomados_pos = positivos[:cuantos_positivos]
+    tomados_neg = negativos[:cuantos_negativos]
+    seleccion = sorted(tomados_pos + tomados_neg, key=lambda c: c.case_id)
+
+    detalle = {
+        "solicitados": cuantos_positivos + cuantos_negativos,
+        "entregados": len(seleccion),
+        "positivos": len(tomados_pos),
+        "negativos": len(tomados_neg),
+        "positivos_objetivo": cuantos_positivos,
+        "negativos_objetivo": cuantos_negativos,
+        "positivos_disponibles": len(positivos),
+        "negativos_disponibles": len(negativos),
+    }
+    if len(tomados_pos) < cuantos_positivos or len(tomados_neg) < cuantos_negativos:
+        detalle["advertencia"] = (
+            "no había suficientes casos de una clase: la submuestra queda "
+            "desbalanceada respecto de lo pedido"
+        )
+    return seleccion, detalle
+
+
 def seleccionar_piloto(raiz_experimentos: Path) -> dict:
     """Piloto de verificación del pipeline, solo de `desarrollo`."""
     resultado: dict = {
@@ -200,14 +271,22 @@ def seleccionar_rubrica(raiz_experimentos: Path) -> dict:
     for dataset in DATASETS_PRINCIPALES:
         casos = _cargar(raiz_experimentos, dataset, "evaluacion")
         condiciones = sorted({c.condicion for c in casos})
-        por_condicion = CASOS_RUBRICA_POR_DATASET // len(condiciones)
+        # Se estratifica a nivel de DATASET, no de condición. Con 6 casos y
+        # dos condiciones, estratificar dentro de cada condición daría
+        # 1 positivo y 2 negativos por condición, es decir 2+/4- en total.
+        # Repartiendo el resto en sentido contrario para cada clase, el
+        # dataset queda 3+/3- y cada condición con 3 casos.
+        cupos = _repartir_cupos(len(condiciones), CASOS_RUBRICA_POR_DATASET)
         detalle_dataset: dict = {}
-        for condicion in condiciones:
+        for indice, condicion in enumerate(condiciones):
             del_grupo = [c for c in casos if c.condicion == condicion]
             semilla = SEMILLA_SUBCONJUNTOS + zlib.crc32(
                 f"rubrica|{dataset}|{condicion}".encode()
             ) % 10_000
-            seleccion, detalle = _estratificar(del_grupo, por_condicion, semilla)
+            seleccion, detalle = _estratificar_exacto(
+                del_grupo, cupos[indice]["anomalo"], cupos[indice]["normal"],
+                semilla,
+            )
             detalle_dataset[condicion] = {
                 "composicion": detalle,
                 "case_ids": [c.case_id for c in seleccion],

@@ -1,8 +1,33 @@
-"""Extensión propuesta del contrato de salida de los agentes.
+"""SUPERADO — NO CONECTAR. Ver el aviso al final de este docstring.
 
-**NO ESTÁ CONECTADA.** Este módulo define textos de prompt y un esquema
-JSON; ningún agente los usa. Activarlos cambia lo que el sistema hace, y
-esa es una decisión de la autora, no del adaptador.
+Extensión propuesta del contrato de salida de los agentes.
+
+================================================================
+AVISO (7 de octubre de 2026)
+================================================================
+
+**D-11 quedó resuelto externamente y su implementación NO es de este
+módulo.** La decisión consolidada dice, textual: no implementar D-11, no
+modificar los agentes para resolverlo, no cambiar sus prompts, no agregar
+los campos por cuenta propia y no duplicar una implementación que ya está
+siendo desarrollada por otro proceso.
+
+Este archivo se escribió **antes** de esa decisión, como propuesta para que
+la autora eligiera. Queda en el repositorio por dos razones:
+
+1. documenta el diagnóstico que llevó a D-11, con la medición que lo
+   sustenta (la tabla de más abajo);
+2. deja constancia de que el adaptador ya sabe consumir esos tres campos,
+   así que cuando la implementación externa aparezca no hay que tocar la
+   capa experimental.
+
+Lo que **no** debe hacerse con él: conectar `ADDENDUM_TRIAGE` a ningún
+agente, ni tomar `ESQUEMA_TRIAGE_PROPUESTO` como el contrato real. El
+contrato real es el que defina la implementación externa; cuando esté,
+`src/experimentation/runtime/configuracion.py::detectar_d11()` lo confirma y
+la Fase D valida la integración.
+
+El texto que sigue es el diagnóstico original, conservado sin cambios.
 
 ## El problema que resuelve
 
@@ -50,7 +75,7 @@ from __future__ import annotations
 #: Versión del contrato de agentes. Cambiarla obliga a registrar el cambio
 #: en la procedencia y a no comparar corridas de versiones distintas como
 #: si fueran lo mismo.
-VERSION_CONTRATO_AGENTES = "1.0.0-propuesta"
+VERSION_CONTRATO_AGENTES = "1.0.0-propuesta-SUPERADA"
 
 #: Campos nuevos que el estado tendría que llevar. Son los que
 #: `src/experimentation/adapters/extraccion.py` ya sabe leer: si se activan,

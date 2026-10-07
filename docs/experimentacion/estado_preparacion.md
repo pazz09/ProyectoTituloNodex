@@ -368,3 +368,69 @@ sería peor que no publicarlo.
 |---|---|---|
 | D-11 | Si se extiende el contrato de salida de los agentes para habilitar D2 y D3 | 4 (bloquea su cierre completo) |
 | D-12 | Qué coeficiente de concordancia informar en D4, si alguno | 5 (interpretación final) |
+
+## 13. Plan de continuación (7-oct-2026)
+
+Llegó `PROMPT_CLAUDE_CONTINUACION_PLAN_PRUEBAS_NODEX.md`, que cierra todas
+las decisiones que estaban abiertas. Resoluciones y su efecto acá:
+
+| Decisión | Resolución | Efecto en el código |
+|---|---|---|
+| D-11 | **Resuelta externamente. No implementar.** | `adapters/contrato_agentes.py` queda marcado SUPERADO; `runtime/configuracion.py::detectar_d11()` solo comprueba si llegó |
+| D-2 | N=1 piloto, N=3 campaña final | A cablear en el orquestador |
+| D-6 | **6 BGL + 6 UWF = 12 casos**, 24 reportes, 48 evaluaciones | `subconjuntos.py` corregido: antes eran 12 por dataset (48 reportes) |
+| D-3 | Sin umbrales absolutos; comparación interna pareada + descriptivas | Ya cumplido: ningún evaluador tiene umbrales |
+| D-12 | Sin kappa | Ya cumplido |
+| D-5 | Comparación externa bibliográfica | Ya cumplido: nada instala sistemas externos |
+
+### Estado de D-11: NO integrado
+
+Verificado el 7-oct-2026 sobre `src/state.py` y `src/agents/`: **cero
+ocurrencias** de `eventos_reconstruidos`, `secuencia_temporal`,
+`tecnicas_atribuidas`, `evidence_uids` e `invalid_evidence_uid_count`.
+
+Consecuencias mientras no esté:
+
+- **D2 y D3 no son medibles.** D1, D4 y D5 sí.
+- La telemetría del piloto **no es la definitiva**: §11 prohíbe mezclar
+  mediciones previas a D-11 con posteriores. `Telemetria.previa_a_d11`
+  arranca en `True` y la exportación lo propaga.
+- La Fase D (validación de integración) no puede empezar.
+
+Nada más depende de D-11: runners, persistencia, identidad y baseline se
+pueden construir ahora.
+
+### Hallazgo nuevo: el fallback de modelo rompe la comparabilidad
+
+`src/config.py` define `LLM_MODEL_PRIMARY = gemini-3.1-pro-preview` y
+`LLM_MODEL_FALLBACK = gemini-3.6-flash`: si el primario agota reintentos, el
+sistema reintenta con el otro. Una corrida que cayó al fallback **usó otro
+modelo** y no es comparable con el resto de la campaña.
+
+No es hipotético: es el comportamiento por omisión. Por eso la telemetría
+registra el **modelo efectivo por llamada**, `Telemetria.uso_fallback` lo
+expone, y `exportacion.resumen_de_integridad()` cuenta esas corridas y
+emite la advertencia junto a la tabla, no en un log aparte.
+
+### Capa de ejecución preparada (Fase C, parcial)
+
+`src/experimentation/runtime/`, 6 módulos, **ninguno ejecuta NODEX ni llama
+a un modelo**:
+
+| Módulo | Qué garantiza |
+|---|---|
+| `identidad.py` | `run_id` determinístico con las cinco coordenadas del §15. Cambiar la configuración cambia el id, así que no se pisan corridas de campañas distintas |
+| `configuracion.py` | Congelado del §12, con hash de los 5 prompts, de la capa experimental y de los manifiestos. Los parámetros ausentes se listan aparte para que un nombre mal escrito no quede como un `None` invisible. Las credenciales solo como booleano: verificado que la clave no aparece en el artefacto |
+| `persistencia.py` | Estructura del §15 y escritura única. Comprueba las tres piezas **antes** de escribir cualquiera, para no dejar una corrida a medio guardar |
+| `telemetria.py` | Campos del §11. `total_tokens` es `None` y no 0 cuando el proveedor no informó nada; si solo algunas llamadas informaron, lo declara en `campos_parciales` |
+| `exportacion.py` | Tabla del §14. `D1_precision/recall/f1` van `null` por fila, porque son métricas de conjunto y por caso darían el acierto disfrazado de métrica; el acierto va en `D1_outcome` |
+| `__init__.py` | — |
+
+### Lo que falta para el piloto
+
+| Brecha | Bloqueante |
+|---|---|
+| **El agente único no existe en el repositorio** | Sí |
+| Runners de NODEX, agente único y baseline | Sí |
+| Orquestador que recorra el subconjunto piloto con N=1 | Sí |
+| Integración externa de D-11 → Fase D | Sí, para D2 y D3 |
