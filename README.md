@@ -209,6 +209,13 @@ Las primeras tres se pueblan **exclusivamente** mediante retroalimentación huma
 
 ## Generación de reportes
 
+Desde el contrato `d11-v1`, el reporte JSON añade eventos reconstruidos,
+secuencia temporal y técnicas MITRE explícitamente atribuidas con UIDs de
+evidencia validados. Los candidatos RAG permanecen separados. API, CLI y
+evaluador conservan estos campos y telemetría D5. El evaluador permite el
+comparador de una llamada con `--arquitectura agente_unico`. Alcance, límites
+del catálogo de evidencia y contrato: [D-11](docs/contrato_salida_d11.md).
+
 El reporte final se persiste en SQLite (`data/historial.db`) y se sirve en dos formas, ambas derivadas del mismo estado final del grafo:
 
 - **Estructurado** (JSON): expuesto por la API y por el modo de línea de comandos.

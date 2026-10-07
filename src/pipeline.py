@@ -8,6 +8,8 @@ import time
 
 from src.config import CONFIDENCE_THRESHOLD
 from src.graph.build_graph import build_graph
+from src.output_contract import campos_d11, construir_evidencia
+from src.telemetry import medir_ejecucion, resumen_telemetria
 from src.tools.aggregation import firma_lote, preprocesar_lote
 from src.tools.reputation import ReputationCache, corroborar_ips
 from src.tools.tool_consultar_rag import ltm  # instancia compartida de LongTermMemory
@@ -109,9 +111,18 @@ def _preparar_estado_inicial(raw_logs: str, thread_id: str | None = None):
     resumen["reputacion_ips"] = corroborar_ips(ips, get_ip_cache()) if ips else {}
 
     metadatos, advertencias, muestras = _metadatos_desde_v2(_resultado, v2)
+    evidencia, omitidos = construir_evidencia(_resultado)
     firma = firma_lote(resumen, metadatos)
 
     input_inicial = {
+        "evidencia_logs": evidencia,
+        "evidencia_logs_omitidos": omitidos,
+        "eventos_reconstruidos": [],
+        "secuencia_temporal": [],
+        "tecnicas_atribuidas": [],
+        "invalid_evidence_uid_count": 0,
+        "d11_warnings": [],
+        "telemetry": {},
         "resumen_logs": resumen,
         "preprocessing_metadata": metadatos,
         "parsing_warnings": advertencias,
@@ -151,6 +162,12 @@ def _preparar_estado_inicial(raw_logs: str, thread_id: str | None = None):
 
 
 def analizar_lote(raw_logs: str, thread_id: str | None = None) -> dict:
+    """Analiza un lote con el grafo y devuelve su estado final y telemetría."""
+    with medir_ejecucion():
+        return _analizar_lote(raw_logs, thread_id)
+
+
+def _analizar_lote(raw_logs: str, thread_id: str | None = None) -> dict:
     """Corre el pipeline completo sobre un lote de logs crudos.
 
     Devuelve el estado final del grafo, con el `_firma` del lote agregado
@@ -173,7 +190,7 @@ def analizar_lote(raw_logs: str, thread_id: str | None = None) -> dict:
         print(f"\n💥 ¡Alerta! El agente colapsó por un error de API: {e}")
         print("🕵️‍♂️ Rescatando los datos forenses de la memoria (Caja Negra)...")
 
-    estado_final = app.get_state(config).values
+    estado_final = dict(app.get_state(config).values)
     estado_final["_firma"] = firma
     # `analizar_lote()` conserva el estado parcial para uso forense, pero debe
     # señalar inequívocamente que no representa un análisis terminado. Sin
@@ -182,10 +199,18 @@ def analizar_lote(raw_logs: str, thread_id: str | None = None) -> dict:
     # grafo (hallazgo real de la Fase 6, 24-sep-2026).
     estado_final["_error_api"] = error_api
     estado_final["requiere_revision_humana"] = float(estado_final.get("confianza", 0)) < CONFIDENCE_THRESHOLD
+    estado_final["telemetry"] = resumen_telemetria(estado_final)
+    estado_final.update(campos_d11(estado_final))
     return estado_final
 
 
 def analizar_lote_stream(raw_logs: str, thread_id: str | None = None):
+    """Emite avances y reporte final, midiendo la ejecución completa."""
+    with medir_ejecucion():
+        yield from _analizar_lote_stream(raw_logs, thread_id)
+
+
+def _analizar_lote_stream(raw_logs: str, thread_id: str | None = None):
     """Igual que `analizar_lote`, pero como generador para la interfaz web
     (`src/api/main.py`): emite un evento por cada transición del grafo en
     vez de devolver solo el resultado final, para poder mostrar el avance
@@ -263,15 +288,18 @@ def analizar_lote_stream(raw_logs: str, thread_id: str | None = None):
     except Exception as e:
         mensaje = f"{type(e).__name__}: {e}"
         print(f"\n💥 ¡Alerta! El agente colapsó por un error de API: {mensaje}")
-        yield {"tipo": "error", "mensaje": mensaje}
+        parcial = dict(app.get_state(config).values)
+        yield {"tipo": "error", "mensaje": mensaje, "telemetry": resumen_telemetria(parcial)}
         return  # no arma ni emite "final" -- ver nota arriba
 
-    estado_final = app.get_state(config).values
+    estado_final = dict(app.get_state(config).values)
     estado_final["_firma"] = firma
+    estado_final["telemetry"] = resumen_telemetria(estado_final)
     confianza = float(estado_final.get("confianza", 0) or 0)
     yield {
         "tipo": "final",
         "reporte": {
+            **campos_d11(estado_final),
             "diagnostico": estado_final.get("diagnostico"),
             "confianza": confianza,
             "hay_incidente": estado_final.get("hay_incidente"),

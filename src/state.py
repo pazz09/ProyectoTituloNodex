@@ -10,6 +10,8 @@ from typing import Annotated, List
 
 from typing_extensions import TypedDict
 
+from src.output_contract import EventoReconstruido, TecnicaAtribuida
+
 
 def limpiar_o_acumular(actuales: list, nuevos: list):
     """Reducer para recordar el historial de fallos.
@@ -42,6 +44,15 @@ class LogGuardState(TypedDict):
     preprocessing_metadata: dict     # esquema, cobertura, decoders, productos, segmentos
     parsing_warnings: list           # advertencias del preprocesamiento
     raw_samples: list                # muestras de texto crudo, acotadas y filtradas
+    # Catálogo acotado de registros observados para D-11, sin etiquetas/raw.
+    evidencia_logs: list
+    evidencia_logs_omitidos: int
+    eventos_reconstruidos: list[EventoReconstruido]
+    secuencia_temporal: list[str]
+    tecnicas_atribuidas: list[TecnicaAtribuida]
+    invalid_evidence_uid_count: int
+    d11_warnings: list[str]
+    telemetry: dict
     firma: str
     # --- Plan-and-Execute (agente_planificador, 11-sep-2026) ---
     # `plan` es la única fuente de verdad sobre qué se planificó; su

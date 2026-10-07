@@ -311,3 +311,59 @@ Por lo tanto, el cierre técnico puede resumirse así:
 - Metadatos, documentación y CI: **considerablemente mejorados**.
 - Fase 6 y métricas finales reproducibles: **completadas y certificadas**.
 - Cierre completo de auditoría: **alcanzado**, con rendimiento HDFS pendiente de mejora.
+
+## 11. Extensión D-11 del contrato experimental — 7 de octubre de 2026
+
+El cierre anterior corresponde a detección y al pipeline de preprocesamiento.
+La revisión D-11 detectó una brecha adicional: el diagnóstico narrativo y los
+candidatos MITRE recuperados no constituían predicciones estructuradas de
+reconstrucción ni atribución. Se extendió el contrato a `d11-v1`.
+
+La implementación añade `eventos_reconstruidos`, `secuencia_temporal` y
+`tecnicas_atribuidas` con evidencia trazable, validación posterior al LLM,
+normalización tolerante a respuestas parciales y contador de UIDs inválidos.
+El Auditor existente produce estos campos en la misma llamada. El estado
+LangGraph los transporta hasta el reporte SSE/API, persistencia JSON, CLI y
+adaptador experimental. La topología, routers, RAG y reglas D1 permanecen.
+
+El comparador de agente único, que no existía en `src`, produce el mismo
+contrato sin ejecutar el grafo. Se selecciona mediante `--arquitectura
+agente_unico`. La telemetría registra solicitudes reales, modelo efectivo,
+consumo informado por el proveedor, duración, replanificaciones, correcciones
+acumuladas y UIDs inválidos. No estima tokens ausentes.
+
+Ver diagnóstico, archivos modificados, contrato anterior/nuevo, flujo final y
+limitaciones en [Contrato de salida D-11](contrato_salida_d11.md).
+
+**Validación efectivamente ejecutada:**
+
+- `pytest tests/ -q`: **569 passed**, en 57,57 s. Una advertencia de deprecación
+  de Starlette/AnyIO, sin fallos. Incluye API, persistencia, PDF, preprocesamiento,
+  agentes, routers y topología del grafo.
+- Después de corregir el caso donde un evento inválido reservaba su ID y añadir
+  su prueba, `pytest tests/test_output_contract_d11.py -q`: **26 passed**, en
+  48,10 s. Esta verificación final también ejercita el cliente LLM con respuesta
+  SDK simulada dentro de LangGraph y comprueba su consumo en el reporte.
+- El fixture A/B/C recorre entrada → grafo compilado → D2/D3 → adaptador → JSON
+  experimental, además de streaming y CLI. El agente único y la ausencia de
+  etiquetas Zeek en su prompt se prueban explícitamente. No hubo consultas
+  reales al proveedor LLM ni se usó ground truth como contexto de inferencia.
+- `python -m compileall -q src tests/test_output_contract_d11.py` y
+  `git diff --check`: sin errores.
+
+El `.venv` local apunta a un Python 3.12.10 eliminado. Las pruebas se ejecutaron
+con Python 3.12.14 del runtime disponible, utilizando las dependencias locales
+del proyecto. Windows bloqueaba la DLL instalada de `uuid_utils`; se instaló
+la misma versión fijada (`0.17.1`) en `tmp/d11-test-deps`, sin cambiar los locks.
+Se desactivó la autocarga de plugins opcionales de pytest y se vaciaron las
+credenciales de proveedores para la corrida completa. No se ejecutó build del
+frontend, cuyos archivos no cambiaron, ni una campaña con LLM real.
+
+**Dictamen D-11:** contrato implementado y verificado con pruebas deterministas
+e integración. La cobertura de evidencia se limita al catálogo visible (40
+registros por defecto; el recorte se declara). El comparador no consulta RAG
+por defecto, por lo que el protocolo debe declarar el acceso a herramientas.
+El scoring D2/D3 requiere ground truth específico y matching predefinido.
+Los artefactos históricos de fase 6 no certifican el consumo D5 ni las
+capacidades D2/D3 de esta extensión: la campaña final debe usar `d11-v1` sobre
+un commit limpio.

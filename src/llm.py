@@ -9,6 +9,8 @@ import re
 import ssl
 import time
 
+from src.telemetry import iniciar_llamada, registrar_consumo
+
 from google import genai
 from google.genai import types
 
@@ -204,8 +206,11 @@ def _generate_con_backoff(
     intentos_503 = 0
     intentos_cuota_minuto = 0
     while True:
+        llamada = iniciar_llamada(modelo)
         try:
-            return client.models.generate_content(model=modelo, contents=msg, config=cfg)
+            respuesta = client.models.generate_content(model=modelo, contents=msg, config=cfg)
+            registrar_consumo(llamada, respuesta)
+            return respuesta
         except Exception as e:
             tipo_cuota = _tipo_error_cuota(e)
             if tipo_cuota == "dia":
