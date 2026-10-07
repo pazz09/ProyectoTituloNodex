@@ -434,3 +434,84 @@ a un modelo**:
 | Runners de NODEX, agente único y baseline | Sí |
 | Orquestador que recorra el subconjunto piloto con N=1 | Sí |
 | Integración externa de D-11 → Fase D | Sí, para D2 y D3 |
+
+## 14. Runners de las tres arquitecturas (Fase C)
+
+`src/experimentation/runners/`, 4 módulos. **Ninguno se ejecutó**: correr un
+runner es ejecutar NODEX, el agente único o el preprocesamiento sobre un
+caso, lo que requiere autorización.
+
+| Runner | LLM | Repeticiones | D2/D3 |
+|---|---|---|---|
+| `nodex` | 5 nodos + bucles | N=3 en campaña | pendientes de D-11 |
+| `agente_unico` | 1 llamada | N=3 en campaña | pendientes de D-11 |
+| `baseline` | no usa | N=1: determinístico | no aplica nunca |
+
+### El agente único existía solo como decisión; ahora existe como código
+
+Lo que se mantiene **idéntico** a NODEX, para que la variable medida sea la
+arquitectura y no la entrada:
+
+| Elemento | Cómo |
+|---|---|
+| El caso | El mismo archivo, la misma función de lectura |
+| Preprocesamiento | La misma `preprocesar_lote()` |
+| Resumen que ve el modelo | El mismo `acotar_resumen_para_prompt()` |
+| Contexto de interpretación | `contexto_preprocesamiento(metadatos, advertencias, muestras, incluir_muestras=True)` — el mismo camino que `_metadatos_desde_v2()` |
+| Conocimiento externo | El mismo `tool_consultar_rag()`, con la `firma` calculada igual |
+| Modelo y temperatura | El mismo `llm_json()` |
+| Claves de salida | Las seis que produce el estado de NODEX, así el **mismo** adaptador sirve para las dos |
+
+Que el adaptador sea el mismo no es comodidad: dos adaptadores podrían
+diferir en cómo interpretan un veredicto ausente, y esa diferencia se
+confundiría con una diferencia entre arquitecturas.
+
+El contrato de salida de D-11 queda como `MARCADOR_CONTRATO_D11` **sin
+rellenar**. El texto lo define la implementación externa; escribirlo acá
+sería duplicarla. `contrato_d11_pendiente()` lo detecta y lo reporta en cada
+corrida.
+
+### El baseline responde otra pregunta que UWF, y hay que declararlo
+
+Las reglas del baseline son operativas: severidad declarada, proporción de
+eventos fallidos y concentración de intentos fallidos por IP. Eso responde
+*"¿el sistema se comporta de forma anómala?"*.
+
+UWF pregunta *"¿hay actividad maliciosa?"*. Un escaneo de puertos exitoso no
+produce severidades graves ni conexiones fallidas, así que el baseline puede
+no detectarlo **por diseño de sus reglas**, no por debilidad.
+
+No se arregla inventándole una noción de malicia. Cada salida lleva
+`pregunta_respondida` y, en casos de seguridad,
+`desalineacion_de_pregunta = True`. Para **BGL** la comparación con el
+baseline es pareada y válida; para **UWF** es contextual y el informe tiene
+que decirlo.
+
+### Tres errores propios encontrados en esta fase
+
+Los dos primeros solo habrían fallado **en plena campaña**:
+
+1. `CONTRATO_VERSION` se importaba de `contracts.salida`, donde no existe
+   (vive en `contracts/__init__.py`).
+2. `firma_lote` se importaba de `tools.resumen_prompt` en vez de
+   `tools.aggregation`. El RAG exige `state["firma"]` y lanza `KeyError` si
+   falta.
+3. `construir_entrada()` del agente único usaba el valor equivocado de
+   `preprocesar_lote()` —que devuelve `(resultado, v2, resumen_v1)`— y
+   omitía las muestras crudas y `incluir_muestras=True`. El agente único
+   habría visto **menos contexto que NODEX**, sesgando la comparación a
+   favor del multiagente. Es el sesgo que el §10 prohíbe expresamente.
+
+A raíz de los dos primeros quedó un control nuevo en
+`tests/experimentation/test_runners.py`: verifica por AST que **cada**
+`from src.X import Y` de la capa experimental apunte a un nombre que existe.
+Corrido a mano: **170 imports verificados, 0 fallos**. También detecté y
+corregí un falso positivo del propio control (no manejaba asignaciones en
+tupla como `VALOR_BENIGNO, VALOR_MALICIOSO = "False", "True"`).
+
+### Lo que falta para el piloto
+
+| Brecha | Bloqueante |
+|---|---|
+| Orquestador que recorra el subconjunto piloto con N=1, persista y exporte | Sí |
+| Integración externa de D-11 → Fase D | Solo para D2 y D3 |
