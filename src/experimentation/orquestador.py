@@ -108,6 +108,50 @@ class PlanCampana:
         }
 
 
+def asegurar_salida_utf8() -> dict:
+    """Fuerza UTF-8 en stdout/stderr antes de correr. **Riesgo real medido.**
+
+    NODEX imprime progreso con caracteres no ASCII (`→`, `⚠️`, `✓`): 56
+    líneas de `src/` no se pueden codificar en cp1252. Y en Windows, cuando
+    la salida se **redirige** a un archivo o a otro proceso,
+    `sys.stdout.encoding` es cp1252, no UTF-8.
+
+    Consecuencia: una corrida con la salida redirigida muere con
+    `UnicodeEncodeError` al imprimir, no por un problema del modelo. El caso
+    más incómodo es `src/llm.py:248`, el aviso del fallback de modelo: el
+    camino que más interesa observar es justo uno de los que crashean.
+
+    Se arregla **acá y no en NODEX**: reconfigurar la salida del proceso que
+    orquesta no cambia ninguna lógica del sistema evaluado. El defecto de
+    producción queda reportado aparte.
+    """
+    import sys
+
+    antes = {}
+    for nombre in ("stdout", "stderr"):
+        flujo = getattr(sys, nombre, None)
+        antes[nombre] = getattr(flujo, "encoding", None)
+        reconfigurar = getattr(flujo, "reconfigure", None)
+        if reconfigurar is not None:
+            try:
+                # `errors="replace"` como red de seguridad: si algún flujo no
+                # admite UTF-8, un carácter se vuelve "?" en vez de abortar
+                # una corrida de miles de llamadas.
+                reconfigurar(encoding="utf-8", errors="replace")
+            except (ValueError, OSError):
+                pass
+    return {
+        "encoding_antes": antes,
+        "encoding_despues": {
+            nombre: getattr(getattr(sys, nombre, None), "encoding", None)
+            for nombre in ("stdout", "stderr")
+        },
+        "motivo": (
+            "56 líneas de src/ no son codificables en cp1252 y en Windows "
+            "stdout es cp1252 cuando se redirige la salida"
+        ),
+    }
+
 def cargar_subconjunto(raiz_repo: Path, nombre: str) -> dict:
     """Lee `experiments/subconjuntos/<nombre>.json`."""
     archivo = raiz_repo / "experiments" / "subconjuntos" / f"{nombre}.json"
@@ -217,16 +261,27 @@ def _correr_una(
         crudo = {"diagnostico_baseline": diagnostico}
         telemetria_dict = telemetria.to_dict()
     else:
-        if identidad.arquitectura == "nodex_multiagente":
-            estado, diagnostico = nodex.ejecutar(contenido, identidad.run_id)
-            estado_ejecucion = nodex.estado_de_ejecucion(diagnostico, estado)
-        else:
-            estado, diagnostico = agente_unico.ejecutar(
-                contenido, identidad.run_id
-            )
-            estado_ejecucion = (
-                "error_api" if diagnostico.get("error_llm") else "completa"
-            )
+        from src import telemetria_llm
+        from src.experimentation.runtime.configuracion import detectar_d11
+
+        # El grabador se activa justo antes de la corrida y se apaga después,
+        # en un `finally`: si quedara activo, la corrida siguiente sumaría sus
+        # llamadas a las de esta.
+        grabador = telemetria_llm.activar(identidad.run_id)
+        try:
+            if identidad.arquitectura == "nodex_multiagente":
+                estado, diagnostico = nodex.ejecutar(contenido, identidad.run_id)
+                estado_ejecucion = nodex.estado_de_ejecucion(diagnostico, estado)
+            else:
+                estado, diagnostico = agente_unico.ejecutar(
+                    contenido, identidad.run_id
+                )
+                estado_ejecucion = (
+                    "error_api" if diagnostico.get("error_llm") else "completa"
+                )
+        finally:
+            medido = grabador.to_dict()
+            telemetria_llm.desactivar()
         resultado = adaptar(
             estado,
             case_id=identidad.case_id,
@@ -239,26 +294,24 @@ def _correr_una(
         salida_dict = resultado.salida.to_dict()
         estados = resultado.estado_por_dimension
         crudo = estado
-        # La telemetría fina (tokens, modelo efectivo) la instrumenta la
-        # Fase 6 sobre `src/llm.py`. Hasta entonces se registra lo que el
-        # runner puede medir, y queda marcada como previa a D-11.
-        telemetria_dict = {
-            "run_id": identidad.run_id,
-            "execution_time": diagnostico.get("execution_time"),
-            "replan_count": diagnostico.get("replan_count"),
-            "intentos_correccion": diagnostico.get("intentos_correccion"),
-            "llm_call_count": diagnostico.get("llamadas_llm"),
-            "input_tokens": None,
-            "output_tokens": None,
-            "total_tokens": None,
-            "uso_fallback": False,
-            "previa_a_d11": True,
-            "nota": (
-                "tokens y modelo efectivo pendientes de la instrumentación "
-                "de la Fase 6; no se inventan"
-            ),
-            "diagnostico_runner": diagnostico,
-        }
+        # La telemetría por llamada la aporta el grabador de
+        # `src/telemetria_llm.py`: modelo solicitado y efectivo, tokens de
+        # entrada, salida y razonamiento, latencia, agente y errores. Lo que
+        # el proveedor no informa queda `None`, nunca estimado.
+        #
+        # `replan_count` e `intentos_correccion` no salen del grabador sino
+        # del estado del grafo, así que se agregan acá: son contadores de la
+        # corrida, no de una llamada.
+        telemetria_dict = dict(
+            medido,
+            execution_time=diagnostico.get("execution_time"),
+            replan_count=diagnostico.get("replan_count"),
+            intentos_correccion=diagnostico.get("intentos_correccion"),
+            # §11 del plan: no mezclar telemetría previa a D-11 con la
+            # posterior. El valor se mide, no se asume.
+            previa_a_d11=not detectar_d11(raiz_repo).get("integrado", False),
+            diagnostico_runner=diagnostico,
+        )
 
     persistencia.guardar(
         identidad, raiz_repo,
@@ -310,6 +363,10 @@ def ejecutar_campana(
             "ya_hechas": plan.ya_hechas,
         }
 
+    # Antes de la primera corrida: sin esto, una salida redirigida aborta
+    # con UnicodeEncodeError al imprimir el progreso de NODEX.
+    salida_utf8 = asegurar_salida_utf8()
+
     particion = subconjunto["particion"]
     resultados, fallos = [], []
     for entrada in plan.pendientes:
@@ -348,6 +405,7 @@ def ejecutar_campana(
         "modo": "ejecutado",
         "ejecutado": True,
         "protocolo_version": PROTOCOLO_VERSION,
+        "salida_utf8": salida_utf8,
         "plan": plan.resumen(),
         "n_resultados": len(resultados),
         "fallos": fallos,

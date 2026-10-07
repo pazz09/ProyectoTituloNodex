@@ -602,3 +602,119 @@ Lo que falta ya no es código de la capa experimental:
 | Integración externa de D-11 → Fase D | Proceso externo |
 | Autorización para ejecutar el piloto (168 llamadas) | Decisión de la autora |
 | Instrumentación de tokens y modelo efectivo (Fase 6) | Pendiente; hoy la telemetría no inventa tokens, los deja en `None` |
+
+## 16. Telemetría del cliente LLM (Fase 6)
+
+Instrumentación de `src/llm.py`, **sin cambiar ninguna decisión de NODEX**.
+El diff contra producción son tres bloques y ningún valor de retorno ni
+camino de excepción se modifica.
+
+### Por qué `llm_json()` basta como único punto
+
+Los cinco nodos LLM y el segundo punto de llamada del triage pasan todos por
+`llm_json()`. Los bucles de replanificación y de corrección de comandos no
+agregan puntos nuevos: vuelven a invocar a los mismos agentes, que vuelven a
+llamar a `llm_json()`. Un solo embudo cubre todo.
+
+### Dos contadores, porque una invocación puede ser varias llamadas
+
+Una invocación de `llm_json()` puede producir varias llamadas HTTP:
+
+1. el bucle de `retries` por JSON inválido vuelve a pedir;
+2. `_generate_con_backoff` reintenta ante 503 y 429-por-minuto;
+3. `_generate_con_fallback` repite la secuencia completa con el modelo de
+   respaldo.
+
+| Contador | Qué cuenta |
+|---|---|
+| `llm_call_count` | invocaciones de `llm_json()`, o sea **pasos de agente** |
+| `api_call_count` | llamadas reales a `generate_content`, reintentos incluidos |
+| `reintentos_api` | la diferencia |
+
+**Los tokens se suman sobre las llamadas físicas**, porque un reintento
+también consume. Si solo se registrara la respuesta final, el consumo
+quedaría subestimado justo en las corridas problemáticas, que son las que
+más interesa medir.
+
+### Qué se registra
+
+Por llamada: agente, invocación lógica a la que pertenece, reintento de
+JSON, modelo solicitado, **modelo efectivo**, tokens de entrada, salida,
+razonamiento y total, latencia y error.
+
+Por corrida: los dos contadores, los tokens sumados, `uso_fallback`, los
+modelos efectivos vistos, la latencia total de API, los errores, el consumo
+agrupado por agente, y —agregados por el orquestador desde el estado del
+grafo, no por el grabador— **`replan_count` e `intentos_correccion`**.
+
+### `None` nunca es cero
+
+Un contador que el proveedor no informa queda `None`. No se estima.
+
+El `print` que ya tenía `llm_json` usa
+`getattr(um, "thoughts_token_count", 0)`: está bien para un mensaje en
+pantalla, pero no para una métrica, porque un 0 se promedia y baja el
+consumo medio. El grabador lee el mismo atributo conservando el `None`.
+
+`origen_total_tokens` declara de dónde salió el total: `proveedor`,
+`suma_de_partes` o `no_informado`. La suma de partes puede no incluir tokens
+que el proveedor contabilice aparte, así que la distinción importa.
+
+### Atribución al agente sin tocar los agentes
+
+Se deduce recorriendo la pila hasta el primer marco de `src/agents/`, con
+`sys._getframe` y no `inspect.stack()` (que lee el código fuente de cada
+marco). Se eligió así para **no editar los cinco agentes**: pasarles un
+parámetro nuevo obligaría a tocar archivos que la implementación externa de
+D-11 también está modificando.
+
+### Verificación con cliente simulado
+
+Se ejercitó con `generate_content` reemplazado por un objeto falso, **sin
+credenciales y sin red**. Ocho escenarios: caso normal, reintento por JSON
+inválido, razonamiento ausente, respuesta sin `usage_metadata`, 503
+transitorio, fallback de modelo, grabador inactivo y agrupación por agente.
+Siete pasaron tal cual. El octavo destapó un defecto de producción.
+
+### Defecto de producción encontrado: la salida redirigida aborta la corrida
+
+**No lo causa la instrumentación.** `src/llm.py:248` imprime el aviso del
+fallback con `⚠️`, y **56 líneas de `src/`** tienen caracteres que cp1252 no
+puede codificar (`→`, `⚠️`, `✓`). En Windows, cuando la salida se **redirige**
+a un archivo, `sys.stdout.encoding` es cp1252 — medido, no supuesto.
+
+Consecuencia: una corrida con la salida redirigida muere con
+`UnicodeEncodeError` al imprimir, no por un problema del modelo. Y el camino
+que crashea es justo el del fallback, que es el que más interesa observar.
+Para una campaña de 2 982 llamadas, que se va a registrar en un archivo, es
+un riesgo vivo.
+
+Se mitiga **en la capa experimental y no en NODEX**:
+`orquestador.asegurar_salida_utf8()` reconfigura stdout y stderr a UTF-8 con
+`errors="replace"` antes de la primera corrida. Verificado: cp1252 → utf-8 y
+el aviso imprime sin crashear. Reconfigurar el proceso que orquesta no
+cambia ninguna lógica del sistema evaluado.
+
+Queda como defecto abierto de producción, para arreglar aparte si se quiere
+que la salida redirigida funcione fuera del experimento.
+
+### Dos falsos positivos más de mi propio control de imports
+
+El control que verifica que cada `from src.X import Y` apunte a un nombre
+existente dio tres falsos positivos nuevos:
+`runtime.exportacion`, `runtime.persistencia` y `evaluators.deteccion`. Son
+**submódulos**, y `from paquete import submodulo` es válido aunque el
+`__init__.py` no los reexporte. Confirmado importándolos. El control ahora
+acepta ese caso: **194 imports verificados, 0 fallos**.
+
+Es el tercer falso positivo del mismo control (antes: asignaciones en tupla
+y búsqueda por subcadena). Vale anotarlo: un control estático que avisa de
+más se deja de leer, y entonces no sirve.
+
+### Lo que falta para el piloto
+
+| Pendiente | Quién |
+|---|---|
+| Integración externa de D-11 → Fase D | Proceso externo |
+| Ejecutar el piloto N=1 (168 llamadas), **después** de la Fase D | Decisión de la autora |
+| HDFS con N=3 | Se decide después del piloto principal |

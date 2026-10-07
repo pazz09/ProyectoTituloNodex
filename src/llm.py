@@ -18,6 +18,7 @@ try:
 except ImportError:  # httpx no es una dependencia directa; si no está, igual cubrimos lo esencial
     _TIPOS_ERROR_TRANSPORTE = (ssl.SSLError, ConnectionError, TimeoutError)
 
+from src import telemetria_llm
 from src.config import (
     BACKOFF_INICIAL,
     BACKOFF_JITTER,
@@ -204,9 +205,29 @@ def _generate_con_backoff(
     intentos_503 = 0
     intentos_cuota_minuto = 0
     while True:
+        comenzado = time.monotonic()
         try:
-            return client.models.generate_content(model=modelo, contents=msg, config=cfg)
+            respuesta = client.models.generate_content(model=modelo, contents=msg, config=cfg)
+            # Telemetria (Fase 6): se anota la llamada REAL, reintentos
+            # incluidos, porque un reintento tambien consume tokens. Es un
+            # no-op si no hay grabador activo, asi que la web, la API y el
+            # CLI se comportan igual que antes. No altera el retorno.
+            telemetria_llm.registrar_llamada(
+                modelo_efectivo=modelo,
+                modelo_solicitado=LLM_MODEL_PRIMARY,
+                comenzado=comenzado,
+                respuesta=respuesta,
+            )
+            return respuesta
         except Exception as e:
+            # Se anota el fallo y se deja intacto el camino de excepcion que
+            # sigue: esta linea no decide nada.
+            telemetria_llm.registrar_llamada(
+                modelo_efectivo=modelo,
+                modelo_solicitado=LLM_MODEL_PRIMARY,
+                comenzado=comenzado,
+                error=f"{type(e).__name__}: {e}",
+            )
             tipo_cuota = _tipo_error_cuota(e)
             if tipo_cuota == "dia":
                 raise
@@ -279,7 +300,11 @@ def llm_json(prompt: str, system: str = None, retries: int = 1) -> dict:
             prompt + f"\n\nTu respuesta anterior no fue JSON válido:\n{last_text}\n"
             "Devuelve ÚNICAMENTE JSON válido, sin texto adicional."
         )
-        resp = _generate_con_fallback(msg, cfg)
+        # Marca la invocacion logica (= un paso de agente) y a que
+        # reintento de JSON corresponde. Cuenta aparte de las llamadas
+        # fisicas: ver `src/telemetria_llm.py`.
+        with telemetria_llm.invocacion_logica(attempt):
+            resp = _generate_con_fallback(msg, cfg)
         if resp.usage_metadata:
             um = resp.usage_metadata
             print(f"   [tokens] entrada={um.prompt_token_count} "

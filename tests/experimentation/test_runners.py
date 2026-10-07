@@ -235,6 +235,12 @@ def _nombres_definidos(modulo: str) -> set[str] | None:
     return None
 
 
+def _es_submodulo(paquete: str, nombre: str) -> bool:
+    """`True` si `paquete/nombre.py` existe en alguno de los dos checkouts."""
+    relativo = Path(*paquete.split(".")) / f"{nombre}.py"
+    return any((base / relativo).is_file() for base in (RAIZ, RAIZ_PRODUCCION))
+
+
 def test_todos_los_imports_de_la_capa_experimental_existen():
     """Un `from src.X import Y` con Y inexistente solo falla al ejecutar.
 
@@ -259,8 +265,16 @@ def test_todos_los_imports_de_la_capa_experimental_existen():
                 fallos.append(f"{archivo.name}: módulo inexistente {nodo.module}")
                 continue
             for alias in nodo.names:
-                if alias.name not in disponibles:
-                    fallos.append(
-                        f"{archivo.name}: {nodo.module} no define {alias.name!r}"
-                    )
+                if alias.name in disponibles:
+                    continue
+                # `from paquete import submodulo` es valido aunque el
+                # `__init__.py` no reexporte el nombre: Python resuelve el
+                # submodulo del disco. Sin esta rama el control daba tres
+                # falsos positivos: runtime.exportacion, runtime.persistencia
+                # y evaluators.deteccion.
+                if _es_submodulo(nodo.module, alias.name):
+                    continue
+                fallos.append(
+                    f"{archivo.name}: {nodo.module} no define {alias.name!r}"
+                )
     assert not fallos, "\n".join(fallos)
