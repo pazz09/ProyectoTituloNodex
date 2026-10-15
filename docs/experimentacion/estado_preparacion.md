@@ -950,6 +950,10 @@ decisión D-7) no existía; se generó de forma determinista y no sobrescribe.
   técnicas y 475 subtécnicas**, y ninguna colección de memoria. La API de
   chromadb se abrió sobre una **copia**, porque abrir una base con la API puede
   ejecutarle migraciones; el original quedó con el mismo hash.
+  **Esta verificación fue insuficiente (15-oct-2026, ver §21):** comprobó que los
+  datos estaban, pero abrió la base sin la función de embeddings de NODEX, y con
+  ella `src/memory.py` no puede abrirla. Se corrigió con una base v2 y un control
+  nuevo que abre la base con el código de NODEX.
 - La suite de D-11 (`tests/test_output_contract_d11.py`, de Felipe) pasa dentro
   de las 860.
 
@@ -1278,3 +1282,128 @@ configuración, si NODEX corre:
 cambia lo que las herramientas le entregan al sistema y por lo tanto lo que se
 está midiendo. Ninguna comparación hecha con una opción es directamente
 comparable con otra hecha con la otra.
+
+### 20.8 ENMIENDA del criterio 3 (15-oct-2026, DESPUÉS del primer resultado)
+
+**Esta enmienda se hace después de ver un resultado y se registra como tal.**
+
+*Primer resultado* (etapa 1, 15-oct-2026): `gemini-3.8-flash` con Gemini directo
+sobre `bgl_des_balanceado_0000` cumplió 5 de los 6 criterios y **falló el 3**
+(`evidencia_valida`). El modelo reconstruyó 8 eventos y citó 19 «uids», números
+tipo `1129456912`. BGL no tiene columna `uid`, y el criterio original decía que
+citar uids en un caso sin uids es inválido. Falla de contenido: no se repite.
+
+*Motivo de la enmienda.* El criterio original no mide lo que se quería medir en
+BGL: la dimensión de reconstrucción **no aplica** a BGL, así que no hay
+referencia contra la cual juzgar los uids que cita el modelo, y el prompt de
+Gemini directo se los pide igual (ver 20.9). Un criterio que cualquier modelo
+incumple en BGL no discrimina entre modelos.
+
+*Enmienda.* En datasets **sin columna `uid`** (BGL):
+- **Gemini directo:** no se juzga la evidencia citada.
+- **NODEX:** solo cuenta `invalid_evidence_uid_count` (debe ser 0; ausente no se
+  da por 0).
+
+En datasets **con** columna `uid` (UWF) el criterio **no cambia**. (Interpretación
+de la enmienda: se aplica solo a los datasets sin `uid`; no se la extendió a UWF.)
+
+*Cómo se conserva lo anterior.*
+- El veredicto con el criterio **ORIGINAL** de la primera corrida queda guardado
+  tal cual; no se recalcula.
+- Cada corrida guarda **los dos veredictos** (original y enmendado), y la tabla
+  final muestra ambos.
+- Las corridas del Pro previstas sobre el mismo caso se ejecutan igual.
+
+*Regla de decisión con la enmienda.* La decisión se toma con el criterio
+**enmendado SOLO si el Pro también incumple el criterio 3 ORIGINAL en BGL con
+Gemini directo** (eso demuestra que el criterio original no discrimina). Si el Pro
+lo cumple y el candidato no, vale la regla original y el resultado es «se mantiene
+el Pro». Si esa corrida del Pro no se hizo o no devolvió una respuesta que juzgar
+(p. ej. una caída de infraestructura), también vale la original: una caída no
+demuestra nada sobre el criterio.
+
+### 20.9 Limitaciones declaradas de la comparación
+
+1. **El prompt de Gemini directo pide reconstrucción de eventos en BGL**, donde esa
+   dimensión no aplica. Gemini directo recibe la misma instrucción en todos los
+   datasets, así que en BGL inventa referencias de evidencia que no se pueden
+   juzgar. Es una limitación del diseño de la pseudo-ablación, no del modelo.
+2. **DECISIÓN PENDIENTE sobre NVD y AbuseIPDB** para la campaña final (ver 20.7):
+   consultas reales o respaldo local, y la elección debe declararse en el informe.
+3. **Temperatura 0** frente a la recomendación oficial de 1.0 (ver 20.4).
+4. Un caso por dataset: no prueba estabilidad entre corridas.
+
+### 20.10 Primer intento de la etapa 1 (anulado por la base de conocimiento)
+
+El primer intento de NODEX con `gemini-3.8-flash` sobre BGL terminó en error **antes
+de llamar al modelo** (0 llamadas): la base de ChromaDB no se podía abrir con el
+código de NODEX (ver sección 21). Ese intento no mide nada del modelo. Sus archivos
+se conservan con la extensión `.anulada` y la corrida se repite con la base v2.
+No cuenta como repetición «por infraestructura» de la regla 20.6: fue un defecto de
+la base y no del proveedor.
+
+## 21. Base de ChromaDB v2 (15-oct-2026)
+
+### 21.1 Qué falló y por qué la verificación anterior no lo vio
+
+La base experimental original (`experiments/knowledge/chroma`, **v1**) se creó con
+`create_collection` **sin función de embeddings**, así que ChromaDB guardó la
+función «default». `src/memory.py` abre las colecciones con
+`SentenceTransformerEmbeddingFunction` y ChromaDB 1.5.9 rechaza el choque
+(*«An embedding function already exists in the collection configuration... new:
+sentence_transformer vs persisted: default»*). Toda corrida de NODEX con esa base
+habría fallado al importar el sistema.
+
+**La verificación de la Etapa 1 (sección 18) fue insuficiente.** Contó los 697
+documentos abriendo la base con la API de Chroma **sin función de embeddings**:
+comprobó que los datos estaban, no que NODEX pudiera abrirlos. Lo descubrió la
+primera corrida real de NODEX.
+
+### 21.2 Qué se cambió para que no se repita
+
+- **Nuevo control** (`knowledge/verificar_base.py`): abre una copia de la base con
+  `LongTermMemory`, **el mismo código que usa NODEX**, y hace consultas reales con
+  embeddings locales. Está incorporado como sección 7 de `verificar_artefactos`.
+- **Una prueba reproduce el defecto:** abrir la v1 con el código de NODEX falla, y
+  la prueba lo exige. Sin ese control, la verificación anterior habría seguido
+  «pasando».
+- Regla de trabajo: **una base de conocimiento se verifica abriéndola con el código
+  que la va a usar, no con una API equivalente.**
+
+### 21.3 Qué se hizo
+
+- **Base nueva en una ruta versionada:** `experiments/knowledge/chroma_v2`. La v1 **no
+  se tocó** (sus hashes registrados siguen coincidiendo) y queda solo como
+  referencia (`ConfiguracionAislada.chroma_v1`).
+- Construida desde **una copia** de la v1 con los vectores ya calculados (no se
+  recalculan), creando la colección con la función de embeddings de NODEX
+  (`sentence_transformer`, `all-MiniLM-L6-v2`). Mismos 697 documentos, ids y
+  metadatos. Solo `attack_techniques`: **sin casos reservados, etiquetas ni
+  feedback** (las colecciones de memoria de producción no se copian).
+- `src/memory.py` **no se adaptó.**
+- Registros nuevos (los de la v1 no se reescribieron): `poblado_chroma_v2.json` (con
+  el hash de cada archivo), `inventario_conocimiento_v2.json`,
+  `verificacion_chroma_v2.json`. La configuración congelada registra sus hashes.
+
+### 21.4 Verificación de la v2 (por ejecución)
+
+Las 12 consultas se escribieron y commitearon **antes** de construir o consultar la
+base (`CONSULTAS_FIJAS`), son descripciones genéricas de ATT&CK y una prueba
+comprueba que no contienen ningún `case_id` ni líneas de un caso.
+
+| Qué | Resultado |
+|---|---|
+| Se abre con `LongTermMemory` y responde consultas reales | Sí: 697 documentos, 12/12 consultas con resultados |
+| Mismos ids y mismo orden que la v1 (top 5) | **12 de 12** |
+| Mismo resultado que vería NODEX (tras el umbral de similitud) | **12 de 12** |
+| Mayor diferencia de distancia entre v1 y v2 | **5,96e-08** (consultas «scanning a network...» y «disabling security tools...»), el redondeo de float32 ya medido |
+| Diferencia máxima entre vectores guardados | 1,49e-08 |
+| Ids, documentos y metadatos | Idénticos |
+| Claves de metadatos | Solo las del catálogo (`technique_id`, `name`, `tactics`, `is_subtechnique`, `url`) |
+| Vectores guardados vs recalculados con el modelo (40 documentos) | Coseno mínimo 0,99999999999992 |
+| `case_id` encontrado dentro del contenido | Ninguno |
+| Aislamiento (`test_aislamiento` y `verificar_artefactos`) | 67 hashes comprobados, 0 fallos |
+
+No se observó ninguna diferencia de ids ni de orden; la única diferencia es la de
+distancia ya citada. Una limitación: 12 consultas no prueban todos los casos de
+empate posibles, solo que la v2 no cambia lo que recupera en ese conjunto.

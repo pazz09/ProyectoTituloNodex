@@ -262,11 +262,19 @@ def test_la_version_devuelta_distinta_del_nombre_pedido_no_rompe_el_criterio_6()
 
 # --- la regla de decisión ---------------------------------------------------------------
 
-def _fila(modelo, cumple=True, rompe=None):
+def _fila(modelo, cumple=True, rompe=None, arquitectura="nodex_multiagente", dataset="uwf",
+          rompe_original=None, tiene_estado=True):
+    """Una fila del resumen. `rompe` rompe el criterio en AMBOS veredictos;
+    `rompe_original` solo en el original (lo que hace la enmienda)."""
     criterios = {c: cumple for c in cm.CRITERIOS}
+    enmendados = dict(criterios)
     if rompe:
-        criterios[rompe] = False
-    return {"modelo": modelo, "etiqueta": f"{modelo}__x", "criterios": criterios}
+        criterios[rompe] = enmendados[rompe] = False
+    if rompe_original:
+        criterios[rompe_original] = False
+    return {"modelo": modelo, "etiqueta": f"{modelo}__{arquitectura}__{dataset}",
+            "arquitectura": arquitectura, "dataset": dataset, "criterios": criterios,
+            "criterios_enmendados": enmendados, "tiene_estado": tiene_estado}
 
 
 def test_si_flash_cumple_todo_la_regla_lo_propone_como_principal():
@@ -285,10 +293,10 @@ def test_si_flash_falla_uno_solo_se_mantiene_el_pro_y_se_dice_cual():
     assert d["cumple_todos"] is False
     assert d["resultado_de_la_regla"] == cm.MODELO_ACTUAL
     assert d["criterios_fallidos"] == [
-        {"corrida": f"{cm.MODELO_CANDIDATO}__x", "criterio": "evidencia_valida"}]
+        {"corrida": f"{cm.MODELO_CANDIDATO}__nodex_multiagente__uwf", "criterio": "evidencia_valida"}]
 
 
-def test_que_el_pro_falle_no_cambia_la_regla():
+def test_que_el_pro_falle_otro_criterio_no_cambia_la_regla():
     """La regla solo mira al candidato; el Pro es la referencia, no se juzga."""
     filas = [_fila(cm.MODELO_ACTUAL, rompe="json_objeto_valido")]
     filas += [_fila(cm.MODELO_CANDIDATO) for _ in range(4)]
@@ -299,6 +307,145 @@ def test_sin_corridas_del_candidato_la_regla_no_propone_el_cambio():
     d = cm.aplicar_regla([_fila(cm.MODELO_ACTUAL)])
     assert d["cumple_todos"] is False
     assert d["resultado_de_la_regla"] == cm.MODELO_ACTUAL
+
+
+# --- enmienda del criterio 3 (15-oct-2026, posterior al primer resultado) ------------------
+
+def _gemext_bgl(modelo, original_ok, enmendado_ok=True):
+    fila = _fila(modelo, arquitectura="gemini_externo", dataset="bgl")
+    fila["criterios"]["evidencia_valida"] = original_ok
+    fila["criterios_enmendados"]["evidencia_valida"] = enmendado_ok
+    return fila
+
+
+def _caso_flash_falla_solo_el_original(pro_original_ok):
+    """Flash incumple el criterio 3 ORIGINAL en BGL/Gemini directo (como la primera
+    corrida real) y lo cumple con el enmendado; el resto cumple todo."""
+    return [
+        _gemext_bgl(cm.MODELO_CANDIDATO, original_ok=False),
+        _gemext_bgl(cm.MODELO_ACTUAL, original_ok=pro_original_ok),
+        _fila(cm.MODELO_CANDIDATO), _fila(cm.MODELO_CANDIDATO, dataset="bgl"),
+        _fila(cm.MODELO_CANDIDATO, arquitectura="gemini_externo"),
+    ]
+
+
+def test_si_el_pro_tambien_incumple_el_original_la_decision_usa_el_enmendado():
+    d = cm.aplicar_regla(_caso_flash_falla_solo_el_original(pro_original_ok=False))
+    assert d["criterio_usado"] == "enmendado"
+    assert "no discrimina" in d["motivo_del_criterio_usado"]
+    assert d["resultado_de_la_regla"] == cm.MODELO_CANDIDATO
+    # y quedan visibles los dos veredictos
+    assert d["con_criterio_original"]["resultado_de_la_regla"] == cm.MODELO_ACTUAL
+    assert d["con_criterio_enmendado"]["resultado_de_la_regla"] == cm.MODELO_CANDIDATO
+
+
+def test_si_el_pro_cumple_el_original_y_flash_no_se_mantiene_la_regla_original_y_el_pro():
+    d = cm.aplicar_regla(_caso_flash_falla_solo_el_original(pro_original_ok=True))
+    assert d["criterio_usado"] == "original"
+    assert d["resultado_de_la_regla"] == cm.MODELO_ACTUAL
+    assert [f["criterio"] for f in d["criterios_fallidos"]] == ["evidencia_valida"]
+    # el enmendado habría dado otro resultado, pero NO se usa: sería cambiar la regla a posteriori
+    assert d["con_criterio_enmendado"]["resultado_de_la_regla"] == cm.MODELO_CANDIDATO
+
+
+def test_si_la_corrida_del_pro_en_bgl_no_se_hizo_vale_la_regla_original():
+    filas = [f for f in _caso_flash_falla_solo_el_original(False)
+             if not (f["modelo"] == cm.MODELO_ACTUAL)]
+    d = cm.aplicar_regla(filas)
+    assert d["criterio_usado"] == "original"
+    assert d["resultado_de_la_regla"] == cm.MODELO_ACTUAL
+
+
+def test_si_el_pro_no_devolvio_respuesta_no_se_concluye_que_el_criterio_no_discrimina():
+    """Una caída de infraestructura del Pro no demuestra nada sobre el criterio."""
+    filas = _caso_flash_falla_solo_el_original(pro_original_ok=False)
+    for f in filas:
+        if f["modelo"] == cm.MODELO_ACTUAL:
+            f["tiene_estado"] = False
+    d = cm.aplicar_regla(filas)
+    assert d["criterio_usado"] == "original"
+
+
+def test_con_el_enmendado_un_fallo_en_otro_criterio_sigue_siendo_fallo():
+    filas = _caso_flash_falla_solo_el_original(pro_original_ok=False)
+    filas.append(_fila(cm.MODELO_CANDIDATO, rompe="veredicto_presente"))
+    d = cm.aplicar_regla(filas)
+    assert d["criterio_usado"] == "enmendado"
+    assert d["resultado_de_la_regla"] == cm.MODELO_ACTUAL
+    assert [f["criterio"] for f in d["criterios_fallidos"]] == ["veredicto_presente"]
+
+
+def test_la_enmienda_no_juzga_la_evidencia_de_gemini_directo_en_un_dataset_sin_uid():
+    """El caso real de la primera corrida: 19 «uids» citados en BGL, que no tiene uid."""
+    r = _valida("gemini_externo")
+    r["estado"]["uids_citados"] = ["1129456912", "1129501476"]
+    r["estado"]["invalid_evidence_uid_count"] = None
+    assert cm.evaluar_criterios(r, "m", None)["evidencia_valida"] is False             # original
+    assert cm.evaluar_criterios(r, "m", None, enmendado=True)["evidencia_valida"] is True
+
+
+def test_la_enmienda_en_nodex_sin_uid_solo_cuenta_su_contador():
+    r = _valida()
+    r["estado"]["uids_citados"] = ["1129456912"]
+    assert cm.evaluar_criterios(r, "m", None, enmendado=True)["evidencia_valida"] is True
+    r["estado"]["invalid_evidence_uid_count"] = 3
+    assert cm.evaluar_criterios(r, "m", None, enmendado=True)["evidencia_valida"] is False
+    r["estado"]["invalid_evidence_uid_count"] = None          # ausente no se da por 0
+    assert cm.evaluar_criterios(r, "m", None, enmendado=True)["evidencia_valida"] is False
+
+
+def test_la_enmienda_no_cambia_nada_en_un_dataset_con_uid():
+    r = _valida("gemini_externo")
+    r["estado"]["uids_citados"] = ["U1", "U404"]               # U404 no existe en el caso
+    assert cm.evaluar_criterios(r, "m", UIDS)["evidencia_valida"] is False
+    assert cm.evaluar_criterios(r, "m", UIDS, enmendado=True)["evidencia_valida"] is False
+
+
+def test_la_enmienda_no_da_por_valida_una_corrida_sin_respuesta():
+    r = _valida("gemini_externo")
+    r["estado"] = {}
+    r["diagnostico"] = {"error": "TimeoutError: x"}
+    assert cm.evaluar_criterios(r, "m", None, enmendado=True)["evidencia_valida"] is False
+
+
+def test_la_enmienda_solo_toca_el_criterio_3():
+    r = _valida("gemini_externo")
+    r["estado"]["uids_citados"] = ["1", "2"]
+    original = cm.evaluar_criterios(r, "m", None)
+    enmendado = cm.evaluar_criterios(r, "m", None, enmendado=True)
+    assert {c for c in cm.CRITERIOS if original[c] != enmendado[c]} == {"evidencia_valida"}
+
+
+def test_una_corrida_anterior_a_la_enmienda_conserva_su_veredicto_original_tal_cual():
+    """La primera corrida real quedó guardada sin `criterios_enmendados`: al resumir se
+    calcula el enmendado, pero el original NO se recalcula."""
+    final = _crudo_de(cm.Corrida("m", "gemini_externo", "bgl", "bgl_des_a_0000"))
+    final["criterios"] = {c: True for c in cm.CRITERIOS} | {"evidencia_valida": False}
+    final["tipo_fallo"] = cm.FALLO_CONTENIDO
+    final["repetida_por_infraestructura"] = False
+    final["intentos"] = [final]
+    final["estado"]["uids_citados"] = ["1129456912"]
+    fila = cm.resumen_de_corrida(final, None)
+    assert fila["criterios"]["evidencia_valida"] is False          # original, como se guardó
+    assert fila["criterios_enmendados"]["evidencia_valida"] is True
+    assert fila["cumple_original"] is False and fila["cumple_enmendado"] is True
+
+
+def test_cada_corrida_nueva_guarda_los_dos_veredictos():
+    final = cm.correr_corrida(CORRIDA, _Lanzador(_crudo()), UIDS)
+    assert set(final["criterios"]) == set(final["criterios_enmendados"]) == set(cm.CRITERIOS)
+
+
+@pytest.mark.parametrize("texto, esperado", [
+    ("2", [1]), ("3-8", [2, 3, 4, 5, 6, 7]), ("2,5-6", [1, 4, 5]), ("1-2", [0, 1])])
+def test_corridas_se_numeran_desde_1(texto, esperado):
+    assert cm._parsear_corridas(texto, 8) == esperado
+
+
+@pytest.mark.parametrize("texto", ["0", "9", "5-3", "1-9"])
+def test_corridas_fuera_del_plan_son_un_error(texto):
+    with pytest.raises(ValueError):
+        cm._parsear_corridas(texto, 8)
 
 
 # --- instrumentos del trabajador ------------------------------------------------------

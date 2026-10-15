@@ -190,8 +190,17 @@ def uids_del_caso(raiz_repo: Path, dataset: str, case_id: str) -> frozenset[str]
 
 
 def evaluar_criterios(resultado: dict, modelo: str,
-                      uids_caso: frozenset[str] | None) -> dict[str, bool]:
-    """Aplica los seis criterios a lo que dejó el trabajador. Todos son bool."""
+                      uids_caso: frozenset[str] | None,
+                      enmendado: bool = False) -> dict[str, bool]:
+    """Aplica los seis criterios a lo que dejó el trabajador. Todos son bool.
+
+    `enmendado=True` aplica la ENMIENDA del criterio 3, hecha el 15-oct-2026
+    DESPUÉS del primer resultado (ver docs, sección 20.8): en un dataset sin
+    columna `uid` no se juzga la evidencia citada por Gemini directo, y en NODEX
+    solo cuenta `invalid_evidence_uid_count`. En un dataset con `uid` (UWF) el
+    criterio es el mismo. El veredicto con el criterio ORIGINAL (`enmendado=False`)
+    se conserva siempre.
+    """
     diag = resultado.get("diagnostico") or {}
     tel = resultado.get("telemetria") or {}
     estado = resultado.get("estado") or {}
@@ -211,10 +220,18 @@ def evaluar_criterios(resultado: dict, modelo: str,
     contador_ok = reportado == 0 if resultado["arquitectura"] == "nodex_multiagente" \
         else reportado in (None, 0)
 
+    if enmendado and uids_caso is None:
+        # Dataset sin columna `uid`: citar uids no tiene referencia contra la cual
+        # juzgarse. NODEX: solo su propio contador. Gemini directo: no se juzga.
+        evidencia_ok = bool(estado) and (
+            contador_ok if resultado["arquitectura"] == "nodex_multiagente" else True)
+    else:
+        evidencia_ok = bool(estado) and invalidos == 0 and contador_ok
+
     return {
         "json_objeto_valido": bool(json_ok),
         "veredicto_presente": bool(estado.get("veredicto_presente")),
-        "evidencia_valida": bool(estado) and invalidos == 0 and contador_ok,
+        "evidencia_valida": evidencia_ok,
         "tokens_registrados": all(
             isinstance(tel.get(c), int) and not isinstance(tel.get(c), bool)
             for c in ("input_tokens", "output_tokens")),
@@ -224,21 +241,54 @@ def evaluar_criterios(resultado: dict, modelo: str,
     }
 
 
-def aplicar_regla(filas: list[dict]) -> dict:
-    """Regla de decisión fijada de antemano. No cambia ninguna configuración."""
+def _regla_con(filas: list[dict], clave: str) -> dict:
     del_candidato = [f for f in filas if f["modelo"] == MODELO_CANDIDATO]
     fallas = [
         {"corrida": f["etiqueta"], "criterio": c}
-        for f in del_candidato for c in CRITERIOS if not f["criterios"][c]
+        for f in del_candidato for c in CRITERIOS if not f[clave][c]
     ]
     cumple = bool(del_candidato) and not fallas
     return {
-        "regla": (f"{MODELO_CANDIDATO} cumple los 6 criterios en todas sus corridas "
-                  f"-> modelo principal; si no, se mantiene {MODELO_ACTUAL}"),
         "corridas_evaluadas": len(del_candidato),
         "cumple_todos": cumple,
         "resultado_de_la_regla": MODELO_CANDIDATO if cumple else MODELO_ACTUAL,
         "criterios_fallidos": fallas,
+    }
+
+
+def aplicar_regla(filas: list[dict]) -> dict:
+    """Regla de decisión fijada de antemano. No cambia ninguna configuración.
+
+    Se evalúa con el criterio ORIGINAL y con el ENMENDADO (criterio 3). La
+    decisión usa el enmendado SOLO si el Pro también incumple el criterio
+    original en BGL con Gemini directo (eso demuestra que el criterio original
+    no discrimina entre modelos). Si el Pro lo cumple y el candidato no, o si
+    esa corrida del Pro todavía no existe, vale la regla original.
+    """
+    original = _regla_con(filas, "criterios")
+    enmendada = _regla_con(filas, "criterios_enmendados")
+    pro = next((f for f in filas if f["modelo"] == MODELO_ACTUAL
+                and f["arquitectura"] == "gemini_externo" and f["dataset"] == "bgl"), None)
+    if pro is None:
+        usa_enmendado, motivo = False, "la corrida del Pro en BGL con Gemini directo no se hizo"
+    elif not pro.get("tiene_estado"):
+        usa_enmendado, motivo = False, ("la corrida del Pro en BGL con Gemini directo no "
+                                        "devolvió una respuesta que juzgar")
+    elif not pro["criterios"]["evidencia_valida"]:
+        usa_enmendado, motivo = True, ("el Pro también incumple el criterio 3 original en "
+                                       "BGL con Gemini directo: no discrimina")
+    else:
+        usa_enmendado, motivo = False, ("el Pro cumple el criterio 3 original en BGL con "
+                                        "Gemini directo: el criterio sí discrimina")
+    elegida = enmendada if usa_enmendado else original
+    return {
+        "regla": (f"{MODELO_CANDIDATO} cumple los 6 criterios en todas sus corridas "
+                  f"-> modelo principal; si no, se mantiene {MODELO_ACTUAL}"),
+        "criterio_usado": "enmendado" if usa_enmendado else "original",
+        "motivo_del_criterio_usado": motivo,
+        "con_criterio_original": original,
+        "con_criterio_enmendado": enmendada,
+        **elegida,
     }
 
 
@@ -394,6 +444,8 @@ def correr_corrida(corrida: Corrida, lanzar, uids_caso: frozenset[str] | None) -
         resultado = lanzar(corrida, n)
         resultado["intento"] = n
         resultado["criterios"] = evaluar_criterios(resultado, corrida.modelo, uids_caso)
+        resultado["criterios_enmendados"] = evaluar_criterios(
+            resultado, corrida.modelo, uids_caso, enmendado=True)
         resultado["tipo_fallo"] = clasificar_fallo(resultado, resultado["criterios"])
         intentos.append(resultado)
         if resultado["tipo_fallo"] != FALLO_INFRAESTRUCTURA:
@@ -438,14 +490,24 @@ def revision_inmediata(resultado: dict, modelo: str) -> list[str]:
     return avisos
 
 
-def resumen_de_corrida(final: dict) -> dict:
-    """Una fila legible de una corrida final."""
+def resumen_de_corrida(final: dict, uids_caso: frozenset[str] | None = None) -> dict:
+    """Una fila legible de una corrida final, con los dos veredictos.
+
+    El veredicto ORIGINAL es el que quedó guardado al correr y no se recalcula. El
+    enmendado se calcula aquí si la corrida es anterior a la enmienda.
+    """
     tel = final.get("telemetria") or {}
+    enmendados = final.get("criterios_enmendados") or evaluar_criterios(
+        final, final["modelo"], uids_caso, enmendado=True)
     llamadas = tel.get("llm_calls") or []
     return {
         "etiqueta": final["etiqueta"], "modelo": final["modelo"],
         "arquitectura": final["arquitectura"], "dataset": final["dataset"],
         "case_id": final["case_id"], "criterios": final["criterios"],
+        "criterios_enmendados": enmendados,
+        "cumple_original": all(final["criterios"].values()),
+        "cumple_enmendado": all(enmendados.values()),
+        "tiene_estado": bool(final.get("estado")),
         "tipo_fallo": final["tipo_fallo"],
         "repetida_por_infraestructura": final["repetida_por_infraestructura"],
         "n_intentos": len(final["intentos"]),
@@ -565,10 +627,14 @@ def resumir(raiz_repo: Path, salida: Path) -> dict:
     for corrida in plan:
         archivo = salida / f"{corrida.etiqueta}.final.json"
         if archivo.is_file():
-            filas.append(resumen_de_corrida(json.loads(archivo.read_text(encoding="utf-8"))))
+            filas.append(resumen_de_corrida(
+                json.loads(archivo.read_text(encoding="utf-8")),
+                uids_del_caso(raiz_repo, corrida.dataset, corrida.case_id)))
         else:
             faltan.append(corrida.etiqueta)
-    return {"filas": filas, "corridas_que_faltan": faltan, "decision": aplicar_regla(filas)}
+    anuladas = sorted(p.name for p in salida.glob("*.anulada"))
+    return {"filas": filas, "corridas_que_faltan": faltan,
+            "archivos_anulados_conservados": anuladas, "decision": aplicar_regla(filas)}
 
 
 def describir_plan(plan: list[Corrida]) -> str:
@@ -579,6 +645,18 @@ def describir_plan(plan: list[Corrida]) -> str:
         lineas.append(f"  {i}. [etapa {etapa}] {c.modelo:<24} {c.arquitectura:<18} "
                       f"{c.dataset}  {c.case_id}  >= {LLAMADAS_MINIMAS[c.arquitectura]} llamadas")
     return "\n".join(lineas)
+
+
+def _parsear_corridas(texto: str, total: int) -> list[int]:
+    """`"2"`, `"3-8"` o `"2,5-6"` (numeración desde 1) -> índices desde 0, ordenados."""
+    indices: set[int] = set()
+    for parte in texto.split(","):
+        extremos = parte.strip().split("-")
+        desde, hasta = int(extremos[0]), int(extremos[-1])
+        if not (1 <= desde <= hasta <= total):
+            raise ValueError(f"corridas fuera del plan (1-{total}): {parte!r}")
+        indices.update(range(desde - 1, hasta))
+    return sorted(indices)
 
 
 def _dentro_de(hijo: Path, padre: Path) -> bool:
@@ -595,6 +673,9 @@ def main(argv: list[str] | None = None, raiz_repo: Path | None = None) -> int:
     p.add_argument("--etapa", type=int, choices=(1, 2),
                    help="HACE LLAMADAS AL MODELO. 1 = las dos primeras corridas (BGL con el "
                         "candidato); se detiene para revisar. 2 = las seis restantes.")
+    p.add_argument("--corridas", metavar="N[,N-M]",
+                   help="HACE LLAMADAS AL MODELO. Corre estas corridas del plan "
+                        "(numeración de la lista impresa), p. ej. 2 o 3-8.")
     p.add_argument("--verificar-config", action="store_true",
                    help="muestra la configuracion efectiva por modelo; no usa la red.")
     p.add_argument("--resumir", action="store_true",
@@ -626,16 +707,19 @@ def main(argv: list[str] | None = None, raiz_repo: Path | None = None) -> int:
         print(json.dumps(resumir(raiz_repo, Path(args.salida)), indent=2, ensure_ascii=False))
         return 0
 
-    if not args.etapa:
-        print("\n(sin --etapa: no se hizo ninguna llamada)")
+    if not args.etapa and not args.corridas:
+        print("\n(sin --etapa ni --corridas: no se hizo ninguna llamada)")
         return 0
 
     if not args.env or not args.salida:
-        p.error("--etapa necesita --env y --salida")
+        p.error("--etapa y --corridas necesitan --env y --salida")
     salida = Path(args.salida)
     if _dentro_de(salida, raiz_repo / "experiments"):
         p.error("--salida debe estar FUERA de experiments/: esto no es un resultado reportable")
-    indices = list(range(ETAPA_1)) if args.etapa == 1 else list(range(ETAPA_1, len(plan)))
+    if args.corridas:
+        indices = _parsear_corridas(args.corridas, len(plan))
+    else:
+        indices = list(range(ETAPA_1)) if args.etapa == 1 else list(range(ETAPA_1, len(plan)))
     if args.etapa == 1 and salida.exists() and any(salida.iterdir()):
         p.error("--salida ya tiene contenido: la etapa 1 no sobrescribe nada")
     finales = ejecutar(raiz_repo, Path(args.env), salida, indices)
