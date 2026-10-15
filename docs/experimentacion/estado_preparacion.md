@@ -1635,3 +1635,85 @@ válido y solo un fallo de git da `None`; cuatro pruebas lo cubren (árbol limpi
 con archivo sin seguimiento y fuera de un repositorio). Esa primera congelación (huella
 `20d936582d27...`) no se usó en ninguna corrida y se descartó; el piloto se congeló de nuevo,
 con el mismo nombre, sobre el commit con la corrección.
+
+## 23. Piloto de depuración (15-oct-2026)
+
+**Resultados de DEPURACIÓN: no son reportables.** Desarrollo, N=1, 24 casos (8 de BGL, 8 de
+HDFS, 8 de UWF) × 3 arquitecturas = 72 corridas. Configuración congelada
+`piloto-flash38-20261015` (huella `8be17560bd44f7a59bf76ebf7bad0b7942b6b4fd3de3997600a764512bacce32`,
+commit `fbeeba6`, árbol limpio): `gemini-3.8-flash`, `LLM_SIN_RESPALDO` activo, temperatura 0,
+`generateContent`; Gemini directo hereda el mismo modelo.
+
+### 23.1 Resultado operativo
+
+- **72 de 72 corridas completas**; 0 ausentes, 0 fallidas, **0 con fallback**, 0 fallas de
+  infraestructura (no se activó la parada de 3 seguidas ni el tope de 2 h).
+- Todas las llamadas con `model_version` = `gemini-3.8-flash` (el pedido) y razonamiento
+  informado. **Ninguna corrida con total de tokens `None`**: no hubo llamadas fallidas.
+- Etapa 1 (`bgl_des_balanceado_0000`, 3 arquitecturas): limpia; se siguió con las 69 restantes.
+- Consumo de las 48 corridas con LLM: **158 llamadas** y **≈1,265 M de tokens** (entrada
+  1.055.970, salida 55.996, razonamiento 152.904).
+- **Estimación del plan vs lo real (un solo dato):** el plan estimó ≈1,139 M de tokens solo con
+  lo medido (sin HDFS). Las 32 corridas con LLM de BGL y UWF consumieron 1,166 M (+2,4 %).
+  Es una coincidencia con N=1 por celda: no valida la estimación.
+- NODEX hizo 5, 6 y 11 llamadas por corrida (BGL 5,1 de media, HDFS 5,0, UWF 6,6).
+
+### 23.2 HDFS aparte: las 16 corridas con LLM (sin medición previa de tokens)
+
+HDFS es **auxiliar (D-7)** y no tenía medición previa. Resultado: NODEX 8 corridas, 40
+llamadas, 6.132 / 851 / 2.636 tokens (entrada / salida / razonamiento) y 32 s por corrida;
+Gemini directo 8 corridas, 8 llamadas, 1.318 / 339 / 1.097 tokens y 10,5 s por corrida. Total
+de las 16: 48 llamadas, **98.983 tokens**, 342 s. Con esto la estimación de HDFS deja de estar
+«sin medición» (una sola vez, N=8 por arquitectura).
+
+### 23.3 Intentos de consulta externa (primer dato válido)
+
+NODEX, 24 corridas (el bloqueo y la tabla funcionaron: ver 20.16):
+
+| Dataset | AbuseIPDB: consultas / corridas con intentos | NVD |
+|---|---|---|
+| BGL | 2 / 2 de 8 | 0 |
+| HDFS | 43 / 8 de 8 | 0 |
+| UWF | 158 / 8 de 8 | 0 |
+| **Total** | **203, todos bloqueados, el respaldo local respondió en el 100 %** | **0** |
+
+NVD **no se consultó nunca** en los 24 casos de NODEX. Gemini directo y el baseline no usan
+herramientas (la celda no aplica). **La política para la campaña final sigue PENDIENTE.**
+
+### 23.4 Revisión de la vista «Resultados» (Chrome real, API real)
+
+Chrome sin ventana contra la API real (`/api/resultados`) y la interfaz de producción. Capturas
+en `docs/experimentacion/capturas_piloto_20261015/`. Lo que se ve:
+
+- **Banner de no reportable:** visible y en rojo («RESULTADOS DE DEPURACIÓN — NO REPORTABLES»).
+- **Integridad:** 72 / 72 / 72 / 0 / 0 / 0, y dos advertencias: la de depuración (alta, roja) y
+  «203 · intentos de consulta a NVD/AbuseIPDB bloqueados, con respaldo local» (informativa, azul).
+- **Totales `None` y suma parcial:** las columnas existen («Corridas con total None», «Llamadas
+  fallidas», «Tokens parciales») y muestran 0, 0 y «—»; **no hubo ninguna corrida real con
+  total `None`, así que la suma parcial no se pudo ver con datos reales.** Está cubierta por las
+  pruebas, no por este piloto.
+- **Tabla de intentos de consulta externa:** visible por arquitectura, dataset y herramienta;
+  «—» (no aplica) para Gemini directo y el baseline, 0 medidos para NVD en NODEX.
+
+**Defectos de la vista encontrados al verla (no se corrigieron: el código está congelado):**
+
+1. Las seis tarjetas de integridad no caben en la fila de cinco: «Con fallback de modelo» pasa
+   a una segunda fila.
+2. Las tablas de consumo y de consultas externas son más anchas que la pantalla (2.477 px contra
+   1.026 visibles): las columnas nuevas («Corridas con total None», «Llamadas fallidas»,
+   «Tokens parciales») quedan fuera de pantalla hasta desplazarse a la derecha.
+3. En la tabla de consultas externas la columna «Nota» es un texto largo que parte las celdas y
+   estira las filas de NODEX a ~180 px; la nota debería ir en la descripción de la tabla.
+4. La captura del lado derecho de la tabla de consultas (columna «Respondió el respaldo local») no
+   se logró por un detalle del script de captura; sus valores están en `consultas_externas.csv`.
+
+### 23.5 Limitaciones y pendientes
+
+- Gemini directo no registra la duración por llamada (su runner no pasa por `src/llm.py`);
+  solo hay el tiempo total de su única llamada.
+- Los resultados de este piloto no deben citarse como resultados experimentales.
+- **PENDIENTES, abiertos:** (1) la política de NVD y AbuseIPDB para la campaña final (consultas
+  reales o respaldo local; cualquiera debe declararse en el informe); (2) el presupuesto de la
+  campaña con la tabla de precios vigente (`experiments/config/precios_modelo.json` sigue vacía:
+  falta fecha, fuente y precios); (3) el formulario ciego de la rúbrica humana (hoy los informes
+  no ocultan qué arquitectura los produjo).

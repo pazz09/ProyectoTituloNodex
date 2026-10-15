@@ -1,0 +1,40 @@
+{
+  "integridad": "Integridad de los datos\n\nQué tan completo y comparable es lo que se muestra abajo. Las corridas fallidas y las que usaron otro modelo se muestran, no se ocultan.\n\n72\nCorridas esperadas\n72\nPresentes\n72\nCompletas\n0\nAusentes\n0\nFallidas\n0\nCon fallback de modelo\nresultados de DEPURACIÓN (desarrollo/piloto): no son reportables ni se citan en el informe\n203 · intentos de consulta a NVD/AbuseIPDB bloqueados, con respaldo local (política de la campaña final pendiente)",
+  "s115": "11.5 Consumo y comportamiento operacional\n\nTiempo, llamadas al modelo, tokens, replanificaciones y correcciones. Solo promedian las corridas completas.\n\nresultados de DEPURACIÓN (desarrollo/piloto): no son reportables ni se citan en el informe\n203 · intentos de consulta a NVD/AbuseIPDB bloqueados, con respaldo local (política de la campaña final pendiente)\nTiempo por corrida (s)\nMedia\nMediana\n0\n25\n50\n75\n100\n0,0\n0,0\n18,2\n19,2\n38,6\n38,4\n0,0\n0,0\n10,5\n9,3\n32,2\n33,5\n0,1\n0,1\n50,7\n49,3\n58,7\n52,1\nbgl\nBaseline de reglas\nbgl\nGemini directo\nbgl\nNODEX\nhdfs\nBaseline de reglas\nhdfs\nGemini directo\nhdfs\nNODEX\nuwf\nBaseline de reglas\nuwf\nGemini directo\nuwf\nNODEX\nSVG\nPNG\nTokens por corrida (tokens)\nEntrada\nSalida\nRazonamiento\n0\n25000\n50000\n75000\n100000\n2759\n1243\n1133\n3992\n788\n2990\n1318\n339\n1097\n6132\n851\n2636\n50341\n1739\n5630\n67454\n2040\n5626\nn/d\nn/d\nn/d\nn/d\nn/d\nn/d\nn/d\nn/d\nn/d\nbgl\nBaseline de reglas\nbgl\nGemini directo\nbgl\nNODEX\nhdfs\nBaseline de reglas\nhdfs\nGemini directo\nhdfs\nNODEX\nuwf\nBaseline de reglas\nuwf\nGemini directo\nuwf\nNODEX\nSVG\nPNG\nLlamadas al modelo, replanificaciones y correcciones por corrida\nLlamadas\nReplanificaciones\nCorrecciones\n0\n3\n5\n8\n10\n0,0\n1,0\n5,1\n0,0\n1,0\n0,0\n1,0\n5,0\n0,0\n1,0\n0,0\n1,0\n6,6\n0,1\n1,1\nn/d\nn/d\nn/d\nn/d\nn/d\nn/d\nn/d\nn/d\nn/d\nn/d\nn/d\nn/d\nbgl\nBaseline de reglas\nbgl\nGemini directo\nbgl\nNODEX\nhdfs\nBaseline de reglas\nhdfs\nGemini directo\nhdfs\nNODEX\nuwf\nBaseline de reglas\nuwf\nGemini directo\nuwf\nNODEX\nSVG\nPNG\nConsumo y comportamiento operacional\nCSV\n\nSolo promedian las corridas completas: una corrida cortada consumió menos y haría parecer más eficiente a la arquitectura que más falla. Si el proveedor no informó los tokens, la celda queda vacía; no se estiman. Una llamada fallida deja el total de su corrida en None y la deja fuera de las medias de tokens; lo que sí se sabe de esas corridas se muestra aparte como suma parcial (≥, un piso), nunca como total.\n\nDataset\tArquitectura\tCompletas\tNo completas\tTiempo medio (s)\tTiempo mediana (s)\tLlamadas al modelo\tTokens de entrada\tTokens de salida\tTokens de razonamiento\tTokens totales\tVersión devuelta por la API\tReplanificaciones\tCorrecciones\tCon fallback\tCorridas con total None (fuera de las medias de tokens)\tLlamadas fallidas\tTokens parciales (piso, solo de esas corridas)\nbgl\tBaseline de reglas\t8\t0\t0,02\t0,02\t0,00\t—\t—\t—\t—\t—\t—\t—\t—\t—\t—\t—\nbgl\tGemini directo\t8\t0\t18,17\t19,23\t1,00\t2759,00\t1242,88\t1133,25\t5135,13\tgemini-3.8-flash\t—\t—\t0\t0\t0\t—\nbgl\tNODEX\t8\t0\t38,56\t38,38\t5,13\t3992,25\t788,13\t2990,38\t7770,75\tgemini-3.8-flash\t0,00\t1,00\t0\t0\t0\t—\nhdfs\tBaseline de reglas\t8\t0\t0,02\t0,02\t0,00\t—\t—\t—\t—\t—\t—\t—\t—\t—\t—\t—\nhdfs\tGemini directo\t8\t0\t10,55\t9,32\t1,00\t1318,25\t339,25\t1097,13\t2754,63\tgemini-3.8-flash\t—\t—\t0\t0\t0\t—\nhdfs\tNODEX\t8\t0\t32,18\t33,51\t5,00\t6132,00\t850,63\t2635,63\t9618,25\tgemini-3.8-flash\t0,00\t1,00\t0\t0\t0\t—\nuwf\tBaseline de reglas\t8\t0\t0,05\t0,05\t0,00\t—\t—\t—\t—\t—\t—\t—\t—\t—\t—\t—\nuwf\tGemini directo\t8\t0\t50,69\t49,32\t1,00\t50341,25\t1739,13\t5630,38\t57710,75\tgemini-3.8-flash\t—\t—\t0\t0\t0\t—\nuwf\tNODEX\t8\t0\t58,71\t52,15\t6,63\t67453,50\t2039,50\t5626,25\t75119,25\tgemini-3.8-flash\t0,13\t1,13\t0\t0\t0\t—\nIntentos de consulta externa (NVD, AbuseIPDB)\nCSV\n\nPara decidir con datos la política de consultas externas de la campaña final (decisión pendiente; cualquiera que se elija debe declararse en el informe). «No usa herramientas externas» y «sin registro» no son lo mismo que 0 intentos.\n\nDataset\tArquitectura\tHerramienta\tCorridas\tCon registro\tCorridas con intentos\tConsultas a la herramienta\tIntentos de salida a la red\tBloqueados\tRespondió el respaldo local\tNota\nbgl\tBaseline de reglas\tabuseipdb\t8\t—\t—\t—\t—\t—\t—\tno usa herramientas externas\nbgl\tBaseline de reglas\tnvd\t8\t—\t—\t—\t—\t—\t—\tno usa herramientas externas\nbgl\tGemini directo\tabuseipdb\t8\t—\t—\t—\t—\t—\t—\tno usa herramientas externas\nbgl\tGemini directo\tnvd\t8\t—\t—\t—\t—\t—\t—\tno usa herramientas externas\nbgl\tNODEX\tabuseipdb\t8\t8\t2\t2\t2\t2\t2\tlas llamadas HTTP se bloquean y responde el respaldo local; política de la campaña final PENDIENTE\nbgl\tNODEX\tnvd\t8\t8\t0\t0\t0\t0\t0\tlas llamadas HTTP se bloquean y responde el respaldo local; política de la campaña final PENDIENTE\nhdfs\tBaseline de reglas\tabuseipdb\t8\t—\t—\t—\t—\t—\t—\tno usa herramientas externas\nhdfs\tBaseline de reglas\tnvd\t8\t—\t—\t—\t—\t—\t—\tno usa herramientas externas\nhdfs\tGemini directo\tabuseipdb\t8\t—\t—\t—\t—\t—\t—\tno usa herramientas externas\nhdfs\tGemini directo\tnvd\t8\t—\t—\t—\t—\t—\t—\tno usa herramientas externas\nhdfs\tNODEX\tabuseipdb\t8\t8\t8\t43\t43\t43\t43\tlas llamadas HTTP se bloquean y responde el respaldo local; política de la campaña final PENDIENTE\nhdfs\tNODEX\tnvd\t8\t8\t0\t0\t0\t0\t0\tlas llamadas HTTP se bloquean y responde el respaldo local; política de la campaña final PENDIENTE\nuwf\tBaseline de reglas\tabuseipdb\t8\t—\t—\t—\t—\t—\t—\tno usa herramientas externas\nuwf\tBaseline de reglas\tnvd\t8\t—\t—\t—\t—\t—\t—\tno usa herramientas externas\nuwf\tGemini directo\tabuseipdb\t8\t—\t—\t—\t—\t—\t—\tno usa herramientas externas\nuwf\tGemini directo\tnvd\t8\t—\t—\t—\t—\t—\t—\tno usa herramientas externas\nuwf\tNODEX\tabuseipdb\t8\t8\t8\t158\t158\t158\t158\tlas llamadas HTTP se bloquean y responde el respaldo local; política de la campaña final PENDIENTE\nuwf\tNODEX\tnvd\t8\t8\t0\t0\t0\t0\t0\tlas llamadas HTTP se bloquean y responde el respaldo local; política de la campaña final PENDIENTE",
+  "banner": "RESULTADOS DE DEPURACIÓN — NO REPORTABLES\n\nSon de una corrida de desarrollo o de piloto, hecha para depurar el sistema. No se citan en el informe ni se comparan como resultados.",
+  "cabeceras_consumo": [
+    [
+      "Dataset",
+      "Arquitectura",
+      "Completas",
+      "No completas",
+      "Tiempo medio (s)",
+      "Tiempo mediana (s)",
+      "Llamadas al modelo",
+      "Tokens de entrada",
+      "Tokens de salida",
+      "Tokens de razonamiento",
+      "Tokens totales",
+      "Versión devuelta por la API",
+      "Replanificaciones",
+      "Correcciones",
+      "Con fallback",
+      "Corridas con total None (fuera de las medias de tokens)",
+      "Llamadas fallidas",
+      "Tokens parciales (piso, solo de esas corridas)"
+    ],
+    [
+      "Dataset",
+      "Arquitectura",
+      "Herramienta",
+      "Corridas",
+      "Con registro",
+      "Corridas con intentos",
+      "Consultas a la herramienta",
+      "Intentos de salida a la red",
+      "Bloqueados",
+      "Respondió el respaldo local",
+      "Nota"
+    ]
+  ]
+}
