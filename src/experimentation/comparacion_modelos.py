@@ -78,6 +78,8 @@ import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 
+from src.experimentation.knowledge.aislamiento import configuracion_experimental
+
 MODELOS = ("gemini-3.1-pro-preview", "gemini-3.8-flash")
 MODELO_CANDIDATO = "gemini-3.8-flash"
 MODELO_ACTUAL = "gemini-3.1-pro-preview"
@@ -501,7 +503,7 @@ def _lanzador_real(raiz_repo: Path, base: dict, salida: Path, tmp: Path):
         if destino.exists():
             raise FileExistsError(f"{destino} ya existe: no se sobrescribe")
         copia = tmp / f"chroma_{corrida.etiqueta}_{n}"
-        shutil.copytree(raiz_repo / "experiments" / "knowledge" / "chroma", copia)
+        shutil.copytree(configuracion_experimental(raiz_repo).chroma, copia)
         entorno = entorno_de_la_corrida(
             base, corrida.modelo, copia, tmp / f"ip_{corrida.etiqueta}_{n}.json")
         try:

@@ -59,10 +59,17 @@ def _sha256(ruta: Path) -> str:
     return h.hexdigest()
 
 
-def copiar_conocimiento(origen: Path, destino: Path) -> dict:
+def copiar_conocimiento(origen: Path, destino: Path, funcion_embeddings=None) -> dict:
     """Copia las colecciones de conocimiento de `origen` a `destino`.
 
     `origen` tiene que ser una copia de trabajo, no la base de producción.
+
+    `funcion_embeddings`: la función con que se CREA cada colección destino. Los
+    vectores no se recalculan (se copian los ya guardados), pero la función queda
+    persistida en la configuración de la colección. Sin ella Chroma guarda
+    «default» y `src/memory.py`, que abre la colección con
+    `SentenceTransformerEmbeddingFunction`, no puede abrirla (ChromaDB 1.5.9
+    rechaza el choque). Fue el defecto de la v1 de la base experimental.
     """
     import chromadb
 
@@ -91,6 +98,8 @@ def copiar_conocimiento(origen: Path, destino: Path) -> dict:
         "colecciones_copiadas": {},
         "colecciones_omitidas": sorted(disponibles & set(COLECCIONES_MEMORIA)),
         "metodo": "copia de vectores ya calculados; no se recalcula ninguno",
+        "funcion_de_embeddings_de_la_coleccion": (
+            type(funcion_embeddings).__name__ if funcion_embeddings else "default (sin función)"),
     }
 
     for nombre in COLECCIONES_CONOCIMIENTO:
@@ -101,8 +110,9 @@ def copiar_conocimiento(origen: Path, destino: Path) -> dict:
         datos = original.get(
             include=["embeddings", "documents", "metadatas"], limit=total
         )
+        argumentos = {"embedding_function": funcion_embeddings} if funcion_embeddings else {}
         nueva = cliente_destino.create_collection(
-            name=nombre, metadata=original.metadata or None
+            name=nombre, metadata=original.metadata or None, **argumentos
         )
         for inicio in range(0, total, LOTE):
             fin = inicio + LOTE
@@ -123,14 +133,34 @@ def copiar_conocimiento(origen: Path, destino: Path) -> dict:
     return resumen
 
 
+def _snapshot(directorio: Path) -> dict:
+    """Bytes y sha256 de cada archivo de la base, para poder verificarla después."""
+    archivos = {}
+    for ruta in sorted(p for p in directorio.rglob("*") if p.is_file()):
+        archivos[ruta.relative_to(directorio).as_posix()] = {
+            "bytes": ruta.stat().st_size, "sha256": _sha256(ruta)}
+    return {"archivos": archivos, "bytes_totales": sum(a["bytes"] for a in archivos.values())}
+
+
 def main(raiz_repo: Path, origen_copia: Path, original: Path) -> None:
+    """Construye la base experimental ACTIVA (v2) desde una copia de la v1.
+
+    La v1 no se modifica (se comprueba su hash antes y después). La v2 se crea
+    con la función de embeddings que usa NODEX.
+    """
+    from chromadb.utils import embedding_functions
+
+    from src.config import EMBEDDING_MODEL
     from src.experimentation.knowledge.aislamiento import (
         configuracion_experimental,
     )
 
     hash_antes = _sha256(original / "chroma.sqlite3")
     configuracion = configuracion_experimental(raiz_repo)
-    resumen = copiar_conocimiento(origen_copia, configuracion.chroma)
+    funcion = embedding_functions.SentenceTransformerEmbeddingFunction(
+        model_name=EMBEDDING_MODEL)
+    resumen = copiar_conocimiento(origen_copia, configuracion.chroma, funcion)
+    resumen["modelo_de_embeddings"] = EMBEDDING_MODEL
 
     hash_despues = _sha256(original / "chroma.sqlite3")
     resumen["original_sin_modificar"] = hash_antes == hash_despues
@@ -140,7 +170,10 @@ def main(raiz_repo: Path, origen_copia: Path, original: Path) -> None:
     # vuelve a abrir con la API.
     resumen["inventario_resultante"] = inventariar_chroma(configuracion.chroma)
 
-    destino_json = configuracion.raiz / "poblado_chroma.json"
+    resumen["snapshot"] = _snapshot(configuracion.chroma)
+    destino_json = configuracion.poblado
+    if destino_json.exists():
+        raise FileExistsError(f"{destino_json} ya existe: no se sobrescribe")
     destino_json.write_text(
         json.dumps(resumen, indent=2, ensure_ascii=False), encoding="utf-8"
     )

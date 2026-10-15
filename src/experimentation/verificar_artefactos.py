@@ -143,6 +143,33 @@ else:
             fallos.append(f"catalogo inesperado: total={_n} padres={_padres}")
     comparar("chroma tras abrir la copia", pob["snapshot"]["archivos"]["chroma.sqlite3"]["sha256"], _sqlite)
 
+print("=== 7) base vectorial ACTIVA (v2): hashes y apertura con el codigo de NODEX ===")
+# La seccion 6 solo comprobaba que los datos estuvieran (697 documentos) abriendo la
+# base SIN funcion de embeddings. Eso no probaba que NODEX pudiera abrirla: la v1 se
+# creo sin funcion y `src/memory.py` la rechaza. Esta seccion abre la v2 con
+# `LongTermMemory`, el mismo codigo que usa NODEX, y hace consultas reales.
+pob2 = json.loads((EXP / "knowledge" / "poblado_chroma_v2.json").read_text(encoding="utf-8"))
+n = 0
+for rel, meta in pob2["snapshot"]["archivos"].items():
+    comparar("chroma_v2 " + rel, meta["sha256"], EXP / "knowledge" / "chroma_v2" / rel)
+    n += 1
+print(f"  {n} archivos de la base v2 comparados")
+try:
+    from src.experimentation.knowledge.verificar_base import abrir_con_memoria
+
+    _abierta = abrir_con_memoria(RAIZ, EXP / "knowledge" / "chroma_v2")
+    print(f"  abierta con LongTermMemory: {_abierta['n_attack_techniques']} documentos, "
+          f"{len(_abierta['consultas'])} consultas respondidas")
+    if _abierta["n_attack_techniques"] != 697:
+        fallos.append(f"la base v2 deberia tener 697 documentos: {_abierta['n_attack_techniques']}")
+    if not all(c["ids"] for c in _abierta["consultas"]):
+        fallos.append("la base v2 no respondio alguna consulta de verificacion")
+except Exception as _e:  # noqa: BLE001 - se informa como fallo, no se oculta
+    fallos.append(f"NODEX no puede abrir la base v2: {type(_e).__name__}: {str(_e)[:300]}")
+comparar("chroma_v2 tras abrir la copia",
+         pob2["snapshot"]["archivos"]["chroma.sqlite3"]["sha256"],
+         EXP / "knowledge" / "chroma_v2" / "chroma.sqlite3")
+
 print(f"\nhashes verificados: {verificados} | FALLOS: {len(fallos)}")
 for f in fallos[:20]:
     print("  -", f)

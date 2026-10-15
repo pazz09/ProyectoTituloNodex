@@ -62,8 +62,17 @@ class ConfiguracionAislada:
     """Rutas exclusivas del experimento."""
 
     raiz: Path
-    #: Base vectorial del experimento. Contendrá **solo** el catálogo MITRE.
+    #: Base vectorial ACTIVA del experimento (v2). Contiene **solo** el
+    #: catálogo MITRE, creado con la función de embeddings que usa NODEX.
     chroma: Path = field(init=False)
+    #: Base anterior (v1). Se conserva intacta, solo como referencia: se creó
+    #: sin función de embeddings (Chroma guardó «default») y `src/memory.py`
+    #: no puede abrirla. NO se usa para correr el sistema.
+    chroma_v1: Path = field(init=False)
+    #: Registro del poblado de la base v2 (con los hashes de sus archivos).
+    poblado: Path = field(init=False)
+    #: Informe de la verificación de la base v2.
+    verificacion: Path = field(init=False)
     #: Caché de reputación de IP, propia y vacía al empezar.
     cache_ip: Path = field(init=False)
     #: Historial de corridas, separado del `historial.db` de producción.
@@ -72,10 +81,15 @@ class ConfiguracionAislada:
     inventario: Path = field(init=False)
 
     def __post_init__(self) -> None:
-        self.chroma = self.raiz / "chroma"
+        self.chroma = self.raiz / "chroma_v2"
+        self.chroma_v1 = self.raiz / "chroma"
+        self.poblado = self.raiz / "poblado_chroma_v2.json"
+        self.verificacion = self.raiz / "verificacion_chroma_v2.json"
         self.cache_ip = self.raiz / "ip_reputation_cache.json"
         self.historial = self.raiz / "historial.db"
-        self.inventario = self.raiz / "inventario_conocimiento.json"
+        # Los archivos de la v1 (`inventario_conocimiento.json`,
+        # `poblado_chroma.json`) quedan como historia; la v2 escribe los suyos.
+        self.inventario = self.raiz / "inventario_conocimiento_v2.json"
 
     def variables_entorno(self) -> dict[str, str]:
         """Variables a exportar antes de cualquier ejecución autorizada.

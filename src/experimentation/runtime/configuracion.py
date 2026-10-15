@@ -275,6 +275,11 @@ def congelar(
     for nombre, clave in (
         ("inventario_conocimiento.json", "inventario_sha256"),
         ("poblado_chroma.json", "poblado_sha256"),
+        # Base ACTIVA (v2): la v1 no la puede abrir `src/memory.py`. Se registran
+        # también el inventario y el informe de verificación de la v2.
+        ("inventario_conocimiento_v2.json", "inventario_v2_sha256"),
+        ("poblado_chroma_v2.json", "poblado_v2_sha256"),
+        ("verificacion_chroma_v2.json", "verificacion_v2_sha256"),
     ):
         ruta = directorio_conocimiento / nombre
         if ruta.is_file():
