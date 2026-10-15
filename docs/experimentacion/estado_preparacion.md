@@ -958,7 +958,12 @@ decisión D-7) no existía; se generó de forma determinista y no sobrescribe.
 - Consumo real: tokens, latencia y llamadas por corrida.
 - El recorrido completo corrida → almacenamiento → evaluación → métricas. Las
   piezas se probaron por separado; el recorrido entero se prueba en la Etapa 2.
-- Consultas al RAG y carga del modelo de embeddings.
+- Consultas al RAG. **Corrección:** el modelo de embeddings SÍ se cargó, de forma
+  indirecta: importar `src.api.main` (que hacen las pruebas de la API de
+  producción) construye la memoria y carga los 103 tensores de
+  `all-MiniLM-L6-v2` desde la caché local, y además avisa de una consulta
+  sin autenticar a HF Hub. Es comportamiento ya existente. No se ejecutó
+  ninguna consulta.
 - Detección de fallback de modelo sobre telemetría real.
 - Build, lint y typecheck del frontend.
 
@@ -981,3 +986,103 @@ solo intento fallido deja en `None` los tokens de toda la corrida.
 
 La sección 16 de este documento (instrumentación propia del cliente LLM) está
 **obsoleta**: el módulo se retiró en la Fase D.
+
+## 19. Etapa 2: vista «Resultados» (15-oct-2026)
+
+Consolidación, API de solo lectura y vista en la interfaz, listas para recibir
+datos reales. **No se necesitaron datos reales y no se ejecutó nada**: ni
+NODEX, ni el baseline, ni `gemini_externo`, ni `ejecutar_campana` con
+`ejecucion_habilitada=True`. El bucle de ejecución se ejerció con corredores
+simulados a través de `ejecutar_plan`. `experiments/outputs` no existe y
+`experiments/metrics` quedó vacía.
+
+### Qué se construyó
+
+| Pieza | Dónde | Qué hace |
+|---|---|---|
+| Evaluación por corrida | `src/experimentation/evaluacion.py` | **Único módulo que abre `ground_truth/`**. Devuelve un registro por corrida, no métricas agregadas |
+| Consolidación | `src/experimentation/consolidacion.py` | Agrupa, declara y escribe en `experiments/metrics/<config>/<marca>/`. Reutiliza los evaluadores; no reimplementa ninguna métrica |
+| Línea de comandos | `python -m src.experimentation.consolidacion --subconjunto X --config Y` | Solo lee. Se niega a crear una consolidación si no hay corridas |
+| API | `src/api/resultados.py` | 3 rutas GET: lista, resumen, reporte por `run_id` |
+| Vista | `frontend/components/resultados-view.tsx` | Secciones 11.1 a 11.7, CSV por tabla, SVG y PNG por gráfico |
+
+Salida de cada consolidación: `resumen.json`, un CSV por tabla, `registros.json`
+(una fila por corrida evaluada), `tabla_14.csv` (el esquema exacto del §14) y
+`metricas_p1.0_<marca>_contrato.json`, armado con los `MetricsRecord` del
+contrato, cuyo invariante contable valida que no se pierda ninguna corrida.
+
+### Definiciones que hay que conocer para leer una cifra
+
+- **D1 micro**: una matriz de confusión con todas las corridas evaluables de
+  un dataset y una arquitectura, repeticiones incluidas.
+- **D1 macro por condición**: promedio de las métricas dentro de cada
+  condición (natural, balanceado, visible, sigiloso). Cada condición pesa
+  igual aunque tenga distinto número de casos o distinta prevalencia.
+- **Media y desviación entre repeticiones**: la métrica se calcula por
+  repetición y se promedia. Con una sola repetición la desviación es `null`,
+  no cero: una observación no tiene dispersión.
+- **D2 y D3**: micro, macro y coincidencia exacta; D3 solo a nivel de técnica
+  (`label_technique`), por decisión del 7-oct-2026.
+- **Fallback de modelo**: una corrida lo usó si alguna de sus llamadas la
+  respondió un modelo distinto de `LLM_MODEL_PRIMARY` de la configuración
+  congelada. Sin configuración congelada **no se da por inexistente**: se
+  declara `fallback_no_determinable`.
+- **Celdas `null`**: «no aplica o sin dato». En CSV, celda vacía. Para el
+  baseline, por ejemplo, los tokens y el fallback no aplican.
+
+### Defectos reales encontrados al conectar las piezas
+
+Ninguna prueba unitaria los veía; cada pieza, por separado, estaba bien.
+
+| # | Defecto | Consecuencia si no se corregía |
+|---|---|---|
+| 1 | Las corridas guardaban su salida pero **no cómo habían terminado ni qué dimensiones eran puntuables**; la evaluación lo leía justo de ahí | Toda dimensión habría figurado como no evaluable: tablas vacías que se confunden con un sistema que falla |
+| 2 | `gemini_externo` no tenía carpeta de almacenamiento (`KeyError`) | Fallaba **después** de gastar la llamada al modelo (Etapa 1) |
+| 3 | El evaluador de consumo esperaba `tokens_entrada`, `latencia_total_s`… y la telemetría real produce `input_tokens`, `execution_time`… | Toda la columna de consumo habría salido ausente, sin error. Las pruebas pasaban porque sus fixtures usaban los mismos nombres equivocados |
+| 4 | Un fallo solo vivía en el valor de retorno de `ejecutar_campana` | Se perdía al terminar el proceso; nada podía mostrarlo |
+| 5 | La evaluación mezclaba BGL y UWF en una sola matriz de confusión por arquitectura | Dos preguntas distintas promediadas juntas |
+| 6 | Al baseline le aparecían «sin tokens: 4» y «con fallback: 0» | No usa el modelo: esas celdas **no aplican** y un 0 dice lo contrario. Lo mostró la revisión visual de la página renderizada |
+| 7 | `subconjuntos.main()` reescribía `piloto.json` y `rubrica.json` en cada corrida | Violaba la regla de no sobrescribir (Etapa 1) |
+
+Además se separó la lectura del ground truth en `evaluacion.py`:
+`orquestador.py` —el que corre arquitecturas— **ya no contiene ninguna ruta
+a `ground_truth/`**, y las pruebas lo verifican por AST: el orquestador no
+tiene la ruta, no importa la evaluación, y la evaluación no importa los
+runners ni el sistema.
+
+### Verificado por ejecución
+
+- **Suite completa: 928 pasan, 0 fallan.** Capa experimental: 323. Interfaz
+  (Vitest): 65.
+- `pnpm lint`: **0 errores**, 2 advertencias que ya existían (el patrón de
+  carga al montar de las otras vistas). La vista nueva no suma ninguna.
+- `pnpm typecheck`: limpio. `pnpm build`: exitoso (Next.js 16.3.3).
+- El recorrido **ejecutar → guardar → evaluar → consolidar** con corredores
+  simulados produce las ocho tablas, la tabla del §14 y el contrato.
+- **Mutaciones**: se reintrodujo cada defecto a propósito y cada uno hizo
+  fallar su prueba (5 en el recorrido completo, 4 en la API, 6 en la
+  interfaz). Hubo una que **no** se atrapaba —devolver el archivo entero de
+  la corrida en la API— y por eso se agregó la prueba de campos exactos.
+- La API: 3 rutas, todas GET; validación estricta de la URL; la ruta final se
+  comprueba contra `experiments/`; un archivo centinela en `ground_truth/` no
+  aparece en ninguna respuesta; el módulo no contiene la ruta ni importa el
+  sistema.
+
+### Pendiente: NO verificado
+
+- **La vista en un navegador real contra la API real.** Se verificó con
+  jsdom (65 pruebas) y con un build de producción, no a ojo. No hay tools de
+  navegador en esta sesión.
+- Todo lo de la Etapa 1 que sigue pendiente: corridas reales, disponibilidad
+  de Gemini, consumo real, detección de fallback sobre telemetría real.
+- **Formulario para los dos evaluadores humanos.** La consolidación lee
+  `experiments/rubrica/<config>/puntajes.csv`, pero no hay plantilla ni
+  herramienta para capturar los puntajes, y los informes **no se ocultan**
+  respecto de qué arquitectura los produjo. Hacerlo ciego es un requisito de la
+  rúbrica y falta construirlo antes de la parte humana.
+- **Lanzador**: no hay un comando para ejecutar el piloto. Hoy `ejecutar_campana`
+  se invoca desde código. Falta una línea de comandos que exija
+  `--ejecutar` de forma explícita y muestre el plan antes.
+- Instrumentar el fallback con el modelo **solicitado** (hoy solo se guarda el
+  efectivo) y los totales de tokens todo-o-nada de `src/telemetry.py`.
+  Reportado a Felipe; no se tocó el núcleo.
