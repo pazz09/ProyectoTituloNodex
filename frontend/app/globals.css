@@ -630,3 +630,49 @@ textarea.field::placeholder { color: var(--text-faint); }
   .tech { grid-template-columns: minmax(0, 1fr); gap: 10px; }
   .tech-id { width: 84px; }
 }
+
+/* --- Resultados experimentales --------------------------------------------
+   Reglas del sistema visual: sin sombras, el color solo para estado y datos en
+   monoespaciado. Las advertencias de integridad usan las fichas de estado
+   existentes (crit / warn / info) y van junto a cada sección. */
+.view-head .acciones { flex-wrap: wrap; align-items: flex-end; }
+.selector { display: grid; gap: 4px; font-size: 11.5px; color: var(--text-muted); }
+.selector select {
+  height: 36px; padding: 0 12px; min-width: 190px;
+  background: var(--block); color: var(--text);
+  border: 1px solid var(--border); border-radius: var(--r-sm);
+  font-size: 13px; font-family: var(--font-mono);
+}
+.selector select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+.num-seccion { font-family: var(--font-mono); color: var(--text-faint); font-weight: 400; margin-right: 6px; }
+.avisos-integridad { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+.avisos-integridad .chip { white-space: normal; }
+
+.notice-block.aviso { border-color: var(--warn-line); background: var(--warn-soft); }
+.notice-block.aviso strong { color: var(--warn); }
+.notice-block.aviso .icono-aviso { color: var(--warn); background: var(--warn-soft); border-color: var(--warn-line); }
+.panel-body > .notice-block { margin-bottom: 22px; }
+
+.bloque-tabla { margin-top: 26px; }
+.bloque-tabla-cabecera { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 8px; }
+.bloque-tabla-cabecera h3 { font-size: 13.5px; font-weight: 500; color: var(--text); }
+.nota-tabla { color: var(--text-muted); font-size: 12.5px; margin: 0 0 12px; }
+.bloque-tabla .table th, .bloque-tabla .table td { padding: 11px 14px; }
+
+.figura { margin: 0 0 8px; }
+.grafico-barras svg { width: 100%; height: auto; display: block; }
+.figura-pie { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+.figura-pie .btn { height: 30px; padding: 0 12px; font-size: 12px; }
+.figura-error, .figura-pie .figura-error { color: var(--crit); font-size: 12px; }
+
+.lista-fallidas { margin: 14px 0 0; padding-left: 18px; color: var(--text-muted); font-size: 12.5px; }
+.lista-fallidas code { font-family: var(--font-mono); color: var(--text); }
+
+.reporte-corrida { margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--border-soft); }
+.reporte-texto {
+  white-space: pre-wrap; word-break: break-word;
+  background: var(--block); border: 1px solid var(--border); border-radius: var(--r-sm);
+  padding: 16px 18px; font-size: 12.5px; line-height: 1.6; color: var(--text);
+  font-family: var(--font-mono); max-height: 460px; overflow: auto;
+}

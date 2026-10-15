@@ -1,0 +1,1214 @@
+{
+  "esquema": "resultados-v1",
+  "datos_ficticios": true,
+  "config_version": "FICTICIO-no-usar",
+  "consolidacion": "20000101T000000Z",
+  "generado_utc": "2026-10-15T03:06:52+00:00",
+  "protocolo_version": "1.0",
+  "subconjunto": "sub",
+  "particion": "desarrollo",
+  "arquitecturas": [
+    "nodex_multiagente",
+    "baseline_reglas",
+    "gemini_externo"
+  ],
+  "integridad": {
+    "corridas_esperadas": 18,
+    "corridas_presentes": 17,
+    "corridas_completas": 17,
+    "corridas_ausentes": [],
+    "corridas_fallidas": [
+      {
+        "run_id": "bgl_des_natural_0001__gemext__r1__b3fca52c",
+        "estado": "error_api",
+        "error": "RuntimeError: 503 UNAVAILABLE: el modelo no respondio"
+      }
+    ],
+    "corridas_con_fallback": [
+      "uwf_des_visible_0000__nodex__r1__5b43786d"
+    ],
+    "fallback_determinable": true,
+    "modelo_principal": "gemini-principal",
+    "corridas_con_telemetria_previa_a_d11": 11,
+    "corridas_sin_tokens": 0,
+    "advertencias": [
+      {
+        "codigo": "datos_ficticios",
+        "severidad": "alta",
+        "mensaje": "datos ficticios de prueba",
+        "n": 0
+      },
+      {
+        "codigo": "corridas_fallidas",
+        "severidad": "alta",
+        "mensaje": "corridas fallidas",
+        "n": 1
+      },
+      {
+        "codigo": "fallback_de_modelo",
+        "severidad": "alta",
+        "mensaje": "corridas que respondió el modelo de respaldo; no son comparables",
+        "n": 1
+      },
+      {
+        "codigo": "telemetria_previa_a_d11",
+        "severidad": "media",
+        "mensaje": "telemetría tomada antes de integrar D-11; no mezclar con la posterior",
+        "n": 11
+      }
+    ]
+  },
+  "tablas": {
+    "d1_deteccion": {
+      "titulo": "Detección por dataset y arquitectura",
+      "seccion": "11.1",
+      "descripcion": "Micro: una matriz con todas las corridas evaluables. Una celda vacía es «sin dato», no cero.",
+      "columnas": [
+        {
+          "clave": "dataset",
+          "etiqueta": "Dataset",
+          "tipo": "texto"
+        },
+        {
+          "clave": "arquitectura",
+          "etiqueta": "Arquitectura",
+          "tipo": "texto"
+        },
+        {
+          "clave": "n_corridas",
+          "etiqueta": "Corridas",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_evaluables",
+          "etiqueta": "Evaluables",
+          "tipo": "entero"
+        },
+        {
+          "clave": "no_evaluables",
+          "etiqueta": "No evaluables",
+          "tipo": "entero"
+        },
+        {
+          "clave": "tp",
+          "etiqueta": "TP",
+          "tipo": "entero"
+        },
+        {
+          "clave": "fp",
+          "etiqueta": "FP",
+          "tipo": "entero"
+        },
+        {
+          "clave": "fn",
+          "etiqueta": "FN",
+          "tipo": "entero"
+        },
+        {
+          "clave": "tn",
+          "etiqueta": "TN",
+          "tipo": "entero"
+        },
+        {
+          "clave": "accuracy",
+          "etiqueta": "Exactitud",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "precision",
+          "etiqueta": "Precisión",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "recall",
+          "etiqueta": "Exhaustividad",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "f1",
+          "etiqueta": "F1",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "fpr",
+          "etiqueta": "FPR",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "fnr",
+          "etiqueta": "FNR",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "f1_macro_condiciones",
+          "etiqueta": "F1 macro (condiciones)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "f1_media_repeticiones",
+          "etiqueta": "F1 media (repeticiones)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "f1_desv_repeticiones",
+          "etiqueta": "F1 desv. (repeticiones)",
+          "tipo": "proporcion"
+        }
+      ],
+      "filas": [
+        {
+          "dataset": "bgl",
+          "arquitectura": "baseline_reglas",
+          "n_corridas": 2,
+          "n_evaluables": 2,
+          "no_evaluables": 0,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "tn": 1,
+          "accuracy": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "fpr": 0.0,
+          "fnr": 0.0,
+          "f1_macro_condiciones": 1.0,
+          "f1_media_repeticiones": 1.0,
+          "f1_desv_repeticiones": null
+        },
+        {
+          "dataset": "bgl",
+          "arquitectura": "gemini_externo",
+          "n_corridas": 1,
+          "n_evaluables": 1,
+          "no_evaluables": 0,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "tn": 0,
+          "accuracy": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "fpr": null,
+          "fnr": 0.0,
+          "f1_macro_condiciones": 1.0,
+          "f1_media_repeticiones": 1.0,
+          "f1_desv_repeticiones": null
+        },
+        {
+          "dataset": "bgl",
+          "arquitectura": "nodex_multiagente",
+          "n_corridas": 2,
+          "n_evaluables": 2,
+          "no_evaluables": 0,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "tn": 1,
+          "accuracy": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "fpr": 0.0,
+          "fnr": 0.0,
+          "f1_macro_condiciones": 1.0,
+          "f1_media_repeticiones": 1.0,
+          "f1_desv_repeticiones": null
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "baseline_reglas",
+          "n_corridas": 4,
+          "n_evaluables": 4,
+          "no_evaluables": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "tn": 2,
+          "accuracy": 0.5,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "fpr": 0.0,
+          "fnr": 1.0,
+          "f1_macro_condiciones": 0.0,
+          "f1_media_repeticiones": 0.0,
+          "f1_desv_repeticiones": null
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "gemini_externo",
+          "n_corridas": 4,
+          "n_evaluables": 4,
+          "no_evaluables": 0,
+          "tp": 2,
+          "fp": 2,
+          "fn": 0,
+          "tn": 0,
+          "accuracy": 0.5,
+          "precision": 0.5,
+          "recall": 1.0,
+          "f1": 0.6666666666666666,
+          "fpr": 1.0,
+          "fnr": 0.0,
+          "f1_macro_condiciones": 0.6666666666666666,
+          "f1_media_repeticiones": 0.6666666666666666,
+          "f1_desv_repeticiones": null
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "nodex_multiagente",
+          "n_corridas": 4,
+          "n_evaluables": 4,
+          "no_evaluables": 0,
+          "tp": 1,
+          "fp": 1,
+          "fn": 1,
+          "tn": 1,
+          "accuracy": 0.5,
+          "precision": 0.5,
+          "recall": 0.5,
+          "f1": 0.5,
+          "fpr": 0.5,
+          "fnr": 0.5,
+          "f1_macro_condiciones": 0.5,
+          "f1_media_repeticiones": 0.5,
+          "f1_desv_repeticiones": null
+        }
+      ]
+    },
+    "d1_condiciones": {
+      "titulo": "Detección por condición",
+      "seccion": "11.1",
+      "descripcion": null,
+      "columnas": [
+        {
+          "clave": "dataset",
+          "etiqueta": "Dataset",
+          "tipo": "texto"
+        },
+        {
+          "clave": "arquitectura",
+          "etiqueta": "Arquitectura",
+          "tipo": "texto"
+        },
+        {
+          "clave": "condicion",
+          "etiqueta": "Condición",
+          "tipo": "texto"
+        },
+        {
+          "clave": "n_evaluables",
+          "etiqueta": "Evaluables",
+          "tipo": "entero"
+        },
+        {
+          "clave": "tp",
+          "etiqueta": "TP",
+          "tipo": "entero"
+        },
+        {
+          "clave": "fp",
+          "etiqueta": "FP",
+          "tipo": "entero"
+        },
+        {
+          "clave": "fn",
+          "etiqueta": "FN",
+          "tipo": "entero"
+        },
+        {
+          "clave": "tn",
+          "etiqueta": "TN",
+          "tipo": "entero"
+        },
+        {
+          "clave": "precision",
+          "etiqueta": "Precisión",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "recall",
+          "etiqueta": "Exhaustividad",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "f1",
+          "etiqueta": "F1",
+          "tipo": "proporcion"
+        }
+      ],
+      "filas": [
+        {
+          "dataset": "bgl",
+          "arquitectura": "baseline_reglas",
+          "condicion": "natural",
+          "n_evaluables": 2,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "tn": 1,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        {
+          "dataset": "bgl",
+          "arquitectura": "gemini_externo",
+          "condicion": "natural",
+          "n_evaluables": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "tn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        {
+          "dataset": "bgl",
+          "arquitectura": "nodex_multiagente",
+          "condicion": "natural",
+          "n_evaluables": 2,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "tn": 1,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "baseline_reglas",
+          "condicion": "visible",
+          "n_evaluables": 4,
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "tn": 2,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "gemini_externo",
+          "condicion": "visible",
+          "n_evaluables": 4,
+          "tp": 2,
+          "fp": 2,
+          "fn": 0,
+          "tn": 0,
+          "precision": 0.5,
+          "recall": 1.0,
+          "f1": 0.6666666666666666
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "nodex_multiagente",
+          "condicion": "visible",
+          "n_evaluables": 4,
+          "tp": 1,
+          "fp": 1,
+          "fn": 1,
+          "tn": 1,
+          "precision": 0.5,
+          "recall": 0.5,
+          "f1": 0.5
+        }
+      ]
+    },
+    "d2_reconstruccion": {
+      "titulo": "Reconstrucción del incidente",
+      "seccion": "11.2",
+      "descripcion": null,
+      "columnas": [
+        {
+          "clave": "dataset",
+          "etiqueta": "Dataset",
+          "tipo": "texto"
+        },
+        {
+          "clave": "arquitectura",
+          "etiqueta": "Arquitectura",
+          "tipo": "texto"
+        },
+        {
+          "clave": "n_corridas",
+          "etiqueta": "Corridas",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_evaluables",
+          "etiqueta": "Evaluables",
+          "tipo": "entero"
+        },
+        {
+          "clave": "no_evaluables",
+          "etiqueta": "No evaluables",
+          "tipo": "entero"
+        },
+        {
+          "clave": "micro_precision",
+          "etiqueta": "Precisión (micro)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "micro_recall",
+          "etiqueta": "Exhaustividad (micro)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "micro_f1",
+          "etiqueta": "F1 (micro)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "macro_precision",
+          "etiqueta": "Precisión (macro)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "macro_recall",
+          "etiqueta": "Exhaustividad (macro)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "macro_f1",
+          "etiqueta": "F1 (macro)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "exact_match",
+          "etiqueta": "Coincidencia exacta",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "f1_media_repeticiones",
+          "etiqueta": "F1 media (repeticiones)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "f1_desv_repeticiones",
+          "etiqueta": "F1 desv. (repeticiones)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "uids_inventados",
+          "etiqueta": "Uids inventados",
+          "tipo": "entero"
+        }
+      ],
+      "filas": [
+        {
+          "dataset": "uwf",
+          "arquitectura": "gemini_externo",
+          "n_corridas": 4,
+          "n_evaluables": 2,
+          "no_evaluables": 0,
+          "micro_precision": 0.6666666666666666,
+          "micro_recall": 0.6666666666666666,
+          "micro_f1": 0.6666666666666666,
+          "macro_precision": 0.75,
+          "macro_recall": 0.75,
+          "macro_f1": 0.75,
+          "exact_match": 0.5,
+          "f1_media_repeticiones": 0.6666666666666666,
+          "f1_desv_repeticiones": null,
+          "uids_inventados": 1
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "nodex_multiagente",
+          "n_corridas": 4,
+          "n_evaluables": 1,
+          "no_evaluables": 1,
+          "micro_precision": 1.0,
+          "micro_recall": 1.0,
+          "micro_f1": 1.0,
+          "macro_precision": 1.0,
+          "macro_recall": 1.0,
+          "macro_f1": 1.0,
+          "exact_match": 1.0,
+          "f1_media_repeticiones": 1.0,
+          "f1_desv_repeticiones": null,
+          "uids_inventados": 0
+        }
+      ]
+    },
+    "d3_mitre": {
+      "titulo": "Identificación MITRE ATT&CK (nivel técnica)",
+      "seccion": "11.3",
+      "descripcion": null,
+      "columnas": [
+        {
+          "clave": "dataset",
+          "etiqueta": "Dataset",
+          "tipo": "texto"
+        },
+        {
+          "clave": "arquitectura",
+          "etiqueta": "Arquitectura",
+          "tipo": "texto"
+        },
+        {
+          "clave": "n_corridas",
+          "etiqueta": "Corridas",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_evaluables",
+          "etiqueta": "Evaluables",
+          "tipo": "entero"
+        },
+        {
+          "clave": "no_evaluables",
+          "etiqueta": "No evaluables",
+          "tipo": "entero"
+        },
+        {
+          "clave": "micro_precision",
+          "etiqueta": "Precisión (micro)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "micro_recall",
+          "etiqueta": "Exhaustividad (micro)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "micro_f1",
+          "etiqueta": "F1 (micro)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "macro_precision",
+          "etiqueta": "Precisión (macro)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "macro_recall",
+          "etiqueta": "Exhaustividad (macro)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "macro_f1",
+          "etiqueta": "F1 (macro)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "exact_match",
+          "etiqueta": "Coincidencia exacta",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "f1_media_repeticiones",
+          "etiqueta": "F1 media (repeticiones)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "f1_desv_repeticiones",
+          "etiqueta": "F1 desv. (repeticiones)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "atribuciones_sin_evidencia",
+          "etiqueta": "Atribuciones sin evidencia",
+          "tipo": "entero"
+        }
+      ],
+      "filas": [
+        {
+          "dataset": "uwf",
+          "arquitectura": "gemini_externo",
+          "n_corridas": 4,
+          "n_evaluables": 2,
+          "no_evaluables": 0,
+          "micro_precision": 1.0,
+          "micro_recall": 1.0,
+          "micro_f1": 1.0,
+          "macro_precision": 1.0,
+          "macro_recall": 1.0,
+          "macro_f1": 1.0,
+          "exact_match": 1.0,
+          "f1_media_repeticiones": 1.0,
+          "f1_desv_repeticiones": null,
+          "atribuciones_sin_evidencia": 0
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "nodex_multiagente",
+          "n_corridas": 4,
+          "n_evaluables": 1,
+          "no_evaluables": 1,
+          "micro_precision": 1.0,
+          "micro_recall": 1.0,
+          "micro_f1": 1.0,
+          "macro_precision": 1.0,
+          "macro_recall": 1.0,
+          "macro_f1": 1.0,
+          "exact_match": 1.0,
+          "f1_media_repeticiones": 1.0,
+          "f1_desv_repeticiones": null,
+          "atribuciones_sin_evidencia": 0
+        }
+      ]
+    },
+    "d4_rubrica": {
+      "titulo": "Rúbrica del reporte (escala 0 a 3)",
+      "seccion": "11.4",
+      "descripcion": "Dos evaluadores humanos. Concordancia por acuerdo exacto, hasta un nivel y diferencia absoluta media; no se calcula kappa. En el último criterio, 3 significa ausencia de información no sustentada.",
+      "columnas": [
+        {
+          "clave": "dataset",
+          "etiqueta": "Dataset",
+          "tipo": "texto"
+        },
+        {
+          "clave": "arquitectura",
+          "etiqueta": "Arquitectura",
+          "tipo": "texto"
+        },
+        {
+          "clave": "n_reportes",
+          "etiqueta": "Reportes",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_evaluadores",
+          "etiqueta": "Evaluadores",
+          "tipo": "entero"
+        },
+        {
+          "clave": "completitud",
+          "etiqueta": "Completitud",
+          "tipo": "numero"
+        },
+        {
+          "clave": "correccion_factual",
+          "etiqueta": "Corrección factual",
+          "tipo": "numero"
+        },
+        {
+          "clave": "coherencia_con_evidencia",
+          "etiqueta": "Coherencia con evidencia",
+          "tipo": "numero"
+        },
+        {
+          "clave": "claridad",
+          "etiqueta": "Claridad",
+          "tipo": "numero"
+        },
+        {
+          "clave": "informacion_no_sustentada",
+          "etiqueta": "Sin información inventada",
+          "tipo": "numero"
+        },
+        {
+          "clave": "promedio_global",
+          "etiqueta": "Promedio global",
+          "tipo": "numero"
+        },
+        {
+          "clave": "acuerdo_exacto",
+          "etiqueta": "Acuerdo exacto",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "acuerdo_hasta_un_nivel",
+          "etiqueta": "Acuerdo ±1 nivel",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "diferencia_absoluta_media",
+          "etiqueta": "Diferencia absoluta media",
+          "tipo": "numero"
+        },
+        {
+          "clave": "desacuerdos_relevantes",
+          "etiqueta": "Desacuerdos de 2+ niveles",
+          "tipo": "entero"
+        }
+      ],
+      "filas": [
+        {
+          "dataset": "uwf",
+          "arquitectura": "gemini_externo",
+          "n_reportes": 1,
+          "n_evaluadores": 2,
+          "completitud": 2.0,
+          "correccion_factual": 2.5,
+          "coherencia_con_evidencia": 2.0,
+          "claridad": 3.0,
+          "informacion_no_sustentada": 2.0,
+          "promedio_global": 2.3,
+          "acuerdo_exacto": 0.8,
+          "acuerdo_hasta_un_nivel": 1.0,
+          "diferencia_absoluta_media": 0.2,
+          "desacuerdos_relevantes": 0
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "nodex_multiagente",
+          "n_reportes": 1,
+          "n_evaluadores": 2,
+          "completitud": 2.5,
+          "correccion_factual": 2.0,
+          "coherencia_con_evidencia": 1.0,
+          "claridad": 3.0,
+          "informacion_no_sustentada": 3.0,
+          "promedio_global": 2.3,
+          "acuerdo_exacto": 0.6,
+          "acuerdo_hasta_un_nivel": 0.8,
+          "diferencia_absoluta_media": 0.6,
+          "desacuerdos_relevantes": 1
+        }
+      ]
+    },
+    "consumo": {
+      "titulo": "Consumo y comportamiento operacional",
+      "seccion": "11.5",
+      "descripcion": "Solo promedian las corridas completas: una corrida cortada consumió menos y haría parecer más eficiente a la arquitectura que más falla. Si el proveedor no informó los tokens, la celda queda vacía; no se estiman.",
+      "columnas": [
+        {
+          "clave": "dataset",
+          "etiqueta": "Dataset",
+          "tipo": "texto"
+        },
+        {
+          "clave": "arquitectura",
+          "etiqueta": "Arquitectura",
+          "tipo": "texto"
+        },
+        {
+          "clave": "n_completas",
+          "etiqueta": "Completas",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_no_completas",
+          "etiqueta": "No completas",
+          "tipo": "entero"
+        },
+        {
+          "clave": "tiempo_medio_s",
+          "etiqueta": "Tiempo medio (s)",
+          "tipo": "numero"
+        },
+        {
+          "clave": "tiempo_mediana_s",
+          "etiqueta": "Tiempo mediana (s)",
+          "tipo": "numero"
+        },
+        {
+          "clave": "llamadas_medias",
+          "etiqueta": "Llamadas al modelo",
+          "tipo": "numero"
+        },
+        {
+          "clave": "tokens_entrada_medios",
+          "etiqueta": "Tokens de entrada",
+          "tipo": "numero"
+        },
+        {
+          "clave": "tokens_salida_medios",
+          "etiqueta": "Tokens de salida",
+          "tipo": "numero"
+        },
+        {
+          "clave": "tokens_totales_medios",
+          "etiqueta": "Tokens totales",
+          "tipo": "numero"
+        },
+        {
+          "clave": "replan_medio",
+          "etiqueta": "Replanificaciones",
+          "tipo": "numero"
+        },
+        {
+          "clave": "correcciones_medias",
+          "etiqueta": "Correcciones",
+          "tipo": "numero"
+        },
+        {
+          "clave": "n_con_fallback",
+          "etiqueta": "Con fallback",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_sin_tokens",
+          "etiqueta": "Sin tokens informados",
+          "tipo": "entero"
+        }
+      ],
+      "filas": [
+        {
+          "dataset": "bgl",
+          "arquitectura": "baseline_reglas",
+          "n_completas": 2,
+          "n_no_completas": 0,
+          "tiempo_medio_s": 0.1,
+          "tiempo_mediana_s": 0.1,
+          "llamadas_medias": 0.0,
+          "tokens_entrada_medios": null,
+          "tokens_salida_medios": null,
+          "tokens_totales_medios": null,
+          "replan_medio": null,
+          "correcciones_medias": null,
+          "n_con_fallback": null,
+          "n_sin_tokens": null
+        },
+        {
+          "dataset": "bgl",
+          "arquitectura": "gemini_externo",
+          "n_completas": 1,
+          "n_no_completas": 1,
+          "tiempo_medio_s": 4.0,
+          "tiempo_mediana_s": 4.0,
+          "llamadas_medias": 1.0,
+          "tokens_entrada_medios": 300.0,
+          "tokens_salida_medios": 100.0,
+          "tokens_totales_medios": 400.0,
+          "replan_medio": null,
+          "correcciones_medias": null,
+          "n_con_fallback": 0,
+          "n_sin_tokens": 0
+        },
+        {
+          "dataset": "bgl",
+          "arquitectura": "nodex_multiagente",
+          "n_completas": 2,
+          "n_no_completas": 0,
+          "tiempo_medio_s": 10.0,
+          "tiempo_mediana_s": 10.0,
+          "llamadas_medias": 6.0,
+          "tokens_entrada_medios": 1000.0,
+          "tokens_salida_medios": 200.0,
+          "tokens_totales_medios": 1200.0,
+          "replan_medio": 1.0,
+          "correcciones_medias": 0.0,
+          "n_con_fallback": 0,
+          "n_sin_tokens": 0
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "baseline_reglas",
+          "n_completas": 4,
+          "n_no_completas": 0,
+          "tiempo_medio_s": 0.1,
+          "tiempo_mediana_s": 0.1,
+          "llamadas_medias": 0.0,
+          "tokens_entrada_medios": null,
+          "tokens_salida_medios": null,
+          "tokens_totales_medios": null,
+          "replan_medio": null,
+          "correcciones_medias": null,
+          "n_con_fallback": null,
+          "n_sin_tokens": null
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "gemini_externo",
+          "n_completas": 4,
+          "n_no_completas": 0,
+          "tiempo_medio_s": 4.0,
+          "tiempo_mediana_s": 4.0,
+          "llamadas_medias": 1.0,
+          "tokens_entrada_medios": 300.0,
+          "tokens_salida_medios": 100.0,
+          "tokens_totales_medios": 400.0,
+          "replan_medio": null,
+          "correcciones_medias": null,
+          "n_con_fallback": 0,
+          "n_sin_tokens": 0
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "nodex_multiagente",
+          "n_completas": 4,
+          "n_no_completas": 0,
+          "tiempo_medio_s": 10.0,
+          "tiempo_mediana_s": 10.0,
+          "llamadas_medias": 6.0,
+          "tokens_entrada_medios": 1000.0,
+          "tokens_salida_medios": 200.0,
+          "tokens_totales_medios": 1200.0,
+          "replan_medio": 1.0,
+          "correcciones_medias": 0.0,
+          "n_con_fallback": 1,
+          "n_sin_tokens": 0
+        }
+      ]
+    },
+    "comparacion": {
+      "titulo": "NODEX frente al baseline y a Gemini directo",
+      "seccion": "11.6",
+      "descripcion": "Sin umbrales de aprobado: se comparan las arquitecturas entre sí y se describe cada resultado. Una celda vacía es «no aplica o sin dato».",
+      "columnas": [
+        {
+          "clave": "dataset",
+          "etiqueta": "Dataset",
+          "tipo": "texto"
+        },
+        {
+          "clave": "metrica",
+          "etiqueta": "Métrica",
+          "tipo": "texto"
+        },
+        {
+          "clave": "nodex_multiagente",
+          "etiqueta": "NODEX",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "baseline_reglas",
+          "etiqueta": "Baseline",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "gemini_externo",
+          "etiqueta": "Gemini directo",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "comparable",
+          "etiqueta": "Tipo de comparación",
+          "tipo": "texto"
+        },
+        {
+          "clave": "nota",
+          "etiqueta": "Nota",
+          "tipo": "texto"
+        }
+      ],
+      "filas": [
+        {
+          "dataset": "bgl",
+          "metrica": "D1_precision",
+          "nodex_multiagente": 1.0,
+          "baseline_reglas": 1.0,
+          "gemini_externo": 1.0,
+          "comparable": "pareada",
+          "nota": "NODEX y el baseline responden la misma pregunta."
+        },
+        {
+          "dataset": "bgl",
+          "metrica": "D1_recall",
+          "nodex_multiagente": 1.0,
+          "baseline_reglas": 1.0,
+          "gemini_externo": 1.0,
+          "comparable": "pareada",
+          "nota": "NODEX y el baseline responden la misma pregunta."
+        },
+        {
+          "dataset": "bgl",
+          "metrica": "D1_f1",
+          "nodex_multiagente": 1.0,
+          "baseline_reglas": 1.0,
+          "gemini_externo": 1.0,
+          "comparable": "pareada",
+          "nota": "NODEX y el baseline responden la misma pregunta."
+        },
+        {
+          "dataset": "bgl",
+          "metrica": "tiempo_medio_s",
+          "nodex_multiagente": 10.0,
+          "baseline_reglas": 0.1,
+          "gemini_externo": 4.0,
+          "comparable": "sistema completo vs modelo",
+          "nota": "Gemini directo no usa RAG ni herramientas, por diseño: compara el sistema completo con el modelo, no una sola variable."
+        },
+        {
+          "dataset": "uwf",
+          "metrica": "D1_precision",
+          "nodex_multiagente": 0.5,
+          "baseline_reglas": null,
+          "gemini_externo": 0.5,
+          "comparable": "contextual",
+          "nota": "El baseline responde la pregunta operativa y UWF pregunta por actividad maliciosa: la comparación con el baseline no es pareada."
+        },
+        {
+          "dataset": "uwf",
+          "metrica": "D1_recall",
+          "nodex_multiagente": 0.5,
+          "baseline_reglas": 0.0,
+          "gemini_externo": 1.0,
+          "comparable": "contextual",
+          "nota": "El baseline responde la pregunta operativa y UWF pregunta por actividad maliciosa: la comparación con el baseline no es pareada."
+        },
+        {
+          "dataset": "uwf",
+          "metrica": "D1_f1",
+          "nodex_multiagente": 0.5,
+          "baseline_reglas": 0.0,
+          "gemini_externo": 0.6666666666666666,
+          "comparable": "contextual",
+          "nota": "El baseline responde la pregunta operativa y UWF pregunta por actividad maliciosa: la comparación con el baseline no es pareada."
+        },
+        {
+          "dataset": "uwf",
+          "metrica": "D2_f1",
+          "nodex_multiagente": 1.0,
+          "baseline_reglas": null,
+          "gemini_externo": 0.6666666666666666,
+          "comparable": "sin baseline",
+          "nota": "El baseline no produce esta salida: no aplica."
+        },
+        {
+          "dataset": "uwf",
+          "metrica": "D2_exact_match",
+          "nodex_multiagente": 1.0,
+          "baseline_reglas": null,
+          "gemini_externo": 0.5,
+          "comparable": "sin baseline",
+          "nota": "El baseline no produce esta salida: no aplica."
+        },
+        {
+          "dataset": "uwf",
+          "metrica": "D3_f1",
+          "nodex_multiagente": 1.0,
+          "baseline_reglas": null,
+          "gemini_externo": 1.0,
+          "comparable": "sin baseline",
+          "nota": "El baseline no produce esta salida: no aplica."
+        },
+        {
+          "dataset": "uwf",
+          "metrica": "D3_exact_match",
+          "nodex_multiagente": 1.0,
+          "baseline_reglas": null,
+          "gemini_externo": 1.0,
+          "comparable": "sin baseline",
+          "nota": "El baseline no produce esta salida: no aplica."
+        },
+        {
+          "dataset": "uwf",
+          "metrica": "tiempo_medio_s",
+          "nodex_multiagente": 10.0,
+          "baseline_reglas": 0.1,
+          "gemini_externo": 4.0,
+          "comparable": "sistema completo vs modelo",
+          "nota": "Gemini directo no usa RAG ni herramientas, por diseño: compara el sistema completo con el modelo, no una sola variable."
+        }
+      ]
+    },
+    "errores_d1": {
+      "titulo": "Falsos positivos y falsos negativos",
+      "seccion": "11.7",
+      "descripcion": "FP: el sistema afirmó actividad que la referencia no tiene. FN: la referencia la tiene y el sistema no la detectó.",
+      "columnas": [
+        {
+          "clave": "run_id",
+          "etiqueta": "Corrida",
+          "tipo": "texto"
+        },
+        {
+          "clave": "dataset",
+          "etiqueta": "Dataset",
+          "tipo": "texto"
+        },
+        {
+          "clave": "condicion",
+          "etiqueta": "Condición",
+          "tipo": "texto"
+        },
+        {
+          "clave": "arquitectura",
+          "etiqueta": "Arquitectura",
+          "tipo": "texto"
+        },
+        {
+          "clave": "repeticion",
+          "etiqueta": "Rep.",
+          "tipo": "entero"
+        },
+        {
+          "clave": "resultado",
+          "etiqueta": "Tipo",
+          "tipo": "texto"
+        },
+        {
+          "clave": "prediccion",
+          "etiqueta": "Predicción",
+          "tipo": "texto"
+        },
+        {
+          "clave": "referencia",
+          "etiqueta": "Referencia",
+          "tipo": "texto"
+        }
+      ],
+      "filas": [
+        {
+          "run_id": "uwf_des_visible_0000__reglas__r1__657b4e9a",
+          "case_id": "uwf_des_visible_0000",
+          "dataset": "uwf",
+          "condicion": "visible",
+          "arquitectura": "baseline_reglas",
+          "repeticion": 1,
+          "resultado": "FN",
+          "prediccion": "BENIGN",
+          "referencia": "anomalo"
+        },
+        {
+          "run_id": "uwf_des_visible_0001__nodex__r1__ce33acf8",
+          "case_id": "uwf_des_visible_0001",
+          "dataset": "uwf",
+          "condicion": "visible",
+          "arquitectura": "nodex_multiagente",
+          "repeticion": 1,
+          "resultado": "FN",
+          "prediccion": "BENIGN",
+          "referencia": "anomalo"
+        },
+        {
+          "run_id": "uwf_des_visible_0001__reglas__r1__41f91fac",
+          "case_id": "uwf_des_visible_0001",
+          "dataset": "uwf",
+          "condicion": "visible",
+          "arquitectura": "baseline_reglas",
+          "repeticion": 1,
+          "resultado": "FN",
+          "prediccion": "BENIGN",
+          "referencia": "anomalo"
+        },
+        {
+          "run_id": "uwf_des_visible_0002__gemext__r1__3e6777a9",
+          "case_id": "uwf_des_visible_0002",
+          "dataset": "uwf",
+          "condicion": "visible",
+          "arquitectura": "gemini_externo",
+          "repeticion": 1,
+          "resultado": "FP",
+          "prediccion": "MALICIOUS",
+          "referencia": "normal"
+        },
+        {
+          "run_id": "uwf_des_visible_0002__nodex__r1__aad3d706",
+          "case_id": "uwf_des_visible_0002",
+          "dataset": "uwf",
+          "condicion": "visible",
+          "arquitectura": "nodex_multiagente",
+          "repeticion": 1,
+          "resultado": "FP",
+          "prediccion": "MALICIOUS",
+          "referencia": "normal"
+        },
+        {
+          "run_id": "uwf_des_visible_0003__gemext__r1__0895e75a",
+          "case_id": "uwf_des_visible_0003",
+          "dataset": "uwf",
+          "condicion": "visible",
+          "arquitectura": "gemini_externo",
+          "repeticion": 1,
+          "resultado": "FP",
+          "prediccion": "MALICIOUS",
+          "referencia": "normal"
+        }
+      ]
+    }
+  },
+  "_aviso": "FIXTURE FICTICIA para probar la interfaz. Generada con corridas simuladas; no contiene ningun resultado experimental."
+}

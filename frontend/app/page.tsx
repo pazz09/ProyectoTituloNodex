@@ -6,6 +6,7 @@ import { ConversacionView } from '@/components/conversacion-view'
 import { HistorialView } from '@/components/historial-view'
 import { OverviewView } from '@/components/overview-view'
 import { ReportView } from '@/components/report-view'
+import { ResultadosView } from '@/components/resultados-view'
 import { useAnalisis } from '@/components/use-analisis'
 import type { Grupo, Vista } from '@/components/app-shell'
 import type { Corrida } from '@/lib/api'
@@ -32,7 +33,13 @@ export default function Page() {
   const navegar = useCallback((destino: Vista) => {
     if (destino !== 'informe') {
       setGrupoOrigen(
-        destino === 'historial' ? 'historial' : destino === 'overview' ? 'overview' : 'analisis',
+        destino === 'historial'
+          ? 'historial'
+          : destino === 'overview'
+            ? 'overview'
+            : destino === 'resultados'
+              ? 'resultados'
+              : 'analisis',
       )
     }
     setVista(destino)
@@ -81,6 +88,10 @@ export default function Page() {
 
   if (vista === 'historial') {
     return <HistorialView onAbrir={(c) => abrirInforme(c, 'historial')} onNavegar={navegar} />
+  }
+
+  if (vista === 'resultados') {
+    return <ResultadosView onNavegar={navegar} />
   }
 
   return (

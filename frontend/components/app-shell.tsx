@@ -1,12 +1,12 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { Activity, LayoutGrid, Settings, Sparkles } from 'lucide-react'
+import { Activity, ChartColumn, LayoutGrid, Settings, Sparkles } from 'lucide-react'
 
-export type Vista = 'overview' | 'analisis' | 'informe' | 'historial'
+export type Vista = 'overview' | 'analisis' | 'informe' | 'historial' | 'resultados'
 
 /** Grupo de la barra lateral que queda resaltado. */
-export type Grupo = 'overview' | 'historial' | 'analisis'
+export type Grupo = 'overview' | 'historial' | 'analisis' | 'resultados'
 
 /**
  * Armazón de la aplicación.
@@ -52,6 +52,7 @@ export function AppShell({
             <nav className="rail-nav">
               {item('overview', 'Resumen', LayoutGrid, grupo === 'overview')}
               {item('historial', 'Ejecuciones', Activity, grupo === 'historial')}
+              {item('resultados', 'Resultados', ChartColumn, grupo === 'resultados')}
             </nav>
 
             <div className="rail-sep" />
