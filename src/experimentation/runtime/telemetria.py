@@ -171,3 +171,54 @@ class Telemetria:
             "previa_a_d11": self.previa_a_d11,
             "llamadas": [llamada.to_dict() for llamada in self.llamadas],
         }
+
+
+def _entero_o_none(valor) -> int | None:
+    """Un entero >= 0 real, o `None`. Nunca convierte a 0."""
+    if isinstance(valor, bool) or not isinstance(valor, int) or valor < 0:
+        return None
+    return valor
+
+
+def _texto_o_none(valor) -> str | None:
+    return valor if isinstance(valor, str) and valor.strip() else None
+
+
+def campos_de_modelo(medido: dict | None) -> dict:
+    """Alimenta `LlamadaLlm`/`Telemetria` con la telemetría real del sistema.
+
+    `medido` es el resumen de `src/telemetry.py` (`llm_calls` con `model`,
+    tokens y, desde la instrumentación de `src/llm.py`, `model_version` y
+    `reasoning_tokens`). Devuelve solo lo que esta capa agrega:
+
+    - `reasoning_tokens`: suma de las llamadas que lo informaron; `None` si
+      ninguna. Si solo algunas lo informaron, la suma es parcial y
+      `campos_parciales` lo declara.
+    - `modelos_efectivos`: versiones que devolvió la API (`model_version`),
+      sin repetir.
+    - `campos_parciales`.
+
+    `uso_fallback` NO se deriva de comparar `model` con `model_version`: la
+    API puede devolver un nombre con sufijo de versión distinto del pedido, y
+    eso sería un falso fallback. El fallback se decide con el nombre pedido
+    en cada llamada (`model`), en el consolidador.
+    """
+    llamadas = []
+    for indice, c in enumerate((medido or {}).get("llm_calls") or []):
+        if not isinstance(c, dict):
+            continue
+        llamadas.append(LlamadaLlm(
+            indice=indice,
+            agente="no_informado",
+            modelo_solicitado=_texto_o_none(c.get("model")),
+            modelo_efectivo=_texto_o_none(c.get("model_version")),
+            input_tokens=_entero_o_none(c.get("input_tokens")),
+            output_tokens=_entero_o_none(c.get("output_tokens")),
+            reasoning_tokens=_entero_o_none(c.get("reasoning_tokens")),
+        ))
+    resumen = Telemetria(run_id="", llamadas=llamadas).to_dict()
+    return {
+        "reasoning_tokens": resumen["reasoning_tokens"],
+        "modelos_efectivos": resumen["modelos_efectivos"],
+        "campos_parciales": resumen["campos_parciales"],
+    }

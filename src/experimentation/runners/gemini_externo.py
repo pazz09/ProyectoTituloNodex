@@ -196,6 +196,7 @@ def ejecutar(contenido: str, run_id: str) -> tuple[dict, dict]:
     error: str | None = None
     respuesta = None
     uso = None
+    version_devuelta = None
     # Sin reintentos y sin fallback de modelo: el punto de la pseudo-ablación
     # es el modelo desnudo. Un fallo se registra como fallo.
     try:
@@ -206,6 +207,9 @@ def ejecutar(contenido: str, run_id: str) -> tuple[dict, dict]:
         )
         respuesta = _parsear_json(getattr(bruta, "text", "") or "")
         uso = getattr(bruta, "usage_metadata", None)
+        version = getattr(bruta, "model_version", None)
+        if isinstance(version, str) and version.strip():
+            version_devuelta = version
     except Exception as excepcion:  # noqa: BLE001 - se registra, no se oculta
         error = f"{type(excepcion).__name__}: {excepcion}"
     transcurrido = time.monotonic() - comenzado
@@ -261,7 +265,10 @@ def ejecutar(contenido: str, run_id: str) -> tuple[dict, dict]:
         "arquitectura": _ETIQUETA,
         "modelo": LLM_MODEL_PRIMARY,
         "temperatura": TEMPERATURE,
-        "llamadas_llm": 0 if error and respuesta == {} else 1,
+        # Llegados acá la llamada SE HIZO (los retornos tempranos de arriba
+        # son los únicos que no la hacen): una respuesta que no es JSON, o un
+        # error de la API, igual cuentan como una llamada. Antes valían 0.
+        "llamadas_llm": 1,
         "execution_time": transcurrido,
         "error": error,
         "sin_rag": True,
@@ -270,19 +277,34 @@ def ejecutar(contenido: str, run_id: str) -> tuple[dict, dict]:
         "reintentos": 0,
         "fallback_de_modelo": False,
         "telemetry": {
-            "llm_call_count": 0 if error and respuesta == {} else 1,
+            "llm_call_count": 1,
             "input_tokens": _entero(getattr(uso, "prompt_token_count", None)),
             "output_tokens": _entero(
                 getattr(uso, "candidates_token_count", None)
             ),
             "total_tokens": _entero(getattr(uso, "total_token_count", None)),
             "execution_time": transcurrido,
+            "reasoning_tokens": _entero(getattr(uso, "thoughts_token_count", None)),
+            # Una entrada por llamada, con la misma forma que `llm_calls` de
+            # NODEX (src/telemetry.py + src/llm.py), para que el consolidador
+            # y la vista no necesiten una rama para esta arquitectura.
+            "llm_calls": [{
+                "model": LLM_MODEL_PRIMARY,
+                "model_version": version_devuelta,
+                "input_tokens": _entero(getattr(uso, "prompt_token_count", None)),
+                "output_tokens": _entero(getattr(uso, "candidates_token_count", None)),
+                "total_tokens": _entero(getattr(uso, "total_token_count", None)),
+                "reasoning_tokens": _entero(getattr(uso, "thoughts_token_count", None)),
+            }],
             # No aplican: no hay grafo que replanifique ni comandos que
             # corregir. `None` y no 0, porque 0 afirmaría que hubo cero
             # replanificaciones en un sistema que no replanifica.
             "replan_count": None,
             "intentos_correccion": None,
-            "modelo_efectivo": LLM_MODEL_PRIMARY,
+            # El nombre que se pidió y la versión que devolvió la API son
+            # cosas distintas; antes `modelo_efectivo` repetía el pedido.
+            "modelo_solicitado": LLM_MODEL_PRIMARY,
+            "modelo_efectivo": version_devuelta,
         },
         "campos_ausentes_en_la_respuesta": sorted(
             clave for clave in ("diagnostico", "hay_anomalia", "hay_incidente",

@@ -34,6 +34,7 @@ CAMPOS_TELEMETRIA = (
     "input_tokens",
     "output_tokens",
     "total_tokens",
+    "reasoning_tokens",
     "execution_time",
     "replan_count",
     "intentos_correccion",

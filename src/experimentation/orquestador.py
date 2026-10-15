@@ -50,6 +50,7 @@ from pathlib import Path
 from src.experimentation.contracts import PROTOCOLO_VERSION
 from src.experimentation.runtime.identidad import IdentidadCorrida
 from src.experimentation.runtime import exportacion, persistencia
+from src.experimentation.runtime.telemetria import campos_de_modelo
 
 #: Repeticiones por partición (decisión D-2, cerrada el 7-oct-2026).
 REPETICIONES = {"desarrollo": 1, "evaluacion": 3}
@@ -318,6 +319,9 @@ def _correr_una(
         # ninguno: el orquestador solo agrega lo que mide él mismo.
         telemetria_dict = dict(
             medido,
+            # Versión devuelta por la API y tokens de razonamiento, a partir
+            # de `llm_calls` (instrumentación de src/llm.py).
+            **campos_de_modelo(medido),
             # Tiempo de pared del runner, que incluye la lectura del caso y
             # la adaptación. Distinto del `execution_time` del grafo, así que
             # lleva otro nombre en vez de sobreescribirlo.

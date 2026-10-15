@@ -123,13 +123,22 @@ def _construir_repo(raiz: Path) -> None:
 
 # --- corredores simulados -------------------------------------------------------
 
-def _telemetria(modelo=PRINCIPAL, tokens=1000, tiempo=10.0, replan=1, correcciones=0):
+def _telemetria(modelo=PRINCIPAL, tokens=1000, tiempo=10.0, replan=1, correcciones=0,
+                razonamiento=40):
+    """`razonamiento=None` simula un proveedor que no informó esos tokens.
+
+    La versión devuelta por la API lleva un sufijo (`-001`) a propósito: es
+    DISTINTA del nombre pedido, como puede ocurrir de verdad, y aun así no debe
+    contar como fallback.
+    """
     return {
         "llm_call_count": 6, "input_tokens": tokens, "output_tokens": 200,
         "total_tokens": None if tokens is None else tokens + 200,
         "execution_time": tiempo, "replan_count": replan,
         "intentos_correccion": correcciones, "invalid_evidence_uid_count": 0,
-        "d11_warning_count": 0, "llm_calls": [{"model": modelo}],
+        "d11_warning_count": 0,
+        "llm_calls": [{"model": modelo, "model_version": f"{modelo}-001",
+                       "reasoning_tokens": razonamiento}],
     }
 
 
@@ -173,7 +182,9 @@ def _nodex_ejecutar(contenido, run_id):
         estado = _estado_base(cid, False, False)
     # Una corrida cayó al modelo de respaldo.
     modelo = RESPALDO if cid == "uwf_des_visible_0000" else PRINCIPAL
-    estado["telemetry"] = _telemetria(modelo=modelo)
+    # En BGL el proveedor "no informó" los tokens de razonamiento.
+    estado["telemetry"] = _telemetria(
+        modelo=modelo, razonamiento=None if c["dataset"] == "bgl" else 40)
     return estado, {"execution_time": 10.5, "error": None,
                     "replan_count": 1, "intentos_correccion": 0}
 
@@ -195,7 +206,11 @@ def _gemini_ejecutar(contenido, run_id):
     return estado, {"execution_time": 4.0, "error": None, "telemetry": {
         "llm_call_count": 1, "input_tokens": 300, "output_tokens": 100,
         "total_tokens": 400, "execution_time": 4.0, "replan_count": None,
-        "intentos_correccion": None, "modelo_efectivo": PRINCIPAL}}
+        "intentos_correccion": None, "reasoning_tokens": 12,
+        "modelo_solicitado": PRINCIPAL, "modelo_efectivo": f"{PRINCIPAL}-001",
+        "llm_calls": [{"model": PRINCIPAL, "model_version": f"{PRINCIPAL}-001",
+                       "input_tokens": 300, "output_tokens": 100,
+                       "total_tokens": 400, "reasoning_tokens": 12}]}}
 
 
 def _baseline_ejecutar(contenido, identidad, tipo_deteccion):
@@ -566,3 +581,106 @@ def test_la_linea_de_comandos_consolida_y_resume_la_integridad(campana, capsys):
 def test_la_linea_de_comandos_exige_subconjunto_y_configuracion():
     with pytest.raises(SystemExit):
         consolidacion.main(["--subconjunto", "sub"])
+
+
+# --- versión devuelta por la API y tokens de razonamiento ------------------------
+#
+# La instrumentación vive en src/llm.py; acá se prueba que lo que registra llegue
+# a lo que se ve: la telemetría guardada, la tabla de consumo, la tabla del §14 y
+# los avisos de integridad. Regla: lo que el proveedor no informa queda vacío
+# (`None`), nunca en 0.
+
+def _telemetria_guardada(raiz, cid, dataset, arquitectura="nodex_multiagente") -> dict:
+    ident = IdentidadCorrida(cid, dataset, arquitectura, 1, CONFIG)
+    return persistencia.leer_telemetria(ident, raiz)
+
+
+def test_la_telemetria_guardada_lleva_los_tokens_de_razonamiento_y_la_version(campana):
+    """El orquestador alimenta `campos_de_modelo` al guardar la corrida."""
+    raiz, _ = campana
+    uwf = _telemetria_guardada(raiz, "uwf_des_visible_0001", "uwf")
+    assert uwf["reasoning_tokens"] == 40
+    assert uwf["modelos_efectivos"] == [f"{PRINCIPAL}-001"]
+    bgl = _telemetria_guardada(raiz, "bgl_des_natural_0000", "bgl")
+    assert bgl["reasoning_tokens"] is None            # no informado: None, no 0
+    assert bgl["modelos_efectivos"] == [f"{PRINCIPAL}-001"]
+
+
+def test_los_tokens_de_razonamiento_y_la_version_llegan_a_la_tabla_de_consumo(campana):
+    raiz, _ = campana
+    resumen = _consolidar(raiz)
+    nodex_uwf = _fila(resumen, "consumo", "uwf", "nodex_multiagente")
+    assert nodex_uwf["tokens_razonamiento_medios"] == pytest.approx(40)
+    # una corrida cayó al respaldo: se ven las dos versiones
+    assert nodex_uwf["versiones_devueltas"] == f"{PRINCIPAL}-001; {RESPALDO}-001"
+    gemini = _fila(resumen, "consumo", "uwf", "gemini_externo")
+    assert gemini["tokens_razonamiento_medios"] == pytest.approx(12)
+    assert gemini["versiones_devueltas"] == f"{PRINCIPAL}-001"
+
+
+def test_lo_que_el_proveedor_no_informo_queda_vacio_y_no_es_cero(campana):
+    raiz, _ = campana
+    resumen = _consolidar(raiz)
+    bgl = _fila(resumen, "consumo", "bgl", "nodex_multiagente")
+    assert bgl["tokens_razonamiento_medios"] is None
+    assert bgl["versiones_devueltas"] == f"{PRINCIPAL}-001"   # la versión sí vino
+    baseline = _fila(resumen, "consumo", "uwf", "baseline_reglas")
+    assert baseline["tokens_razonamiento_medios"] is None
+    assert baseline["versiones_devueltas"] is None            # no usa el modelo
+
+
+def test_la_tabla_14_exporta_razonamiento_y_versiones_con_celdas_vacias_donde_no_hay(campana):
+    raiz, _ = campana
+    destino = consolidacion.consolidar(raiz, "sub", CONFIG, ARQUITECTURAS, marca=MARCA)
+    with (destino / "tabla_14.csv").open(encoding="utf-8", newline="") as f:
+        filas = {(r["case_id"], r["architecture"]): r for r in csv.DictReader(f)}
+    uwf = filas[("uwf_des_visible_0001", "nodex_multiagente")]
+    assert uwf["reasoning_tokens"] == "40"
+    assert uwf["modelos_efectivos"] == f"{PRINCIPAL}-001"
+    bgl = filas[("bgl_des_natural_0000", "nodex_multiagente")]
+    assert bgl["reasoning_tokens"] == ""              # vacío, no "0"
+    assert filas[("uwf_des_visible_0000", "nodex_multiagente")]["modelos_efectivos"] == (
+        f"{RESPALDO}-001")
+    base = filas[("uwf_des_visible_0001", "baseline_reglas")]
+    assert base["reasoning_tokens"] == "" and base["modelos_efectivos"] == ""
+
+
+def test_una_version_distinta_del_nombre_pedido_no_cuenta_como_fallback():
+    """La API puede devolver `modelo-001` cuando se pidió `modelo`: eso no es
+    un respaldo. El fallback se decide con el nombre pedido en cada llamada."""
+    telemetria = {"llm_calls": [{"model": PRINCIPAL, "model_version": f"{PRINCIPAL}-001"}]}
+    assert consolidacion.uso_fallback(telemetria, PRINCIPAL) is False
+    caida = {"llm_calls": [{"model": PRINCIPAL}, {"model": RESPALDO}]}
+    assert consolidacion.uso_fallback(caida, PRINCIPAL) is True
+
+
+def test_los_avisos_de_integridad_declaran_lo_no_informado(campana):
+    raiz, _ = campana
+    avisos = {a["codigo"]: a for a in _consolidar(raiz)["integridad"]["advertencias"]}
+    assert avisos["razonamiento_no_informado"]["n"] == 2      # las 2 de NODEX en BGL
+    assert avisos["razonamiento_no_informado"]["severidad"] == "info"
+    assert "version_de_modelo_no_informada" not in avisos     # todas la informaron
+
+
+def test_las_corridas_guardadas_antes_de_la_instrumentacion_no_inventan_datos(campana):
+    """Una telemetría vieja (sin `model_version` ni `reasoning_tokens`) queda
+    como no informada; no se rellena con 0 ni con el nombre pedido."""
+    raiz, _ = campana
+    ident = IdentidadCorrida("uwf_des_visible_0001", "uwf", "nodex_multiagente", 1, CONFIG)
+    ruta = persistencia.rutas(ident, raiz).telemetria
+    datos = json.loads(ruta.read_text(encoding="utf-8"))
+    tel = datos["telemetria"]
+    for clave in ("reasoning_tokens", "modelos_efectivos", "campos_parciales"):
+        tel.pop(clave)
+    for llamada in tel["llm_calls"]:
+        llamada.pop("reasoning_tokens")
+        llamada.pop("model_version")
+    ruta.write_text(json.dumps(datos), encoding="utf-8")
+
+    resumen = _consolidar(raiz)
+    avisos = {a["codigo"]: a for a in resumen["integridad"]["advertencias"]}
+    assert avisos["razonamiento_no_informado"]["n"] == 3
+    assert avisos["version_de_modelo_no_informada"]["n"] == 1
+    # el promedio de las que sí informaron no se arrastra hacia 0
+    f = _fila(resumen, "consumo", "uwf", "nodex_multiagente")
+    assert f["tokens_razonamiento_medios"] == pytest.approx(40)

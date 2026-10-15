@@ -115,3 +115,62 @@ def test_leer_salida_exige_la_identidad_completa(tmp_path):
     archivo.write_text(json.dumps({"salida": {}}), encoding="utf-8")
     with pytest.raises(ValueError, match="identidad"):
         persistencia.leer_salida(archivo)
+
+
+# --- campos_de_modelo: puente entre la telemetría del sistema y esta capa ------------
+
+from src.experimentation.runtime import exportacion as _exportacion
+from src.experimentation.runtime.telemetria import campos_de_modelo
+
+
+def test_campos_de_modelo_suma_el_razonamiento_y_lista_las_versiones():
+    medido = {"llm_calls": [
+        {"model": "m", "model_version": "m-001", "reasoning_tokens": 5,
+         "input_tokens": 1, "output_tokens": 1},
+        {"model": "m", "model_version": "m-001", "reasoning_tokens": 7,
+         "input_tokens": 1, "output_tokens": 1},
+    ]}
+    campos = campos_de_modelo(medido)
+    assert campos["reasoning_tokens"] == 12
+    assert campos["modelos_efectivos"] == ["m-001"]        # sin repetir
+    assert campos["campos_parciales"] == {}
+
+
+def test_campos_de_modelo_none_sigue_siendo_none():
+    for medido in (None, {}, {"llm_calls": []},
+                   {"llm_calls": [{"model": "m", "reasoning_tokens": None}]}):
+        campos = campos_de_modelo(medido)
+        assert campos["reasoning_tokens"] is None, medido
+        assert campos["modelos_efectivos"] == [], medido
+
+
+def test_campos_de_modelo_declara_la_suma_parcial():
+    medido = {"llm_calls": [{"model": "m", "reasoning_tokens": 5},
+                            {"model": "m", "reasoning_tokens": None}]}
+    campos = campos_de_modelo(medido)
+    assert campos["reasoning_tokens"] == 5
+    assert campos["campos_parciales"]["reasoning_tokens"] == {"informadas": 1, "totales": 2}
+
+
+def test_campos_de_modelo_rechaza_valores_que_no_son_enteros_ni_textos():
+    medido = {"llm_calls": [{"model": "m", "model_version": "", "reasoning_tokens": True},
+                            {"model": "m", "model_version": 3, "reasoning_tokens": -1},
+                            "no es un dict"]}
+    campos = campos_de_modelo(medido)
+    assert campos["reasoning_tokens"] is None
+    assert campos["modelos_efectivos"] == []
+
+
+def test_la_exportacion_incluye_razonamiento_y_versiones_sin_convertir_none_en_cero():
+    assert "reasoning_tokens" in _exportacion.COLUMNAS
+    assert "modelos_efectivos" in _exportacion.COLUMNAS
+    ident = {"case_id": "c", "dataset": "d", "arquitectura": "a", "repeticion": 1}
+    con = _exportacion.fila(ident, {}, telemetria={
+        "reasoning_tokens": 12, "modelos_efectivos": ["m-001", "n-002"]})
+    assert con["reasoning_tokens"] == 12
+    assert con["modelos_efectivos"] == "m-001; n-002"
+    sin = _exportacion.fila(ident, {}, telemetria={})
+    assert sin["reasoning_tokens"] is None
+    assert sin["modelos_efectivos"] is None
+    cero = _exportacion.fila(ident, {}, telemetria={"reasoning_tokens": 0})
+    assert cero["reasoning_tokens"] == 0          # un cero informado sí es un cero

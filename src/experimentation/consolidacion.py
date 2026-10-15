@@ -72,6 +72,7 @@ from src.experimentation.evaluators.reporte import (
 from src.experimentation.orquestador import ARQUITECTURAS_CAMPANA
 from src.experimentation.runtime import exportacion, persistencia
 from src.experimentation.runtime.identidad import IdentidadCorrida
+from src.experimentation.runtime.telemetria import campos_de_modelo
 
 ESQUEMA_RESULTADOS = "resultados-v1"
 
@@ -419,7 +420,15 @@ def tabla_consumo(registros, telemetrias, fallos_sin_salida, principal) -> tuple
             "llamadas_medias": c["llm_call_count"]["media"],
             "tokens_entrada_medios": c["input_tokens"]["media"],
             "tokens_salida_medios": c["output_tokens"]["media"],
+            # `None` cuando ninguna corrida informó razonamiento: no es 0.
+            "tokens_razonamiento_medios": c["reasoning_tokens"]["media"],
             "tokens_totales_medios": c["total_tokens"]["media"],
+            # Versión(es) que devolvió la API, tal cual. `None` para el
+            # baseline (no usa el modelo) o si ninguna respuesta la informó.
+            "versiones_devueltas": "; ".join(sorted({
+                v for r in grupo
+                for v in (telemetrias.get(r.run_id) or {}).get("modelos_efectivos") or []
+            })) or None,
             "replan_medio": c["replan_count"]["media"],
             "correcciones_medias": c["intentos_correccion"]["media"],
             # El baseline no usa el modelo: no tiene tokens que informar ni un
@@ -443,7 +452,9 @@ def tabla_consumo(registros, telemetrias, fallos_sin_salida, principal) -> tuple
         ("llamadas_medias", "Llamadas al modelo", "numero"),
         ("tokens_entrada_medios", "Tokens de entrada", "numero"),
         ("tokens_salida_medios", "Tokens de salida", "numero"),
+        ("tokens_razonamiento_medios", "Tokens de razonamiento", "numero"),
         ("tokens_totales_medios", "Tokens totales", "numero"),
+        ("versiones_devueltas", "Versión devuelta por la API"),
         ("replan_medio", "Replanificaciones", "numero"),
         ("correcciones_medias", "Correcciones", "numero"),
         ("n_con_fallback", "Con fallback", "entero"),
@@ -559,6 +570,13 @@ def construir_integridad(
     sin_tokens = sum(
         1 for r in llm if r.estado_ejecucion == ESTADO_COMPLETA
         and (telemetrias.get(r.run_id) or {}).get("total_tokens") is None)
+    completas_llm = [r for r in llm if r.estado_ejecucion == ESTADO_COMPLETA]
+    sin_razonamiento = sum(
+        1 for r in completas_llm
+        if (telemetrias.get(r.run_id) or {}).get("reasoning_tokens") is None)
+    sin_version = sum(
+        1 for r in completas_llm
+        if not (telemetrias.get(r.run_id) or {}).get("modelos_efectivos"))
     sin_meta = sum(1 for r in resultado.registros if r.sin_metadatos_de_ejecucion)
     determinable = principal is not None or not con_llamadas
 
@@ -589,6 +607,14 @@ def construir_integridad(
     if sin_tokens:
         avisos.append(aviso("tokens_no_informados", "media",
                             "corridas completas sin tokens informados", sin_tokens))
+    if sin_razonamiento:
+        avisos.append(aviso("razonamiento_no_informado", "info",
+                            "corridas completas sin tokens de razonamiento informados "
+                            "(no son 0: el proveedor no los entregó)", sin_razonamiento))
+    if sin_version:
+        avisos.append(aviso("version_de_modelo_no_informada", "info",
+                            "corridas completas sin la versión que devolvió la API: "
+                            "no se puede probar qué versión respondió", sin_version))
     if sin_meta:
         avisos.append(aviso("sin_metadatos_de_ejecucion", "alta",
                             "corridas guardadas sin metadatos de ejecución: sus dimensiones "
@@ -610,6 +636,8 @@ def construir_integridad(
         "modelo_principal": principal,
         "corridas_con_telemetria_previa_a_d11": previas,
         "corridas_sin_tokens": sin_tokens,
+        "corridas_sin_razonamiento": sin_razonamiento,
+        "corridas_sin_version_de_modelo": sin_version,
         "advertencias": avisos,
     }
 
@@ -654,7 +682,15 @@ def consolidar(
     for r in registros:
         identidad = IdentidadCorrida(r.case_id, r.dataset, r.arquitectura,
                                      r.repeticion, config_version)
-        telemetrias[r.run_id] = persistencia.leer_telemetria(identidad, raiz_repo)
+        tel = persistencia.leer_telemetria(identidad, raiz_repo)
+        if tel is not None:
+            # Las corridas guardadas antes de esta instrumentación no traen
+            # estos campos: se derivan de `llm_calls` si existe, y si no, quedan
+            # en `None` (no se inventan).
+            tel = dict(tel)
+            for clave, valor in campos_de_modelo(tel).items():
+                tel.setdefault(clave, valor)
+        telemetrias[r.run_id] = tel
 
     fallos = ultimo_fallo_por_corrida(persistencia.leer_fallos(raiz_repo, config_version))
     # Solo los fallos de corridas que no llegaron a guardar una salida: si una

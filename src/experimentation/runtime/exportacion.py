@@ -79,6 +79,11 @@ COLUMNAS = (
     "config_version",
     #: `True` si la telemetría se tomó antes de integrar D-11.
     "telemetria_previa_a_d11",
+    #: Tokens de razonamiento (suma de las llamadas que los informaron).
+    #: `None` si el proveedor no los informó: no es 0.
+    "reasoning_tokens",
+    #: Versión(es) que devolvió la API, separadas por "; ". `None` si no hubo.
+    "modelos_efectivos",
 )
 
 #: Valor con que se representa una celda inaplicable en CSV. En JSON va
@@ -157,6 +162,8 @@ def fila(
         "telemetria_previa_a_d11": bool(
             telemetria.get("previa_a_d11", True)
         ),
+        "reasoning_tokens": _celda(telemetria.get("reasoning_tokens")),
+        "modelos_efectivos": "; ".join(telemetria.get("modelos_efectivos") or []) or None,
     }
 
 

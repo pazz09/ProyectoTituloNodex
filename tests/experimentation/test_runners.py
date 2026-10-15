@@ -289,3 +289,95 @@ def test_todos_los_imports_de_la_capa_experimental_existen():
                     f"{archivo.name}: {nodo.module} no define {alias.name!r}"
                 )
     assert not fallos, "\n".join(fallos)
+
+
+# --- gemini_externo con un cliente simulado ---------------------------------------
+#
+# Hasta ahora las pruebas de este runner inspeccionaban su código fuente; estas lo
+# EJECUTAN con un cliente falso (sin red y sin gastar cuota) y fijan qué telemetría
+# deja: la versión que devolvió la API, los tokens de razonamiento y la cuenta de
+# llamadas.
+
+from types import SimpleNamespace
+
+
+class _ClienteFalso:
+    """Imita `client.models.generate_content` de google-genai."""
+
+    def __init__(self, respuesta=None, error=None):
+        self._respuesta, self._error = respuesta, error
+        self.llamadas = []
+        self.models = SimpleNamespace(generate_content=self._generar)
+
+    def _generar(self, **kwargs):
+        self.llamadas.append(kwargs)
+        if self._error is not None:
+            raise self._error
+        return self._respuesta
+
+
+def _respuesta_gemini(texto, version="modelo-x-001", razonamiento=9):
+    uso = SimpleNamespace(prompt_token_count=100, candidates_token_count=20,
+                          total_token_count=129, thoughts_token_count=razonamiento)
+    return SimpleNamespace(text=texto, usage_metadata=uso, model_version=version)
+
+
+def _ejecutar_con(monkeypatch, cliente):
+    import google.genai.types as tipos
+    import src.config as config
+
+    monkeypatch.setattr(config, "GEMINI_API_KEY", "clave-ficticia")
+    monkeypatch.setattr(gemini_externo, "_cliente", lambda *a, **k: (cliente, tipos))
+    return gemini_externo.ejecutar("log de prueba", "caso__gemext__r1__00000000")
+
+
+def test_gemini_externo_registra_version_devuelta_y_razonamiento(monkeypatch):
+    cliente = _ClienteFalso(_respuesta_gemini('{"hay_incidente": true}'))
+    estado, diagnostico = _ejecutar_con(monkeypatch, cliente)
+    tel = diagnostico["telemetry"]
+    assert len(cliente.llamadas) == 1
+    assert tel["llm_call_count"] == 1
+    assert tel["reasoning_tokens"] == 9
+    assert tel["modelo_efectivo"] == "modelo-x-001"       # lo que devolvió la API
+    assert tel["modelo_solicitado"] == diagnostico["modelo"]
+    assert tel["llm_calls"] == [{
+        "model": diagnostico["modelo"], "model_version": "modelo-x-001",
+        "input_tokens": 100, "output_tokens": 20, "total_tokens": 129,
+        "reasoning_tokens": 9,
+    }]
+
+
+def test_gemini_externo_sin_version_ni_razonamiento_los_deja_en_none(monkeypatch):
+    """Antes `modelo_efectivo` repetía el nombre pedido aunque la API no
+    hubiera informado nada: aparentaba una prueba que no existía."""
+    cliente = _ClienteFalso(_respuesta_gemini(
+        '{"hay_incidente": true}', version=None, razonamiento=None))
+    _, diagnostico = _ejecutar_con(monkeypatch, cliente)
+    tel = diagnostico["telemetry"]
+    assert tel["modelo_efectivo"] is None
+    assert tel["reasoning_tokens"] is None
+    assert tel["llm_calls"][0]["model_version"] is None
+    assert tel["llm_calls"][0]["reasoning_tokens"] is None
+
+
+def test_regresion_una_respuesta_que_no_es_json_igual_cuenta_como_una_llamada(monkeypatch):
+    """Defecto previo: una respuesta no-JSON figuraba con 0 llamadas aunque la
+    llamada se hizo y gastó tokens, así que el consumo quedaba subestimado."""
+    cliente = _ClienteFalso(_respuesta_gemini("esto no es json"))
+    _, diagnostico = _ejecutar_con(monkeypatch, cliente)
+    assert diagnostico["error"] == "la respuesta no es un objeto JSON"
+    assert diagnostico["llamadas_llm"] == 1
+    assert diagnostico["telemetry"]["llm_call_count"] == 1
+    assert diagnostico["telemetry"]["input_tokens"] == 100       # los tokens SÍ se gastaron
+    assert len(diagnostico["telemetry"]["llm_calls"]) == 1
+
+
+def test_un_error_de_la_api_cuenta_como_llamada_y_deja_tokens_en_none(monkeypatch):
+    cliente = _ClienteFalso(error=TimeoutError("timeout"))
+    _, diagnostico = _ejecutar_con(monkeypatch, cliente)
+    assert "TimeoutError" in diagnostico["error"]
+    tel = diagnostico["telemetry"]
+    assert tel["llm_call_count"] == 1
+    assert tel["input_tokens"] is None and tel["reasoning_tokens"] is None
+    assert tel["llm_calls"][0]["model_version"] is None
+    assert len(cliente.llamadas) == 1          # sin reintentos ni respaldo
