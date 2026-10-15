@@ -381,6 +381,7 @@ def test_fallback_tambien_falla_propaga_su_propio_error(monkeypatch):
 # `model_version` y `reasoning_tokens`. Regla que fijan estas pruebas: lo que el
 # proveedor no informa queda en `None`, nunca en 0.
 
+import json
 import os
 import subprocess
 import sys
@@ -568,3 +569,111 @@ def test_la_variable_de_entorno_activa_el_modo_sin_respaldo():
 def test_la_bandera_entra_en_la_configuracion_congelada():
     from src.experimentation.runtime.configuracion import PARAMETROS_CONGELADOS
     assert "LLM_SIN_RESPALDO" in PARAMETROS_CONGELADOS
+
+
+# --- Duración por llamada y tipo de error ------------------------------------------------
+#
+# Con la corrida 4 de la comparación de modelos (97 min, una llamada fallida) no se pudo
+# decir cuánto tardó cada llamada: la telemetría no lo guardaba. Ahora cada llamada
+# registra `duration_s` (solo la llamada a la API, SIN las esperas de reintento) y, si
+# falló, `error` (clase y código HTTP, sin el mensaje).
+
+class _Reloj:
+    """Reloj controlado: cada lectura devuelve el siguiente valor."""
+
+    def __init__(self, *lecturas):
+        self._lecturas = list(lecturas)
+
+    def __call__(self):
+        return self._lecturas.pop(0)
+
+
+def _con_reloj(monkeypatch, *lecturas):
+    reloj = _Reloj(*lecturas)
+    monkeypatch.setattr(llm_mod.time, "monotonic", reloj)
+    return reloj
+
+
+def test_registra_cuanto_tardo_una_llamada_exitosa(monkeypatch):
+    _con_reloj(monkeypatch, 10.0, 12.5)
+    llamadas = _llamadas_registradas(monkeypatch, _respuesta(version="v", razonamiento=1))
+    assert llamadas[0]["duration_s"] == 2.5
+    assert llamadas[0]["error"] is None
+
+
+class _ErrorHttp(Exception):
+    def __init__(self, code):
+        super().__init__("mensaje largo que no debe guardarse")
+        self.code = code
+
+
+def test_una_llamada_fallida_registra_su_duracion_y_el_tipo_de_error_sin_el_mensaje(monkeypatch):
+    _con_reloj(monkeypatch, 0.0, 7.0)
+
+    def falla(**k):
+        raise _ErrorHttp(503)
+
+    monkeypatch.setattr(llm_mod.client.models, "generate_content", falla)
+    with medir_ejecucion():
+        try:
+            llm_mod._generate_con_backoff("x", None, max_reintentos=0)
+        except Exception:
+            pass
+        llamadas = resumen_telemetria({})["llm_calls"]
+    assert llamadas[0]["duration_s"] == 7.0
+    assert llamadas[0]["error"] == "_ErrorHttp(503)"
+    assert "mensaje" not in json.dumps(llamadas)
+
+
+def test_la_duracion_de_una_llamada_fallida_no_incluye_la_espera_del_reintento(monkeypatch):
+    """La espera entre intentos ocurre fuera de la llamada: no cuenta como duración."""
+    # intento 1: 0 -> 5 (falla); espera (parchada); intento 2: 100 -> 103 (exito)
+    _con_reloj(monkeypatch, 0.0, 5.0, 100.0, 103.0)
+    intentos = []
+
+    def fake(**k):
+        intentos.append(1)
+        if len(intentos) == 1:
+            raise ERR_503
+        return _respuesta(version="v", razonamiento=1)
+
+    monkeypatch.setattr(llm_mod.client.models, "generate_content", fake)
+    monkeypatch.setattr(llm_mod.time, "sleep", lambda s: None)
+    with medir_ejecucion():
+        llm_mod._generate_con_backoff("x", None, jitter=0.0)
+        llamadas = resumen_telemetria({})["llm_calls"]
+    assert [c["duration_s"] for c in llamadas] == [5.0, 3.0]
+    assert llamadas[0]["error"] is not None and llamadas[1]["error"] is None
+
+
+def test_sin_medicion_activa_la_duracion_no_falla(monkeypatch):
+    monkeypatch.setattr(
+        llm_mod.client.models, "generate_content", lambda **k: _respuesta("v", 1))
+    assert llm_mod._generate_con_backoff("x", None).model_version == "v"
+
+
+def test_los_campos_nuevos_arrancan_en_none_y_no_en_cero():
+    llamada = {}
+    llm_mod._preparar_campos_extra(llamada)
+    assert llamada["duration_s"] is None and llamada["error"] is None
+
+
+def test_un_error_posterior_a_la_respuesta_igual_queda_registrado(monkeypatch):
+    """Si algo falla después de que la API respondió (p. ej. al leer el consumo), la
+    duración ya registrada se conserva y el error también se anota."""
+    _con_reloj(monkeypatch, 0.0, 2.0, 99.0)
+    monkeypatch.setattr(
+        llm_mod.client.models, "generate_content", lambda **k: _respuesta("v", 1))
+
+    def revienta(llamada, respuesta):
+        raise KeyError("x")
+
+    monkeypatch.setattr(llm_mod, "registrar_consumo", revienta)
+    with medir_ejecucion():
+        try:
+            llm_mod._generate_con_backoff("x", None, max_reintentos=0)
+        except Exception:
+            pass
+        llamada = resumen_telemetria({})["llm_calls"][0]
+    assert llamada["duration_s"] == 2.0           # la de la API, no la del fallo posterior
+    assert llamada["error"] == "KeyError"

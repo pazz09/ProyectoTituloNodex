@@ -174,7 +174,7 @@ def _espera_con_jitter(espera: float, jitter: float) -> float:
 
 
 def _preparar_campos_extra(llamada) -> None:
-    """Declara en `None` los dos campos que agrega esta instrumentación.
+    """Declara en `None` los campos que agrega esta instrumentación.
 
     `iniciar_llamada` (src/telemetry.py) devuelve el MISMO diccionario que
     luego se copia a `llm_calls`, así que se pueden añadir campos sin tocar
@@ -184,6 +184,26 @@ def _preparar_campos_extra(llamada) -> None:
     if llamada is not None:
         llamada["model_version"] = None
         llamada["reasoning_tokens"] = None
+        llamada["duration_s"] = None
+        llamada["error"] = None
+
+
+def _registrar_duracion(llamada, inicio: float, error: Exception | None = None) -> None:
+    """Guarda cuánto tardó la llamada y, si falló, de qué tipo fue el error.
+
+    La duración es la de la LLAMADA a la API (desde que se envía hasta que
+    responde o falla). No incluye las esperas de reintento: esas ocurren fuera
+    de la llamada. La duración se registra una sola vez por llamada. El error es solo el
+    nombre de la clase (y el código HTTP si lo trae), sin el mensaje.
+    """
+    if llamada is None:
+        return
+    if llamada.get("duration_s") is None:
+        llamada["duration_s"] = round(time.monotonic() - inicio, 3)
+    if error is not None and llamada.get("error") is None:
+        codigo = getattr(error, "code", None)
+        sufijo = f"({codigo})" if isinstance(codigo, int) and not isinstance(codigo, bool) else ""
+        llamada["error"] = f"{type(error).__name__}{sufijo}"
 
 
 def _registrar_version_y_razonamiento(llamada, respuesta) -> None:
@@ -243,12 +263,15 @@ def _generate_con_backoff(
     while True:
         llamada = iniciar_llamada(modelo)
         _preparar_campos_extra(llamada)
+        inicio = time.monotonic()
         try:
             respuesta = client.models.generate_content(model=modelo, contents=msg, config=cfg)
+            _registrar_duracion(llamada, inicio)
             registrar_consumo(llamada, respuesta)
             _registrar_version_y_razonamiento(llamada, respuesta)
             return respuesta
         except Exception as e:
+            _registrar_duracion(llamada, inicio, e)
             tipo_cuota = _tipo_error_cuota(e)
             if tipo_cuota == "dia":
                 raise
