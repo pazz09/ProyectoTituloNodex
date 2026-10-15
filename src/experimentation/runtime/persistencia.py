@@ -38,6 +38,10 @@ from src.experimentation.runtime.identidad import IdentidadCorrida
 #: Carpeta de salidas por arquitectura.
 CARPETA_POR_ARQUITECTURA = {
     "nodex_multiagente": "nodex",
+    # Pseudo-ablación (decisión del 7-oct-2026). Faltaba en esta tabla: al
+    # planificar con `gemini_externo` el almacenamiento lanzaba KeyError. Lo
+    # encontró el plan en seco de la Etapa 1, no las pruebas unitarias.
+    "gemini_externo": "gemini_externo",
     "agente_unico": "single_agent",
     "baseline_reglas": "baseline",
 }
@@ -48,6 +52,7 @@ SUBDIRECTORIOS = (
     "ground_truth",
     "manifests",
     "nodex",
+    "gemini_externo",
     "single_agent",
     "baseline",
     "metrics",
