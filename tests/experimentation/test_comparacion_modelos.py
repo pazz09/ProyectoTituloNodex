@@ -910,3 +910,20 @@ def test_el_veredicto_del_criterio_4_no_cambia_por_mostrar_la_suma_parcial():
     r = _valida()
     r["telemetria"] = {"input_tokens": None, "output_tokens": None, "llm_calls": [ok, fallida]}
     assert cm.evaluar_criterios(r, "m", UIDS)["tokens_registrados"] is False
+
+
+def test_el_bloqueo_anota_el_intento_cuando_requests_llama_con_argumentos_por_nombre():
+    """Regresión: `requests.get` llama a `Session.request(method=..., url=...)` por
+    nombre. Con una firma posicional el bloqueo fallaba con TypeError ANTES de anotar el
+    intento: la red seguía bloqueada, pero el contador marcaba 0 siempre."""
+    import requests
+
+    original = requests.sessions.Session.request
+    try:
+        intentos = cm._bloquear_red(requests.sessions.Session)
+        with pytest.raises(ConnectionError):
+            requests.get("https://services.nvd.nist.gov/rest/json/cves/2.0",
+                         params={"keywordSearch": "x"})
+        assert intentos == ["https://services.nvd.nist.gov/rest/json/cves/2.0"]
+    finally:
+        requests.sessions.Session.request = original

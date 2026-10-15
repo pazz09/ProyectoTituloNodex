@@ -35,7 +35,8 @@ def test_el_plan_en_seco_enumera_las_corridas_sin_ejecutarlas():
     plan = orquestador.ejecutar_campana(RAIZ, "piloto", "prueba-001")
     resumen = plan["plan"]
     assert resumen["corridas_pendientes"] > 0
-    assert resumen["llamadas_llm_piso"] > 0
+    assert resumen["llamadas_llm_referencia"] > 0
+    assert "llamadas_llm_piso" not in resumen
     # El piloto es de desarrollo: D-2 fija N=1.
     assert resumen["repeticiones"] == 1
 
@@ -68,16 +69,30 @@ def test_el_baseline_no_suma_llamadas_al_modelo():
     assert orquestador.LLAMADAS_POR_CORRIDA["baseline_reglas"] == 0
 
 
-def test_las_llamadas_por_corrida_son_un_piso_declarado():
-    """NODEX tiene 6 puntos de llamada y sube con los bucles de
-    replanificación y corrección, que no se pueden acotar sin medir."""
+def test_las_llamadas_por_corrida_son_una_referencia_y_no_un_piso():
+    """Lo medido el 15-oct-2026 (comparación de modelos): NODEX hizo 5, 6, 12 y 13
+    llamadas. El 6 es una referencia de partida; un «piso» de 6 es falso (hubo una
+    corrida de 5)."""
     assert orquestador.LLAMADAS_POR_CORRIDA["nodex_multiagente"] == 6
+    assert orquestador.LLAMADAS_MEDIDAS["nodex_multiagente"] == (5, 6, 12, 13)
+    assert min(orquestador.LLAMADAS_MEDIDAS["nodex_multiagente"]) < (
+        orquestador.LLAMADAS_POR_CORRIDA["nodex_multiagente"])
     # La pseudo-ablación es Gemini directo, de un solo prompt (decisión del
     # 7-oct-2026): reemplazó al agente único integrado en esta tabla.
     assert orquestador.LLAMADAS_POR_CORRIDA["gemini_externo"] == 1
     assert "agente_unico" not in orquestador.LLAMADAS_POR_CORRIDA
+    plan = orquestador.ejecutar_campana(RAIZ, "piloto", "prueba-001")["plan"]
+    assert "NO un piso" in plan["nota_llamadas"]
+    assert plan["rango_medido_de_llamadas_por_corrida"]["nodex_multiagente"] == [5, 13]
+
+
+def test_el_plan_impreso_no_llama_piso_a_las_llamadas(capsys):
     plan = orquestador.ejecutar_campana(RAIZ, "piloto", "prueba-001")
-    assert "piso" in plan["plan"]["nota_llamadas"]
+    orquestador.imprimir_plan(plan)
+    salida = capsys.readouterr().out
+    assert "(piso)" not in salida
+    assert "NO un piso" in salida
+    assert "referencia" in salida
 
 
 # --- identidad y reanudación --------------------------------------------

@@ -251,3 +251,26 @@ def leer_telemetria(identidad: IdentidadCorrida, raiz_repo: Path) -> dict | None
     if not ruta.is_file():
         return None
     return json.loads(ruta.read_text(encoding="utf-8")).get("telemetria")
+
+
+def ruta_consultas_externas(identidad: IdentidadCorrida, raiz_repo: Path) -> Path:
+    """Dónde va el registro de intentos de consulta externa (NVD, AbuseIPDB) de una corrida."""
+    return (raiz_repo / "experiments" / "telemetry" / identidad.dataset
+            / f"{identidad.run_id}.consultas_externas.json")
+
+
+def guardar_consultas_externas(
+    identidad: IdentidadCorrida, raiz_repo: Path, consultas: list[dict]
+) -> Path:
+    """Guarda las consultas de la corrida. Una lista VACÍA es un dato (no consultó nada);
+    la ausencia del archivo significa «no se registró»."""
+    return _escribir(ruta_consultas_externas(identidad, raiz_repo),
+                     {**identidad.to_dict(), "consultas": consultas})
+
+
+def leer_consultas_externas(identidad: IdentidadCorrida, raiz_repo: Path) -> list[dict] | None:
+    """Las consultas guardadas de una corrida, o `None` si no hay registro."""
+    ruta = ruta_consultas_externas(identidad, raiz_repo)
+    if not ruta.is_file():
+        return None
+    return json.loads(ruta.read_text(encoding="utf-8")).get("consultas")

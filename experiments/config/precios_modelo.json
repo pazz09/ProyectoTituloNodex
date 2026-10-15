@@ -1,0 +1,10 @@
+{
+  "esquema": "1.0",
+  "nota": "Tabla CONFIGURABLE de precios por modelo. Viene vacía a propósito: no se supone ningún precio. Para activar el costo en el plan, completar fecha, fuente, moneda y los precios por millón de tokens del modelo (los tokens de razonamiento se facturan como salida). Mientras falte algo, el costo es null, no 0.",
+  "moneda": null,
+  "fecha": null,
+  "fuente": null,
+  "modelos": {
+    "gemini-3.8-flash": {"entrada_por_millon": null, "salida_por_millon": null}
+  }
+}

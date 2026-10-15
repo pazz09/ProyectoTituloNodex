@@ -332,7 +332,11 @@ def _bloquear_red(clase_sesion) -> list[str]:
     """Hace fallar toda petición de `requests` y anota a dónde iba."""
     intentos: list[str] = []
 
-    def bloqueada(self, metodo, url, *args, **kwargs):
+    def bloqueada(self, *args, **kwargs):
+        # `requests.get` llama a `Session.request(method=..., url=...)` por nombre.
+        # Con una firma posicional esto fallaba con TypeError antes de anotar el
+        # intento: el bloqueo funcionaba pero el contador marcaba 0 siempre.
+        url = kwargs.get("url", args[1] if len(args) > 1 else "")
         intentos.append(str(url).split("?")[0])
         raise ConnectionError("llamada externa bloqueada: no autorizada en esta comparación")
 

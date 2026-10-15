@@ -72,16 +72,27 @@ ARQUITECTURAS_CAMPANA = ("nodex_multiagente", "baseline_reglas")
 
 #: Llamadas al modelo por corrida, para estimar el costo del plan en seco.
 #:
-#: NODEX tiene 5 nodos LLM (planificador, triage, selector de herramientas,
-#: ingeniero de mitigación, auditor final) y el nodo de triage tiene dos
-#: puntos de llamada, así que el piso son 6. Sube con los bucles de
-#: replanificación y de corrección de comandos, que no se pueden acotar sin
-#: medir. Es un **piso**, no una estimación.
+#: REFERENCIA de partida, **NO un piso**. NODEX tiene 5 nodos LLM (planificador,
+#: triage, selector de herramientas, ingeniero de mitigación, auditor final) y el
+#: nodo de triage tiene dos puntos de llamada, de ahí el 6. Pero lo MEDIDO en la
+#: comparación de modelos del 15-oct-2026 fue 5, 6, 12 y 13 llamadas: puede ser
+#: menos (5) y sube con los bucles de replanificación y de corrección de comandos,
+#: que no se pueden acotar sin medir. Ver `LLAMADAS_MEDIDAS`.
 LLAMADAS_POR_CORRIDA = {
     "nodex_multiagente": 6,
     # Pseudo-ablacion: un solo prompt, sin reintentos ni fallback.
     "gemini_externo": 1,
     "baseline_reglas": 0,
+}
+
+
+#: Lo medido (llamadas por corrida) en la comparación de modelos del 15-oct-2026,
+#: con ambos modelos y dos casos por modelo. Son 4 corridas de NODEX: es un rango
+#: observado, no un intervalo.
+LLAMADAS_MEDIDAS = {
+    "nodex_multiagente": (5, 6, 12, 13),
+    "gemini_externo": (1, 1, 1, 1),
+    "baseline_reglas": (0,),
 }
 
 
@@ -101,11 +112,11 @@ class PlanCampana:
 
     def resumen(self) -> dict:
         por_arquitectura: dict = {}
-        llamadas_piso = 0
+        referencia = 0
         for corrida in self.corridas:
             arquitectura = corrida["arquitectura"]
             por_arquitectura[arquitectura] = por_arquitectura.get(arquitectura, 0) + 1
-            llamadas_piso += LLAMADAS_POR_CORRIDA.get(arquitectura, 0)
+            referencia += LLAMADAS_POR_CORRIDA.get(arquitectura, 0)
         return {
             "config_version": self.config_version,
             "particion": self.particion,
@@ -113,11 +124,14 @@ class PlanCampana:
             "corridas_pendientes": len(self.corridas),
             "corridas_ya_hechas": len(self.ya_hechas),
             "por_arquitectura": por_arquitectura,
-            "llamadas_llm_piso": llamadas_piso,
+            "llamadas_llm_referencia": referencia,
+            "rango_medido_de_llamadas_por_corrida": {
+                a: [min(v), max(v)] for a, v in LLAMADAS_MEDIDAS.items()
+                if a in por_arquitectura},
             "nota_llamadas": (
-                "piso, no estimación: NODEX tiene 6 puntos de llamada y sube "
-                "con los bucles de replanificación y corrección, que no se "
-                "pueden acotar sin medir"
+                "referencia de partida, NO un piso: se midieron 5, 6, 12 y 13 "
+                "llamadas por corrida de NODEX (puede ser menos de 6 y sube con los "
+                "bucles de replanificación y corrección)"
             ),
             "repeticiones": REPETICIONES.get(self.particion),
         }
@@ -479,7 +493,9 @@ def imprimir_plan(plan: dict) -> None:
     print(f"ya hechas      : {resumen['corridas_ya_hechas']}")
     for arquitectura, cuantas in sorted(resumen["por_arquitectura"].items()):
         llamadas = cuantas * LLAMADAS_POR_CORRIDA.get(arquitectura, 0)
+        rango = resumen["rango_medido_de_llamadas_por_corrida"].get(arquitectura)
+        medido = f"  (medido {rango[0]}-{rango[1]} por corrida)" if rango else ""
         print(f"  {arquitectura:<20} {cuantas:>4} corridas  "
-              f"{llamadas:>5} llamadas (piso)")
-    print(f"llamadas LLM piso: {resumen['llamadas_llm_piso']}")
+              f"{llamadas:>5} llamadas de referencia{medido}")
+    print(f"llamadas LLM de referencia (NO un piso): {resumen['llamadas_llm_referencia']}")
     print(f"  {resumen['nota_llamadas']}")

@@ -164,6 +164,11 @@ class ConfiguracionCongelada:
     #: definitiva (§11: no mezclar mediciones previas a D-11 con
     #: posteriores).
     d11_integrado: bool = False
+    #: Cómo se llama al modelo (método de la API, formato de respuesta, respaldo,
+    #: versión del SDK). Lo que no es un parámetro de `src/config.py` pero mueve el resultado.
+    generacion: dict = field(default_factory=dict)
+    #: Política de los recursos externos (NVD, AbuseIPDB) bajo la que corrió la campaña.
+    recursos_externos: dict = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         if not self.config_version:
@@ -239,6 +244,8 @@ def congelar(
     config_version: str,
     raiz_repo: Path,
     modulo_config=None,
+    generacion: dict | None = None,
+    recursos_externos: dict | None = None,
 ) -> ConfiguracionCongelada:
     """Arma la instantánea. Lee configuración y archivos; no ejecuta NODEX.
 
@@ -321,6 +328,8 @@ def congelar(
             "plataforma": platform.platform(),
         },
         d11_integrado=detectar_d11(raiz_repo)["integrado"],
+        generacion=dict(generacion or {}),
+        recursos_externos=dict(recursos_externos or {}),
     )
 
 
