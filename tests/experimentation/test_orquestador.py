@@ -43,14 +43,14 @@ def test_el_plan_en_seco_enumera_las_corridas_sin_ejecutarlas():
 
 # --- repeticiones (D-2) --------------------------------------------------
 
-def test_el_piloto_usa_una_repeticion_y_la_evaluacion_tres():
+def test_el_piloto_usa_una_repeticion_y_la_evaluacion_dos():
+    """D-2 pedía 3; el 15-oct-2026 pasó a 2 (profesor guía, presupuesto de USD 6)."""
     assert orquestador.REPETICIONES["desarrollo"] == 1
-    assert orquestador.REPETICIONES["evaluacion"] == 3
+    assert orquestador.REPETICIONES["evaluacion"] == 2
 
 
 def test_el_baseline_no_se_repite_porque_es_determinista():
-    """Repetirlo tres veces daría tres archivos idénticos y triplicaría el
-    conteo de casos sin aportar nada."""
+    """Repetirlo daría archivos idénticos y multiplicaría el conteo de casos sin aportar nada."""
     assert orquestador.REPETICIONES_BASELINE == 1
     plan = orquestador.planificar(
         RAIZ,
@@ -58,10 +58,10 @@ def test_el_baseline_no_se_repite_porque_es_determinista():
         "prueba-001",
     )
     por_arquitectura = plan.resumen()["por_arquitectura"]
-    # En evaluación, las arquitecturas LLM corren 3 veces por caso y el
+    # En evaluación, las arquitecturas LLM corren 2 veces por caso y el
     # baseline una sola.
     assert por_arquitectura["nodex_multiagente"] == (
-        3 * por_arquitectura["baseline_reglas"]
+        2 * por_arquitectura["baseline_reglas"]
     )
 
 

@@ -17,6 +17,15 @@
   resto. Si la etapa 1 no sale limpia, termina con código 3 y NO sigue.
 - **Tope de 2 horas por corrida** (se mata el ÁRBOL de procesos). **Tres fallas de
   infraestructura seguidas** (503, 429, timeout, tope) detienen la campaña: código 4.
+- **Tope de gasto acumulado** (`--tope-gasto`, por omisión USD 5,00). El gasto se RECALCULA antes
+  de cada corrida con los tokens medidos de todo lo guardado de la configuración y la tabla de
+  precios vigente ese día: no hay contador aparte que pueda perderse al reanudar. Si el gasto más el
+  costo MÁXIMO observado de la celda de la corrida siguiente superaría el tope, se detiene antes de
+  lanzarla (código 5). La parada es reanudable: las corridas guardadas no se repiten. Una corrida
+  fallida cuyas llamadas no informaron tokens deja un costo PARCIAL (un piso): se informa aparte.
+  El gasto acumulado se informa por corrida y por etapa (`gasto.json`).
+- **JSON válido de NODEX:** cada corrida de NODEX deja `<run_id>.llm_json.json` con las respuestas
+  de `llm_json()` y cuántas fueron inválidas.
 - **Aislamiento.** ChromaDB y la caché de IP son copias temporales por corrida; las
   llamadas HTTP de `requests` (NVD, AbuseIPDB) se bloquean con respaldo local y **cada
   intento de consulta queda registrado por corrida** (herramienta, parámetros, si el
@@ -59,6 +68,10 @@ ESTADOS_DE_INFRAESTRUCTURA = ("error_api", "timeout")
 
 #: Códigos de salida.
 SALIDA_OK, SALIDA_ETAPA_NO_LIMPIA, SALIDA_FALLAS_SEGUIDAS = 0, 3, 4
+SALIDA_TOPE_DE_GASTO = 5
+
+#: Tope de gasto acumulado de la campaña (USD). El presupuesto total es 6,00; el resto es el margen.
+TOPE_GASTO_USD = 5.00
 
 GENERACION = {
     "api": "generateContent (google-genai, Models.generate_content)",
@@ -220,6 +233,12 @@ def entradas_de_la_etapa(plan, subconjunto: dict, etapa: int) -> list[dict]:
     return [e for e in plan.pendientes if e["case_id"] != primero]
 
 
+def etiqueta_de_resultados(subconjunto: dict) -> str:
+    """Los resultados de la partición de evaluación son de la campaña; los demás, de depuración."""
+    return ("campana_evaluacion" if subconjunto.get("particion") == "evaluacion"
+            else "depuracion_no_reportable")
+
+
 def describir_plan(raiz: Path, subconjunto: dict, plan, congelada: dict | None) -> str:
     resumen = plan.resumen()
     modelo = ((congelada or {}).get("parametros") or {}).get("LLM_MODEL_PRIMARY")
@@ -268,7 +287,11 @@ def describir_plan(raiz: Path, subconjunto: dict, plan, congelada: dict | None) 
                   f"2 = {len(e2)} corridas")
     lineas.append(f"tope por corrida: {TOPE_CORRIDA_S // 3600} h | se detiene tras "
                   f"{MAX_FALLAS_DE_INFRAESTRUCTURA_SEGUIDAS} fallas de infraestructura seguidas")
-    lineas.append("resultados: de DEPURACIÓN, no reportables")
+    lineas.append(f"tope de gasto acumulado: USD {TOPE_GASTO_USD:.2f} (por omisión; --tope-gasto)")
+    lineas.append("resultados: " + (
+        "de la CAMPAÑA (partición de evaluación)"
+        if etiqueta_de_resultados(subconjunto) == "campana_evaluacion"
+        else "de DEPURACIÓN, no reportables"))
     return "\n".join(lineas)
 
 
@@ -285,6 +308,13 @@ def trabajar(raiz: Path, dataset: str, case_id: str, arquitectura: str, repetici
 
     registro = RegistroConsultas()
     instalar(registro)
+    cuenta_json = None
+    if arquitectura == "nodex_multiagente":
+        # Medición de JSON válido de NODEX: hay que envolver `llm_json` ANTES de que se importen
+        # los agentes (se quedan con la función que haya en ese momento).
+        import src.llm as modulo_llm
+        from src.experimentation.comparacion_modelos import _instrumentar_llm_json
+        cuenta_json = _instrumentar_llm_json(modulo_llm)
     orquestador.asegurar_salida_utf8()
     identidad = IdentidadCorrida(case_id=case_id, dataset=dataset, arquitectura=arquitectura,
                                  repeticion=repeticion, config_version=config_version)
@@ -298,6 +328,12 @@ def trabajar(raiz: Path, dataset: str, case_id: str, arquitectura: str, repetici
         persistencia.guardar_consultas_externas(identidad, raiz, registro.a_lista())
     except FileExistsError:
         pass   # ya hay un registro de un intento anterior de esta misma corrida
+    if cuenta_json is not None:
+        try:
+            persistencia.guardar_llm_json(identidad, raiz, cuenta_json["llamadas"],
+                                          cuenta_json["invalidas"])
+        except FileExistsError:
+            pass
     destino.write_text(json.dumps({"error": error}), encoding="utf-8")
     return 0
 
@@ -353,7 +389,7 @@ def correr_una(raiz: Path, base_env: dict, congelada: dict, entrada: dict, parti
         persistencia.guardar_fallo(identidad, raiz, estado=estado, error=error)
     return {"run_id": identidad.run_id, "case_id": identidad.case_id,
             "dataset": identidad.dataset, "arquitectura": identidad.arquitectura,
-            "estado": estado, "error": error, "segundos": segundos,
+            "repeticion": identidad.repeticion, "estado": estado, "error": error, "segundos": segundos,
             "infraestructura": estado in ESTADOS_DE_INFRAESTRUCTURA,
             "tope_alcanzado": bool(vencio)}
 
@@ -365,8 +401,10 @@ def informe_de_corrida(raiz: Path, corrida: dict, congelada: dict) -> dict:
     from src.experimentation import consolidacion
 
     identidad = IdentidadCorrida(corrida["case_id"], corrida["dataset"], corrida["arquitectura"],
-                                 1, congelada["config_version"])
+                                 corrida.get("repeticion", 1), congelada["config_version"])
     tel = persistencia.leer_telemetria(identidad, raiz) or {}
+    json_nodex = (persistencia.leer_llm_json(identidad, raiz)
+                  if corrida["arquitectura"] == "nodex_multiagente" else None)
     principal = (congelada.get("parametros") or {}).get("LLM_MODEL_PRIMARY")
     usa_modelo = corrida["arquitectura"] != "baseline_reglas"
     llamadas = tel.get("llm_calls") or []
@@ -390,6 +428,8 @@ def informe_de_corrida(raiz: Path, corrida: dict, congelada: dict) -> dict:
                    "parcial": consolidacion.es_parcial(tel)} if usa_modelo else None,
         "intentos_de_consulta_externa": (None if consultas is None else
                                          sum(1 for c in consultas if c.get("intento_externo"))),
+        "json_llamadas": None if json_nodex is None else json_nodex["llamadas"],
+        "json_invalidas": None if json_nodex is None else json_nodex["invalidas"],
     }
 
 
@@ -429,44 +469,157 @@ def imprimir_informe(informes: list[dict]) -> None:
 
 # --- ejecución de una etapa --------------------------------------------------------------------------
 
+def ruta_gasto(raiz: Path, config_version: str) -> Path:
+    return raiz / "experiments" / "ejecucion" / config_version / "gasto.json"
+
+
+def leer_registro_de_gasto(raiz: Path, config_version: str) -> list[dict]:
+    ruta = ruta_gasto(raiz, config_version)
+    return json.loads(ruta.read_text(encoding="utf-8")) if ruta.is_file() else []
+
+
+def _anotar_gasto(raiz: Path, config_version: str, entrada: dict) -> None:
+    ruta = ruta_gasto(raiz, config_version)
+    ruta.parent.mkdir(parents=True, exist_ok=True)
+    ruta.write_text(json.dumps(leer_registro_de_gasto(raiz, config_version) + [entrada],
+                               indent=2, ensure_ascii=False), encoding="utf-8")
+
+
+def revisar_tope_de_gasto(raiz: Path, congelada: dict, tope: float, hoy: str,
+                          siguiente: dict | None = None,
+                          config_referencia: str | None = None) -> dict:
+    """Gasto acumulado de la configuración y si lanzar `siguiente` podría superar el tope.
+
+    El gasto se recalcula desde la telemetría guardada (tokens medidos × precios vigentes `hoy`).
+    El costo de la corrida siguiente se acota con el MÁXIMO observado de su celda
+    (arquitectura, dataset), tomando lo mayor entre lo ya medido en esta configuración y lo del
+    piloto de referencia. Sin ninguna medición el máximo es 0: no se inventa un costo.
+    """
+    from src.experimentation import presupuesto
+
+    config_version = congelada["config_version"]
+    modelo = (congelada.get("parametros") or {}).get("LLM_MODEL_PRIMARY") or ""
+    precios = estimacion.leer_precios(raiz)
+    gasto = presupuesto.gasto_acumulado(raiz, config_version, precios, modelo, hoy)
+    maximo_siguiente = 0.0
+    if siguiente is not None:
+        celdas = [presupuesto.costos_por_celda(raiz, config_version, precios, modelo, hoy)]
+        if config_referencia:
+            celdas.append(presupuesto.costos_por_celda(raiz, config_referencia, precios, modelo, hoy))
+        maximo_siguiente = max(presupuesto.costo_maximo_esperado(
+            c, siguiente["arquitectura"], siguiente["dataset"]) for c in celdas)
+    proyectado = round(gasto["usd"] + maximo_siguiente, 6)
+    return {"gasto_acumulado_usd": gasto["usd"], "corridas_con_costo": gasto["corridas"],
+            "corridas_con_costo_parcial": gasto["corridas_con_costo_parcial"],
+            "maximo_de_la_siguiente_usd": round(maximo_siguiente, 6),
+            "proyectado_usd": proyectado, "tope_usd": tope,
+            "supera": proyectado > tope, "fecha_de_precios": hoy}
+
+
+def _detener_por_gasto(raiz: Path, config_version: str, etapa: int, revision: dict,
+                       corridas: list[dict], congelada: dict, subconjunto: dict,
+                       gasto_inicial: float, motivo: str) -> tuple[int, list[dict]]:
+    print(f"DETENIDO POR TOPE DE GASTO: {motivo}. Gasto acumulado USD "
+          f"{revision['gasto_acumulado_usd']:.4f} de USD {revision['tope_usd']:.2f}. "
+          f"Reanudable: las corridas guardadas no se repiten.", flush=True)
+    informes = [informe_de_corrida(raiz, c, congelada) for c in corridas]
+    _guardar_informe(raiz / "experiments" / "ejecucion" / config_version, etapa, informes,
+                     detenido=True, motivo_de_parada=motivo, subconjunto=subconjunto,
+                     gasto={"inicial_usd": gasto_inicial, **revision})
+    return SALIDA_TOPE_DE_GASTO, informes
+
+
 def ejecutar_etapa(raiz: Path, ruta_env: Path, config_version: str, subconjunto_nombre: str,
-                   etapa: int, correr=correr_una) -> tuple[int, list[dict]]:
-    """Corre una etapa. Devuelve `(código de salida, informes)`."""
+                   etapa: int, correr=correr_una, tope_gasto: float = TOPE_GASTO_USD,
+                   hoy: str | None = None, dataset: str | None = None,
+                   config_referencia: str | None = None) -> tuple[int, list[dict]]:
+    """Corre una etapa. Devuelve `(código de salida, informes)`.
+
+    Se detiene (en este orden de importancia) por tres fallas de infraestructura seguidas o
+    porque la corrida siguiente podría superar el tope de gasto acumulado. `dataset` limita la
+    etapa a un dataset (la campaña se hace primero BGL y después UWF).
+    """
+    hoy = hoy or datetime.now(timezone.utc).strftime("%Y-%m-%d")
     congelada = leer_configuracion(raiz, config_version)
     subconjunto = orquestador.cargar_subconjunto(raiz, subconjunto_nombre)
     plan = orquestador.planificar(raiz, subconjunto, config_version, ARQUITECTURAS_PILOTO)
     entradas = entradas_de_la_etapa(plan, subconjunto, etapa)
+    if dataset:
+        entradas = [e for e in entradas if e["dataset"] == dataset]
     base_env = {**os.environ, **_leer_entorno(ruta_env)}
     carpeta_logs = raiz / "experiments" / "ejecucion" / config_version
+    try:
+        revision = revisar_tope_de_gasto(raiz, congelada, tope_gasto, hoy,
+                                         config_referencia=config_referencia)
+    except ValueError as e:
+        print(f"NO SE PUEDE MEDIR EL GASTO: {e}. No se lanza nada.", flush=True)
+        return SALIDA_TOPE_DE_GASTO, []
+    gasto_inicial = revision["gasto_acumulado_usd"]
+    if revision["supera"]:
+        return _detener_por_gasto(raiz, config_version, etapa, revision, [], congelada, subconjunto,
+                                  gasto_inicial, "el gasto acumulado ya supera el tope")
     corridas, seguidas = [], 0
     for entrada in entradas:
+        revision = revisar_tope_de_gasto(raiz, congelada, tope_gasto, hoy, siguiente=entrada,
+                                         config_referencia=config_referencia)
+        if revision["supera"]:
+            return _detener_por_gasto(
+                raiz, config_version, etapa, revision, corridas, congelada, subconjunto,
+                gasto_inicial,
+                f"gasto USD {revision['gasto_acumulado_usd']:.4f} + máximo observado de la siguiente "
+                f"({entrada['arquitectura']}, {entrada['dataset']}) USD "
+                f"{revision['maximo_de_la_siguiente_usd']:.4f} superaría USD {tope_gasto:.2f}")
         corrida = correr(raiz, base_env, congelada, entrada, subconjunto["particion"],
                          config_version, carpeta_logs)
         corridas.append(corrida)
         seguidas = seguidas + 1 if corrida["infraestructura"] else 0
+        despues = revisar_tope_de_gasto(raiz, congelada, tope_gasto, hoy,
+                                        config_referencia=config_referencia)
+        _anotar_gasto(raiz, config_version, {
+            "momento": datetime.now(timezone.utc).isoformat(timespec="seconds"), "etapa": etapa,
+            "run_id": corrida["run_id"], "estado": corrida["estado"],
+            "gasto_acumulado_usd": despues["gasto_acumulado_usd"], "tope_usd": tope_gasto})
         print(f"[{len(corridas)}/{len(entradas)}] {corrida['arquitectura']} {corrida['case_id']}: "
-              f"{corrida['estado']} en {corrida['segundos']} s", flush=True)
+              f"{corrida['estado']} en {corrida['segundos']} s | gasto acumulado USD "
+              f"{despues['gasto_acumulado_usd']:.4f} de {tope_gasto:.2f}", flush=True)
         if seguidas >= MAX_FALLAS_DE_INFRAESTRUCTURA_SEGUIDAS:
             print(f"DETENIDO: {seguidas} fallas de infraestructura seguidas", flush=True)
             informes = [informe_de_corrida(raiz, c, congelada) for c in corridas]
-            _guardar_informe(carpeta_logs, etapa, informes, detenido=True)
+            _guardar_informe(carpeta_logs, etapa, informes, detenido=True,
+                             motivo_de_parada="fallas de infraestructura seguidas",
+                             subconjunto=subconjunto,
+                             gasto={"inicial_usd": gasto_inicial, **despues})
             return SALIDA_FALLAS_SEGUIDAS, informes
+        if despues["gasto_acumulado_usd"] > tope_gasto:
+            return _detener_por_gasto(raiz, config_version, etapa, despues, corridas, congelada,
+                                      subconjunto, gasto_inicial,
+                                      "la corrida que acaba de terminar dejó el gasto sobre el tope")
     informes = [informe_de_corrida(raiz, c, congelada) for c in corridas]
     limpia, motivos = etapa_limpia(informes, congelada)
-    _guardar_informe(carpeta_logs, etapa, informes, detenido=False, limpia=limpia, motivos=motivos)
+    final = revisar_tope_de_gasto(raiz, congelada, tope_gasto, hoy,
+                                  config_referencia=config_referencia)
+    _guardar_informe(carpeta_logs, etapa, informes, detenido=False, limpia=limpia, motivos=motivos,
+                     subconjunto=subconjunto, gasto={"inicial_usd": gasto_inicial, **final})
     return (SALIDA_OK if limpia else SALIDA_ETAPA_NO_LIMPIA), informes
 
 
 def _guardar_informe(carpeta: Path, etapa: int, informes: list[dict], detenido: bool,
-                     limpia: bool | None = None, motivos: list[str] | None = None) -> None:
+                     limpia: bool | None = None, motivos: list[str] | None = None,
+                     motivo_de_parada: str | None = None, subconjunto: dict | None = None,
+                     gasto: dict | None = None) -> None:
     carpeta.mkdir(parents=True, exist_ok=True)
     destino = carpeta / f"informe_etapa{etapa}.json"
     if destino.exists():
         destino = carpeta / (f"informe_etapa{etapa}_"
                              f"{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}.json")
+    gasto = gasto or {}
     destino.write_text(json.dumps({
-        "etapa": etapa, "detenido_por_fallas_seguidas": detenido, "limpia": limpia,
-        "motivos": motivos or [], "etiqueta": "depuracion_no_reportable",
+        "etapa": etapa, "detenido": detenido, "detenido_por_fallas_seguidas":
+            detenido and motivo_de_parada == "fallas de infraestructura seguidas",
+        "motivo_de_parada": motivo_de_parada, "limpia": limpia,
+        "motivos": motivos or [], "etiqueta": etiqueta_de_resultados(subconjunto or {}),
+        "gasto": {**gasto, "de_la_etapa_usd": round(
+            gasto.get("gasto_acumulado_usd", 0.0) - gasto.get("inicial_usd", 0.0), 6)} if gasto else None,
         "informes": informes}, indent=2, ensure_ascii=False), encoding="utf-8")
 
 
@@ -486,6 +639,12 @@ def main(argv: list[str] | None = None, raiz: Path | None = None) -> int:
                    help="HACE LLAMADAS AL MODELO. Sin esto solo se muestra el plan.")
     p.add_argument("--etapa", type=int, choices=(1, 2),
                    help="1 = un caso con las tres arquitecturas; 2 = el resto")
+    p.add_argument("--dataset", help="limita la etapa a un dataset (la campaña: primero bgl, luego uwf)")
+    p.add_argument("--tope-gasto", type=float, default=TOPE_GASTO_USD,
+                   help=f"tope de gasto acumulado en USD (por omisión {TOPE_GASTO_USD:.2f})")
+    p.add_argument("--config-referencia",
+                   help="config_version de un piloto con corridas medidas: acota el costo máximo de "
+                        "las celdas que aún no tienen medición en esta campaña")
     p.add_argument("--trabajar", nargs=7, metavar=("DATASET", "CASO", "ARQ", "REP", "CONFIG",
                                                     "PARTICION", "DESTINO"),
                    help="uso interno: corre una corrida en este proceso")
@@ -541,7 +700,9 @@ def main(argv: list[str] | None = None, raiz: Path | None = None) -> int:
         print(f"LA CONFIGURACIÓN EFECTIVA NO COINCIDE CON LA CONGELADA: {v['distintos']}")
         return SALIDA_ETAPA_NO_LIMPIA
 
-    codigo, informes = ejecutar_etapa(raiz, Path(a.env), a.config_version, a.subconjunto, a.etapa)
+    codigo, informes = ejecutar_etapa(raiz, Path(a.env), a.config_version, a.subconjunto, a.etapa,
+                                      tope_gasto=a.tope_gasto, dataset=a.dataset,
+                                      config_referencia=a.config_referencia)
     print(f"\nInforme de la etapa {a.etapa}:")
     imprimir_informe(informes)
     limpia, motivos = etapa_limpia(informes, congelada)

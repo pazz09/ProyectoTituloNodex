@@ -52,8 +52,10 @@ from src.experimentation.runtime.identidad import IdentidadCorrida
 from src.experimentation.runtime import exportacion, persistencia
 from src.experimentation.runtime.telemetria import campos_de_modelo
 
-#: Repeticiones por partición (decisión D-2, cerrada el 7-oct-2026).
-REPETICIONES = {"desarrollo": 1, "evaluacion": 3}
+#: Repeticiones por partición. D-2 (7-oct-2026) fijó N=3 en evaluación; el 15-oct-2026 se cambió a
+#: N=2 (pedido del profesor guía, con presupuesto total de USD 6). Cambio de alcance documentado en
+#: `docs/experimentacion/estado_preparacion.md`. NODEX y Gemini directo; el baseline va aparte.
+REPETICIONES = {"desarrollo": 1, "evaluacion": 2}
 
 #: El baseline es determinístico: una sola corrida.
 REPETICIONES_BASELINE = 1

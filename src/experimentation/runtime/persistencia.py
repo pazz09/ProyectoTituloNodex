@@ -268,6 +268,27 @@ def guardar_consultas_externas(
                      {**identidad.to_dict(), "consultas": consultas})
 
 
+def ruta_llm_json(identidad: IdentidadCorrida, raiz_repo: Path) -> Path:
+    """Dónde va el conteo de respuestas JSON válidas/inválidas del modelo en una corrida de NODEX."""
+    return (raiz_repo / "experiments" / "telemetry" / identidad.dataset
+            / f"{identidad.run_id}.llm_json.json")
+
+
+def guardar_llm_json(identidad: IdentidadCorrida, raiz_repo: Path, llamadas: int,
+                     invalidas: int) -> Path:
+    """Guarda cuántas veces `llm_json()` devolvió JSON inválido. 0 de 0 es un dato (no llamó)."""
+    return _escribir(ruta_llm_json(identidad, raiz_repo),
+                     {**identidad.to_dict(), "llm_json": {"llamadas": llamadas, "invalidas": invalidas}})
+
+
+def leer_llm_json(identidad: IdentidadCorrida, raiz_repo: Path) -> dict | None:
+    """`{"llamadas", "invalidas"}` de una corrida, o `None` si no se midió."""
+    ruta = ruta_llm_json(identidad, raiz_repo)
+    if not ruta.is_file():
+        return None
+    return json.loads(ruta.read_text(encoding="utf-8")).get("llm_json")
+
+
 def leer_consultas_externas(identidad: IdentidadCorrida, raiz_repo: Path) -> list[dict] | None:
     """Las consultas guardadas de una corrida, o `None` si no hay registro."""
     ruta = ruta_consultas_externas(identidad, raiz_repo)

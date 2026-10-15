@@ -1,0 +1,121 @@
+{
+  "proposito": "campaña final con presupuesto de USD 6: submuestra de la partición de evaluación",
+  "particion": "evaluacion",
+  "decision": "cambio de alcance del 15-oct-2026: USD 6 en total, N=2 (pedido del profesor guía) y casos reducidos; HDFS es auxiliar (D-7) y no entra",
+  "muestreo": "estratificado por condición, con los casos de la rúbrica incluidos; sin mirar etiquetas (no abre ground_truth)",
+  "semilla": 20261015,
+  "cupos": {
+    "bgl/balanceado": 12,
+    "bgl/natural": 18,
+    "uwf/sigiloso": 5,
+    "uwf/visible": 5
+  },
+  "casos_de_la_rubrica": {
+    "incluidos": [
+      "bgl_eva_balanceado_0001",
+      "bgl_eva_balanceado_0005",
+      "bgl_eva_balanceado_0006",
+      "bgl_eva_natural_0002",
+      "bgl_eva_natural_0016",
+      "bgl_eva_natural_0031",
+      "uwf_eva_sigiloso_0013",
+      "uwf_eva_sigiloso_0018",
+      "uwf_eva_sigiloso_0024",
+      "uwf_eva_visible_0004",
+      "uwf_eva_visible_0027",
+      "uwf_eva_visible_0028"
+    ],
+    "n_incluidos": 12,
+    "n_en_la_rubrica": 12,
+    "fuera_por_cupo": []
+  },
+  "preseleccionada_antes_de_resultados": true,
+  "protocolo_version": "1.0",
+  "datasets": {
+    "bgl": {
+      "balanceado": {
+        "composicion": {
+          "disponibles": 12,
+          "entregados": 12,
+          "de_la_rubrica": 3,
+          "completados_al_azar": 9
+        },
+        "case_ids": [
+          "bgl_eva_balanceado_0000",
+          "bgl_eva_balanceado_0001",
+          "bgl_eva_balanceado_0002",
+          "bgl_eva_balanceado_0003",
+          "bgl_eva_balanceado_0004",
+          "bgl_eva_balanceado_0005",
+          "bgl_eva_balanceado_0006",
+          "bgl_eva_balanceado_0007",
+          "bgl_eva_balanceado_0008",
+          "bgl_eva_balanceado_0009",
+          "bgl_eva_balanceado_0010",
+          "bgl_eva_balanceado_0011"
+        ]
+      },
+      "natural": {
+        "composicion": {
+          "disponibles": 50,
+          "entregados": 18,
+          "de_la_rubrica": 3,
+          "completados_al_azar": 15
+        },
+        "case_ids": [
+          "bgl_eva_natural_0000",
+          "bgl_eva_natural_0001",
+          "bgl_eva_natural_0002",
+          "bgl_eva_natural_0004",
+          "bgl_eva_natural_0005",
+          "bgl_eva_natural_0006",
+          "bgl_eva_natural_0008",
+          "bgl_eva_natural_0009",
+          "bgl_eva_natural_0013",
+          "bgl_eva_natural_0016",
+          "bgl_eva_natural_0023",
+          "bgl_eva_natural_0024",
+          "bgl_eva_natural_0028",
+          "bgl_eva_natural_0030",
+          "bgl_eva_natural_0031",
+          "bgl_eva_natural_0040",
+          "bgl_eva_natural_0043",
+          "bgl_eva_natural_0046"
+        ]
+      }
+    },
+    "uwf": {
+      "sigiloso": {
+        "composicion": {
+          "disponibles": 40,
+          "entregados": 5,
+          "de_la_rubrica": 3,
+          "completados_al_azar": 2
+        },
+        "case_ids": [
+          "uwf_eva_sigiloso_0006",
+          "uwf_eva_sigiloso_0013",
+          "uwf_eva_sigiloso_0018",
+          "uwf_eva_sigiloso_0019",
+          "uwf_eva_sigiloso_0024"
+        ]
+      },
+      "visible": {
+        "composicion": {
+          "disponibles": 40,
+          "entregados": 5,
+          "de_la_rubrica": 3,
+          "completados_al_azar": 2
+        },
+        "case_ids": [
+          "uwf_eva_visible_0004",
+          "uwf_eva_visible_0022",
+          "uwf_eva_visible_0023",
+          "uwf_eva_visible_0027",
+          "uwf_eva_visible_0028"
+        ]
+      }
+    }
+  },
+  "n_casos": 40
+}
