@@ -28,6 +28,7 @@ from fastapi.responses import FileResponse, Response, StreamingResponse
 from pydantic import BaseModel
 
 from src.api import historial
+from src.api import resultados as api_resultados
 from src.api.informe_pdf import generar_informe_pdf
 from src.pipeline import analizar_lote_stream, commit_feedback
 from src.preprocessing.pipeline import PreprocesamientoError
@@ -62,6 +63,10 @@ app.add_middleware(
     allow_headers=["*"],
     expose_headers=["Content-Disposition"],
 )
+
+# Resultados experimentales: solo lectura (GET). No abre el ground truth ni
+# invoca modelos; ver `src/api/resultados.py`.
+app.include_router(api_resultados.router)
 
 _STATIC_DIR = Path(__file__).parent / "static"
 
