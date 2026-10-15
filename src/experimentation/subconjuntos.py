@@ -307,6 +307,66 @@ def seleccionar_rubrica(raiz_experimentos: Path) -> dict:
     return resultado
 
 
+def seleccionar_evaluacion(raiz_experimentos: Path) -> dict:
+    """TODOS los casos de la partición de evaluación de los datasets principales.
+
+    Es el subconjunto de la campaña final: BGL y UWF, sin muestreo. HDFS
+    queda fuera por la decisión D-7 (dataset auxiliar: su archivo no trae la
+    secuencia completa por bloque, así que no sirve para medir detección).
+
+    Se genera una sola vez y se congela, como los otros: elegir después qué
+    casos entran, viendo ya cómo le fue al sistema, sería cherry-picking. No
+    hay aleatoriedad (entran todos), así que la regeneración es idéntica.
+    """
+    resultado: dict = {
+        "proposito": "campaña final: toda la partición de evaluación de los datasets principales",
+        "particion": "evaluacion",
+        "decision": "D-7: HDFS es auxiliar y no entra; BGL y UWF son los principales",
+        "muestreo": "ninguno: entran todos los casos",
+        "protocolo_version": PROTOCOLO_VERSION,
+        "datasets": {},
+    }
+    total = 0
+    for dataset in DATASETS_PRINCIPALES:
+        casos = _cargar(raiz_experimentos, dataset, "evaluacion")
+        por_condicion: dict = {}
+        for condicion in sorted({c.condicion for c in casos}):
+            del_grupo = sorted((c for c in casos if c.condicion == condicion),
+                               key=lambda c: c.case_id)
+            positivos = sum(1 for c in del_grupo if c.etiqueta_deteccion == "anomalo")
+            por_condicion[condicion] = {
+                "composicion": {
+                    "entregados": len(del_grupo),
+                    "positivos": positivos,
+                    "negativos": len(del_grupo) - positivos,
+                },
+                "case_ids": [c.case_id for c in del_grupo],
+            }
+            total += len(del_grupo)
+        resultado["datasets"][dataset] = por_condicion
+    resultado["n_casos"] = total
+    return resultado
+
+
+def escribir_sin_sobrescribir(ruta: Path, datos: dict) -> str:
+    """Escribe `datos` como JSON. Si el archivo existe, NO lo toca.
+
+    Devuelve `creado` o `identico`. Si existe y difiere, falla: los
+    subconjuntos se fijan antes de que exista ningún resultado y una
+    regeneración que los cambie en silencio invalidaría esa garantía.
+    """
+    texto = json.dumps(datos, indent=2, ensure_ascii=False)
+    if ruta.exists():
+        if ruta.read_text(encoding="utf-8") == texto:
+            return "identico"
+        raise FileExistsError(
+            f"{ruta} ya existe y la regeneración da un contenido distinto. "
+            "Los subconjuntos están congelados: no se sobrescriben"
+        )
+    ruta.write_text(texto, encoding="utf-8")
+    return "creado"
+
+
 def main(raiz_repo: Path) -> None:
     raiz_experimentos = raiz_repo / "experiments"
     destino = raiz_experimentos / "subconjuntos"
@@ -314,10 +374,14 @@ def main(raiz_repo: Path) -> None:
 
     piloto = seleccionar_piloto(raiz_experimentos)
     rubrica = seleccionar_rubrica(raiz_experimentos)
-    (destino / "piloto.json").write_text(
-        json.dumps(piloto, indent=2, ensure_ascii=False), encoding="utf-8")
-    (destino / "rubrica.json").write_text(
-        json.dumps(rubrica, indent=2, ensure_ascii=False), encoding="utf-8")
+    evaluacion = seleccionar_evaluacion(raiz_experimentos)
+    # Antes esto reescribía los archivos en cada corrida, lo que contradice
+    # la regla de no sobrescribir. Ahora un archivo existente se verifica
+    # (debe ser idéntico) y no se toca.
+    for nombre, datos in (("piloto", piloto), ("rubrica", rubrica),
+                          ("evaluacion", evaluacion)):
+        estado = escribir_sin_sobrescribir(destino / f"{nombre}.json", datos)
+        print(f"subconjunto {nombre}: {estado}")
 
     print(f"piloto: {piloto['n_casos']} casos "
           f"({piloto['costo_estimado']['corridas_sin_repeticiones']} corridas "
