@@ -136,35 +136,52 @@ def test_la_similitud_se_deriva_de_la_distancia_solo_si_existe():
 
 
 def test_un_id_citado_en_prosa_no_cuenta_como_atribucion():
-    """El agente de triage cita IDs dentro del texto de `diagnostico`, sin
-    evidencia. Una atribución sin evidence_uids no es puntuable."""
+    """El diagnóstico menciona T1046 en prosa (`_estado()` lo hace), pero el
+    estado no trae `tecnicas_atribuidas`: sin esa lista estructurada y sin
+    `evidence_uids`, el ID del texto no es una atribución puntuable."""
     tacticas, tecnicas, diagnostico = extraer_atribuciones_mitre(_estado())
     assert tacticas == [] and tecnicas == []
-    assert diagnostico["fuente"] == "prosa_sin_evidencia"
-    assert diagnostico["ids_citados_en_prosa"] == ["T1046"]
+    assert "T1046" in _estado()["diagnostico"]
+    assert diagnostico["fuente"] == "contrato_d11"
+    assert "tecnicas_atribuidas" in diagnostico["motivo"]
 
 
-def test_mitre_queda_no_evaluable_con_el_contrato_actual():
+def test_mitre_queda_no_evaluable_si_el_estado_no_trae_tecnicas_atribuidas():
     resultado = _adaptar()
     assert resultado.estado_por_dimension["mitre"] == "no_evaluable"
-    assert "no produce atribuciones" in resultado.diagnostico["mitre"]["motivo"]
+    assert "tecnicas_atribuidas" in resultado.diagnostico["mitre"]["motivo"]
 
 
-def test_con_el_campo_estructurado_la_atribucion_si_cuenta():
+def test_con_el_contrato_d11_la_atribucion_si_cuenta():
+    """Nombres del contrato `d11-v1`: `technique_id`, `evidence_uids`. Leer
+    `id` daría una lista vacía sin avisar."""
     estado = _estado(tecnicas_atribuidas=[
-        {"id": "T1046", "nivel": "tecnica", "evidence_uids": ["CxyzA1"]},
-        {"id": "Discovery", "nivel": "tactica", "evidence_uids": ["CxyzA1"]},
+        {"technique_id": "T1046", "technique_name": "Network Service Discovery",
+         "evidence_uids": ["CxyzA1"], "justification": "puertos",
+         "confidence": 0.8},
     ])
     resultado = _adaptar(estado)
     assert resultado.estado_por_dimension["mitre"] == "evaluable"
     salida = resultado.salida.to_dict()
     assert [t["id"] for t in salida["mitre"]["techniques"]] == ["T1046"]
-    assert [t["id"] for t in salida["mitre"]["tactics"]] == ["Discovery"]
+    assert salida["mitre"]["techniques"][0]["evidence_uids"] == ["CxyzA1"]
 
 
-def test_una_atribucion_estructurada_sin_evidencia_se_descarta():
+def test_las_tacticas_quedan_fuera_del_scoring_de_d3():
+    """Decisión del 7-oct-2026: el scoring principal es `label_technique`.
+    El contrato no lleva nivel, así que la lista de tácticas va siempre
+    vacía y eso se declara, no se esconde."""
     estado = _estado(tecnicas_atribuidas=[
-        {"id": "T1046", "nivel": "tecnica", "evidence_uids": []},
+        {"technique_id": "T1046", "evidence_uids": ["CxyzA1"]},
+    ])
+    tacticas, _, diagnostico = extraer_atribuciones_mitre(estado)
+    assert tacticas == []
+    assert diagnostico["nivel_tactica"] == "no_aplica"
+
+
+def test_una_atribucion_sin_evidencia_se_descarta():
+    estado = _estado(tecnicas_atribuidas=[
+        {"technique_id": "T1046", "evidence_uids": []},
     ])
     _, tecnicas, diagnostico = extraer_atribuciones_mitre(estado)
     assert tecnicas == []
@@ -186,32 +203,62 @@ def test_la_cronologia_viaja_etiquetada_como_lo_que_es():
     cronologia = extraer_cronologia_preprocesamiento(_estado())
     assert cronologia["omitidos"] == 4
     assert "sin LLM" in cronologia["producida_por"]
-    assert "no es" in cronologia
+    # La clave es `no_es` (con guion bajo): la versión anterior de esta
+    # prueba buscaba "no es" con espacio y nunca podía pasar.
+    assert "reconstrucción" in cronologia["no_es"]
 
 
-def test_con_el_campo_estructurado_la_reconstruccion_si_cuenta():
+def test_con_el_contrato_d11_la_reconstruccion_si_cuenta():
     estado = _estado(
         eventos_reconstruidos=[
-            {"uid": "CxyzA1", "timestamp": "2022-09-14T16:37:35Z",
-             "event_type": "port_scan", "entities": ["143.88.18.12"]},
-            {"uid": "CxyzA2", "timestamp": "2022-09-14T16:37:36Z"},
+            {"event_id": "event_001", "evidence_uids": ["CxyzA1", "CxyzA2"],
+             "timestamp": "2022-09-14T16:37:35Z", "event_type": "port_scan",
+             "description": "barrido", "confidence": 0.7},
+            {"event_id": "event_002", "evidence_uids": ["CxyzA3"],
+             "timestamp": "2022-09-14T16:37:36Z", "event_type": "port_scan",
+             "description": "barrido", "confidence": 0.6},
         ],
-        secuencia_temporal=["CxyzA1", "CxyzA2"],
+        secuencia_temporal=["event_001", "event_002"],
     )
     resultado = _adaptar(estado)
     assert resultado.estado_por_dimension["reconstruccion"] == "evaluable"
-    assert resultado.salida.temporal_sequence == ("CxyzA1", "CxyzA2")
+    assert resultado.salida.temporal_sequence == ("event_001", "event_002")
 
 
-def test_la_secuencia_descarta_uids_que_no_estan_entre_los_eventos():
-    """Un `uid` inventado no puede entrar en la secuencia: rompería el
-    contrato y además sería una afirmación falsa."""
-    eventos, secuencia, _ = extraer_reconstruccion({
-        "eventos_reconstruidos": [{"uid": "CxyzA1"}],
-        "secuencia_temporal": ["CxyzA1", "NoExiste9"],
+def test_la_clave_de_matching_son_los_evidence_uids_y_no_el_event_id():
+    """`event_id` es la etiqueta que el sistema le pone al evento y
+    `normalizar_d11` la reemplaza por una sintética si falta o colisiona con
+    un uid. Los `evidence_uids` son los que se validan contra el catálogo de
+    evidencia, indexado por el uid real del registro. Comparar `event_id`
+    contra `core_event_uids` no coincidiría con nada."""
+    estado = _estado(
+        eventos_reconstruidos=[
+            {"event_id": "event_001", "evidence_uids": ["CxyzA1", "CxyzA2"]},
+            {"event_id": "event_002", "evidence_uids": ["CxyzA2", "CxyzA3"]},
+        ],
+        secuencia_temporal=["event_001", "event_002"],
+    )
+    resultado = _adaptar(estado)
+    assert resultado.diagnostico["reconstruccion"]["uids_de_evidencia"] == [
+        "CxyzA1", "CxyzA2", "CxyzA3",   # unión, sin repetir CxyzA2
+    ]
+    citados = [u for e in resultado.salida.to_dict()["reconstructed_events"]
+               for u in e["evidence_uids"]]
+    assert "CxyzA1" in citados and "event_001" not in citados
+
+
+def test_la_secuencia_descarta_event_id_que_no_estan_entre_los_eventos():
+    """Un `event_id` inexistente no puede entrar en la secuencia: rompería el
+    contrato y además sería una afirmación falsa. Se declara cuáles se
+    descartaron."""
+    eventos, secuencia, diagnostico = extraer_reconstruccion({
+        "eventos_reconstruidos": [
+            {"event_id": "event_001", "evidence_uids": ["CxyzA1"]}],
+        "secuencia_temporal": ["event_001", "NoExiste9"],
     })
     assert len(eventos) == 1
-    assert secuencia == ("CxyzA1",)
+    assert secuencia == ("event_001",)
+    assert diagnostico["secuencia_descartada"] == ["NoExiste9"]
 
 
 # --- reporte --------------------------------------------------------------
