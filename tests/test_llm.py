@@ -372,3 +372,199 @@ def test_fallback_tambien_falla_propaga_su_propio_error(monkeypatch):
         assert False, "debía relanzar el error del respaldo"
     except _ErrorFalso as e:
         assert e is ERR_503
+
+
+# --- Versión devuelta y tokens de razonamiento (instrumentación de src/llm.py) ---
+#
+# `src/telemetry.py` (de Felipe) no se toca: `iniciar_llamada` devuelve el mismo
+# diccionario que luego se copia a `llm_calls`, así que `llm.py` le agrega
+# `model_version` y `reasoning_tokens`. Regla que fijan estas pruebas: lo que el
+# proveedor no informa queda en `None`, nunca en 0.
+
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+from src.telemetry import medir_ejecucion, resumen_telemetria
+
+RAIZ = Path(__file__).resolve().parent.parent
+
+
+def _respuesta(version=None, razonamiento=None, texto='{"ok": true}'):
+    uso = SimpleNamespace(
+        prompt_token_count=10, candidates_token_count=5, total_token_count=20,
+        thoughts_token_count=razonamiento,
+    )
+    return SimpleNamespace(text=texto, usage_metadata=uso, model_version=version)
+
+
+def _llamadas_registradas(monkeypatch, respuesta):
+    monkeypatch.setattr(
+        llm_mod.client.models, "generate_content", lambda **k: respuesta)
+    with medir_ejecucion():
+        llm_mod._generate_con_backoff("x", None)
+        return resumen_telemetria({})["llm_calls"]
+
+
+def test_registra_la_version_devuelta_y_los_tokens_de_razonamiento(monkeypatch):
+    llamadas = _llamadas_registradas(
+        monkeypatch, _respuesta(version="modelo-x-001", razonamiento=7))
+    assert len(llamadas) == 1
+    assert llamadas[0]["model_version"] == "modelo-x-001"
+    assert llamadas[0]["reasoning_tokens"] == 7
+    # el nombre PEDIDO sigue siendo otro campo y no se pisa con la versión
+    assert llamadas[0]["model"] == llm_mod.LLM_MODEL_PRIMARY
+    # y los campos de siempre no se alteran
+    assert (llamadas[0]["input_tokens"], llamadas[0]["output_tokens"],
+            llamadas[0]["total_tokens"]) == (10, 5, 20)
+
+
+def test_lo_que_el_proveedor_no_informa_queda_en_none_y_no_en_cero(monkeypatch):
+    llamadas = _llamadas_registradas(
+        monkeypatch, _respuesta(version=None, razonamiento=None))
+    assert llamadas[0]["model_version"] is None
+    assert llamadas[0]["reasoning_tokens"] is None
+
+
+def test_un_cero_informado_por_el_proveedor_si_es_un_cero(monkeypatch):
+    """Cero informado ("pensó 0 tokens") es un dato; ausente es otra cosa."""
+    llamadas = _llamadas_registradas(
+        monkeypatch, _respuesta(version="v", razonamiento=0))
+    assert llamadas[0]["reasoning_tokens"] == 0
+
+
+def test_valores_invalidos_no_se_aceptan(monkeypatch):
+    for razonamiento in (True, -3, "7", 2.5, SimpleNamespace()):
+        llamadas = _llamadas_registradas(
+            monkeypatch, _respuesta(version="v", razonamiento=razonamiento))
+        assert llamadas[0]["reasoning_tokens"] is None, razonamiento
+    for version in ("", "   ", 5, SimpleNamespace()):
+        llamadas = _llamadas_registradas(
+            monkeypatch, _respuesta(version=version, razonamiento=1))
+        assert llamadas[0]["model_version"] is None, version
+
+
+def test_una_respuesta_sin_metadatos_de_uso_deja_todo_en_none(monkeypatch):
+    sin_uso = SimpleNamespace(text="{}", usage_metadata=None)  # ni model_version
+    llamadas = _llamadas_registradas(monkeypatch, sin_uso)
+    assert llamadas[0]["model_version"] is None
+    assert llamadas[0]["reasoning_tokens"] is None
+
+
+def test_una_llamada_fallida_queda_con_los_campos_en_none(monkeypatch):
+    def falla(**k):
+        raise ERR_CUOTA_DIARIA
+
+    monkeypatch.setattr(llm_mod.client.models, "generate_content", falla)
+    with medir_ejecucion():
+        try:
+            llm_mod._generate_con_backoff("x", None)
+        except Exception:
+            pass
+        llamadas = resumen_telemetria({})["llm_calls"]
+    assert len(llamadas) == 1
+    assert llamadas[0]["model_version"] is None
+    assert llamadas[0]["reasoning_tokens"] is None
+
+
+def test_sin_medicion_activa_no_falla_ni_registra(monkeypatch):
+    monkeypatch.setattr(
+        llm_mod.client.models, "generate_content", lambda **k: _respuesta("v", 1))
+    assert llm_mod._generate_con_backoff("x", None).model_version == "v"
+
+
+# --- Opt-in "sin respaldo" (LLM_SIN_RESPALDO) ---
+
+def test_con_sin_respaldo_el_error_del_principal_se_relanza(monkeypatch):
+    modelos = []
+
+    def fake(model=None, contents=None, config=None):
+        modelos.append(model)
+        raise ERR_CUOTA_DIARIA
+
+    monkeypatch.setattr(llm_mod, "LLM_SIN_RESPALDO", True)
+    monkeypatch.setattr(llm_mod.client.models, "generate_content", fake)
+    monkeypatch.setattr(llm_mod.time, "sleep", lambda s: None)
+    try:
+        llm_mod._generate_con_fallback("x", None)
+    except Exception as e:
+        assert e is ERR_CUOTA_DIARIA
+    else:
+        raise AssertionError("debía relanzar el error del principal")
+    assert modelos == [llm_mod.LLM_MODEL_PRIMARY]  # el respaldo NUNCA se llamó
+
+
+def test_con_sin_respaldo_siguen_los_reintentos_con_espera_sobre_el_mismo_modelo(
+        monkeypatch):
+    """Solo se apaga el CAMBIO DE MODELO, no los reintentos."""
+    modelos, esperas = [], []
+
+    def fake(model=None, contents=None, config=None):
+        modelos.append(model)
+        if len(modelos) < 3:
+            raise ERR_503
+        return "ok"
+
+    monkeypatch.setattr(llm_mod, "LLM_SIN_RESPALDO", True)
+    monkeypatch.setattr(llm_mod.client.models, "generate_content", fake)
+    monkeypatch.setattr(llm_mod.time, "sleep", lambda s: esperas.append(s))
+    assert llm_mod._generate_con_fallback("x", None, jitter=0.0) == "ok"
+    assert modelos == [llm_mod.LLM_MODEL_PRIMARY] * 3
+    assert len(esperas) == 2  # esperó antes de cada reintento
+
+
+def test_con_sin_respaldo_agotar_los_reintentos_tampoco_cambia_de_modelo(monkeypatch):
+    modelos = []
+
+    def fake(model=None, contents=None, config=None):
+        modelos.append(model)
+        raise ERR_503
+
+    monkeypatch.setattr(llm_mod, "LLM_SIN_RESPALDO", True)
+    monkeypatch.setattr(llm_mod.client.models, "generate_content", fake)
+    monkeypatch.setattr(llm_mod.time, "sleep", lambda s: None)
+    try:
+        llm_mod._generate_con_fallback("x", None, max_reintentos=2, jitter=0.0)
+    except Exception:
+        pass
+    assert modelos == [llm_mod.LLM_MODEL_PRIMARY] * 3  # 1 inicial + 2 reintentos
+
+
+def _valor_de_la_bandera(**entorno_extra):
+    entorno = {k: v for k, v in os.environ.items() if k != "LLM_SIN_RESPALDO"}
+    entorno.update(entorno_extra)
+    salida = subprocess.run(
+        [sys.executable, "-c", "import src.config as c; print(c.LLM_SIN_RESPALDO)"],
+        cwd=RAIZ, env=entorno, capture_output=True, text=True, timeout=120)
+    return salida.stdout.strip().splitlines()[-1], salida.stderr
+
+
+def test_por_omision_el_respaldo_sigue_activo(monkeypatch):
+    """Sin la variable de entorno, el comportamiento NO cambia."""
+    valor, error = _valor_de_la_bandera()
+    assert valor == "False", error
+
+    modelos = []
+
+    def fake(model=None, contents=None, config=None):
+        modelos.append(model)
+        if model == llm_mod.LLM_MODEL_PRIMARY:
+            raise ERR_CUOTA_DIARIA
+        return "ok_respaldo"
+
+    monkeypatch.setattr(llm_mod, "LLM_SIN_RESPALDO", False)
+    monkeypatch.setattr(llm_mod.client.models, "generate_content", fake)
+    monkeypatch.setattr(llm_mod.time, "sleep", lambda s: None)
+    assert llm_mod._generate_con_fallback("x", None) == "ok_respaldo"
+    assert modelos == [llm_mod.LLM_MODEL_PRIMARY, llm_mod.LLM_MODEL_FALLBACK]
+
+
+def test_la_variable_de_entorno_activa_el_modo_sin_respaldo():
+    valor, error = _valor_de_la_bandera(LLM_SIN_RESPALDO="true")
+    assert valor == "True", error
+
+
+def test_la_bandera_entra_en_la_configuracion_congelada():
+    from src.experimentation.runtime.configuracion import PARAMETROS_CONGELADOS
+    assert "LLM_SIN_RESPALDO" in PARAMETROS_CONGELADOS

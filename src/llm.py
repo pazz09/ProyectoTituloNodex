@@ -27,6 +27,7 @@ from src.config import (
     GEMINI_API_KEY,
     LLM_MODEL_FALLBACK,
     LLM_MODEL_PRIMARY,
+    LLM_SIN_RESPALDO,
     MAX_REINTENTOS_CUOTA_MINUTO,
     MAX_REINTENTOS_TRANSITORIO,
     TEMPERATURE,
@@ -172,6 +173,40 @@ def _espera_con_jitter(espera: float, jitter: float) -> float:
     return espera * random.uniform(1 - jitter, 1 + jitter)
 
 
+def _preparar_campos_extra(llamada) -> None:
+    """Declara en `None` los dos campos que agrega esta instrumentación.
+
+    `iniciar_llamada` (src/telemetry.py) devuelve el MISMO diccionario que
+    luego se copia a `llm_calls`, así que se pueden añadir campos sin tocar
+    ese módulo. Quedan en `None` hasta que una respuesta los informe: una
+    llamada que falla, o un proveedor que no los envía, deja `None` y nunca 0.
+    """
+    if llamada is not None:
+        llamada["model_version"] = None
+        llamada["reasoning_tokens"] = None
+
+
+def _registrar_version_y_razonamiento(llamada, respuesta) -> None:
+    """Guarda la versión que devolvió la API y los tokens de razonamiento.
+
+    - `model_version`: lo que la respuesta dice que la atendió. Es distinto
+      de `model` (el nombre que se pidió) y es la única prueba de qué versión
+      respondió. Solo se acepta un texto no vacío.
+    - `reasoning_tokens`: `usage_metadata.thoughts_token_count`. Solo se
+      acepta un entero >= 0; si el proveedor no lo informa queda `None`.
+    """
+    if llamada is None:
+        return
+    version = getattr(respuesta, "model_version", None)
+    if isinstance(version, str) and version.strip():
+        llamada["model_version"] = version
+    uso = getattr(respuesta, "usage_metadata", None)
+    razonamiento = getattr(uso, "thoughts_token_count", None)
+    if (isinstance(razonamiento, int) and not isinstance(razonamiento, bool)
+            and razonamiento >= 0):
+        llamada["reasoning_tokens"] = razonamiento
+
+
 def _generate_con_backoff(
     msg: str,
     cfg,
@@ -207,9 +242,11 @@ def _generate_con_backoff(
     intentos_cuota_minuto = 0
     while True:
         llamada = iniciar_llamada(modelo)
+        _preparar_campos_extra(llamada)
         try:
             respuesta = client.models.generate_content(model=modelo, contents=msg, config=cfg)
             registrar_consumo(llamada, respuesta)
+            _registrar_version_y_razonamiento(llamada, respuesta)
             return respuesta
         except Exception as e:
             tipo_cuota = _tipo_error_cuota(e)
@@ -243,7 +280,15 @@ def _generate_con_fallback(msg: str, cfg, **kwargs):
     medida, más caro), respaldo `gemini-3.6-flash` (~3.4x más barato, 0
     fallas en las corridas reales de prueba) -- ver `src/config.py` para el
     detalle de la decisión y los datos medidos.
+
+    Con `LLM_SIN_RESPALDO` (opt-in, por omisión apagado) NO se cambia de
+    modelo: si el principal agota sus reintentos, el error se relanza. Solo
+    se apaga el cambio de modelo; los reintentos con espera sobre el mismo
+    modelo (503, 429 por minuto) ocurren igual dentro de
+    `_generate_con_backoff`.
     """
+    if LLM_SIN_RESPALDO:
+        return _generate_con_backoff(msg, cfg, modelo=LLM_MODEL_PRIMARY, **kwargs)
     try:
         return _generate_con_backoff(msg, cfg, modelo=LLM_MODEL_PRIMARY, **kwargs)
     except Exception as e:

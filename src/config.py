@@ -50,6 +50,8 @@ NVD_API_KEY = os.environ.get("NVD_API_KEY")  # opcional: rate limit bajo si falt
 LLM_MODEL_PRIMARY = os.environ.get("LLM_MODEL_PRIMARY", "gemini-3.1-pro-preview")
 LLM_MODEL_FALLBACK = os.environ.get("LLM_MODEL_FALLBACK", "gemini-3.6-flash")
 TEMPERATURE = float(os.environ.get("TEMPERATURE", "0"))
+# LLM_SIN_RESPALDO (opt-in) apaga el cambio al modelo de respaldo; se define
+# más abajo, junto a los demás helpers de variables de entorno.
 
 # --- Reintentos ante errores transitorios de la API (ver src/llm.py) ---
 # Calibrado para cuenta CON CRÉDITOS (1-sep-2026): sin los límites del tier
@@ -256,6 +258,16 @@ def _env_bool(nombre: str, default: bool) -> bool:
     raise ValueError(
         f"{nombre} debe ser booleano (true/false); se recibió {crudo!r}"
     )
+
+
+# Respaldo de modelo apagado (opt-in). Por omisión es False: el comportamiento
+# del sistema no cambia. Con True, `_generate_con_fallback` (src/llm.py) NO
+# pasa a `LLM_MODEL_FALLBACK` cuando el principal agota sus reintentos: el
+# error se relanza. Solo apaga el CAMBIO DE MODELO; los reintentos con espera
+# sobre el mismo modelo (503, 429 por minuto) siguen igual.
+# Sirve para una campaña donde todas las corridas deben ser del mismo modelo
+# (p. ej. la comparación con `gemini_externo`, que nunca tiene respaldo).
+LLM_SIN_RESPALDO = _env_bool("LLM_SIN_RESPALDO", False)
 
 
 # Modos de detección de formato (§9 del plan):
