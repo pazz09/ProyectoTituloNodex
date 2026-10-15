@@ -1,0 +1,92 @@
+{
+  "case_id": "bgl_des_natural_0001",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "bgl_des_natural_0001__nodex__r1__a7c0b680",
+  "telemetria": {
+    "llm_call_count": 5,
+    "input_tokens": 3976,
+    "output_tokens": 1196,
+    "total_tokens": 7437,
+    "execution_time": 32.738425,
+    "replan_count": 0,
+    "intentos_correccion": 1,
+    "invalid_evidence_uid_count": 0,
+    "d11_warning_count": 0,
+    "llm_calls": [
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 669,
+        "output_tokens": 289,
+        "total_tokens": 1322,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 364,
+        "duration_s": 7.359,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 814,
+        "output_tokens": 191,
+        "total_tokens": 1795,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 790,
+        "duration_s": 8.254,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 217,
+        "output_tokens": 62,
+        "total_tokens": 402,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 123,
+        "duration_s": 3.233,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 170,
+        "output_tokens": 91,
+        "total_tokens": 849,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 588,
+        "duration_s": 5.668,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 2106,
+        "output_tokens": 563,
+        "total_tokens": 3069,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 400,
+        "duration_s": 8.164,
+        "error": null
+      }
+    ],
+    "n_llamadas_fallidas": 0,
+    "duracion_llamadas_s": 32.678,
+    "reasoning_tokens": 2265,
+    "modelos_efectivos": [
+      "gemini-3.8-flash"
+    ],
+    "campos_parciales": {},
+    "tiempo_total_runner_s": 32.73863710000296,
+    "previa_a_d11": false,
+    "output_contract_version": "d11-v1",
+    "diagnostico_runner": {
+      "arquitectura": "nodex_multiagente",
+      "thread_id": "exp__bgl_des_natural_0001__nodex__r1__a7c0b680",
+      "execution_time": 32.73863710000296,
+      "error": null,
+      "claves_ausentes_en_el_estado": [],
+      "replan_count": 0,
+      "intentos_correccion": 1,
+      "historial_ejecucion": 6,
+      "d11_presente_en_el_estado": true
+    }
+  }
+}

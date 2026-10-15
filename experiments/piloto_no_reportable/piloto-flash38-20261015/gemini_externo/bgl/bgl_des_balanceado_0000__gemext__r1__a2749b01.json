@@ -1,0 +1,41 @@
+{
+  "case_id": "bgl_des_balanceado_0000",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "bgl_des_balanceado_0000__gemext__r1__a2749b01",
+  "salida": {
+    "case_id": "bgl_des_balanceado_0000",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos registros corresponden a eventos operativos de un supercomputador IBM Blue Gene/L (BlueGene/L RAS logs). Se observan múltiples fallas y anomalías operativas que incluyen errores de paridad de caché de datos en el nodo R02-M0-N4-C:J04-U11, errores corregibles de memoria DDR (CE), fallos de interconexión (advertencia en cable de red toro y resincronización de receptores de árbol), fallos de ejecución/carga de programas de usuarios (archivos de volcado de memoria 'core files', errores de formato ejecutable 'Exec format error' y archivos inexistentes) y una terminación anormal del kernel (reason 1004). Ninguno de estos eventos presenta indicios de actividad maliciosa ni intrusión cibernética; corresponden enteramente a degradación de hardware y fallas de software/operativas estándar de HPC.\n\n## Evaluación del auditor\n\nEl log provee trazabilidad detallada de componentes de cómputo (C), nodos de I/O (I) y la red interna de Blue Gene/L. La ausencia de comandos interactivos sospechosos, conexiones externas anómalas, escaladas de privilegios o patrones de explotación confirma que se trata de problemas de fiabilidad de hardware (RAM/caché/interconexión) y errores de los usuarios al invocar ejecutables o scripts en el entorno distribuido.\n\n## Comandos de mitigación propuestos\n\n- service bluegene status\n- bg_console -e 'diags -node R02-M0-N4-C:J04-U11 -type dcache'\n- bg_console -e 'diags -node R21-M1-N0-C:J10-U11 -type ddr'\n- bg_console -e 'diags -cable torus_z -node R11-M1-N2-C:J09-U11'\n- file /bgl/apps/followup/RAPTOR/new.raptor.trace"
+    },
+    "_meta": {
+      "run_id": "bgl_des_balanceado_0000__gemext__r1__a2749b01",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_des_balanceado_0000__gemext__r1__a2749b01.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:12:23+00:00"
+  }
+}

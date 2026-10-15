@@ -1,0 +1,41 @@
+{
+  "case_id": "hdfs_des_balanceado_0004",
+  "dataset": "hdfs",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "hdfs_des_balanceado_0004__gemext__r1__6ecb9a9e",
+  "salida": {
+    "case_id": "hdfs_des_balanceado_0004",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl registro contiene eventos operativos rutinarios y normales de Hadoop Distributed File System (HDFS). Se observan operaciones estándar a nivel INFO que incluyen la recepción de bloques por DataNodes (DataXceiver), confirmaciones de transferencia (PacketResponder), actualización del mapeo de bloques en el NameNode (FSNamesystem) y eliminación programada o recolección de basura de bloques obsoletos (FSDataset). No hay indicios de degradación operativa, excepciones ni actividad maliciosa.\n\n## Evaluación del auditor\n\nTodos los registros presentan severidad INFO y describen el ciclo de vida normal de almacenamiento y replicación de bloques en HDFS. No existen trazas de error, intentos de acceso no autorizado, ataques de denegación de servicio o explotación. No se requieren acciones correctivas ni de contención."
+    },
+    "_meta": {
+      "run_id": "hdfs_des_balanceado_0004__gemext__r1__6ecb9a9e",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "hdfs_des_balanceado_0004__gemext__r1__6ecb9a9e.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:23:14+00:00"
+  }
+}

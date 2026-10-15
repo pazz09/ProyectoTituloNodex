@@ -1,0 +1,21 @@
+{
+  "case_id": "bgl_des_natural_0008",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "bgl_des_natural_0008__gemext__r1__1cab2672",
+  "estado_crudo": {
+    "diagnostico": "Los registros corresponden a mensajes informativos estándar y periódicos del kernel de un sistema IBM Blue Gene/L (arquitectura RAS). Se reportan estadísticas rutinarias sobre interrupciones e invocaciones del manejador de señales RBS/DDR, registrando cero errores corregibles de DDR y cero interrupciones de entrada crítica en todos los nodos evaluados. No se detectan anomalías operativas ni indicios de actividad maliciosa.",
+    "hay_anomalia": false,
+    "hay_incidente": false,
+    "confianza": 0.99,
+    "evaluacion_auditor": "Todos los eventos presentan nivel de severidad INFO con valores nominales esperados en métricas de rendimiento y hardware (0 llamadas al signal handler de RBS, 0 microsegundos en interrupciones críticas). No existe evidencia de degradación de hardware, fallos de memoria ni vectores de compromiso de seguridad.",
+    "comandos_mitigacion": [],
+    "eventos_reconstruidos": [],
+    "secuencia_temporal": [],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

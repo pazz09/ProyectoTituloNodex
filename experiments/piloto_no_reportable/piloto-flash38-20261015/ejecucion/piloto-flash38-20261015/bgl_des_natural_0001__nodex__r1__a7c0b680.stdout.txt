@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=669 salida=289 razonamiento=364 total=1322
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=814 salida=191 razonamiento=790 total=1795
+   → No hace falta RAG (A pesar de la baja cobertura del parsing estructurado, la muestra de texto crudo permite identificar claramente registros de diagnóstico de hardware/kernel (arquitectura tipo BlueGene/L RAS) sin relación con vectores de ataque ni técnicas MITRE ATT&CK, haciendo innecesaria la consulta a la memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=217 salida=62 razonamiento=123 total=402
+   → usar_cve: False | Razón: El diagnóstico concluye que se trata de un falso positivo relacionado con registros operativos de hardware/kernel (errores de paridad corregidos) y no con una vulnerabilidad de software o ataque explotable.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=170 salida=91 razonamiento=588 total=849
+   → 4 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2106 salida=563 razonamiento=400 total=3069
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | Los registros reportan eventos de hardware corregidos (errores de paridad en caché de instrucciones) capturados por subsistemas RAS/MCE del kernel. Constituyen una anomalía operativa a nivel de infraestructura física/hardware, pero no presentan indicios de compromiso de seguridad ni actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

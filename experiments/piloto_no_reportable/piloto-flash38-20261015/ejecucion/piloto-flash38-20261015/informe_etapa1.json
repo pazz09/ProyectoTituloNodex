@@ -1,0 +1,76 @@
+{
+  "etapa": 1,
+  "detenido_por_fallas_seguidas": false,
+  "limpia": true,
+  "motivos": [],
+  "etiqueta": "depuracion_no_reportable",
+  "informes": [
+    {
+      "run_id": "bgl_des_balanceado_0000__nodex__r1__98cf3d8a",
+      "arquitectura": "nodex_multiagente",
+      "dataset": "bgl",
+      "case_id": "bgl_des_balanceado_0000",
+      "estado": "completa",
+      "error": null,
+      "segundos": 58.2,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 5,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 4100,
+        "salida": 973,
+        "razonamiento": 2806,
+        "total": 7879,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 1
+    },
+    {
+      "run_id": "bgl_des_balanceado_0000__reglas__r1__f9afcffc",
+      "arquitectura": "baseline_reglas",
+      "dataset": "bgl",
+      "case_id": "bgl_des_balanceado_0000",
+      "estado": "completa",
+      "error": null,
+      "segundos": 0.4,
+      "credencial_presente": null,
+      "modelo_pedido": null,
+      "versiones_devueltas": null,
+      "usa_fallback": null,
+      "llamadas": 0,
+      "llamadas_fallidas": 0,
+      "tokens": null,
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "bgl_des_balanceado_0000__gemext__r1__a2749b01",
+      "arquitectura": "gemini_externo",
+      "dataset": "bgl",
+      "case_id": "bgl_des_balanceado_0000",
+      "estado": "completa",
+      "error": null,
+      "segundos": 28.6,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 1,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 2731,
+        "salida": 535,
+        "razonamiento": 3074,
+        "total": 6340,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    }
+  ]
+}

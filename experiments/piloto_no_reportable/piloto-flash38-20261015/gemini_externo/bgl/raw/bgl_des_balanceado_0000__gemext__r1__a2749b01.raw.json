@@ -1,0 +1,27 @@
+{
+  "case_id": "bgl_des_balanceado_0000",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "bgl_des_balanceado_0000__gemext__r1__a2749b01",
+  "estado_crudo": {
+    "diagnostico": "Los registros corresponden a eventos operativos de un supercomputador IBM Blue Gene/L (BlueGene/L RAS logs). Se observan múltiples fallas y anomalías operativas que incluyen errores de paridad de caché de datos en el nodo R02-M0-N4-C:J04-U11, errores corregibles de memoria DDR (CE), fallos de interconexión (advertencia en cable de red toro y resincronización de receptores de árbol), fallos de ejecución/carga de programas de usuarios (archivos de volcado de memoria 'core files', errores de formato ejecutable 'Exec format error' y archivos inexistentes) y una terminación anormal del kernel (reason 1004). Ninguno de estos eventos presenta indicios de actividad maliciosa ni intrusión cibernética; corresponden enteramente a degradación de hardware y fallas de software/operativas estándar de HPC.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.98,
+    "evaluacion_auditor": "El log provee trazabilidad detallada de componentes de cómputo (C), nodos de I/O (I) y la red interna de Blue Gene/L. La ausencia de comandos interactivos sospechosos, conexiones externas anómalas, escaladas de privilegios o patrones de explotación confirma que se trata de problemas de fiabilidad de hardware (RAM/caché/interconexión) y errores de los usuarios al invocar ejecutables o scripts en el entorno distribuido.",
+    "comandos_mitigacion": [
+      "service bluegene status",
+      "bg_console -e 'diags -node R02-M0-N4-C:J04-U11 -type dcache'",
+      "bg_console -e 'diags -node R21-M1-N0-C:J10-U11 -type ddr'",
+      "bg_console -e 'diags -cable torus_z -node R11-M1-N2-C:J09-U11'",
+      "file /bgl/apps/followup/RAPTOR/new.raptor.trace"
+    ],
+    "eventos_reconstruidos": [],
+    "secuencia_temporal": [],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

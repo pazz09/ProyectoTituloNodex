@@ -1,0 +1,41 @@
+{
+  "case_id": "hdfs_des_natural_0000",
+  "dataset": "hdfs",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "hdfs_des_natural_0000__gemext__r1__67c94e70",
+  "salida": {
+    "case_id": "hdfs_des_natural_0000",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nOperación normal y saludable de un clúster Hadoop HDFS. Los registros reflejan actividades estándar del ciclo de vida de bloques distribuidos, incluyendo recepción (PacketResponder, DataXceiver), lectura/servicio de bloques a clientes (Served block), mantenimiento y borrado de bloques obsoletos (FSDataset, invalidSet) y actualización de metadatos en el NameNode (addStoredBlock). Todos los eventos presentan nivel INFO y comportamiento rutinario dentro de los parámetros esperados de 64 MB (67108864 bytes).\n\n## Evaluación del auditor\n\nSe analizaron 10 líneas de logs de Hadoop HDFS correspondientes al periodo 081109-081111. No existen advertencias (WARN), errores (ERROR) ni excepciones que apunten a fallos de hardware, red o corrupción de datos. Tampoco se observan patrones de acceso anómalo, denegación de servicio o explotación maliciosa. El conjunto de datos es completamente benigno y operativo."
+    },
+    "_meta": {
+      "run_id": "hdfs_des_natural_0000__gemext__r1__67c94e70",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "hdfs_des_natural_0000__gemext__r1__67c94e70.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:27:16+00:00"
+  }
+}

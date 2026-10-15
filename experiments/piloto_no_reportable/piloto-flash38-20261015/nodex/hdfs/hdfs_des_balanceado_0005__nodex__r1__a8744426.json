@@ -1,0 +1,41 @@
+{
+  "case_id": "hdfs_des_balanceado_0005",
+  "dataset": "hdfs",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "hdfs_des_balanceado_0005__nodex__r1__a8744426",
+  "salida": {
+    "case_id": "hdfs_des_balanceado_0005",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nActividad operativa completamente normal y benigna de Hadoop HDFS. Los registros corresponden a rutinas legítimas de verificación de integridad de bloques (DataBlockScanner) y comunicaciones internas del clúster entre DataNodes y NameSystem en un segmento de red privada (10.x.x.x). No se observan errores, advertencias, anomalías de tráfico ni intentos de explotación de vulnerabilidades.\n\n## Evaluación del auditor\n\nEl diagnóstico es completamente preciso. La totalidad de los registros analizados corresponde a operaciones normales, rutinarias y benignas del sistema de archivos distribuido Hadoop HDFS (verificación periódica de integridad mediante DataBlockScanner, transferencia y servicio de bloques entre DataNodes en red interna, terminación normal de hilos PacketResponder, borrado de bloques y actualización de mapas de bloques en el NameSystem). No existe presencia de fallas, anomalías operativas ni indicios de actividad maliciosa."
+    },
+    "_meta": {
+      "run_id": "hdfs_des_balanceado_0005__nodex__r1__a8744426",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "hdfs_des_balanceado_0005__nodex__r1__a8744426.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:23:24+00:00"
+  }
+}

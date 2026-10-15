@@ -1,0 +1,91 @@
+{
+  "case_id": "bgl_des_balanceado_0002",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "bgl_des_balanceado_0002__gemext__r1__5de7ac27",
+  "salida": {
+    "case_id": "bgl_des_balanceado_0002",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "EVT-01",
+        "timestamp": "2005-08-26-12.28.10 a 2005-08-26-12.31.35",
+        "entities": [],
+        "event_type": "KERNEL_EXCEPTION_DUMP",
+        "evidence_uids": [
+          "1125084490",
+          "1125084517",
+          "1125084553",
+          "1125084580",
+          "1125084639",
+          "1125084695"
+        ]
+      },
+      {
+        "uid": "EVT-02",
+        "timestamp": "2005-08-26-13.19.21 a 2005-08-27-23.11.52",
+        "entities": [],
+        "event_type": "ECC_MEMORY_CORRECTION",
+        "evidence_uids": [
+          "1125087561",
+          "1125114716",
+          "1125149105",
+          "1125209512"
+        ]
+      },
+      {
+        "uid": "EVT-03",
+        "timestamp": "2005-08-27-18.49.52.912954",
+        "entities": [],
+        "event_type": "POWER_HARDWARE_FAILURE",
+        "evidence_uids": [
+          "1125193792"
+        ]
+      },
+      {
+        "uid": "EVT-04",
+        "timestamp": "2005-08-28-01.58.37 a 2005-08-28-02.30.29",
+        "entities": [],
+        "event_type": "FPU_ALIGNMENT_EXCEPTIONS",
+        "evidence_uids": [
+          "1125219517",
+          "1125219610",
+          "1125220160",
+          "1125220268",
+          "1125221152",
+          "1125221429"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nFallas de hardware y excepciones operativas a nivel de procesador y memoria en un supercomputador IBM Blue Gene/L. Se observa un fallo crítico de energía en una tarjeta de nodo (PGOOD/MPGOOD error), errores de memoria corregibles (ECC/CE) y un alto volumen de excepciones de alineación en la unidad de punto flotante Double-Hummer, además de volcados de registros de excepciones (iar/dear). No existe evidencia de actividad maliciosa o intrusión.\n\n## Evaluación del auditor\n\nLos registros corresponden exclusivamente al subsistema RAS (Reliability, Availability, and Serviceability) del kernel y descubrimiento de hardware en Blue Gene/L. La pérdida de PGOOD/MPGOOD en el nodo R11-M1-N7 es una falla física de suministro eléctrico. Los mensajes de 'double-hummer alignment exceptions' reflejan problemas de compilación u optimización matemática en aplicaciones científicas concurrentes, no un vector de ataque. Las excepciones IAR/DEAR y errores de memoria DDR son fallos y degradaciones operativas estándar.\n\n## Comandos de mitigación propuestos\n\n- service card replace R11-M1-N7\n- mmdiag --hardware\n- bg_console -e 'locate node card R11-M1-N7'"
+    },
+    "_meta": {
+      "run_id": "bgl_des_balanceado_0002__gemext__r1__5de7ac27",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_des_balanceado_0002__gemext__r1__5de7ac27.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:15:34+00:00"
+  }
+}

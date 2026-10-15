@@ -1,0 +1,84 @@
+{
+  "case_id": "bgl_des_balanceado_0003",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "bgl_des_balanceado_0003__gemext__r1__222e37b4",
+  "estado_crudo": {
+    "diagnostico": "Registros de kernel de un supercomputador IBM BlueGene/L que muestran excepciones de alineación de punto flotante ('floating point alignment exceptions') y volcados de registros de instrucción y dirección de excepción de datos (iar/dear). Corresponde a un problema de rendimiento o error de ejecución de software científico/cálculo no alineado en múltiples nodos de cómputo, no a una intrusión o ataque.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "Los registros corresponden al dataset RAS de BlueGene/L. La presencia de millones de excepciones de alineación de coma flotante (2,354,412) y los volcados iar/dear reflejan desalineación de memoria en código compilado o desbordamientos aritméticos manejados por interrupciones de kernel. No existe ninguna evidencia de compromiso, escalada de privilegios o actividad maliciosa.",
+    "comandos_mitigacion": [
+      "# Recompilar las aplicaciones de usuario con directivas de alineación estricta de memoria (ej. banderas de compilador IBM XL Fortran/C)",
+      "xlc -qalign=natural -O3 application.c -o application",
+      "# Monitorear eventos RAS del midplane en el subsistema de gestión del cluster",
+      "grep -E 'alignment exceptions|dear|iar' /var/log/messages"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-01",
+        "evidence_uids": [
+          "1131060284",
+          "1131060319",
+          "1131060387",
+          "1131060429",
+          "1131060431",
+          "1131060537",
+          "1131060539",
+          "1131060633",
+          "1131060644",
+          "1131060739",
+          "1131060806"
+        ],
+        "timestamp": "2005-11-03-15.24.44 a 2005-11-03-15.33.26",
+        "event_type": "KERNEL_REGISTER_DUMP",
+        "description": "Nodos del rack R66 y R67 reportan repetidamente registros iar (00106534, 00106580, 00106568) y dear (02494c0c, 02494bfc, etc.), indicando excepciones de acceso a memoria/datos."
+      },
+      {
+        "event_id": "EVT-02",
+        "evidence_uids": [
+          "1131061480"
+        ],
+        "timestamp": "2005-11-03-15.44.40.306019",
+        "event_type": "ALIGNMENT_EXCEPTION_ALERT",
+        "description": "El nodo R61-M0-N8-C:J03-U01 reporta 2,354,412 excepciones de alineación de punto flotante manejadas por el kernel."
+      },
+      {
+        "event_id": "EVT-03",
+        "evidence_uids": [
+          "1131061513",
+          "1131061592",
+          "1131061693",
+          "1131061732",
+          "1131061783",
+          "1131061828",
+          "1131061838"
+        ],
+        "timestamp": "2005-11-03-15.45.13 a 2005-11-03-15.50.38",
+        "event_type": "KERNEL_REGISTER_DUMP",
+        "description": "Nodos de los racks R60, R62, R64 y R65 registran nuevos volcados iar/dear en el rango de direcciones dear 045e14xx."
+      },
+      {
+        "event_id": "EVT-04",
+        "evidence_uids": [
+          "1131063447"
+        ],
+        "timestamp": "2005-11-03-16.17.27.446763",
+        "event_type": "ALIGNMENT_EXCEPTION_ALERT",
+        "description": "El nodo R51-M1-NA-C:J17-U11 reporta nuevamente la misma cantidad masiva (2,354,412) de excepciones de alineación de punto flotante."
+      }
+    ],
+    "secuencia_temporal": [
+      "2005-11-03 15:24:44 - Inicio de reportes de registros iar/dear en racks R66 y R67.",
+      "2005-11-03 15:44:40 - El nodo R61-M0-N8-C:J03-U01 alcanza un contador de 2,354,412 excepciones de alineación de punto flotante.",
+      "2005-11-03 15:45:13 a 15:50:38 - Propagación de reportes iar/dear hacia nodos en racks R60, R62, R64 y R65 con rango de direcciones dear 045e14xx.",
+      "2005-11-03 16:17:27 - Registro adicional de 2,354,412 excepciones de alineación de punto flotante en el nodo R51-M1-NA-C:J17-U11."
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

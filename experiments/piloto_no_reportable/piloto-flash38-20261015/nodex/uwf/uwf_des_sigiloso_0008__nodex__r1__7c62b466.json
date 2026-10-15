@@ -1,0 +1,89 @@
+{
+  "case_id": "uwf_des_sigiloso_0008",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "uwf_des_sigiloso_0008__nodex__r1__7c62b466",
+  "salida": {
+    "case_id": "uwf_des_sigiloso_0008",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-17 15:23:28.384592",
+        "entities": [],
+        "event_type": "dns_scan_attempt",
+        "evidence_uids": [
+          "CkjOcm1GRruXfFPcU8",
+          "C1Gr6m4Vjpg7p2O6p8"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-17 15:55:44.383701",
+        "entities": [],
+        "event_type": "dns_scan_attempt",
+        "evidence_uids": [
+          "CAaFcO1L1mWGulOg3"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": [
+        {
+          "id": "T1590.002",
+          "name": "Gather Victim Network Information: DNS",
+          "evidence_uids": [
+            "CkjOcm1GRruXfFPcU8",
+            "CAaFcO1L1mWGulOg3"
+          ]
+        }
+      ]
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe observa un volumen anómalo y repetitivo de tráfico DNS (puerto 53 UDP) originado en la IP externa 143.88.255.10 hacia el servidor interno 10.0.10.1, con 261 conexiones fallidas caracterizadas por un estado 'S0' (sin respuesta del servidor). Este comportamiento es consistente con actividades de reconocimiento de red y fuerza bruta sobre nombres de dominio o servicios DNS (T1590.002), o bien intentos fallidos de establecimiento de canal encubierto/C2 mediante DNS (T1071.004). Se recomienda bloquear temporalmente la IP 143.88.255.10 en el firewall perimetral y verificar si el resolver DNS 10.0.10.1 está indebidamente expuesto a redes no confiables.\n\n## Evaluación del auditor\n\nEl diagnóstico es preciso. La evidencia de Zeek muestra cientos de conexiones UDP hacia el puerto 53 del host interno 10.0.10.1 desde la IP 143.88.255.10 en estado S0 (sin respuesta), lo cual denota un sondeo o actividad de reconocimiento recurrente sobre infraestructura DNS interna. Las medidas de bloqueo perimetral propuestas son pertinentes.\n\n## Comandos de mitigación propuestos\n\n- iptables -I INPUT 1 -s 143.88.255.10 -j DROP\n- iptables -I FORWARD 1 -s 143.88.255.10 -d 10.0.10.1 -p udp --dport 53 -j DROP\n- ip route add blackhole 143.88.255.10/32\n- ufw insert 1 deny from 143.88.255.10 to any"
+    },
+    "_meta": {
+      "run_id": "uwf_des_sigiloso_0008__nodex__r1__7c62b466",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_des_sigiloso_0008__nodex__r1__7c62b466.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:35:12+00:00"
+  }
+}

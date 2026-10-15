@@ -1,0 +1,650 @@
+{
+  "case_id": "hdfs_des_natural_0002",
+  "dataset": "hdfs",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "hdfs_des_natural_0002__nodex__r1__5770f4e0",
+  "estado_crudo": {
+    "resumen_logs": {
+      "formato_detectado": "hdfs",
+      "total_lineas": 10,
+      "servicios": {
+        "hdfs.datanode": 7,
+        "hdfs.fsnamesystem": 2,
+        "hdfs.fsdataset": 1
+      },
+      "eventos": {
+        "evento_normal": 10
+      },
+      "ventana_temporal": {
+        "inicio": "2008-11-10 00:35:02",
+        "fin": "2008-11-11 10:07:52"
+      },
+      "n_ips_distintas": 7,
+      "ips_distintas": [
+        "10.251.203.149",
+        "10.251.29.239",
+        "10.251.73.188",
+        "10.251.199.225",
+        "10.251.201.204",
+        "10.251.123.132",
+        "10.251.71.97"
+      ],
+      "por_ip": {
+        "10.251.203.149": {
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [
+            "hdfs.datanode"
+          ],
+          "n_eventos": 1,
+          "n_como_origen": 1,
+          "n_como_destino": 0
+        },
+        "10.251.29.239": {
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [
+            "hdfs.datanode"
+          ],
+          "n_eventos": 1,
+          "n_como_origen": 1,
+          "n_como_destino": 0
+        },
+        "10.251.73.188": {
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [
+            "hdfs.datanode"
+          ],
+          "n_eventos": 1,
+          "n_como_origen": 1,
+          "n_como_destino": 0
+        },
+        "10.251.199.225": {
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [
+            "hdfs.datanode"
+          ],
+          "n_eventos": 1,
+          "n_como_origen": 1,
+          "n_como_destino": 0
+        },
+        "10.251.201.204": {
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [
+            "hdfs.fsnamesystem"
+          ],
+          "n_eventos": 1,
+          "n_como_origen": 1,
+          "n_como_destino": 0
+        },
+        "10.251.123.132": {
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [
+            "hdfs.datanode"
+          ],
+          "n_eventos": 1,
+          "n_como_origen": 1,
+          "n_como_destino": 0
+        },
+        "10.251.71.97": {
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [
+            "hdfs.datanode"
+          ],
+          "n_eventos": 1,
+          "n_como_origen": 1,
+          "n_como_destino": 0
+        }
+      },
+      "usuarios": {},
+      "n_usuarios_distintos": 0,
+      "codigos_respuesta": {},
+      "entidades": [
+        {
+          "ip": "10.251.203.149",
+          "n_eventos": 1,
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [
+            "hdfs.datanode"
+          ],
+          "n_como_origen": 1,
+          "n_como_destino": 0
+        },
+        {
+          "ip": "10.251.29.239",
+          "n_eventos": 1,
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [
+            "hdfs.datanode"
+          ],
+          "n_como_origen": 1,
+          "n_como_destino": 0
+        },
+        {
+          "ip": "10.251.73.188",
+          "n_eventos": 1,
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [
+            "hdfs.datanode"
+          ],
+          "n_como_origen": 1,
+          "n_como_destino": 0
+        },
+        {
+          "ip": "10.251.199.225",
+          "n_eventos": 1,
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [
+            "hdfs.datanode"
+          ],
+          "n_como_origen": 1,
+          "n_como_destino": 0
+        },
+        {
+          "ip": "10.251.201.204",
+          "n_eventos": 1,
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [
+            "hdfs.fsnamesystem"
+          ],
+          "n_como_origen": 1,
+          "n_como_destino": 0
+        },
+        {
+          "ip": "10.251.123.132",
+          "n_eventos": 1,
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [
+            "hdfs.datanode"
+          ],
+          "n_como_origen": 1,
+          "n_como_destino": 0
+        },
+        {
+          "ip": "10.251.71.97",
+          "n_eventos": 1,
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [
+            "hdfs.datanode"
+          ],
+          "n_como_origen": 1,
+          "n_como_destino": 0
+        }
+      ],
+      "cronologia": [],
+      "cronologia_omitidos": 0,
+      "raw_procedencia": {
+        "sha256": "33e20f492de89b4298f04adfc08947a8f7a25d146fc4527a63c070592f7d653a",
+        "lineas": 10,
+        "bytes": 1389
+      },
+      "reputacion_ips": {
+        "10.251.203.149": {
+          "fuente": "fallback",
+          "ip": "10.251.203.149",
+          "score": 0,
+          "nota": "IP privada/local",
+          "categoria": "limpio"
+        },
+        "10.251.29.239": {
+          "fuente": "fallback",
+          "ip": "10.251.29.239",
+          "score": 0,
+          "nota": "IP privada/local",
+          "categoria": "limpio"
+        },
+        "10.251.73.188": {
+          "fuente": "fallback",
+          "ip": "10.251.73.188",
+          "score": 0,
+          "nota": "IP privada/local",
+          "categoria": "limpio"
+        },
+        "10.251.199.225": {
+          "fuente": "fallback",
+          "ip": "10.251.199.225",
+          "score": 0,
+          "nota": "IP privada/local",
+          "categoria": "limpio"
+        },
+        "10.251.201.204": {
+          "fuente": "fallback",
+          "ip": "10.251.201.204",
+          "score": 0,
+          "nota": "IP privada/local",
+          "categoria": "limpio"
+        },
+        "10.251.123.132": {
+          "fuente": "fallback",
+          "ip": "10.251.123.132",
+          "score": 0,
+          "nota": "IP privada/local",
+          "categoria": "limpio"
+        },
+        "10.251.71.97": {
+          "fuente": "fallback",
+          "ip": "10.251.71.97",
+          "score": 0,
+          "nota": "IP privada/local",
+          "categoria": "limpio"
+        }
+      }
+    },
+    "preprocessing_metadata": {
+      "schema_version": "2.0",
+      "total_lineas_fisicas": 10,
+      "total_eventos": 10,
+      "decoder_distribution": {
+        "text": 10
+      },
+      "product_distribution": {
+        "HDFS": 10
+      },
+      "vendor_distribution": {
+        "Apache": 10
+      },
+      "version_distribution": {},
+      "protocol_distribution": {},
+      "profile_distribution": {
+        "hdfs": 10
+      },
+      "severity_distribution": {
+        "INFO": 10
+      },
+      "event_categories": {},
+      "event_outcomes": {},
+      "entities": {
+        "ip": {
+          "10.251.29.239": 2,
+          "10.251.71.97": 2,
+          "10.251.123.132": 1,
+          "10.251.199.225": 1,
+          "10.251.201.204": 1,
+          "10.251.203.149": 1,
+          "10.251.73.188": 1
+        },
+        "proceso": {
+          "dfs.DataNode$PacketResponder": 5,
+          "dfs.DataNode$DataXceiver": 2,
+          "dfs.FSNamesystem": 2,
+          "dfs.FSDataset": 1
+        },
+        "servicio": {
+          "hdfs.datanode": 7,
+          "hdfs.fsnamesystem": 2,
+          "hdfs.fsdataset": 1
+        },
+        "producto": {
+          "HDFS": 10
+        }
+      },
+      "time_window": {
+        "inicio": "2008-11-10 00:35:02",
+        "fin": "2008-11-11 10:07:52"
+      },
+      "parsing": {
+        "parsed_events": 10,
+        "fallback_events": 0,
+        "coverage": 1.0
+      },
+      "segments": [
+        {
+          "index": 0,
+          "decoder": "text",
+          "line_start": 1,
+          "line_end": 10,
+          "n_records": 10,
+          "confidence": 0.1,
+          "decoder_inicial": "text",
+          "confidence_inicial": 0.1,
+          "decoder_distribution": {
+            "text": 10
+          },
+          "context": {}
+        }
+      ],
+      "entities_resumen": {
+        "ip": 7,
+        "proceso": 4,
+        "servicio": 3,
+        "producto": 1
+      },
+      "config": {
+        "LOG_DETECTION_CHUNK_SIZE": 50,
+        "LOG_ENABLE_MULTILINE": true,
+        "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+        "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+        "LOG_MAX_EVENTS": 100000,
+        "LOG_MAX_FILE_BYTES": 52428800,
+        "LOG_MAX_RAW_SAMPLES": 20,
+        "LOG_MAX_UNMAPPED_FIELDS": 100,
+        "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+        "LOG_PARSING_MODE": "hybrid",
+        "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+        "LOG_PRESERVE_RAW": true
+      }
+    },
+    "parsing_warnings": [],
+    "raw_samples": [
+      {
+        "decoder": "text",
+        "texto": "081110 003502 4937 INFO dfs.DataNode$PacketResponder: Received block blk_7484759945731484842 of size 67108864 from /10.251.203.149"
+      }
+    ],
+    "evidencia_logs": [
+      {
+        "uid": "log_record_000001",
+        "record_number": 1,
+        "line_start": 1,
+        "line_end": 1,
+        "timestamp": "2008-11-10 00:35:02",
+        "source_ip": "10.251.203.149",
+        "service_name": "hdfs.datanode",
+        "process_name": "dfs.DataNode$PacketResponder",
+        "severity": "INFO",
+        "message": "Received block blk_7484759945731484842 of size 67108864 from /10.251.203.149"
+      },
+      {
+        "uid": "log_record_000002",
+        "record_number": 2,
+        "line_start": 2,
+        "line_end": 2,
+        "timestamp": "2008-11-10 10:34:00",
+        "service_name": "hdfs.fsdataset",
+        "process_name": "dfs.FSDataset",
+        "severity": "INFO",
+        "message": "Deleting block blk_-8796256534683400159 file /mnt/hadoop/dfs/data/current/subdir18/blk_-8796256534683400159"
+      },
+      {
+        "uid": "log_record_000003",
+        "record_number": 3,
+        "line_start": 3,
+        "line_end": 3,
+        "timestamp": "2008-11-10 11:54:08",
+        "source_ip": "10.251.29.239",
+        "destination_ip": "10.251.29.239",
+        "service_name": "hdfs.datanode",
+        "process_name": "dfs.DataNode$DataXceiver",
+        "severity": "INFO",
+        "destination_port": 50010,
+        "message": "Receiving block blk_-7230947007726948080 src: /10.251.29.239:53564 dest: /10.251.29.239:50010"
+      },
+      {
+        "uid": "log_record_000004",
+        "record_number": 4,
+        "line_start": 4,
+        "line_end": 4,
+        "timestamp": "2008-11-10 11:57:34",
+        "source_ip": "10.251.73.188",
+        "service_name": "hdfs.datanode",
+        "process_name": "dfs.DataNode$PacketResponder",
+        "severity": "INFO",
+        "message": "Received block blk_-2117066166574895060 of size 67108864 from /10.251.73.188"
+      },
+      {
+        "uid": "log_record_000005",
+        "record_number": 5,
+        "line_start": 5,
+        "line_end": 5,
+        "timestamp": "2008-11-10 21:38:16",
+        "service_name": "hdfs.fsnamesystem",
+        "process_name": "dfs.FSNamesystem",
+        "severity": "INFO",
+        "message": "BLOCK* NameSystem.allocateBlock: /user/root/rand3/_temporary/_task_200811101024_0005_m_001091_0/part-01091. blk_-4468645577339843974"
+      },
+      {
+        "uid": "log_record_000006",
+        "record_number": 6,
+        "line_start": 6,
+        "line_end": 6,
+        "timestamp": "2008-11-10 22:11:34",
+        "service_name": "hdfs.datanode",
+        "process_name": "dfs.DataNode$PacketResponder",
+        "severity": "INFO",
+        "message": "PacketResponder 2 for block blk_1349228381785843634 terminating"
+      },
+      {
+        "uid": "log_record_000007",
+        "record_number": 7,
+        "line_start": 7,
+        "line_end": 7,
+        "timestamp": "2008-11-11 03:16:50",
+        "source_ip": "10.251.199.225",
+        "service_name": "hdfs.datanode",
+        "process_name": "dfs.DataNode$PacketResponder",
+        "severity": "INFO",
+        "message": "Received block blk_3777399812922072863 of size 67108864 from /10.251.199.225"
+      },
+      {
+        "uid": "log_record_000008",
+        "record_number": 8,
+        "line_start": 8,
+        "line_end": 8,
+        "timestamp": "2008-11-11 06:52:11",
+        "source_ip": "10.251.201.204",
+        "service_name": "hdfs.fsnamesystem",
+        "process_name": "dfs.FSNamesystem",
+        "severity": "INFO",
+        "message": "BLOCK* NameSystem.delete: blk_5580254744888391593 is added to invalidSet of 10.251.201.204:50010"
+      },
+      {
+        "uid": "log_record_000009",
+        "record_number": 9,
+        "line_start": 9,
+        "line_end": 9,
+        "timestamp": "2008-11-11 07:34:06",
+        "source_ip": "10.251.123.132",
+        "service_name": "hdfs.datanode",
+        "process_name": "dfs.DataNode$PacketResponder",
+        "severity": "INFO",
+        "message": "Received block blk_-8310554294841246175 of size 67108864 from /10.251.123.132"
+      },
+      {
+        "uid": "log_record_000010",
+        "record_number": 10,
+        "line_start": 10,
+        "line_end": 10,
+        "timestamp": "2008-11-11 10:07:52",
+        "source_ip": "10.251.71.97",
+        "destination_ip": "10.251.71.97",
+        "service_name": "hdfs.datanode",
+        "process_name": "dfs.DataNode$DataXceiver",
+        "severity": "INFO",
+        "destination_port": 50010,
+        "message": "Receiving block blk_-178934379749864379 src: /10.251.71.97:55517 dest: /10.251.71.97:50010"
+      }
+    ],
+    "evidencia_logs_omitidos": 0,
+    "eventos_reconstruidos": [],
+    "secuencia_temporal": [],
+    "tecnicas_atribuidas": [],
+    "invalid_evidence_uid_count": 0,
+    "d11_warnings": [],
+    "telemetry": {
+      "llm_call_count": 5,
+      "input_tokens": 6559,
+      "output_tokens": 685,
+      "total_tokens": 11058,
+      "execution_time": 36.242737,
+      "replan_count": 0,
+      "intentos_correccion": 1,
+      "invalid_evidence_uid_count": 0,
+      "d11_warning_count": 0,
+      "llm_calls": [
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 1659,
+          "output_tokens": 310,
+          "total_tokens": 2717,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 748,
+          "duration_s": 8.214,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 1767,
+          "output_tokens": 146,
+          "total_tokens": 2188,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 275,
+          "duration_s": 4.484,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 209,
+          "output_tokens": 50,
+          "total_tokens": 604,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 345,
+          "duration_s": 5.898,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 124,
+          "output_tokens": 6,
+          "total_tokens": 1073,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 943,
+          "duration_s": 7.879,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 2800,
+          "output_tokens": 173,
+          "total_tokens": 4476,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 1503,
+          "duration_s": 9.705,
+          "error": null
+        }
+      ]
+    },
+    "firma": "v2|lineas=10 ips=7 servicios=[hdfs.datanode:7,hdfs.fsnamesystem:2,hdfs.fsdataset:1] eventos=[evento_normal:10] eventos_totales=10 decoders=[text:10] productos=[HDFS:10] severidades=[INFO:10] categorias=[] cobertura=1.0",
+    "plan": {
+      "plan_version": 1,
+      "objetivo": "Evaluar la actividad en los registros de HDFS para descartar anomalías y asegurar la postura de seguridad de los servicios DataNode y FSNamesystem.",
+      "pasos": [
+        {
+          "id": 1,
+          "accion": "triage",
+          "objetivo": "Realizar el diagnóstico inicial de los 10 eventos de HDFS y verificar la legitimidad de las operaciones entre las IPs internas.",
+          "estado": "ejecutado"
+        },
+        {
+          "id": 2,
+          "accion": "cve",
+          "objetivo": "Consultar vulnerabilidades conocidas que afecten a los servicios y componentes identificados de Apache Hadoop HDFS.",
+          "estado": "omitido",
+          "motivo": "El diagnóstico concluye que la actividad es operacional, normal y legítima, sin indicios de ataque, explotación o vulnerabilidad específica que amerite la búsqueda de CVEs."
+        },
+        {
+          "id": 3,
+          "accion": "mitigacion",
+          "objetivo": "Proponer directrices de contención, hardening y monitoreo preventivo para la infraestructura HDFS.",
+          "estado": "ejecutado"
+        }
+      ],
+      "criterios_finalizacion": [
+        "Confirmación de que los eventos corresponden a tráfico operacional normal sin indicios de compromiso.",
+        "Identificación y reporte de vulnerabilidades CVE aplicables a los servicios HDFS expuestos.",
+        "Emisión de recomendaciones de mitigación y mejores prácticas de seguridad para el clúster."
+      ]
+    },
+    "plan_objetivo": "Evaluar la actividad en los registros de HDFS para descartar anomalías y asegurar la postura de seguridad de los servicios DataNode y FSNamesystem.",
+    "paso_actual": 3,
+    "historial_ejecucion": [
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_planificador",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "plan v1, 3 pasos: ['triage', 'cve', 'mitigacion']"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 1,
+        "nodo": "agente_analista_triage",
+        "accion": "triage",
+        "estado": "ejecutado",
+        "resumen": "diagnóstico producido"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_selector_herramientas",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "usar_cve=False"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 3,
+        "nodo": "agente_ingeniero_mitigacion",
+        "accion": "mitigacion",
+        "estado": "ejecutado",
+        "resumen": "0 comandos propuestos"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "tool_validar_comandos",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "comandos válidos"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_auditor_final",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "confianza=0.98 cobertura_suficiente=True"
+      }
+    ],
+    "desviaciones_plan": [],
+    "historial_planes": [],
+    "replan_count": 0,
+    "diagnostico": "Actividad operacional normal y legítima de HDFS. Los registros corresponden a transferencias rutinarias de bloques de datos (PacketResponder) y operaciones estándar entre servicios DataNode y FSNamesystem dentro de un rango de direcciones IP privadas. No se identificaron errores, excepciones ni indicadores de actividad maliciosa.",
+    "necesita_rag": false,
+    "usar_cve": false,
+    "razon_seleccion": "El diagnóstico concluye que la actividad es operacional, normal y legítima, sin indicios de ataque, explotación o vulnerabilidad específica que amerite la búsqueda de CVEs.",
+    "contexto_rag": [],
+    "tecnicas_mitre": [],
+    "cves_encontrados": [],
+    "comandos_mitigacion": [],
+    "comandos_validos": true,
+    "motivos_rechazo": [],
+    "intentos_correccion": 1,
+    "confianza": 0.98,
+    "hay_incidente": false,
+    "hay_anomalia": false,
+    "evaluacion_auditor": "Los registros corresponden a operaciones rutinarias y legítimas de un clúster HDFS, incluyendo transferencias de bloques, asignación y eliminación estándar entre DataNodes y NameSystem sin indicios de fallos ni actividad sospechosa.",
+    "cobertura_auditor": true,
+    "cobertura_suficiente": true,
+    "motivo_replanificacion": "",
+    "requiere_replanificacion": false,
+    "_firma": "v2|lineas=10 ips=7 servicios=[hdfs.datanode:7,hdfs.fsnamesystem:2,hdfs.fsdataset:1] eventos=[evento_normal:10] eventos_totales=10 decoders=[text:10] productos=[HDFS:10] severidades=[INFO:10] categorias=[] cobertura=1.0",
+    "_error_api": null,
+    "requiere_revision_humana": false,
+    "output_contract_version": "d11-v1"
+  }
+}

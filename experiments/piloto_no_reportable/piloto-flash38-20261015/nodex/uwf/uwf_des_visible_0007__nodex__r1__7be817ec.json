@@ -1,0 +1,102 @@
+{
+  "case_id": "uwf_des_visible_0007",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "uwf_des_visible_0007__nodex__r1__7be817ec",
+  "salida": {
+    "case_id": "uwf_des_visible_0007",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2022-01-02 00:27:59.133424",
+        "entities": [],
+        "event_type": "network_connection_attempt",
+        "evidence_uids": [
+          "Cynz6W1p0jaUzVyuz6",
+          "CIpE884XV72BWJTPkj"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2022-01-02 00:34:32.380570",
+        "entities": [],
+        "event_type": "network_connection_attempt",
+        "evidence_uids": [
+          "C4dYVZ2GDcqyKQ8aE",
+          "CjJlhy4LRvcf6ZLksc"
+        ]
+      },
+      {
+        "uid": "event_003",
+        "timestamp": "2022-01-02 00:54:12.135190",
+        "entities": [],
+        "event_type": "network_connection_attempt",
+        "evidence_uids": [
+          "CFAi661hHQ0Sym1YT9",
+          "CfyKhJ3fXDsTqrxU34"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002",
+      "event_003"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": [
+        {
+          "id": "T1590.002",
+          "name": "Gather Victim Network Information: DNS",
+          "evidence_uids": [
+            "Cynz6W1p0jaUzVyuz6",
+            "C4dYVZ2GDcqyKQ8aE",
+            "CfyKhJ3fXDsTqrxU34"
+          ]
+        }
+      ]
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe observa un patrón anómalo de tráfico DNS con 239 peticiones consecutivas enviadas desde la IP pública 143.88.255.10 hacia el servidor DNS interno 10.0.10.1 (puerto 53 UDP) en un lapso de 26 minutos. Todas las conexiones presentan un estado 'S0' (sin respuesta del servidor) y se clasifican como intentos fallidos y eventos críticos. Este comportamiento descarta una exfiltración o canal C2 bidireccional efectivo, pero es consistente con un intento de abuso del protocolo DNS (T1071.004) para sondeo, tunelado no establecido o una actividad de reconocimiento DNS (T1590.002), así como un posible intento de denegación de servicio/escaneo hacia el resolver local.\n\n## Evaluación del auditor\n\nEl diagnóstico es preciso al identificar un flujo recurrente y anómalo de consultas DNS UDP desde la IP pública 143.88.255.10 hacia la IP privada 10.0.10.1 con estado S0 (sin respuesta), lo cual denota una actividad de sondeo o escaneo de servicios DNS sin establecimiento de canal C2. Las acciones de contención perimetral y limitación de tasa son adecuadas.\n\n## Comandos de mitigación propuestos\n\n- iptables -I INPUT 1 -s 143.88.255.10 -j DROP -m comment --comment 'Mitigacion sondeo DNS T1071.004/T1590.002'\n- iptables -I FORWARD 1 -s 143.88.255.10 -d 10.0.10.1 -p udp --dport 53 -j DROP -m comment --comment 'Bloqueo perimetral hacia resolver interno'\n- ufw insert 1 deny from 143.88.255.10 to any\n- iptables -A INPUT -p udp --dport 53 -m hashlimit --hashlimit-name DNS_RATE --hashlimit-above 25/sec --hashlimit-burst 50 --hashlimit-mode srcip -j DROP\n- iptables-save > /etc/iptables/rules.v4"
+    },
+    "_meta": {
+      "run_id": "uwf_des_visible_0007__nodex__r1__7be817ec",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_des_visible_0007__nodex__r1__7be817ec.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:44:37+00:00"
+  }
+}

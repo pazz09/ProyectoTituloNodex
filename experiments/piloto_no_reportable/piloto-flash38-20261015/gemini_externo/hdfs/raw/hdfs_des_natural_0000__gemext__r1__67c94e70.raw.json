@@ -1,0 +1,21 @@
+{
+  "case_id": "hdfs_des_natural_0000",
+  "dataset": "hdfs",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "hdfs_des_natural_0000__gemext__r1__67c94e70",
+  "estado_crudo": {
+    "diagnostico": "Operación normal y saludable de un clúster Hadoop HDFS. Los registros reflejan actividades estándar del ciclo de vida de bloques distribuidos, incluyendo recepción (PacketResponder, DataXceiver), lectura/servicio de bloques a clientes (Served block), mantenimiento y borrado de bloques obsoletos (FSDataset, invalidSet) y actualización de metadatos en el NameNode (addStoredBlock). Todos los eventos presentan nivel INFO y comportamiento rutinario dentro de los parámetros esperados de 64 MB (67108864 bytes).",
+    "hay_anomalia": false,
+    "hay_incidente": false,
+    "confianza": 0.98,
+    "evaluacion_auditor": "Se analizaron 10 líneas de logs de Hadoop HDFS correspondientes al periodo 081109-081111. No existen advertencias (WARN), errores (ERROR) ni excepciones que apunten a fallos de hardware, red o corrupción de datos. Tampoco se observan patrones de acceso anómalo, denegación de servicio o explotación maliciosa. El conjunto de datos es completamente benigno y operativo.",
+    "comandos_mitigacion": [],
+    "eventos_reconstruidos": [],
+    "secuencia_temporal": [],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

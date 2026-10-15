@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3943 salida=361 razonamiento=1038 total=5342
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=4198 salida=171 razonamiento=340 total=4709
+   → Solicitando RAG (Se observa un patrón anómalo de 265 solicitudes DNS dirigidas desde 143.88.255.10 hacia 10.0.10.1 con estado de conexión S0 y fallos reiterados. Conforme al plan de investigación, es necesario consultar la memoria histórica y las técnicas MITRE ATT&CK asociadas al abuso del protocolo DNS (como T1071.004, T1568 o T1498) para clasificar con precisión la naturaleza del ataque (amplificación/DoS, tunelizado o escaneo) antes de emitir el diagnóstico definitivo y las recomendaciones de contención.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1584.002, T1071.004, T1590.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=4899 salida=188 razonamiento=1080 total=6167
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=300 salida=54 razonamiento=391 total=745
+   → usar_cve: False | Razón: El diagnóstico describe actividad de reconocimiento de red o túnel C2 genérico sin especificar el software DNS objetivo ni su versión, por lo que no hay una vulnerabilidad o producto concreto que consultar.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=235 salida=109 razonamiento=1090 total=1434
+   → 4 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=48032 salida=947 razonamiento=3790 total=52769
+   → Confianza final: 0.90 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es incorrecto al clasificar la actividad como un incidente de seguridad (C2 o reconocimiento externo) y recomendar el bloqueo de la IP. La IP 143.88.255.10 pertenece al mismo rango de red corporativa (/16) que otros hosts locales (p. ej. 143.88.10.11, que consulta a 143.88.255.10 como servidor DNS). Las ráfagas regulares cada ~30 segundos hacia 10.0.10.1:53 con resultado S0 corresponden a un fallo operativo de resolución, temporizador de reintento o reenviador DNS (forwarder) inalcanzable, no a un ataque deliberado. Aplicar un bloqueo perimetral sobre dicha IP aislaría un servicio interno legítimo.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

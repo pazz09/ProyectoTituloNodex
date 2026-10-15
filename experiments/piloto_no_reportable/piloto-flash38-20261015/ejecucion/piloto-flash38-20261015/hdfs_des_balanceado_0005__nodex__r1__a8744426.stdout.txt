@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1049 salida=319 razonamiento=377 total=1745
+   → Plan v1: ['triage', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=1136 salida=157 razonamiento=391 total=1684
+   → No hace falta RAG (El lote presenta 100% de cobertura en el parsing, todos los eventos son de severidad INFO correspondientes a operaciones estándar y benignas de HDFS entre IPs privadas limpias, y el plan de investigación explícitamente no contempla consultar memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=239 salida=35 razonamiento=127 total=401
+   → usar_cve: False | Razón: El diagnóstico confirma actividad completamente normal y benigna sin intentos de explotación ni indicios de vulnerabilidades.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=144 salida=6 razonamiento=921 total=1071
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2615 salida=238 razonamiento=903 total=3756
+   → Confianza final: 1.00 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es completamente preciso. La totalidad de los registros analizados corresponde a operaciones normales, rutinarias y benignas del sistema de archivos distribuido Hadoop HDFS (verificación periódica de integridad mediante DataBlockScanner, transferencia y servicio de bloques entre DataNodes en red interna, terminación normal de hilos PacketResponder, borrado de bloques y actualización de mapas de bloques en el NameSystem). No existe presencia de fallas, anomalías operativas ni indicios de actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

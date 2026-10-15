@@ -1,0 +1,41 @@
+{
+  "case_id": "hdfs_des_balanceado_0010",
+  "dataset": "hdfs",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "hdfs_des_balanceado_0010__nodex__r1__9b2cc343",
+  "salida": {
+    "case_id": "hdfs_des_balanceado_0010",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nActividad operacional legítima y normal de HDFS. Los registros corresponden a transferencias rutinarias de bloques entre nodos de datos (DataNode) y operaciones estándar del sistema de archivos (FSNamesystem/FSDataset) dentro de una red privada (10.0.0.0/8). No se registran fallos, accesos no autorizados ni indicadores de compromiso.\n\n## Evaluación del auditor\n\nEl diagnóstico es completamente acertado. Los registros corresponden a transacciones y operaciones operacionales estándar del cluster HDFS (DataNode, FSNamesystem y FSDataset), incluyendo transferencias y limpiezas rutinarias de bloques sin anomalías ni fallos.\n\n## Comandos de mitigación propuestos\n\n- iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT\n- iptables -A INPUT -p tcp -s 10.0.0.0/8 -m multiport --dports 8020,9000,9870,9864,9866,9867 -j ACCEPT\n- iptables -A INPUT -p tcp -m multiport --dports 8020,9000,9870,9864,9866,9867 -j DROP"
+    },
+    "_meta": {
+      "run_id": "hdfs_des_balanceado_0010__nodex__r1__9b2cc343",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "hdfs_des_balanceado_0010__nodex__r1__9b2cc343.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:24:30+00:00"
+  }
+}

@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1659 salida=310 razonamiento=748 total=2717
+   → Plan v1: ['triage', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=1767 salida=146 razonamiento=275 total=2188
+   → No hace falta RAG (El lote presenta una cobertura de parsing del 100%, todos los eventos son de severidad INFO clasificados como normales, las direcciones IP son internas/privadas sin anomalías y no hay indicios de comportamiento adverso, lo que permite emitir un diagnóstico concluyente sin requerir contexto histórico adicional.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=209 salida=50 razonamiento=345 total=604
+   → usar_cve: False | Razón: El diagnóstico concluye que la actividad es operacional, normal y legítima, sin indicios de ataque, explotación o vulnerabilidad específica que amerite la búsqueda de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=124 salida=6 razonamiento=943 total=1073
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2800 salida=173 razonamiento=1503 total=4476
+   → Confianza final: 0.98 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | Los registros corresponden a operaciones rutinarias y legítimas de un clúster HDFS, incluyendo transferencias de bloques, asignación y eliminación estándar entre DataNodes y NameSystem sin indicios de fallos ni actividad sospechosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

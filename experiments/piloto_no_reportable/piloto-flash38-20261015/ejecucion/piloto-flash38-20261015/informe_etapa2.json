@@ -1,0 +1,1550 @@
+{
+  "etapa": 2,
+  "detenido_por_fallas_seguidas": false,
+  "limpia": true,
+  "motivos": [],
+  "etiqueta": "depuracion_no_reportable",
+  "informes": [
+    {
+      "run_id": "bgl_des_balanceado_0001__nodex__r1__17971299",
+      "arquitectura": "nodex_multiagente",
+      "dataset": "bgl",
+      "case_id": "bgl_des_balanceado_0001",
+      "estado": "completa",
+      "error": null,
+      "segundos": 64.0,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 5,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 3787,
+        "salida": 892,
+        "razonamiento": 3206,
+        "total": 7885,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "bgl_des_balanceado_0001__reglas__r1__90d6c499",
+      "arquitectura": "baseline_reglas",
+      "dataset": "bgl",
+      "case_id": "bgl_des_balanceado_0001",
+      "estado": "completa",
+      "error": null,
+      "segundos": 0.5,
+      "credencial_presente": null,
+      "modelo_pedido": null,
+      "versiones_devueltas": null,
+      "usa_fallback": null,
+      "llamadas": 0,
+      "llamadas_fallidas": 0,
+      "tokens": null,
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "bgl_des_balanceado_0001__gemext__r1__ddbd0092",
+      "arquitectura": "gemini_externo",
+      "dataset": "bgl",
+      "case_id": "bgl_des_balanceado_0001",
+      "estado": "completa",
+      "error": null,
+      "segundos": 21.7,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 1,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 2538,
+        "salida": 1636,
+        "razonamiento": 727,
+        "total": 4901,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "bgl_des_balanceado_0002__nodex__r1__5d0e65ed",
+      "arquitectura": "nodex_multiagente",
+      "dataset": "bgl",
+      "case_id": "bgl_des_balanceado_0002",
+      "estado": "completa",
+      "error": null,
+      "segundos": 54.0,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 5,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 3426,
+        "salida": 591,
+        "razonamiento": 2789,
+        "total": 6806,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "bgl_des_balanceado_0002__reglas__r1__2b5dd936",
+      "arquitectura": "baseline_reglas",
+      "dataset": "bgl",
+      "case_id": "bgl_des_balanceado_0002",
+      "estado": "completa",
+      "error": null,
+      "segundos": 0.4,
+      "credencial_presente": null,
+      "modelo_pedido": null,
+      "versiones_devueltas": null,
+      "usa_fallback": null,
+      "llamadas": 0,
+      "llamadas_fallidas": 0,
+      "tokens": null,
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "bgl_des_balanceado_0002__gemext__r1__5de7ac27",
+      "arquitectura": "gemini_externo",
+      "dataset": "bgl",
+      "case_id": "bgl_des_balanceado_0002",
+      "estado": "completa",
+      "error": null,
+      "segundos": 21.9,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 1,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 2765,
+        "salida": 1339,
+        "razonamiento": 749,
+        "total": 4853,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "bgl_des_balanceado_0003__nodex__r1__d2564afe",
+      "arquitectura": "nodex_multiagente",
+      "dataset": "bgl",
+      "case_id": "bgl_des_balanceado_0003",
+      "estado": "completa",
+      "error": null,
+      "segundos": 67.7,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 5,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 3488,
+        "salida": 576,
+        "razonamiento": 3476,
+        "total": 7540,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "bgl_des_balanceado_0003__reglas__r1__4224d253",
+      "arquitectura": "baseline_reglas",
+      "dataset": "bgl",
+      "case_id": "bgl_des_balanceado_0003",
+      "estado": "completa",
+      "error": null,
+      "segundos": 0.5,
+      "credencial_presente": null,
+      "modelo_pedido": null,
+      "versiones_devueltas": null,
+      "usa_fallback": null,
+      "llamadas": 0,
+      "llamadas_fallidas": 0,
+      "tokens": null,
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "bgl_des_balanceado_0003__gemext__r1__222e37b4",
+      "arquitectura": "gemini_externo",
+      "dataset": "bgl",
+      "case_id": "bgl_des_balanceado_0003",
+      "estado": "completa",
+      "error": null,
+      "segundos": 22.5,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 1,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 2692,
+        "salida": 1493,
+        "razonamiento": 812,
+        "total": 4997,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "bgl_des_natural_0001__nodex__r1__a7c0b680",
+      "arquitectura": "nodex_multiagente",
+      "dataset": "bgl",
+      "case_id": "bgl_des_natural_0001",
+      "estado": "completa",
+      "error": null,
+      "segundos": 51.6,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 5,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 3976,
+        "salida": 1196,
+        "razonamiento": 2265,
+        "total": 7437,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 1
+    },
+    {
+      "run_id": "bgl_des_natural_0001__reglas__r1__a44e6c08",
+      "arquitectura": "baseline_reglas",
+      "dataset": "bgl",
+      "case_id": "bgl_des_natural_0001",
+      "estado": "completa",
+      "error": null,
+      "segundos": 0.5,
+      "credencial_presente": null,
+      "modelo_pedido": null,
+      "versiones_devueltas": null,
+      "usa_fallback": null,
+      "llamadas": 0,
+      "llamadas_fallidas": 0,
+      "tokens": null,
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "bgl_des_natural_0001__gemext__r1__2bcc6dfb",
+      "arquitectura": "gemini_externo",
+      "dataset": "bgl",
+      "case_id": "bgl_des_natural_0001",
+      "estado": "completa",
+      "error": null,
+      "segundos": 19.3,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 1,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 2551,
+        "salida": 1593,
+        "razonamiento": 635,
+        "total": 4779,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "bgl_des_natural_0005__nodex__r1__f733000f",
+      "arquitectura": "nodex_multiagente",
+      "dataset": "bgl",
+      "case_id": "bgl_des_natural_0005",
+      "estado": "completa",
+      "error": null,
+      "segundos": 61.8,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 6,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 6134,
+        "salida": 890,
+        "razonamiento": 3850,
+        "total": 10874,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "bgl_des_natural_0005__reglas__r1__dadb47dd",
+      "arquitectura": "baseline_reglas",
+      "dataset": "bgl",
+      "case_id": "bgl_des_natural_0005",
+      "estado": "completa",
+      "error": null,
+      "segundos": 0.5,
+      "credencial_presente": null,
+      "modelo_pedido": null,
+      "versiones_devueltas": null,
+      "usa_fallback": null,
+      "llamadas": 0,
+      "llamadas_fallidas": 0,
+      "tokens": null,
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "bgl_des_natural_0005__gemext__r1__0f9b05f6",
+      "arquitectura": "gemini_externo",
+      "dataset": "bgl",
+      "case_id": "bgl_des_natural_0005",
+      "estado": "completa",
+      "error": null,
+      "segundos": 22.7,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 1,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 3109,
+        "salida": 1794,
+        "razonamiento": 1399,
+        "total": 6302,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "bgl_des_natural_0008__nodex__r1__897ff48d",
+      "arquitectura": "nodex_multiagente",
+      "dataset": "bgl",
+      "case_id": "bgl_des_natural_0008",
+      "estado": "completa",
+      "error": null,
+      "segundos": 48.4,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 5,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 3457,
+        "salida": 578,
+        "razonamiento": 2236,
+        "total": 6271,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "bgl_des_natural_0008__reglas__r1__301d30c7",
+      "arquitectura": "baseline_reglas",
+      "dataset": "bgl",
+      "case_id": "bgl_des_natural_0008",
+      "estado": "completa",
+      "error": null,
+      "segundos": 0.4,
+      "credencial_presente": null,
+      "modelo_pedido": null,
+      "versiones_devueltas": null,
+      "usa_fallback": null,
+      "llamadas": 0,
+      "llamadas_fallidas": 0,
+      "tokens": null,
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "bgl_des_natural_0008__gemext__r1__1cab2672",
+      "arquitectura": "gemini_externo",
+      "dataset": "bgl",
+      "case_id": "bgl_des_natural_0008",
+      "estado": "completa",
+      "error": null,
+      "segundos": 9.9,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 1,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 3006,
+        "salida": 246,
+        "razonamiento": 434,
+        "total": 3686,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "bgl_des_natural_0013__nodex__r1__e630f716",
+      "arquitectura": "nodex_multiagente",
+      "dataset": "bgl",
+      "case_id": "bgl_des_natural_0013",
+      "estado": "completa",
+      "error": null,
+      "segundos": 56.5,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 5,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 3570,
+        "salida": 609,
+        "razonamiento": 3295,
+        "total": 7474,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "bgl_des_natural_0013__reglas__r1__4b0d961e",
+      "arquitectura": "baseline_reglas",
+      "dataset": "bgl",
+      "case_id": "bgl_des_natural_0013",
+      "estado": "completa",
+      "error": null,
+      "segundos": 0.4,
+      "credencial_presente": null,
+      "modelo_pedido": null,
+      "versiones_devueltas": null,
+      "usa_fallback": null,
+      "llamadas": 0,
+      "llamadas_fallidas": 0,
+      "tokens": null,
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "bgl_des_natural_0013__gemext__r1__bd2651b8",
+      "arquitectura": "gemini_externo",
+      "dataset": "bgl",
+      "case_id": "bgl_des_natural_0013",
+      "estado": "completa",
+      "error": null,
+      "segundos": 22.3,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 1,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 2680,
+        "salida": 1307,
+        "razonamiento": 1236,
+        "total": 5223,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "hdfs_des_balanceado_0004__nodex__r1__2c455dd7",
+      "arquitectura": "nodex_multiagente",
+      "dataset": "hdfs",
+      "case_id": "hdfs_des_balanceado_0004",
+      "estado": "completa",
+      "error": null,
+      "segundos": 52.2,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 5,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 6383,
+        "salida": 927,
+        "razonamiento": 2293,
+        "total": 9603,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 6
+    },
+    {
+      "run_id": "hdfs_des_balanceado_0004__reglas__r1__99d3fe28",
+      "arquitectura": "baseline_reglas",
+      "dataset": "hdfs",
+      "case_id": "hdfs_des_balanceado_0004",
+      "estado": "completa",
+      "error": null,
+      "segundos": 0.5,
+      "credencial_presente": null,
+      "modelo_pedido": null,
+      "versiones_devueltas": null,
+      "usa_fallback": null,
+      "llamadas": 0,
+      "llamadas_fallidas": 0,
+      "tokens": null,
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "hdfs_des_balanceado_0004__gemext__r1__6ecb9a9e",
+      "arquitectura": "gemini_externo",
+      "dataset": "hdfs",
+      "case_id": "hdfs_des_balanceado_0004",
+      "estado": "completa",
+      "error": null,
+      "segundos": 9.4,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 1,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 1353,
+        "salida": 242,
+        "razonamiento": 349,
+        "total": 1944,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "hdfs_des_balanceado_0005__nodex__r1__a8744426",
+      "arquitectura": "nodex_multiagente",
+      "dataset": "hdfs",
+      "case_id": "hdfs_des_balanceado_0005",
+      "estado": "completa",
+      "error": null,
+      "segundos": 53.3,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 5,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 5183,
+        "salida": 755,
+        "razonamiento": 2719,
+        "total": 8657,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 3
+    },
+    {
+      "run_id": "hdfs_des_balanceado_0005__reglas__r1__a46212f4",
+      "arquitectura": "baseline_reglas",
+      "dataset": "hdfs",
+      "case_id": "hdfs_des_balanceado_0005",
+      "estado": "completa",
+      "error": null,
+      "segundos": 0.4,
+      "credencial_presente": null,
+      "modelo_pedido": null,
+      "versiones_devueltas": null,
+      "usa_fallback": null,
+      "llamadas": 0,
+      "llamadas_fallidas": 0,
+      "tokens": null,
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "hdfs_des_balanceado_0005__gemext__r1__07b291fb",
+      "arquitectura": "gemini_externo",
+      "dataset": "hdfs",
+      "case_id": "hdfs_des_balanceado_0005",
+      "estado": "completa",
+      "error": null,
+      "segundos": 12.3,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 1,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 1240,
+        "salida": 243,
+        "razonamiento": 1110,
+        "total": 2593,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "hdfs_des_balanceado_0010__nodex__r1__9b2cc343",
+      "arquitectura": "nodex_multiagente",
+      "dataset": "hdfs",
+      "case_id": "hdfs_des_balanceado_0010",
+      "estado": "completa",
+      "error": null,
+      "segundos": 47.5,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 5,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 5668,
+        "salida": 770,
+        "razonamiento": 2134,
+        "total": 8572,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 4
+    },
+    {
+      "run_id": "hdfs_des_balanceado_0010__reglas__r1__e04c624b",
+      "arquitectura": "baseline_reglas",
+      "dataset": "hdfs",
+      "case_id": "hdfs_des_balanceado_0010",
+      "estado": "completa",
+      "error": null,
+      "segundos": 0.5,
+      "credencial_presente": null,
+      "modelo_pedido": null,
+      "versiones_devueltas": null,
+      "usa_fallback": null,
+      "llamadas": 0,
+      "llamadas_fallidas": 0,
+      "tokens": null,
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "hdfs_des_balanceado_0010__gemext__r1__2def5d97",
+      "arquitectura": "gemini_externo",
+      "dataset": "hdfs",
+      "case_id": "hdfs_des_balanceado_0010",
+      "estado": "completa",
+      "error": null,
+      "segundos": 12.0,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 1,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 1248,
+        "salida": 249,
+        "razonamiento": 1000,
+        "total": 2497,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "hdfs_des_balanceado_0014__nodex__r1__e67bae44",
+      "arquitectura": "nodex_multiagente",
+      "dataset": "hdfs",
+      "case_id": "hdfs_des_balanceado_0014",
+      "estado": "completa",
+      "error": null,
+      "segundos": 44.5,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 5,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 5542,
+        "salida": 711,
+        "razonamiento": 2048,
+        "total": 8301,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 4
+    },
+    {
+      "run_id": "hdfs_des_balanceado_0014__reglas__r1__168bd13b",
+      "arquitectura": "baseline_reglas",
+      "dataset": "hdfs",
+      "case_id": "hdfs_des_balanceado_0014",
+      "estado": "completa",
+      "error": null,
+      "segundos": 0.4,
+      "credencial_presente": null,
+      "modelo_pedido": null,
+      "versiones_devueltas": null,
+      "usa_fallback": null,
+      "llamadas": 0,
+      "llamadas_fallidas": 0,
+      "tokens": null,
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "hdfs_des_balanceado_0014__gemext__r1__537a7642",
+      "arquitectura": "gemini_externo",
+      "dataset": "hdfs",
+      "case_id": "hdfs_des_balanceado_0014",
+      "estado": "completa",
+      "error": null,
+      "segundos": 14.2,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 1,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 1331,
+        "salida": 265,
+        "razonamiento": 1312,
+        "total": 2908,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "hdfs_des_natural_0000__nodex__r1__8463c143",
+      "arquitectura": "nodex_multiagente",
+      "dataset": "hdfs",
+      "case_id": "hdfs_des_natural_0000",
+      "estado": "completa",
+      "error": null,
+      "segundos": 46.7,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 5,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 6915,
+        "salida": 722,
+        "razonamiento": 2616,
+        "total": 10253,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 8
+    },
+    {
+      "run_id": "hdfs_des_natural_0000__reglas__r1__de683383",
+      "arquitectura": "baseline_reglas",
+      "dataset": "hdfs",
+      "case_id": "hdfs_des_natural_0000",
+      "estado": "completa",
+      "error": null,
+      "segundos": 0.5,
+      "credencial_presente": null,
+      "modelo_pedido": null,
+      "versiones_devueltas": null,
+      "usa_fallback": null,
+      "llamadas": 0,
+      "llamadas_fallidas": 0,
+      "tokens": null,
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "hdfs_des_natural_0000__gemext__r1__67c94e70",
+      "arquitectura": "gemini_externo",
+      "dataset": "hdfs",
+      "case_id": "hdfs_des_natural_0000",
+      "estado": "completa",
+      "error": null,
+      "segundos": 18.8,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 1,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 1350,
+        "salida": 305,
+        "razonamiento": 1355,
+        "total": 3010,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "hdfs_des_natural_0002__nodex__r1__5770f4e0",
+      "arquitectura": "nodex_multiagente",
+      "dataset": "hdfs",
+      "case_id": "hdfs_des_natural_0002",
+      "estado": "completa",
+      "error": null,
+      "segundos": 54.8,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 5,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 6559,
+        "salida": 685,
+        "razonamiento": 3814,
+        "total": 11058,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 7
+    },
+    {
+      "run_id": "hdfs_des_natural_0002__reglas__r1__a50bea3b",
+      "arquitectura": "baseline_reglas",
+      "dataset": "hdfs",
+      "case_id": "hdfs_des_natural_0002",
+      "estado": "completa",
+      "error": null,
+      "segundos": 0.4,
+      "credencial_presente": null,
+      "modelo_pedido": null,
+      "versiones_devueltas": null,
+      "usa_fallback": null,
+      "llamadas": 0,
+      "llamadas_fallidas": 0,
+      "tokens": null,
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "hdfs_des_natural_0002__gemext__r1__b53b58ba",
+      "arquitectura": "gemini_externo",
+      "dataset": "hdfs",
+      "case_id": "hdfs_des_natural_0002",
+      "estado": "completa",
+      "error": null,
+      "segundos": 10.9,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 1,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 1329,
+        "salida": 244,
+        "razonamiento": 1023,
+        "total": 2596,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "hdfs_des_natural_0007__nodex__r1__ae168016",
+      "arquitectura": "nodex_multiagente",
+      "dataset": "hdfs",
+      "case_id": "hdfs_des_natural_0007",
+      "estado": "completa",
+      "error": null,
+      "segundos": 53.2,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 5,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 6457,
+        "salida": 1498,
+        "razonamiento": 2814,
+        "total": 10769,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 5
+    },
+    {
+      "run_id": "hdfs_des_natural_0007__reglas__r1__6e7db597",
+      "arquitectura": "baseline_reglas",
+      "dataset": "hdfs",
+      "case_id": "hdfs_des_natural_0007",
+      "estado": "completa",
+      "error": null,
+      "segundos": 0.4,
+      "credencial_presente": null,
+      "modelo_pedido": null,
+      "versiones_devueltas": null,
+      "usa_fallback": null,
+      "llamadas": 0,
+      "llamadas_fallidas": 0,
+      "tokens": null,
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "hdfs_des_natural_0007__gemext__r1__a2d7780a",
+      "arquitectura": "gemini_externo",
+      "dataset": "hdfs",
+      "case_id": "hdfs_des_natural_0007",
+      "estado": "completa",
+      "error": null,
+      "segundos": 17.7,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 1,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 1322,
+        "salida": 927,
+        "razonamiento": 1509,
+        "total": 3758,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "hdfs_des_natural_0018__nodex__r1__b4f3e8de",
+      "arquitectura": "nodex_multiagente",
+      "dataset": "hdfs",
+      "case_id": "hdfs_des_natural_0018",
+      "estado": "completa",
+      "error": null,
+      "segundos": 55.9,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 5,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 6349,
+        "salida": 737,
+        "razonamiento": 2647,
+        "total": 9733,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 6
+    },
+    {
+      "run_id": "hdfs_des_natural_0018__reglas__r1__67ce7c31",
+      "arquitectura": "baseline_reglas",
+      "dataset": "hdfs",
+      "case_id": "hdfs_des_natural_0018",
+      "estado": "completa",
+      "error": null,
+      "segundos": 0.4,
+      "credencial_presente": null,
+      "modelo_pedido": null,
+      "versiones_devueltas": null,
+      "usa_fallback": null,
+      "llamadas": 0,
+      "llamadas_fallidas": 0,
+      "tokens": null,
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "hdfs_des_natural_0018__gemext__r1__a752f506",
+      "arquitectura": "gemini_externo",
+      "dataset": "hdfs",
+      "case_id": "hdfs_des_natural_0018",
+      "estado": "completa",
+      "error": null,
+      "segundos": 12.1,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 1,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 1373,
+        "salida": 239,
+        "razonamiento": 1119,
+        "total": 2731,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "uwf_des_sigiloso_0004__nodex__r1__8d766ff7",
+      "arquitectura": "nodex_multiagente",
+      "dataset": "uwf",
+      "case_id": "uwf_des_sigiloso_0004",
+      "estado": "completa",
+      "error": null,
+      "segundos": 83.5,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 6,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 61607,
+        "salida": 1830,
+        "razonamiento": 7729,
+        "total": 71166,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 22
+    },
+    {
+      "run_id": "uwf_des_sigiloso_0004__reglas__r1__80f74be1",
+      "arquitectura": "baseline_reglas",
+      "dataset": "uwf",
+      "case_id": "uwf_des_sigiloso_0004",
+      "estado": "completa",
+      "error": null,
+      "segundos": 0.5,
+      "credencial_presente": null,
+      "modelo_pedido": null,
+      "versiones_devueltas": null,
+      "usa_fallback": null,
+      "llamadas": 0,
+      "llamadas_fallidas": 0,
+      "tokens": null,
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "uwf_des_sigiloso_0004__gemext__r1__26482208",
+      "arquitectura": "gemini_externo",
+      "dataset": "uwf",
+      "case_id": "uwf_des_sigiloso_0004",
+      "estado": "completa",
+      "error": null,
+      "segundos": 38.8,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 1,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 50720,
+        "salida": 1543,
+        "razonamiento": 4159,
+        "total": 56422,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "uwf_des_sigiloso_0005__nodex__r1__022e40e4",
+      "arquitectura": "nodex_multiagente",
+      "dataset": "uwf",
+      "case_id": "uwf_des_sigiloso_0005",
+      "estado": "completa",
+      "error": null,
+      "segundos": 63.0,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 6,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 61722,
+        "salida": 1729,
+        "razonamiento": 3309,
+        "total": 66760,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 22
+    },
+    {
+      "run_id": "uwf_des_sigiloso_0005__reglas__r1__e98e4084",
+      "arquitectura": "baseline_reglas",
+      "dataset": "uwf",
+      "case_id": "uwf_des_sigiloso_0005",
+      "estado": "completa",
+      "error": null,
+      "segundos": 0.5,
+      "credencial_presente": null,
+      "modelo_pedido": null,
+      "versiones_devueltas": null,
+      "usa_fallback": null,
+      "llamadas": 0,
+      "llamadas_fallidas": 0,
+      "tokens": null,
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "uwf_des_sigiloso_0005__gemext__r1__5981b99b",
+      "arquitectura": "gemini_externo",
+      "dataset": "uwf",
+      "case_id": "uwf_des_sigiloso_0005",
+      "estado": "completa",
+      "error": null,
+      "segundos": 65.6,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 1,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 50740,
+        "salida": 1733,
+        "razonamiento": 10126,
+        "total": 62599,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "uwf_des_sigiloso_0008__nodex__r1__7c62b466",
+      "arquitectura": "nodex_multiagente",
+      "dataset": "uwf",
+      "case_id": "uwf_des_sigiloso_0008",
+      "estado": "completa",
+      "error": null,
+      "segundos": 78.2,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 6,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 60254,
+        "salida": 1599,
+        "razonamiento": 6239,
+        "total": 68092,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 19
+    },
+    {
+      "run_id": "uwf_des_sigiloso_0008__reglas__r1__0348379e",
+      "arquitectura": "baseline_reglas",
+      "dataset": "uwf",
+      "case_id": "uwf_des_sigiloso_0008",
+      "estado": "completa",
+      "error": null,
+      "segundos": 0.5,
+      "credencial_presente": null,
+      "modelo_pedido": null,
+      "versiones_devueltas": null,
+      "usa_fallback": null,
+      "llamadas": 0,
+      "llamadas_fallidas": 0,
+      "tokens": null,
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "uwf_des_sigiloso_0008__gemext__r1__4ab19a1f",
+      "arquitectura": "gemini_externo",
+      "dataset": "uwf",
+      "case_id": "uwf_des_sigiloso_0008",
+      "estado": "completa",
+      "error": null,
+      "segundos": 81.3,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 1,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 50791,
+        "salida": 1969,
+        "razonamiento": 10962,
+        "total": 63722,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "uwf_des_sigiloso_0010__nodex__r1__59b4c089",
+      "arquitectura": "nodex_multiagente",
+      "dataset": "uwf",
+      "case_id": "uwf_des_sigiloso_0010",
+      "estado": "completa",
+      "error": null,
+      "segundos": 122.3,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 11,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 113548,
+        "salida": 3053,
+        "razonamiento": 10528,
+        "total": 127129,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 14
+    },
+    {
+      "run_id": "uwf_des_sigiloso_0010__reglas__r1__c3d38ce8",
+      "arquitectura": "baseline_reglas",
+      "dataset": "uwf",
+      "case_id": "uwf_des_sigiloso_0010",
+      "estado": "completa",
+      "error": null,
+      "segundos": 0.5,
+      "credencial_presente": null,
+      "modelo_pedido": null,
+      "versiones_devueltas": null,
+      "usa_fallback": null,
+      "llamadas": 0,
+      "llamadas_fallidas": 0,
+      "tokens": null,
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "uwf_des_sigiloso_0010__gemext__r1__6b664160",
+      "arquitectura": "gemini_externo",
+      "dataset": "uwf",
+      "case_id": "uwf_des_sigiloso_0010",
+      "estado": "completa",
+      "error": null,
+      "segundos": 79.3,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 1,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 50699,
+        "salida": 1114,
+        "razonamiento": 4079,
+        "total": 55892,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "uwf_des_visible_0000__nodex__r1__6182d617",
+      "arquitectura": "nodex_multiagente",
+      "dataset": "uwf",
+      "case_id": "uwf_des_visible_0000",
+      "estado": "completa",
+      "error": null,
+      "segundos": 71.7,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 6,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 59674,
+        "salida": 2130,
+        "razonamiento": 4633,
+        "total": 66437,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 19
+    },
+    {
+      "run_id": "uwf_des_visible_0000__reglas__r1__19e802ea",
+      "arquitectura": "baseline_reglas",
+      "dataset": "uwf",
+      "case_id": "uwf_des_visible_0000",
+      "estado": "completa",
+      "error": null,
+      "segundos": 0.5,
+      "credencial_presente": null,
+      "modelo_pedido": null,
+      "versiones_devueltas": null,
+      "usa_fallback": null,
+      "llamadas": 0,
+      "llamadas_fallidas": 0,
+      "tokens": null,
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "uwf_des_visible_0000__gemext__r1__3050930b",
+      "arquitectura": "gemini_externo",
+      "dataset": "uwf",
+      "case_id": "uwf_des_visible_0000",
+      "estado": "completa",
+      "error": null,
+      "segundos": 29.9,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 1,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 49076,
+        "salida": 3217,
+        "razonamiento": 1261,
+        "total": 53554,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "uwf_des_visible_0001__nodex__r1__eedaf904",
+      "arquitectura": "nodex_multiagente",
+      "dataset": "uwf",
+      "case_id": "uwf_des_visible_0001",
+      "estado": "completa",
+      "error": null,
+      "segundos": 70.5,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 6,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 60976,
+        "salida": 2229,
+        "razonamiento": 4447,
+        "total": 67652,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 22
+    },
+    {
+      "run_id": "uwf_des_visible_0001__reglas__r1__7091098f",
+      "arquitectura": "baseline_reglas",
+      "dataset": "uwf",
+      "case_id": "uwf_des_visible_0001",
+      "estado": "completa",
+      "error": null,
+      "segundos": 0.5,
+      "credencial_presente": null,
+      "modelo_pedido": null,
+      "versiones_devueltas": null,
+      "usa_fallback": null,
+      "llamadas": 0,
+      "llamadas_fallidas": 0,
+      "tokens": null,
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "uwf_des_visible_0001__gemext__r1__4f990898",
+      "arquitectura": "gemini_externo",
+      "dataset": "uwf",
+      "case_id": "uwf_des_visible_0001",
+      "estado": "completa",
+      "error": null,
+      "segundos": 29.2,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 1,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 49178,
+        "salida": 2119,
+        "razonamiento": 1966,
+        "total": 53263,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "uwf_des_visible_0007__nodex__r1__7be817ec",
+      "arquitectura": "nodex_multiagente",
+      "dataset": "uwf",
+      "case_id": "uwf_des_visible_0007",
+      "estado": "completa",
+      "error": null,
+      "segundos": 73.2,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 6,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 61498,
+        "salida": 1944,
+        "razonamiento": 3928,
+        "total": 67370,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 21
+    },
+    {
+      "run_id": "uwf_des_visible_0007__reglas__r1__dcf63490",
+      "arquitectura": "baseline_reglas",
+      "dataset": "uwf",
+      "case_id": "uwf_des_visible_0007",
+      "estado": "completa",
+      "error": null,
+      "segundos": 0.5,
+      "credencial_presente": null,
+      "modelo_pedido": null,
+      "versiones_devueltas": null,
+      "usa_fallback": null,
+      "llamadas": 0,
+      "llamadas_fallidas": 0,
+      "tokens": null,
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "uwf_des_visible_0007__gemext__r1__945d57b3",
+      "arquitectura": "gemini_externo",
+      "dataset": "uwf",
+      "case_id": "uwf_des_visible_0007",
+      "estado": "completa",
+      "error": null,
+      "segundos": 31.2,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 1,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 50794,
+        "salida": 522,
+        "razonamiento": 3711,
+        "total": 55027,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "uwf_des_visible_0009__nodex__r1__4f3d941a",
+      "arquitectura": "nodex_multiagente",
+      "dataset": "uwf",
+      "case_id": "uwf_des_visible_0009",
+      "estado": "completa",
+      "error": null,
+      "segundos": 68.8,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 6,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 60349,
+        "salida": 1802,
+        "razonamiento": 4197,
+        "total": 66348,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 19
+    },
+    {
+      "run_id": "uwf_des_visible_0009__reglas__r1__8dbb5e25",
+      "arquitectura": "baseline_reglas",
+      "dataset": "uwf",
+      "case_id": "uwf_des_visible_0009",
+      "estado": "completa",
+      "error": null,
+      "segundos": 0.5,
+      "credencial_presente": null,
+      "modelo_pedido": null,
+      "versiones_devueltas": null,
+      "usa_fallback": null,
+      "llamadas": 0,
+      "llamadas_fallidas": 0,
+      "tokens": null,
+      "intentos_de_consulta_externa": 0
+    },
+    {
+      "run_id": "uwf_des_visible_0009__gemext__r1__0737d882",
+      "arquitectura": "gemini_externo",
+      "dataset": "uwf",
+      "case_id": "uwf_des_visible_0009",
+      "estado": "completa",
+      "error": null,
+      "segundos": 73.4,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 1,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 50732,
+        "salida": 1696,
+        "razonamiento": 8779,
+        "total": 61207,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0
+    }
+  ]
+}

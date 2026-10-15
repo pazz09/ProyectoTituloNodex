@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1485 salida=310 razonamiento=469 total=2264
+   → Plan v1: ['triage', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=1602 salida=171 razonamiento=435 total=2208
+   → No hace falta RAG (El plan de investigación no contempla consultar memoria histórica, la cobertura de parsing es del 100% y los datos muestran inequívocamente operaciones operativas internas estándar de HDFS en una red privada sin anomalías.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=244 salida=45 razonamiento=96 total=385
+   → usar_cve: False | Razón: El diagnóstico confirma que se trata de actividad operativa legítima y rutinaria de HDFS sin indicios de compromiso, ataques ni vulnerabilidades explotadas.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=159 salida=10 razonamiento=571 total=740
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2859 salida=201 razonamiento=1076 total=4136
+   → Confianza final: 1.00 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros corresponden íntegramente a operaciones estándar de mantenimiento y ciclo de vida de bloques en HDFS (asignación, recepción, actualización de metadatos y eliminación de bloques) ejecutadas en IPs privadas internas, todas con severidad INFO y sin fallas ni indicios de anomalía o actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1501 salida=238 razonamiento=339 total=2078
+   → Plan v1: ['triage', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=1629 salida=172 razonamiento=360 total=2161
+   → No hace falta RAG (La cobertura de parsing es del 100%, la totalidad de eventos tiene severidad INFO y clasificados como normales, las IPs son locales y corresponden a la operación estándar de HDFS, por lo que no se requiere consulta histórica adicional para descartar incidentes.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=236 salida=45 razonamiento=255 total=536
+   → usar_cve: False | Razón: El diagnóstico indica actividad completamente benigna y operativa normal en el clúster HDFS, sin indicios de explotación, anomalías ni vulnerabilidades.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=151 salida=6 razonamiento=973 total=1130
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2866 salida=466 razonamiento=366 total=3698
+   → Confianza final: 0.98 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | Los registros corresponden exclusivamente a operaciones rutinarias y normales del clúster HDFS (recepción, confirmación, registro y eliminación habitual de bloques de datos en DataNodes y NameSystem con severidad INFO). No se observan fallos, errores ni indicios de actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

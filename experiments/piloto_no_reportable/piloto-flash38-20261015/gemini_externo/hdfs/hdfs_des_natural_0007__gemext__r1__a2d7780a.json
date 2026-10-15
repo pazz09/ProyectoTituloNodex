@@ -1,0 +1,51 @@
+{
+  "case_id": "hdfs_des_natural_0007",
+  "dataset": "hdfs",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "hdfs_des_natural_0007__gemext__r1__a2d7780a",
+  "salida": {
+    "case_id": "hdfs_des_natural_0007",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "EVT-01",
+        "timestamp": "081110 070326",
+        "entities": [],
+        "event_type": "DataNode Communication Warning",
+        "evidence_uids": [
+          "7430"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl registro corresponde a eventos operativos de un clúster Apache Hadoop HDFS. Se observa una actividad mayoritariamente normal (asignación de bloques, servicio de bloques a clientes, verificación de integridad y borrado de bloques locales), con una advertencia operativa aislada a las 07:03:26 ('Got exception while serving blk_-7680599654910200999') que denota una interrupción o fallo de comunicación en el DataNode al servir un bloque. No existe evidencia de actividad maliciosa ni brecha de seguridad.\n\n## Evaluación del auditor\n\nEl log muestra operaciones habituales de HDFS durante un periodo de varios días. La anomalía observada (WARN dfs.DataNode$DataXceiver) suele derivar de clientes que cierran la conexión de red prematuramente, timeouts de socket o problemas transitorios de I/O en disco, pero no compromete la integridad del clúster ni exhibe patrones de ataque. Al no existir indicios de compromiso, no se atribuyen técnicas MITRE ATT&CK.\n\n## Comandos de mitigación propuestos\n\n- hdfs fsck / -files -blocks -locations\n- hdfs dfsadmin -report"
+    },
+    "_meta": {
+      "run_id": "hdfs_des_natural_0007__gemext__r1__a2d7780a",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "hdfs_des_natural_0007__gemext__r1__a2d7780a.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:29:34+00:00"
+  }
+}

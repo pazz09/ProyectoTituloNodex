@@ -1,0 +1,113 @@
+{
+  "analisis": {
+    "config_version": "piloto-flash38-20261015",
+    "por_dataset": {
+      "bgl": {
+        "consultas": 2,
+        "ips_unicas": 1,
+        "por_clase_consultas": {
+          "rfc1918": 2
+        },
+        "por_clase_ips_unicas": {
+          "rfc1918": 1
+        },
+        "consultas_no_publicas": 2,
+        "pct_consultas_no_publicas": 100.0,
+        "ips_unicas_no_publicas": 1,
+        "pct_ips_unicas_no_publicas": 100.0,
+        "ips_no_publicas_que_el_respaldo_puntua_como_publicas": 0,
+        "ejemplos_mal_tratadas": []
+      },
+      "hdfs": {
+        "consultas": 43,
+        "ips_unicas": 41,
+        "por_clase_consultas": {
+          "rfc1918": 43
+        },
+        "por_clase_ips_unicas": {
+          "rfc1918": 41
+        },
+        "consultas_no_publicas": 43,
+        "pct_consultas_no_publicas": 100.0,
+        "ips_unicas_no_publicas": 41,
+        "pct_ips_unicas_no_publicas": 100.0,
+        "ips_no_publicas_que_el_respaldo_puntua_como_publicas": 0,
+        "ejemplos_mal_tratadas": []
+      },
+      "uwf": {
+        "consultas": 158,
+        "ips_unicas": 50,
+        "por_clase_consultas": {
+          "publica": 77,
+          "rfc1918": 23,
+          "ipv6_global": 20,
+          "ipv6_no_global": 31,
+          "multicast": 6,
+          "loopback": 1
+        },
+        "por_clase_ips_unicas": {
+          "rfc1918": 3,
+          "loopback": 1,
+          "publica": 27,
+          "ipv6_global": 8,
+          "multicast": 2,
+          "ipv6_no_global": 9
+        },
+        "consultas_no_publicas": 61,
+        "pct_consultas_no_publicas": 38.6,
+        "ips_unicas_no_publicas": 15,
+        "pct_ips_unicas_no_publicas": 30.0,
+        "ips_no_publicas_que_el_respaldo_puntua_como_publicas": 13,
+        "ejemplos_mal_tratadas": [
+          "172.28.128.255",
+          "172.28.128.3",
+          "224.0.0.251",
+          "224.0.0.252",
+          "fe80::250:56ff:fe9e:2553",
+          "fe80::250:56ff:fe9e:5457",
+          "fe80::250:56ff:fe9e:8afe",
+          "fe80::250:56ff:fe9e:da15",
+          "fe80::250:56ff:fe9e:ef90",
+          "fe80::250:56ff:fe9e:f1c3"
+        ]
+      }
+    },
+    "total_consultas": 203,
+    "total_no_publicas": 106,
+    "pct_total_no_publicas": 52.2
+  },
+  "respaldo_local": {
+    "abuseipdb": {
+      "donde": "src/tools/reputation.py::check_ip_reputation (rama sin AbuseIPDB)",
+      "fuente": "ninguna: es una heurística escrita en el código, no un conjunto de datos",
+      "fecha": "ninguna (no tiene versión ni fecha de datos; viene de la migración del prototipo, 1-sep-2026)",
+      "cobertura": "una sola regla: si la dirección empieza con ['10.', '192.168.', '172.16.', '127.'] se considera privada (score 0, «limpio»); CUALQUIER otra cadena se considera pública con score 50",
+      "limites_conocidos": [
+        "172.16. solo cubre 172.16.x.x; el rango privado real es 172.16.0.0/12 (172.16 a 172.31)",
+        "no reconoce IPv6, link-local 169.254, multicast 224/4 ni 100.64/10: las puntúa como públicas",
+        "no distingue ninguna IP pública de otra: todas valen 50"
+      ],
+      "categoria_resultante": {
+        "score_0": "limpio",
+        "score_50 (SCORE_SOSPECHOSO=25, SCORE_MALICIOSO=75)": "sospechoso"
+      }
+    },
+    "nvd": {
+      "donde": "src/tools/cve.py::query_cve (catálogo local `_CVE_LOCAL`)",
+      "fuente": "ninguna declarada: tres entradas escritas a mano",
+      "fecha": "ninguna",
+      "cobertura": {
+        "openssh": [
+          "CVE-2024-6387 (regreSSHion, RCE en sshd)"
+        ],
+        "apache": [
+          "CVE-2021-41773 (path traversal en Apache HTTP)"
+        ],
+        "sql": [
+          "CWE-89 (SQL Injection)"
+        ]
+      },
+      "regla": "una palabra clave que CONTENGA una de las claves devuelve su entrada; cualquier otra devuelve lista vacía"
+    }
+  }
+}

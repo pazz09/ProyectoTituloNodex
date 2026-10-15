@@ -1,0 +1,92 @@
+{
+  "case_id": "uwf_des_sigiloso_0008",
+  "dataset": "uwf",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "uwf_des_sigiloso_0008__gemext__r1__4ab19a1f",
+  "estado_crudo": {
+    "diagnostico": "Se detectó actividad consistente con balizamiento periódico automatizado (C2 Beaconing / DNS Tunneling) desde la dirección IP 143.88.255.10 hacia el servidor DNS interno 10.0.10.1 en el puerto 53/UDP. La comunicación se ejecuta de forma ininterrumpida con un intervalo fijo exacto de 30.25 segundos, emitiendo ráfagas variables de 1 a 9 consultas DNS por pulso, con tamaños de carga fijos de 78 y 102 bytes. Todos los intentos quedan en estado S0 (sin respuesta del servidor). En paralelo, se identifica una anomalía de rendimiento en el servidor DNS 143.88.1.1, que experimenta retrasos de resolución de ~5 segundos en consultas recurrentes desde 143.88.1.51.",
+    "hay_anomalia": true,
+    "hay_incidente": true,
+    "confianza": 0.92,
+    "evaluacion_auditor": "El diagnóstico de incidente se sustenta sólidamente en el análisis de series temporales: la estricta regularidad (delta de 30.25 segundos entre ráfagas) y las longitudes invariables de carga (78 y 102 bytes) corresponden a firmas clásicas de agentes C2 (como Cobalt Strike DNS Beacon). La principal limitación es que el registro de conexiones de Zeek (conn.log) no desglosa los campos de aplicación DNS (QNAME, QTYPE), lo que impide confirmar el dominio o la presencia de subdominios codificados. La falta de respuesta (S0) confirma que el canal C2 no está operativo bidireccionalmente en este segmento, aunque persiste el intento de comunicación.",
+    "comandos_mitigacion": [
+      "iptables -A FORWARD -s 143.88.255.10 -d 10.0.10.1 -p udp --dport 53 -j DROP",
+      "iptables -A INPUT -s 143.88.255.10 -j DROP",
+      "tcpdump -nn -i any host 143.88.255.10 and udp port 53 -w /var/log/dns_beacon_143.88.255.10.pcap"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-001",
+        "evidence_uids": [
+          "CkjOcm1GRruXfFPcU8",
+          "C1Gr6m4Vjpg7p2O6p8"
+        ],
+        "timestamp": "2021-12-17 15:23:28.384592",
+        "event_type": "DNS Beaconing Initiation",
+        "description": "Inicio de la actividad de balizamiento desde 143.88.255.10 hacia 10.0.10.1:53 con paquetes DNS de 78 y 102 bytes sin respuesta (S0)."
+      },
+      {
+        "event_id": "EVT-002",
+        "evidence_uids": [
+          "Cqtcka1jZm0XsORwY8",
+          "Cj9Nzpt8z2XAKRwza",
+          "Ci6eou1XniGf8kwZAl",
+          "Cr8Q6L16xMsU2EBNd4",
+          "CBbLux3w4Y0DFDWTGc",
+          "CAq9gq41oPQthR6Cff",
+          "CCOjNP3OnzAa6idjij",
+          "Cvbm6x11HuZxS88cYa",
+          "CZ9kgh3ZCcZbaOiCdg",
+          "Cz8NEAQcFgemWIhw4"
+        ],
+        "timestamp": "2021-12-17 15:23:58.631310",
+        "event_type": "Periodic C2 Beaconing Loop",
+        "description": "Repetición regular de ráfagas DNS cada ~30.25 segundos hacia 10.0.10.1 alternando tamaños de 78 y 102 bytes sin obtener respuesta (conn_state S0)."
+      },
+      {
+        "event_id": "EVT-003",
+        "evidence_uids": [
+          "CGDkPN3EhLG9xZO1A",
+          "CpKiih2xTjT6jjvnj1",
+          "CLxX5g3qdw71seVDdk",
+          "C4vKjv1t7p7yjeCmsi",
+          "Cxm3AA2X3XMS7YH4Z1",
+          "Cgjdb33A0p7tHVeosc"
+        ],
+        "timestamp": "2021-12-17 15:27:27.515433",
+        "event_type": "DNS Query Resolution Latency Anomaly",
+        "description": "Consultas DNS legítimas de 143.88.1.51 hacia el resolver 143.88.1.1 presentan demoras sistemáticas de 5.00 segundos con retransmisiones (4 paquetes enviados, 4 recibidos)."
+      }
+    ],
+    "secuencia_temporal": [
+      "2021-12-17 15:23:28.384592 - 143.88.255.10 emite primer pulso de consultas DNS a 10.0.10.1 (UID: CkjOcm1GRruXfFPcU8)",
+      "2021-12-17 15:23:58.631310 - Segundo pulso (+30.25s) con 4 consultas hacia 10.0.10.1 (UID: Cqtcka1jZm0XsORwY8)",
+      "2021-12-17 15:24:28.881647 - Tercer pulso (+30.25s) con 6 consultas hacia 10.0.10.1 (UID: CBbLux3w4Y0DFDWTGc)",
+      "2021-12-17 15:27:27.515433 - Host 143.88.1.51 experimenta timeout de 5 segundos contra 143.88.1.1 (UID: CGDkPN3EhLG9xZO1A)",
+      "2021-12-17 15:55:44.380940 - Actividad de balizamiento continúa inalterada manteniendo el ciclo de 30s hasta el final del registro (UID: C1v3G8USR69rvpAVk)"
+    ],
+    "tecnicas_atribuidas": [
+      {
+        "technique_id": "T1071.004",
+        "technique_name": "Application Layer Protocol: DNS",
+        "evidence_uids": [
+          "CkjOcm1GRruXfFPcU8",
+          "C1Gr6m4Vjpg7p2O6p8",
+          "Cqtcka1jZm0XsORwY8",
+          "Cj9Nzpt8z2XAKRwza",
+          "Ci6eou1XniGf8kwZAl",
+          "Cr8Q6L16xMsU2EBNd4",
+          "CBbLux3w4Y0DFDWTGc",
+          "CAq9gq41oPQthR6Cff",
+          "CCOjNP3OnzAa6idjij",
+          "Cvbm6x11HuZxS88cYa"
+        ],
+        "justification": "El host 143.88.255.10 utiliza el protocolo DNS (puerto 53 UDP) para intentar establecer comunicación periódica automatizada (beaconing) cada 30 segundos hacia 10.0.10.1 con paquetes estandarizados."
+      }
+    ],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

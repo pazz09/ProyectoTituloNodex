@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3932 salida=400 razonamiento=554 total=4886
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=4199 salida=148 razonamiento=384 total=4731
+   → Solicitando RAG (Se observa un tráfico anómalo masivo hacia el puerto DNS (10.0.10.1:53) con 265 intentos fallidos y estado S0 desde la IP 143.88.255.10. Sin embargo, para determinar con precisión la naturaleza del ataque (DNS Tunneling, DGA, Exfiltración o DoS/Amplificación) y mapear adecuadamente las técnicas MITRE ATT&CK e incidentes previos tal como requiere el plan de investigación, es necesario consultar la base de conocimiento histórica.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1584.002, T1071.004, T1590.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=4886 salida=228 razonamiento=524 total=5638
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=340 salida=58 razonamiento=280 total=678
+   → usar_cve: False | Razón: El diagnóstico describe un sondeo o escaneo de red genérico hacia el puerto DNS (53/UDP) sin identificar un software o versión específica del servicio ni un intento de explotación de una vulnerabilidad conocida.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=275 salida=150 razonamiento=663 total=1088
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=48090 salida=745 razonamiento=904 total=49739
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=True | cobertura_suficiente=True | Se confirma el diagnóstico de sondeo persistente y no autorizado contra el servicio DNS en 10.0.10.1:53/udp proveniente de la IP 143.88.255.10. Los registros evidencian ráfagas constantes de paquetes con estado S0 (sin respuesta), lo cual es coherente con escaneo y reconocimiento activo (T1590.002). Las acciones de mitigación recomendadas mediante iptables y ufw son pertinentes.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

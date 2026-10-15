@@ -1,0 +1,41 @@
+{
+  "case_id": "hdfs_des_natural_0000",
+  "dataset": "hdfs",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "hdfs_des_natural_0000__nodex__r1__8463c143",
+  "salida": {
+    "case_id": "hdfs_des_natural_0000",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nActividad operativa benigna y normal en el clúster HDFS. Los eventos registrados corresponden a operaciones rutinarias de recepción y gestión de bloques de datos distribuidos entre DataNodes y NameSystem a través de direcciones IP privadas de la red interna (10.x.x.x). Todos los eventos presentan nivel de severidad INFO, sin errores, excepciones ni indicios de anomalías de seguridad o actividad maliciosa.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Los registros analizados muestran exclusivamente operaciones rutinarias y normales del sistema de archivos distribuido HDFS (recepción, despacho, actualización y eliminación de bloques de datos) ejecutadas entre nodos internos (10.x.x.x) con severidad INFO, sin anomalías operativas ni indicios de compromiso de seguridad."
+    },
+    "_meta": {
+      "run_id": "hdfs_des_natural_0000__nodex__r1__8463c143",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "hdfs_des_natural_0000__nodex__r1__8463c143.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:26:29+00:00"
+  }
+}

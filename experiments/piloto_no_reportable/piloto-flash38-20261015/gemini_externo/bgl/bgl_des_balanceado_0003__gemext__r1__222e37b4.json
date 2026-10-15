@@ -1,0 +1,94 @@
+{
+  "case_id": "bgl_des_balanceado_0003",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "bgl_des_balanceado_0003__gemext__r1__222e37b4",
+  "salida": {
+    "case_id": "bgl_des_balanceado_0003",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "EVT-01",
+        "timestamp": "2005-11-03-15.24.44 a 2005-11-03-15.33.26",
+        "entities": [],
+        "event_type": "KERNEL_REGISTER_DUMP",
+        "evidence_uids": [
+          "1131060284",
+          "1131060319",
+          "1131060387",
+          "1131060429",
+          "1131060431",
+          "1131060537",
+          "1131060539",
+          "1131060633",
+          "1131060644",
+          "1131060739",
+          "1131060806"
+        ]
+      },
+      {
+        "uid": "EVT-02",
+        "timestamp": "2005-11-03-15.44.40.306019",
+        "entities": [],
+        "event_type": "ALIGNMENT_EXCEPTION_ALERT",
+        "evidence_uids": [
+          "1131061480"
+        ]
+      },
+      {
+        "uid": "EVT-03",
+        "timestamp": "2005-11-03-15.45.13 a 2005-11-03-15.50.38",
+        "entities": [],
+        "event_type": "KERNEL_REGISTER_DUMP",
+        "evidence_uids": [
+          "1131061513",
+          "1131061592",
+          "1131061693",
+          "1131061732",
+          "1131061783",
+          "1131061828",
+          "1131061838"
+        ]
+      },
+      {
+        "uid": "EVT-04",
+        "timestamp": "2005-11-03-16.17.27.446763",
+        "entities": [],
+        "event_type": "ALIGNMENT_EXCEPTION_ALERT",
+        "evidence_uids": [
+          "1131063447"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nRegistros de kernel de un supercomputador IBM BlueGene/L que muestran excepciones de alineación de punto flotante ('floating point alignment exceptions') y volcados de registros de instrucción y dirección de excepción de datos (iar/dear). Corresponde a un problema de rendimiento o error de ejecución de software científico/cálculo no alineado en múltiples nodos de cómputo, no a una intrusión o ataque.\n\n## Evaluación del auditor\n\nLos registros corresponden al dataset RAS de BlueGene/L. La presencia de millones de excepciones de alineación de coma flotante (2,354,412) y los volcados iar/dear reflejan desalineación de memoria en código compilado o desbordamientos aritméticos manejados por interrupciones de kernel. No existe ninguna evidencia de compromiso, escalada de privilegios o actividad maliciosa.\n\n## Comandos de mitigación propuestos\n\n- # Recompilar las aplicaciones de usuario con directivas de alineación estricta de memoria (ej. banderas de compilador IBM XL Fortran/C)\n- xlc -qalign=natural -O3 application.c -o application\n- # Monitorear eventos RAS del midplane en el subsistema de gestión del cluster\n- grep -E 'alignment exceptions|dear|iar' /var/log/messages"
+    },
+    "_meta": {
+      "run_id": "bgl_des_balanceado_0003__gemext__r1__222e37b4",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_des_balanceado_0003__gemext__r1__222e37b4.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:17:04+00:00"
+  }
+}

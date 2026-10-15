@@ -1,0 +1,33 @@
+{
+  "case_id": "uwf_des_sigiloso_0010",
+  "dataset": "uwf",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "uwf_des_sigiloso_0010__gemext__r1__6b664160",
+  "estado_crudo": {
+    "diagnostico": "Se observa una anomalia operativa recurrente en la infraestructura de resolucion DNS. La estacion o dispositivo con IP 143.88.255.10 emite ráfagas periodicas de consultas DNS UDP hacia el servidor interno 10.0.10.1 (puerto 53) en intervalos matematicamente constantes de aproximadamente 30.25 segundos. Todas estas conexiones finalizan en estado 'S0' (sin respuesta del servidor, 0 bytes/paquetes retornados). Adicionalmente, el host 143.88.1.51 experimenta demoras o timeouts de exactamente 5 segundos al consultar 143.88.1.1. No se identifican indicadores concluyentes de compromiso, comando y control (C2) externo ni tunelizacion maliciosa demostrable, sino una falla de servicio, falta de enrutamiento o mala configuracion de resolver DNS en el cliente.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.92,
+    "evaluacion_auditor": "El patron periodico estricto (30.25s) podria sugerir superficialmente un mecanismo de beaconing de malware; sin embargo, el destino es una IP privada (10.0.10.1) que no responde (S0) y los tamaños de paquete son tipicos de reintentos de resolucion estandar de un servicio desatendido. Sin registros de la capa de aplicacion DNS que muestren nombres de dominio sospechosos, no existe sustento probatorio para calificarlo como incidente de seguridad ni para mapear tecnicas de MITRE ATT&CK sin incurrir en falsos positivos.",
+    "comandos_mitigacion": [
+      "ping -c 4 10.0.10.1",
+      "traceroute -n 10.0.10.1",
+      "iptables -L -n -v | grep 53",
+      "systemctl status named || systemctl status bind9 || systemctl status systemd-resolved",
+      "tcpdump -nn -i any host 143.88.255.10 and port 53"
+    ],
+    "eventos_reconstruidos": [],
+    "secuencia_temporal": [
+      "2021-12-26 02:28:15: Host 143.88.1.51 consulta a 143.88.1.1:53 sufriendo un retraso de 5.00s (SF) [uid: CtRlzE4QRqfpeeWFgh].",
+      "2021-12-26 02:28:40: Host 143.88.255.10 inicia ciclo de consultas DNS UDP hacia 10.0.10.1 sin recibir respuesta (estado S0) [uid: CHDXcfRsi32UJ6Trk, CeDXSX1hDSQkHf9xG1, CMIpZX2ZYol0ivnOX4, CohekA8CMJxU1Vtu, CbndGD3rP71NJaN38].",
+      "2021-12-26 02:29:10 - 02:57:55: El host 143.88.255.10 repite rafagas de solicitudes DNS a 10.0.10.1 cada 30.25 segundos de forma ininterrumpida, acumulando decenas de fallos de conexion S0.",
+      "2021-12-26 02:29:41 / 02:49:52: Trafico normal de difusion NetBIOS de la estacion 172.28.128.3 [uid: CmJ9MK1mUaqV6fj3Ok, CMU19833kwk3pHWtK3].",
+      "2021-12-26 02:35:39 - 02:53:12: Host 143.88.1.53 resuelve exitosamente contra 143.88.1.1:53 con latencia normal (<1ms) [uid: CfVf2s3xuuisJZuBAj, CrTitV1jbHY371fcyb, Ct5Grh1mzpGeEu6Qm6, ClHP5e1ht0HUwfDN9i, C5lgsw2yT1TlSMwJa8, CdldUj22n0KFHOQ9ba, CrhMWq1d6eRUGxke74]."
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

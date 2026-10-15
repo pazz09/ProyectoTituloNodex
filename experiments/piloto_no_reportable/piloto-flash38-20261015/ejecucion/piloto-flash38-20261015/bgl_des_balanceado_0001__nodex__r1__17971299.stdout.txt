@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=525 salida=201 razonamiento=852 total=1578
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=668 salida=256 razonamiento=845 total=1769
+   → No hace falta RAG (A pesar de que el preprocesamiento determinístico arrojó 0% de cobertura por tratarse de texto libre, el formato y contenido de la muestra cruda identifican de forma unívoca trazas estándar de RAS/hardware (IBM BlueGene), lo que permite caracterizar el lote como benigno/operacional sin necesidad de recurrir a la memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=268 salida=63 razonamiento=312 total=643
+   → usar_cve: False | Razón: El diagnóstico indica que se trata de telemetría de hardware (error de memoria corregible RAS) en un supercomputador y no de una vulnerabilidad de software ni un incidente de seguridad, por lo que no procede buscar CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=221 salida=79 razonamiento=558 total=858
+   → 6 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2105 salida=293 razonamiento=639 total=3037
+   → Confianza final: 0.90 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros corresponden a eventos de telemetría RAS del kernel que reportan errores corregibles (CE) a nivel de memoria física/hardware en la arquitectura de supercomputación. Se trata de una anomalía de hardware puramente operativa, sin evidencia de intrusión, compromiso o actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

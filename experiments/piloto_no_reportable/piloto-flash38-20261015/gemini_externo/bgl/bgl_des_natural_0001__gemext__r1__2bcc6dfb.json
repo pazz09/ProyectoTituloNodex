@@ -1,0 +1,102 @@
+{
+  "case_id": "bgl_des_natural_0001",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "bgl_des_natural_0001__gemext__r1__2bcc6dfb",
+  "salida": {
+    "case_id": "bgl_des_natural_0001",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "EVT-01",
+        "timestamp": "2005-06-03-15.42.50.675872",
+        "entities": [],
+        "event_type": "HARDWARE_CACHE_PARITY_ERROR",
+        "evidence_uids": [
+          "1117838570",
+          "1117838573",
+          "1117838976",
+          "1117838978"
+        ]
+      },
+      {
+        "uid": "EVT-02",
+        "timestamp": "2005-06-03-16.47.20.730545",
+        "entities": [],
+        "event_type": "KERNEL_ALIGNMENT_EXCEPTION",
+        "evidence_uids": [
+          "1117842440",
+          "1117842974",
+          "1117843015"
+        ]
+      },
+      {
+        "uid": "EVT-03",
+        "timestamp": "2005-06-03-18.21.59.871925",
+        "entities": [],
+        "event_type": "HARDWARE_MEMORY_CORRECTABLE_ERROR",
+        "evidence_uids": [
+          "1117848119",
+          "1117942120"
+        ]
+      },
+      {
+        "uid": "EVT-04",
+        "timestamp": "2005-06-04-00.24.32.432192",
+        "entities": [],
+        "event_type": "APPLICATION_COMMUNICATION_FATAL",
+        "evidence_uids": [
+          "1117869872",
+          "1117869876"
+        ]
+      },
+      {
+        "uid": "EVT-05",
+        "timestamp": "2005-06-05-00.09.01.903373",
+        "entities": [],
+        "event_type": "APPLICATION_CORE_DUMP",
+        "evidence_uids": [
+          "1117955341",
+          "1117955392",
+          "1117956980",
+          "1117957045",
+          "1117959501",
+          "1117959513",
+          "1117959563",
+          "1117973759",
+          "1117973786"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl registro corresponde a eventos operativos y de hardware de una supercomputadora IBM Blue Gene/L (sistema RAS). Se observan errores de paridad de caché de instrucciones corregidos, excepciones de alineación de punto flotante ('double-hummer'), errores de memoria corregibles (CE), fallos fatales de comunicación por socket en el demonio de control de E/S ('ciod') hacia 172.16.96.116, seguidos de múltiples caídas de procesos que generan volcados de memoria ('generating core'). No existe evidencia de intrusión, compromiso o actividad maliciosa; se trata enteramente de fallos operacionales y degradación de software/hardware.\n\n## Evaluación del auditor\n\nLa hipótesis de fallo puramente operativo es altamente consistente con la telemetría RAS de Blue Gene/L. No se identifican vectores de ataque, ejecuciones anómalas de comandos interactivos ni escaladas de privilegios. Las fallas de sockets en ciod y las posteriores generaciones de 'core' se deben a la terminación anormal de trabajos paralelos distribuidos tras la interrupción del flujo de control.\n\n## Comandos de mitigación propuestos\n\n- mmgetstate -a\n- squeue -t R\n- dmesg -T | grep -i 'parity\\|ecc\\|alignment'\n- find / -name 'core.[0-9]*' -mtime -2 -ls"
+    },
+    "_meta": {
+      "run_id": "bgl_des_natural_0001__gemext__r1__2bcc6dfb",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_des_natural_0001__gemext__r1__2bcc6dfb.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:18:19+00:00"
+  }
+}

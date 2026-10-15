@@ -1,0 +1,70 @@
+{
+  "case_id": "hdfs_des_balanceado_0014",
+  "dataset": "hdfs",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "hdfs_des_balanceado_0014__nodex__r1__e67bae44",
+  "consultas": [
+    {
+      "orden": 1,
+      "herramienta": "abuseipdb",
+      "parametros": {
+        "ip": "10.251.122.65"
+      },
+      "intento_externo": true,
+      "bloqueado": true,
+      "n_intentos_bloqueados": 1,
+      "hosts": [
+        "api.abuseipdb.com"
+      ],
+      "respaldo_respondio": true,
+      "fuente_respuesta": "fallback"
+    },
+    {
+      "orden": 2,
+      "herramienta": "abuseipdb",
+      "parametros": {
+        "ip": "10.251.89.155"
+      },
+      "intento_externo": true,
+      "bloqueado": true,
+      "n_intentos_bloqueados": 1,
+      "hosts": [
+        "api.abuseipdb.com"
+      ],
+      "respaldo_respondio": true,
+      "fuente_respuesta": "fallback"
+    },
+    {
+      "orden": 3,
+      "herramienta": "abuseipdb",
+      "parametros": {
+        "ip": "10.251.91.32"
+      },
+      "intento_externo": true,
+      "bloqueado": true,
+      "n_intentos_bloqueados": 1,
+      "hosts": [
+        "api.abuseipdb.com"
+      ],
+      "respaldo_respondio": true,
+      "fuente_respuesta": "fallback"
+    },
+    {
+      "orden": 4,
+      "herramienta": "abuseipdb",
+      "parametros": {
+        "ip": "10.251.197.226"
+      },
+      "intento_externo": true,
+      "bloqueado": true,
+      "n_intentos_bloqueados": 1,
+      "hosts": [
+        "api.abuseipdb.com"
+      ],
+      "respaldo_respondio": true,
+      "fuente_respuesta": "fallback"
+    }
+  ]
+}

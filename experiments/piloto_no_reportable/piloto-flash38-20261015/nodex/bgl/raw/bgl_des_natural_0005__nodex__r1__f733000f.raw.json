@@ -1,0 +1,500 @@
+{
+  "case_id": "bgl_des_natural_0005",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "bgl_des_natural_0005__nodex__r1__f733000f",
+  "estado_crudo": {
+    "resumen_logs": {
+      "formato_detectado": "auth_log",
+      "total_lineas": 20,
+      "servicios": {
+        "desconocido": 20
+      },
+      "eventos": {
+        "evento_critico": 1,
+        "evento_normal": 19
+      },
+      "ventana_temporal": {
+        "inicio": null,
+        "fin": null
+      },
+      "n_ips_distintas": 0,
+      "ips_distintas": [],
+      "por_ip": {},
+      "usuarios": {},
+      "n_usuarios_distintos": 0,
+      "codigos_respuesta": {},
+      "entidades": [],
+      "cronologia": [
+        {
+          "n": 19,
+          "timestamp": null,
+          "servicio": null,
+          "evento": "evento_critico",
+          "mensaje": "1132232535 2005.11.17 R64-M1-N4-I:J18-U01 2005-11-17-05.02.15.807696 R64-M1-N4-I:J18-U01 RAS APP FATAL ciod: Error loading /bgl/apps/followup/SPaSM_static/SPaSM.460-1115: invalid o…"
+        }
+      ],
+      "cronologia_omitidos": 0,
+      "raw_procedencia": {
+        "sha256": "83411ee419950487165a6fe13986662663b5e8c339b199119bd8e6b6fda7c79b",
+        "lineas": 20,
+        "bytes": 3890
+      },
+      "reputacion_ips": {}
+    },
+    "preprocessing_metadata": {
+      "schema_version": "2.0",
+      "total_lineas_fisicas": 20,
+      "total_eventos": 20,
+      "decoder_distribution": {
+        "text": 20
+      },
+      "product_distribution": {},
+      "vendor_distribution": {},
+      "version_distribution": {},
+      "protocol_distribution": {},
+      "profile_distribution": {
+        "auth_log": 1
+      },
+      "severity_distribution": {},
+      "event_categories": {
+        "authentication": 1
+      },
+      "event_outcomes": {
+        "failure": 1
+      },
+      "entities": {},
+      "time_window": {
+        "inicio": null,
+        "fin": null
+      },
+      "parsing": {
+        "parsed_events": 0,
+        "fallback_events": 20,
+        "coverage": 0.0
+      },
+      "segments": [
+        {
+          "index": 0,
+          "decoder": "text",
+          "line_start": 1,
+          "line_end": 20,
+          "n_records": 20,
+          "confidence": 0.1,
+          "decoder_inicial": "text",
+          "confidence_inicial": 0.1,
+          "decoder_distribution": {
+            "text": 20
+          },
+          "context": {}
+        }
+      ],
+      "entities_resumen": {},
+      "config": {
+        "LOG_DETECTION_CHUNK_SIZE": 50,
+        "LOG_ENABLE_MULTILINE": true,
+        "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+        "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+        "LOG_MAX_EVENTS": 100000,
+        "LOG_MAX_FILE_BYTES": 52428800,
+        "LOG_MAX_RAW_SAMPLES": 20,
+        "LOG_MAX_UNMAPPED_FIELDS": 100,
+        "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+        "LOG_PARSING_MODE": "hybrid",
+        "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+        "LOG_PRESERVE_RAW": true
+      }
+    },
+    "parsing_warnings": [],
+    "raw_samples": [
+      {
+        "decoder": "text",
+        "texto": "1131692621 2005.11.10 R63-M0-NF-C:J06-U01 2005-11-10-23.03.41.120402 R63-M0-NF-C:J06-U01 RAS KERNEL INFO iar 00106274 dear 0246da8c"
+      }
+    ],
+    "evidencia_logs": [
+      {
+        "uid": "log_record_000001",
+        "record_number": 1,
+        "line_start": 1,
+        "line_end": 1,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000002",
+        "record_number": 2,
+        "line_start": 2,
+        "line_end": 2,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000003",
+        "record_number": 3,
+        "line_start": 3,
+        "line_end": 3,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000004",
+        "record_number": 4,
+        "line_start": 4,
+        "line_end": 4,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000005",
+        "record_number": 5,
+        "line_start": 5,
+        "line_end": 5,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000006",
+        "record_number": 6,
+        "line_start": 6,
+        "line_end": 6,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000007",
+        "record_number": 7,
+        "line_start": 7,
+        "line_end": 7,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000008",
+        "record_number": 8,
+        "line_start": 8,
+        "line_end": 8,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000009",
+        "record_number": 9,
+        "line_start": 9,
+        "line_end": 9,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000010",
+        "record_number": 10,
+        "line_start": 10,
+        "line_end": 10,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000011",
+        "record_number": 11,
+        "line_start": 11,
+        "line_end": 11,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000012",
+        "record_number": 12,
+        "line_start": 12,
+        "line_end": 12,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000013",
+        "record_number": 13,
+        "line_start": 13,
+        "line_end": 13,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000014",
+        "record_number": 14,
+        "line_start": 14,
+        "line_end": 14,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000015",
+        "record_number": 15,
+        "line_start": 15,
+        "line_end": 15,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000016",
+        "record_number": 16,
+        "line_start": 16,
+        "line_end": 16,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000017",
+        "record_number": 17,
+        "line_start": 17,
+        "line_end": 17,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000018",
+        "record_number": 18,
+        "line_start": 18,
+        "line_end": 18,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000019",
+        "record_number": 19,
+        "line_start": 19,
+        "line_end": 19,
+        "timestamp": null,
+        "event_category": "authentication",
+        "event_action": "login",
+        "event_outcome": "failure"
+      },
+      {
+        "uid": "log_record_000020",
+        "record_number": 20,
+        "line_start": 20,
+        "line_end": 20,
+        "timestamp": null
+      }
+    ],
+    "evidencia_logs_omitidos": 0,
+    "eventos_reconstruidos": [],
+    "secuencia_temporal": [],
+    "tecnicas_atribuidas": [],
+    "invalid_evidence_uid_count": 0,
+    "d11_warnings": [],
+    "telemetry": {
+      "llm_call_count": 6,
+      "input_tokens": 6134,
+      "output_tokens": 890,
+      "total_tokens": 10874,
+      "execution_time": 42.739864,
+      "replan_count": 0,
+      "intentos_correccion": 1,
+      "invalid_evidence_uid_count": 0,
+      "d11_warning_count": 0,
+      "llm_calls": [
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 569,
+          "output_tokens": 332,
+          "total_tokens": 1247,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 346,
+          "duration_s": 6.016,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 737,
+          "output_tokens": 100,
+          "total_tokens": 1293,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 456,
+          "duration_s": 4.517,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 1470,
+          "output_tokens": 174,
+          "total_tokens": 2117,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 473,
+          "duration_s": 5.363,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 275,
+          "output_tokens": 64,
+          "total_tokens": 554,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 215,
+          "duration_s": 5.256,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 221,
+          "output_tokens": 6,
+          "total_tokens": 1701,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 1474,
+          "duration_s": 12.673,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 2862,
+          "output_tokens": 214,
+          "total_tokens": 3962,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 886,
+          "duration_s": 8.736,
+          "error": null
+        }
+      ]
+    },
+    "firma": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:1,evento_normal:19] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:1] cobertura=0.0",
+    "plan": {
+      "plan_version": 1,
+      "objetivo": "Investigar el evento crítico de autenticación identificado en los registros no estructurados para determinar posible compromiso o actividad sospechosa y definir medidas de mitigación.",
+      "pasos": [
+        {
+          "id": 1,
+          "accion": "triage",
+          "objetivo": "Analizar las líneas en texto libre para extraer detalles del evento crítico de autenticación, identificar entidades involucradas y evaluar la severidad del incidente.",
+          "estado": "ejecutado"
+        },
+        {
+          "id": 2,
+          "accion": "rag",
+          "objetivo": "Consultar técnicas de MITRE ATT&CK y memoria histórica relacionadas con incidentes de autenticación y accesos no autorizados para contextualizar el comportamiento anómalo.",
+          "estado": "ejecutado"
+        },
+        {
+          "id": 3,
+          "accion": "mitigacion",
+          "objetivo": "Proponer acciones de contención, bloqueo y endurecimiento de políticas de acceso basadas en los hallazgos del evento crítico.",
+          "estado": "ejecutado"
+        }
+      ],
+      "criterios_finalizacion": [
+        "Identificación de la causa raíz del evento crítico de autenticación a partir de los logs en texto libre.",
+        "Mapeo de la actividad anómala contra tácticas y técnicas de MITRE ATT&CK.",
+        "Definición de recomendaciones concretas de contención y remediación."
+      ]
+    },
+    "plan_objetivo": "Investigar el evento crítico de autenticación identificado en los registros no estructurados para determinar posible compromiso o actividad sospechosa y definir medidas de mitigación.",
+    "paso_actual": 3,
+    "historial_ejecucion": [
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_planificador",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "plan v1, 3 pasos: ['triage', 'rag', 'mitigacion']"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 1,
+        "nodo": "agente_analista_triage",
+        "accion": "triage",
+        "estado": "ejecutado",
+        "resumen": "solicitó contexto histórico (RAG)"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 2,
+        "nodo": "tool_consultar_rag",
+        "accion": "rag",
+        "estado": "ejecutado",
+        "resumen": "0 patrones, 3 técnicas MITRE"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 1,
+        "nodo": "agente_analista_triage",
+        "accion": "triage",
+        "estado": "ejecutado",
+        "resumen": "diagnóstico producido"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_selector_herramientas",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "usar_cve=False"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 3,
+        "nodo": "agente_ingeniero_mitigacion",
+        "accion": "mitigacion",
+        "estado": "ejecutado",
+        "resumen": "0 comandos propuestos"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "tool_validar_comandos",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "comandos válidos"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_auditor_final",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "confianza=0.95 cobertura_suficiente=True"
+      }
+    ],
+    "desviaciones_plan": [],
+    "historial_planes": [],
+    "replan_count": 0,
+    "diagnostico": "El lote analizado presenta una tasa de decodificación estructural del 0%, habiendo sido clasificado erróneamente bajo el perfil de autenticación. La muestra de registro crudo ('RAS KERNEL INFO iar 00106274 dear 0246da8c') corresponde a trazas de diagnóstico de bajo nivel de arquitectura BlueGene/L (RAS Kernel) y no a eventos de autenticación ni actividad maliciosa. Ninguna de las técnicas MITRE ATT&CK sugeridas (T1685.001, T1685.004, T1654) aplica a la evidencia observada; el evento crítico detectado parece ser un falso positivo derivado del preprocesamiento.",
+    "necesita_rag": false,
+    "usar_cve": false,
+    "razon_seleccion": "El diagnóstico concluye que se trata de un falso positivo derivado de trazas de diagnóstico de bajo nivel (BlueGene/L RAS Kernel) y no identifica ningún ataque, servicio vulnerable o vulnerabilidad específica que requiera consulta de CVEs.",
+    "contexto_rag": [],
+    "tecnicas_mitre": [
+      {
+        "texto": "Disable or Modify Windows Event Log. Adversaries may disable or modify the Windows Event Log to limit data that can be leveraged for detections and audits. Windows Event Log records user and system activity such as login attempts and process creation.(Citation: EventLog_Core_Technologies) This data is used by security tools and analysts to generate detections. \n\nThe EventLog service maintains event logs from various system components and applications. By default, the service automatically starts when a system powers on. An audit policy, maintained by the Local Security Policy (secpol.msc), defines which system events the EventLog service logs. Security audit policy settings can be changed by running secpol.msc, then navigating to `Security Settings\\Local Policies\\Audit Policy` for basic au",
+        "meta": {
+          "tactics": "defense-impairment",
+          "is_subtechnique": true,
+          "technique_id": "T1685.001",
+          "url": "https://attack.mitre.org/techniques/T1685/001",
+          "name": "Disable or Modify Windows Event Log"
+        },
+        "similitud": 0.537
+      },
+      {
+        "texto": "Disable or Modify Linux Audit System Log. Adversaries may disable or modify the Linux Audit system to hide malicious activity and avoid detection. Linux admins use the Linux Audit system to track security-relevant information on a system. The Linux Audit system operates at the kernel-level and maintains event logs on application and system activity such as process, network, file, and login events based on pre-configured rules. \n\nOften referred to as `auditd`, this is the name of the daemon used to write events to disk and is governed by the parameters set in the `audit.conf` configuration file. Two primary ways to configure the log generation rules are through the command line `auditctl` utility and the file `/etc/audit/audit.rules`, containing a sequence of `auditctl` commands loaded at b",
+        "meta": {
+          "technique_id": "T1685.004",
+          "tactics": "defense-impairment",
+          "is_subtechnique": true,
+          "name": "Disable or Modify Linux Audit System Log",
+          "url": "https://attack.mitre.org/techniques/T1685/004"
+        },
+        "similitud": 0.498
+      },
+      {
+        "texto": "Log Enumeration. Adversaries may enumerate system and service logs to find useful data. These logs may highlight various types of valuable insights for an adversary, such as user authentication records ([Account Discovery](https://attack.mitre.org/techniques/T1087)), security or vulnerable software ([Software Discovery](https://attack.mitre.org/techniques/T1518)), or hosts within a compromised network ([Remote System Discovery](https://attack.mitre.org/techniques/T1018)).\n\nHost binaries may be leveraged to collect system logs. Examples include using `wevtutil.exe` or [PowerShell](https://attack.mitre.org/techniques/T1059/001) on Windows to access and/or export security event information.(Citation: WithSecure Lazarus-NoPineapple Threat Intel Report 2023)(Citation: Cadet Blizzard emerges as ",
+        "meta": {
+          "technique_id": "T1654",
+          "url": "https://attack.mitre.org/techniques/T1654",
+          "is_subtechnique": false,
+          "tactics": "discovery",
+          "name": "Log Enumeration"
+        },
+        "similitud": 0.468
+      }
+    ],
+    "cves_encontrados": [],
+    "comandos_mitigacion": [],
+    "comandos_validos": true,
+    "motivos_rechazo": [],
+    "intentos_correccion": 1,
+    "confianza": 0.95,
+    "hay_incidente": false,
+    "hay_anomalia": false,
+    "evaluacion_auditor": "El diagnóstico es correcto. Los registros observados corresponden a trazas informativas de bajo nivel de arquitectura BlueGene/L (RAS KERNEL INFO), clasificadas erróneamente como fallos de autenticación por el preprocesamiento automatizado. No existe comportamiento anómalo ni indicios de actividad maliciosa en los registros disponibles.",
+    "cobertura_auditor": true,
+    "cobertura_suficiente": true,
+    "motivo_replanificacion": "",
+    "requiere_replanificacion": false,
+    "_firma": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:1,evento_normal:19] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:1] cobertura=0.0",
+    "_error_api": null,
+    "requiere_revision_humana": false,
+    "output_contract_version": "d11-v1"
+  }
+}

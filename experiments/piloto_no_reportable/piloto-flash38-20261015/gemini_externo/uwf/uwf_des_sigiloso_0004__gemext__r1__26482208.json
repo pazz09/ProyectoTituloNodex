@@ -1,0 +1,90 @@
+{
+  "case_id": "uwf_des_sigiloso_0004",
+  "dataset": "uwf",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "uwf_des_sigiloso_0004__gemext__r1__26482208",
+  "salida": {
+    "case_id": "uwf_des_sigiloso_0004",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "EVT-01",
+        "timestamp": "2021-12-17 14:54:13.882541",
+        "entities": [],
+        "event_type": "DNS_QUERY_TIMEOUT",
+        "evidence_uids": [
+          "CMVz024Flvrg67l0U3",
+          "CbKvJo2VR2LpW0avYj",
+          "C3C2Uo1y25s9vHSrEd",
+          "CmGm8ygXRpzy20PRc"
+        ]
+      },
+      {
+        "uid": "EVT-02",
+        "timestamp": "2021-12-17 14:54:44.131785 - 2021-12-17 14:56:45.130325",
+        "entities": [],
+        "event_type": "PERIODIC_DNS_RETRY",
+        "evidence_uids": [
+          "CEz7iNN0gElkr19F",
+          "CzQiLs2na87d73Rzda",
+          "C398Om21qkn8votaNd",
+          "Cy7AmL2n3xLXQ6K9Zc",
+          "CI3REG4Tu6Yyaczc77"
+        ]
+      },
+      {
+        "uid": "EVT-03",
+        "timestamp": "2021-12-17 15:07:51.080000",
+        "entities": [],
+        "event_type": "CLIENT_DNS_TIMEOUT",
+        "evidence_uids": [
+          "CMa9NF3REGgUxAHcVj",
+          "CVkUIf11GNbaiQWIhg",
+          "CBaHBE211gFoTBK6U9"
+        ]
+      },
+      {
+        "uid": "EVT-04",
+        "timestamp": "2021-12-17 15:23:28.381670",
+        "entities": [],
+        "event_type": "PERSISTENT_DNS_OUTAGE",
+        "evidence_uids": [
+          "CJ3sxV3jjI11vGuzF3",
+          "CcYo461N4lVkiK2rOk",
+          "CKM2ZI7N1PLCTEUJ",
+          "CEXWt04ODVkJg6vMu"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nAnomalía operativa de red por indisponibilidad o falla de enrutamiento hacia el servidor DNS interno 10.0.10.1. El host/forwarder 143.88.255.10 realiza ráfagas periódicas de consultas DNS cada ~30 segundos hacia 10.0.10.1:53 sin recibir ninguna respuesta (estado Zeek S0, resp_pkts=0). A su vez, clientes internos como 143.88.10.11 experimentan fallos al consultar a 143.88.255.10. No se observa actividad maliciosa ni comunicación con infraestructura hostil externa.\n\n## Evaluación del auditor\n\nLa cadencia periódica de ~30 segundos de 143.88.255.10 podría superficialmente sugerir un beaconing, pero el destino es una IP privada interna (RFC 1918, local_resp=T) en el puerto 53/UDP, y el host actúa como intermediario/servidor DNS para otros clientes (ej. 143.88.10.11). Dado que el 100% de los intentos hacia 10.0.10.1 quedan en estado S0 sin bytes de respuesta, se concluye que se trata de un problema de disponibilidad de infraestructura (servidor DNS caído, ruta inaccesible o filtrado por firewall interno) y no de un compromiso de seguridad.\n\n## Comandos de mitigación propuestos\n\n- ping -c 4 10.0.10.1\n- traceroute -n -U -p 53 10.0.10.1\n- dig @10.0.10.1 -p 53 localhost +time=2 +tries=1\n- systemctl status systemd-resolved\n- ip route get 10.0.10.1"
+    },
+    "_meta": {
+      "run_id": "uwf_des_sigiloso_0004__gemext__r1__26482208",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "uwf_des_sigiloso_0004__gemext__r1__26482208.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:32:25+00:00"
+  }
+}

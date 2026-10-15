@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=529 salida=202 razonamiento=725 total=1456
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=671 salida=152 razonamiento=571 total=1394
+   → No hace falta RAG (A pesar de la baja cobertura del parsing estructurado, el formato de la muestra evidencia registros de depuración estándar de supercomputación (BlueGene/L) con severidad informativa. No hay indicios de amenaza que justifiquen consulta a la memoria histórica, en concordancia con el plan de investigación.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=170 salida=56 razonamiento=394 total=620
+   → usar_cve: False | Razón: El diagnóstico determina que la actividad es benigna (telemetría y depuración operacional) y no se identifican vulnerabilidades, ataques ni servicios comprometidos que justifiquen la búsqueda de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=123 salida=6 razonamiento=498 total=627
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=1933 salida=175 razonamiento=601 total=2709
+   → Confianza final: 0.85 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es preciso. Los registros evaluados corresponden a operaciones normales de telemetría y depuración del kernel de BlueGene/L (RAS KERNEL INFO). No se observan anomalías operativas, fallas críticas ni indicios de compromiso de seguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

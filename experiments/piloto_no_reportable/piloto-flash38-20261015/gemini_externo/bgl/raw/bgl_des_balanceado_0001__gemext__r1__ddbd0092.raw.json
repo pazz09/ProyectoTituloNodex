@@ -1,0 +1,96 @@
+{
+  "case_id": "bgl_des_balanceado_0001",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "bgl_des_balanceado_0001__gemext__r1__ddbd0092",
+  "estado_crudo": {
+    "diagnostico": "El registro contiene eventos de diagnóstico y fallos operacionales de hardware y software en un supercomputador IBM Blue Gene/L. Se observan errores de ejecución de aplicaciones MPI debido a ejecutables faltantes o rutas inválidas ('ciod: Error loading ... No such file or directory'), fallos críticos de tiempo de ejecución del sistema operativo del nodo ('rts panic! - stopping execution'), múltiples generaciones de volcados de memoria (core dumps) distribuidos, correcciones de errores en memoria RAM/DDR (ECC/CE) y excepciones masivas de alineación en la unidad de punto flotante Double-Hummer. Todos los registros corresponden a fallos operacionales y degradación de componentes propios de un entorno de computación de alto rendimiento (HPC), sin evidencia de compromiso ni actividad maliciosa.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "Se confirma la presencia de anomalías operativas de alta severidad (FATAL, panics y coredumps concurrentes), pero se descarta un incidente de seguridad tras verificar que los patrones corresponden a problemas habituales de ejecución de jobs científicos, desalineación de instrucciones de la FPU y fallos puntuales de memoria corregidos por hardware. La hipótesis de intrusión carece de sustento en los registros disponibles.",
+    "comandos_mitigacion": [],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-01",
+        "evidence_uids": [
+          "1121091173"
+        ],
+        "timestamp": "2005-07-11-07.12.53.947417",
+        "event_type": "Hardware Memory Error Correction",
+        "description": "Detección y corrección de error de memoria (Correctable Error) en el nodo R30-M0-NB-C:J09-U01."
+      },
+      {
+        "event_id": "EVT-02",
+        "evidence_uids": [
+          "1121111691"
+        ],
+        "timestamp": "2005-07-11-12.54.51.738880",
+        "event_type": "Application Launch Failure",
+        "description": "Fallo del demonio ciod al cargar el binario raptor.new.dev.3d.BGL.CXX_XL.MPI.ex en R22-M0-N0-I:J18-U11 por no existir la ruta o imagen."
+      },
+      {
+        "event_id": "EVT-03",
+        "evidence_uids": [
+          "1121115817",
+          "1121115819"
+        ],
+        "timestamp": "2005-07-11-14.03.37.675251",
+        "event_type": "Kernel Panic",
+        "description": "Pánicos del kernel de tiempo de ejecución (rts panic) que fuerzan la detención de cómputo en nodos R01-M0-N1-C:J09-U11 y R04-M0-N1-C:J02-U01."
+      },
+      {
+        "event_id": "EVT-04",
+        "evidence_uids": [
+          "1121172088",
+          "1121172217",
+          "1121172239",
+          "1121172258",
+          "1121172266",
+          "1121172311",
+          "1121172452",
+          "1121172512",
+          "1121172822",
+          "1121172833",
+          "1121172957",
+          "1121172988"
+        ],
+        "timestamp": "2005-07-12-05.41.28.215496",
+        "event_type": "Process Core Dumps",
+        "description": "Generación coordinada de archivos core dump a través de múltiples nodos de cómputo tras el colapso de un proceso de cálculo paralelo."
+      },
+      {
+        "event_id": "EVT-05",
+        "evidence_uids": [
+          "1121238463"
+        ],
+        "timestamp": "2005-07-13-00.07.43.091930",
+        "event_type": "Hardware Memory Error Correction",
+        "description": "El kernel detecta y corrige un error en la memoria DDR en el nodo R11-M1-N3-C:J07-U11."
+      },
+      {
+        "event_id": "EVT-06",
+        "evidence_uids": [
+          "1121252281",
+          "1121252310"
+        ],
+        "timestamp": "2005-07-13-03.58.01.460537",
+        "event_type": "CPU Alignment Exceptions",
+        "description": "Generación masiva de excepciones de alineación (Double-Hummer alignment exceptions) en nodos R33-M1-NE-C:J07-U01 y R24-M0-N1-C:J03-U01."
+      }
+    ],
+    "secuencia_temporal": [
+      "2005-07-11 07:12:53 - Corrección de error de memoria (CE sym 2) en R30-M0-NB-C:J09-U01",
+      "2005-07-11 12:54:51 - Fallo en ciod al intentar lanzar job MPI por ruta no encontrada",
+      "2005-07-11 14:03:37 - Kernel panic del entorno RTS en múltiples nodos de cómputo",
+      "2005-07-12 05:41:28 a 05:56:28 - Volcados de memoria (core generation) en cascada en nodos del clúster",
+      "2005-07-13 00:07:43 - Detección y corrección de error DDR en R11-M1-N3-C:J07-U11",
+      "2005-07-13 03:58:01 a 03:58:30 - Registro de cientos de millones de excepciones de alineación de hardware Double-Hummer FPU"
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

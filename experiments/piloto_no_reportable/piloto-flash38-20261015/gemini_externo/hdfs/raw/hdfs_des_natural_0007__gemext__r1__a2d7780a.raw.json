@@ -1,0 +1,43 @@
+{
+  "case_id": "hdfs_des_natural_0007",
+  "dataset": "hdfs",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "hdfs_des_natural_0007__gemext__r1__a2d7780a",
+  "estado_crudo": {
+    "diagnostico": "El registro corresponde a eventos operativos de un clúster Apache Hadoop HDFS. Se observa una actividad mayoritariamente normal (asignación de bloques, servicio de bloques a clientes, verificación de integridad y borrado de bloques locales), con una advertencia operativa aislada a las 07:03:26 ('Got exception while serving blk_-7680599654910200999') que denota una interrupción o fallo de comunicación en el DataNode al servir un bloque. No existe evidencia de actividad maliciosa ni brecha de seguridad.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "El log muestra operaciones habituales de HDFS durante un periodo de varios días. La anomalía observada (WARN dfs.DataNode$DataXceiver) suele derivar de clientes que cierran la conexión de red prematuramente, timeouts de socket o problemas transitorios de I/O en disco, pero no compromete la integridad del clúster ni exhibe patrones de ataque. Al no existir indicios de compromiso, no se atribuyen técnicas MITRE ATT&CK.",
+    "comandos_mitigacion": [
+      "hdfs fsck / -files -blocks -locations",
+      "hdfs dfsadmin -report"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-01",
+        "evidence_uids": [
+          "7430"
+        ],
+        "timestamp": "081110 070326",
+        "event_type": "DataNode Communication Warning",
+        "description": "El DataNode en 10.251.75.228:50010 capturó una excepción al servir el bloque blk_-7680599654910200999 hacia /10.251.75.228."
+      }
+    ],
+    "secuencia_temporal": [
+      "081109 205315: FSNamesystem asigna bloque blk_-7878121102358435702 para una tarea MapReduce.",
+      "081110 014138: PacketResponder para el bloque blk_-3802183646922512795 finaliza normalmente.",
+      "081110 060934: DataXceiver sirve exitosamente el bloque blk_2986720270598512615 a 10.251.66.102.",
+      "081110 070326: DataXceiver genera advertencia por excepción al servir el bloque blk_-7680599654910200999 a 10.251.75.228.",
+      "081110 070334: DataXceiver sirve exitosamente el bloque blk_-6050976999174805557 a 10.251.111.37.",
+      "081110 121758: DataBlockScanner verifica con éxito la integridad de blk_1649162819905816843.",
+      "081110 210540 - 210601: FSDataset elimina bloques locales en subdir57 y subdir27.",
+      "081110 224218 - 081111 084906: FSNamesystem actualiza el blockMap agregando réplicas de bloques en diferentes DataNodes."
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

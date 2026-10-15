@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=569 salida=332 razonamiento=346 total=1247
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=737 salida=100 razonamiento=456 total=1293
+   → Solicitando RAG (La cobertura de parsing es del 0% y todos los eventos se encuentran en texto no estructurado sin IPs, usuarios ni servicios identificados. Dado que el resumen carece de contexto suficiente para determinar el origen y la naturaleza del supuesto evento crítico de autenticación, es necesario consultar la memoria histórica y las técnicas de MITRE ATT&CK para contextualizar los registros y orientar la investigación.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1685.001, T1685.004, T1654
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=1470 salida=174 razonamiento=473 total=2117
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=275 salida=64 razonamiento=215 total=554
+   → usar_cve: False | Razón: El diagnóstico concluye que se trata de un falso positivo derivado de trazas de diagnóstico de bajo nivel (BlueGene/L RAS Kernel) y no identifica ningún ataque, servicio vulnerable o vulnerabilidad específica que requiera consulta de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=221 salida=6 razonamiento=1474 total=1701
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2862 salida=214 razonamiento=886 total=3962
+   → Confianza final: 0.95 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros observados corresponden a trazas informativas de bajo nivel de arquitectura BlueGene/L (RAS KERNEL INFO), clasificadas erróneamente como fallos de autenticación por el preprocesamiento automatizado. No existe comportamiento anómalo ni indicios de actividad maliciosa en los registros disponibles.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

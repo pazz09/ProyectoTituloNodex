@@ -1,0 +1,52 @@
+{
+  "case_id": "bgl_des_balanceado_0000",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "bgl_des_balanceado_0000__nodex__r1__98cf3d8a",
+  "salida": {
+    "case_id": "bgl_des_balanceado_0000",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "process_crash",
+        "evidence_uids": [
+          "log_record_000001",
+          "log_record_000002"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos eventos corresponden a registros de sistema/núcleo de un entorno de computación de alto rendimiento (HPC / BlueGene RAS logs), registrando la generación de archivos core dump ('generated 58 core files') asociados a la ejecución del programa '/home/spelce1/HPCC_IBM/Urgent/COP/64K/opt_co_dc.rts'. No se observan indicios de compromiso de seguridad, accesos no autorizados ni actividad maliciosa atribuible a la IP 172.16.96.116; la actividad constituye una anomalía estrictamente operacional ligada al fallo de un proceso de software.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Los registros reflejan la terminación anormal y generación de volcados de memoria (core dumps) de una aplicación en un entorno HPC (BlueGene), lo cual representa una anomalía exclusivamente operativa y de estabilidad de software, sin indicios de actividad maliciosa ni compromiso de seguridad.\n\n## Comandos de mitigación propuestos\n\n- df -h /home/spelce1\n- find /home/spelce1/HPCC_IBM/Urgent/COP/64K/ -maxdepth 1 -name 'core*' -ls\n- coredumpctl list --no-legend | tail -n 20\n- dmesg -T | grep -E -i 'segfault|trap|killed process' | tail -n 20\n- systemctl status systemd-coredump.socket"
+    },
+    "_meta": {
+      "run_id": "bgl_des_balanceado_0000__nodex__r1__98cf3d8a",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_des_balanceado_0000__nodex__r1__98cf3d8a.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:11:25+00:00"
+  }
+}

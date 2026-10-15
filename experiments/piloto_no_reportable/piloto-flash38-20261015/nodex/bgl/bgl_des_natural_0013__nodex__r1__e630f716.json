@@ -1,0 +1,41 @@
+{
+  "case_id": "bgl_des_natural_0013",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "bgl_des_natural_0013__nodex__r1__e630f716",
+  "salida": {
+    "case_id": "bgl_des_natural_0013",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos registros corresponden a trazas de telemetría y diagnósticos de hardware/núcleo estándar de un entorno de computación de alto rendimiento (específicamente registros RAS de arquitectura IBM BlueGene/L, como indica 'RAS KERNEL INFO' y el formato del nodo 'R62-M0-N0-C:J14-U01'). No se observan indicios de actividad maliciosa, compromisos de seguridad ni anomalías operacionales críticas en la muestra evaluada; se descarta un incidente de seguridad.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto al identificar los registros como telemetría operativa estándar RAS de arquitectura IBM BlueGene/L. No se observan anomalías de funcionamiento ni indicios de actividad maliciosa o incidentes de seguridad."
+    },
+    "_meta": {
+      "run_id": "bgl_des_natural_0013__nodex__r1__e630f716",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_des_natural_0013__nodex__r1__e630f716.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:21:02+00:00"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "case_id": "bgl_des_balanceado_0000",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "bgl_des_balanceado_0000__nodex__r1__98cf3d8a",
+  "consultas": [
+    {
+      "orden": 1,
+      "herramienta": "abuseipdb",
+      "parametros": {
+        "ip": "172.16.96.116"
+      },
+      "intento_externo": true,
+      "bloqueado": true,
+      "n_intentos_bloqueados": 1,
+      "hosts": [
+        "api.abuseipdb.com"
+      ],
+      "respaldo_respondio": true,
+      "fuente_respuesta": "fallback"
+    }
+  ]
+}

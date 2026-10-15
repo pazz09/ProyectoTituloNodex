@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=531 salida=192 razonamiento=754 total=1477
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=679 salida=151 razonamiento=475 total=1305
+   → No hace falta RAG (El registro crudo muestra con claridad un evento informativo estándar del sistema operativo/hardware (BGL RAS) sin patrones maliciosos, y el plan de investigación no contempla el uso de memoria histórica, permitiendo emitir un dictamen conclusivo de benignidad directamente.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=177 salida=44 razonamiento=153 total=374
+   → usar_cve: False | Razón: El diagnóstico indica actividad operativa benigna y telemetría normal del sistema sin indicadores de compromiso, vulnerabilidades explotadas ni amenazas a la seguridad.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=130 salida=10 razonamiento=272 total=412
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=1940 salida=181 razonamiento=582 total=2703
+   → Confianza final: 0.85 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | Los registros corresponden a telemetría operacional estándar de nivel informativo del kernel (RAS KERNEL INFO) en arquitectura BlueGene/L. No se observan anomalías operativas críticas ni indicios de actividad maliciosa o compromiso de seguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

@@ -1,0 +1,21 @@
+{
+  "case_id": "hdfs_des_natural_0018",
+  "dataset": "hdfs",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "hdfs_des_natural_0018__gemext__r1__a752f506",
+  "estado_crudo": {
+    "diagnostico": "El registro muestra operaciones estándar y rutinarias de un clúster Hadoop HDFS. Incluye asignaciones de bloques para tareas de MapReduce (randtxt3), recepción y almacenamiento de réplicas de bloques entre DataNodes (DataXceiver, PacketResponder) y limpieza normal de bloques temporales o invalidados (FSDataset, invalidSet). Todos los mensajes son de nivel INFO y no evidencian errores ni actividad hostil.",
+    "hay_anomalia": false,
+    "hay_incidente": false,
+    "confianza": 0.98,
+    "evaluacion_auditor": "La muestra de logs analizada refleja el ciclo de vida normal de bloques de datos en HDFS sin presencia de excepciones de E/S, desconexión de réplicas ni patrones de denegación o manipulación maliciosa. No se requiere intervención técnica.",
+    "comandos_mitigacion": [],
+    "eventos_reconstruidos": [],
+    "secuencia_temporal": [],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

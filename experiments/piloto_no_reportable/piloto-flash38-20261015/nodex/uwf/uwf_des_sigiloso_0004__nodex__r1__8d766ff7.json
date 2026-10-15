@@ -1,0 +1,97 @@
+{
+  "case_id": "uwf_des_sigiloso_0004",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "uwf_des_sigiloso_0004__nodex__r1__8d766ff7",
+  "salida": {
+    "case_id": "uwf_des_sigiloso_0004",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-17 14:54:13.882541",
+        "entities": [],
+        "event_type": "dns_forwarding_failure",
+        "evidence_uids": [
+          "CMVz024Flvrg67l0U3",
+          "CbKvJo2VR2LpW0avYj",
+          "C3C2Uo1y25s9vHSrEd",
+          "CmGm8ygXRpzy20PRc"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-17 15:07:51.080",
+        "entities": [],
+        "event_type": "internal_dns_request",
+        "evidence_uids": [
+          "CMa9NF3REGgUxAHcVj",
+          "CVkUIf11GNbaiQWIhg",
+          "CBaHBE211gFoTBK6U9"
+        ]
+      },
+      {
+        "uid": "event_003",
+        "timestamp": "2021-12-17 15:23:28.381670",
+        "entities": [],
+        "event_type": "dns_forwarding_failure",
+        "evidence_uids": [
+          "CJ3sxV3jjI11vGuzF3",
+          "CcYo461N4lVkiK2rOk",
+          "CKM2ZI7N1PLCTEUJ",
+          "CEXWt04ODVkJg6vMu"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002",
+      "event_003"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe identifica un patrón anómalo de tráfico DNS (265 peticiones en estado S0 sin respuesta) procedente de la IP externa 143.88.255.10 dirigido al servidor DNS interno 10.0.10.1:53 UDP en un periodo de ~29 minutos. Este comportamiento coincide con actividades de reconocimiento y recolección de información sobre la infraestructura DNS objetivo (T1590.002) o con intentos repetidos de comunicación C2/túnel DNS no establecido (T1071.004). Se recomienda el bloqueo inmediato de la IP de origen 143.88.255.10 en el firewall perimetral y verificar la correcta restricción de acceso al puerto 53 desde redes externas.\n\n## Evaluación del auditor\n\nEl diagnóstico es incorrecto al clasificar la actividad como un incidente de seguridad (C2 o reconocimiento externo) y recomendar el bloqueo de la IP. La IP 143.88.255.10 pertenece al mismo rango de red corporativa (/16) que otros hosts locales (p. ej. 143.88.10.11, que consulta a 143.88.255.10 como servidor DNS). Las ráfagas regulares cada ~30 segundos hacia 10.0.10.1:53 con resultado S0 corresponden a un fallo operativo de resolución, temporizador de reintento o reenviador DNS (forwarder) inalcanzable, no a un ataque deliberado. Aplicar un bloqueo perimetral sobre dicha IP aislaría un servicio interno legítimo.\n\n## Comandos de mitigación propuestos\n\n- iptables -I INPUT 1 -s 143.88.255.10 -j DROP\n- iptables -I FORWARD 1 -s 143.88.255.10 -j DROP\n- ufw insert 1 deny from 143.88.255.10 to any\n- conntrack -D -s 143.88.255.10"
+    },
+    "_meta": {
+      "run_id": "uwf_des_sigiloso_0004__nodex__r1__8d766ff7",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_des_sigiloso_0004__nodex__r1__8d766ff7.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:31:01+00:00"
+  }
+}

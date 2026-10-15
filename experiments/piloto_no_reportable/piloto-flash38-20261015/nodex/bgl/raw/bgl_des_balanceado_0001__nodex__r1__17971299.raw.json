@@ -1,0 +1,434 @@
+{
+  "case_id": "bgl_des_balanceado_0001",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "bgl_des_balanceado_0001__nodex__r1__17971299",
+  "estado_crudo": {
+    "resumen_logs": {
+      "formato_detectado": "text",
+      "total_lineas": 20,
+      "servicios": {
+        "desconocido": 20
+      },
+      "eventos": {
+        "evento_normal": 20
+      },
+      "ventana_temporal": {
+        "inicio": null,
+        "fin": null
+      },
+      "n_ips_distintas": 0,
+      "ips_distintas": [],
+      "por_ip": {},
+      "usuarios": {},
+      "n_usuarios_distintos": 0,
+      "codigos_respuesta": {},
+      "entidades": [],
+      "cronologia": [],
+      "cronologia_omitidos": 0,
+      "raw_procedencia": {
+        "sha256": "ad18bdd3370a748edf30659a0c46f4da63ec4f3bd12b460ac21d919fd1a4ca95",
+        "lineas": 20,
+        "bytes": 2741
+      },
+      "reputacion_ips": {}
+    },
+    "preprocessing_metadata": {
+      "schema_version": "2.0",
+      "total_lineas_fisicas": 20,
+      "total_eventos": 20,
+      "decoder_distribution": {
+        "text": 20
+      },
+      "product_distribution": {},
+      "vendor_distribution": {},
+      "version_distribution": {},
+      "protocol_distribution": {},
+      "profile_distribution": {},
+      "severity_distribution": {},
+      "event_categories": {},
+      "event_outcomes": {},
+      "entities": {},
+      "time_window": {
+        "inicio": null,
+        "fin": null
+      },
+      "parsing": {
+        "parsed_events": 0,
+        "fallback_events": 20,
+        "coverage": 0.0
+      },
+      "segments": [
+        {
+          "index": 0,
+          "decoder": "text",
+          "line_start": 1,
+          "line_end": 20,
+          "n_records": 20,
+          "confidence": 0.1,
+          "decoder_inicial": "text",
+          "confidence_inicial": 0.1,
+          "decoder_distribution": {
+            "text": 20
+          },
+          "context": {}
+        }
+      ],
+      "entities_resumen": {},
+      "config": {
+        "LOG_DETECTION_CHUNK_SIZE": 50,
+        "LOG_ENABLE_MULTILINE": true,
+        "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+        "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+        "LOG_MAX_EVENTS": 100000,
+        "LOG_MAX_FILE_BYTES": 52428800,
+        "LOG_MAX_RAW_SAMPLES": 20,
+        "LOG_MAX_UNMAPPED_FIELDS": 100,
+        "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+        "LOG_PARSING_MODE": "hybrid",
+        "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+        "LOG_PRESERVE_RAW": true
+      }
+    },
+    "parsing_warnings": [],
+    "raw_samples": [
+      {
+        "decoder": "text",
+        "texto": "1121091173 2005.07.11 R30-M0-NB-C:J09-U01 2005-07-11-07.12.53.947417 R30-M0-NB-C:J09-U01 RAS KERNEL INFO CE sym 2, at 0x0d09f1c0, mask 0x80"
+      }
+    ],
+    "evidencia_logs": [
+      {
+        "uid": "log_record_000001",
+        "record_number": 1,
+        "line_start": 1,
+        "line_end": 1,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000002",
+        "record_number": 2,
+        "line_start": 2,
+        "line_end": 2,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000003",
+        "record_number": 3,
+        "line_start": 3,
+        "line_end": 3,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000004",
+        "record_number": 4,
+        "line_start": 4,
+        "line_end": 4,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000005",
+        "record_number": 5,
+        "line_start": 5,
+        "line_end": 5,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000006",
+        "record_number": 6,
+        "line_start": 6,
+        "line_end": 6,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000007",
+        "record_number": 7,
+        "line_start": 7,
+        "line_end": 7,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000008",
+        "record_number": 8,
+        "line_start": 8,
+        "line_end": 8,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000009",
+        "record_number": 9,
+        "line_start": 9,
+        "line_end": 9,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000010",
+        "record_number": 10,
+        "line_start": 10,
+        "line_end": 10,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000011",
+        "record_number": 11,
+        "line_start": 11,
+        "line_end": 11,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000012",
+        "record_number": 12,
+        "line_start": 12,
+        "line_end": 12,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000013",
+        "record_number": 13,
+        "line_start": 13,
+        "line_end": 13,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000014",
+        "record_number": 14,
+        "line_start": 14,
+        "line_end": 14,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000015",
+        "record_number": 15,
+        "line_start": 15,
+        "line_end": 15,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000016",
+        "record_number": 16,
+        "line_start": 16,
+        "line_end": 16,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000017",
+        "record_number": 17,
+        "line_start": 17,
+        "line_end": 17,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000018",
+        "record_number": 18,
+        "line_start": 18,
+        "line_end": 18,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000019",
+        "record_number": 19,
+        "line_start": 19,
+        "line_end": 19,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000020",
+        "record_number": 20,
+        "line_start": 20,
+        "line_end": 20,
+        "timestamp": null
+      }
+    ],
+    "evidencia_logs_omitidos": 0,
+    "eventos_reconstruidos": [
+      {
+        "event_id": "event_001",
+        "evidence_uids": [
+          "log_record_000001"
+        ],
+        "timestamp": null,
+        "event_type": "hardware_memory_error",
+        "description": "Registro de telemetría RAS reportando un error de memoria corregible (CE) en el componente de hardware.",
+        "confidence": null
+      }
+    ],
+    "secuencia_temporal": [],
+    "tecnicas_atribuidas": [],
+    "invalid_evidence_uid_count": 0,
+    "d11_warnings": [],
+    "telemetry": {
+      "llm_call_count": 5,
+      "input_tokens": 3787,
+      "output_tokens": 892,
+      "total_tokens": 7885,
+      "execution_time": 42.870046,
+      "replan_count": 0,
+      "intentos_correccion": 1,
+      "invalid_evidence_uid_count": 0,
+      "d11_warning_count": 0,
+      "llm_calls": [
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 525,
+          "output_tokens": 201,
+          "total_tokens": 1578,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 852,
+          "duration_s": 10.377,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 668,
+          "output_tokens": 256,
+          "total_tokens": 1769,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 845,
+          "duration_s": 9.942,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 268,
+          "output_tokens": 63,
+          "total_tokens": 643,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 312,
+          "duration_s": 4.948,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 221,
+          "output_tokens": 79,
+          "total_tokens": 858,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 558,
+          "duration_s": 6.797,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 2105,
+          "output_tokens": 293,
+          "total_tokens": 3037,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 639,
+          "duration_s": 10.72,
+          "error": null
+        }
+      ]
+    },
+    "firma": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+    "plan": {
+      "plan_version": 1,
+      "objetivo": "Analizar e identificar la naturaleza de los 20 eventos en texto libre no estructurado para evaluar posibles anomalías y proponer acciones de contención.",
+      "pasos": [
+        {
+          "id": 1,
+          "accion": "triage",
+          "objetivo": "Inspeccionar y categorizar las 20 líneas de texto sin procesar para identificar posibles patrones de actividad sospechosa o entidades relevantes.",
+          "estado": "ejecutado"
+        },
+        {
+          "id": 2,
+          "accion": "mitigacion",
+          "objetivo": "Proponer recomendaciones de contención basadas en los hallazgos y sugerencias para mejorar el parseo y la visibilidad de los logs.",
+          "estado": "ejecutado"
+        }
+      ],
+      "criterios_finalizacion": [
+        "Inspección completa del contenido de los eventos no estructurados.",
+        "Determinación de la existencia de amenazas o falsos positivos.",
+        "Emisión de pautas de mitigación y adecuación de ingesta de logs."
+      ]
+    },
+    "plan_objetivo": "Analizar e identificar la naturaleza de los 20 eventos en texto libre no estructurado para evaluar posibles anomalías y proponer acciones de contención.",
+    "paso_actual": 2,
+    "historial_ejecucion": [
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_planificador",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "plan v1, 2 pasos: ['triage', 'mitigacion']"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 1,
+        "nodo": "agente_analista_triage",
+        "accion": "triage",
+        "estado": "ejecutado",
+        "resumen": "diagnóstico producido"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_selector_herramientas",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "usar_cve=False"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 2,
+        "nodo": "agente_ingeniero_mitigacion",
+        "accion": "mitigacion",
+        "estado": "ejecutado",
+        "resumen": "6 comandos propuestos"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "tool_validar_comandos",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "comandos válidos"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_auditor_final",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "confianza=0.9 cobertura_suficiente=True"
+      }
+    ],
+    "desviaciones_plan": [],
+    "historial_planes": [],
+    "replan_count": 0,
+    "diagnostico": "Los eventos analizados corresponden a registros de telemetría y fiabilidad del sistema (RAS - Reliability, Availability, and Serviceability) del kernel de un supercomputador (arquitectura IBM BlueGene/L). El registro de muestra clasificado como 'RAS KERNEL INFO CE' describe un error corregible de hardware/memoria (Correctable Error, CE) en el componente R30-M0-NB-C:J09-U01. No se observan indicadores de compromiso (IoC), vectores de ataque ni tácticas/técnicas mapeables a MITRE ATT&CK. No se requieren acciones de contención de seguridad, sino seguimiento a nivel de mantenimiento de hardware para prevenir fallos no corregibles en los módulos de memoria afectados.",
+    "necesita_rag": false,
+    "usar_cve": false,
+    "razon_seleccion": "El diagnóstico indica que se trata de telemetría de hardware (error de memoria corregible RAS) en un supercomputador y no de una vulnerabilidad de software ni un incidente de seguridad, por lo que no procede buscar CVEs.",
+    "contexto_rag": [],
+    "tecnicas_mitre": [],
+    "cves_encontrados": [],
+    "comandos_mitigacion": [
+      "dmesg -T | grep -iE 'edac|memory error|correctable'",
+      "edac-util -v",
+      "ras-mc-ctl --error-count",
+      "systemctl status rasdaemon",
+      "journalctl -k --grep='CE|EDAC|RAS' -n 50",
+      "ipmitool sel list"
+    ],
+    "comandos_validos": true,
+    "motivos_rechazo": [],
+    "intentos_correccion": 1,
+    "confianza": 0.9,
+    "hay_incidente": false,
+    "hay_anomalia": true,
+    "evaluacion_auditor": "El diagnóstico es correcto. Los registros corresponden a eventos de telemetría RAS del kernel que reportan errores corregibles (CE) a nivel de memoria física/hardware en la arquitectura de supercomputación. Se trata de una anomalía de hardware puramente operativa, sin evidencia de intrusión, compromiso o actividad maliciosa.",
+    "cobertura_auditor": true,
+    "cobertura_suficiente": true,
+    "motivo_replanificacion": "",
+    "requiere_replanificacion": false,
+    "_firma": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+    "_error_api": null,
+    "requiere_revision_humana": false,
+    "output_contract_version": "d11-v1"
+  }
+}

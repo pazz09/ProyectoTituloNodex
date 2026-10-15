@@ -1,0 +1,41 @@
+{
+  "case_id": "hdfs_des_balanceado_0005",
+  "dataset": "hdfs",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "hdfs_des_balanceado_0005__gemext__r1__07b291fb",
+  "salida": {
+    "case_id": "hdfs_des_balanceado_0005",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl log muestra operaciones completamente normales y rutinarias en un clúster Hadoop HDFS a nivel INFO. Incluye verificaciones periódicas de bloques por DataBlockScanner, recepción y despacho de bloques por DataXceiver, finalizaciones regulares de PacketResponder, eliminación de bloques antiguos/temporales por FSDataset y actualización de metadatos en el NameSystem. No se observan errores, excepciones ni actividades anómalas o maliciosas.\n\n## Evaluación del auditor\n\nEl conjunto de datos corresponde al dataset clásico de logs de HDFS. Todas las entradas registran estados operacionales exitosos estándar (nivel INFO). La ausencia de advertencias (WARN), errores (ERROR) o excepciones confirma que no hay degradación del sistema ni compromiso de seguridad."
+    },
+    "_meta": {
+      "run_id": "hdfs_des_balanceado_0005__gemext__r1__07b291fb",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "hdfs_des_balanceado_0005__gemext__r1__07b291fb.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:24:17+00:00"
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "case_id": "hdfs_des_natural_0007",
+  "dataset": "hdfs",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "hdfs_des_natural_0007__nodex__r1__ae168016",
+  "salida": {
+    "case_id": "hdfs_des_natural_0007",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2008-11-09 20:53:15",
+        "entities": [],
+        "event_type": "block_allocation",
+        "evidence_uids": [
+          "log_record_000001"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2008-11-10 07:03:26",
+        "entities": [],
+        "event_type": "datanode_exception",
+        "evidence_uids": [
+          "log_record_000004"
+        ]
+      },
+      {
+        "uid": "event_003",
+        "timestamp": "2008-11-10 12:17:58",
+        "entities": [],
+        "event_type": "block_verification",
+        "evidence_uids": [
+          "log_record_000006"
+        ]
+      },
+      {
+        "uid": "event_004",
+        "timestamp": "2008-11-10 21:05:40",
+        "entities": [],
+        "event_type": "block_deletion",
+        "evidence_uids": [
+          "log_record_000007",
+          "log_record_000008"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002",
+      "event_003",
+      "event_004"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos eventos analizados corresponden a la operativa interna rutinaria de un clúster Hadoop HDFS ejecutando tareas de MapReduce (asignación de bloques temporales en rutas /user/root/rand/_temporary/). La presencia de un evento clasificado como crítico o WARN entre los componentes NameSystem/DataNode/FSDataSet refleja una anomalía operacional típica (ej. latencia de réplica, verificación de bloque o reintento de comunicación interna entre nodos en el rango 10.250.0.0/16 - 10.251.0.0/16). Se descarta explotación de vulnerabilidades externas o compromiso de seguridad. Como medida de contención y mantenimiento operacional, se sugiere validar el estado de replicación y la integridad de los DataNodes involucrados mediante 'hdfs fsck'.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Los registros reflejan la operativa rutinaria de un clúster HDFS (asignación, servicio, verificación y eliminación de bloques en tareas de MapReduce). El único evento de advertencia (WARN en log_record_000004) corresponde a una excepción operacional al servir un bloque en el DataNode (típicamente desconexión de cliente o timeout de I/O), lo cual califica como una anomalía operativa sin ningún impacto ni indicio de compromiso de seguridad.\n\n## Comandos de mitigación propuestos\n\n- hdfs dfsadmin -report\n- hdfs fsck /user/root/rand/ -files -blocks -locations\n- hdfs fsck / -list-corruptfileblocks\n- iptables -I INPUT 1 -p tcp -s 10.250.0.0/16 -m multiport --dports 8020,9000,9864,9866,9867,9870 -j ACCEPT\n- iptables -I INPUT 2 -p tcp -s 10.251.0.0/16 -m multiport --dports 8020,9000,9864,9866,9867,9870 -j ACCEPT\n- iptables -A INPUT -p tcp -m multiport --dports 8020,9000,9864,9866,9867,9870 -j DROP"
+    },
+    "_meta": {
+      "run_id": "hdfs_des_natural_0007__nodex__r1__ae168016",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "hdfs_des_natural_0007__nodex__r1__ae168016.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:28:41+00:00"
+  }
+}

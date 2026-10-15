@@ -1,0 +1,41 @@
+{
+  "case_id": "hdfs_des_natural_0018",
+  "dataset": "hdfs",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "hdfs_des_natural_0018__nodex__r1__b4f3e8de",
+  "salida": {
+    "case_id": "hdfs_des_natural_0018",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nActividad operativa legítima y rutinaria del clúster HDFS. Los eventos analizados (nivel INFO) corresponden a operaciones internas normales del sistema de archivos distribuido (gestión y eliminación de bloques por parte de FSDataset, DataNode y FSNamesystem) originadas exclusivamente en rangos de direccionamiento IP privado interno, sin registrar intentos fallidos, anomalías ni patrones sospechosos. No se identifican vulnerabilidades activas ni indicios de compromiso.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Los registros corresponden íntegramente a operaciones estándar de mantenimiento y ciclo de vida de bloques en HDFS (asignación, recepción, actualización de metadatos y eliminación de bloques) ejecutadas en IPs privadas internas, todas con severidad INFO y sin fallas ni indicios de anomalía o actividad maliciosa."
+    },
+    "_meta": {
+      "run_id": "hdfs_des_natural_0018__nodex__r1__b4f3e8de",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "hdfs_des_natural_0018__nodex__r1__b4f3e8de.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:29:52+00:00"
+  }
+}
