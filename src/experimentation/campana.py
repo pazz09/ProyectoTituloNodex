@@ -256,11 +256,12 @@ def describir_plan(raiz: Path, subconjunto: dict, plan, congelada: dict | None) 
                   f"{est['total_estimado_tokens']:,} tokens".replace(",", "."))
     if est["aviso_modelo"]:
         lineas.append(f"  AVISO: {est['aviso_modelo']}")
-    costo = estimacion.costo(est, estimacion.leer_precios(raiz), modelo or "")
-    lineas.append("  costo: " + (f"{costo['costo']} {costo.get('moneda')} "
-                                 f"(precios del {costo['fecha_de_precios']}, "
-                                 f"fuente: {costo['fuente_de_precios']})"
-                                 if costo["costo"] is not None else f"sin calcular — {costo['motivo']}"))
+    hoy = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    costo = estimacion.costo(est, estimacion.leer_precios(raiz), modelo or "", hoy)
+    lineas.append("  costo (solo lo medido): " + (
+        f"{costo['costo']} {costo.get('moneda')} con los precios vigentes el {hoy} "
+        f"(tabla consultada el {costo['fecha_de_precios']}, fuente: {costo['fuente_de_precios']})"
+        if costo["costo"] is not None else f"sin calcular — {costo['motivo']}"))
     e1 = entradas_de_la_etapa(plan, subconjunto, 1)
     e2 = entradas_de_la_etapa(plan, subconjunto, 2)
     lineas.append(f"etapas: 1 = {len(e1)} corridas (caso {_primer_caso(subconjunto)}), "

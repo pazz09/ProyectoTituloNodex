@@ -101,25 +101,125 @@ def leer_precios(raiz_repo: Path) -> dict:
     return json.loads(ruta.read_text(encoding="utf-8"))
 
 
-def costo(estimacion: dict, precios: dict, modelo: str) -> dict:
-    """Costo estimado con la tabla de precios, o `None` si no hay precio configurado.
+def precio_vigente(precios: dict, modelo: str, fecha: str) -> dict | None:
+    """Precios de `modelo` vigentes en `fecha` (`AAAA-MM-DD`), o `None` si no hay.
 
-    Los tokens de razonamiento se facturan como salida (documentación oficial de
-    Gemini). No se usa ningún precio que no esté en la tabla.
+    Cada vigencia lleva `desde` y `hasta` (inclusivos; `null` = sin límite). Si la tabla no
+    declara fecha de consulta y fuente, tampoco se usa: un precio sin procedencia no es un
+    precio.
     """
-    fila = (precios.get("modelos") or {}).get(modelo) or {}
-    p_entrada, p_salida = fila.get("entrada_por_millon"), fila.get("salida_por_millon")
-    if p_entrada is None or p_salida is None:
-        return {"costo": None, "motivo": f"sin precios configurados para {modelo}"}
-    if not precios.get("fecha") or not precios.get("fuente"):
-        return {"costo": None, "motivo": "la tabla de precios no declara fecha y fuente"}
+    if not precios.get("fecha_de_consulta") or not precios.get("fuente"):
+        return None
+    for v in ((precios.get("modelos") or {}).get(modelo) or {}).get("vigencias") or []:
+        if (v.get("desde") is None or v["desde"] <= fecha) and (
+                v.get("hasta") is None or fecha <= v["hasta"]):
+            if v.get("entrada_por_millon") is None or v.get("salida_por_millon") is None:
+                return None
+            return v
+    return None
+
+
+def costo_de_tokens(entrada: float, salida_con_razonamiento: float, vigencia: dict) -> float:
+    """USD de una cantidad de tokens. El razonamiento se factura como salida."""
+    return (entrada / 1e6 * vigencia["entrada_por_millon"]
+            + salida_con_razonamiento / 1e6 * vigencia["salida_por_millon"])
+
+
+def costo(estimacion: dict, precios: dict, modelo: str, fecha: str) -> dict:
+    """Costo estimado de un plan con los precios vigentes en `fecha`, o `None` sin precio."""
+    v = precio_vigente(precios, modelo, fecha)
+    if v is None:
+        return {"costo": None,
+                "motivo": f"sin precio vigente de {modelo} el {fecha} (o la tabla no declara "
+                          f"fecha de consulta y fuente)"}
     entrada = salida = 0
     for f in estimacion["filas"]:
         if f["por_corrida"] is None:
             continue
         entrada += f["por_corrida"]["entrada"] * f["corridas"]
         salida += (f["por_corrida"]["salida"] + f["por_corrida"]["razonamiento"]) * f["corridas"]
-    valor = entrada / 1e6 * p_entrada + salida / 1e6 * p_salida
-    return {"costo": round(valor, 4), "moneda": precios.get("moneda"),
-            "fecha_de_precios": precios["fecha"], "fuente_de_precios": precios["fuente"],
+    return {"costo": round(costo_de_tokens(entrada, salida, v), 4),
+            "moneda": precios.get("moneda"), "fecha": fecha,
+            "fecha_de_precios": precios["fecha_de_consulta"], "fuente_de_precios": precios["fuente"],
+            "vigencia": {"desde": v.get("desde"), "hasta": v.get("hasta")},
             "nota": "solo incluye las corridas con medición"}
+
+
+def mediciones_de_un_resumen(resumen: dict) -> dict[tuple[str, str], dict]:
+    """Tokens POR CORRIDA (media de las corridas completas) por (arquitectura, dataset), a
+    partir de la tabla de consumo de una consolidación. Para el baseline no hay tokens."""
+    salida = {}
+    for f in resumen["tablas"]["consumo"]["filas"]:
+        if f["arquitectura"] == "baseline_reglas" or f.get("tokens_entrada_medios") is None:
+            continue
+        salida[(f["arquitectura"], f["dataset"])] = {
+            "entrada": f["tokens_entrada_medios"], "salida": f["tokens_salida_medios"],
+            "razonamiento": f["tokens_razonamiento_medios"],
+            "llamadas": f["llamadas_medias"], "n": f["n_completas"]}
+    return salida
+
+
+def costo_real(resumen: dict, precios: dict, modelo: str, fecha: str) -> dict:
+    """Costo de lo que YA se ejecutó (suma de las corridas completas de una consolidación)."""
+    v = precio_vigente(precios, modelo, fecha)
+    entrada = salida = razon = corridas = llamadas = 0.0
+    for f in resumen["tablas"]["consumo"]["filas"]:
+        if f["arquitectura"] == "baseline_reglas" or f.get("tokens_entrada_medios") is None:
+            continue
+        n = f["n_completas"]
+        entrada += f["tokens_entrada_medios"] * n
+        salida += f["tokens_salida_medios"] * n
+        razon += f["tokens_razonamiento_medios"] * n
+        llamadas += f["llamadas_medias"] * n
+        corridas += n
+    base = {"corridas_con_llm": round(corridas), "llamadas": round(llamadas),
+            "tokens_entrada": round(entrada), "tokens_salida": round(salida),
+            "tokens_razonamiento": round(razon)}
+    if v is None:
+        return {**base, "costo": None, "motivo": f"sin precio vigente de {modelo} el {fecha}"}
+    return {**base, "costo": round(costo_de_tokens(entrada, salida + razon, v), 4),
+            "moneda": precios.get("moneda"), "fecha": fecha,
+            "vigencia": {"desde": v.get("desde"), "hasta": v.get("hasta")}}
+
+
+def estimar_campana(casos: dict[str, int], repeticiones: int,
+                    mediciones: dict[tuple[str, str], dict], precios: dict, modelo: str,
+                    fechas: dict[str, str], arquitecturas: tuple[str, ...]) -> dict:
+    """Orden de magnitud de una campaña: casos por dataset × repeticiones × tokens por corrida.
+
+    `mediciones`: tokens por corrida por celda. `fechas`: nombre de escenario -> fecha, para
+    mostrar el costo bajo cada vigencia de precios. El baseline NO se presupuesta. Una celda
+    sin medición no suma y se declara.
+    """
+    filas, sin_medicion = [], []
+    totales = {nombre: 0.0 for nombre in fechas}
+    tokens_total = 0.0
+    for dataset, n_casos in casos.items():
+        for arq in arquitecturas:
+            m = mediciones.get((arq, dataset))
+            corridas = n_casos * repeticiones
+            if m is None:
+                sin_medicion.append({"arquitectura": arq, "dataset": dataset, "corridas": corridas})
+                continue
+            por_corrida = {k: m[k] for k in ("entrada", "salida", "razonamiento")}
+            costos = {}
+            for nombre, fecha in fechas.items():
+                v = precio_vigente(precios, modelo, fecha)
+                costos[nombre] = (None if v is None else round(costo_de_tokens(
+                    m["entrada"] * corridas, (m["salida"] + m["razonamiento"]) * corridas, v), 2))
+                if costos[nombre] is not None:
+                    totales[nombre] += costos[nombre]
+            tokens = (m["entrada"] + m["salida"] + m["razonamiento"]) * corridas
+            tokens_total += tokens
+            filas.append({"arquitectura": arq, "dataset": dataset, "casos": n_casos,
+                          "repeticiones": repeticiones, "corridas": corridas,
+                          "tokens_por_corrida": round(sum(por_corrida.values())),
+                          "tokens": round(tokens), "base": f"media de {m['n']} corridas medidas",
+                          "costo": costos})
+    return {
+        "es": "orden de magnitud; no es un presupuesto",
+        "baseline": "no se presupuesta (no usa el modelo)",
+        "filas": filas, "tokens_total": round(tokens_total),
+        "costo_total": {k: round(v, 2) for k, v in totales.items()},
+        "celdas_sin_medicion": sin_medicion,
+    }
