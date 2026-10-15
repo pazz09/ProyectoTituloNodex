@@ -535,3 +535,34 @@ def test_la_consolidacion_no_toca_las_carpetas_de_resultados_del_repositorio(cam
     repo = Path(__file__).resolve().parents[2] / "experiments"
     assert not any((repo / "metrics").rglob("*")) if (repo / "metrics").exists() else True
     assert not (repo / "outputs").exists()
+
+
+# --- línea de comandos ---------------------------------------------------------------
+
+def test_la_linea_de_comandos_se_niega_a_consolidar_si_no_hay_corridas(tmp_path, capsys):
+    """Una invocación accidental no debe dejar carpetas vacías en
+    experiments/metrics/."""
+    _construir_repo(tmp_path)
+    codigo = consolidacion.main(
+        ["--subconjunto", "sub", "--config", CONFIG], raiz_repo=tmp_path)
+    assert codigo == 2
+    assert "No se crea ninguna consolidación" in capsys.readouterr().out
+    assert not (tmp_path / "experiments" / "metrics").exists()
+
+
+def test_la_linea_de_comandos_consolida_y_resume_la_integridad(campana, capsys):
+    raiz, _ = campana
+    codigo = consolidacion.main(
+        ["--subconjunto", "sub", "--config", CONFIG, "--arquitecturas",
+         "nodex_multiagente", "baseline_reglas", "gemini_externo", "--marca", MARCA],
+        raiz_repo=raiz)
+    salida = capsys.readouterr().out
+    assert codigo == 0
+    assert (raiz / "experiments" / "metrics" / CONFIG / MARCA / "resumen.json").is_file()
+    assert "fallidas 1" in salida
+    assert "[alta]" in salida          # la corrida fallida y el fallback se anuncian
+
+
+def test_la_linea_de_comandos_exige_subconjunto_y_configuracion():
+    with pytest.raises(SystemExit):
+        consolidacion.main(["--subconjunto", "sub"])

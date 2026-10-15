@@ -735,3 +735,56 @@ def consolidar(
     escribir_resultado(c_d1 + c_d2 + c_d3 + c_d4 + c_con, destino,
                        detalle={"integridad": integridad}, etiqueta="contrato", marca=marca)
     return destino
+
+
+# --- línea de comandos -------------------------------------------------------------
+
+def main(argv: list[str] | None = None, raiz_repo: Path | None = None) -> int:
+    """`python -m src.experimentation.consolidacion --subconjunto X --config Y`.
+
+    Solo LEE lo guardado: no ejecuta arquitecturas ni llama a ningún modelo.
+    Se niega a crear una consolidación cuando no hay ninguna corrida guardada
+    ni ningún fallo registrado, para no dejar carpetas vacías en
+    `experiments/metrics/` por una invocación accidental.
+    """
+    import argparse
+
+    analizador = argparse.ArgumentParser(
+        prog="python -m src.experimentation.consolidacion",
+        description="Consolida las corridas guardadas en tablas para el informe.",
+    )
+    analizador.add_argument("--subconjunto", required=True,
+                            help="nombre del subconjunto: piloto, rubrica, evaluacion")
+    analizador.add_argument("--config", required=True,
+                            help="config_version de las corridas a consolidar")
+    analizador.add_argument("--arquitecturas", nargs="+", default=list(ARQUITECTURAS_CAMPANA),
+                            help="por omisión: NODEX y el baseline")
+    analizador.add_argument("--marca", default=None,
+                            help="marca de la consolidación (por omisión, la hora UTC)")
+    args = analizador.parse_args(argv)
+
+    raiz = raiz_repo or Path(__file__).resolve().parents[2]
+    arquitecturas = tuple(args.arquitecturas)
+
+    previa = evaluar_corridas(raiz, args.subconjunto, args.config, arquitecturas)
+    hay_fallos = bool(persistencia.leer_fallos(raiz, args.config))
+    if not previa.registros and not hay_fallos:
+        print(f"No hay corridas guardadas de {args.config!r} para el subconjunto "
+              f"{args.subconjunto!r} ({previa.esperadas} esperadas, todas ausentes). "
+              "No se crea ninguna consolidación.")
+        return 2
+
+    destino = consolidar(raiz, args.subconjunto, args.config, arquitecturas, marca=args.marca)
+    resumen = json.loads((destino / "resumen.json").read_text(encoding="utf-8"))
+    i = resumen["integridad"]
+    print(f"Consolidación escrita en {destino}")
+    print(f"  corridas: {i['corridas_presentes']} presentes de {i['corridas_esperadas']} "
+          f"esperadas | completas {i['corridas_completas']} | ausentes "
+          f"{len(i['corridas_ausentes'])} | fallidas {len(i['corridas_fallidas'])}")
+    for aviso in i["advertencias"]:
+        print(f"  [{aviso['severidad']}] {aviso['mensaje']} ({aviso['n']})")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
