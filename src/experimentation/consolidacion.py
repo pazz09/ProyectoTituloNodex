@@ -48,6 +48,7 @@ import statistics
 from datetime import datetime, timezone
 from pathlib import Path
 
+from src.experimentation import estadistica
 from src.experimentation.contracts import PROTOCOLO_VERSION
 from src.experimentation.evaluacion import (
     REGLA_D2_D3,
@@ -246,11 +247,13 @@ def _dataset_de(case_id: str) -> str:
 
 # --- tablas ------------------------------------------------------------------
 
-def _tabla(titulo, seccion, columnas, filas, descripcion=None) -> dict:
+def _tabla(titulo, seccion, columnas, filas, descripcion=None, aviso=None) -> dict:
     return {
         "titulo": titulo,
         "seccion": seccion,
         "descripcion": descripcion,
+        # Advertencia que la vista muestra DESTACADA (no una nota al pie).
+        "aviso": aviso,
         "columnas": [
             {"clave": c[0], "etiqueta": c[1], "tipo": c[2] if len(c) > 2 else "texto"}
             for c in columnas
@@ -284,6 +287,39 @@ def _estados_d1(registros) -> list[str]:
             previo = r.estados.get("deteccion", "no_evaluable")
             estados.append("no_evaluable" if previo == "evaluable" else previo)
     return estados
+
+
+_METRICAS_CON_INTERVALO = (
+    ("accuracy", lambda c: (c.tp + c.tn, c.total)),
+    ("precision", lambda c: (c.tp, c.tp + c.fp)),
+    ("recall", lambda c: (c.tp, c.tp + c.fn)),
+)
+
+
+def _intervalos_d1(conteos) -> dict:
+    """Intervalo de Wilson al 95 % de exactitud, precisión y exhaustividad, con su texto."""
+    campos = {}
+    for nombre, numerador_y_denominador in _METRICAS_CON_INTERVALO:
+        aciertos, total = numerador_y_denominador(conteos)
+        ic = estadistica.wilson(aciertos, total)
+        campos[f"{nombre}_ic"] = estadistica.texto_intervalo(ic)
+        campos[f"{nombre}_ic_inf"] = None if ic is None else round(ic[0], 6)
+        campos[f"{nombre}_ic_sup"] = None if ic is None else round(ic[1], 6)
+        campos[f"{nombre}_ic_n"] = total
+    return campos
+
+
+def _aviso_muestras_chicas(filas: list[dict]) -> str | None:
+    """Aviso destacado: con pocos casos por celda los intervalos son anchos y las repeticiones no
+    son independientes. Lleva los tamaños reales."""
+    ns = [f["n_evaluables"] for f in filas if f.get("n_evaluables")]
+    if not ns:
+        return None
+    rango = str(min(ns)) if min(ns) == max(ns) else f"{min(ns)} a {max(ns)}"
+    return (f"Muestras chicas: {rango} corridas evaluables por celda. Los intervalos de confianza son "
+            f"anchos: una diferencia entre arquitecturas que cabe dentro de ellos no permite decir "
+            f"que una sea mejor que otra. Las repeticiones de un mismo caso no son independientes, así "
+            f"que los intervalos de Wilson (que las tratan como independientes) son además optimistas.")
 
 
 def tabla_d1(registros) -> tuple[dict, dict, list]:
@@ -324,6 +360,7 @@ def tabla_d1(registros) -> tuple[dict, dict, list]:
             "f1_macro_condiciones": media([v["f1"] for v in por_cond.values()]),
             "f1_media_repeticiones": media([v["f1"] for v in por_rep.values()]),
             "f1_desv_repeticiones": desviacion([v["f1"] for v in por_rep.values()]),
+            **_intervalos_d1(conteos),
         })
         contratos.append(construir_deteccion(arquitectura, dataset, estados, conteos, m))
 
@@ -339,10 +376,15 @@ def tabla_d1(registros) -> tuple[dict, dict, list]:
          ("fpr", "FPR", "proporcion"), ("fnr", "FNR", "proporcion"),
          ("f1_macro_condiciones", "F1 macro (condiciones)", "proporcion"),
          ("f1_media_repeticiones", "F1 media (repeticiones)", "proporcion"),
-         ("f1_desv_repeticiones", "F1 desv. (repeticiones)", "proporcion")],
+         ("f1_desv_repeticiones", "F1 desv. (repeticiones)", "proporcion"),
+         ("accuracy_ic", "IC 95 % Exactitud (Wilson)"),
+         ("precision_ic", "IC 95 % Precisión (Wilson)"),
+         ("recall_ic", "IC 95 % Exhaustividad (Wilson)")],
         filas,
         "Micro: una matriz con todas las corridas evaluables. Una celda vacía es "
-        "«sin dato», no cero.",
+        "«sin dato», no cero. IC 95 %: intervalo de Wilson de la exactitud (TP+TN sobre evaluables), "
+        "la precisión (TP sobre TP+FP) y la exhaustividad (TP sobre TP+FN).",
+        _aviso_muestras_chicas(filas),
     )
     t2 = _tabla(
         "Detección por condición", "11.1",
@@ -564,6 +606,81 @@ def tabla_consumo(registros, telemetrias, fallos_sin_salida, principal) -> tuple
         "de tokens («Corridas con total None»); lo que sí se sabe de esas corridas se "
         "muestra aparte como suma parcial («Tokens parciales», ≥, un piso), nunca como total.",
     ), contratos
+
+
+def _variacion_pct(valores: list[float]) -> float | None:
+    """(máximo − mínimo) / media × 100 de las repeticiones de un caso. `None` si no se puede."""
+    if len(valores) < 2:
+        return None
+    m = sum(valores) / len(valores)
+    return None if m == 0 else 100 * (max(valores) - min(valores)) / m
+
+
+def tabla_consistencia(registros, telemetrias) -> dict:
+    """¿El sistema repite lo que dice? Concordancia de veredicto y variación de tokens y tiempo
+    entre las repeticiones de un mismo caso. Solo hay filas donde hay repeticiones (no el baseline).
+
+    - Concordancia: de los casos con veredicto en al menos 2 repeticiones, en cuántos todas
+      coinciden. Una repetición sin veredicto (falló) no se compara; se cuenta aparte.
+    - Variación: por caso, (máximo − mínimo) / media de la repetición; se informa la media y el
+      máximo sobre los casos. Tokens: total de la corrida; tiempo: segundos de ejecución.
+    """
+    filas = []
+    for (dataset, arquitectura), grupo in _grupos(registros).items():
+        por_caso: dict[str, list] = {}
+        for r in grupo:
+            por_caso.setdefault(r.case_id, []).append(r)
+        if max(len(v) for v in por_caso.values()) < 2:
+            continue
+        comparables = concordantes = sin_comparar = 0
+        var_tokens, var_tiempo = [], []
+        for reps in por_caso.values():
+            veredictos = [r.prediccion for r in reps if r.prediccion is not None]
+            if len(veredictos) >= 2:
+                comparables += 1
+                concordantes += len(set(veredictos)) == 1
+            else:
+                sin_comparar += 1
+            tokens = [t["total_tokens"] for r in reps
+                      if (t := telemetrias.get(r.run_id) or {}).get("total_tokens") is not None]
+            tiempos = [t["execution_time"] for r in reps
+                       if (t := telemetrias.get(r.run_id) or {}).get("execution_time") is not None]
+            if (v := _variacion_pct(tokens)) is not None:
+                var_tokens.append(v)
+            if (v := _variacion_pct(tiempos)) is not None:
+                var_tiempo.append(v)
+        ic = estadistica.wilson(concordantes, comparables)
+        filas.append({
+            "dataset": dataset, "arquitectura": arquitectura,
+            "n_casos": len(por_caso), "n_comparables": comparables,
+            "n_sin_comparar": sin_comparar, "n_mismo_veredicto": concordantes,
+            "concordancia": None if not comparables else concordantes / comparables,
+            "concordancia_ic": estadistica.texto_intervalo(ic),
+            "n_casos_tokens": len(var_tokens),
+            "tokens_variacion_media_pct": media(var_tokens),
+            "tokens_variacion_max_pct": max(var_tokens) if var_tokens else None,
+            "n_casos_tiempo": len(var_tiempo),
+            "tiempo_variacion_media_pct": media(var_tiempo),
+            "tiempo_variacion_max_pct": max(var_tiempo) if var_tiempo else None,
+        })
+    return _tabla(
+        "Consistencia entre repeticiones", "11.1",
+        [("dataset", "Dataset"), ("arquitectura", "Arquitectura"),
+         ("n_casos", "Casos", "entero"), ("n_comparables", "Con veredicto en ≥ 2 repeticiones", "entero"),
+         ("n_sin_comparar", "Sin comparar", "entero"),
+         ("n_mismo_veredicto", "Mismo veredicto", "entero"),
+         ("concordancia", "Concordancia de veredicto", "proporcion"),
+         ("concordancia_ic", "IC 95 % (Wilson)"),
+         ("tokens_variacion_media_pct", "Variación de tokens, media (%)", "numero"),
+         ("tokens_variacion_max_pct", "Variación de tokens, máx. (%)", "numero"),
+         ("tiempo_variacion_media_pct", "Variación de tiempo, media (%)", "numero"),
+         ("tiempo_variacion_max_pct", "Variación de tiempo, máx. (%)", "numero")],
+        filas,
+        "Por caso: (máximo − mínimo) / media entre sus repeticiones. «Sin comparar»: casos con menos "
+        "de 2 repeticiones con veredicto (una repetición fallida no se compara ni se cuenta como "
+        "discrepancia). Temperatura 0 no garantiza respuestas idénticas.",
+        _aviso_muestras_chicas([{"n_evaluables": f["n_comparables"]} for f in filas]),
+    )
 
 
 HERRAMIENTAS_EXTERNAS = ("abuseipdb", "nvd")
@@ -915,12 +1032,14 @@ def consolidar(
     t_d4, c_d4 = tabla_d4(puntuaciones, registros)
     t_con, c_con = tabla_consumo(registros, telemetrias, fallos_sin_salida, principal)
     t_ext = tabla_consultas_externas(registros, consultas_externas)
+    t_cons = tabla_consistencia(registros, telemetrias)
     t_cmp = tabla_comparacion(t_d1, t_d2, t_d3, t_con)
     t_err = tabla_errores(registros)
     tablas = {
         "d1_deteccion": t_d1, "d1_condiciones": t_d1c,
         "d2_reconstruccion": t_d2, "d3_mitre": t_d3, "d4_rubrica": t_d4,
-        "consumo": t_con, "consultas_externas": t_ext, "comparacion": t_cmp,
+        "consumo": t_con, "consultas_externas": t_ext, "consistencia_repeticiones": t_cons,
+        "comparacion": t_cmp,
         "errores_d1": t_err,
     }
 

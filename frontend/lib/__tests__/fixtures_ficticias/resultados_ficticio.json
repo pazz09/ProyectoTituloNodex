@@ -5,8 +5,16 @@
   "reportable": false,
   "config_version": "FICTICIO-no-usar",
   "consolidacion": "20000101T000000Z",
-  "generado_utc": "2026-10-15T22:04:16+00:00",
+  "generado_utc": "2026-10-15T23:35:56+00:00",
   "protocolo_version": "1.0",
+  "reglas_de_evaluacion": {
+    "d2_d3": {
+      "version": "v2-omision-cuenta",
+      "enmienda": "2026-10-15",
+      "motivo": "observación del piloto de desarrollo: los casos sin atribución salían de la métrica e inflaban la exhaustividad",
+      "texto": "corrida válida y completa + referencia existente + sin eventos/técnicas = omisión (exhaustividad 0, precisión indefinida, cuenta); corrida fallida o de formato inválido = no evaluable, aparte"
+    }
+  },
   "subconjunto": "sub",
   "particion": "desarrollo",
   "arquitecturas": [
@@ -52,6 +60,12 @@
         "severidad": "alta",
         "mensaje": "datos ficticios de prueba",
         "n": 0
+      },
+      {
+        "codigo": "omisiones_d2_d3",
+        "severidad": "info",
+        "mensaje": "corridas válidas en que el sistema no entregó eventos o técnicas habiendo referencia: cuentan como omisión (exhaustividad 0), no salen de la métrica (regla v2, 15-oct-2026)",
+        "n": 1
       },
       {
         "codigo": "resultados_de_depuracion",
@@ -101,7 +115,8 @@
     "d1_deteccion": {
       "titulo": "Detección por dataset y arquitectura",
       "seccion": "11.1",
-      "descripcion": "Micro: una matriz con todas las corridas evaluables. Una celda vacía es «sin dato», no cero.",
+      "descripcion": "Micro: una matriz con todas las corridas evaluables. Una celda vacía es «sin dato», no cero. IC 95 %: intervalo de Wilson de la exactitud (TP+TN sobre evaluables), la precisión (TP sobre TP+FP) y la exhaustividad (TP sobre TP+FN).",
+      "aviso": "Muestras chicas: 1 a 4 corridas evaluables por celda. Los intervalos de confianza son anchos: una diferencia entre arquitecturas que cabe dentro de ellos no permite decir que una sea mejor que otra. Las repeticiones de un mismo caso no son independientes, así que los intervalos de Wilson (que las tratan como independientes) son además optimistas.",
       "columnas": [
         {
           "clave": "dataset",
@@ -192,6 +207,21 @@
           "clave": "f1_desv_repeticiones",
           "etiqueta": "F1 desv. (repeticiones)",
           "tipo": "proporcion"
+        },
+        {
+          "clave": "accuracy_ic",
+          "etiqueta": "IC 95 % Exactitud (Wilson)",
+          "tipo": "texto"
+        },
+        {
+          "clave": "precision_ic",
+          "etiqueta": "IC 95 % Precisión (Wilson)",
+          "tipo": "texto"
+        },
+        {
+          "clave": "recall_ic",
+          "etiqueta": "IC 95 % Exhaustividad (Wilson)",
+          "tipo": "texto"
         }
       ],
       "filas": [
@@ -213,7 +243,19 @@
           "fnr": 0.0,
           "f1_macro_condiciones": 1.0,
           "f1_media_repeticiones": 1.0,
-          "f1_desv_repeticiones": null
+          "f1_desv_repeticiones": null,
+          "accuracy_ic": "0,34 – 1,00",
+          "accuracy_ic_inf": 0.34238,
+          "accuracy_ic_sup": 1.0,
+          "accuracy_ic_n": 2,
+          "precision_ic": "0,21 – 1,00",
+          "precision_ic_inf": 0.206549,
+          "precision_ic_sup": 1.0,
+          "precision_ic_n": 1,
+          "recall_ic": "0,21 – 1,00",
+          "recall_ic_inf": 0.206549,
+          "recall_ic_sup": 1.0,
+          "recall_ic_n": 1
         },
         {
           "dataset": "bgl",
@@ -233,7 +275,19 @@
           "fnr": 0.0,
           "f1_macro_condiciones": 1.0,
           "f1_media_repeticiones": 1.0,
-          "f1_desv_repeticiones": null
+          "f1_desv_repeticiones": null,
+          "accuracy_ic": "0,21 – 1,00",
+          "accuracy_ic_inf": 0.206549,
+          "accuracy_ic_sup": 1.0,
+          "accuracy_ic_n": 1,
+          "precision_ic": "0,21 – 1,00",
+          "precision_ic_inf": 0.206549,
+          "precision_ic_sup": 1.0,
+          "precision_ic_n": 1,
+          "recall_ic": "0,21 – 1,00",
+          "recall_ic_inf": 0.206549,
+          "recall_ic_sup": 1.0,
+          "recall_ic_n": 1
         },
         {
           "dataset": "bgl",
@@ -253,7 +307,19 @@
           "fnr": 0.0,
           "f1_macro_condiciones": 1.0,
           "f1_media_repeticiones": 1.0,
-          "f1_desv_repeticiones": null
+          "f1_desv_repeticiones": null,
+          "accuracy_ic": "0,34 – 1,00",
+          "accuracy_ic_inf": 0.34238,
+          "accuracy_ic_sup": 1.0,
+          "accuracy_ic_n": 2,
+          "precision_ic": "0,21 – 1,00",
+          "precision_ic_inf": 0.206549,
+          "precision_ic_sup": 1.0,
+          "precision_ic_n": 1,
+          "recall_ic": "0,21 – 1,00",
+          "recall_ic_inf": 0.206549,
+          "recall_ic_sup": 1.0,
+          "recall_ic_n": 1
         },
         {
           "dataset": "uwf",
@@ -273,7 +339,19 @@
           "fnr": 1.0,
           "f1_macro_condiciones": 0.0,
           "f1_media_repeticiones": 0.0,
-          "f1_desv_repeticiones": null
+          "f1_desv_repeticiones": null,
+          "accuracy_ic": "0,15 – 0,85",
+          "accuracy_ic_inf": 0.150039,
+          "accuracy_ic_sup": 0.849961,
+          "accuracy_ic_n": 4,
+          "precision_ic": null,
+          "precision_ic_inf": null,
+          "precision_ic_sup": null,
+          "precision_ic_n": 0,
+          "recall_ic": "0,00 – 0,66",
+          "recall_ic_inf": 0.0,
+          "recall_ic_sup": 0.65762,
+          "recall_ic_n": 2
         },
         {
           "dataset": "uwf",
@@ -293,7 +371,19 @@
           "fnr": 0.0,
           "f1_macro_condiciones": 0.6666666666666666,
           "f1_media_repeticiones": 0.6666666666666666,
-          "f1_desv_repeticiones": null
+          "f1_desv_repeticiones": null,
+          "accuracy_ic": "0,15 – 0,85",
+          "accuracy_ic_inf": 0.150039,
+          "accuracy_ic_sup": 0.849961,
+          "accuracy_ic_n": 4,
+          "precision_ic": "0,15 – 0,85",
+          "precision_ic_inf": 0.150039,
+          "precision_ic_sup": 0.849961,
+          "precision_ic_n": 4,
+          "recall_ic": "0,34 – 1,00",
+          "recall_ic_inf": 0.34238,
+          "recall_ic_sup": 1.0,
+          "recall_ic_n": 2
         },
         {
           "dataset": "uwf",
@@ -313,7 +403,19 @@
           "fnr": 0.5,
           "f1_macro_condiciones": 0.5,
           "f1_media_repeticiones": 0.5,
-          "f1_desv_repeticiones": null
+          "f1_desv_repeticiones": null,
+          "accuracy_ic": "0,15 – 0,85",
+          "accuracy_ic_inf": 0.150039,
+          "accuracy_ic_sup": 0.849961,
+          "accuracy_ic_n": 4,
+          "precision_ic": "0,09 – 0,91",
+          "precision_ic_inf": 0.094531,
+          "precision_ic_sup": 0.905469,
+          "precision_ic_n": 2,
+          "recall_ic": "0,09 – 0,91",
+          "recall_ic_inf": 0.094531,
+          "recall_ic_sup": 0.905469,
+          "recall_ic_n": 2
         }
       ]
     },
@@ -321,6 +423,7 @@
       "titulo": "Detección por condición",
       "seccion": "11.1",
       "descripcion": null,
+      "aviso": null,
       "columnas": [
         {
           "clave": "dataset",
@@ -462,7 +565,8 @@
     "d2_reconstruccion": {
       "titulo": "Reconstrucción del incidente",
       "seccion": "11.2",
-      "descripcion": null,
+      "descripcion": "Cobertura = evaluables de las corridas a las que la dimensión aplica (con referencia). Omisión: corrida válida y completa en que el sistema no entregó nada y la referencia existe; CUENTA (exhaustividad 0, precisión indefinida) y no sale de la métrica (enmienda del 15-oct-2026, fijada antes de la campaña). No evaluables: la corrida falló o su formato es inválido; se informan aparte.",
+      "aviso": null,
       "columnas": [
         {
           "clave": "dataset",
@@ -480,8 +584,18 @@
           "tipo": "entero"
         },
         {
+          "clave": "cobertura",
+          "etiqueta": "Cobertura (evaluables)",
+          "tipo": "texto"
+        },
+        {
           "clave": "n_evaluables",
           "etiqueta": "Evaluables",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_omisiones",
+          "etiqueta": "Omisiones",
           "tipo": "entero"
         },
         {
@@ -546,6 +660,8 @@
           "arquitectura": "gemini_externo",
           "n_corridas": 4,
           "n_evaluables": 2,
+          "cobertura": "2 de 2",
+          "n_omisiones": 0,
           "no_evaluables": 0,
           "micro_precision": 0.6666666666666666,
           "micro_recall": 0.6666666666666666,
@@ -562,16 +678,18 @@
           "dataset": "uwf",
           "arquitectura": "nodex_multiagente",
           "n_corridas": 4,
-          "n_evaluables": 1,
-          "no_evaluables": 1,
+          "n_evaluables": 2,
+          "cobertura": "2 de 2",
+          "n_omisiones": 1,
+          "no_evaluables": 0,
           "micro_precision": 1.0,
-          "micro_recall": 1.0,
-          "micro_f1": 1.0,
+          "micro_recall": 0.6666666666666666,
+          "micro_f1": 0.8,
           "macro_precision": 1.0,
-          "macro_recall": 1.0,
-          "macro_f1": 1.0,
-          "exact_match": 1.0,
-          "f1_media_repeticiones": 1.0,
+          "macro_recall": 0.5,
+          "macro_f1": 0.5,
+          "exact_match": 0.5,
+          "f1_media_repeticiones": 0.8,
           "f1_desv_repeticiones": null,
           "uids_inventados": 0
         }
@@ -580,7 +698,8 @@
     "d3_mitre": {
       "titulo": "Identificación MITRE ATT&CK (nivel técnica)",
       "seccion": "11.3",
-      "descripcion": null,
+      "descripcion": "Cobertura = evaluables de las corridas a las que la dimensión aplica (con referencia). Omisión: corrida válida y completa en que el sistema no entregó nada y la referencia existe; CUENTA (exhaustividad 0, precisión indefinida) y no sale de la métrica (enmienda del 15-oct-2026, fijada antes de la campaña). No evaluables: la corrida falló o su formato es inválido; se informan aparte.",
+      "aviso": null,
       "columnas": [
         {
           "clave": "dataset",
@@ -598,8 +717,18 @@
           "tipo": "entero"
         },
         {
+          "clave": "cobertura",
+          "etiqueta": "Cobertura (evaluables)",
+          "tipo": "texto"
+        },
+        {
           "clave": "n_evaluables",
           "etiqueta": "Evaluables",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_omisiones",
+          "etiqueta": "Omisiones",
           "tipo": "entero"
         },
         {
@@ -664,6 +793,8 @@
           "arquitectura": "gemini_externo",
           "n_corridas": 4,
           "n_evaluables": 2,
+          "cobertura": "2 de 2",
+          "n_omisiones": 0,
           "no_evaluables": 0,
           "micro_precision": 1.0,
           "micro_recall": 1.0,
@@ -680,16 +811,18 @@
           "dataset": "uwf",
           "arquitectura": "nodex_multiagente",
           "n_corridas": 4,
-          "n_evaluables": 1,
-          "no_evaluables": 1,
+          "n_evaluables": 2,
+          "cobertura": "2 de 2",
+          "n_omisiones": 1,
+          "no_evaluables": 0,
           "micro_precision": 1.0,
-          "micro_recall": 1.0,
-          "micro_f1": 1.0,
+          "micro_recall": 0.5,
+          "micro_f1": 0.6666666666666666,
           "macro_precision": 1.0,
-          "macro_recall": 1.0,
-          "macro_f1": 1.0,
-          "exact_match": 1.0,
-          "f1_media_repeticiones": 1.0,
+          "macro_recall": 0.5,
+          "macro_f1": 0.5,
+          "exact_match": 0.5,
+          "f1_media_repeticiones": 0.6666666666666666,
           "f1_desv_repeticiones": null,
           "atribuciones_sin_evidencia": 0
         }
@@ -699,6 +832,7 @@
       "titulo": "Rúbrica del reporte (escala 0 a 3)",
       "seccion": "11.4",
       "descripcion": "Dos evaluadores humanos. Concordancia por acuerdo exacto, hasta un nivel y diferencia absoluta media; no se calcula kappa. En el último criterio, 3 significa ausencia de información no sustentada.",
+      "aviso": null,
       "columnas": [
         {
           "clave": "dataset",
@@ -810,6 +944,7 @@
       "titulo": "Consumo y comportamiento operacional",
       "seccion": "11.5",
       "descripcion": "Solo promedian las corridas completas: una corrida cortada consumió menos y haría parecer más eficiente a la arquitectura que más falla. Si el proveedor no informó los tokens, la celda queda vacía; no se estiman. Una llamada fallida deja el total de su corrida en None y la deja fuera de las medias de tokens («Corridas con total None»); lo que sí se sabe de esas corridas se muestra aparte como suma parcial («Tokens parciales», ≥, un piso), nunca como total.",
+      "aviso": null,
       "columnas": [
         {
           "clave": "dataset",
@@ -1029,6 +1164,7 @@
       "titulo": "Intentos de consulta externa (NVD, AbuseIPDB)",
       "seccion": "11.5",
       "descripcion": "Para decidir con datos la política de consultas externas de la campaña final (decisión pendiente; cualquiera que se elija debe declararse en el informe). En el piloto las llamadas HTTP se bloquean y responde el respaldo local. Estado «no aplica»: la arquitectura no usa herramientas externas (Gemini directo, baseline). «Sin registro»: corridas anteriores a este registro. Ninguno de los dos es lo mismo que 0 intentos.",
+      "aviso": null,
       "columnas": [
         {
           "clave": "dataset",
@@ -1081,6 +1217,11 @@
           "tipo": "entero"
         },
         {
+          "clave": "n_sin_reputacion",
+          "etiqueta": "Sin reputación (modo)",
+          "tipo": "entero"
+        },
+        {
           "clave": "estado",
           "etiqueta": "Estado",
           "tipo": "texto"
@@ -1098,6 +1239,7 @@
           "n_intentos_externos": null,
           "n_bloqueados": null,
           "n_respaldo_respondio": null,
+          "n_sin_reputacion": null,
           "estado": "no aplica"
         },
         {
@@ -1111,6 +1253,7 @@
           "n_intentos_externos": null,
           "n_bloqueados": null,
           "n_respaldo_respondio": null,
+          "n_sin_reputacion": null,
           "estado": "no aplica"
         },
         {
@@ -1124,6 +1267,7 @@
           "n_intentos_externos": null,
           "n_bloqueados": null,
           "n_respaldo_respondio": null,
+          "n_sin_reputacion": null,
           "estado": "no aplica"
         },
         {
@@ -1137,6 +1281,7 @@
           "n_intentos_externos": null,
           "n_bloqueados": null,
           "n_respaldo_respondio": null,
+          "n_sin_reputacion": null,
           "estado": "no aplica"
         },
         {
@@ -1150,6 +1295,7 @@
           "n_intentos_externos": null,
           "n_bloqueados": null,
           "n_respaldo_respondio": null,
+          "n_sin_reputacion": null,
           "estado": "sin registro"
         },
         {
@@ -1163,6 +1309,7 @@
           "n_intentos_externos": null,
           "n_bloqueados": null,
           "n_respaldo_respondio": null,
+          "n_sin_reputacion": null,
           "estado": "sin registro"
         },
         {
@@ -1176,6 +1323,7 @@
           "n_intentos_externos": null,
           "n_bloqueados": null,
           "n_respaldo_respondio": null,
+          "n_sin_reputacion": null,
           "estado": "no aplica"
         },
         {
@@ -1189,6 +1337,7 @@
           "n_intentos_externos": null,
           "n_bloqueados": null,
           "n_respaldo_respondio": null,
+          "n_sin_reputacion": null,
           "estado": "no aplica"
         },
         {
@@ -1202,6 +1351,7 @@
           "n_intentos_externos": null,
           "n_bloqueados": null,
           "n_respaldo_respondio": null,
+          "n_sin_reputacion": null,
           "estado": "no aplica"
         },
         {
@@ -1215,6 +1365,7 @@
           "n_intentos_externos": null,
           "n_bloqueados": null,
           "n_respaldo_respondio": null,
+          "n_sin_reputacion": null,
           "estado": "no aplica"
         },
         {
@@ -1228,6 +1379,7 @@
           "n_intentos_externos": 2,
           "n_bloqueados": 2,
           "n_respaldo_respondio": 2,
+          "n_sin_reputacion": 0,
           "estado": "medido"
         },
         {
@@ -1241,14 +1393,85 @@
           "n_intentos_externos": 1,
           "n_bloqueados": 1,
           "n_respaldo_respondio": 1,
+          "n_sin_reputacion": 0,
           "estado": "medido"
         }
       ]
+    },
+    "consistencia_repeticiones": {
+      "titulo": "Consistencia entre repeticiones",
+      "seccion": "11.1",
+      "descripcion": "Por caso: (máximo − mínimo) / media entre sus repeticiones. «Sin comparar»: casos con menos de 2 repeticiones con veredicto (una repetición fallida no se compara ni se cuenta como discrepancia). Temperatura 0 no garantiza respuestas idénticas.",
+      "aviso": null,
+      "columnas": [
+        {
+          "clave": "dataset",
+          "etiqueta": "Dataset",
+          "tipo": "texto"
+        },
+        {
+          "clave": "arquitectura",
+          "etiqueta": "Arquitectura",
+          "tipo": "texto"
+        },
+        {
+          "clave": "n_casos",
+          "etiqueta": "Casos",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_comparables",
+          "etiqueta": "Con veredicto en ≥ 2 repeticiones",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_sin_comparar",
+          "etiqueta": "Sin comparar",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_mismo_veredicto",
+          "etiqueta": "Mismo veredicto",
+          "tipo": "entero"
+        },
+        {
+          "clave": "concordancia",
+          "etiqueta": "Concordancia de veredicto",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "concordancia_ic",
+          "etiqueta": "IC 95 % (Wilson)",
+          "tipo": "texto"
+        },
+        {
+          "clave": "tokens_variacion_media_pct",
+          "etiqueta": "Variación de tokens, media (%)",
+          "tipo": "numero"
+        },
+        {
+          "clave": "tokens_variacion_max_pct",
+          "etiqueta": "Variación de tokens, máx. (%)",
+          "tipo": "numero"
+        },
+        {
+          "clave": "tiempo_variacion_media_pct",
+          "etiqueta": "Variación de tiempo, media (%)",
+          "tipo": "numero"
+        },
+        {
+          "clave": "tiempo_variacion_max_pct",
+          "etiqueta": "Variación de tiempo, máx. (%)",
+          "tipo": "numero"
+        }
+      ],
+      "filas": []
     },
     "comparacion": {
       "titulo": "NODEX frente al baseline y a Gemini directo",
       "seccion": "11.6",
       "descripcion": "Sin umbrales de aprobado: se comparan las arquitecturas entre sí y se describe cada resultado. Una celda vacía es «no aplica o sin dato».",
+      "aviso": null,
       "columnas": [
         {
           "clave": "dataset",
@@ -1353,7 +1576,7 @@
         {
           "dataset": "uwf",
           "metrica": "D2_f1",
-          "nodex_multiagente": 1.0,
+          "nodex_multiagente": 0.8,
           "baseline_reglas": null,
           "gemini_externo": 0.6666666666666666,
           "comparable": "sin baseline",
@@ -1362,7 +1585,7 @@
         {
           "dataset": "uwf",
           "metrica": "D2_exact_match",
-          "nodex_multiagente": 1.0,
+          "nodex_multiagente": 0.5,
           "baseline_reglas": null,
           "gemini_externo": 0.5,
           "comparable": "sin baseline",
@@ -1371,7 +1594,7 @@
         {
           "dataset": "uwf",
           "metrica": "D3_f1",
-          "nodex_multiagente": 1.0,
+          "nodex_multiagente": 0.6666666666666666,
           "baseline_reglas": null,
           "gemini_externo": 1.0,
           "comparable": "sin baseline",
@@ -1380,7 +1603,7 @@
         {
           "dataset": "uwf",
           "metrica": "D3_exact_match",
-          "nodex_multiagente": 1.0,
+          "nodex_multiagente": 0.5,
           "baseline_reglas": null,
           "gemini_externo": 1.0,
           "comparable": "sin baseline",
@@ -1401,6 +1624,7 @@
       "titulo": "Falsos positivos y falsos negativos",
       "seccion": "11.7",
       "descripcion": "FP: el sistema afirmó actividad que la referencia no tiene. FN: la referencia la tiene y el sistema no la detectó.",
+      "aviso": null,
       "columnas": [
         {
           "clave": "run_id",

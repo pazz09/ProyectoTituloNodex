@@ -16,9 +16,11 @@ Solo LEE lo guardado:
 
 - **Gemini directo:** su runner parsea la respuesta del modelo; si no era un objeto JSON queda
   un error en su diagnóstico. Se informa el porcentaje real.
-- **NODEX:** el JSON lo valida `llm_json()` en cada nodo, y el lanzador del piloto NO contaba las
-  respuestas inválidas. No hay medición directa: se informa `None` y, aparte, un *proxy*
-  (la corrida terminó completa y con veredicto), que NO es lo mismo.
+- **NODEX:** el JSON lo valida `llm_json()` en cada nodo. El lanzador de la campaña cuenta las
+  respuestas inválidas por corrida (`<run_id>.llm_json.json`): se informa el porcentaje de corridas
+  sin ninguna respuesta inválida y el total de respuestas inválidas sobre llamadas. El piloto
+  original NO lo contaba: ahí se informa `None` y, aparte, un *proxy* (la corrida terminó completa y
+  con veredicto), que NO es lo mismo.
 - **Baseline:** no usa el modelo; no aplica.
 """
 
@@ -76,15 +78,20 @@ def _filas(raiz_repo: Path, subconjunto: str, config_version: str,
         diag = tel.get("diagnostico_runner") or {}
         mitre = salida.get("mitre") or {}
         arq = ident.arquitectura
+        medicion_json = persistencia.leer_llm_json(ident, raiz_repo) if arq == "nodex_multiagente" else None
         if arq == "gemini_externo":
             json_valido = not diag.get("error")
+        elif medicion_json is not None:
+            json_valido = medicion_json["invalidas"] == 0     # NODEX medido por el lanzador
         else:
-            json_valido = None          # NODEX: no medido; baseline: no aplica
+            json_valido = None          # NODEX sin medición (piloto anterior); baseline: no aplica
         filas.append({
             "run_id": ident.run_id, "case_id": ident.case_id, "dataset": ident.dataset,
             "arquitectura": arq, "guardada": True,
             "estado_ejecucion": ejec.get("estado"),
             "json_valido": json_valido,
+            "json_llamadas": None if medicion_json is None else medicion_json["llamadas"],
+            "json_invalidas": None if medicion_json is None else medicion_json["invalidas"],
             "proxy_json_valido": ejec.get("estado") == "completa" and bool(
                 (salida.get("_meta") or {}).get("veredicto_booleano_presente")),
             "veredicto_presente": bool((salida.get("_meta") or {}).get("veredicto_booleano_presente")),
@@ -129,6 +136,11 @@ def resumir(filas: list[dict]) -> list[dict]:
             "completas": sum(1 for f in guardadas if f["estado_ejecucion"] == "completa"),
             "json_valido_pct": _pct(sum(validos), len(validos)) if validos else None,
             "json_valido_n": f"{sum(validos)}/{len(validos)}" if validos else None,
+            "json_respuestas_invalidas_n": (
+                "{}/{}".format(
+                    sum(f["json_invalidas"] for f in guardadas if f.get("json_llamadas") is not None),
+                    sum(f["json_llamadas"] for f in guardadas if f.get("json_llamadas") is not None))
+                if any(f.get("json_llamadas") is not None for f in guardadas) else None),
             "proxy_json_valido_pct": _pct(sum(f["proxy_json_valido"] for f in guardadas), n)
             if usa_modelo else None,
             "veredicto_presente_pct": _pct(sum(f["veredicto_presente"] for f in guardadas), n),

@@ -602,3 +602,62 @@ describe('Resultados: tablas que caben o se desplazan con sentido', () => {
     expect(c.querySelectorAll('#integridad .kpis .kpi')).toHaveLength(6)
   })
 })
+
+describe('intervalos de confianza y consistencia entre repeticiones', () => {
+  it('la tabla de detección lleva los intervalos de Wilson y un aviso destacado de muestras chicas', () => {
+    const c = montar()
+    const aviso = c.querySelector('#seccion-11-1 .aviso-tabla')
+    expect(aviso).not.toBeNull()
+    expect(aviso!.textContent).toMatch(/Muestras chicas/)
+    expect(aviso!.textContent).toMatch(/no son independientes/)
+    const cabeceras = [...c.querySelectorAll('#seccion-11-1 th')].map((t) => t.textContent)
+    expect(cabeceras).toEqual(
+      expect.arrayContaining([
+        'IC 95 % Exactitud (Wilson)',
+        'IC 95 % Precisión (Wilson)',
+        'IC 95 % Exhaustividad (Wilson)',
+      ]),
+    )
+  })
+
+  it('un intervalo sin dato queda vacío y no aparece como «0 – 0»', () => {
+    const c = montar()
+    const textos = [...c.querySelectorAll('#seccion-11-1 td')].map((t) => t.textContent)
+    expect(textos).not.toContain('0,00 – 0,00')
+  })
+
+  it('sin repeticiones (piloto, N=1) la tabla de consistencia no se muestra', () => {
+    const c = montar()
+    const titulos = [...c.querySelectorAll('#seccion-11-1 h3')].map((t) => t.textContent)
+    expect(titulos).not.toContain('Consistencia entre repeticiones')
+  })
+
+  it('con repeticiones se muestra la tabla de consistencia con su aviso y su descarga', () => {
+    const conRepeticiones = {
+      ...resumen,
+      tablas: {
+        ...resumen.tablas,
+        consistencia_repeticiones: {
+          titulo: 'Consistencia entre repeticiones',
+          seccion: '11.1',
+          descripcion: 'Por caso: (máximo − mínimo) / media entre sus repeticiones.',
+          aviso: 'Muestras chicas: 10 corridas evaluables por celda.',
+          columnas: [
+            { clave: 'dataset', etiqueta: 'Dataset', tipo: 'texto' },
+            { clave: 'arquitectura', etiqueta: 'Arquitectura', tipo: 'texto' },
+            { clave: 'concordancia', etiqueta: 'Concordancia de veredicto', tipo: 'proporcion' },
+            { clave: 'concordancia_ic', etiqueta: 'IC 95 % (Wilson)', tipo: 'texto' },
+          ],
+          filas: [
+            { dataset: 'bgl', arquitectura: 'nodex_multiagente', concordancia: 0.9, concordancia_ic: '0,60 – 0,98' },
+          ],
+        },
+      },
+    } as unknown as ResumenResultados
+    const c = montar({ resumen: conRepeticiones })
+    const titulos = [...c.querySelectorAll('#seccion-11-1 h3')].map((t) => t.textContent)
+    expect(titulos).toContain('Consistencia entre repeticiones')
+    expect(c.textContent).toContain('0,60 – 0,98')
+    expect(c.querySelectorAll('#seccion-11-1 .aviso-tabla').length).toBeGreaterThanOrEqual(2)
+  })
+})

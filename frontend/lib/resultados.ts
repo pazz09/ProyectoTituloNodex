@@ -33,6 +33,8 @@ export type TablaResultados = {
   /** Sección del informe a la que alimenta (11.1 a 11.7). */
   seccion: string
   descripcion?: string
+  /** Advertencia que se muestra DESTACADA sobre la tabla (p. ej. muestras chicas). */
+  aviso?: string | null
   columnas: ColumnaTabla[]
   filas: FilaTabla[]
 }

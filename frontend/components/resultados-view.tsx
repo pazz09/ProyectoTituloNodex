@@ -159,6 +159,17 @@ function TablaDatos({
         <h3>{tabla.titulo}</h3>
         <BotonCsv tabla={tabla} nombre={nombre} />
       </div>
+      {tabla.aviso && (
+        <div className="notice-block aviso aviso-tabla" role="note">
+          <div className="icono-aviso">
+            <AlertTriangle size={16} />
+          </div>
+          <div>
+            <strong>Muestras chicas: leer con cautela</strong>
+            <p>{tabla.aviso}</p>
+          </div>
+        </div>
+      )}
       {tabla.descripcion && <p className="nota-tabla">{tabla.descripcion}</p>}
       <div className="table-scroll">
         {/* Con «dataset» y «arquitectura» al principio, esas dos columnas se quedan fijas al
@@ -484,6 +495,12 @@ export function ResultadosContenido(p: PropsContenido) {
                   <TablaDatos
                     tabla={tablaDe(resumen, 'd1_condiciones')!}
                     nombre={`${base}_d1_condiciones`}
+                  />
+                ) : null}
+                {tablaDe(resumen, 'consistencia_repeticiones')?.filas.length ? (
+                  <TablaDatos
+                    tabla={tablaDe(resumen, 'consistencia_repeticiones')!}
+                    nombre={`${base}_consistencia_repeticiones`}
                   />
                 ) : null}
               </>

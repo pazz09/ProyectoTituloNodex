@@ -990,6 +990,17 @@ def test_json_valido_solo_se_informa_donde_se_puede_medir(campana):
     assert base["json_valido_pct"] is None and base["proxy_json_valido_pct"] is None
 
 
+def test_si_el_lanzador_midio_el_json_de_nodex_se_informa_el_valor_real(campana):
+    raiz, _ = campana
+    for cid, llamadas, invalidas in (("uwf_des_visible_0000", 6, 0), ("uwf_des_visible_0001", 5, 2)):
+        persistencia.guardar_llm_json(
+            IdentidadCorrida(cid, "uwf", "nodex_multiagente", 1, CONFIG), raiz, llamadas, invalidas)
+    nodex = _celda(_salud(raiz), "nodex_multiagente", "uwf")
+    assert nodex["json_valido_n"] == "1/2" and nodex["json_valido_pct"] == 50.0   # 2 corridas medidas
+    assert nodex["json_respuestas_invalidas_n"] == "2/11"                        # respuestas, no corridas
+    assert nodex["proxy_json_valido_pct"] == 100.0                               # el proxy sigue aparte
+
+
 def test_el_veredicto_presente_lleva_su_denominador(campana):
     raiz, _ = campana
     c = _celda(_salud(raiz), "nodex_multiagente", "uwf")
