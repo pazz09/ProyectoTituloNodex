@@ -409,6 +409,7 @@ def tabla_consumo(registros, telemetrias, fallos_sin_salida, principal) -> tuple
         agg = agregar_consumo(corridas)
         c = agg.por_campo
         completas = [r for r in grupo if r.estado_ejecucion == ESTADO_COMPLETA]
+        es_baseline = arquitectura == "baseline_reglas"
         filas.append({
             "dataset": dataset, "arquitectura": arquitectura,
             "n_completas": agg.n_corridas_completas,
@@ -421,10 +422,13 @@ def tabla_consumo(registros, telemetrias, fallos_sin_salida, principal) -> tuple
             "tokens_totales_medios": c["total_tokens"]["media"],
             "replan_medio": c["replan_count"]["media"],
             "correcciones_medias": c["intentos_correccion"]["media"],
-            "n_con_fallback": sum(
+            # El baseline no usa el modelo: no tiene tokens que informar ni un
+            # modelo al que caer. Para él estas dos celdas NO APLICAN (null);
+            # un 0 diría «usó el modelo principal y no faltó ningún dato».
+            "n_con_fallback": None if es_baseline else sum(
                 1 for r in grupo
                 if uso_fallback(telemetrias.get(r.run_id), principal) is True),
-            "n_sin_tokens": sum(
+            "n_sin_tokens": None if es_baseline else sum(
                 1 for r in completas
                 if (telemetrias.get(r.run_id) or {}).get("total_tokens") is None),
         })

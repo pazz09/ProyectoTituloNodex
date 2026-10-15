@@ -369,6 +369,21 @@ def test_el_baseline_no_inventa_tokens(campana):
     assert f["tiempo_medio_s"] == pytest.approx(0.1)
 
 
+def test_para_el_baseline_los_tokens_y_el_fallback_no_aplican_y_no_son_cero(campana):
+    """Lo mostró la revisión visual de la vista: el baseline figuraba con
+    «sin tokens informados: 4». No usa el modelo, así que no hay tokens que
+    informar ni modelo de respaldo; un 0 diría lo contrario de «no aplica»."""
+    raiz, _ = campana
+    resumen = _consolidar(raiz)
+    for dataset in ("uwf", "bgl"):
+        f = _fila(resumen, "consumo", dataset, "baseline_reglas")
+        assert f["n_sin_tokens"] is None
+        assert f["n_con_fallback"] is None
+    nodex_f = _fila(resumen, "consumo", "uwf", "nodex_multiagente")
+    assert nodex_f["n_sin_tokens"] == 0          # a NODEX sí le aplica, y vale 0
+    assert nodex_f["n_con_fallback"] == 1
+
+
 # --- integridad -----------------------------------------------------------------------
 
 def test_el_fallback_se_detecta_comparando_con_el_modelo_congelado(campana):
