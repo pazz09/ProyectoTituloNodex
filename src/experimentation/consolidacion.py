@@ -128,6 +128,73 @@ def uso_fallback(telemetria: dict | None, principal: str | None) -> bool | None:
     return any(m != principal for m in modelos)
 
 
+def _con_tokens(llamada: dict) -> bool:
+    """La llamada informó tokens de entrada y de salida."""
+    return all(isinstance(llamada.get(c), int) and not isinstance(llamada.get(c), bool)
+               for c in ("input_tokens", "output_tokens"))
+
+
+def tokens_de_la_corrida(telemetria: dict | None) -> dict:
+    """Qué tokens se pueden afirmar de una corrida, llamada por llamada.
+
+    `src/telemetry.py` calcula los totales de forma todo-o-nada: una sola
+    llamada fallida deja los totales de la corrida en `None`. Esto recupera lo que
+    SÍ se sabe: la suma de las llamadas que informaron tokens. Esa suma es un
+    PISO (el consumo real es mayor), nunca un total.
+
+    `completa` es `True` solo si TODAS las llamadas informaron tokens. Una llamada
+    cuenta como fallida si trae `error` o si no informó ningún token.
+    """
+    llamadas = [c for c in ((telemetria or {}).get("llm_calls") or []) if isinstance(c, dict)]
+    con_tokens = [c for c in llamadas if _con_tokens(c)]
+
+    def suma(campo):
+        valores = [c[campo] for c in con_tokens
+                   if isinstance(c.get(campo), int) and not isinstance(c.get(campo), bool)]
+        return sum(valores) if valores else None
+
+    fallidas = sum(
+        1 for c in llamadas
+        if c.get("error") is not None
+        or all(c.get(k) is None for k in ("input_tokens", "output_tokens", "total_tokens")))
+    return {
+        "n_llamadas": len(llamadas), "n_con_tokens": len(con_tokens),
+        "n_fallidas": fallidas, "entrada": suma("input_tokens"),
+        "salida": suma("output_tokens"), "razonamiento": suma("reasoning_tokens"),
+        "completa": bool(llamadas) and len(con_tokens) == len(llamadas),
+    }
+
+
+def es_parcial(telemetria: dict | None) -> bool:
+    """Total `None`, pero algunas llamadas sí informaron tokens (y otras no)."""
+    d = tokens_de_la_corrida(telemetria)
+    return (telemetria or {}).get("total_tokens") is None and 0 < d["n_con_tokens"] < d["n_llamadas"]
+
+
+def _miles(n: int) -> str:
+    return f"{n:,}".replace(",", ".")
+
+
+def texto_tokens_parciales(corridas: list[dict]) -> str | None:
+    """Suma parcial rotulada de un grupo de corridas con total `None`.
+
+    Siempre con «≥» (es un piso) y con «(k de n llamadas)», para que nadie la lea
+    como un total. `None` si no hay nada que mostrar.
+    """
+    partes = [tokens_de_la_corrida(t) for t in corridas]
+    k = sum(d["n_con_tokens"] for d in partes)
+    n = sum(d["n_llamadas"] for d in partes)
+    if not partes or k == 0:
+        return None
+    etiquetas = []
+    for campo, nombre in (("entrada", "entrada"), ("salida", "salida"),
+                          ("razonamiento", "razonamiento")):
+        valores = [d[campo] for d in partes if d[campo] is not None]
+        if valores:
+            etiquetas.append(f"≥ {_miles(sum(valores))} {nombre}")
+    return f"{' · '.join(etiquetas)} ({k} de {n} llamadas)"
+
+
 def leer_rubrica(
     raiz_repo: Path, config_version: str
 ) -> tuple[list[PuntuacionRubrica], list[dict]]:
@@ -434,6 +501,16 @@ def tabla_consumo(registros, telemetrias, fallos_sin_salida, principal) -> tuple
             # El baseline no usa el modelo: no tiene tokens que informar ni un
             # modelo al que caer. Para él estas dos celdas NO APLICAN (null);
             # un 0 diría «usó el modelo principal y no faltó ningún dato».
+            # Corridas completas con total `None` (por una llamada fallida o porque el
+            # proveedor no informó): quedan FUERA de las medias de tokens de arriba.
+            "n_llamadas_fallidas": None if es_baseline else sum(
+                tokens_de_la_corrida(telemetrias.get(r.run_id))["n_fallidas"]
+                for r in grupo),
+            # Suma parcial de esas corridas, rotulada como piso. Nunca se mezcla con
+            # las medias ni con los totales.
+            "tokens_parciales": None if es_baseline else texto_tokens_parciales([
+                telemetrias.get(r.run_id) for r in completas
+                if es_parcial(telemetrias.get(r.run_id))]),
             "n_con_fallback": None if es_baseline else sum(
                 1 for r in grupo
                 if uso_fallback(telemetrias.get(r.run_id), principal) is True),
@@ -458,14 +535,78 @@ def tabla_consumo(registros, telemetrias, fallos_sin_salida, principal) -> tuple
         ("replan_medio", "Replanificaciones", "numero"),
         ("correcciones_medias", "Correcciones", "numero"),
         ("n_con_fallback", "Con fallback", "entero"),
-        ("n_sin_tokens", "Sin tokens informados", "entero"),
+        ("n_sin_tokens", "Corridas con total None (fuera de las medias de tokens)", "entero"),
+        ("n_llamadas_fallidas", "Llamadas fallidas", "entero"),
+        ("tokens_parciales", "Tokens parciales (piso, solo de esas corridas)"),
     ]
     return _tabla(
         "Consumo y comportamiento operacional", "11.5", columnas, filas,
         "Solo promedian las corridas completas: una corrida cortada consumió menos y "
         "haría parecer más eficiente a la arquitectura que más falla. Si el proveedor "
-        "no informó los tokens, la celda queda vacía; no se estiman.",
+        "no informó los tokens, la celda queda vacía; no se estiman. Una llamada "
+        "fallida deja el total de su corrida en None y la deja fuera de las medias "
+        "de tokens; lo que sí se sabe de esas corridas se muestra aparte como suma "
+        "parcial (≥, un piso), nunca como total.",
     ), contratos
+
+
+HERRAMIENTAS_EXTERNAS = ("abuseipdb", "nvd")
+
+
+def tabla_consultas_externas(registros, consultas_por_run: dict) -> dict:
+    """Intentos de consulta externa (AbuseIPDB, NVD) por arquitectura y dataset.
+
+    Insumo para decidir, con datos, si la campaña final corre con consultas reales o con
+    respaldo local (decisión PENDIENTE). En el piloto las llamadas HTTP se bloquean y
+    responde el respaldo local; esto cuenta cuántas veces NODEX lo intentó.
+
+    Solo NODEX usa herramientas: para Gemini directo y el baseline las celdas NO APLICAN
+    (`None`), no valen 0. Si ninguna corrida del grupo tiene registro (corridas
+    anteriores a este registro), también son `None`: «no se midió» no es «cero intentos».
+    """
+    filas = []
+    for (dataset, arquitectura), grupo in sorted(_grupos(registros).items()):
+        for herramienta in HERRAMIENTAS_EXTERNAS:
+            base = {"dataset": dataset, "arquitectura": arquitectura, "herramienta": herramienta,
+                    "n_corridas": len(grupo), "n_con_registro": None, "n_corridas_con_intentos": None,
+                    "n_consultas": None, "n_intentos_externos": None, "n_bloqueados": None,
+                    "n_respaldo_respondio": None, "nota": "no usa herramientas externas"}
+            if arquitectura != "nodex_multiagente":
+                filas.append(base)
+                continue
+            listas = [consultas_por_run.get(r.run_id) for r in grupo]
+            con_registro = [l for l in listas if l is not None]
+            if not con_registro:
+                filas.append({**base, "nota": "sin registro (corridas anteriores a este registro)"})
+                continue
+            propias = [[c for c in l if c.get("herramienta") == herramienta] for l in con_registro]
+            todas = [c for l in propias for c in l]
+            filas.append({
+                **base, "n_con_registro": len(con_registro),
+                "n_corridas_con_intentos": sum(
+                    1 for l in propias if any(c.get("intento_externo") for c in l)),
+                "n_consultas": len(todas),
+                "n_intentos_externos": sum(1 for c in todas if c.get("intento_externo")),
+                "n_bloqueados": sum(1 for c in todas if c.get("bloqueado")),
+                "n_respaldo_respondio": sum(1 for c in todas if c.get("respaldo_respondio")),
+                "nota": ("las llamadas HTTP se bloquean y responde el respaldo local; "
+                         "política de la campaña final PENDIENTE"),
+            })
+    columnas = [
+        ("dataset", "Dataset"), ("arquitectura", "Arquitectura"), ("herramienta", "Herramienta"),
+        ("n_corridas", "Corridas", "entero"), ("n_con_registro", "Con registro", "entero"),
+        ("n_corridas_con_intentos", "Corridas con intentos", "entero"),
+        ("n_consultas", "Consultas a la herramienta", "entero"),
+        ("n_intentos_externos", "Intentos de salida a la red", "entero"),
+        ("n_bloqueados", "Bloqueados", "entero"),
+        ("n_respaldo_respondio", "Respondió el respaldo local", "entero"),
+        ("nota", "Nota"),
+    ]
+    return _tabla(
+        "Intentos de consulta externa (NVD, AbuseIPDB)", "11.5", columnas, filas,
+        "Para decidir con datos la política de consultas externas de la campaña final "
+        "(decisión pendiente; cualquiera que se elija debe declararse en el informe). "
+        "«No usa herramientas externas» y «sin registro» no son lo mismo que 0 intentos.")
 
 
 def tabla_comparacion(t_d1, t_d2, t_d3, t_consumo) -> dict:
@@ -550,6 +691,8 @@ def construir_integridad(
     principal: str | None,
     filas_rubrica_invalidas: list[dict],
     datos_ficticios: bool,
+    depuracion: bool = False,
+    consultas_externas: dict | None = None,
 ) -> dict:
     ids_con_fallo = {f["run_id"] for f in fallos}
     ausentes_puras = [r for r in resultado.ausentes if r not in ids_con_fallo]
@@ -570,6 +713,15 @@ def construir_integridad(
     sin_tokens = sum(
         1 for r in llm if r.estado_ejecucion == ESTADO_COMPLETA
         and (telemetrias.get(r.run_id) or {}).get("total_tokens") is None)
+    # De esas, las que tienen una suma parcial que mostrar (alguna llamada informó).
+    parciales = [
+        {"run_id": r.run_id,
+         "n_llamadas": (d := tokens_de_la_corrida(telemetrias.get(r.run_id)))["n_llamadas"],
+         "n_con_tokens": d["n_con_tokens"], "n_llamadas_fallidas": d["n_fallidas"],
+         "tokens_entrada_parcial": d["entrada"], "tokens_salida_parcial": d["salida"],
+         "tokens_razonamiento_parcial": d["razonamiento"]}
+        for r in llm if r.estado_ejecucion == ESTADO_COMPLETA
+        and es_parcial(telemetrias.get(r.run_id))]
     completas_llm = [r for r in llm if r.estado_ejecucion == ESTADO_COMPLETA]
     sin_razonamiento = sum(
         1 for r in completas_llm
@@ -586,6 +738,18 @@ def construir_integridad(
     avisos = []
     if datos_ficticios:
         avisos.append(aviso("datos_ficticios", "alta", "datos ficticios de prueba", 0))
+    if depuracion:
+        avisos.append(aviso(
+            "resultados_de_depuracion", "alta",
+            "resultados de DEPURACIÓN (desarrollo/piloto): no son reportables ni se citan "
+            "en el informe", 0))
+    bloqueados = sum(
+        1 for l in (consultas_externas or {}).values() for c in (l or []) if c.get("bloqueado"))
+    if bloqueados:
+        avisos.append(aviso(
+            "consultas_externas_bloqueadas", "info",
+            "intentos de consulta a NVD/AbuseIPDB bloqueados, con respaldo local "
+            "(política de la campaña final pendiente)", bloqueados))
     if ausentes_puras:
         avisos.append(aviso("corridas_ausentes", "alta",
                             "corridas esperadas que no están guardadas", len(ausentes_puras)))
@@ -604,9 +768,16 @@ def construir_integridad(
         avisos.append(aviso("telemetria_previa_a_d11", "media",
                             "telemetría tomada antes de integrar D-11; no mezclar con la posterior",
                             previas))
-    if sin_tokens:
+    if sin_tokens - len(parciales):
         avisos.append(aviso("tokens_no_informados", "media",
-                            "corridas completas sin tokens informados", sin_tokens))
+                            "corridas completas sin tokens informados",
+                            sin_tokens - len(parciales)))
+    if parciales:
+        avisos.append(aviso(
+            "tokens_parciales", "media",
+            "corridas completas con el total de tokens en None porque una llamada falló "
+            "(o no informó): solo se conoce una suma parcial, que es un piso; quedan "
+            "fuera de las medias de tokens", len(parciales)))
     if sin_razonamiento:
         avisos.append(aviso("razonamiento_no_informado", "info",
                             "corridas completas sin tokens de razonamiento informados "
@@ -636,6 +807,7 @@ def construir_integridad(
         "modelo_principal": principal,
         "corridas_con_telemetria_previa_a_d11": previas,
         "corridas_sin_tokens": sin_tokens,
+        "corridas_con_tokens_parciales": parciales,
         "corridas_sin_razonamiento": sin_razonamiento,
         "corridas_sin_version_de_modelo": sin_version,
         "advertencias": avisos,
@@ -663,8 +835,13 @@ def consolidar(
     raiz_destino: Path | None = None,
     marca: str | None = None,
     datos_ficticios: bool = False,
+    depuracion: bool | None = None,
 ) -> Path:
     """Consolida una campaña y devuelve el directorio escrito.
+
+    `depuracion`: marca los resultados como de DEPURACIÓN (no reportables). Por omisión es
+    `True` para cualquier partición que no sea `evaluacion`: el desarrollo y el piloto
+    existen para depurar, y sus cifras no se citan en el informe.
 
     No ejecuta nada ni llama a ningún modelo: lee lo guardado. Falla si el
     directorio de esa consolidación ya existe.
@@ -678,10 +855,14 @@ def consolidar(
     resultado = evaluar_corridas(raiz_repo, subconjunto, config_version, arquitecturas)
     registros = resultado.registros
 
+    if depuracion is None:
+        depuracion = resultado.particion != "evaluacion"
     telemetrias: dict[str, dict | None] = {}
+    consultas_externas: dict[str, list | None] = {}
     for r in registros:
         identidad = IdentidadCorrida(r.case_id, r.dataset, r.arquitectura,
                                      r.repeticion, config_version)
+        consultas_externas[r.run_id] = persistencia.leer_consultas_externas(identidad, raiz_repo)
         tel = persistencia.leer_telemetria(identidad, raiz_repo)
         if tel is not None:
             # Las corridas guardadas antes de esta instrumentación no traen
@@ -706,20 +887,26 @@ def consolidar(
                                   "Identificación MITRE ATT&CK (nivel técnica)")
     t_d4, c_d4 = tabla_d4(puntuaciones, registros)
     t_con, c_con = tabla_consumo(registros, telemetrias, fallos_sin_salida, principal)
+    t_ext = tabla_consultas_externas(registros, consultas_externas)
     t_cmp = tabla_comparacion(t_d1, t_d2, t_d3, t_con)
     t_err = tabla_errores(registros)
     tablas = {
         "d1_deteccion": t_d1, "d1_condiciones": t_d1c,
         "d2_reconstruccion": t_d2, "d3_mitre": t_d3, "d4_rubrica": t_d4,
-        "consumo": t_con, "comparacion": t_cmp, "errores_d1": t_err,
+        "consumo": t_con, "consultas_externas": t_ext, "comparacion": t_cmp,
+        "errores_d1": t_err,
     }
 
     integridad = construir_integridad(
-        resultado, telemetrias, fallos, principal, rubrica_invalida, datos_ficticios)
+        resultado, telemetrias, fallos, principal, rubrica_invalida, datos_ficticios,
+        depuracion=depuracion, consultas_externas=consultas_externas)
 
     resumen = {
         "esquema": ESQUEMA_RESULTADOS,
         "datos_ficticios": datos_ficticios,
+        # De DEPURACIÓN: no reportable. Se muestra con una advertencia en la vista.
+        "depuracion": depuracion,
+        "reportable": not depuracion and not datos_ficticios,
         "config_version": config_version,
         "consolidacion": marca,
         "generado_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),

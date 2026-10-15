@@ -137,8 +137,12 @@ def _telemetria(modelo=PRINCIPAL, tokens=1000, tiempo=10.0, replan=1, correccion
         "execution_time": tiempo, "replan_count": replan,
         "intentos_correccion": correcciones, "invalid_evidence_uid_count": 0,
         "d11_warning_count": 0,
+        # Las llamadas llevan sus tokens, como en la telemetría real; con `tokens=None`
+        # simulan un proveedor que no los informó.
         "llm_calls": [{"model": modelo, "model_version": f"{modelo}-001",
-                       "reasoning_tokens": razonamiento}],
+                       "input_tokens": tokens, "output_tokens": None if tokens is None else 200,
+                       "total_tokens": None if tokens is None else tokens + 200,
+                       "reasoning_tokens": razonamiento, "duration_s": 3.0, "error": None}],
     }
 
 
@@ -684,3 +688,232 @@ def test_las_corridas_guardadas_antes_de_la_instrumentacion_no_inventan_datos(ca
     # el promedio de las que sí informaron no se arrastra hacia 0
     f = _fila(resumen, "consumo", "uwf", "nodex_multiagente")
     assert f["tokens_razonamiento_medios"] == pytest.approx(40)
+
+
+# --- totales None por una llamada fallida: suma parcial rotulada ------------------------------
+#
+# `src/telemetry.py` calcula los totales de tokens de forma todo-o-nada: una llamada
+# fallida deja los de TODA la corrida en None (corrida 4 de la comparación de modelos).
+# El consolidador muestra lo que sí se sabe como un PISO rotulado, nunca como total, y esas
+# corridas quedan fuera de las medias.
+
+def _llamada_ok(entrada, salida, razonamiento):
+    return {"model": PRINCIPAL, "model_version": f"{PRINCIPAL}-001", "input_tokens": entrada,
+            "output_tokens": salida, "total_tokens": entrada + salida + razonamiento,
+            "reasoning_tokens": razonamiento, "duration_s": 2.0, "error": None}
+
+
+def _llamada_fallida():
+    return {"model": PRINCIPAL, "model_version": None, "input_tokens": None,
+            "output_tokens": None, "total_tokens": None, "reasoning_tokens": None,
+            "duration_s": 90.0, "error": "ServerError(503)"}
+
+
+def test_tokens_de_la_corrida_distingue_completa_parcial_y_sin_datos():
+    ok = _llamada_ok(10, 5, 3)
+    completa = consolidacion.tokens_de_la_corrida({"llm_calls": [ok, dict(ok)]})
+    assert completa["completa"] is True and completa["n_fallidas"] == 0
+    parcial = consolidacion.tokens_de_la_corrida({"llm_calls": [ok, _llamada_fallida(), dict(ok)]})
+    assert parcial["completa"] is False
+    assert (parcial["n_llamadas"], parcial["n_con_tokens"], parcial["n_fallidas"]) == (3, 2, 1)
+    assert (parcial["entrada"], parcial["salida"], parcial["razonamiento"]) == (20, 10, 6)
+    vacia = consolidacion.tokens_de_la_corrida({"llm_calls": []})
+    assert vacia["completa"] is False and vacia["entrada"] is None
+    assert consolidacion.tokens_de_la_corrida(None)["n_llamadas"] == 0
+
+
+def test_una_corrida_es_parcial_solo_si_el_total_es_none_y_algunas_llamadas_informaron():
+    ok = _llamada_ok(10, 5, 3)
+    assert consolidacion.es_parcial({"total_tokens": None, "llm_calls": [ok, _llamada_fallida()]})
+    # total completo: no es parcial
+    assert not consolidacion.es_parcial({"total_tokens": 36, "llm_calls": [ok, dict(ok)]})
+    # ninguna informó: no hay suma parcial que mostrar (es «sin tokens»)
+    assert not consolidacion.es_parcial(
+        {"total_tokens": None, "llm_calls": [_llamada_fallida(), _llamada_fallida()]})
+
+
+def test_la_suma_parcial_va_con_piso_y_con_cuantas_llamadas_la_sustentan():
+    ok = _llamada_ok(9000, 2000, 9800)
+    texto = consolidacion.texto_tokens_parciales(
+        [{"llm_calls": [ok] * 11 + [_llamada_fallida()]}])
+    assert texto == "≥ 99.000 entrada · ≥ 22.000 salida · ≥ 107.800 razonamiento (11 de 12 llamadas)"
+    assert consolidacion.texto_tokens_parciales([]) is None
+    assert consolidacion.texto_tokens_parciales([{"llm_calls": [_llamada_fallida()]}]) is None
+
+
+def _reescribir_telemetria(raiz, cid, dataset, llamadas, totales=None):
+    ident = IdentidadCorrida(cid, dataset, "nodex_multiagente", 1, CONFIG)
+    ruta = persistencia.rutas(ident, raiz).telemetria
+    datos = json.loads(ruta.read_text(encoding="utf-8"))
+    datos["telemetria"]["llm_calls"] = llamadas
+    datos["telemetria"]["llm_call_count"] = len(llamadas)
+    datos["telemetria"].update({"input_tokens": None, "output_tokens": None,
+                                "total_tokens": None} if totales is None else totales)
+    ruta.write_text(json.dumps(datos), encoding="utf-8")
+
+
+def test_una_corrida_con_llamada_fallida_queda_fuera_de_la_media_y_se_muestra_como_parcial(campana):
+    raiz, _ = campana
+    _reescribir_telemetria(raiz, "uwf_des_visible_0001", "uwf",
+                           [_llamada_ok(10, 5, 3), _llamada_fallida(), _llamada_ok(20, 7, 4)])
+    f = _fila(_consolidar(raiz), "consumo", "uwf", "nodex_multiagente")
+    # la media de las otras 3 corridas completas (1000 cada una) NO se mezcla con el piso
+    assert f["tokens_entrada_medios"] == pytest.approx(1000)
+    assert f["n_sin_tokens"] == 1                      # corridas con total None
+    assert f["n_llamadas_fallidas"] == 1
+    assert f["tokens_parciales"] == "≥ 30 entrada · ≥ 12 salida · ≥ 7 razonamiento (2 de 3 llamadas)"
+
+
+def test_los_grupos_sin_corridas_parciales_no_muestran_suma_parcial(campana):
+    raiz, _ = campana
+    resumen = _consolidar(raiz)
+    for dataset, arq in (("uwf", "nodex_multiagente"), ("bgl", "nodex_multiagente"),
+                         ("uwf", "gemini_externo")):
+        assert _fila(resumen, "consumo", dataset, arq)["tokens_parciales"] is None
+    # el baseline no usa el modelo: estas celdas no aplican
+    baseline = _fila(resumen, "consumo", "uwf", "baseline_reglas")
+    assert baseline["tokens_parciales"] is None and baseline["n_llamadas_fallidas"] is None
+
+
+def test_el_aviso_tokens_parciales_lista_la_corrida_y_no_se_confunde_con_tokens_no_informados(campana):
+    raiz, _ = campana
+    _reescribir_telemetria(raiz, "uwf_des_visible_0001", "uwf",
+                           [_llamada_ok(10, 5, 3), _llamada_fallida()])
+    integridad = _consolidar(raiz)["integridad"]
+    avisos = {a["codigo"]: a for a in integridad["advertencias"]}
+    assert avisos["tokens_parciales"]["n"] == 1
+    assert avisos["tokens_parciales"]["severidad"] == "media"
+    assert "tokens_no_informados" not in avisos        # esta SÍ tiene datos parciales
+    detalle = integridad["corridas_con_tokens_parciales"]
+    assert len(detalle) == 1
+    assert (detalle[0]["n_llamadas"], detalle[0]["n_con_tokens"],
+            detalle[0]["n_llamadas_fallidas"]) == (2, 1, 1)
+    assert detalle[0]["tokens_entrada_parcial"] == 10
+
+
+def test_una_corrida_sin_ningun_token_sigue_siendo_tokens_no_informados_y_no_parcial(campana):
+    raiz, _ = campana
+    _reescribir_telemetria(raiz, "uwf_des_visible_0001", "uwf",
+                           [_llamada_fallida(), _llamada_fallida()])
+    resumen = _consolidar(raiz)
+    integridad = resumen["integridad"]
+    avisos = {a["codigo"]: a for a in integridad["advertencias"]}
+    assert avisos["tokens_no_informados"]["n"] == 1
+    assert "tokens_parciales" not in avisos
+    assert integridad["corridas_con_tokens_parciales"] == []
+    f = _fila(resumen, "consumo", "uwf", "nodex_multiagente")
+    assert f["tokens_parciales"] is None and f["n_llamadas_fallidas"] == 2
+
+
+def test_una_llamada_con_error_cuenta_como_fallida_aunque_traiga_tokens():
+    """El error registrado manda: una llamada que falló después de responder (p. ej. al
+    leer el consumo) no es una llamada sana. Y una sin error ni tokens (telemetría
+    anterior a este registro) tampoco se da por sana."""
+    con_error = {"input_tokens": 5, "output_tokens": 2, "error": "KeyError"}
+    sin_nada = {"model": PRINCIPAL}
+    sana = _llamada_ok(1, 1, 1)
+    d = consolidacion.tokens_de_la_corrida({"llm_calls": [con_error, sin_nada, sana]})
+    assert d["n_fallidas"] == 2
+
+
+# --- depuración y consultas externas ----------------------------------------------------------
+
+def test_los_resultados_de_desarrollo_se_marcan_de_depuracion_y_no_reportables(campana):
+    raiz, _ = campana
+    resumen = _consolidar(raiz)
+    assert resumen["depuracion"] is True and resumen["reportable"] is False
+    avisos = {a["codigo"]: a for a in resumen["integridad"]["advertencias"]}
+    assert avisos["resultados_de_depuracion"]["severidad"] == "alta"
+    assert "no son reportables" in avisos["resultados_de_depuracion"]["mensaje"]
+
+
+def test_la_depuracion_se_puede_apagar_explicitamente_para_una_campana_reportable(campana):
+    raiz, _ = campana
+    destino = consolidacion.consolidar(raiz, "sub", CONFIG, ARQUITECTURAS, marca=MARCA,
+                                       depuracion=False)
+    resumen = json.loads((destino / "resumen.json").read_text(encoding="utf-8"))
+    assert resumen["depuracion"] is False and resumen["reportable"] is True
+    assert "resultados_de_depuracion" not in {
+        a["codigo"] for a in resumen["integridad"]["advertencias"]}
+
+
+def test_los_datos_ficticios_nunca_son_reportables(campana):
+    raiz, _ = campana
+    destino = consolidacion.consolidar(raiz, "sub", CONFIG, ARQUITECTURAS, marca=MARCA,
+                                       datos_ficticios=True, depuracion=False)
+    resumen = json.loads((destino / "resumen.json").read_text(encoding="utf-8"))
+    assert resumen["reportable"] is False
+
+
+def _guardar_consultas(raiz, cid, dataset, consultas, arquitectura="nodex_multiagente"):
+    ident = IdentidadCorrida(cid, dataset, arquitectura, 1, CONFIG)
+    persistencia.guardar_consultas_externas(ident, raiz, consultas)
+
+
+def _consulta(herramienta, intento=True, respaldo=True):
+    return {"herramienta": herramienta, "parametros": {}, "intento_externo": intento,
+            "bloqueado": intento, "respaldo_respondio": respaldo, "fuente_respuesta": "fallback"}
+
+
+def _fila_ext(resumen, dataset, arquitectura, herramienta):
+    return next(f for f in resumen["tablas"]["consultas_externas"]["filas"]
+                if (f["dataset"], f["arquitectura"], f["herramienta"]) ==
+                (dataset, arquitectura, herramienta))
+
+
+def test_la_tabla_de_consultas_externas_cuenta_por_arquitectura_dataset_y_herramienta(campana):
+    raiz, _ = campana
+    _guardar_consultas(raiz, "uwf_des_visible_0000", "uwf",
+                       [_consulta("abuseipdb"), _consulta("abuseipdb"), _consulta("nvd")])
+    _guardar_consultas(raiz, "uwf_des_visible_0001", "uwf", [_consulta("nvd", intento=False)])
+    _guardar_consultas(raiz, "uwf_des_visible_0002", "uwf", [])         # no consultó nada
+    resumen = _consolidar(raiz)
+    ab = _fila_ext(resumen, "uwf", "nodex_multiagente", "abuseipdb")
+    assert (ab["n_corridas"], ab["n_con_registro"]) == (4, 3)            # la 0003 no tiene registro
+    assert (ab["n_consultas"], ab["n_intentos_externos"], ab["n_bloqueados"],
+            ab["n_respaldo_respondio"], ab["n_corridas_con_intentos"]) == (2, 2, 2, 2, 1)
+    nvd = _fila_ext(resumen, "uwf", "nodex_multiagente", "nvd")
+    assert (nvd["n_consultas"], nvd["n_intentos_externos"], nvd["n_respaldo_respondio"]) == (2, 1, 2)
+
+
+def test_cero_consultas_registradas_es_cero_y_no_se_confunde_con_sin_registro(campana):
+    raiz, _ = campana
+    for cid in ("uwf_des_visible_0000", "uwf_des_visible_0001", "uwf_des_visible_0002",
+                "uwf_des_visible_0003"):
+        _guardar_consultas(raiz, cid, "uwf", [])
+    resumen = _consolidar(raiz)
+    con = _fila_ext(resumen, "uwf", "nodex_multiagente", "nvd")
+    assert con["n_consultas"] == 0 and con["n_intentos_externos"] == 0       # medido: cero
+    sin = _fila_ext(resumen, "bgl", "nodex_multiagente", "nvd")              # nadie guardó nada
+    assert sin["n_consultas"] is None and "sin registro" in sin["nota"]      # no medido: None
+
+
+def test_gemini_directo_y_el_baseline_no_usan_herramientas_y_sus_celdas_no_aplican(campana):
+    raiz, _ = campana
+    resumen = _consolidar(raiz)
+    for arq in ("gemini_externo", "baseline_reglas"):
+        f = _fila_ext(resumen, "uwf", arq, "abuseipdb")
+        assert f["n_consultas"] is None and f["n_intentos_externos"] is None
+        assert f["nota"] == "no usa herramientas externas"
+
+
+def test_el_aviso_cuenta_los_intentos_bloqueados_y_es_informativo(campana):
+    raiz, _ = campana
+    _guardar_consultas(raiz, "uwf_des_visible_0000", "uwf",
+                       [_consulta("abuseipdb"), _consulta("nvd"), _consulta("nvd", intento=False)])
+    avisos = {a["codigo"]: a for a in _consolidar(raiz)["integridad"]["advertencias"]}
+    assert avisos["consultas_externas_bloqueadas"]["n"] == 2
+    assert avisos["consultas_externas_bloqueadas"]["severidad"] == "info"
+    assert "pendiente" in avisos["consultas_externas_bloqueadas"]["mensaje"]
+
+
+def test_sin_registros_de_consultas_no_hay_aviso_de_bloqueos(campana):
+    raiz, _ = campana
+    avisos = {a["codigo"] for a in _consolidar(raiz)["integridad"]["advertencias"]}
+    assert "consultas_externas_bloqueadas" not in avisos
+
+
+def test_la_tabla_de_consultas_externas_se_escribe_como_csv(campana):
+    raiz, _ = campana
+    destino = consolidacion.consolidar(raiz, "sub", CONFIG, ARQUITECTURAS, marca=MARCA)
+    assert (destino / "consultas_externas.csv").is_file()

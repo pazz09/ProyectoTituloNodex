@@ -171,8 +171,8 @@ describe('con la fixture ficticia', () => {
   it('cada tabla tiene su botón CSV, y hay uno por tabla mostrada', () => {
     const c = montar()
     const botones = [...c.querySelectorAll('button')].filter((b) => b.textContent!.trim() === 'CSV')
-    // d1 (2 tablas), d2, d3, d4, consumo, comparación y errores.
-    expect(botones).toHaveLength(8)
+    // d1 (2 tablas), d2, d3, d4, consumo, consultas externas, comparación y errores.
+    expect(botones).toHaveLength(9)
   })
 
   it('el CSV descargado trae las mismas filas y columnas que la tabla en pantalla', () => {
@@ -420,5 +420,119 @@ describe('Resultados: versión devuelta por la API y tokens de razonamiento', ()
     expect(iRaz).toBeGreaterThan(-1)
     const bgl = lineas.find((l) => l.startsWith('bgl,nodex_multiagente'))!.split(',')
     expect(bgl[iRaz]).toBe('')
+  })
+})
+
+describe('Resultados: depuración, tokens parciales y consultas externas', () => {
+  const montarVista = (r: ResumenResultados = resumen) => {
+    const contenedor = document.createElement('div')
+    document.body.appendChild(contenedor)
+    const raiz = createRoot(contenedor)
+    act(() => raiz.render(<ResultadosContenido {...base} resumen={r} />))
+    desmontar = () => {
+      act(() => raiz.unmount())
+      contenedor.remove()
+    }
+    return contenedor
+  }
+
+  afterEach(() => desmontar?.())
+
+  it('los resultados de depuración llevan un aviso visible de que no son reportables', () => {
+    const c = montarVista()
+    const aviso = c.querySelector('#aviso-depuracion')!
+    expect(aviso).not.toBeNull()
+    expect(aviso.textContent).toMatch(/DEPURACIÓN/)
+    expect(aviso.textContent).toMatch(/NO REPORTABLES/)
+  })
+
+  it('sin depuración no se muestra el aviso', () => {
+    const c = montarVista({ ...resumen, depuracion: false, reportable: true })
+    expect(c.querySelector('#aviso-depuracion')).toBeNull()
+  })
+
+  it('una consolidación anterior (sin el campo depuracion) no rompe la vista', () => {
+    const { depuracion: _d, reportable: _r, ...anterior } = resumen
+    const c = montarVista(anterior as ResumenResultados)
+    expect(c.querySelector('#aviso-depuracion')).toBeNull()
+    expect(c.querySelector('#integridad')).not.toBeNull()
+  })
+
+  it('lista las corridas con tokens parciales, con ≥ y cuántas llamadas la sustentan', () => {
+    const c = montarVista()
+    const bloque = c.querySelector('#tokens-parciales')!
+    expect(bloque).not.toBeNull()
+    expect(bloque.textContent).toMatch(/≥ 30 entrada/)
+    expect(bloque.textContent).toMatch(/2 de 3 llamadas/)
+    expect(bloque.textContent).toMatch(/1 fallida/)
+    expect(bloque.textContent).toMatch(/nunca un total/)
+  })
+
+  it('sin corridas con tokens parciales no aparece ese bloque', () => {
+    const limpio = JSON.parse(JSON.stringify(resumen)) as ResumenResultados
+    limpio.integridad.corridas_con_tokens_parciales = []
+    expect(montarVista(limpio).querySelector('#tokens-parciales')).toBeNull()
+  })
+
+  it('el aviso tokens_parciales aparece junto a las cifras de consumo', () => {
+    const texto = montarVista().querySelector('#seccion-11-5 .avisos-integridad')!.textContent!
+    expect(texto).toMatch(/total de tokens en None/)
+  })
+
+  it('la tabla de consumo muestra la suma parcial rotulada y las llamadas fallidas', () => {
+    const c = montarVista()
+    const cab = [...c.querySelectorAll('#seccion-11-5 thead th')].map((th) => th.textContent)
+    expect(cab).toContain('Llamadas fallidas')
+    expect(cab.some((h) => h!.startsWith('Tokens parciales'))).toBe(true)
+    const iParcial = cab.findIndex((h) => h!.startsWith('Tokens parciales'))
+    const fila = [...c.querySelectorAll('#seccion-11-5 tbody tr')].find(
+      (tr) => tr.textContent!.includes('uwf') && tr.textContent!.includes('NODEX')
+        && tr.textContent!.includes('≥'),
+    )!
+    const celda = [...fila.querySelectorAll('td')][iParcial].textContent!
+    expect(celda).toBe('≥ 30 entrada · ≥ 12 salida · ≥ 7 razonamiento (2 de 3 llamadas)')
+  })
+
+  it('muestra la tabla de intentos de consulta externa por arquitectura y dataset', () => {
+    const c = montarVista()
+    const tablas = [...c.querySelectorAll('#seccion-11-5 table')]
+    const ext = tablas.find((t) => t.textContent!.includes('Intentos de salida a la red'))!
+    expect(ext).toBeDefined()
+    const cab = [...ext.querySelectorAll('thead th')].map((th) => th.textContent)
+    const fila = (ds: string, arq: string, herr: string) =>
+      [...ext.querySelectorAll('tbody tr')].find((tr) => {
+        const td = [...tr.querySelectorAll('td')].map((x) => x.textContent)
+        return td[0] === ds && td[1] === arq && td[2] === herr
+      })
+    const nodex = [...fila('uwf', 'NODEX', 'abuseipdb')!.querySelectorAll('td')].map((x) => x.textContent)
+    expect(nodex[cab.indexOf('Consultas a la herramienta')]).toBe('2')
+    expect(nodex[cab.indexOf('Bloqueados')]).toBe('2')
+    // Gemini directo y el baseline no usan herramientas: no aplica (—), no 0.
+    const gem = [...fila('uwf', 'Gemini directo', 'nvd')!.querySelectorAll('td')].map((x) => x.textContent)
+    expect(gem[cab.indexOf('Consultas a la herramienta')]).toBe('—')
+    // BGL de NODEX no tiene registro: tampoco es 0.
+    const bgl = [...fila('bgl', 'NODEX', 'nvd')!.querySelectorAll('td')].map((x) => x.textContent)
+    expect(bgl[cab.indexOf('Consultas a la herramienta')]).toBe('—')
+  })
+
+  it('una consolidación anterior sin la tabla de consultas externas no la muestra ni falla', () => {
+    const anterior = JSON.parse(JSON.stringify(resumen)) as ResumenResultados
+    delete (anterior.tablas as Record<string, unknown>).consultas_externas
+    const c = montarVista(anterior)
+    expect(c.textContent).not.toContain('Intentos de salida a la red')
+  })
+
+  it('la tabla de consultas externas se puede descargar en CSV con las celdas vacías como vacías', () => {
+    const c = montarVista()
+    const botones = [...c.querySelectorAll('#seccion-11-5 button')].filter(
+      (b) => b.textContent!.trim() === 'CSV',
+    )
+    vi.mocked(descargarTexto).mockClear()
+    act(() => (botones[botones.length - 1] as HTMLButtonElement).click())
+    const [nombre, contenido] = vi.mocked(descargarTexto).mock.calls[0]
+    expect(nombre).toMatch(/consultas_externas\.csv$/)
+    const lineas = (contenido as string).replace(/^\uFEFF/, '').trim().split('\r\n')
+    const gem = lineas.find((l) => l.startsWith('uwf,gemini_externo,nvd'))!.split(',')
+    expect(gem[lineas[0].split(',').indexOf('n_consultas')]).toBe('')
   })
 })

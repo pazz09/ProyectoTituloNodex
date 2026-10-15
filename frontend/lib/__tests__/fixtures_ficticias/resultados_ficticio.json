@@ -1,9 +1,11 @@
 {
   "esquema": "resultados-v1",
   "datos_ficticios": true,
+  "depuracion": true,
+  "reportable": false,
   "config_version": "FICTICIO-no-usar",
   "consolidacion": "20000101T000000Z",
-  "generado_utc": "2026-10-15T03:46:00+00:00",
+  "generado_utc": "2026-10-15T21:02:38+00:00",
   "protocolo_version": "1.0",
   "subconjunto": "sub",
   "particion": "desarrollo",
@@ -30,7 +32,18 @@
     "fallback_determinable": true,
     "modelo_principal": "gemini-principal",
     "corridas_con_telemetria_previa_a_d11": 11,
-    "corridas_sin_tokens": 0,
+    "corridas_sin_tokens": 1,
+    "corridas_con_tokens_parciales": [
+      {
+        "run_id": "uwf_des_visible_0001__nodex__r1__ce33acf8",
+        "n_llamadas": 3,
+        "n_con_tokens": 2,
+        "n_llamadas_fallidas": 1,
+        "tokens_entrada_parcial": 30,
+        "tokens_salida_parcial": 12,
+        "tokens_razonamiento_parcial": 7
+      }
+    ],
     "corridas_sin_razonamiento": 2,
     "corridas_sin_version_de_modelo": 0,
     "advertencias": [
@@ -39,6 +52,18 @@
         "severidad": "alta",
         "mensaje": "datos ficticios de prueba",
         "n": 0
+      },
+      {
+        "codigo": "resultados_de_depuracion",
+        "severidad": "alta",
+        "mensaje": "resultados de DEPURACIÓN (desarrollo/piloto): no son reportables ni se citan en el informe",
+        "n": 0
+      },
+      {
+        "codigo": "consultas_externas_bloqueadas",
+        "severidad": "info",
+        "mensaje": "intentos de consulta a NVD/AbuseIPDB bloqueados, con respaldo local (política de la campaña final pendiente)",
+        "n": 3
       },
       {
         "codigo": "corridas_fallidas",
@@ -57,6 +82,12 @@
         "severidad": "media",
         "mensaje": "telemetría tomada antes de integrar D-11; no mezclar con la posterior",
         "n": 11
+      },
+      {
+        "codigo": "tokens_parciales",
+        "severidad": "media",
+        "mensaje": "corridas completas con el total de tokens en None porque una llamada falló (o no informó): solo se conoce una suma parcial, que es un piso; quedan fuera de las medias de tokens",
+        "n": 1
       },
       {
         "codigo": "razonamiento_no_informado",
@@ -778,7 +809,7 @@
     "consumo": {
       "titulo": "Consumo y comportamiento operacional",
       "seccion": "11.5",
-      "descripcion": "Solo promedian las corridas completas: una corrida cortada consumió menos y haría parecer más eficiente a la arquitectura que más falla. Si el proveedor no informó los tokens, la celda queda vacía; no se estiman.",
+      "descripcion": "Solo promedian las corridas completas: una corrida cortada consumió menos y haría parecer más eficiente a la arquitectura que más falla. Si el proveedor no informó los tokens, la celda queda vacía; no se estiman. Una llamada fallida deja el total de su corrida en None y la deja fuera de las medias de tokens; lo que sí se sabe de esas corridas se muestra aparte como suma parcial (≥, un piso), nunca como total.",
       "columnas": [
         {
           "clave": "dataset",
@@ -857,8 +888,18 @@
         },
         {
           "clave": "n_sin_tokens",
-          "etiqueta": "Sin tokens informados",
+          "etiqueta": "Corridas con total None (fuera de las medias de tokens)",
           "tipo": "entero"
+        },
+        {
+          "clave": "n_llamadas_fallidas",
+          "etiqueta": "Llamadas fallidas",
+          "tipo": "entero"
+        },
+        {
+          "clave": "tokens_parciales",
+          "etiqueta": "Tokens parciales (piso, solo de esas corridas)",
+          "tipo": "texto"
         }
       ],
       "filas": [
@@ -877,6 +918,8 @@
           "versiones_devueltas": null,
           "replan_medio": null,
           "correcciones_medias": null,
+          "n_llamadas_fallidas": null,
+          "tokens_parciales": null,
           "n_con_fallback": null,
           "n_sin_tokens": null
         },
@@ -895,6 +938,8 @@
           "versiones_devueltas": "gemini-principal-001",
           "replan_medio": null,
           "correcciones_medias": null,
+          "n_llamadas_fallidas": 0,
+          "tokens_parciales": null,
           "n_con_fallback": 0,
           "n_sin_tokens": 0
         },
@@ -913,6 +958,8 @@
           "versiones_devueltas": "gemini-principal-001",
           "replan_medio": 1.0,
           "correcciones_medias": 0.0,
+          "n_llamadas_fallidas": 0,
+          "tokens_parciales": null,
           "n_con_fallback": 0,
           "n_sin_tokens": 0
         },
@@ -931,6 +978,8 @@
           "versiones_devueltas": null,
           "replan_medio": null,
           "correcciones_medias": null,
+          "n_llamadas_fallidas": null,
+          "tokens_parciales": null,
           "n_con_fallback": null,
           "n_sin_tokens": null
         },
@@ -949,6 +998,8 @@
           "versiones_devueltas": "gemini-principal-001",
           "replan_medio": null,
           "correcciones_medias": null,
+          "n_llamadas_fallidas": 0,
+          "tokens_parciales": null,
           "n_con_fallback": 0,
           "n_sin_tokens": 0
         },
@@ -959,7 +1010,7 @@
           "n_no_completas": 0,
           "tiempo_medio_s": 10.0,
           "tiempo_mediana_s": 10.0,
-          "llamadas_medias": 6.0,
+          "llamadas_medias": 5.25,
           "tokens_entrada_medios": 1000.0,
           "tokens_salida_medios": 200.0,
           "tokens_razonamiento_medios": 40.0,
@@ -967,8 +1018,230 @@
           "versiones_devueltas": "gemini-principal-001; gemini-respaldo-001",
           "replan_medio": 1.0,
           "correcciones_medias": 0.0,
+          "n_llamadas_fallidas": 1,
+          "tokens_parciales": "≥ 30 entrada · ≥ 12 salida · ≥ 7 razonamiento (2 de 3 llamadas)",
           "n_con_fallback": 1,
-          "n_sin_tokens": 0
+          "n_sin_tokens": 1
+        }
+      ]
+    },
+    "consultas_externas": {
+      "titulo": "Intentos de consulta externa (NVD, AbuseIPDB)",
+      "seccion": "11.5",
+      "descripcion": "Para decidir con datos la política de consultas externas de la campaña final (decisión pendiente; cualquiera que se elija debe declararse en el informe). «No usa herramientas externas» y «sin registro» no son lo mismo que 0 intentos.",
+      "columnas": [
+        {
+          "clave": "dataset",
+          "etiqueta": "Dataset",
+          "tipo": "texto"
+        },
+        {
+          "clave": "arquitectura",
+          "etiqueta": "Arquitectura",
+          "tipo": "texto"
+        },
+        {
+          "clave": "herramienta",
+          "etiqueta": "Herramienta",
+          "tipo": "texto"
+        },
+        {
+          "clave": "n_corridas",
+          "etiqueta": "Corridas",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_con_registro",
+          "etiqueta": "Con registro",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_corridas_con_intentos",
+          "etiqueta": "Corridas con intentos",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_consultas",
+          "etiqueta": "Consultas a la herramienta",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_intentos_externos",
+          "etiqueta": "Intentos de salida a la red",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_bloqueados",
+          "etiqueta": "Bloqueados",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_respaldo_respondio",
+          "etiqueta": "Respondió el respaldo local",
+          "tipo": "entero"
+        },
+        {
+          "clave": "nota",
+          "etiqueta": "Nota",
+          "tipo": "texto"
+        }
+      ],
+      "filas": [
+        {
+          "dataset": "bgl",
+          "arquitectura": "baseline_reglas",
+          "herramienta": "abuseipdb",
+          "n_corridas": 2,
+          "n_con_registro": null,
+          "n_corridas_con_intentos": null,
+          "n_consultas": null,
+          "n_intentos_externos": null,
+          "n_bloqueados": null,
+          "n_respaldo_respondio": null,
+          "nota": "no usa herramientas externas"
+        },
+        {
+          "dataset": "bgl",
+          "arquitectura": "baseline_reglas",
+          "herramienta": "nvd",
+          "n_corridas": 2,
+          "n_con_registro": null,
+          "n_corridas_con_intentos": null,
+          "n_consultas": null,
+          "n_intentos_externos": null,
+          "n_bloqueados": null,
+          "n_respaldo_respondio": null,
+          "nota": "no usa herramientas externas"
+        },
+        {
+          "dataset": "bgl",
+          "arquitectura": "gemini_externo",
+          "herramienta": "abuseipdb",
+          "n_corridas": 1,
+          "n_con_registro": null,
+          "n_corridas_con_intentos": null,
+          "n_consultas": null,
+          "n_intentos_externos": null,
+          "n_bloqueados": null,
+          "n_respaldo_respondio": null,
+          "nota": "no usa herramientas externas"
+        },
+        {
+          "dataset": "bgl",
+          "arquitectura": "gemini_externo",
+          "herramienta": "nvd",
+          "n_corridas": 1,
+          "n_con_registro": null,
+          "n_corridas_con_intentos": null,
+          "n_consultas": null,
+          "n_intentos_externos": null,
+          "n_bloqueados": null,
+          "n_respaldo_respondio": null,
+          "nota": "no usa herramientas externas"
+        },
+        {
+          "dataset": "bgl",
+          "arquitectura": "nodex_multiagente",
+          "herramienta": "abuseipdb",
+          "n_corridas": 2,
+          "n_con_registro": null,
+          "n_corridas_con_intentos": null,
+          "n_consultas": null,
+          "n_intentos_externos": null,
+          "n_bloqueados": null,
+          "n_respaldo_respondio": null,
+          "nota": "sin registro (corridas anteriores a este registro)"
+        },
+        {
+          "dataset": "bgl",
+          "arquitectura": "nodex_multiagente",
+          "herramienta": "nvd",
+          "n_corridas": 2,
+          "n_con_registro": null,
+          "n_corridas_con_intentos": null,
+          "n_consultas": null,
+          "n_intentos_externos": null,
+          "n_bloqueados": null,
+          "n_respaldo_respondio": null,
+          "nota": "sin registro (corridas anteriores a este registro)"
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "baseline_reglas",
+          "herramienta": "abuseipdb",
+          "n_corridas": 4,
+          "n_con_registro": null,
+          "n_corridas_con_intentos": null,
+          "n_consultas": null,
+          "n_intentos_externos": null,
+          "n_bloqueados": null,
+          "n_respaldo_respondio": null,
+          "nota": "no usa herramientas externas"
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "baseline_reglas",
+          "herramienta": "nvd",
+          "n_corridas": 4,
+          "n_con_registro": null,
+          "n_corridas_con_intentos": null,
+          "n_consultas": null,
+          "n_intentos_externos": null,
+          "n_bloqueados": null,
+          "n_respaldo_respondio": null,
+          "nota": "no usa herramientas externas"
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "gemini_externo",
+          "herramienta": "abuseipdb",
+          "n_corridas": 4,
+          "n_con_registro": null,
+          "n_corridas_con_intentos": null,
+          "n_consultas": null,
+          "n_intentos_externos": null,
+          "n_bloqueados": null,
+          "n_respaldo_respondio": null,
+          "nota": "no usa herramientas externas"
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "gemini_externo",
+          "herramienta": "nvd",
+          "n_corridas": 4,
+          "n_con_registro": null,
+          "n_corridas_con_intentos": null,
+          "n_consultas": null,
+          "n_intentos_externos": null,
+          "n_bloqueados": null,
+          "n_respaldo_respondio": null,
+          "nota": "no usa herramientas externas"
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "nodex_multiagente",
+          "herramienta": "abuseipdb",
+          "n_corridas": 4,
+          "n_con_registro": 2,
+          "n_corridas_con_intentos": 1,
+          "n_consultas": 2,
+          "n_intentos_externos": 2,
+          "n_bloqueados": 2,
+          "n_respaldo_respondio": 2,
+          "nota": "las llamadas HTTP se bloquean y responde el respaldo local; política de la campaña final PENDIENTE"
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "nodex_multiagente",
+          "herramienta": "nvd",
+          "n_corridas": 4,
+          "n_con_registro": 2,
+          "n_corridas_con_intentos": 1,
+          "n_consultas": 1,
+          "n_intentos_externos": 1,
+          "n_bloqueados": 1,
+          "n_respaldo_respondio": 1,
+          "nota": "las llamadas HTTP se bloquean y responde el respaldo local; política de la campaña final PENDIENTE"
         }
       ]
     },

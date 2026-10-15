@@ -174,3 +174,22 @@ def test_la_exportacion_incluye_razonamiento_y_versiones_sin_convertir_none_en_c
     assert sin["modelos_efectivos"] is None
     cero = _exportacion.fila(ident, {}, telemetria={"reasoning_tokens": 0})
     assert cero["reasoning_tokens"] == 0          # un cero informado sí es un cero
+
+
+def test_campos_de_modelo_alimenta_la_latencia_y_el_error_de_cada_llamada():
+    medido = {"llm_calls": [
+        {"model": "m", "duration_s": 2.5, "error": None},
+        {"model": "m", "duration_s": 7.0, "error": "ServerError(503)"},
+        {"model": "m", "duration_s": None, "error": None},
+    ]}
+    campos = campos_de_modelo(medido)
+    assert campos["n_llamadas_fallidas"] == 1
+    assert campos["duracion_llamadas_s"] == 9.5      # solo las que la informaron
+
+
+def test_campos_de_modelo_duracion_none_sigue_siendo_none_y_no_cero():
+    for medido in (None, {"llm_calls": []}, {"llm_calls": [{"model": "m"}]},
+                   {"llm_calls": [{"model": "m", "duration_s": True}, {"model": "m", "duration_s": -1}]}):
+        campos = campos_de_modelo(medido)
+        assert campos["duracion_llamadas_s"] is None, medido
+        assert campos["n_llamadas_fallidas"] == 0, medido

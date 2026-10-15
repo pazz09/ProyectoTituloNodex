@@ -180,6 +180,13 @@ def _entero_o_none(valor) -> int | None:
     return valor
 
 
+def _numero_o_none(valor) -> float | None:
+    """Un número >= 0 real, o `None`. Nunca convierte a 0."""
+    if isinstance(valor, bool) or not isinstance(valor, (int, float)) or valor < 0:
+        return None
+    return float(valor)
+
+
 def _texto_o_none(valor) -> str | None:
     return valor if isinstance(valor, str) and valor.strip() else None
 
@@ -197,6 +204,10 @@ def campos_de_modelo(medido: dict | None) -> dict:
     - `modelos_efectivos`: versiones que devolvió la API (`model_version`),
       sin repetir.
     - `campos_parciales`.
+    - `n_llamadas_fallidas`: llamadas que fallaron (traen `error`).
+    - `duracion_llamadas_s`: suma de las duraciones de las llamadas que la
+      informaron; `None` si ninguna. Es la suma de las llamadas a la API, sin las
+      esperas de reintento ni el tiempo propio del grafo.
 
     `uso_fallback` NO se deriva de comparar `model` con `model_version`: la
     API puede devolver un nombre con sufijo de versión distinto del pedido, y
@@ -215,9 +226,14 @@ def campos_de_modelo(medido: dict | None) -> dict:
             input_tokens=_entero_o_none(c.get("input_tokens")),
             output_tokens=_entero_o_none(c.get("output_tokens")),
             reasoning_tokens=_entero_o_none(c.get("reasoning_tokens")),
+            latencia_s=_numero_o_none(c.get("duration_s")),
+            error=_texto_o_none(c.get("error")),
         ))
     resumen = Telemetria(run_id="", llamadas=llamadas).to_dict()
+    duraciones = [l.latencia_s for l in llamadas if l.latencia_s is not None]
     return {
+        "n_llamadas_fallidas": sum(1 for l in llamadas if l.error is not None),
+        "duracion_llamadas_s": round(sum(duraciones), 3) if duraciones else None,
         "reasoning_tokens": resumen["reasoning_tokens"],
         "modelos_efectivos": resumen["modelos_efectivos"],
         "campos_parciales": resumen["campos_parciales"],

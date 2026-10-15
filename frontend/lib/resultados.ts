@@ -50,6 +50,16 @@ export type CorridaFallida = {
   error: string | null
 }
 
+export type CorridaConTokensParciales = {
+  run_id: string
+  n_llamadas: number
+  n_con_tokens: number
+  n_llamadas_fallidas: number
+  tokens_entrada_parcial: number | null
+  tokens_salida_parcial: number | null
+  tokens_razonamiento_parcial: number | null
+}
+
 export type Integridad = {
   corridas_esperadas: number
   corridas_presentes: number
@@ -62,6 +72,8 @@ export type Integridad = {
   modelo_principal: string | null
   corridas_con_telemetria_previa_a_d11: number
   corridas_sin_tokens: number
+  /** Corridas completas con total de tokens None pero con una suma parcial (un piso). */
+  corridas_con_tokens_parciales?: CorridaConTokensParciales[]
   /** Corridas completas que no informaron tokens de razonamiento (no son 0). */
   corridas_sin_razonamiento?: number
   /** Corridas completas sin la versión de modelo que devolvió la API. */
@@ -73,6 +85,10 @@ export type ResumenResultados = {
   esquema: string
   /** `true` solo en fixtures de prueba. Nunca en resultados reales. */
   datos_ficticios: boolean
+  /** Resultados de DEPURACIÓN (desarrollo/piloto): no son reportables. */
+  depuracion?: boolean
+  /** `false` si son ficticios o de depuración. */
+  reportable?: boolean
   config_version: string
   consolidacion: string
   generado_utc: string

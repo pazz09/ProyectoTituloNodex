@@ -9,6 +9,7 @@ import type { ModeloBarras } from '@/lib/graficos'
 import {
   descargarTexto,
   formatoCelda,
+  formatoNumero,
   listarResultados,
   nombreArchivo,
   nombreArquitectura,
@@ -270,6 +271,26 @@ function Integridad({ resumen }: { resumen: ResumenResultados }) {
             alguna corrida usó el modelo de respaldo.
           </p>
         )}
+        {(i.corridas_con_tokens_parciales?.length ?? 0) > 0 && (
+          <div id="tokens-parciales">
+            <p className="nota-tabla">
+              Corridas con el total de tokens en <b>None</b> porque una llamada falló. Solo se
+              conoce una suma parcial (<b>≥</b>, un piso, nunca un total); quedan fuera de las
+              medias de tokens.
+            </p>
+            <ul className="lista-fallidas">
+              {i.corridas_con_tokens_parciales!.map((c) => (
+                <li key={c.run_id}>
+                  <code>{c.run_id}</code> — ≥ {formatoNumero(c.tokens_entrada_parcial, 0)} entrada ·
+                  ≥ {formatoNumero(c.tokens_salida_parcial, 0)} salida · ≥{' '}
+                  {formatoNumero(c.tokens_razonamiento_parcial, 0)} razonamiento (
+                  {c.n_con_tokens} de {c.n_llamadas} llamadas; {c.n_llamadas_fallidas} fallida
+                  {c.n_llamadas_fallidas === 1 ? '' : 's'})
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
         {i.corridas_fallidas.length > 0 && (
           <ul className="lista-fallidas">
             {i.corridas_fallidas.map((f) => (
@@ -398,6 +419,20 @@ export function ResultadosContenido(p: PropsContenido) {
 
       {resumen && (
         <>
+          {resumen.depuracion && (
+            <div className="notice-block" role="alert" id="aviso-depuracion">
+              <div className="icono-aviso">
+                <AlertTriangle size={16} />
+              </div>
+              <div>
+                <strong>RESULTADOS DE DEPURACIÓN — NO REPORTABLES</strong>
+                <p>
+                  Son de una corrida de desarrollo o de piloto, hecha para depurar el sistema.
+                  No se citan en el informe ni se comparan como resultados.
+                </p>
+              </div>
+            </div>
+          )}
           {resumen.datos_ficticios && (
             <div className="notice-block" role="alert" id="aviso-ficticio">
               <div className="icono-aviso">
@@ -587,6 +622,12 @@ export function ResultadosContenido(p: PropsContenido) {
                   )}
                 />
                 <TablaDatos tabla={tablaDe(resumen, 'consumo')!} nombre={`${base}_consumo`} />
+                {tablaDe(resumen, 'consultas_externas')?.filas.length ? (
+                  <TablaDatos
+                    tabla={tablaDe(resumen, 'consultas_externas')!}
+                    nombre={`${base}_consultas_externas`}
+                  />
+                ) : null}
               </>
             ) : (
               <Vacio id="consumo" />
