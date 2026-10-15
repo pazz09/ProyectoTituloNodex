@@ -605,6 +605,11 @@ Lo que falta ya no es código de la capa experimental:
 
 ## 16. Telemetría del cliente LLM (Fase 6)
 
+> **OBSOLETA desde la Fase D (7-oct-2026).** El módulo que describe esta
+> sección (`src/telemetria_llm.py`) se retiró en favor de `src/telemetry.py` de
+> D-11, y `src/llm.py` quedó igual al de `origin/main`. Se conserva solo como
+> registro de las decisiones de diseño. Ver la sección 17 y la 18.
+
 Instrumentación de `src/llm.py`, **sin cambiar ninguna decisión de NODEX**.
 El diff contra producción son tres bloques y ningún valor de retorno ni
 camino de excepción se modifica.
@@ -848,3 +853,131 @@ Corridas el 7-oct-2026 sobre un estado sintético con la forma de `d11-v1`.
 | Ejecutar el piloto N=1: **48 corridas, 144 llamadas** | Autorización de la autora |
 | Los dos huecos de `src/telemetry.py` | Decisión sobre si se parchean en el núcleo |
 | HDFS con N=3 | Se decide después del piloto principal |
+
+## 18. Etapa 1: verificación por ejecución (14-oct-2026)
+
+Primera vez que se ejecuta algo de la capa experimental. **No se llamó al
+modelo, ni a AbuseIPDB, ni a NVD; no se ejecutó NODEX, el baseline ni
+`gemini_externo` sobre ningún caso; `ejecutar_campana` se invocó solo con su
+valor por omisión (plan en seco).** El worktree no tiene `.env`.
+
+### Entorno real
+
+| Componente | Versión instalada |
+|---|---|
+| Python | 3.13.5 |
+| Node | 22.17.0 |
+| pnpm | 10.33.0 |
+| chromadb / sentence-transformers / torch | 1.5.9 / 6.1.0 / 2.14.0 |
+| fastapi / pytest / langgraph / google-genai | 0.141.1 / 9.1.1 / 1.2.12 / 2.25.0 |
+| pyarrow (solo `requirements-experimentacion.txt`) | 25.0.1 |
+
+Instalado con `pip install -r requirements.txt -c constraints.txt` y luego
+`requirements-experimentacion.txt`, en un `.venv` propio del worktree.
+`pip check`: sin conflictos. El resultado coincide con lo declarado en la
+Fase 0, que se había leído de archivos y no comprobado.
+
+### Pruebas
+
+| Corrida | Resultado |
+|---|---|
+| `tests/experimentation`, primera ejecución | **249 pasan, 10 fallan** |
+| `tests/experimentation`, tras corregir | **290 pasan, 0 fallan** (incluye 31 pruebas nuevas) |
+| Suite completa del proyecto | **860 pasan, 0 fallan, 0 omitidas**, 1 advertencia (obsolescencia de `anyio` dentro de Starlette, ajena) |
+
+Correr la suite no modificó el repositorio ni escribió en `experiments/`.
+
+### Los 10 fallos, clasificados
+
+Ninguno fue defecto del código; ninguno fue del entorno. **Los diez eran
+defectos de las pruebas**, escritas sin poder ejecutarse:
+
+| # | Prueba | Causa |
+|---|---|---|
+| 1-6 | `test_adaptador_nodex` (6) | Afirmaban el comportamiento de la propuesta anterior (campos `id`, `nivel`, `uid`; extracción de IDs desde la prosa). La Fase D reescribió el adaptador para `d11-v1` y no actualicé estas pruebas |
+| 7 | `test_la_cronologia_viaja_etiquetada...` | Buscaba `"no es"` con espacio en las claves de un dict cuya clave es `no_es`. Nunca pudo pasar |
+| 8 | `test_la_base_experimental_existe_pero_esta_vacia` | Dejó de ser cierta al poblar la base el 4-oct (por diseño). Ahora verifica qué contiene |
+| 9 | `test_la_prevalencia_efectiva...` | `approx` por omisión (1e-6 relativo) era más estricto que el redondeo a 6 decimales del propio manifiesto |
+| 10 | `test_las_llamadas_por_corrida...` | Leía `agente_unico`, que la Fase D reemplazó por `gemini_externo` |
+
+Las pruebas no se tocaron para que pasaran: se reescribieron para verificar
+el comportamiento correcto del contrato actual, y se agregaron dos que
+cubren el error que casi se cuela: que la clave de matching de D2 son los
+`evidence_uids` y no el `event_id`, y que las tácticas quedan fuera del
+scoring de D3.
+
+### Defectos del código encontrados por ejecución
+
+| Defecto | Cómo se encontró | Corrección |
+|---|---|---|
+| `gemini_externo` no tenía carpeta de almacenamiento (`KeyError` al planificar) | El plan en seco con esa arquitectura. **Las 261 pruebas no lo veían** | `persistencia.py` + prueba parametrizada sobre cada arquitectura del vocabulario. Verificado que falla sin el arreglo y pasa con él |
+| `subconjuntos.main()` reescribía `piloto.json` y `rubrica.json` en cada corrida | Lectura al agregar el subconjunto de evaluación | `escribir_sin_sobrescribir()`. Al regenerar, ambos dieron contenido **idéntico**: la selección es determinista |
+| `TestCase` chocaba con la convención de pytest | Advertencia en cada corrida | `__test__ = False` |
+
+### Plan en seco (medido, no estimado)
+
+`ejecutar_campana` con el valor por omisión. «Piso» es literal: NODEX tiene
+6 puntos de llamada y sube con los bucles de replanificación y corrección,
+que no se pueden acotar sin medir. Archivos en `experiments/` antes y
+después del plan en seco: 1 023 y 1 023.
+
+| Subconjunto | Partición | Reps. LLM | NODEX | Baseline | Gemini directo | Corridas | Llamadas (piso) |
+|---|---|---|---|---|---|---|---|
+| piloto, por defecto | desarrollo | 1 | 24 | 24 | — | **48** | **144** |
+| piloto, con `gemini_externo` | desarrollo | 1 | 24 | 24 | 24 | **72** | **168** |
+| rubrica, por defecto | evaluación | 3 | 36 | 12 | — | 48 | 216 |
+| evaluacion, por defecto | evaluación | 3 | 426 | 142 | — | **568** | **2 556** |
+| evaluacion, con `gemini_externo` | evaluación | 3 | 426 | 142 | 426 | **994** | **2 982** |
+
+El subconjunto `evaluacion` (142 casos: 62 de BGL y 80 de UWF, sin HDFS por la
+decisión D-7) no existía; se generó de forma determinista y no sobrescribe.
+
+### Verificado por ejecución
+
+- **60 hashes** coinciden con los registrados: 16 archivos fuente, 13 Parquet,
+  13 CSV de eventos y 13 de etiquetas de UWF, y los 5 archivos de la base
+  vectorial. Con la comprobación posterior a abrir la base, **61**.
+- Los **336 casos** listados en los manifiestos existen en disco con su JSON,
+  su contenido y su referencia (solo se comprobó la existencia de esta
+  última; no se leyó).
+- Los **3 subconjuntos** (piloto 24, rúbrica 12, evaluación 142) referencian
+  únicamente casos existentes.
+- La base vectorial abre en **modo solo lectura** (la escritura es rechazada),
+  tiene una única colección, `attack_techniques`, con **697 documentos: 222
+  técnicas y 475 subtécnicas**, y ninguna colección de memoria. La API de
+  chromadb se abrió sobre una **copia**, porque abrir una base con la API puede
+  ejecutarle migraciones; el original quedó con el mismo hash.
+- La suite de D-11 (`tests/test_output_contract_d11.py`, de Felipe) pasa dentro
+  de las 860.
+
+### Pendiente: NO verificado por ejecución
+
+- Cualquier corrida de NODEX, del baseline o de `gemini_externo` sobre un caso.
+- Que Gemini responda: credencial, cuota y disponibilidad de
+  `gemini-3.1-pro-preview` (deprecado desde feb-2026, sin fecha de apagado).
+- Consumo real: tokens, latencia y llamadas por corrida.
+- El recorrido completo corrida → almacenamiento → evaluación → métricas. Las
+  piezas se probaron por separado; el recorrido entero se prueba en la Etapa 2.
+- Consultas al RAG y carga del modelo de embeddings.
+- Detección de fallback de modelo sobre telemetría real.
+- Build, lint y typecheck del frontend.
+
+### Correcciones a lo dicho antes
+
+Al leer `src/telemetry.py` de nuevo con el código delante, dos de las tres
+observaciones que hice sobre ella (Fase D) eran **parcialmente erróneas**:
+
+- «No registra las llamadas fallidas»: **sí las cuenta**.
+  `iniciar_llamada(modelo)` agrega la llamada a la lista *antes* de pedirle
+  nada al proveedor, así que un intento fallido figura con tokens `None`. Lo
+  que no guarda es el texto del error.
+- «No detecta el fallback de modelo»: **sí es detectable**. Cada llamada guarda
+  el modelo que se usó, y se compara contra `LLM_MODEL_PRIMARY` de la
+  configuración congelada. Lo que falta es el modelo *solicitado*, no el
+  efectivo.
+
+Lo que sigue siendo cierto: los totales de tokens son todo-o-nada, así que un
+solo intento fallido deja en `None` los tokens de toda la corrida.
+
+La sección 16 de este documento (instrumentación propia del cliente LLM) está
+**obsoleta**: el módulo se retiró en la Fase D.
