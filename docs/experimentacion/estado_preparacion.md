@@ -1120,7 +1120,7 @@ este documento que la repetían.
 | Persistencia y exportación | `orquestador.py`, `runtime/exportacion.py` | La telemetría guardada lleva `reasoning_tokens` y `modelos_efectivos`; la tabla del §14 suma las columnas `reasoning_tokens` y `modelos_efectivos` |
 | Consolidación y vista | `consolidacion.py`, vista «Resultados» | Tabla de consumo con «Tokens de razonamiento» y «Versión devuelta por la API»; la serie «Razonamiento» en el gráfico de tokens; dos avisos informativos (`razonamiento_no_informado`, `version_de_modelo_no_informada`) |
 | Opción «sin respaldo» | `src/config.py`, `src/llm.py` | `LLM_SIN_RESPALDO` (opt-in; **por omisión apagada**, el comportamiento no cambia). Solo apaga el **cambio de modelo**: los reintentos con espera sobre el mismo modelo (503, 429 por minuto) siguen. Entra en la configuración congelada |
-| Comparación mínima | `src/experimentation/comparacion_modelos.py` | Plan, seis criterios de validez y regla de decisión. Sin `--ejecutar` solo muestra el plan |
+| Comparación mínima | `src/experimentation/comparacion_modelos.py` | Plan, seis criterios de validez y regla de decisión, regla de repetición y orden por etapas. Sin `--etapa` solo muestra el plan |
 
 Dos reglas de diseño que conviene recordar al leer los datos:
 
@@ -1231,3 +1231,50 @@ regla y la muestra; **no cambia ninguna configuración ni congela nada.**
 estabilidad entre corridas; y cumplir los criterios no demuestra que
 `gemini-3.8-flash` detecte igual de bien que el Pro, solo que el sistema no se
 rompe con él.
+
+### 20.6 Regla de repetición y orden de ejecución (fijadas antes de la primera llamada)
+
+**Interpretación estricta de la regla de decisión** (confirmada): `gemini-3.8-flash`
+pasa a modelo principal solo si cumple los 6 criterios en sus 4 corridas (los
+dos casos, con NODEX y con Gemini directo).
+
+**Regla de repetición:**
+
+| Tipo de fallo | Qué es | Se repite |
+|---|---|---|
+| Contenido | JSON inválido, veredicto ausente, uids de evidencia inválidos, tokens no registrados (o llamadas con otro modelo) | **No.** Cuenta como fallo |
+| Infraestructura | Timeout, 503 o 429 que persisten tras los reintentos con espera de `src/llm.py` | **Una vez.** Se conservan los dos intentos. Si el repetido también falla, cuenta como fallo |
+| Otro | Un error que no es ninguno de los dos (p. ej. un 400 o un fallo del propio código) | **No.** Cuenta como fallo: repetirlo no lo arregla |
+
+Si hay un error, el error manda: un timeout deja la corrida sin tokens y sin
+veredicto, y eso es infraestructura, no contenido. Nunca hay un tercer intento.
+
+**Orden de ejecución.** Etapa 1: caso de BGL (`bgl_des_balanceado_0000`) con el
+candidato, primero Gemini directo y luego NODEX. Antes de seguir se revisa lo que
+devolvió la API real: que `model_version` no sea `None` y corresponda al modelo
+pedido, y que los tokens de razonamiento estén informados o sean `None` (si el
+proveedor no los informa se dejan así; no se inventan). Si algo es inesperado la
+herramienta termina con código 3 y **se detiene**. Si todo está limpio, la
+etapa 2 corre las seis restantes sin otra confirmación: BGL con el Pro, y luego
+UWF con el candidato y con el Pro (en cada caso, Gemini directo antes que
+NODEX).
+
+### 20.7 DECISIÓN PENDIENTE: NVD y AbuseIPDB en la campaña final
+
+En esta comparación **se bloquean** las llamadas HTTP de `requests` (el cliente
+que usan NVD y AbuseIPDB), con confirmación expresa. Las herramientas caen a su
+respaldo local, **igual para los dos modelos**, y los intentos bloqueados se
+cuentan y se informan.
+
+Para la **campaña final** queda abierto, y debe decidirse antes de congelar la
+configuración, si NODEX corre:
+
+- **con consultas reales** a NVD y AbuseIPDB (como en producción; la caché de IP
+  se llenaría una vez, en un paso autorizado aparte, y luego se usaría en solo
+  lectura, según `POLITICA_RECURSOS_EXTERNOS`), o
+- **con el respaldo local** (sin red, reproducible, pero distinto de producción).
+
+**Cualquiera de las dos opciones hay que declararla en el informe**, porque
+cambia lo que las herramientas le entregan al sistema y por lo tanto lo que se
+está midiendo. Ninguna comparación hecha con una opción es directamente
+comparable con otra hecha con la otra.
