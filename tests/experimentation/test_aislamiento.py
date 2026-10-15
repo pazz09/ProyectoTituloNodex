@@ -180,12 +180,21 @@ def test_el_plan_de_poblado_excluye_la_memoria_y_no_recalcula_vectores():
     assert plan["estado"] == "NO_EJECUTADO"
 
 
-def test_la_base_experimental_existe_pero_esta_vacia():
-    """Existir no es lo mismo que estar poblada. Poblarla requiere
-    autorización (Fase 3, acción 6)."""
+def test_la_base_experimental_tiene_solo_conocimiento_y_ninguna_memoria():
+    """La base se pobló el 4-oct-2026 (Fase 3, acción 6, autorizada) con el
+    catálogo ATT&CK. Lo que importa para el aislamiento es QUÉ contiene: solo
+    `attack_techniques`, con las 697 técnicas, y ninguna colección de
+    memoria. La versión anterior de esta prueba afirmaba que estaba vacía,
+    lo que dejó de ser cierto al poblarla, por diseño."""
     configuracion = configuracion_experimental(RAIZ)
     inventario = inventariar_chroma(configuracion.chroma)
-    assert inventario["existe"] is False or not inventario["colecciones"]
+    assert inventario["existe"] is True
+    nombres = {c["nombre"] for c in inventario["colecciones"]}
+    assert nombres == set(COLECCIONES_CONOCIMIENTO)
+    assert not nombres & set(COLECCIONES_MEMORIA)
+    catalogo = inventario["catalogo_mitre"]
+    assert catalogo["total"] == 697
+    assert catalogo["tecnicas_padre"] + catalogo["subtecnicas"] == 697
 
 
 def test_la_politica_prohibe_consultas_de_prueba_a_los_tres_recursos():

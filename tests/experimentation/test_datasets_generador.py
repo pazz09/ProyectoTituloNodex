@@ -57,7 +57,10 @@ def test_la_prevalencia_efectiva_se_registra_junto_a_la_solicitada():
     prevalencia = resultado.prevalencia_efectiva
     assert prevalencia["solicitada"] == 0.0346
     assert prevalencia["n_casos_positivos"] == 1
-    assert prevalencia["efectiva"] == pytest.approx(1 / 30)
+    # El manifiesto redondea a 6 decimales (`round(..., 6)` en el generador),
+    # así que la tolerancia relativa por omisión de `approx` (1e-6) es más
+    # estricta que el propio dato y fallaba por 3,3e-7.
+    assert prevalencia["efectiva"] == pytest.approx(1 / 30, abs=1e-6)
     # El delta es lo que el informe tiene que citar si no es cero.
     assert prevalencia["delta_por_redondeo"] != 0
 

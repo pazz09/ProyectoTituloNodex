@@ -74,6 +74,12 @@ class TestCase:
     retirarse al preparar el caso, no al evaluarlo.
     """
 
+    #: Le dice a pytest que esta clase NO es una prueba. Su nombre empieza con
+    #: "Test" y los módulos de prueba la importan, así que pytest intentaba
+    #: recolectarla y avisaba en cada corrida. Es un atributo de clase sin
+    #: anotación: no es un campo del dataclass.
+    __test__ = False
+
     case_id: str
     dataset: str
     #: `operativa` (HDFS/BGL) o `seguridad` (UWF). Determina qué campo del

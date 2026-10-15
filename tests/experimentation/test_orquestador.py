@@ -72,7 +72,10 @@ def test_las_llamadas_por_corrida_son_un_piso_declarado():
     """NODEX tiene 6 puntos de llamada y sube con los bucles de
     replanificación y corrección, que no se pueden acotar sin medir."""
     assert orquestador.LLAMADAS_POR_CORRIDA["nodex_multiagente"] == 6
-    assert orquestador.LLAMADAS_POR_CORRIDA["agente_unico"] == 1
+    # La pseudo-ablación es Gemini directo, de un solo prompt (decisión del
+    # 7-oct-2026): reemplazó al agente único integrado en esta tabla.
+    assert orquestador.LLAMADAS_POR_CORRIDA["gemini_externo"] == 1
+    assert "agente_unico" not in orquestador.LLAMADAS_POR_CORRIDA
     plan = orquestador.ejecutar_campana(RAIZ, "piloto", "prueba-001")
     assert "piso" in plan["plan"]["nota_llamadas"]
 
