@@ -699,7 +699,11 @@ def _crudo_de(corrida, **cambios):
     r.update({"etiqueta": corrida.etiqueta, "modelo": corrida.modelo,
               "arquitectura": corrida.arquitectura, "dataset": corrida.dataset,
               "case_id": corrida.case_id})
-    r["telemetria"] = r["telemetria"] | {"llm_call_count": 1, "reasoning_tokens": 5}
+    r["telemetria"] = r["telemetria"] | {
+        "llm_call_count": 1, "reasoning_tokens": 5,
+        "llm_calls": [{"model": corrida.modelo, "model_version": f"{corrida.modelo}-001",
+                       "input_tokens": 100, "output_tokens": 20, "total_tokens": 125,
+                       "reasoning_tokens": 5}]}
     r["diagnostico"] = {"error": None, "execution_time": 2.0}
     # Los casos reales no tienen los uids U1..U3 de los otros tests: aquí no se cita ninguno.
     r["estado"] = r["estado"] | {"uids_citados": []}
@@ -771,9 +775,138 @@ def test_todo_subprocess_que_captura_salida_la_decodifica_en_utf8():
         arbol = ast.parse(inspect.getsource(modulo))
         llamadas = [n for n in ast.walk(arbol)
                     if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute)
-                    and n.func.attr == "run" and getattr(n.func.value, "id", "") == "subprocess"]
+                    and n.func.attr in ("run", "Popen")
+                    and getattr(n.func.value, "id", "") == "subprocess"]
         assert llamadas, modulo.__name__
         for llamada in llamadas:
             claves = {k.arg: k.value for k in llamada.keywords}
+            if "text" not in claves:       # salida en bytes (p. ej. taskkill): no se decodifica
+                continue
             assert "encoding" in claves, f"{modulo.__name__}:{llamada.lineno} sin encoding"
             assert getattr(claves["encoding"], "value", None) == "utf-8"
+
+
+# --- tope real por corrida y sumas parciales ---------------------------------------------
+
+def test_solo_las_corridas_del_pro_en_uwf_tienen_tope_y_es_de_dos_horas():
+    plan = cm.planificar(RAIZ)
+    con_tope = [c for c in plan if cm.tope_de(c) is not None]
+    assert {(c.modelo, c.dataset) for c in con_tope} == {(cm.MODELO_ACTUAL, "uwf")}
+    assert len(con_tope) == 2                      # las corridas 7 y 8
+    assert all(cm.tope_de(c) == 7200 for c in con_tope)
+    # las del candidato no tienen tope
+    assert all(cm.tope_de(c) is None for c in plan if c.modelo == cm.MODELO_CANDIDATO)
+
+
+def _proceso_vivo(pid: int) -> bool:
+    import subprocess
+    salida = subprocess.run(["tasklist", "/FI", f"PID eq {pid}", "/NH"], capture_output=True,
+                            text=True, encoding="utf-8", errors="replace").stdout
+    return str(pid) in salida
+
+
+@pytest.mark.skipif(__import__("os").name != "nt", reason="el árbol de procesos se mata con taskkill")
+def test_el_tope_corta_al_hijo_y_tambien_a_sus_descendientes(tmp_path):
+    """Regresión: matar solo al lanzador dejaba vivo al proceso hijo, que seguía
+    corriendo y retenía las tuberías, así que el tope no cortaba nada."""
+    import sys
+    import time
+    pidfile = tmp_path / "nieto.pid"
+    codigo = (
+        "import subprocess, sys, time, pathlib;"
+        "n = subprocess.Popen([sys.executable, '-c', 'import time; time.sleep(120)']);"
+        f"pathlib.Path(r'{pidfile}').write_text(str(n.pid));"
+        "time.sleep(120)"
+    )
+    inicio = time.monotonic()
+    codigo_salida, _, _, vencio = cm.ejecutar_hijo(
+        [sys.executable, "-c", codigo], RAIZ, dict(__import__("os").environ), tope_s=4)
+    transcurrido = time.monotonic() - inicio
+    assert vencio is True and codigo_salida is None
+    assert transcurrido < 30, f"tardó {transcurrido:.0f} s: el tope no cortó"
+    nieto = int(pidfile.read_text())
+    time.sleep(1)
+    assert not _proceso_vivo(nieto), "el descendiente quedó vivo"
+
+
+def test_un_hijo_que_termina_a_tiempo_no_se_marca_como_vencido():
+    import sys
+    codigo, stdout, stderr, vencio = cm.ejecutar_hijo(
+        [sys.executable, "-c", "print('árbol ñandú')"], RAIZ,
+        dict(__import__("os").environ, PYTHONIOENCODING="utf-8"), tope_s=60)
+    assert (codigo, vencio) == (0, False)
+    assert "ñandú" in stdout            # se lee en UTF-8
+
+
+def test_una_corrida_cortada_por_el_tope_se_registra_y_no_se_repite():
+    cortada = _crudo(no_completo_en_el_tiempo_previsto=True,
+                     excepcion="NoCompletoEnElTiempoPrevisto: superó el tope de 7200 s",
+                     estado={}, telemetria={})
+    assert cm.clasificar_fallo(cortada, {c: False for c in cm.CRITERIOS}) == cm.FALLO_TOPE
+    lanzar = _Lanzador(cortada, _crudo())
+    final = cm.correr_corrida(CORRIDA, lanzar, UIDS)
+    assert lanzar.intentos == [1]                       # no se repite
+    assert final["tipo_fallo"] == cm.FALLO_TOPE
+    assert final["repetida_por_infraestructura"] is False
+
+
+def test_la_constancia_de_un_vigilante_externo_marca_la_corrida_como_no_completada(tmp_path):
+    salida = tmp_path / "salida"
+    cm.ejecutar(RAIZ, Path("sin-env"), salida, [0], lanzar=_lanzar_todo_bien)
+    etiqueta = cm.planificar(RAIZ)[0].etiqueta
+    (salida / f"{etiqueta}.tope.json").write_text("{}", encoding="utf-8")
+    fila = cm.resumir(RAIZ, salida)["filas"][0]
+    assert fila["tipo_fallo"] == cm.FALLO_TOPE
+    assert fila["no_completo_en_el_tiempo_previsto"] is True
+    # el final.json guardado no se edita
+    guardado = json.loads((salida / f"{etiqueta}.final.json").read_text(encoding="utf-8"))
+    assert guardado["tipo_fallo"] is None
+
+
+def _con_llamadas_de_tokens(llamadas):
+    final = _crudo_de(cm.Corrida("m", "nodex_multiagente", "bgl", "bgl_des_a_0000"))
+    final["telemetria"] = {"llm_calls": llamadas, "llm_call_count": len(llamadas),
+                           "input_tokens": None, "output_tokens": None}
+    final["criterios"] = {c: True for c in cm.CRITERIOS}
+    final["tipo_fallo"] = None
+    final["repetida_por_infraestructura"] = False
+    final["intentos"] = [final]
+    return final
+
+
+def test_una_llamada_fallida_deja_los_totales_en_none_y_la_suma_parcial_rotulada():
+    ok = lambda i, o, r: {"model": "m", "model_version": "m", "input_tokens": i,
+                          "output_tokens": o, "total_tokens": i + o + r, "reasoning_tokens": r}
+    fallida = {"model": "m", "model_version": None, "input_tokens": None,
+               "output_tokens": None, "total_tokens": None, "reasoning_tokens": None}
+    fila = cm.resumen_de_corrida(_con_llamadas_de_tokens([ok(10, 5, 3), fallida, ok(20, 7, 4)]),
+                                 None)
+    assert fila["tokens_entrada"] is None and fila["tokens_salida"] is None
+    assert fila["tokens_razonamiento"] is None                 # no es 0 ni un total engañoso
+    assert fila["tokens_entrada_parcial"] == 30
+    assert fila["tokens_salida_parcial"] == 12
+    assert fila["tokens_razonamiento_parcial"] == 7
+    assert fila["n_llamadas_sin_tokens"] == 1
+    assert fila["suma_parcial"] is True
+
+
+def test_sin_llamadas_fallidas_los_totales_son_totales_y_no_hay_suma_parcial():
+    ok = {"model": "m", "model_version": "m", "input_tokens": 10, "output_tokens": 5,
+          "total_tokens": 18, "reasoning_tokens": 3}
+    fila = cm.resumen_de_corrida(_con_llamadas_de_tokens([ok, dict(ok)]), None)
+    assert (fila["tokens_entrada"], fila["tokens_salida"], fila["tokens_razonamiento"]) == (
+        20, 10, 6)
+    assert fila["tokens_entrada_parcial"] is None
+    assert fila["suma_parcial"] is False and fila["n_llamadas_sin_tokens"] == 0
+
+
+def test_el_veredicto_del_criterio_4_no_cambia_por_mostrar_la_suma_parcial():
+    """El criterio 4 se mide sobre la telemetría del sistema (totales). Mostrar la
+    suma parcial es información adicional: no lo aprueba."""
+    fallida = {"model": "m", "model_version": None, "input_tokens": None,
+               "output_tokens": None, "total_tokens": None, "reasoning_tokens": None}
+    ok = {"model": "m", "model_version": "m", "input_tokens": 10, "output_tokens": 5,
+          "total_tokens": 18, "reasoning_tokens": 3}
+    r = _valida()
+    r["telemetria"] = {"input_tokens": None, "output_tokens": None, "llm_calls": [ok, fallida]}
+    assert cm.evaluar_criterios(r, "m", UIDS)["tokens_registrados"] is False

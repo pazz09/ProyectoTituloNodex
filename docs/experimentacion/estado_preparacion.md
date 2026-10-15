@@ -1342,6 +1342,115 @@ se conservan con la extensión `.anulada` y la corrida se repite con la base v2.
 No cuenta como repetición «por infraestructura» de la regla 20.6: fue un defecto de
 la base y no del proveedor.
 
+### 20.11 Tope de tiempo de las corridas del Pro en UWF (fijado DESPUÉS de observar la corrida 4)
+
+**Fecha:** 15-oct-2026. **Motivo:** la corrida 4 (NODEX con `gemini-3.1-pro-preview` en
+BGL) tardó **97 minutos** (5.806 s), frente a 34 s de la corrida 2 (NODEX con el
+candidato en el mismo caso). Se fijó entonces un tope de **2 horas** para las
+corridas 7 y 8 (Pro, UWF), que son de comparación y **no entran en la regla de
+decisión**. Si una lo superaba, se cortaba y se registraba como «no completó en el
+tiempo previsto». Las corridas 5 y 6 (candidato, UWF) no tenían tope.
+
+**Este tope NO es un criterio de decisión del modelo.** No se activó: las corridas
+7 y 8 terminaron en 30 s y 185 s.
+
+**Defecto encontrado en el tope anterior.** El código tenía un tope de 2400 s para
+todas las corridas, pero **no se cumplía**: el `python.exe` del venv es un lanzador
+que arranca al intérprete real; matar solo al lanzador deja vivo al hijo, y
+`communicate()` esperaba a que el hijo cerrara las tuberías. La corrida 4 superó
+los 2400 s sin cortarse y quedó registrada como una corrida normal. Se corrigió
+(`ejecutar_hijo` mata el **árbol** de procesos) y una prueba reproduce el defecto
+original (con el defecto, el tope tarda los 120 s del hijo en volver). Mientras se
+corregía el código, la corrida 8 (que ya había arrancado con el código anterior) se
+vigiló con un proceso externo con el mismo tope de 2 horas; no llegó a cortar nada.
+
+### 20.12 Resultado de la comparación mínima (15-oct-2026)
+
+Casos: `bgl_des_balanceado_0000` y `uwf_des_sigiloso_0004`. Respaldo apagado,
+temperatura 0, ChromaDB v2 (copia), 0 intentos de HTTP bloqueados en las 8 corridas
+(las herramientas de NVD/AbuseIPDB no se invocaron en estos casos). Todas las
+versiones devueltas por la API coinciden con el modelo pedido.
+
+Criterios en el orden 1 JSON · 2 veredicto · 3 evidencia · 4 tokens · 5 sin error ·
+6 solo el modelo pedido. **S** = cumple, **N** = no.
+
+| # | Modelo | Arq. | Caso | Original | Enmendado | Entrada | Salida | Razonam. | Tiempo | Llamadas |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | 3.8-flash | Gemini directo | BGL | S S **N** S S S | S S S S S S | 2.731 | 2.260 | 1.263 | 22 s | 1 |
+| 2 | 3.8-flash | NODEX | BGL | S S **N** S S S | S S S S S S | 4.299 | 1.069 | 2.226 | 34 s | 5 |
+| 3 | 3.1-pro | Gemini directo | BGL | S S **N** S S S | S S S S S S | 2.731 | 1.541 | 3.196 | 36 s | 1 |
+| 4 | 3.1-pro | NODEX | BGL | S S **N** **N** S S | S S S **N** S S | None (≥9.796 parcial) | None (≥2.201 parcial) | None (≥9.830 parcial) | 5.806 s | 12 (1 sin tokens) |
+| 5 | 3.8-flash | Gemini directo | UWF | S S S S S S | S S S S S S | 50.720 | 1.428 | 7.038 | 62 s | 1 |
+| 6 | 3.8-flash | NODEX | UWF | S S S S S S | S S S S S S | 61.667 | 1.826 | 5.820 | 70 s | 6 |
+| 7 | 3.1-pro | Gemini directo | UWF | S S S S S S | S S S S S S | 50.720 | 863 | 3.695 | 30 s | 1 |
+| 8 | 3.1-pro | NODEX | UWF | S S S S S S | S S S S S S | 128.643 | 3.791 | 13.935 | 185 s | 13 |
+
+Ninguna corrida se repitió (ni por contenido ni por infraestructura). La corrida 2
+original quedó **anulada** (la base de ChromaDB v1 no se podía abrir, 0 llamadas al
+modelo) y sus archivos se conservan con la extensión `.anulada`.
+
+**Aplicación de la regla, tal como quedó escrita (20.6 y 20.8).**
+- Con el criterio **original**: `gemini-3.8-flash` falla el criterio 3 en las
+  corridas 1 y 2 → resultado «se mantiene `gemini-3.1-pro-preview`».
+- Con el criterio **enmendado**: cumple los 6 criterios en sus 4 corridas →
+  `gemini-3.8-flash`.
+- Qué veredicto vale: el enmendado **solo si el Pro también incumple el criterio 3
+  original en BGL con Gemini directo**. Lo incumple (corrida 3: citó los mismos 19
+  números como «uids»), así que el criterio original no discrimina y vale el
+  enmendado. **Resultado de la regla: `gemini-3.8-flash` pasa a modelo principal.**
+
+La herramienta no cambia ninguna configuración; no se congeló nada ni se lanzó el
+piloto.
+
+### 20.13 Observaciones (no son criterios)
+
+1. **Contraste de tiempo entre las corridas 2 y 4.** Mismo caso, misma arquitectura,
+   distinto modelo: 34 s con el candidato y 5.806 s con el Pro. Es **una sola
+   corrida** de cada una y puede ser transitorio: la corrida 8 (Pro, NODEX, UWF)
+   tardó 185 s y la 3 (Pro, Gemini directo, BGL) 36 s. No se puede atribuir a una
+   propiedad del modelo con estos datos.
+2. **Corrida 4, criterio 4 («tokens registrados»): falso, tal como salió.** Causa:
+   una de sus 12 llamadas falló y se reintentó (queda registrada sin tokens ni
+   versión), y `src/telemetry.py` calcula los totales de forma **todo-o-nada**
+   (`all(c[k] is not None ...)`), así que los totales de la corrida quedan en
+   `None`. Suma parcial de las 11 llamadas que sí registraron tokens, **parcial y
+   por lo tanto un piso**: entrada ≥ 9.796, salida ≥ 2.201, razonamiento ≥ 9.830.
+   El veredicto del criterio no se cambió. **Cuánto tardó cada llamada no se
+   puede decir:** la telemetría no guarda duración por llamada y la salida estándar
+   de esa corrida no se conservó (se corrigió: ahora se guarda). Solo se conoce el
+   total (5.806 s), 1 reemplanificación y 2 intentos de corrección.
+3. **NODEX no hizo siempre 6 llamadas.** La corrida 2 hizo 5. El «piso de 6» de
+   `LLAMADAS_POR_CORRIDA` no es un piso: el número depende del camino del grafo
+   (5, 6, 12 y 13 llamadas en estas cuatro corridas). La cifra «28 llamadas
+   mínimas» fue una estimación de partida; se hicieron **40 llamadas** en total
+   (13 con el candidato y 27 con el Pro, una de ellas fallida).
+4. No se observaron bucles ni respuestas degradadas con temperatura 0: la mayor
+   salida por llamada fue 2.260 tokens (Gemini directo, BGL).
+
+### 20.14 PROPUESTA (no implementada): cómo debe mostrar el consolidador las corridas con total `None`
+
+Hoy una llamada fallida deja `input_tokens`, `output_tokens` y `total_tokens` de
+toda la corrida en `None`, y la tabla de consumo la excluye de los promedios de
+tokens y la cuenta en «Sin tokens informados». Propuesta para la campaña:
+
+1. **Conteo explícito:** en la tabla de consumo, «Corridas con total None: k de n»
+   y «Llamadas fallidas: m», separadas de «sin tokens porque el proveedor no los
+   informa».
+2. **Suma parcial rotulada, nunca mezclada con los totales:** columnas
+   «Tokens (suma parcial, piso)» que solo se llenan cuando el total es `None`, con
+   el rótulo «≥» y «(11 de 12 llamadas)».
+3. **Los promedios de tokens siguen usando solo corridas con total completo.**
+   Una media que mezclara totales y pisos subestimaría el consumo. Se muestra
+   además cuántas corridas quedaron fuera de la media.
+4. **Aviso de integridad** `tokens_parciales` (severidad media) con la lista de
+   corridas, el n de llamadas fallidas y la causa probable (reintento tras
+   503/429).
+5. **Duración por llamada:** registrarla en `src/llm.py` (como ya se hace con
+   `model_version`) para poder decir cuánto duró cada llamada, incluidas las
+   fallidas.
+6. En la vista, esas corridas se marcan con una advertencia visible junto a las
+   cifras; el CSV deja el total vacío y la suma parcial en su propia columna.
+
 ## 21. Base de ChromaDB v2 (15-oct-2026)
 
 ### 21.1 Qué falló y por qué la verificación anterior no lo vio

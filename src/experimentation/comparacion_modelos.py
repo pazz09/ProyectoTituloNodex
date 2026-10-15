@@ -104,8 +104,21 @@ CRITERIOS = (
 #: Corridas de la etapa 1 (BGL con el candidato: Gemini directo y luego NODEX).
 ETAPA_1 = 2
 
-#: Tope de una corrida. Un NODEX con reintentos largos puede tardar minutos.
-TIMEOUT_CORRIDA_S = 2400
+#: Tope de las corridas del Pro sobre UWF (las de comparación), en segundos.
+#: Se fijó el 15-oct-2026 DESPUÉS de observar la corrida 4 (NODEX con el Pro en BGL
+#: tardó 97 min frente a 34 s de la corrida 2 con el candidato). NO es un criterio
+#: de decisión del modelo: esas corridas no entran en la regla. Las corridas del
+#: candidato no tienen tope. Antes había un tope de 2400 s para todas, pero NO se
+#: cumplía: matar al lanzador del venv deja vivo al proceso hijo y `communicate()`
+#: esperaba a que cerrara las tuberías; la corrida 4 superó ese tope sin cortarse.
+TOPE_PRO_UWF_S = 7200
+FALLO_TOPE = "no_completo_en_el_tiempo_previsto"
+
+
+def tope_de(corrida: "Corrida") -> int | None:
+    """Tope en segundos, o `None` si la corrida no tiene tope."""
+    return (TOPE_PRO_UWF_S
+            if corrida.modelo == MODELO_ACTUAL and corrida.dataset == "uwf" else None)
 
 
 @dataclass(frozen=True)
@@ -424,6 +437,8 @@ def clasificar_fallo(resultado: dict, criterios: dict[str, bool]) -> str | None:
     """
     from src.experimentation.runners.nodex import clasificar_error
 
+    if resultado.get("no_completo_en_el_tiempo_previsto"):
+        return FALLO_TOPE
     error = (resultado.get("diagnostico") or {}).get("error") or resultado.get("excepcion")
     if error:
         return (FALLO_INFRAESTRUCTURA
@@ -497,6 +512,25 @@ def resumen_de_corrida(final: dict, uids_caso: frozenset[str] | None = None) -> 
     enmendado se calcula aquí si la corrida es anterior a la enmienda.
     """
     tel = final.get("telemetria") or {}
+    llamadas_tel = tel.get("llm_calls") or []
+
+    def _suma(campo):
+        """`(total, parcial)`. Total solo si TODAS las llamadas lo informaron; si
+        falta alguna, `total` es None y `parcial` es la suma de las que sí lo
+        informaron (un piso: el consumo real es mayor). Ninguna informó: ambos None."""
+        valores = [c[campo] for c in llamadas_tel if isinstance(c.get(campo), int)]
+        if not llamadas_tel:
+            return tel.get(campo), None
+        if len(valores) == len(llamadas_tel):
+            return sum(valores), None
+        return None, (sum(valores) if valores else None)
+
+    entrada, entrada_parcial = _suma("input_tokens")
+    salida, salida_parcial = _suma("output_tokens")
+    razon, razon_parcial = _suma("reasoning_tokens")
+    sin_tokens = sum(1 for c in llamadas_tel
+                     if all(c.get(k) is None for k in ("input_tokens", "output_tokens",
+                                                       "total_tokens")))
     enmendados = final.get("criterios_enmendados") or evaluar_criterios(
         final, final["modelo"], uids_caso, enmendado=True)
     llamadas = tel.get("llm_calls") or []
@@ -511,9 +545,16 @@ def resumen_de_corrida(final: dict, uids_caso: frozenset[str] | None = None) -> 
         "tipo_fallo": final["tipo_fallo"],
         "repetida_por_infraestructura": final["repetida_por_infraestructura"],
         "n_intentos": len(final["intentos"]),
-        "tokens_entrada": tel.get("input_tokens"),
-        "tokens_salida": tel.get("output_tokens"),
-        "tokens_razonamiento": tel.get("reasoning_tokens"),
+        "tokens_entrada": entrada, "tokens_salida": salida, "tokens_razonamiento": razon,
+        # Sumas PARCIALES (solo las llamadas que informaron tokens). Son un piso.
+        "tokens_entrada_parcial": entrada_parcial,
+        "tokens_salida_parcial": salida_parcial,
+        "tokens_razonamiento_parcial": razon_parcial,
+        "n_llamadas_sin_tokens": sin_tokens,
+        "suma_parcial": any(x is not None for x in (
+            entrada_parcial, salida_parcial, razon_parcial)),
+        "no_completo_en_el_tiempo_previsto": bool(
+            final.get("no_completo_en_el_tiempo_previsto")),
         "tiempo_s": (final.get("diagnostico") or {}).get("execution_time"),
         "llamadas": tel.get("llm_call_count"),
         "versiones_devueltas": sorted({c["model_version"] for c in llamadas
@@ -558,6 +599,41 @@ def verificar_configuracion(raiz_repo: Path, ruta_env: Path) -> list[dict]:
     return filas
 
 
+def _matar_arbol(proceso: subprocess.Popen) -> None:
+    """Mata al proceso y a TODOS sus descendientes.
+
+    El `python.exe` del venv es un lanzador que arranca al intérprete real: matar
+    solo al lanzador deja vivo al hijo, que sigue gastando llamadas y manteniendo
+    abiertas las tuberías.
+    """
+    if os.name == "nt":
+        subprocess.run(["taskkill", "/PID", str(proceso.pid), "/T", "/F"],
+                       capture_output=True)
+    else:  # pragma: no cover - el proyecto corre en Windows
+        import signal
+        os.killpg(os.getpgid(proceso.pid), signal.SIGKILL)
+    proceso.kill()
+
+
+def ejecutar_hijo(comando: list[str], cwd: Path, entorno: dict,
+                  tope_s: int | None) -> tuple[int | None, str, str, bool]:
+    """Corre un proceso hijo. Devuelve `(codigo, stdout, stderr, vencio)`.
+
+    Con `tope_s`, al cumplirse el plazo mata el ÁRBOL de procesos y devuelve
+    `vencio=True`. Sin tope espera sin límite.
+    """
+    proceso = subprocess.Popen(
+        comando, cwd=cwd, env=entorno, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        text=True, encoding="utf-8", errors="replace")
+    try:
+        salida, error = proceso.communicate(timeout=tope_s)
+        return proceso.returncode, salida or "", error or "", False
+    except subprocess.TimeoutExpired:
+        _matar_arbol(proceso)
+        salida, error = proceso.communicate()
+        return None, salida or "", error or "", True
+
+
 def _lanzador_real(raiz_repo: Path, base: dict, salida: Path, tmp: Path):
     """Devuelve `lanzar(corrida, n)`: un proceso hijo por intento."""
     def lanzar(corrida: Corrida, n: int) -> dict:
@@ -568,32 +644,33 @@ def _lanzador_real(raiz_repo: Path, base: dict, salida: Path, tmp: Path):
         shutil.copytree(configuracion_experimental(raiz_repo).chroma, copia)
         entorno = entorno_de_la_corrida(
             base, corrida.modelo, copia, tmp / f"ip_{corrida.etiqueta}_{n}.json")
-        try:
-            proceso = subprocess.run(
-                [sys.executable, "-m", "src.experimentation.comparacion_modelos",
-                 "--trabajar", corrida.modelo, corrida.arquitectura,
-                 corrida.dataset, corrida.case_id, str(destino)],
-                cwd=raiz_repo, env=entorno, capture_output=True, text=True, encoding="utf-8", errors="replace",
-                timeout=TIMEOUT_CORRIDA_S)
-            vencio = False
-        except subprocess.TimeoutExpired as e:
-            proceso, vencio = e, True
-        stderr = getattr(proceso, "stderr", None) or ""
-        if isinstance(stderr, bytes):
-            stderr = stderr.decode("utf-8", "replace")
+        tope = tope_de(corrida)
+        codigo, stdout, stderr, vencio = ejecutar_hijo(
+            [sys.executable, "-m", "src.experimentation.comparacion_modelos",
+             "--trabajar", corrida.modelo, corrida.arquitectura,
+             corrida.dataset, corrida.case_id, str(destino)],
+            raiz_repo, entorno, tope)
         (salida / f"{corrida.etiqueta}.intento{n}.stderr.txt").write_text(
             stderr, encoding="utf-8")
-        if destino.is_file():
-            return json.loads(destino.read_text(encoding="utf-8"))
-        return {
+        # La salida estándar tiene el detalle de cada llamada ([tokens] ...) y los
+        # avisos; antes se descartaba.
+        (salida / f"{corrida.etiqueta}.intento{n}.stdout.txt").write_text(
+            stdout, encoding="utf-8")
+        base_resultado = {
             "etiqueta": corrida.etiqueta, "modelo": corrida.modelo,
             "arquitectura": corrida.arquitectura, "dataset": corrida.dataset,
             "case_id": corrida.case_id,
-            "excepcion": (f"TimeoutError: la corrida superó {TIMEOUT_CORRIDA_S} s"
-                          if vencio else
-                          f"el proceso terminó con código {proceso.returncode} sin dejar resultado"),
-            "diagnostico": {}, "telemetria": {}, "estado": {},
         }
+        if vencio:
+            return {**base_resultado,
+                    "no_completo_en_el_tiempo_previsto": True, "tope_s": tope,
+                    "excepcion": f"NoCompletoEnElTiempoPrevisto: superó el tope de {tope} s",
+                    "diagnostico": {}, "telemetria": {}, "estado": {}}
+        if destino.is_file():
+            return json.loads(destino.read_text(encoding="utf-8"))
+        return {**base_resultado,
+                "excepcion": f"el proceso terminó con código {codigo} sin dejar resultado",
+                "diagnostico": {}, "telemetria": {}, "estado": {}}
     return lanzar
 
 
@@ -627,9 +704,15 @@ def resumir(raiz_repo: Path, salida: Path) -> dict:
     for corrida in plan:
         archivo = salida / f"{corrida.etiqueta}.final.json"
         if archivo.is_file():
+            final = json.loads(archivo.read_text(encoding="utf-8"))
+            constancia = salida / f"{corrida.etiqueta}.tope.json"
+            if constancia.is_file():
+                # Constancia de un vigilante externo que cortó la corrida al
+                # cumplirse el tope; el `final.json` no se edita.
+                final["no_completo_en_el_tiempo_previsto"] = True
+                final["tipo_fallo"] = FALLO_TOPE
             filas.append(resumen_de_corrida(
-                json.loads(archivo.read_text(encoding="utf-8")),
-                uids_del_caso(raiz_repo, corrida.dataset, corrida.case_id)))
+                final, uids_del_caso(raiz_repo, corrida.dataset, corrida.case_id)))
         else:
             faltan.append(corrida.etiqueta)
     anuladas = sorted(p.name for p in salida.glob("*.anulada"))
