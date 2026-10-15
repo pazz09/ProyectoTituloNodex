@@ -815,11 +815,14 @@ devuelve 4.
 Dos huecos de su versión quedan **reportados y no parcheados**, porque
 `src/telemetry.py` es del núcleo:
 
-1. **No registra las llamadas fallidas ni el error.** `registrar_consumo`
-   solo corre en el camino de éxito.
-2. **No guarda el modelo solicitado**, solo el efectivo, así que no detecta
-   el fallback de modelo — que con `gemini-3.1-pro-preview` deprecado es un
-   riesgo vivo.
+1. ~~No registra las llamadas fallidas ni el error.~~ **Corregido el
+   15-oct-2026 (ver §20.3): era falso con el código actual.**
+   `iniciar_llamada` agrega la llamada antes de intentarla; una fallida queda
+   con tokens `None`. Lo que sí falta es el texto del error.
+2. ~~No guarda el modelo solicitado.~~ **Corregido el 15-oct-2026 (ver
+   §20.3): era falso.** Cada intento, del principal y del respaldo, queda
+   registrado con el modelo con que se lo pidió, así que el fallback sí se
+   detecta.
 
 Y un criterio a revisar, no un bug: los totales son todo-o-nada
 (`all(c[k] is not None)`). Un solo 503 transitorio deja los tokens de **toda**
@@ -954,7 +957,10 @@ decisión D-7) no existía; se generó de forma determinista y no sobrescribe.
 
 - Cualquier corrida de NODEX, del baseline o de `gemini_externo` sobre un caso.
 - Que Gemini responda: credencial, cuota y disponibilidad de
-  `gemini-3.1-pro-preview` (deprecado desde feb-2026, sin fecha de apagado).
+  `gemini-3.1-pro-preview` (modelo *preview*, lanzado el 19-feb-2026 según la
+  página oficial de deprecaciones de Google; sin fecha de cierre anunciada.
+  Una versión anterior de este documento lo llamaba «deprecado»: era un
+  error, ver §20.1).
 - Consumo real: tokens, latencia y llamadas por corrida.
 - El recorrido completo corrida → almacenamiento → evaluación → métricas. Las
   piezas se probaron por separado; el recorrido entero se prueba en la Etapa 2.
@@ -1083,6 +1089,145 @@ runners ni el sistema.
 - **Lanzador**: no hay un comando para ejecutar el piloto. Hoy `ejecutar_campana`
   se invoca desde código. Falta una línea de comandos que exija
   `--ejecutar` de forma explícita y muestre el plan antes.
-- Instrumentar el fallback con el modelo **solicitado** (hoy solo se guarda el
-  efectivo) y los totales de tokens todo-o-nada de `src/telemetry.py`.
-  Reportado a Felipe; no se tocó el núcleo.
+- Los totales de tokens todo-o-nada de `src/telemetry.py` (un solo 503 deja
+  los tokens de toda la corrida en `None`). Reportado a Felipe; no se tocó el
+  núcleo. *(La versión original de esta línea decía también que el modelo
+  solicitado no se guardaba: era falso, ver §20.3.)*
+
+## 20. Cambio de modelo: instrumentación, «sin respaldo» y comparación mínima (15-oct-2026)
+
+Preparación para decidir si la campaña corre con `gemini-3.8-flash` en vez de
+`gemini-3.1-pro-preview`. **Esta sección se escribió antes de ejecutar la
+comparación**: los casos, los criterios y la regla de decisión de abajo están
+fijados de antemano, y el resultado se registra aparte, después.
+
+### 20.1 Estado real del modelo principal (corrección)
+
+Documentos anteriores decían que `gemini-3.1-pro-preview` estaba «deprecado
+desde feb-2026». **Es incorrecto.** El 19-feb-2026 es su **fecha de lanzamiento**
+según la página oficial de deprecaciones de Google. Es un modelo *preview*, sin
+fecha de cierre anunciada y sin versión estable (GA). El riesgo que sí existe,
+y que no cambia: un modelo *preview* puede cambiar o retirarse con poco aviso.
+`src/config.py` no contenía la afirmación; se corrigieron los dos lugares de
+este documento que la repetían.
+
+### 20.2 Qué se construyó
+
+| Pieza | Dónde | Qué hace |
+|---|---|---|
+| Versión devuelta y tokens de razonamiento | `src/llm.py` | Cada llamada registra `model_version` (lo que dice la respuesta de la API) y `reasoning_tokens` (`thoughts_token_count`). Lo que el proveedor no informa queda `None`, nunca 0. `src/telemetry.py` no se tocó: `iniciar_llamada` devuelve el mismo diccionario que luego se copia a `llm_calls` |
+| Puente a la capa experimental | `runtime/telemetria.py::campos_de_modelo` | Alimenta `LlamadaLlm.modelo_efectivo` y `reasoning_tokens`; suma, lista versiones y declara las sumas parciales |
+| Persistencia y exportación | `orquestador.py`, `runtime/exportacion.py` | La telemetría guardada lleva `reasoning_tokens` y `modelos_efectivos`; la tabla del §14 suma las columnas `reasoning_tokens` y `modelos_efectivos` |
+| Consolidación y vista | `consolidacion.py`, vista «Resultados» | Tabla de consumo con «Tokens de razonamiento» y «Versión devuelta por la API»; la serie «Razonamiento» en el gráfico de tokens; dos avisos informativos (`razonamiento_no_informado`, `version_de_modelo_no_informada`) |
+| Opción «sin respaldo» | `src/config.py`, `src/llm.py` | `LLM_SIN_RESPALDO` (opt-in; **por omisión apagada**, el comportamiento no cambia). Solo apaga el **cambio de modelo**: los reintentos con espera sobre el mismo modelo (503, 429 por minuto) siguen. Entra en la configuración congelada |
+| Comparación mínima | `src/experimentation/comparacion_modelos.py` | Plan, seis criterios de validez y regla de decisión. Sin `--ejecutar` solo muestra el plan |
+
+Dos reglas de diseño que conviene recordar al leer los datos:
+
+- **El fallback NO se deduce comparando el nombre pedido con la versión
+  devuelta.** La API puede devolver `modelo-001` cuando se pidió `modelo`, y
+  eso no es un respaldo. El fallback se decide con el nombre pedido en cada
+  llamada (`model`), que en el camino de respaldo ya es el modelo de respaldo.
+- Una respuesta de **Gemini directo** que no era JSON figuraba con **0
+  llamadas** aunque la llamada se hizo y gastó tokens (defecto previo, ahora
+  corregido): el consumo quedaba subestimado.
+
+### 20.3 Corrección de dos afirmaciones de la sección 17
+
+La sección 17 decía que `src/telemetry.py` «no registra las llamadas fallidas»
+y «no guarda el modelo solicitado». Con el código actual **ambas son falsas**:
+`iniciar_llamada(modelo)` agrega la llamada **antes** de intentarla, así que una
+llamada fallida queda con tokens `None`, y cada intento (principal y respaldo)
+queda registrado con el modelo con que se lo pidió. Lo que sigue siendo cierto:
+los totales de tokens son todo-o-nada (`all(c[k] is not None ...)`).
+
+### 20.4 Limitación declarada: temperatura 0
+
+La guía oficial de Gemini 3 indica: *«For all Gemini 3 models, we strongly
+recommend keeping the temperature parameter at its default value of 1.0»*, y
+advierte que bajarla puede causar *«looping or degraded performance,
+particularly in complex mathematical or reasoning tasks»*.
+
+NODEX y Gemini directo usan **temperatura 0** (decisión del proyecto: la
+especificación del informe pide 0, y 0 minimiza la variación entre corridas).
+Se mantiene en 0 en ambos modelos de la comparación. **Es una limitación de
+validez, no un hallazgo:** si se observan bucles o respuestas degradadas, se
+reportan; no se corrigen cambiando la temperatura.
+
+Tampoco se envía `thinking_level`: rige el valor por omisión de cada modelo
+(`medium` para `gemini-3.8-flash` y `gemini-3.6-flash`; `minimal` no está
+soportado en 3.8-flash y da error, y NODEX nunca lo pide). El valor por omisión
+del Pro no se verificó en la documentación oficial. Los tokens de razonamiento
+se cobran aparte de la salida, así que el costo y el tiempo pueden diferir
+entre modelos aunque el texto se parezca.
+
+### 20.5 Comparación mínima (diseño fijado antes de ejecutar)
+
+**Pregunta:** con cada modelo, ¿la corrida produce una salida válida y sin
+accidentes? **No** se compara acierto, F1 ni calidad del reporte, y esta
+comparación **no se guarda como resultado reportable** (se escribe fuera de
+`experiments/`).
+
+**Casos.** Criterio fijado antes: el primer `case_id`, por orden alfabético, de
+cada dataset del subconjunto de desarrollo `piloto`.
+
+| Dataset | Caso | Tamaño de la entrada |
+|---|---|---|
+| BGL | `bgl_des_balanceado_0000` | 3,5 KB |
+| UWF | `uwf_des_sigiloso_0004` | 55,9 KB (CSV) |
+
+HDFS queda fuera (D-7, solo auxiliar). El caso de UWF es de la condición
+«sigiloso» solo porque ese es el primero alfabético; no se eligió por su
+dificultad.
+
+**Corridas.** 2 casos × 2 modelos (`gemini-3.1-pro-preview`,
+`gemini-3.8-flash`) × 2 arquitecturas con LLM (NODEX y Gemini directo) = **8
+corridas, 28 llamadas como mínimo** (NODEX 6 + Gemini directo 1, por cada
+combinación). El 28 es un **piso**: un reintento o una corrección lo supera.
+El baseline no entra porque no usa el modelo.
+
+**Criterios de validez** (los seis, por corrida):
+
+1. `json_objeto_valido`: la respuesta del modelo es JSON válido y es un objeto.
+   En NODEX se cuenta cada respuesta final de `llm_json` (ninguna debe ser
+   `json_invalido`); en Gemini directo, que la respuesta se haya podido leer
+   como objeto.
+2. `veredicto_presente`: hay un veredicto booleano.
+3. `evidencia_valida`: `invalid_evidence_uid_count` es 0 **y** todo uid citado
+   existe en el caso (recalculado aparte con el archivo del caso). En NODEX el
+   contador debe valer 0 (si falta, no se da por 0); Gemini directo no tiene
+   contador y se juzga solo por los uids. En BGL, que no tiene uids, citar
+   alguno es inválido.
+4. `tokens_registrados`: hay tokens de entrada y de salida registrados.
+5. `sin_timeout_ni_error`: sin timeout ni error de API ni excepción.
+6. `solo_el_modelo_pedido`: ninguna llamada usó otro modelo.
+
+También se informan, sin criterio: tokens de razonamiento, tiempo, número de
+llamadas, versión devuelta y tamaño de las salidas (para detectar bucles).
+
+**Regla de decisión** (fijada antes): si `gemini-3.8-flash` cumple los seis
+criterios en sus cuatro corridas (los dos casos, con NODEX y con Gemini
+directo), será el modelo principal de la campaña. Si falla alguno, se mantiene
+`gemini-3.1-pro-preview` y se documenta el motivo. Que falle el Pro no cambia
+la regla: es la referencia, no el candidato. La herramienta solo aplica la
+regla y la muestra; **no cambia ninguna configuración ni congela nada.**
+
+**Condiciones de ejecución.**
+
+- Respaldo **apagado** (`LLM_SIN_RESPALDO=true`), con el modelo de respaldo
+  igualado al principal. Cada corrida es un proceso propio con su modelo en el
+  entorno.
+- Temperatura 0 en ambos modelos.
+- Las llamadas HTTP de `requests` (el cliente de AbuseIPDB y NVD) **se
+  bloquean**: no están autorizadas para esta comparación y la política del
+  proyecto las deja congeladas fuera de la campaña. Las herramientas caen a su
+  respaldo local, igual para los dos modelos. Los intentos bloqueados se
+  cuentan y se informan. Gemini usa otro cliente y no se ve afectado.
+- ChromaDB y la caché de IP son **copias temporales**: la base experimental no
+  se modifica (NODEX puede escribir en su memoria al auditar).
+- El modo sin conexión de Hugging Face se fuerza (`HF_HUB_OFFLINE=1`).
+
+**Qué NO prueba:** no mide acierto; con un solo caso por dataset no prueba
+estabilidad entre corridas; y cumplir los criterios no demuestra que
+`gemini-3.8-flash` detecte igual de bien que el Pro, solo que el sistema no se
+rompe con él.
