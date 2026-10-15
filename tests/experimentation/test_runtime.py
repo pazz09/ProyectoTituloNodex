@@ -193,3 +193,49 @@ def test_campos_de_modelo_duracion_none_sigue_siendo_none_y_no_cero():
         campos = campos_de_modelo(medido)
         assert campos["duracion_llamadas_s"] is None, medido
         assert campos["n_llamadas_fallidas"] == 0, medido
+
+
+# --- el árbol limpio se detecta (defecto: `_git` volvía None una salida vacía) -----------
+
+def _repo_git(tmp_path):
+    import subprocess
+    for comando in (["init", "-q"], ["config", "user.email", "t@t"], ["config", "user.name", "t"],
+                    ["config", "commit.gpgsign", "false"]):
+        subprocess.run(["git", "-C", str(tmp_path), *comando], check=True, capture_output=True)
+    (tmp_path / "a.txt").write_text("a", encoding="utf-8")
+    subprocess.run(["git", "-C", str(tmp_path), "add", "."], check=True, capture_output=True)
+    subprocess.run(["git", "-C", str(tmp_path), "commit", "-q", "-m", "x"], check=True,
+                   capture_output=True)
+    return tmp_path
+
+
+def _congelar_en(raiz):
+    from types import SimpleNamespace
+    from src.experimentation.runtime.configuracion import PARAMETROS_CONGELADOS, congelar
+    modulo = SimpleNamespace(**{n: "x" for n in PARAMETROS_CONGELADOS},
+                             GEMINI_API_KEY=None, GOOGLE_API_KEY=None,
+                             ABUSEIPDB_API_KEY=None, NVD_API_KEY=None)
+    return congelar("t", raiz, modulo_config=modulo)
+
+
+def test_un_arbol_limpio_se_congela_como_limpio(tmp_path):
+    raiz = _repo_git(tmp_path)
+    assert _congelar_en(raiz).git["arbol_limpio"] is True
+
+
+def test_un_arbol_con_cambios_se_congela_como_sucio(tmp_path):
+    raiz = _repo_git(tmp_path)
+    (raiz / "a.txt").write_text("cambiado", encoding="utf-8")
+    assert _congelar_en(raiz).git["arbol_limpio"] is False
+
+
+def test_un_archivo_sin_seguimiento_tambien_ensucia_el_arbol(tmp_path):
+    raiz = _repo_git(tmp_path)
+    (raiz / "nuevo.txt").write_text("n", encoding="utf-8")
+    assert _congelar_en(raiz).git["arbol_limpio"] is False
+
+
+def test_si_git_falla_el_arbol_no_se_da_por_limpio(tmp_path):
+    """Fuera de un repositorio no se puede saber: no debe figurar como limpio."""
+    git = _congelar_en(tmp_path).git
+    assert git["arbol_limpio"] is False and git["commit"] is None

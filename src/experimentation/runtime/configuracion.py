@@ -79,7 +79,10 @@ def _git(raiz: Path, *argumentos: str) -> str | None:
             timeout=30,
             check=False,
         )
-        return salida.stdout.strip() or None
+        # Una salida VACÍA es un resultado válido (p. ej. `git status --porcelain` de un
+        # árbol limpio). Antes `or None` la volvía `None`, y `arbol_limpio` (que compara
+        # con "") no podía ser True nunca. Solo un fallo de git devuelve `None`.
+        return salida.stdout.strip() if salida.returncode == 0 else None
     except (OSError, subprocess.SubprocessError):
         return None
 

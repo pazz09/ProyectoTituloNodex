@@ -1623,3 +1623,15 @@ efectivo, fallback, tokens, tiempo, llamadas y errores; con `--etapa 2` sigue co
 Tope de 2 horas por corrida (se mata el árbol de procesos); **tres fallas de infraestructura
 seguidas** (503, 429, timeout) detienen la campaña. Los resultados del piloto se consolidan
 con la etiqueta **de depuración, no reportable** (también en la vista).
+
+### 22.7 Defecto encontrado al congelar: `arbol_limpio` nunca podía ser True
+
+La primera congelación del piloto (15-oct-2026) registró `arbol_limpio: False` con el árbol
+realmente limpio. Causa: `_git()` convertía una salida vacía en `None` (`... or None`), y
+`git status --porcelain` de un árbol limpio es justo una salida vacía; la comparación con `""`
+fallaba siempre. Es un defecto previo de la congelación (ninguna configuración congelada
+anterior pudo marcar el árbol como limpio). Se corrigió: una salida vacía es un resultado
+válido y solo un fallo de git da `None`; cuatro pruebas lo cubren (árbol limpio, con cambios,
+con archivo sin seguimiento y fuera de un repositorio). Esa primera congelación (huella
+`20d936582d27...`) no se usó en ninguna corrida y se descartó; el piloto se congeló de nuevo,
+con el mismo nombre, sobre el commit con la corrección.
