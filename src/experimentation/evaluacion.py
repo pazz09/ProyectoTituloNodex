@@ -54,6 +54,38 @@ from src.experimentation.runtime import persistencia
 from src.experimentation.runtime.identidad import IdentidadCorrida
 
 
+#: ENMIENDA D2/D3 (15-oct-2026, fijada ANTES de la campaña). Motivo: en el piloto de desarrollo, los
+#: casos con incidente en que el sistema no atribuyó ninguna técnica (ni dio eventos) salían de la
+#: métrica como «no evaluables», y la exhaustividad quedaba calculada solo sobre los casos en que el
+#: sistema sí dijo algo: inflada, y favorable al que se calla.
+#:
+#: Regla: si la corrida es VÁLIDA y COMPLETA, la referencia existe y el sistema no entregó ningún evento
+#: (D2) ni técnica (D3), eso es una OMISIÓN: el caso cuenta con exhaustividad 0 y precisión indefinida
+#: (no hubo predicciones), y NO sale de la métrica. Si la corrida falló o su formato es inválido, sigue
+#: «no evaluable» y se informa aparte. La cobertura («k de n evaluables») va junto a cada cifra.
+REGLA_D2_D3 = {
+    "version": "v2-omision-cuenta",
+    "enmienda": "2026-10-15",
+    "motivo": ("observación del piloto de desarrollo: los casos sin atribución salían de la métrica "
+               "e inflaban la exhaustividad"),
+    "texto": ("corrida válida y completa + referencia existente + sin eventos/técnicas = omisión "
+              "(exhaustividad 0, precisión indefinida, cuenta); corrida fallida o de formato "
+              "inválido = no evaluable, aparte"),
+}
+
+
+def corrida_valida_y_completa(ejecucion: dict | None, salida: dict) -> bool:
+    """`True` si la corrida terminó `completa` y su salida trae un veredicto booleano.
+
+    Sin metadatos de ejecución (formato anterior) no se puede afirmar: es `False`.
+    """
+    return bool(
+        ejecucion
+        and ejecucion.get("estado") == "completa"
+        and (salida.get("_meta") or {}).get("veredicto_booleano_presente")
+    )
+
+
 @dataclass
 class RegistroEvaluado:
     """Una corrida guardada, ya comparada con su referencia."""
@@ -82,6 +114,10 @@ class RegistroEvaluado:
     #: dimensión son desconocidos y todo figura como no evaluable. Se marca
     #: para que ese vacío no se confunda con un sistema que falla.
     sin_metadatos_de_ejecucion: bool = False
+    #: `True` si en esa dimensión el sistema no entregó nada en una corrida válida y completa y la
+    #: referencia existe: cuenta como omisión (ver `REGLA_D2_D3`), no sale de la métrica.
+    omision_d2: bool = False
+    omision_d3: bool = False
 
     def to_dict(self) -> dict:
         return {
@@ -101,6 +137,8 @@ class RegistroEvaluado:
             "d3": self.comparacion_d3.to_dict() if self.comparacion_d3 else None,
             "sin_evidencia_d3": list(self.sin_evidencia_d3),
             "sin_metadatos_de_ejecucion": self.sin_metadatos_de_ejecucion,
+            "omision_d2": self.omision_d2,
+            "omision_d3": self.omision_d3,
         }
 
 
@@ -211,6 +249,7 @@ def _evaluar_una(
         sin_metadatos_de_ejecucion=ejecucion is None,
     )
     estado_ref = referencia["estado_dimension"]
+    valida = corrida_valida_y_completa(ejecucion, salida)
 
     # --- D1 detección ---
     d1 = dimension_final(estados_salida.get("deteccion", "no_evaluable"),
@@ -230,9 +269,13 @@ def _evaluar_una(
         )
 
     # --- D2 reconstrucción ---
-    d2 = dimension_final(estados_salida.get("reconstruccion", "no_evaluable"),
-                         estado_ref.get("reconstruccion", "no_aplica"))
+    estado_d2 = estados_salida.get("reconstruccion", "no_evaluable")
+    omitio_d2 = estado_d2 == "no_evaluable" and valida
+    if omitio_d2:
+        estado_d2 = "evaluable"     # REGLA_D2_D3: la omisión se puntúa, no se descarta
+    d2 = dimension_final(estado_d2, estado_ref.get("reconstruccion", "no_aplica"))
     registro.estados["reconstruccion"] = d2
+    registro.omision_d2 = omitio_d2 and d2 == "evaluable"
     if d2 == "evaluable":
         # El matching va por `evidence_uids`, NO por el id del evento. En el
         # contrato d11-v1, `event_id` es la etiqueta que el sistema le pone
@@ -253,9 +296,13 @@ def _evaluar_una(
         registro.uids_inventados_d2 = diag["n_uids_inventados"]
 
     # --- D3 MITRE, solo nivel técnica ---
-    d3 = dimension_final(estados_salida.get("mitre", "no_evaluable"),
-                         estado_ref.get("mitre", "no_aplica"))
+    estado_d3 = estados_salida.get("mitre", "no_evaluable")
+    omitio_d3 = estado_d3 == "no_evaluable" and valida
+    if omitio_d3:
+        estado_d3 = "evaluable"     # REGLA_D2_D3
+    d3 = dimension_final(estado_d3, estado_ref.get("mitre", "no_aplica"))
     registro.estados["mitre"] = d3
+    registro.omision_d3 = omitio_d3 and d3 == "evaluable"
     por_nivel = referencia.get("estado_mitre_por_nivel") or {}
     if d3 == "evaluable" and por_nivel.get("tecnica") == "evaluable":
         # Decisión del 7-oct-2026: el scoring de D3 se fija en

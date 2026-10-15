@@ -50,6 +50,7 @@ from pathlib import Path
 
 from src.experimentation.contracts import PROTOCOLO_VERSION
 from src.experimentation.evaluacion import (
+    REGLA_D2_D3,
     RegistroEvaluado,
     ResultadoEvaluacion,
     evaluar_corridas,
@@ -363,6 +364,12 @@ def _tabla_conjuntos(registros, dimension: str, seccion: str, titulo: str):
         estados = [r.estados.get(dimension, "no_aplica") for r in grupo]
         if all(e == "no_aplica" for e in estados):
             continue  # la dimensión no corresponde a este dataset/arquitectura
+        # Cobertura: k de n evaluables, donde n son las corridas a las que la dimensión APLICA
+        # (con referencia). Las omisiones cuentan como evaluables: son un fallo, no un hueco.
+        n_aplicables = sum(1 for e in estados if e != "no_aplica")
+        n_omisiones = sum(
+            1 for r in grupo
+            if getattr(r, "omision_d2" if dimension == "reconstruccion" else "omision_d3"))
         attr = "comparacion_d2" if dimension == "reconstruccion" else "comparacion_d3"
         comps = [getattr(r, attr) for r in grupo if getattr(r, attr) is not None]
         resultado = evaluar_conjuntos(comps)
@@ -374,6 +381,8 @@ def _tabla_conjuntos(registros, dimension: str, seccion: str, titulo: str):
         fila = {
             "dataset": dataset, "arquitectura": arquitectura,
             "n_corridas": len(grupo), "n_evaluables": len(comps),
+            "cobertura": f"{len(comps)} de {n_aplicables}",
+            "n_omisiones": n_omisiones,
             "no_evaluables": sum(1 for e in estados if e == "no_evaluable"),
             "micro_precision": resultado.micro.get("precision"),
             "micro_recall": resultado.micro.get("recall"),
@@ -399,7 +408,8 @@ def _tabla_conjuntos(registros, dimension: str, seccion: str, titulo: str):
         else ("atribuciones_sin_evidencia", "atribuciones sin evidencia")
     columnas = [
         ("dataset", "Dataset"), ("arquitectura", "Arquitectura"),
-        ("n_corridas", "Corridas", "entero"), ("n_evaluables", "Evaluables", "entero"),
+        ("n_corridas", "Corridas", "entero"), ("cobertura", "Cobertura (evaluables)"),
+        ("n_evaluables", "Evaluables", "entero"), ("n_omisiones", "Omisiones", "entero"),
         ("no_evaluables", "No evaluables", "entero"),
         ("micro_precision", "Precisión (micro)", "proporcion"),
         ("micro_recall", "Exhaustividad (micro)", "proporcion"),
@@ -412,7 +422,13 @@ def _tabla_conjuntos(registros, dimension: str, seccion: str, titulo: str):
         ("f1_desv_repeticiones", "F1 desv. (repeticiones)", "proporcion"),
         (extra[0], extra[1].capitalize(), "entero"),
     ]
-    return _tabla(titulo, seccion, columnas, filas), contratos
+    return _tabla(
+        titulo, seccion, columnas, filas,
+        "Cobertura = evaluables de las corridas a las que la dimensión aplica (con referencia). "
+        "Omisión: corrida válida y completa en que el sistema no entregó nada y la referencia "
+        "existe; CUENTA (exhaustividad 0, precisión indefinida) y no sale de la métrica "
+        "(enmienda del 15-oct-2026, fijada antes de la campaña). No evaluables: la corrida "
+        "falló o su formato es inválido; se informan aparte."), contratos
 
 
 def tabla_d4(puntuaciones: list[PuntuacionRubrica], registros) -> tuple[dict, list]:
@@ -742,6 +758,13 @@ def construir_integridad(
     avisos = []
     if datos_ficticios:
         avisos.append(aviso("datos_ficticios", "alta", "datos ficticios de prueba", 0))
+    omisiones = sum(1 for r in resultado.registros if r.omision_d2 or r.omision_d3)
+    if omisiones:
+        avisos.append(aviso(
+            "omisiones_d2_d3", "info",
+            "corridas válidas en que el sistema no entregó eventos o técnicas habiendo referencia: "
+            "cuentan como omisión (exhaustividad 0), no salen de la métrica (regla v2, 15-oct-2026)",
+            omisiones))
     if depuracion:
         avisos.append(aviso(
             "resultados_de_depuracion", "alta",
@@ -915,6 +938,8 @@ def consolidar(
         "consolidacion": marca,
         "generado_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "protocolo_version": PROTOCOLO_VERSION,
+        # Reglas de evaluación que cambian lo que significa una cifra, con su versión y fecha.
+        "reglas_de_evaluacion": {"d2_d3": REGLA_D2_D3},
         "subconjunto": subconjunto,
         "particion": resultado.particion,
         "arquitecturas": list(arquitecturas),

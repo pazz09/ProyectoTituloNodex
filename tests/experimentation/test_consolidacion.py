@@ -346,10 +346,12 @@ def test_d2_solo_aparece_donde_corresponde(campana):
 def test_d2_compara_por_evidence_uids(campana):
     raiz, _ = campana
     f = _fila(_consolidar(raiz), "d2_reconstruccion", "uwf", "nodex_multiagente")
-    assert f["n_evaluables"] == 1          # solo el caso 0000 reconstruyó algo
-    assert f["no_evaluables"] == 1         # el 0001 no produjo eventos
-    assert f["micro_f1"] == pytest.approx(1.0)
-    assert f["exact_match"] == pytest.approx(1.0)
+    # Regla v2 (15-oct-2026): el caso 0001 no produjo eventos pero la corrida es válida y la
+    # referencia existe: es una OMISIÓN y cuenta (antes salía como «no evaluable»).
+    assert f["n_evaluables"] == 2 and f["n_omisiones"] == 1
+    assert f["no_evaluables"] == 0
+    assert f["micro_f1"] == pytest.approx(0.8)
+    assert f["exact_match"] == pytest.approx(0.5)
 
 
 def test_un_uid_inventado_se_cuenta_aparte(campana):
@@ -1002,9 +1004,10 @@ def test_d2_y_d3_distinguen_evaluable_no_evaluable_y_no_aplica(campana):
     # Estado FINAL (salida cruzada con la referencia): solo los 2 casos con incidente tienen
     # referencia de reconstrucción; en los 2 normales la dimensión NO APLICA aunque el sistema
     # haya devuelto eventos (el caso 0002, un falso positivo, los devolvió).
-    assert (uwf["d2_evaluable"], uwf["d2_no_evaluable"], uwf["d2_no_aplica"]) == (1, 1, 2)
-    assert (uwf["d3_evaluable"], uwf["d3_no_evaluable"], uwf["d3_no_aplica"]) == (1, 1, 2)
-    # el caso positivo SIN eventos (falso negativo) es «no evaluable», no un acierto ni un 0
+    # Regla v2: el caso positivo SIN eventos (falso negativo) en una corrida válida es una OMISIÓN y
+    # cuenta como evaluable (exhaustividad 0); ya no es «no evaluable».
+    assert (uwf["d2_evaluable"], uwf["d2_no_evaluable"], uwf["d2_no_aplica"]) == (2, 0, 2)
+    assert (uwf["d3_evaluable"], uwf["d3_no_evaluable"], uwf["d3_no_aplica"]) == (2, 0, 2)
     bgl = _celda(r, "nodex_multiagente", "bgl")
     assert bgl["d2_no_aplica"] == 2 and bgl["d3_no_aplica"] == 2  # BGL: no aplica
 
@@ -1077,4 +1080,144 @@ def test_el_estado_de_la_salida_se_conserva_aparte_del_estado_final(campana):
     fp = filas["uwf_des_visible_0002"]           # falso positivo: devolvió eventos pero no hay referencia
     assert fp["estado_d2_salida"] == "evaluable" and fp["estado_d2"] == "no_aplica"
     fn = filas["uwf_des_visible_0001"]           # falso negativo: hay referencia pero no devolvió nada
-    assert fn["estado_d2_salida"] == "no_evaluable" and fn["estado_d2"] == "no_evaluable"
+    # la salida no trajo nada (no_evaluable del lado de la salida), pero la corrida es válida y hay
+    # referencia: el estado FINAL es «evaluable» por omisión (regla v2)
+    assert fn["estado_d2_salida"] == "no_evaluable" and fn["estado_d2"] == "evaluable"
+
+
+# --- ENMIENDA D2/D3 (15-oct-2026, fijada antes de la campaña): la omisión cuenta ----------------------
+#
+# Observación del piloto de desarrollo: los casos con incidente en que el sistema no atribuyó ninguna
+# técnica (ni dio eventos) salían de la métrica como «no evaluables», y la exhaustividad quedaba calculada
+# solo sobre los casos en que el sistema sí habló. Ahora, con la corrida válida y completa y la referencia
+# existente, la omisión cuenta: exhaustividad 0 y precisión indefinida. Una corrida fallida o de formato
+# inválido sigue «no evaluable» y se informa aparte.
+
+def _registros_de(raiz):
+    destino = consolidacion.consolidar(raiz, "sub", CONFIG, ARQUITECTURAS, marca=MARCA)
+    return {r["run_id"]: r for r in json.loads((destino / "registros.json").read_text(encoding="utf-8"))}
+
+
+def _id(cid, arq="nodex_multiagente", ds="uwf"):
+    return IdentidadCorrida(cid, ds, arq, 1, CONFIG).run_id
+
+
+def _modificar_salida(raiz, cid, cambio, arq="nodex_multiagente"):
+    ident = IdentidadCorrida(cid, "uwf", arq, 1, CONFIG)
+    ruta = persistencia.rutas(ident, raiz).salida
+    datos = json.loads(ruta.read_text(encoding="utf-8"))
+    cambio(datos)
+    ruta.write_text(json.dumps(datos), encoding="utf-8")
+
+
+def test_una_omision_cuenta_con_exhaustividad_cero_y_precision_indefinida(campana):
+    """El caso 0001 es un incidente en que NODEX no dio eventos: antes salía de la métrica."""
+    raiz, _ = campana
+    reg = _registros_de(raiz)[_id("uwf_des_visible_0001")]
+    assert reg["omision_d2"] is True and reg["omision_d3"] is True
+    assert reg["estados"]["reconstruccion"] == "evaluable" and reg["estados"]["mitre"] == "evaluable"
+    assert (reg["d2"]["tp"], reg["d2"]["fp"], reg["d2"]["fn"]) == (0, 0, 1)
+    assert (reg["d3"]["tp"], reg["d3"]["fp"], reg["d3"]["fn"]) == (0, 0, 1)
+
+
+def test_la_exhaustividad_ya_no_se_calcula_solo_sobre_los_casos_en_que_el_sistema_hablo(campana):
+    raiz, _ = campana
+    f = _fila(_consolidar(raiz), "d2_reconstruccion", "uwf", "nodex_multiagente")
+    assert f["micro_recall"] == pytest.approx(2 / 3)       # antes 1,0: el caso callado no contaba
+    assert f["micro_precision"] == pytest.approx(1.0)      # sin predicciones no hay falsos positivos
+    assert f["macro_recall"] == pytest.approx(0.5)         # (1 + 0) / 2: la omisión pesa como 0
+    assert f["macro_precision"] == pytest.approx(1.0)      # la precisión indefinida NO se promedia como 0
+    assert f["micro_f1"] == pytest.approx(0.8)             # 2·2 / (2·2 + 0 + 1)
+    assert f["exact_match"] == pytest.approx(0.5)
+
+
+def test_la_precision_de_una_omision_es_indefinida_y_no_cero(campana):
+    from src.experimentation.evaluators.conjuntos import ComparacionConjuntos
+    raiz, _ = campana
+    reg = _registros_de(raiz)[_id("uwf_des_visible_0001")]
+    c = ComparacionConjuntos(case_id="x", propuesto=frozenset(), referencia=frozenset({"U3"}))
+    assert (c.tp, c.fp, c.fn) == (reg["d2"]["tp"], reg["d2"]["fp"], reg["d2"]["fn"])
+    from src.experimentation.evaluators.conjuntos import _metricas_de_conteos
+    m = _metricas_de_conteos(c.tp, c.fp, c.fn)
+    assert m["precision"] is None and m["recall"] == 0.0 and m["f1"] == 0.0
+
+
+def test_la_cobertura_y_las_omisiones_se_publican_junto_a_cada_cifra(campana):
+    raiz, _ = campana
+    resumen = _consolidar(raiz)
+    d2 = _fila(resumen, "d2_reconstruccion", "uwf", "nodex_multiagente")
+    assert d2["cobertura"] == "2 de 2" and d2["n_omisiones"] == 1 and d2["no_evaluables"] == 0
+    d3 = _fila(resumen, "d3_mitre", "uwf", "nodex_multiagente")
+    assert d3["cobertura"] == "2 de 2" and d3["n_omisiones"] == 1
+    g = _fila(resumen, "d2_reconstruccion", "uwf", "gemini_externo")
+    assert g["cobertura"] == "2 de 2" and g["n_omisiones"] == 0
+    tabla = resumen["tablas"]["d2_reconstruccion"]
+    assert "Cobertura" in [c["etiqueta"] for c in tabla["columnas"]][3]
+    assert "Omisión" in tabla["descripcion"] and "enmienda" in tabla["descripcion"]
+
+
+def test_la_cobertura_cuenta_solo_las_corridas_a_las_que_la_dimension_aplica(campana):
+    """UWF tiene 4 casos por arquitectura, pero solo 2 con incidente: los normales no tienen
+    referencia de reconstrucción, así que el denominador es 2, no 4."""
+    raiz, _ = campana
+    d2 = _fila(_consolidar(raiz), "d2_reconstruccion", "uwf", "nodex_multiagente")
+    assert d2["n_corridas"] == 4 and d2["cobertura"] == "2 de 2"
+
+
+def test_sin_referencia_el_silencio_no_es_una_omision(campana):
+    """Un caso normal (sin referencia de eventos) en que el sistema no entrega nada es correcto."""
+    raiz, _ = campana
+    reg = _registros_de(raiz)[_id("uwf_des_visible_0003")]          # verdadero negativo
+    assert reg["estados"]["reconstruccion"] == "no_aplica" and reg["omision_d2"] is False
+    assert reg["d2"] is None
+
+
+def test_un_sistema_que_entrega_algo_no_es_una_omision(campana):
+    raiz, _ = campana
+    reg = _registros_de(raiz)[_id("uwf_des_visible_0000")]
+    assert reg["omision_d2"] is False and reg["omision_d3"] is False
+
+
+@pytest.mark.parametrize("cambio, motivo", [
+    (lambda d: d["ejecucion"].update({"estado": "error_contrato"}), "corrida con error de contrato"),
+    (lambda d: d["ejecucion"].update({"estado": "error_api"}), "corrida con error de API"),
+    (lambda d: d["ejecucion"].update({"estado": "timeout"}), "corrida con timeout"),
+    (lambda d: d["salida"]["_meta"].update({"veredicto_booleano_presente": False}), "formato inválido"),
+    (lambda d: d.pop("ejecucion"), "sin metadatos de ejecución"),
+])
+def test_una_corrida_fallida_o_de_formato_invalido_sigue_no_evaluable_y_se_informa_aparte(
+        campana, cambio, motivo):
+    raiz, _ = campana
+    _modificar_salida(raiz, "uwf_des_visible_0001", cambio)
+    resumen = _consolidar(raiz)
+    d2 = _fila(resumen, "d2_reconstruccion", "uwf", "nodex_multiagente")
+    assert d2["no_evaluables"] == 1 and d2["n_omisiones"] == 0, motivo
+    assert d2["cobertura"] == "1 de 2", motivo           # la cobertura baja: se ve que falta un caso
+    assert d2["micro_recall"] == pytest.approx(1.0), motivo   # y NO se le inventa un cero
+    d3 = _fila(resumen, "d3_mitre", "uwf", "nodex_multiagente")
+    assert d3["no_evaluables"] == 1 and d3["n_omisiones"] == 0, motivo
+
+
+def test_el_aviso_de_integridad_cuenta_las_omisiones_y_nombra_la_regla(campana):
+    raiz, _ = campana
+    resumen = _consolidar(raiz)
+    avisos = {a["codigo"]: a for a in resumen["integridad"]["advertencias"]}
+    assert avisos["omisiones_d2_d3"]["n"] >= 1 and avisos["omisiones_d2_d3"]["severidad"] == "info"
+    assert "v2" in avisos["omisiones_d2_d3"]["mensaje"]
+    regla = resumen["reglas_de_evaluacion"]["d2_d3"]
+    assert regla["version"] == "v2-omision-cuenta" and regla["enmienda"] == "2026-10-15"
+    assert "piloto de desarrollo" in regla["motivo"]
+
+
+def test_la_regla_es_una_funcion_pura_de_la_corrida_y_no_toca_a_d1(campana):
+    from src.experimentation.evaluacion import corrida_valida_y_completa
+    ok = {"estado": "completa"}
+    salida = {"_meta": {"veredicto_booleano_presente": True}}
+    assert corrida_valida_y_completa(ok, salida) is True
+    assert corrida_valida_y_completa({"estado": "timeout"}, salida) is False
+    assert corrida_valida_y_completa(ok, {"_meta": {"veredicto_booleano_presente": False}}) is False
+    assert corrida_valida_y_completa(None, salida) is False
+    assert corrida_valida_y_completa(ok, {}) is False
+    raiz, _ = campana
+    d1 = _fila(_consolidar(raiz), "d1_deteccion", "uwf", "nodex_multiagente")
+    assert (d1["tp"], d1["fp"], d1["fn"], d1["tn"]) == (1, 1, 1, 1)
