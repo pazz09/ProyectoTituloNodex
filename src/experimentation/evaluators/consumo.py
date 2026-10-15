@@ -20,16 +20,24 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-#: Métricas de consumo que la Fase 6 tiene que registrar por corrida.
+#: Métricas de consumo, con los nombres que produce `src/telemetry.py`
+#: (`resumen_telemetria`, contrato `d11-v1`).
+#:
+#: Este evaluador esperaba antes `tokens_entrada`, `latencia_total_s`,
+#: `llamadas_llm`, etc. —nombres que escribí yo antes de que existiera la
+#: telemetría real— y con la telemetría de `d11-v1` habría dado toda la
+#: columna como ausente, sin error. Las pruebas pasaban porque sus fixtures
+#: usaban los mismos nombres equivocados. Se detectó al conectar el
+#: consolidador con las salidas guardadas.
 CAMPOS_TELEMETRIA = (
-    "tokens_entrada",
-    "tokens_salida",
-    "tokens_razonamiento",
-    "llamadas_llm",
-    "reintentos",
-    "consultas_rag",
-    "latencia_total_s",
-    "visitas_nodos",
+    "llm_call_count",
+    "input_tokens",
+    "output_tokens",
+    "total_tokens",
+    "execution_time",
+    "replan_count",
+    "intentos_correccion",
+    "invalid_evidence_uid_count",
 )
 
 

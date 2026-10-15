@@ -361,7 +361,7 @@ def test_el_consumo_excluye_las_corridas_fallidas_de_los_promedios():
     esperado = fixture["esperado"]
     assert resultado.n_corridas_completas == esperado["n_corridas_completas"]
     assert resultado.n_por_estado_ejecucion == esperado["n_por_estado_ejecucion"]
-    for campo in ("tokens_entrada", "latencia_total_s"):
+    for campo in ("input_tokens", "execution_time"):
         for clave, valor in esperado[campo].items():
             assert resultado.por_campo[campo][clave] == pytest.approx(valor), (
                 f"{campo}.{clave}")
@@ -369,10 +369,10 @@ def test_el_consumo_excluye_las_corridas_fallidas_de_los_promedios():
 
 def test_un_campo_de_telemetria_ausente_no_se_rellena_con_cero():
     resultado = agregar_consumo([
-        {"estado": "completa", "telemetria": {"tokens_entrada": 100}},
+        {"estado": "completa", "telemetria": {"input_tokens": 100}},
     ])
-    assert resultado.campos_ausentes["llamadas_llm"] == 1
-    assert resultado.por_campo["llamadas_llm"]["media"] is None
+    assert resultado.campos_ausentes["llm_call_count"] == 1
+    assert resultado.por_campo["llm_call_count"]["media"] is None
 
 
 # --- contabilidad y escritura -------------------------------------------

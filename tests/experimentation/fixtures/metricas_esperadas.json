@@ -98,18 +98,18 @@
   "consumo": {
     "dos_completas_una_fallida": {
       "corridas": [
-        {"estado": "completa", "telemetria": {"tokens_entrada": 1000, "latencia_total_s": 10.0}},
-        {"estado": "completa", "telemetria": {"tokens_entrada": 2000, "latencia_total_s": 30.0}},
-        {"estado": "error_api", "telemetria": {"tokens_entrada": 150, "latencia_total_s": 2.0}}
+        {"estado": "completa", "telemetria": {"input_tokens": 1000, "execution_time": 10.0}},
+        {"estado": "completa", "telemetria": {"input_tokens": 2000, "execution_time": 30.0}},
+        {"estado": "error_api", "telemetria": {"input_tokens": 150, "execution_time": 2.0}}
       ],
       "esperado": {
         "n_corridas_completas": 2,
         "n_por_estado_ejecucion": {"error_api": 1},
-        "tokens_entrada": {"media": 1500.0, "mediana": 1500.0, "min": 1000.0,
+        "input_tokens": {"media": 1500.0, "mediana": 1500.0, "min": 1000.0,
                            "max": 2000.0, "total": 3000.0, "n": 2},
-        "latencia_total_s": {"media": 20.0, "mediana": 20.0, "min": 10.0,
+        "execution_time": {"media": 20.0, "mediana": 20.0, "min": 10.0,
                              "max": 30.0, "total": 40.0, "n": 2},
-        "_nota": "incluir la fallida daria 1050.0 de media en tokens_entrada, un 30% menos: la arquitectura que falla mas pareceria la mas eficiente"
+        "_nota": "incluir la fallida daria 1050.0 de media en input_tokens, un 30% menos: la arquitectura que falla mas pareceria la mas eficiente"
       }
     }
   },

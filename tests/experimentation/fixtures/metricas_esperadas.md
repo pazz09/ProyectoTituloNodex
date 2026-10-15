@@ -174,7 +174,7 @@ los evaluadores entendieron cosas distintas.
 
 Tres corridas, una con `estado = "error_api"`:
 
-| Corrida | estado | tokens_entrada | latencia_total_s |
+| Corrida | estado | input_tokens | execution_time |
 |---|---|---|---|
 | r1 | completa | 1000 | 10,0 |
 | r2 | completa | 2000 | 30,0 |
@@ -183,16 +183,16 @@ Tres corridas, una con `estado = "error_api"`:
 Solo entran las completas:
 
 ```
-tokens_entrada:  media = (1000+2000)/2 = 1500,0
+input_tokens:  media = (1000+2000)/2 = 1500,0
                  mediana = 1500,0   min = 1000   max = 2000   total = 3000   n = 2
-latencia_total_s: media = (10+30)/2 = 20,0
+execution_time: media = (10+30)/2 = 20,0
                  mediana = 20,0     min = 10,0   max = 30,0   total = 40,0   n = 2
 
 n_corridas_completas     = 2
 n_por_estado_ejecucion   = {"error_api": 1}
 ```
 
-Si la corrida fallida entrara, `tokens_entrada` medio daría
+Si la corrida fallida entrara, `input_tokens` medio daría
 `(1000+2000+150)/3 = 1050`, un 30% menos. La arquitectura que falla más
 parecería la más eficiente.
 
