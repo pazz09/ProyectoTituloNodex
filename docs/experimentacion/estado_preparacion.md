@@ -1367,8 +1367,8 @@ vigiló con un proceso externo con el mismo tope de 2 horas; no llegó a cortar 
 ### 20.12 Resultado de la comparación mínima (15-oct-2026)
 
 Casos: `bgl_des_balanceado_0000` y `uwf_des_sigiloso_0004`. Respaldo apagado,
-temperatura 0, ChromaDB v2 (copia), 0 intentos de HTTP bloqueados en las 8 corridas
-(las herramientas de NVD/AbuseIPDB no se invocaron en estos casos). Todas las
+temperatura 0, ChromaDB v2 (copia). **Intentos de HTTP bloqueados: NO SE MIDIERON** (el
+contador estaba roto, ver 20.16; el bloqueo sí funcionó). Todas las
 versiones devueltas por la API coinciden con el modelo pedido.
 
 Criterios en el orden 1 JSON · 2 veredicto · 3 evidencia · 4 tokens · 5 sin error ·
@@ -1427,7 +1427,7 @@ piloto.
 4. No se observaron bucles ni respuestas degradadas con temperatura 0: la mayor
    salida por llamada fue 2.260 tokens (Gemini directo, BGL).
 
-### 20.14 PROPUESTA (no implementada): cómo debe mostrar el consolidador las corridas con total `None`
+### 20.14 PROPUESTA (implementada el 15-oct-2026, ver 22.4): cómo debe mostrar el consolidador las corridas con total `None`
 
 Hoy una llamada fallida deja `input_tokens`, `output_tokens` y `total_tokens` de
 toda la corrida en `None`, y la tabla de consumo la excluye de los promedios de
@@ -1450,6 +1450,44 @@ tokens y la cuenta en «Sin tokens informados». Propuesta para la campaña:
    fallidas.
 6. En la vista, esas corridas se marcan con una advertencia visible junto a las
    cifras; el CSV deja el total vacío y la suma parcial en su propia columna.
+
+### 20.15 Decisión: `gemini-3.8-flash` es el modelo principal (15-oct-2026)
+
+Se acepta el resultado de la regla de decisión: **`gemini-3.8-flash` es el modelo
+principal** del piloto y de la campaña. Conviene dejar claro en qué se basa:
+
+- **La elección se basa en validez técnica, no en acierto.** La comparación no midió
+  acierto, F1 ni calidad del reporte; solo comprobó que el sistema produce una salida
+  válida y sin accidentes con cada modelo (JSON válido, veredicto, evidencia, tokens
+  registrados, sin error, solo el modelo pedido). **No hay evidencia de que
+  `gemini-3.8-flash` detecte igual o mejor que el Pro.** Esa pregunta es de la campaña,
+  no de esta comparación.
+- **El criterio 3 se enmendó DESPUÉS del primer resultado** (ver 20.8). La evidencia de
+  que el criterio original no discriminaba es la corrida 3: el Pro con Gemini directo
+  en BGL citó los mismos 19 números como «uids» y también lo incumplió. La enmienda y su
+  motivo están registrados con fecha; el veredicto original de cada corrida se conserva.
+- **La corrida 4 del Pro (97 min, una llamada fallida) es una observación aislada.** Es
+  una sola corrida y puede ser transitoria (la corrida 8, del mismo modelo y la misma
+  arquitectura, tardó 185 s). No se usa como argumento contra el Pro ni a favor del
+  candidato.
+
+### 20.16 CORRECCIÓN: el contador de intentos HTTP de la comparación estaba roto
+
+En 20.12 se informó «0 intentos de HTTP bloqueados en las 8 corridas (las herramientas de
+NVD/AbuseIPDB no se invocaron en estos casos)». **Esa afirmación no estaba respaldada.**
+El bloqueo de red recibía la URL como argumento posicional, pero `requests.get` llama a
+`Session.request(method=..., url=...)` **por nombre**: la función de bloqueo fallaba con
+`TypeError` antes de anotar el intento. El efecto práctico:
+
+- **El bloqueo SÍ funcionó** (la petición no salió; las herramientas, que tragan toda
+  excepción, cayeron a su respaldo local).
+- **El contador marcó 0 siempre**, así que no se sabe cuántos intentos hubo en la
+  comparación. «0» era un artefacto, no una medición.
+
+Se corrigió (`consultas_externas.py` y `comparacion_modelos.py`) y una prueba reproduce
+el defecto: llama a `requests.get(...)` de verdad con la red bloqueada y exige que el
+intento quede anotado. Lo aprendido: un contador que dice 0 tiene que haberse probado
+con un caso que dé más de 0.
 
 ## 21. Base de ChromaDB v2 (15-oct-2026)
 
@@ -1516,3 +1554,67 @@ comprueba que no contienen ningún `case_id` ni líneas de un caso.
 No se observó ninguna diferencia de ids ni de orden; la única diferencia es la de
 distancia ya citada. Una limitación: 12 consultas no prueban todos los casos de
 empate posibles, solo que la v2 no cambia lo que recupera en ese conjunto.
+
+## 22. Preparación del piloto (15-oct-2026)
+
+Todo lo de esta sección se construyó y probó con procesos y clientes simulados; **no se
+hizo ninguna llamada al modelo** para construirlo.
+
+### 22.1 Configuración congelada
+
+`campana --congelar` fija, en un proceso con el entorno ya puesto, la configuración que
+verá el sistema: `gemini-3.8-flash`, `LLM_SIN_RESPALDO` activo, temperatura 0 y
+`generateContent`. Gemini directo hereda el mismo modelo y temperatura. La
+configuración congelada registra además, en campos nuevos, **cómo se llama al modelo**
+(`generacion`: API, formato de respuesta, respaldo apagado, reintentos con espera, versión
+del SDK) y la **política de recursos externos** (`recursos_externos`). Cada corrida corre
+en un proceso propio cuyo entorno sale de lo congelado, no del `.env` (que solo aporta las
+credenciales). Antes de ejecutar se exige que el código sea el congelado (mismo commit y
+`src/` limpio) y que la configuración efectiva coincida con la congelada.
+
+### 22.2 «Piso» de llamadas: corregido
+
+`LLAMADAS_POR_CORRIDA` decía que 6 era un piso de llamadas de NODEX. Lo medido fue 5, 6, 12
+y 13 (la corrida 2 hizo 5). Ahora el plan habla de **llamadas de referencia (NO un
+piso)**, con el rango medido por arquitectura (`LLAMADAS_MEDIDAS`).
+
+### 22.3 Estimación de tokens (orden de magnitud)
+
+`estimacion.py` multiplica lo medido en la comparación (Flash, **una corrida por celda y un
+caso por dataset**) por el número de corridas del plan. Es un orden de magnitud, no un
+presupuesto: los tokens dependen del caso y, en NODEX, de los bucles del grafo. **HDFS no se
+midió** y figura como «sin medición» (no suma). El baseline no usa el modelo. **No se supone
+ningún precio:** `experiments/config/precios_modelo.json` es una tabla configurable con
+fecha y fuente que viene vacía; mientras lo esté, el costo es `None`, no 0.
+
+### 22.4 Duración por llamada y totales `None` (la propuesta de 20.14, implementada)
+
+- `src/llm.py` registra por llamada `duration_s` (solo la llamada a la API, sin las esperas
+  de reintento) y `error` (clase y código HTTP, sin el mensaje).
+- El consolidador, para las corridas con el total de tokens en `None`: conteo de corridas
+  con total `None` (fuera de las medias de tokens), llamadas fallidas, y la **suma parcial
+  rotulada** con «≥» y «(k de n llamadas)», en columna aparte. Los promedios usan solo corridas
+  con total completo. Aviso `tokens_parciales`, distinto de `tokens_no_informados` (ninguna
+  llamada informó). La vista lista esas corridas.
+
+### 22.5 Intentos de consulta externa (NVD, AbuseIPDB)
+
+En el piloto se mantiene el **bloqueo con respaldo local**, y **cada consulta que hace una
+herramienta queda registrada por corrida**: herramienta, parámetros, si intentó salir a la
+red, si fue bloqueada y si el respaldo respondió. Al terminar el piloto, el consolidador
+entrega la tabla de intentos por arquitectura, dataset y herramienta. Solo NODEX usa
+herramientas: para Gemini directo y el baseline las celdas «no aplican» (no son 0), y «sin
+registro» tampoco es 0.
+
+**DECISIÓN PENDIENTE (campaña final):** si NODEX corre con consultas reales o con respaldo
+local. Cualquiera de las dos debe declararse en el informe. La tabla del piloto es el
+insumo para decidir con datos.
+
+### 22.6 Lanzador y etiqueta de depuración
+
+`python -m src.experimentation.campana`: sin `--ejecutar` solo muestra el plan; con
+`--ejecutar --etapa 1` corre UN caso con las tres arquitecturas e informa credencial, modelo
+efectivo, fallback, tokens, tiempo, llamadas y errores; con `--etapa 2` sigue con el resto.
+Tope de 2 horas por corrida (se mata el árbol de procesos); **tres fallas de infraestructura
+seguidas** (503, 429, timeout) detienen la campaña. Los resultados del piloto se consolidan
+con la etiqueta **de depuración, no reportable** (también en la vista).
