@@ -1473,6 +1473,11 @@ principal** del piloto y de la campaña. Conviene dejar claro en qué se basa:
 
 ### 20.16 CORRECCIÓN: el contador de intentos HTTP de la comparación estaba roto
 
+> **El contador «0 intentos HTTP bloqueados» de la comparación de modelos NO es una
+> medición válida y NO debe citarse** (ni en el informe ni en otros documentos). No se
+> sabe cuántos intentos de consulta externa hubo en esa comparación. El primer dato
+> válido saldrá del piloto (sección 22.5).
+
 En 20.12 se informó «0 intentos de HTTP bloqueados en las 8 corridas (las herramientas de
 NVD/AbuseIPDB no se invocaron en estos casos)». **Esa afirmación no estaba respaldada.**
 El bloqueo de red recibía la URL como argumento posicional, pero `requests.get` llama a
