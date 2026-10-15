@@ -86,6 +86,25 @@ def ejecutar(contenido: str, run_id: str) -> tuple[dict, dict]:
     return estado, diagnostico
 
 
+def clasificar_error(error: str) -> str:
+    """Estado de ejecución que corresponde al texto de un error.
+
+    Está aparte de `estado_de_ejecucion` porque el orquestador también la
+    necesita para los fallos que llegan como excepción y para Gemini directo:
+    clasificar distinto según la arquitectura haría que la misma causa se
+    contara en categorías diferentes.
+    """
+    texto = (error or "").lower()
+    if any(s in texto for s in ("resource_exhausted", "quota", "429",
+                                "deadline", "unavailable", "503")):
+        return "error_api"
+    if "preprocesamiento" in texto or "preprocessing" in texto:
+        return "error_preprocesamiento"
+    if "timeout" in texto:
+        return "timeout"
+    return "error_contrato"
+
+
 def estado_de_ejecucion(diagnostico: dict, estado: dict) -> str:
     """Traduce el resultado a un estado de ejecución del contrato.
 
@@ -95,15 +114,7 @@ def estado_de_ejecucion(diagnostico: dict, estado: dict) -> str:
     """
     error = diagnostico.get("error")
     if error:
-        texto = error.lower()
-        if any(s in texto for s in ("resource_exhausted", "quota", "429",
-                                    "deadline", "unavailable", "503")):
-            return "error_api"
-        if "preprocesamiento" in texto or "preprocessing" in texto:
-            return "error_preprocesamiento"
-        if "timeout" in texto:
-            return "timeout"
-        return "error_contrato"
+        return clasificar_error(error)
     if not estado:
         return "error_contrato"
     # Sin ninguno de los dos veredictos no hay nada que evaluar en D1,

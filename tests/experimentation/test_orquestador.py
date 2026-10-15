@@ -107,43 +107,55 @@ def test_el_plan_separa_lo_pendiente_de_lo_ya_hecho():
 
 # --- separación del ground truth ----------------------------------------
 
-def _funciones_que_construyen_ruta(literal: str) -> set[str]:
-    """Funciones del orquestador con `literal` como **constante de ruta**.
+def _arbol(modulo: str) -> ast.Module:
+    fuente = (RAIZ / "src" / "experimentation" / modulo).read_text(encoding="utf-8")
+    return ast.parse(fuente)
+
+
+def _funciones_que_construyen_ruta(modulo: str, literal: str) -> set[str]:
+    """Funciones de `modulo` con `literal` como **constante de ruta**.
 
     Se analiza el AST y se buscan constantes exactas, no subcadenas: los
     docstrings mencionan `ground_truth` para declarar que no lo abren, y una
     búsqueda de texto daría falsos positivos.
     """
-    fuente = (RAIZ / "src" / "experimentation" / "orquestador.py").read_text(
-        encoding="utf-8"
-    )
-    arbol = ast.parse(fuente)
     encontradas = set()
-    for nodo in arbol.body:
+    for nodo in _arbol(modulo).body:
         if not isinstance(nodo, ast.FunctionDef):
             continue
         for interno in ast.walk(nodo):
-            if (isinstance(interno, ast.Constant)
-                    and interno.value == literal):
+            if isinstance(interno, ast.Constant) and interno.value == literal:
                 encontradas.add(nodo.name)
     return encontradas
 
 
-def test_la_mitad_que_ejecuta_nunca_construye_una_ruta_al_ground_truth():
+def _importados(arbol: ast.AST) -> set[str]:
+    modulos = set()
+    for nodo in ast.walk(arbol):
+        if isinstance(nodo, ast.ImportFrom) and nodo.module:
+            modulos.add(nodo.module)
+            modulos.update(f"{nodo.module}.{a.name}" for a in nodo.names)
+        elif isinstance(nodo, ast.Import):
+            modulos.update(a.name for a in nodo.names)
+    return modulos
+
+
+def test_el_orquestador_no_contiene_ninguna_ruta_al_ground_truth():
     """Mientras una corrida está en curso, la referencia no está cargada en
-    ninguna variable del proceso, así que no puede filtrarse a un prompt."""
-    assert _funciones_que_construyen_ruta("ground_truth") == {
+    ninguna variable del proceso. Antes la ruta vivía en una función del
+    orquestador; ahora el archivo entero queda limpio."""
+    assert _funciones_que_construyen_ruta("orquestador.py", "ground_truth") == set()
+
+
+def test_solo_el_modulo_de_evaluacion_arma_la_ruta_a_la_referencia():
+    assert _funciones_que_construyen_ruta("evaluacion.py", "ground_truth") == {
         "_cargar_referencia"
     }
 
 
-def test_solo_la_evaluacion_lee_la_referencia():
-    fuente = (RAIZ / "src" / "experimentation" / "orquestador.py").read_text(
-        encoding="utf-8"
-    )
-    arbol = ast.parse(fuente)
+def test_solo_evaluar_corridas_lee_la_referencia():
     llamadores = set()
-    for nodo in arbol.body:
+    for nodo in _arbol("evaluacion.py").body:
         if not isinstance(nodo, ast.FunctionDef):
             continue
         for interno in ast.walk(nodo):
@@ -151,30 +163,31 @@ def test_solo_la_evaluacion_lee_la_referencia():
                     and isinstance(interno.func, ast.Name)
                     and interno.func.id == "_cargar_referencia"):
                 llamadores.add(nodo.name)
-    assert llamadores == {"evaluar_campana"}
+    assert llamadores == {"evaluar_corridas"}
 
 
-def test_la_evaluacion_no_ejecuta_ninguna_arquitectura():
-    """Si una corrida no está guardada se cuenta como ausente, no se corre:
+def test_la_evaluacion_no_importa_runners_ni_el_sistema():
+    """Si una corrida no está guardada se cuenta como ausente, no se ejecuta:
     la evaluación no debe depender de cuándo se la invoque."""
-    fuente = (RAIZ / "src" / "experimentation" / "orquestador.py").read_text(
-        encoding="utf-8"
-    )
-    arbol = ast.parse(fuente)
-    evaluar = next(
-        n for n in arbol.body
-        if isinstance(n, ast.FunctionDef) and n.name == "evaluar_campana"
-    )
-    for interno in ast.walk(evaluar):
-        if isinstance(interno, ast.ImportFrom) and interno.module:
-            assert "runners" not in interno.module
+    importados = _importados(_arbol("evaluacion.py"))
+    for prohibido in ("src.experimentation.runners", "src.pipeline",
+                      "src.agents", "src.graph", "src.llm"):
+        assert not any(m == prohibido or m.startswith(prohibido + ".")
+                       for m in importados), prohibido
+
+
+def test_el_orquestador_no_importa_el_modulo_de_evaluacion():
+    """El sentido de la separación es que quien corre no pueda ver la
+    referencia; si el orquestador importara la evaluación, la tendría a mano."""
+    assert not any(m.endswith("evaluacion") or ".evaluacion." in m
+                   for m in _importados(_arbol("orquestador.py")))
 
 
 def test_la_evaluacion_declara_las_corridas_ausentes():
-    fuente = (RAIZ / "src" / "experimentation" / "orquestador.py").read_text(
+    fuente = (RAIZ / "src" / "experimentation" / "evaluacion.py").read_text(
         encoding="utf-8"
     )
-    assert "corridas_ausentes" in fuente
+    assert "ausentes" in fuente
     assert "no se ejecuta" in fuente
 
 

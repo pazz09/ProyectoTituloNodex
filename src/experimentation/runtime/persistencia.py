@@ -31,6 +31,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 
 from src.experimentation.runtime.identidad import IdentidadCorrida
@@ -58,6 +59,7 @@ SUBDIRECTORIOS = (
     "metrics",
     "telemetry",
     "config",
+    "fallos",
 )
 
 
@@ -127,8 +129,15 @@ def guardar(
     salida: dict,
     crudo: dict | None = None,
     telemetria: dict | None = None,
+    ejecucion: dict | None = None,
 ) -> dict:
     """Guarda las tres piezas de una corrida. Falla si alguna ya existe.
+
+    `ejecucion` son los metadatos de CÓMO terminó la corrida (`estado`,
+    `estados_por_dimension`, `iniciado_utc`) y viajan en el archivo de salida.
+    Antes no se guardaban: el evaluador los leía de ese archivo, no los
+    encontraba y daba toda dimensión por no evaluable. Habría sido un
+    resultado vacío que se confunde con un sistema que falla.
 
     La comprobación se hace **antes** de escribir cualquiera, para no dejar
     una corrida a medio guardar: o se escriben todas o ninguna.
@@ -145,8 +154,10 @@ def guardar(
     # sigue sabiendo de qué caso, dataset, arquitectura, repetición y
     # configuración salió.
     cabecera = identidad.to_dict()
-    escritos = {"salida": str(_escribir(destino.salida,
-                                       {**cabecera, "salida": salida}))}
+    cuerpo_salida = {**cabecera, "salida": salida}
+    if ejecucion is not None:
+        cuerpo_salida["ejecucion"] = ejecucion
+    escritos = {"salida": str(_escribir(destino.salida, cuerpo_salida))}
     if crudo is not None:
         escritos["crudo"] = str(
             _escribir(destino.crudo, {**cabecera, "estado_crudo": crudo})
@@ -182,3 +193,61 @@ def listar(raiz_repo: Path, arquitectura: str, dataset: str | None = None) -> li
     return sorted(
         p for p in carpeta.glob(patron) if p.parent.name != "raw"
     )
+
+
+# --- corridas que fallaron -------------------------------------------------
+
+def rutas_fallos(identidad: IdentidadCorrida, raiz_repo: Path) -> list[Path]:
+    """Registros de fallo ya guardados para una corrida (puede haber varios)."""
+    carpeta = raiz_repo / "experiments" / "fallos" / identidad.dataset
+    return sorted(carpeta.glob(f"{identidad.run_id}__f*.json"))
+
+
+def guardar_fallo(
+    identidad: IdentidadCorrida,
+    raiz_repo: Path,
+    estado: str,
+    error: str,
+) -> Path:
+    """Registra que una corrida NO terminó, sin tratarla como una corrida hecha.
+
+    Va a `experiments/fallos/`, no junto a las salidas: `ya_existe()` mira solo
+    la salida, así que una corrida fallida no se da por hecha y una
+    reanudación la vuelve a intentar. Los intentos se acumulan
+    (`__f1`, `__f2`, ...) en vez de pisarse: reintentar no borra el historial
+    de cuántas veces falló ni por qué.
+
+    El plan prohíbe ocultar ejecuciones fallidas, y antes un fallo solo
+    quedaba en el valor de retorno de `ejecutar_campana`, que se pierde.
+    """
+    previos = rutas_fallos(identidad, raiz_repo)
+    ruta = (
+        raiz_repo / "experiments" / "fallos" / identidad.dataset
+        / f"{identidad.run_id}__f{len(previos) + 1}.json"
+    )
+    return _escribir(ruta, {
+        **identidad.to_dict(),
+        "estado": estado,
+        "error": error,
+        "intento": len(previos) + 1,
+        "registrado_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+    })
+
+
+def leer_fallos(raiz_repo: Path, config_version: str | None = None) -> list[dict]:
+    """Todos los fallos registrados, opcionalmente de una sola configuración."""
+    carpeta = raiz_repo / "experiments" / "fallos"
+    resultado = []
+    for archivo in sorted(carpeta.glob("*/*.json")) if carpeta.is_dir() else []:
+        datos = json.loads(archivo.read_text(encoding="utf-8"))
+        if config_version is None or datos.get("config_version") == config_version:
+            resultado.append(datos)
+    return resultado
+
+
+def leer_telemetria(identidad: IdentidadCorrida, raiz_repo: Path) -> dict | None:
+    """Telemetría guardada de una corrida, o `None` si no hay."""
+    ruta = rutas(identidad, raiz_repo).telemetria
+    if not ruta.is_file():
+        return None
+    return json.loads(ruta.read_text(encoding="utf-8")).get("telemetria")

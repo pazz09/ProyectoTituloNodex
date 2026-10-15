@@ -14,14 +14,18 @@ cuota.
 
 ## Separación del ground truth
 
-El orquestador tiene dos mitades que **no se tocan**:
+Este módulo corre arquitecturas y **no contiene ninguna ruta al ground
+truth**. La corrección de las corridas guardadas vive en
+`src/experimentation/evaluacion.py`, el único módulo que abre
+`experiments/ground_truth/`:
 
-    ejecutar_campana()   -> corre arquitecturas. NO abre ground_truth/.
-    evaluar_campana()    -> lee las salidas guardadas + ground_truth/.
+    orquestador.py   -> corre arquitecturas y guarda lo que produjeron.
+    evaluacion.py    -> lee lo guardado + la referencia y corrige.
 
-Están separadas en funciones distintas a propósito. Mientras una corrida
-está en curso, la referencia no está cargada en ninguna variable del
-proceso, así que no puede filtrarse a un prompt por descuido.
+Mientras una corrida está en curso, la referencia no está cargada en
+ninguna variable del proceso, así que no puede filtrarse a un prompt por
+descuido. Antes las dos mitades convivían acá, en funciones distintas; ahora
+están en archivos distintos y la ausencia de la ruta se verifica por AST.
 
 ## Reanudación
 
@@ -280,8 +284,11 @@ def _correr_una(
             estado, diagnostico = gemini_externo.ejecutar(
                 contenido, identidad.run_id
             )
+            # Misma clasificación que NODEX: la misma causa no puede contarse
+            # en categorías distintas según la arquitectura.
             estado_ejecucion = (
-                "error_api" if diagnostico.get("error") else "completa"
+                nodex.clasificar_error(diagnostico["error"])
+                if diagnostico.get("error") else "completa"
             )
         # La telemetría la produce el propio sistema: `analizar_lote()`
         # envuelve el grafo en `medir_ejecucion()` y deja el resumen en
@@ -299,6 +306,10 @@ def _correr_una(
         )
         salida_dict = resultado.salida.to_dict()
         estados = resultado.estado_por_dimension
+        # Una corrida que "terminó" sin ningún veredicto booleano no es
+        # completa: no hay nada que puntuar en D1.
+        if estado_ejecucion == "completa" and resultado.salida.classification is None:
+            estado_ejecucion = "error_contrato"
         crudo = estado
         # `resumen_telemetria` ya trae llm_call_count, tokens,
         # execution_time, replan_count, intentos_correccion (acumulado a
@@ -323,6 +334,13 @@ def _correr_una(
         salida=salida_dict,
         crudo=crudo,
         telemetria=telemetria_dict,
+        # Cómo terminó y qué dimensiones se pueden puntuar. Sin esto el
+        # evaluador no tiene de dónde leerlo y da todo por no evaluable.
+        ejecucion={
+            "estado": estado_ejecucion,
+            "estados_por_dimension": estados,
+            "iniciado_utc": iniciado,
+        },
     )
     return {
         "run_id": identidad.run_id,
@@ -368,9 +386,28 @@ def ejecutar_campana(
             "ya_hechas": plan.ya_hechas,
         }
 
+    return ejecutar_plan(raiz_repo, subconjunto, plan, config_version)
+
+
+def ejecutar_plan(
+    raiz_repo: Path,
+    subconjunto: dict,
+    plan: PlanCampana,
+    config_version: str,
+) -> dict:
+    """Corre las corridas pendientes de un plan. **Ejecuta el sistema.**
+
+    Existe aparte de `ejecutar_campana` para poder probar el bucle completo
+    —persistencia, registro de fallos, exportación— con corredores simulados,
+    sin pasar por el interruptor `ejecucion_habilitada`. Quien quiera correr
+    de verdad una campaña sigue entrando por `ejecutar_campana`, que es la
+    que exige habilitarlo de forma explícita.
+    """
     # Antes de la primera corrida: sin esto, una salida redirigida aborta
     # con UnicodeEncodeError al imprimir el progreso de NODEX.
     salida_utf8 = asegurar_salida_utf8()
+
+    from src.experimentation.runners import nodex
 
     particion = subconjunto["particion"]
     resultados, fallos = [], []
@@ -392,10 +429,19 @@ def ejecutar_campana(
         except Exception as excepcion:  # noqa: BLE001
             # El plan prohíbe ocultar ejecuciones fallidas: el fallo se
             # registra y la campaña sigue con el caso siguiente.
-            fallos.append({
-                "run_id": identidad.run_id,
-                "error": f"{type(excepcion).__name__}: {excepcion}",
-            })
+            descripcion = f"{type(excepcion).__name__}: {excepcion}"
+            fallos.append({"run_id": identidad.run_id, "error": descripcion})
+            # Además del valor de retorno (que se pierde al terminar el
+            # proceso), el fallo queda en disco: si no, el consolidador no
+            # tendría forma de mostrarlo.
+            try:
+                persistencia.guardar_fallo(
+                    identidad, raiz_repo,
+                    estado=nodex.clasificar_error(descripcion),
+                    error=descripcion,
+                )
+            except Exception as error_al_registrar:  # noqa: BLE001
+                fallos[-1]["no_se_pudo_registrar"] = str(error_al_registrar)
 
     filas = [
         exportacion.fila(
@@ -433,188 +479,3 @@ def imprimir_plan(plan: dict) -> None:
               f"{llamadas:>5} llamadas (piso)")
     print(f"llamadas LLM piso: {resumen['llamadas_llm_piso']}")
     print(f"  {resumen['nota_llamadas']}")
-
-
-# --- la mitad que SÍ ve el ground truth ----------------------------------
-
-def _cargar_referencia(raiz_repo: Path, dataset: str, particion: str,
-                       case_id: str) -> dict:
-    archivo = (
-        raiz_repo / "experiments" / "ground_truth" / dataset / particion
-        / f"{case_id}.json"
-    )
-    return json.loads(archivo.read_text(encoding="utf-8"))
-
-
-def evaluar_campana(
-    raiz_repo: Path,
-    subconjunto_nombre: str,
-    config_version: str,
-    arquitecturas: tuple[str, ...] = ARQUITECTURAS_CAMPANA,
-) -> dict:
-    """Evalúa las corridas **ya guardadas** contra el ground truth.
-
-    Es la otra mitad del orquestador, y la única que abre `ground_truth/`.
-    No corre ninguna arquitectura: si una corrida no está guardada, se
-    cuenta como ausente en vez de ejecutarse. Así la evaluación es
-    reproducible y no depende de cuándo se la invoque.
-
-    Para cada caso combina **dos** estados por dimensión y se queda con el
-    más restrictivo: el de la salida (¿el sistema produjo algo que puntuar?)
-    y el de la referencia (¿hay una referencia aprobada?). Una dimensión se
-    puntúa solo si las dos dicen `evaluable`.
-    """
-    from src.experimentation.adapters.nodex import dimension_final
-    from src.experimentation.evaluators import deteccion as eval_deteccion
-    from src.experimentation.evaluators.mitre import comparar_caso as comparar_mitre
-    from src.experimentation.evaluators.reconstruccion import (
-        comparar_caso as comparar_reconstruccion,
-    )
-
-    subconjunto = cargar_subconjunto(raiz_repo, subconjunto_nombre)
-    particion = subconjunto["particion"]
-
-    por_arquitectura: dict = {}
-    ausentes: list = []
-
-    for arquitectura in arquitecturas:
-        pares: list = []
-        estados_d1: list[str] = []
-        comparaciones_d2: list = []
-        estados_d2: list[str] = []
-        # Solo `tecnica`: ver el comentario del bloque D3 mas abajo.
-        comparaciones_d3: dict[str, list] = {"tecnica": []}
-        estados_d3: list[str] = []
-        detalle: list = []
-
-        for dataset, case_id in _casos_del_subconjunto(subconjunto):
-            repeticiones = (
-                REPETICIONES_BASELINE
-                if arquitectura == "baseline_reglas"
-                else REPETICIONES.get(particion, 1)
-            )
-            for repeticion in range(1, repeticiones + 1):
-                identidad = IdentidadCorrida(
-                    case_id=case_id, dataset=dataset,
-                    arquitectura=arquitectura, repeticion=repeticion,
-                    config_version=config_version,
-                )
-                ruta = persistencia.rutas(identidad, raiz_repo).salida
-                if not ruta.is_file():
-                    ausentes.append(identidad.run_id)
-                    continue
-                guardado = persistencia.leer_salida(ruta)
-                salida = guardado["salida"]
-                referencia = _cargar_referencia(
-                    raiz_repo, dataset, particion, case_id
-                )
-                estados_salida = guardado.get("estados_por_dimension") or {}
-
-                # --- D1 deteccion ---
-                estado = dimension_final(
-                    estados_salida.get("deteccion", "no_evaluable"),
-                    referencia["estado_dimension"].get("deteccion", "no_aplica"),
-                )
-                estados_d1.append(estado)
-                if estado == "evaluable" and salida.get("classification"):
-                    pares.append(eval_deteccion.ParDeteccion(
-                        case_id=case_id,
-                        prediccion=salida["classification"],
-                        referencia=referencia["etiqueta_deteccion"],
-                    ))
-
-                # --- D2 reconstruccion ---
-                estado_d2 = dimension_final(
-                    estados_salida.get("reconstruccion", "no_evaluable"),
-                    referencia["estado_dimension"].get("reconstruccion",
-                                                       "no_aplica"),
-                )
-                estados_d2.append(estado_d2)
-                if estado_d2 == "evaluable":
-                    # El matching va por `evidence_uids`, NO por el `uid`
-                    # del evento. En el contrato d11-v1, `event_id` es la
-                    # etiqueta que el sistema le pone al evento y
-                    # `normalizar_d11` la reemplaza por una sintetica si
-                    # colisiona con un uid; los `evidence_uids` son los que
-                    # se validan contra el catalogo de evidencia, indexado
-                    # por el uid real del registro. Comparar `event_id`
-                    # contra `core_event_uids` no coincidiria con nada.
-                    citados: list[str] = []
-                    for evento in salida.get("reconstructed_events") or []:
-                        for uid in evento.get("evidence_uids") or []:
-                            if uid not in citados:
-                                citados.append(str(uid))
-                    comparacion, _ = comparar_reconstruccion(
-                        case_id,
-                        citados,
-                        tuple(referencia.get("core_event_uids") or ()),
-                    )
-                    comparaciones_d2.append(comparacion)
-
-                # --- D3 MITRE, un nivel a la vez ---
-                estado_d3 = dimension_final(
-                    estados_salida.get("mitre", "no_evaluable"),
-                    referencia["estado_dimension"].get("mitre", "no_aplica"),
-                )
-                estados_d3.append(estado_d3)
-                if estado_d3 == "evaluable":
-                    # Solo nivel TECNICA. El contrato d11-v1 no lleva nivel y
-                    # la decision del 7-oct-2026 fija el scoring de D3 en
-                    # `label_technique`; `label_tactic` queda como
-                    # informacion complementaria del dataset y no entra.
-                    mitre = salida.get("mitre") or {}
-                    atribuciones = [
-                        dict(item, nivel="tecnica")
-                        for item in (mitre.get("techniques") or [])
-                    ]
-                    por_nivel = referencia.get("estado_mitre_por_nivel") or {}
-                    if por_nivel.get("tecnica") == "evaluable":
-                        comparacion, _ = comparar_mitre(
-                            case_id, atribuciones,
-                            referencia.get("referencias_mitre") or [],
-                            "tecnica",
-                        )
-                        comparaciones_d3["tecnica"].append(comparacion)
-
-                detalle.append({
-                    "run_id": identidad.run_id,
-                    "dataset": dataset,
-                    "estados": {
-                        "deteccion": estado,
-                        "reconstruccion": estado_d2,
-                        "mitre": estado_d3,
-                    },
-                })
-
-        conteos, metricas = eval_deteccion.evaluar(pares)
-        por_arquitectura[arquitectura] = {
-            "deteccion": {
-                "conteos": conteos.to_dict(),
-                "metricas": metricas,
-                "estados": estados_d1,
-            },
-            "reconstruccion": {
-                "n_comparaciones": len(comparaciones_d2),
-                "estados": estados_d2,
-            },
-            "mitre": {
-                "comparaciones_por_nivel": {
-                    nivel: len(v) for nivel, v in comparaciones_d3.items()
-                },
-                "estados": estados_d3,
-            },
-            "detalle": detalle,
-        }
-
-    return {
-        "protocolo_version": PROTOCOLO_VERSION,
-        "config_version": config_version,
-        "subconjunto": subconjunto_nombre,
-        "particion": particion,
-        "corridas_ausentes": ausentes,
-        "nota_ausentes": (
-            "una corrida ausente se cuenta, no se ejecuta: la evaluación no "
-            "debe depender de cuándo se la invoque"
-        ),
-        "por_arquitectura": por_arquitectura,
-    }
