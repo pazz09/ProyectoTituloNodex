@@ -5,7 +5,7 @@
   "reportable": false,
   "config_version": "FICTICIO-no-usar",
   "consolidacion": "20000101T000000Z",
-  "generado_utc": "2026-10-15T21:02:38+00:00",
+  "generado_utc": "2026-10-15T22:04:16+00:00",
   "protocolo_version": "1.0",
   "subconjunto": "sub",
   "particion": "desarrollo",
@@ -809,7 +809,7 @@
     "consumo": {
       "titulo": "Consumo y comportamiento operacional",
       "seccion": "11.5",
-      "descripcion": "Solo promedian las corridas completas: una corrida cortada consumió menos y haría parecer más eficiente a la arquitectura que más falla. Si el proveedor no informó los tokens, la celda queda vacía; no se estiman. Una llamada fallida deja el total de su corrida en None y la deja fuera de las medias de tokens; lo que sí se sabe de esas corridas se muestra aparte como suma parcial (≥, un piso), nunca como total.",
+      "descripcion": "Solo promedian las corridas completas: una corrida cortada consumió menos y haría parecer más eficiente a la arquitectura que más falla. Si el proveedor no informó los tokens, la celda queda vacía; no se estiman. Una llamada fallida deja el total de su corrida en None y la deja fuera de las medias de tokens («Corridas con total None»); lo que sí se sabe de esas corridas se muestra aparte como suma parcial («Tokens parciales», ≥, un piso), nunca como total.",
       "columnas": [
         {
           "clave": "dataset",
@@ -888,7 +888,7 @@
         },
         {
           "clave": "n_sin_tokens",
-          "etiqueta": "Corridas con total None (fuera de las medias de tokens)",
+          "etiqueta": "Corridas con total None",
           "tipo": "entero"
         },
         {
@@ -898,7 +898,7 @@
         },
         {
           "clave": "tokens_parciales",
-          "etiqueta": "Tokens parciales (piso, solo de esas corridas)",
+          "etiqueta": "Tokens parciales (≥, piso)",
           "tipo": "texto"
         }
       ],
@@ -1028,7 +1028,7 @@
     "consultas_externas": {
       "titulo": "Intentos de consulta externa (NVD, AbuseIPDB)",
       "seccion": "11.5",
-      "descripcion": "Para decidir con datos la política de consultas externas de la campaña final (decisión pendiente; cualquiera que se elija debe declararse en el informe). «No usa herramientas externas» y «sin registro» no son lo mismo que 0 intentos.",
+      "descripcion": "Para decidir con datos la política de consultas externas de la campaña final (decisión pendiente; cualquiera que se elija debe declararse en el informe). En el piloto las llamadas HTTP se bloquean y responde el respaldo local. Estado «no aplica»: la arquitectura no usa herramientas externas (Gemini directo, baseline). «Sin registro»: corridas anteriores a este registro. Ninguno de los dos es lo mismo que 0 intentos.",
       "columnas": [
         {
           "clave": "dataset",
@@ -1081,8 +1081,8 @@
           "tipo": "entero"
         },
         {
-          "clave": "nota",
-          "etiqueta": "Nota",
+          "clave": "estado",
+          "etiqueta": "Estado",
           "tipo": "texto"
         }
       ],
@@ -1098,7 +1098,7 @@
           "n_intentos_externos": null,
           "n_bloqueados": null,
           "n_respaldo_respondio": null,
-          "nota": "no usa herramientas externas"
+          "estado": "no aplica"
         },
         {
           "dataset": "bgl",
@@ -1111,7 +1111,7 @@
           "n_intentos_externos": null,
           "n_bloqueados": null,
           "n_respaldo_respondio": null,
-          "nota": "no usa herramientas externas"
+          "estado": "no aplica"
         },
         {
           "dataset": "bgl",
@@ -1124,7 +1124,7 @@
           "n_intentos_externos": null,
           "n_bloqueados": null,
           "n_respaldo_respondio": null,
-          "nota": "no usa herramientas externas"
+          "estado": "no aplica"
         },
         {
           "dataset": "bgl",
@@ -1137,7 +1137,7 @@
           "n_intentos_externos": null,
           "n_bloqueados": null,
           "n_respaldo_respondio": null,
-          "nota": "no usa herramientas externas"
+          "estado": "no aplica"
         },
         {
           "dataset": "bgl",
@@ -1150,7 +1150,7 @@
           "n_intentos_externos": null,
           "n_bloqueados": null,
           "n_respaldo_respondio": null,
-          "nota": "sin registro (corridas anteriores a este registro)"
+          "estado": "sin registro"
         },
         {
           "dataset": "bgl",
@@ -1163,7 +1163,7 @@
           "n_intentos_externos": null,
           "n_bloqueados": null,
           "n_respaldo_respondio": null,
-          "nota": "sin registro (corridas anteriores a este registro)"
+          "estado": "sin registro"
         },
         {
           "dataset": "uwf",
@@ -1176,7 +1176,7 @@
           "n_intentos_externos": null,
           "n_bloqueados": null,
           "n_respaldo_respondio": null,
-          "nota": "no usa herramientas externas"
+          "estado": "no aplica"
         },
         {
           "dataset": "uwf",
@@ -1189,7 +1189,7 @@
           "n_intentos_externos": null,
           "n_bloqueados": null,
           "n_respaldo_respondio": null,
-          "nota": "no usa herramientas externas"
+          "estado": "no aplica"
         },
         {
           "dataset": "uwf",
@@ -1202,7 +1202,7 @@
           "n_intentos_externos": null,
           "n_bloqueados": null,
           "n_respaldo_respondio": null,
-          "nota": "no usa herramientas externas"
+          "estado": "no aplica"
         },
         {
           "dataset": "uwf",
@@ -1215,7 +1215,7 @@
           "n_intentos_externos": null,
           "n_bloqueados": null,
           "n_respaldo_respondio": null,
-          "nota": "no usa herramientas externas"
+          "estado": "no aplica"
         },
         {
           "dataset": "uwf",
@@ -1228,7 +1228,7 @@
           "n_intentos_externos": 2,
           "n_bloqueados": 2,
           "n_respaldo_respondio": 2,
-          "nota": "las llamadas HTTP se bloquean y responde el respaldo local; política de la campaña final PENDIENTE"
+          "estado": "medido"
         },
         {
           "dataset": "uwf",
@@ -1241,7 +1241,7 @@
           "n_intentos_externos": 1,
           "n_bloqueados": 1,
           "n_respaldo_respondio": 1,
-          "nota": "las llamadas HTTP se bloquean y responde el respaldo local; política de la campaña final PENDIENTE"
+          "estado": "medido"
         }
       ]
     },

@@ -535,9 +535,9 @@ def tabla_consumo(registros, telemetrias, fallos_sin_salida, principal) -> tuple
         ("replan_medio", "Replanificaciones", "numero"),
         ("correcciones_medias", "Correcciones", "numero"),
         ("n_con_fallback", "Con fallback", "entero"),
-        ("n_sin_tokens", "Corridas con total None (fuera de las medias de tokens)", "entero"),
+        ("n_sin_tokens", "Corridas con total None", "entero"),
         ("n_llamadas_fallidas", "Llamadas fallidas", "entero"),
-        ("tokens_parciales", "Tokens parciales (piso, solo de esas corridas)"),
+        ("tokens_parciales", "Tokens parciales (≥, piso)"),
     ]
     return _tabla(
         "Consumo y comportamiento operacional", "11.5", columnas, filas,
@@ -545,8 +545,8 @@ def tabla_consumo(registros, telemetrias, fallos_sin_salida, principal) -> tuple
         "haría parecer más eficiente a la arquitectura que más falla. Si el proveedor "
         "no informó los tokens, la celda queda vacía; no se estiman. Una llamada "
         "fallida deja el total de su corrida en None y la deja fuera de las medias "
-        "de tokens; lo que sí se sabe de esas corridas se muestra aparte como suma "
-        "parcial (≥, un piso), nunca como total.",
+        "de tokens («Corridas con total None»); lo que sí se sabe de esas corridas se "
+        "muestra aparte como suma parcial («Tokens parciales», ≥, un piso), nunca como total.",
     ), contratos
 
 
@@ -567,17 +567,19 @@ def tabla_consultas_externas(registros, consultas_por_run: dict) -> dict:
     filas = []
     for (dataset, arquitectura), grupo in sorted(_grupos(registros).items()):
         for herramienta in HERRAMIENTAS_EXTERNAS:
+            # `estado` es una palabra corta («no aplica», «sin registro», «medido»): el
+            # texto largo va en la descripción de la tabla, no en cada fila.
             base = {"dataset": dataset, "arquitectura": arquitectura, "herramienta": herramienta,
                     "n_corridas": len(grupo), "n_con_registro": None, "n_corridas_con_intentos": None,
                     "n_consultas": None, "n_intentos_externos": None, "n_bloqueados": None,
-                    "n_respaldo_respondio": None, "nota": "no usa herramientas externas"}
+                    "n_respaldo_respondio": None, "estado": "no aplica"}
             if arquitectura != "nodex_multiagente":
                 filas.append(base)
                 continue
             listas = [consultas_por_run.get(r.run_id) for r in grupo]
             con_registro = [l for l in listas if l is not None]
             if not con_registro:
-                filas.append({**base, "nota": "sin registro (corridas anteriores a este registro)"})
+                filas.append({**base, "estado": "sin registro"})
                 continue
             propias = [[c for c in l if c.get("herramienta") == herramienta] for l in con_registro]
             todas = [c for l in propias for c in l]
@@ -589,8 +591,7 @@ def tabla_consultas_externas(registros, consultas_por_run: dict) -> dict:
                 "n_intentos_externos": sum(1 for c in todas if c.get("intento_externo")),
                 "n_bloqueados": sum(1 for c in todas if c.get("bloqueado")),
                 "n_respaldo_respondio": sum(1 for c in todas if c.get("respaldo_respondio")),
-                "nota": ("las llamadas HTTP se bloquean y responde el respaldo local; "
-                         "política de la campaña final PENDIENTE"),
+                "estado": "medido",
             })
     columnas = [
         ("dataset", "Dataset"), ("arquitectura", "Arquitectura"), ("herramienta", "Herramienta"),
@@ -600,13 +601,16 @@ def tabla_consultas_externas(registros, consultas_por_run: dict) -> dict:
         ("n_intentos_externos", "Intentos de salida a la red", "entero"),
         ("n_bloqueados", "Bloqueados", "entero"),
         ("n_respaldo_respondio", "Respondió el respaldo local", "entero"),
-        ("nota", "Nota"),
+        ("estado", "Estado"),
     ]
     return _tabla(
         "Intentos de consulta externa (NVD, AbuseIPDB)", "11.5", columnas, filas,
         "Para decidir con datos la política de consultas externas de la campaña final "
-        "(decisión pendiente; cualquiera que se elija debe declararse en el informe). "
-        "«No usa herramientas externas» y «sin registro» no son lo mismo que 0 intentos.")
+        "(decisión pendiente; cualquiera que se elija debe declararse en el informe). En el "
+        "piloto las llamadas HTTP se bloquean y responde el respaldo local. Estado «no aplica»: "
+        "la arquitectura no usa herramientas externas (Gemini directo, baseline). «Sin "
+        "registro»: corridas anteriores a este registro. Ninguno de los dos es lo mismo que 0 "
+        "intentos.")
 
 
 def tabla_comparacion(t_d1, t_d2, t_d3, t_consumo) -> dict:

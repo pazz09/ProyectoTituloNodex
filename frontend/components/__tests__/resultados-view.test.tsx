@@ -536,3 +536,69 @@ describe('Resultados: depuración, tokens parciales y consultas externas', () =>
     expect(gem[lineas[0].split(',').indexOf('n_consultas')]).toBe('')
   })
 })
+
+describe('Resultados: tablas que caben o se desplazan con sentido', () => {
+  const montarVista = () => {
+    const contenedor = document.createElement('div')
+    document.body.appendChild(contenedor)
+    const raiz = createRoot(contenedor)
+    act(() => raiz.render(<ResultadosContenido {...base} />))
+    desmontar = () => {
+      act(() => raiz.unmount())
+      contenedor.remove()
+    }
+    return contenedor
+  }
+
+  afterEach(() => desmontar?.())
+
+  it('las tablas que empiezan con dataset y arquitectura fijan esas dos columnas', () => {
+    const c = montarVista()
+    const tablas = [...c.querySelectorAll('table')]
+    const consumo = tablas.find((t) => t.textContent!.includes('Corridas con total None'))!
+    const consultas = tablas.find((t) => t.textContent!.includes('Intentos de salida a la red'))!
+    expect(consumo.classList.contains('tabla-ancla')).toBe(true)
+    expect(consultas.classList.contains('tabla-ancla')).toBe(true)
+  })
+
+  it('una tabla con otras columnas iniciales no se ancla', () => {
+    const c = montarVista()
+    const sinAncla = [...c.querySelectorAll('table')].filter(
+      (t) => !t.classList.contains('tabla-ancla'),
+    )
+    for (const t of sinAncla) {
+      const [a, b] = [...t.querySelectorAll('thead th')].map((th) => th.textContent)
+      expect(a === 'Dataset' && b === 'Arquitectura').toBe(false)
+    }
+  })
+
+  it('la tabla de consultas externas no tiene la columna «Nota» y sí un estado corto', () => {
+    const c = montarVista()
+    const t = [...c.querySelectorAll('table')].find((x) =>
+      x.textContent!.includes('Intentos de salida a la red'),
+    )!
+    const cab = [...t.querySelectorAll('thead th')].map((th) => th.textContent)
+    expect(cab).not.toContain('Nota')
+    expect(cab).toContain('Estado')
+    const iEstado = cab.indexOf('Estado')
+    for (const tr of t.querySelectorAll('tbody tr')) {
+      const estado = [...tr.querySelectorAll('td')][iEstado].textContent!
+      expect(estado.length).toBeLessThanOrEqual(12)
+    }
+  })
+
+  it('la tabla de consumo tiene encabezados cortos', () => {
+    const c = montarVista()
+    const t = [...c.querySelectorAll('table')].find((x) =>
+      x.textContent!.includes('Corridas con total None'),
+    )!
+    for (const th of t.querySelectorAll('thead th')) {
+      expect(th.textContent!.length, th.textContent!).toBeLessThanOrEqual(34)
+    }
+  })
+
+  it('las seis tarjetas de integridad están en el mismo contenedor', () => {
+    const c = montarVista()
+    expect(c.querySelectorAll('#integridad .kpis .kpi')).toHaveLength(6)
+  })
+})

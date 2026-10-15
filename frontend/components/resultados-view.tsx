@@ -161,7 +161,16 @@ function TablaDatos({
       </div>
       {tabla.descripcion && <p className="nota-tabla">{tabla.descripcion}</p>}
       <div className="table-scroll">
-        <table className="table">
+        {/* Con «dataset» y «arquitectura» al principio, esas dos columnas se quedan fijas al
+            desplazarse a la derecha: si la tabla es más ancha que la pantalla, siempre se sabe a
+            qué fila pertenece cada cifra. */}
+        <table
+          className={`table${
+            tabla.columnas[0]?.clave === 'dataset' && tabla.columnas[1]?.clave === 'arquitectura'
+              ? ' tabla-ancla'
+              : ''
+          }`}
+        >
           <thead>
             <tr>
               {tabla.columnas.map((c) => (

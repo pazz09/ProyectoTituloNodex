@@ -676,3 +676,46 @@ textarea.field::placeholder { color: var(--text-faint); }
   padding: 16px 18px; font-size: 12.5px; line-height: 1.6; color: var(--text);
   font-family: var(--font-mono); max-height: 460px; overflow: auto;
 }
+
+/* --- Resultados: tarjetas de integridad y tablas anchas (15-oct-2026) ---------------------- */
+
+/* Hasta seis tarjetas se reparten en UNA fila (antes cinco por fila dejaban a la sexta sola). En
+   pantallas angostas bajan de a las que quepan, con un mínimo de 120 px por tarjeta. */
+#integridad .kpis {
+  grid-template-columns: repeat(auto-fit, minmax(max(120px, calc(100% / 6)), 1fr));
+}
+#integridad .kpi { padding: 18px 18px; }
+
+/* Tablas: encabezados que bajan de línea, relleno más ajustado y desplazamiento horizontal
+   visible (sombras laterales) cuando aun así no caben. */
+/* OJO: no usar `overflow-wrap: anywhere` ni `word-break: break-all` acá. Cuentan como puntos de
+   corte al calcular el ancho mínimo y dejan columnas de UNA letra (encabezados y valores en
+   vertical). Los encabezados bajan de línea solo en los espacios. */
+.bloque-tabla .table th {
+  white-space: normal; vertical-align: bottom; line-height: 1.25;
+  font-size: 11.5px; overflow-wrap: normal; word-break: normal;
+}
+.bloque-tabla .table th, .bloque-tabla .table td { padding: 8px 9px; }
+.bloque-tabla .table td { font-size: 12.5px; }
+.bloque-tabla .table td.mono { white-space: nowrap; }
+.bloque-tabla .table.tabla-ancla td:nth-child(2) { white-space: normal; }
+.bloque-tabla .table-scroll {
+  background:
+    linear-gradient(to right, var(--panel) 30%, transparent) 0 0,
+    linear-gradient(to left, var(--panel) 30%, transparent) 100% 0,
+    radial-gradient(farthest-side at 0 50%, rgba(0, 0, 0, .55), transparent) 0 0,
+    radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0, .55), transparent) 100% 0;
+  background-repeat: no-repeat;
+  background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
+  background-attachment: local, local, scroll, scroll;
+  scrollbar-width: thin;
+}
+
+/* Columnas ancla: dataset y arquitectura quedan fijas a la izquierda. */
+.table.tabla-ancla th:nth-child(-n + 2), .table.tabla-ancla td:nth-child(-n + 2) {
+  position: sticky; background: var(--panel); z-index: 1;
+}
+.table.tabla-ancla th:first-child, .table.tabla-ancla td:first-child { left: 0; min-width: 64px; }
+.table.tabla-ancla th:nth-child(2), .table.tabla-ancla td:nth-child(2) {
+  left: 64px; min-width: 104px; box-shadow: 1px 0 0 var(--border);
+}

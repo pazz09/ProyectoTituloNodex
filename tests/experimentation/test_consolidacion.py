@@ -548,12 +548,19 @@ def test_se_escriben_las_tablas_el_contrato_y_la_tabla_14(campana):
 
 
 def test_la_consolidacion_no_toca_las_carpetas_de_resultados_del_repositorio(campana):
-    """Todo ocurre en `tmp_path`: `experiments/metrics` del repo sigue vacía."""
+    """Todo ocurre en `tmp_path`: lo que haya en `experiments/metrics` y `experiments/outputs` del
+    repo (p. ej. los resultados reales del piloto) queda exactamente igual."""
     raiz, _ = campana
-    consolidacion.consolidar(raiz, "sub", CONFIG, ARQUITECTURAS, marca=MARCA)
     repo = Path(__file__).resolve().parents[2] / "experiments"
-    assert not any((repo / "metrics").rglob("*")) if (repo / "metrics").exists() else True
-    assert not (repo / "outputs").exists()
+
+    def instantanea():
+        return {str(p.relative_to(repo)): p.stat().st_mtime_ns
+                for carpeta in ("metrics", "outputs") if (repo / carpeta).exists()
+                for p in (repo / carpeta).rglob("*")}
+
+    antes = instantanea()
+    consolidacion.consolidar(raiz, "sub", CONFIG, ARQUITECTURAS, marca=MARCA)
+    assert instantanea() == antes
 
 
 # --- línea de comandos ---------------------------------------------------------------
@@ -885,7 +892,7 @@ def test_cero_consultas_registradas_es_cero_y_no_se_confunde_con_sin_registro(ca
     con = _fila_ext(resumen, "uwf", "nodex_multiagente", "nvd")
     assert con["n_consultas"] == 0 and con["n_intentos_externos"] == 0       # medido: cero
     sin = _fila_ext(resumen, "bgl", "nodex_multiagente", "nvd")              # nadie guardó nada
-    assert sin["n_consultas"] is None and "sin registro" in sin["nota"]      # no medido: None
+    assert sin["n_consultas"] is None and sin["estado"] == "sin registro"    # no medido: None
 
 
 def test_gemini_directo_y_el_baseline_no_usan_herramientas_y_sus_celdas_no_aplican(campana):
@@ -894,7 +901,7 @@ def test_gemini_directo_y_el_baseline_no_usan_herramientas_y_sus_celdas_no_aplic
     for arq in ("gemini_externo", "baseline_reglas"):
         f = _fila_ext(resumen, "uwf", arq, "abuseipdb")
         assert f["n_consultas"] is None and f["n_intentos_externos"] is None
-        assert f["nota"] == "no usa herramientas externas"
+        assert f["estado"] == "no aplica"
 
 
 def test_el_aviso_cuenta_los_intentos_bloqueados_y_es_informativo(campana):
@@ -917,3 +924,157 @@ def test_la_tabla_de_consultas_externas_se_escribe_como_csv(campana):
     raiz, _ = campana
     destino = consolidacion.consolidar(raiz, "sub", CONFIG, ARQUITECTURAS, marca=MARCA)
     assert (destino / "consultas_externas.csv").is_file()
+
+
+def test_la_tabla_de_consultas_externas_no_lleva_texto_largo_por_fila(campana):
+    """Defecto de la vista: una columna «Nota» con una frase larga partía las celdas y estiraba
+    las filas de NODEX. Cada fila lleva un estado corto; la explicación va en la descripción."""
+    raiz, _ = campana
+    _guardar_consultas(raiz, "uwf_des_visible_0000", "uwf", [_consulta("nvd")])
+    tabla = _consolidar(raiz)["tablas"]["consultas_externas"]
+    claves = [c["clave"] for c in tabla["columnas"]]
+    assert "nota" not in claves and "estado" in claves
+    assert {f["estado"] for f in tabla["filas"]} == {"medido", "no aplica", "sin registro"}
+    assert all(len(f["estado"]) <= 12 for f in tabla["filas"])
+    assert "no aplica" in tabla["descripcion"] and "respaldo local" in tabla["descripcion"]
+
+
+def test_las_etiquetas_de_consumo_son_cortas_y_la_explicacion_va_en_la_descripcion(campana):
+    raiz, _ = campana
+    tabla = _consolidar(raiz)["tablas"]["consumo"]
+    etiquetas = {c["clave"]: c["etiqueta"] for c in tabla["columnas"]}
+    assert etiquetas["n_sin_tokens"] == "Corridas con total None"
+    assert etiquetas["tokens_parciales"].startswith("Tokens parciales")
+    assert all(len(e) <= 34 for e in etiquetas.values()), etiquetas
+    assert "Corridas con total None" in tabla["descripcion"]
+
+
+# --- salud estructural del piloto (solo lee lo guardado) ------------------------------------------
+
+def _salud(raiz):
+    from src.experimentation import salud_piloto
+    _consolidar(raiz)
+    return salud_piloto.analizar(raiz, "sub", CONFIG, ARQUITECTURAS)
+
+
+def _celda(r, arq, ds):
+    return next(x for x in r["resumen"] if x["arquitectura"] == arq and x["dataset"] == ds)
+
+
+def test_la_salud_estructural_tiene_una_fila_por_corrida_y_una_celda_por_arquitectura_y_dataset(campana):
+    raiz, _ = campana
+    r = _salud(raiz)
+    assert len(r["filas"]) == 18                                  # 6 casos × 3 arquitecturas
+    assert {(x["arquitectura"], x["dataset"]) for x in r["resumen"]} == {
+        (a, d) for a in ARQUITECTURAS for d in ("bgl", "uwf")}
+    assert "no es un resultado reportable" in r["aviso"] and "ni mide acierto" in r["aviso"]
+
+
+def test_una_corrida_que_fallo_no_se_cuenta_como_guardada_ni_como_json_valido(campana):
+    raiz, _ = campana
+    g = _celda(_salud(raiz), "gemini_externo", "bgl")
+    assert g["corridas"] == 2 and g["guardadas"] == 1             # bgl_des_natural_0001 reventó
+    assert g["json_valido_n"] == "1/1"                            # el denominador son las guardadas
+
+
+def test_json_valido_solo_se_informa_donde_se_puede_medir(campana):
+    raiz, _ = campana
+    r = _salud(raiz)
+    assert _celda(r, "gemini_externo", "uwf")["json_valido_pct"] == 100.0
+    nodex = _celda(r, "nodex_multiagente", "uwf")
+    assert nodex["json_valido_pct"] is None and nodex["json_valido_n"] is None   # no medido: None
+    assert nodex["proxy_json_valido_pct"] == 100.0                               # el proxy va aparte
+    base = _celda(r, "baseline_reglas", "uwf")
+    assert base["json_valido_pct"] is None and base["proxy_json_valido_pct"] is None
+
+
+def test_el_veredicto_presente_lleva_su_denominador(campana):
+    raiz, _ = campana
+    c = _celda(_salud(raiz), "nodex_multiagente", "uwf")
+    assert c["veredicto_presente_n"] == "4/4" and c["veredicto_presente_pct"] == 100.0
+
+
+def test_d2_y_d3_distinguen_evaluable_no_evaluable_y_no_aplica(campana):
+    raiz, _ = campana
+    r = _salud(raiz)
+    uwf = _celda(r, "nodex_multiagente", "uwf")
+    assert uwf["d2_con_contenido"] == 2 and uwf["d3_con_contenido"] == 1
+    # Estado FINAL (salida cruzada con la referencia): solo los 2 casos con incidente tienen
+    # referencia de reconstrucción; en los 2 normales la dimensión NO APLICA aunque el sistema
+    # haya devuelto eventos (el caso 0002, un falso positivo, los devolvió).
+    assert (uwf["d2_evaluable"], uwf["d2_no_evaluable"], uwf["d2_no_aplica"]) == (1, 1, 2)
+    assert (uwf["d3_evaluable"], uwf["d3_no_evaluable"], uwf["d3_no_aplica"]) == (1, 1, 2)
+    # el caso positivo SIN eventos (falso negativo) es «no evaluable», no un acierto ni un 0
+    bgl = _celda(r, "nodex_multiagente", "bgl")
+    assert bgl["d2_no_aplica"] == 2 and bgl["d3_no_aplica"] == 2  # BGL: no aplica
+
+
+def test_los_uids_inventados_se_cuentan_por_celda_y_solo_para_las_arquitecturas_con_modelo(campana):
+    raiz, _ = campana
+    r = _salud(raiz)
+    assert _celda(r, "gemini_externo", "uwf")["uids_inventados_d2_mayor_que_0"] == 1   # U99
+    assert _celda(r, "nodex_multiagente", "uwf")["uids_inventados_d2_mayor_que_0"] == 0
+    assert _celda(r, "baseline_reglas", "uwf")["uids_inventados_d2_mayor_que_0"] is None
+
+
+def test_el_contador_de_evidencia_invalida_del_sistema_solo_existe_para_nodex(campana):
+    raiz, _ = campana
+    r = _salud(raiz)
+    assert _celda(r, "nodex_multiagente", "uwf")["invalid_uid_contador_mayor_que_0"] == 0
+    assert _celda(r, "gemini_externo", "uwf")["invalid_uid_contador_mayor_que_0"] is None
+
+
+def test_la_matriz_de_confusion_cuenta_los_cuatro_cuadrantes_por_celda(campana):
+    raiz, _ = campana
+    d1 = _celda(_salud(raiz), "nodex_multiagente", "uwf")["d1"]
+    assert (d1["TP"], d1["FP"], d1["FN"], d1["TN"]) == (1, 1, 1, 1) and d1["NA"] == 0
+    assert sum(d1.values()) == 4
+
+
+def test_la_salud_estructural_se_niega_a_correr_sobre_la_particion_de_evaluacion(campana, tmp_path):
+    from src.experimentation import salud_piloto
+    raiz, _ = campana
+    _consolidar(raiz)                      # primero se consolida, como de desarrollo
+    ruta = raiz / "experiments" / "subconjuntos" / "sub.json"
+    datos = json.loads(ruta.read_text(encoding="utf-8"))
+    datos["particion"] = "evaluacion"
+    ruta.write_text(json.dumps(datos), encoding="utf-8")
+    with pytest.raises(ValueError, match="SOLO de casos de desarrollo"):
+        salud_piloto.analizar(raiz, "sub", CONFIG, ARQUITECTURAS)
+
+
+def test_el_modulo_de_salud_no_abre_ground_truth_ni_ejecuta_arquitecturas():
+    import ast
+    import inspect
+    from src.experimentation import salud_piloto
+    arbol = ast.parse(inspect.getsource(salud_piloto))
+    docs = {id(n.body[0].value) for n in ast.walk(arbol)
+            if isinstance(n, (ast.Module, ast.FunctionDef)) and n.body
+            and isinstance(n.body[0], ast.Expr) and isinstance(n.body[0].value, ast.Constant)}
+    cadenas = [n.value for n in ast.walk(arbol) if isinstance(n, ast.Constant)
+               and isinstance(n.value, str) and id(n) not in docs]
+    assert not any("ground_truth" in c for c in cadenas)
+    importados = {n.module for n in ast.walk(arbol) if isinstance(n, ast.ImportFrom)}
+    assert not any(m and "runners" in m for m in importados)
+    assert not any(m and "evaluacion" == m.rsplit(".", 1)[-1] for m in importados)
+
+
+def test_una_salida_sin_veredicto_baja_el_porcentaje_de_veredicto_presente(campana):
+    raiz, _ = campana
+    ident = IdentidadCorrida("uwf_des_visible_0003", "uwf", "nodex_multiagente", 1, CONFIG)
+    ruta = persistencia.rutas(ident, raiz).salida
+    datos = json.loads(ruta.read_text(encoding="utf-8"))
+    datos["salida"]["_meta"]["veredicto_booleano_presente"] = False
+    ruta.write_text(json.dumps(datos), encoding="utf-8")
+    c = _celda(_salud(raiz), "nodex_multiagente", "uwf")
+    assert c["veredicto_presente_n"] == "3/4" and c["veredicto_presente_pct"] == 75.0
+    assert c["proxy_json_valido_pct"] == 75.0           # el proxy también lo refleja
+
+
+def test_el_estado_de_la_salida_se_conserva_aparte_del_estado_final(campana):
+    raiz, _ = campana
+    filas = {f["case_id"]: f for f in _salud(raiz)["filas"] if f["arquitectura"] == "nodex_multiagente"}
+    fp = filas["uwf_des_visible_0002"]           # falso positivo: devolvió eventos pero no hay referencia
+    assert fp["estado_d2_salida"] == "evaluable" and fp["estado_d2"] == "no_aplica"
+    fn = filas["uwf_des_visible_0001"]           # falso negativo: hay referencia pero no devolvió nada
+    assert fn["estado_d2_salida"] == "no_evaluable" and fn["estado_d2"] == "no_evaluable"
