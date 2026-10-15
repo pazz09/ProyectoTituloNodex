@@ -553,7 +553,7 @@ def verificar_configuracion(raiz_repo: Path, ruta_env: Path) -> list[dict]:
                 base, modelo, Path(tmp) / "chroma", Path(tmp) / "ip.json")
             salida = subprocess.run(
                 [sys.executable, "-c", _SCRIPT_CONFIG], cwd=raiz_repo, env=entorno,
-                capture_output=True, text=True, timeout=300)
+                capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=300)
             filas.append(json.loads(salida.stdout.strip().splitlines()[-1]))
     return filas
 
@@ -573,7 +573,7 @@ def _lanzador_real(raiz_repo: Path, base: dict, salida: Path, tmp: Path):
                 [sys.executable, "-m", "src.experimentation.comparacion_modelos",
                  "--trabajar", corrida.modelo, corrida.arquitectura,
                  corrida.dataset, corrida.case_id, str(destino)],
-                cwd=raiz_repo, env=entorno, capture_output=True, text=True,
+                cwd=raiz_repo, env=entorno, capture_output=True, text=True, encoding="utf-8", errors="replace",
                 timeout=TIMEOUT_CORRIDA_S)
             vencio = False
         except subprocess.TimeoutExpired as e:

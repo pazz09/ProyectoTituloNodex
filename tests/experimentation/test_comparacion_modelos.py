@@ -756,3 +756,24 @@ def test_una_falla_de_contenido_del_candidato_hace_que_la_regla_mantenga_el_pro(
     d = cm.resumir(RAIZ, salida)["decision"]
     assert d["resultado_de_la_regla"] == cm.MODELO_ACTUAL
     assert [f["criterio"] for f in d["criterios_fallidos"]] == ["evidencia_valida"]
+
+
+# --- los procesos hijos se leen en UTF-8 -----------------------------------------------
+
+def test_todo_subprocess_que_captura_salida_la_decodifica_en_utf8():
+    """Los hijos escriben UTF-8 (PYTHONIOENCODING). Si el padre usa el códec por
+    omisión de Windows (cp1252), el hilo lector falla con UnicodeDecodeError y se
+    pierde el stderr, justo lo que sirve para diagnosticar una caída."""
+    import ast
+    import inspect
+    from src.experimentation.knowledge import verificar_base
+    for modulo in (cm, verificar_base):
+        arbol = ast.parse(inspect.getsource(modulo))
+        llamadas = [n for n in ast.walk(arbol)
+                    if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute)
+                    and n.func.attr == "run" and getattr(n.func.value, "id", "") == "subprocess"]
+        assert llamadas, modulo.__name__
+        for llamada in llamadas:
+            claves = {k.arg: k.value for k in llamada.keywords}
+            assert "encoding" in claves, f"{modulo.__name__}:{llamada.lineno} sin encoding"
+            assert getattr(claves["encoding"], "value", None) == "utf-8"

@@ -178,7 +178,7 @@ def abrir_con_memoria(raiz_repo: Path, chroma: Path) -> dict:
                    "TRANSFORMERS_OFFLINE": "1", "PYTHONIOENCODING": "utf-8"}
         proceso = subprocess.run(
             [sys.executable, "-c", _SCRIPT_MEMORIA], input=json.dumps(list(CONSULTAS_FIJAS)),
-            cwd=raiz_repo, env=entorno, capture_output=True, text=True, timeout=600)
+            cwd=raiz_repo, env=entorno, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=600)
     for linea in proceso.stdout.splitlines():
         if linea.startswith("RESULTADO_JSON:"):
             return json.loads(linea[len("RESULTADO_JSON:"):])
