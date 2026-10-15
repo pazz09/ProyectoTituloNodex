@@ -3,7 +3,7 @@
   "datos_ficticios": true,
   "config_version": "FICTICIO-no-usar",
   "consolidacion": "20000101T000000Z",
-  "generado_utc": "2026-10-15T03:06:52+00:00",
+  "generado_utc": "2026-10-15T03:46:00+00:00",
   "protocolo_version": "1.0",
   "subconjunto": "sub",
   "particion": "desarrollo",
@@ -31,6 +31,8 @@
     "modelo_principal": "gemini-principal",
     "corridas_con_telemetria_previa_a_d11": 11,
     "corridas_sin_tokens": 0,
+    "corridas_sin_razonamiento": 2,
+    "corridas_sin_version_de_modelo": 0,
     "advertencias": [
       {
         "codigo": "datos_ficticios",
@@ -55,6 +57,12 @@
         "severidad": "media",
         "mensaje": "telemetría tomada antes de integrar D-11; no mezclar con la posterior",
         "n": 11
+      },
+      {
+        "codigo": "razonamiento_no_informado",
+        "severidad": "info",
+        "mensaje": "corridas completas sin tokens de razonamiento informados (no son 0: el proveedor no los entregó)",
+        "n": 2
       }
     ]
   },
@@ -818,9 +826,19 @@
           "tipo": "numero"
         },
         {
+          "clave": "tokens_razonamiento_medios",
+          "etiqueta": "Tokens de razonamiento",
+          "tipo": "numero"
+        },
+        {
           "clave": "tokens_totales_medios",
           "etiqueta": "Tokens totales",
           "tipo": "numero"
+        },
+        {
+          "clave": "versiones_devueltas",
+          "etiqueta": "Versión devuelta por la API",
+          "tipo": "texto"
         },
         {
           "clave": "replan_medio",
@@ -854,7 +872,9 @@
           "llamadas_medias": 0.0,
           "tokens_entrada_medios": null,
           "tokens_salida_medios": null,
+          "tokens_razonamiento_medios": null,
           "tokens_totales_medios": null,
+          "versiones_devueltas": null,
           "replan_medio": null,
           "correcciones_medias": null,
           "n_con_fallback": null,
@@ -870,7 +890,9 @@
           "llamadas_medias": 1.0,
           "tokens_entrada_medios": 300.0,
           "tokens_salida_medios": 100.0,
+          "tokens_razonamiento_medios": 12.0,
           "tokens_totales_medios": 400.0,
+          "versiones_devueltas": "gemini-principal-001",
           "replan_medio": null,
           "correcciones_medias": null,
           "n_con_fallback": 0,
@@ -886,7 +908,9 @@
           "llamadas_medias": 6.0,
           "tokens_entrada_medios": 1000.0,
           "tokens_salida_medios": 200.0,
+          "tokens_razonamiento_medios": null,
           "tokens_totales_medios": 1200.0,
+          "versiones_devueltas": "gemini-principal-001",
           "replan_medio": 1.0,
           "correcciones_medias": 0.0,
           "n_con_fallback": 0,
@@ -902,7 +926,9 @@
           "llamadas_medias": 0.0,
           "tokens_entrada_medios": null,
           "tokens_salida_medios": null,
+          "tokens_razonamiento_medios": null,
           "tokens_totales_medios": null,
+          "versiones_devueltas": null,
           "replan_medio": null,
           "correcciones_medias": null,
           "n_con_fallback": null,
@@ -918,7 +944,9 @@
           "llamadas_medias": 1.0,
           "tokens_entrada_medios": 300.0,
           "tokens_salida_medios": 100.0,
+          "tokens_razonamiento_medios": 12.0,
           "tokens_totales_medios": 400.0,
+          "versiones_devueltas": "gemini-principal-001",
           "replan_medio": null,
           "correcciones_medias": null,
           "n_con_fallback": 0,
@@ -934,7 +962,9 @@
           "llamadas_medias": 6.0,
           "tokens_entrada_medios": 1000.0,
           "tokens_salida_medios": 200.0,
+          "tokens_razonamiento_medios": 40.0,
           "tokens_totales_medios": 1200.0,
+          "versiones_devueltas": "gemini-principal-001; gemini-respaldo-001",
           "replan_medio": 1.0,
           "correcciones_medias": 0.0,
           "n_con_fallback": 1,

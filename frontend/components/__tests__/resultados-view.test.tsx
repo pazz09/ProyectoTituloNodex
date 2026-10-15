@@ -346,3 +346,79 @@ describe('barra lateral', () => {
     contenedor.remove()
   })
 })
+
+describe('Resultados: versión devuelta por la API y tokens de razonamiento', () => {
+  const montarVista = () => {
+    const contenedor = document.createElement('div')
+    document.body.appendChild(contenedor)
+    const raiz = createRoot(contenedor)
+    act(() => raiz.render(<ResultadosContenido {...base} />))
+    desmontar = () => {
+      act(() => raiz.unmount())
+      contenedor.remove()
+    }
+    return contenedor
+  }
+
+  const celdaDe = (c: HTMLElement, dataset: string, arq: string, columna: string) => {
+    const cab = [...c.querySelectorAll('#seccion-11-5 thead th')].map((th) => th.textContent)
+    const fila = [...c.querySelectorAll('#seccion-11-5 tbody tr')].find(
+      (tr) => tr.textContent!.includes(dataset) && tr.textContent!.includes(arq),
+    )!
+    return [...fila.querySelectorAll('td')].map((td) => td.textContent)[cab.indexOf(columna)]
+  }
+
+  afterEach(() => desmontar?.())
+
+  it('la tabla de consumo trae las dos columnas nuevas', () => {
+    const c = montarVista()
+    const cab = [...c.querySelectorAll('#seccion-11-5 thead th')].map((th) => th.textContent)
+    expect(cab).toContain('Tokens de razonamiento')
+    expect(cab).toContain('Versión devuelta por la API')
+  })
+
+  it('muestra el valor informado y — donde el proveedor no lo informó (no 0)', () => {
+    const c = montarVista()
+    expect(celdaDe(c, 'uwf', 'NODEX', 'Tokens de razonamiento')).toBe('40,00')
+    expect(celdaDe(c, 'bgl', 'NODEX', 'Tokens de razonamiento')).toBe('—')
+    expect(celdaDe(c, 'uwf', 'Baseline de reglas', 'Tokens de razonamiento')).toBe('—')
+    expect(celdaDe(c, 'uwf', 'Baseline de reglas', 'Versión devuelta por la API')).toBe('—')
+  })
+
+  it('muestra la versión tal como la devolvió la API, también cuando hubo dos', () => {
+    const c = montarVista()
+    expect(celdaDe(c, 'uwf', 'NODEX', 'Versión devuelta por la API')).toContain(';')
+    expect(celdaDe(c, 'uwf', 'Gemini directo', 'Versión devuelta por la API')).toMatch(/-001$/)
+  })
+
+  it('el gráfico de tokens incluye la serie de razonamiento', () => {
+    const c = montarVista()
+    const leyendas = [...c.querySelectorAll('#seccion-11-5 .grafico-barras svg')]
+      .map((s) => s.textContent)
+      .join(' ')
+    expect(leyendas).toContain('Razonamiento')
+  })
+
+  it('el aviso de razonamiento no informado acompaña a las cifras de consumo', () => {
+    const c = montarVista()
+    expect(c.querySelector('#seccion-11-5 .avisos-integridad')!.textContent).toMatch(
+      /sin tokens de razonamiento/,
+    )
+  })
+
+  it('el CSV de consumo conserva las celdas vacías como vacías', () => {
+    const c = montarVista()
+    const boton = [...c.querySelectorAll('#seccion-11-5 button')].find(
+      (b) => b.textContent!.trim() === 'CSV',
+    )!
+    vi.mocked(descargarTexto).mockClear()
+    act(() => (boton as HTMLButtonElement).click())
+    const contenido = vi.mocked(descargarTexto).mock.calls[0][1] as string
+    const lineas = (contenido as string).replace(/^\uFEFF/, '').trim().split('\r\n')
+    const cab = lineas[0].split(',')
+    const iRaz = cab.indexOf('tokens_razonamiento_medios')
+    expect(iRaz).toBeGreaterThan(-1)
+    const bgl = lineas.find((l) => l.startsWith('bgl,nodex_multiagente'))!.split(',')
+    expect(bgl[iRaz]).toBe('')
+  })
+})

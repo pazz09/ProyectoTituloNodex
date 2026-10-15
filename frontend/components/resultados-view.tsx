@@ -566,6 +566,7 @@ export function ResultadosContenido(p: PropsContenido) {
                       [
                         { clave: 'tokens_entrada_medios', nombre: 'Entrada' },
                         { clave: 'tokens_salida_medios', nombre: 'Salida' },
+                        { clave: 'tokens_razonamiento_medios', nombre: 'Razonamiento' },
                       ],
                       { formato: 'numero', unidad: 'tokens' },
                     )}

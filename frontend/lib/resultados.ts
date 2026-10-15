@@ -62,6 +62,10 @@ export type Integridad = {
   modelo_principal: string | null
   corridas_con_telemetria_previa_a_d11: number
   corridas_sin_tokens: number
+  /** Corridas completas que no informaron tokens de razonamiento (no son 0). */
+  corridas_sin_razonamiento?: number
+  /** Corridas completas sin la versión de modelo que devolvió la API. */
+  corridas_sin_version_de_modelo?: number
   advertencias: Advertencia[]
 }
 
