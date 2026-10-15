@@ -1717,3 +1717,219 @@ en `docs/experimentacion/capturas_piloto_20261015/`. Lo que se ve:
   campaña con la tabla de precios vigente (`experiments/config/precios_modelo.json` sigue vacía:
   falta fecha, fuente y precios); (3) el formulario ciego de la rúbrica humana (hoy los informes
   no ocultan qué arquitectura los produjo).
+
+## 24. Después del piloto (15-oct-2026)
+
+El piloto se acepta como **validación del flujo, no de acierto**. Esta sección reúne lo que se hizo
+a continuación, sin lanzar la campaña final y sin tocar prompts, umbrales ni el código del sistema
+evaluado.
+
+### 24.1 Salud estructural del piloto (solo casos de desarrollo)
+
+Módulo `salud_piloto.py`: solo lee lo guardado (salidas, estado crudo, telemetría y
+`registros.json` de la consolidación); **no abre `ground_truth/`** y se niega a correr sobre la
+partición de evaluación. No mide acierto. Resultado por arquitectura y dataset (8 corridas por
+celda). **D2 y D3 usan el estado FINAL** (la salida cruzada con la referencia), el mismo que usan
+las métricas; el estado «del lado de la salida» se guarda aparte.
+
+| Arq. | Dataset | JSON válido | Veredicto presente | D2 evaluable / no evaluable / no aplica (con contenido) | D3 evaluable / no evaluable / no aplica (con contenido) | `invalid_evidence_uid_count` > 0 | uids inventados (D2) > 0 | D1 TP / FP / FN / TN |
+|---|---|---|---|---|---|---|---|---|
+| Baseline | BGL | n/a | 8/8 | 0 / 0 / 8 (0) | 0 / 0 / 8 (0) | n/a | n/a | 0 / 0 / 4 / 4 |
+| Baseline | HDFS | n/a | 8/8 | 0 / 0 / 8 (0) | 0 / 0 / 8 (0) | n/a | n/a | 0 / 0 / 3 / 5 |
+| Baseline | UWF | n/a | 8/8 | 0 / 0 / 8 (0) | 0 / 0 / 8 (0) | n/a | n/a | 4 / 4 / 0 / 0 |
+| Gemini directo | BGL | 8/8 (100 %) | 8/8 | 0 / 0 / 8 (6) | 0 / 0 / 8 (0) | n/a | 0 | 4 / 3 / 0 / 1 |
+| Gemini directo | HDFS | 8/8 (100 %) | 8/8 | 0 / 0 / 8 (1) | 0 / 0 / 8 (0) | n/a | 0 | 0 / 1 / 3 / 4 |
+| Gemini directo | UWF | 8/8 (100 %) | 8/8 | 4 / 0 / 4 (6) | 2 / 2 / 4 (4) | n/a | 0 | 2 / 2 / 2 / 2 |
+| NODEX | BGL | **no medido** | 8/8 | 0 / 0 / 8 (3) | 0 / 0 / 8 (0) | 0 | 0 | 3 / 0 / 1 / 4 |
+| NODEX | HDFS | **no medido** | 8/8 | 0 / 0 / 8 (2) | 0 / 0 / 8 (0) | 0 | 0 | 0 / 1 / 3 / 4 |
+| NODEX | UWF | **no medido** | 8/8 | 4 / 0 / 4 (8) | 3 / 1 / 4 (6) | 0 | 0 | 3 / 3 / 1 / 1 |
+
+La matriz de confusión de D1 es **solo diagnóstico**, no un resultado. «Con contenido» cuenta salidas
+con eventos o técnicas aunque la dimensión no aplique (D2 y D3 no aplican a BGL ni a HDFS).
+
+**Qué se puede y qué no se puede afirmar de «JSON válido».** Para Gemini directo se midió de verdad
+(su runner parsea la respuesta). Para NODEX el JSON lo valida `llm_json()` en cada nodo y el lanzador del
+piloto **no contaba las respuestas inválidas**: no hay medición directa. Se informa un *proxy* (corrida
+completa y con veredicto: 100 %), que **no es lo mismo**. El baseline no usa el modelo.
+
+**Hallazgos (se reportan, no se corrigen):**
+
+1. **D3 «no evaluable» deja afuera los casos en que el sistema no atribuyó ninguna técnica.** En UWF,
+   Gemini directo tiene 2 de 4 casos con incidente en D3 «no evaluable» y NODEX 1 de 4: son casos en que
+   el sistema no dio ninguna técnica (coinciden con falsos negativos de D1). Hoy esas corridas **salen
+   de la métrica en vez de contar como fallo**: una exhaustividad calculada solo sobre las corridas
+   evaluables está inflada y premia al sistema que se calla. Es una decisión documentada del adaptador
+   («si el sistema no produjo nada que puntuar, la dimensión es `no_evaluable`»), no un error de
+   implementación, pero es una decisión que sesga. *Qué cambiaría:* en el evaluador (no en el sistema),
+   puntuar la ausencia de atribución en un caso con referencia como fallo (exhaustividad 0 para ese
+   caso), o como mínimo **publicar la cobertura** («3 de 4 evaluables») junto a cada cifra. *Qué obligaría
+   a repetir:* nada de lo ya corrido; se reevalúan las salidas guardadas, sin llamar al modelo.
+2. **Ninguna arquitectura detecta ninguno de los 3 casos anómalos de HDFS** (TP = 0 y FN = 3 en las tres).
+   No es un defecto confirmado: HDFS es auxiliar (D-7) y el dato no basta para saber si es un límite de
+   los sistemas o del armado de los casos. *Qué haría:* revisar a mano esos 3 casos antes de usar HDFS
+   para algo. No obliga a repetir.
+3. **El baseline predice «malicioso» en los 8 casos de UWF** (4 falsos positivos): responde otra
+   pregunta (ya declarado en 11.6). En BGL y HDFS predice «benigno» en los 16.
+4. **Gemini directo sobre-predice en BGL** (7 de 8 «maligno», 3 falsos positivos de 4 negativos) y
+   devuelve eventos en BGL y HDFS aunque D2 no aplica (6/8 y 1/8): límite conocido del prompt (20.9).
+5. **Cero evidencia inválida** en todas las celdas, tanto por el contador del sistema (NODEX) como por
+   los uids inventados que detecta la evaluación en D2.
+6. **Para la campaña final conviene medir el JSON de NODEX:** agregar al lanzador el contador de
+   respuestas `json_invalido` de `llm_json` (ya existe en la comparación de modelos). Es herramienta,
+   no sistema evaluado.
+
+Nada de lo anterior obliga a repetir el piloto.
+
+### 24.2 Política de consultas externas (NVD y AbuseIPDB): PROPUESTA, pendiente de confirmación
+
+**Fracción de las IPs consultadas a AbuseIPDB que no son públicas** (RFC 1918, loopback, link-local,
+multicast, IPv6 no global, etc.; un IPv6 global cuenta como público):
+
+| Dataset | Consultas | IPs únicas | No públicas (consultas) | No públicas (IPs únicas) | IPs no públicas que el respaldo puntúa como públicas |
+|---|---|---|---|---|---|
+| BGL | 2 | 1 | **2 (100 %)** | 1 de 1 | 0 |
+| HDFS | 43 | 41 | **43 (100 %)** | 41 de 41 | 0 |
+| UWF | 158 | 50 | **61 (38,6 %)** | 15 de 50 (30 %) | **13** |
+| **Total** | **203** | | **106 (52,2 %)** | | |
+
+Todas las consultas de BGL y HDFS eran a direcciones privadas, que no tienen reputación pública. En UWF
+hubo 23 consultas RFC 1918, 31 IPv6 no global, 6 multicast y 1 loopback.
+
+**Qué contiene exactamente el respaldo local** (leído del código por `analisis_ips.descripcion_del_respaldo`):
+
+- **AbuseIPDB** (`check_ip_reputation`, rama sin servicio): **no tiene fuente, fecha ni cobertura
+  declaradas; es una heurística escrita en el código** (viene de la migración del prototipo, 1-sep-2026).
+  Una sola regla: si la dirección empieza con `10.`, `192.168.`, `172.16.` o `127.` es privada (score 0,
+  «limpio»); **cualquier otra cadena es pública con score 50**, y 50 ≥ `SCORE_SOSPECHOSO` (25) la clasifica como
+  **«sospechoso»**. Límites: `172.16.` cubre solo 172.16.x.x (el rango real llega a 172.31); no reconoce IPv6,
+  169.254, multicast ni 100.64/10; no distingue una IP pública de otra.
+- **NVD** (`query_cve`, catálogo `_CVE_LOCAL`): **sin fuente ni fecha; tres entradas escritas a mano**
+  (`openssh`, `apache`, `sql`). Una palabra clave que contenga alguna devuelve su entrada; cualquier otra,
+  lista vacía. En el piloto NODEX no consultó NVD nunca.
+
+**Propuesta (a confirmar):** la campaña final usa el **respaldo local**, y el informe declara que **NVD y
+AbuseIPDB no forman parte de la medición**. Matices que conviene tener presentes antes de confirmar:
+
+1. **No es «igual para todas las arquitecturas»:** solo NODEX usa herramientas. Gemini directo y el
+   baseline no reciben reputación de IP. La declaración correcta es «NODEX recibe un respaldo local fijo;
+   las otras no usan herramientas externas».
+2. **El respaldo no es neutro:** toda IP pública recibe score 50 («sospechoso») y toda IP privada con
+   prefijo conocido, «limpio». NODEX recibe, entonces, una señal de reputación que es una función de la
+   forma de la dirección. En BGL y HDFS (100 % privadas) la señal es casi constante; en UWF distingue
+   «interna» de «externa». No hay evidencia de que esto empuje las predicciones (en UWF NODEX tuvo 3 falsos
+   positivos de 4 negativos), pero tampoco se descartó.
+3. **13 IPs no públicas de UWF se puntúan como públicas** por los límites del respaldo (p. ej. 172.28.x.x,
+   multicast, fe80::).
+4. La alternativa (consultas reales congeladas en una caché, `POLITICA_RECURSOS_EXTERNOS`) daría datos
+   reales, pero las IPs privadas seguirían sin reputación y hay que congelar la caché en un paso aparte.
+
+### 24.3 Precios y costos
+
+`experiments/config/precios_modelo.json` (esquema 2.0, con vigencias) para `gemini-3.8-flash`, en USD por
+millón de tokens, **la salida incluye el razonamiento**:
+
+| Vigencia | Entrada | Salida (con razonamiento) |
+|---|---|---|
+| hasta el 31-dic-2026 | 0,75 | 3,75 |
+| desde el 1-ene-2027 | 1,50 | 7,50 |
+
+Fuente: <https://ai.google.dev/gemini-api/docs/pricing>, **consultada el 15-oct-2026**. Los precios
+coinciden con los indicados por el responsable. **Nota sobre la fecha de la fuente:** el responsable indica
+que la página no muestra fecha de actualización; la lectura automática del 15-oct-2026 mostró «Last updated
+2026-10-15 UTC». No coinciden: verificar a mano antes de presupuestar.
+
+**Costo real del piloto** (48 corridas con LLM, precios vigentes el 15-oct-2026): **USD 1,5754**
+(entrada 1.055.970 × 0,75/M + salida y razonamiento 208.900 × 3,75/M). Por dataset: BGL 0,225, HDFS 0,192, UWF
+1,158. Por corrida: BGL 0,011 (Gemini) / 0,017 (NODEX); HDFS 0,006 / 0,018; UWF 0,065 / 0,079.
+
+**Estimación de la campaña final** (BGL 62 + UWF 80 casos, N=3, NODEX y Gemini directo; el baseline no
+se presupuesta). **Orden de magnitud, no un presupuesto.** Base: la media de las 8 corridas por celda del
+piloto (mejor que una corrida por celda, pero siguen siendo 8 casos de desarrollo):
+
+| Celda | Corridas | Tokens/corrida | Tokens | USD hasta 2026 | USD desde 2027 |
+|---|---|---|---|---|---|
+| BGL · NODEX | 186 | 7.771 | 1,45 M | 3,19 | 6,38 |
+| BGL · Gemini directo | 186 | 5.135 | 0,96 M | 2,04 | 4,08 |
+| UWF · NODEX | 240 | 75.119 | 18,03 M | 19,04 | 38,08 |
+| UWF · Gemini directo | 240 | 57.711 | 13,85 M | 15,69 | 31,39 |
+| **Total** | 852 | | **34,3 M** | **≈ 40** | **≈ 80** |
+
+Con la medición previa de una corrida por celda el total sale 33,4 M de tokens (USD 40,5 / 80,9): coincide
+en orden de magnitud. **HDFS aparte** (no está en el subconjunto de evaluación; 100 casos de evaluación en
+el manifiesto, N=1, hipotético): ≈ 1,24 M de tokens, USD 2,41 (hasta 2026) o 4,81 (desde 2027). Lo que más
+mueve el total es UWF con NODEX (la media de llamadas varió entre 5 y 13) y la fecha de la campaña: **el
+precio se duplica el 1-ene-2027.**
+
+### 24.4 Correcciones de la vista «Resultados» (los tres defectos)
+
+Revisadas en Chrome real contra la API real, con mediciones (no solo capturas):
+
+1. **Tarjeta de fallback** en una segunda fila: las seis tarjetas de integridad ahora caben en **una sola
+   fila** (medido: 1 fila de 6).
+2. **Tablas más anchas que la pantalla:** encabezados que bajan de línea, relleno más ajustado, columnas
+   ancla (dataset y arquitectura quedan fijas al desplazarse) y sombras laterales que indican que hay más.
+   La tabla de consultas externas **cabe entera** (885 px de 885). La de consumo (18 columnas) sigue siendo
+   más ancha que el panel (1.372 px de 885 visibles) y se desplaza con las columnas ancla; no se partió en
+   dos tablas para no cambiar su CSV.
+3. **Columna «Nota»** de la tabla de consultas: reemplazada por «Estado» (`medido` / `no aplica` / `sin
+   registro`); el texto largo pasó a la descripción de la tabla. Las filas de NODEX pasaron de ~185 px a
+   ≤ 57 px.
+
+**Error propio detectado al mirar la captura:** una primera versión del arreglo usó `overflow-wrap:
+anywhere`, que dejó columnas de **un carácter de ancho** (encabezados y «gemini-3.8-flash» en vertical) aunque
+«cabían». Las pruebas de estilo no lo vieron; la captura sí. Se corrigió (los encabezados bajan solo en los
+espacios) y una prueba nueva prohíbe `anywhere` y `break-all` en las reglas de tablas. Lección: una prueba
+de CSS no sustituye mirar el resultado.
+
+### 24.5 Formulario ciego de la rúbrica humana (D-4)
+
+`rubrica_ciega.py`. Escala 0–3 por criterio (los cinco de la rúbrica), dos evaluadores, 12 casos (6 BGL +
+6 UWF, `experiments/subconjuntos/rubrica.json`) × 2 arquitecturas = 24 reportes = 48 evaluaciones.
+
+- **Ciego:** los reportes salen de una plantilla común, se redactan los nombres de arquitecturas y modelos y
+  se **audita** que no quede ninguno (si queda, no se arma el paquete). Cada reporte se identifica por su
+  posición (R01…R24); la correspondencia con caso y arquitectura está en una clave secreta aparte.
+- **Orden aleatorio con semilla registrada:** cada evaluador tiene su orden (`Random(semilla:evaluador)`).
+  La semilla va en la clave; en el paquete solo va un compromiso (hash), porque conocerla permitiría
+  reconstruir qué reporte es cuál.
+- **Evaluadores independientes:** un HTML autocontenido por evaluador con solo sus reportes; exporta un JSON
+  propio y no deja exportar con puntajes incompletos. La importación exige un archivo de cada evaluador y
+  rechaza puntajes fuera de la escala, repetidos, incompletos o de otro paquete.
+- **Concordancia sin kappa:** acuerdo exacto, acuerdo hasta un nivel y diferencia absoluta media (más los
+  desacuerdos de 2 niveles o más, listados). Escribe `puntajes.csv` en el formato que ya lee el consolidador.
+- **No incluye ninguna salida de la campaña:** recibe los reportes armados; las pruebas usan reportes
+  ficticios. No lee `ground_truth/` (los evaluadores deben ver el caso y su referencia: quien arme el paquete
+  decide el contexto, y habrá que hacerlo por un camino autorizado).
+- **Verificado en Chrome real** con reportes ficticios: abre, rechaza exportar incompleto, se llena con clics,
+  conserva las respuestas al recargar, exporta, y la importación desciega y calcula la concordancia. Encontré y
+  corregí un defecto: la columna del nivel 3 quedaba fuera de pantalla (ahora los cuatro niveles caben a 1.100 y
+  a 420 px).
+
+### 24.6 Archivo del piloto: «piloto, no reportable»
+
+Copia (no mueve) de lo que produjo `piloto-flash38-20261015` a
+`experiments/piloto_no_reportable/piloto-flash38-20261015/`, con `MANIFIESTO.json` (config_version, huella
+`8be17560…`, commit `fbeeba6`, árbol limpio al congelar, SHA-256 de cada archivo) y `LEEME.txt`: 463 archivos, 4,6 MB,
+hashes verificados. Los originales siguen en `experiments/<carpeta>/`.
+
+### 24.7 Para lanzar la campaña final falta
+
+1. **Decisiones tuyas:** la política de NVD y AbuseIPDB (24.2) y si se archiva el piloto en git (24.6).
+2. **Decidir qué se hace con D3/D2 «no evaluable»** (hallazgo 1 de 24.1) **antes** de ver resultados de la campaña.
+3. **Medir el JSON de NODEX** (contador de `llm_json` en el lanzador).
+4. **Congelar un `config_version` nuevo** (el del piloto no se reutiliza) sobre un árbol limpio, con los
+   prompts y el código tal como quedarán, y `--verificar-config`.
+5. **Confirmar que las particiones de evaluación no se han visto** (evidencia abajo) y que el subconjunto
+   `evaluacion` (62 + 80 casos) es el que se corre.
+6. **Presupuesto** con la tabla de precios verificada y la fecha prevista de la campaña (el precio se duplica
+   el 1-ene-2027).
+7. **Rúbrica humana:** dos evaluadores, y un camino autorizado para darles el caso y su referencia.
+8. **Tu autorización explícita.**
+
+**Evidencia sobre las particiones de evaluación** (no prueba que nadie las haya abierto a mano): el
+subconjunto del piloto es 100 % de desarrollo (0 casos de evaluación); ninguno de los 288 archivos de corridas
+menciona un caso de evaluación; no hay cambios sin commitear en `cases/`, `ground_truth/`, `manifests/` ni
+`subconjuntos/`; y la referencia solo la lee `evaluacion.py`, que en el piloto abrió solo las de los 24 casos
+del subconjunto. **Divulgación:** durante esta preparación se leyeron metadatos de evaluación, no su
+contenido: los ids de `rubrica.json` y `evaluacion.json` y los conteos agregados de los manifiestos (para
+estimar costos y armar el formulario). No se abrió ningún caso ni referencia de evaluación.
