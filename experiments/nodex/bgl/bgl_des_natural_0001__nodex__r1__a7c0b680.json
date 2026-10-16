@@ -1,0 +1,70 @@
+{
+  "case_id": "bgl_des_natural_0001",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "bgl_des_natural_0001__nodex__r1__a7c0b680",
+  "salida": {
+    "case_id": "bgl_des_natural_0001",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "hardware_cache_parity_error",
+        "evidence_uids": [
+          "log_record_000001",
+          "log_record_000002",
+          "log_record_000003",
+          "log_record_000004",
+          "log_record_000005",
+          "log_record_000006",
+          "log_record_000007",
+          "log_record_000008",
+          "log_record_000009",
+          "log_record_000010",
+          "log_record_000011",
+          "log_record_000012",
+          "log_record_000013",
+          "log_record_000014",
+          "log_record_000015",
+          "log_record_000016",
+          "log_record_000017",
+          "log_record_000018",
+          "log_record_000019",
+          "log_record_000020"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos eventos analizados corresponden a registros operativos de sistema y hardware (específicamente logs RAS de kernel reportando 'instruction cache parity error corrected'), no existiendo evidencia de actividad maliciosa, intrusión o compromiso de seguridad relacionado con la IP privada 172.16.96.116. Se clasifica como falso positivo de seguridad / actividad benigna de infraestructura. No se requieren medidas de contención, únicamente seguimiento por parte del equipo de hardware/sistemas si los errores de paridad persisten.\n\n## Evaluación del auditor\n\nLos registros reportan eventos de hardware corregidos (errores de paridad en caché de instrucciones) capturados por subsistemas RAS/MCE del kernel. Constituyen una anomalía operativa a nivel de infraestructura física/hardware, pero no presentan indicios de compromiso de seguridad ni actividad maliciosa.\n\n## Comandos de mitigación propuestos\n\n- dmesg -T | grep -iE 'parity error|cache'\n- journalctl -k -b | grep -iE 'ras|mce|parity'\n- which ras-mc-ctl >/dev/null 2>&1 && ras-mc-ctl --errors || true\n- which ipmitool >/dev/null 2>&1 && ipmitool sel elist || true"
+    },
+    "_meta": {
+      "run_id": "bgl_des_natural_0001__nodex__r1__a7c0b680",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_des_natural_0001__nodex__r1__a7c0b680.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:17:27+00:00"
+  }
+}

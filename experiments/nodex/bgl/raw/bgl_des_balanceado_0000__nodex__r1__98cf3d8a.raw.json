@@ -1,0 +1,470 @@
+{
+  "case_id": "bgl_des_balanceado_0000",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "bgl_des_balanceado_0000__nodex__r1__98cf3d8a",
+  "estado_crudo": {
+    "resumen_logs": {
+      "formato_detectado": "text",
+      "total_lineas": 20,
+      "servicios": {
+        "desconocido": 20
+      },
+      "eventos": {
+        "evento_normal": 20
+      },
+      "ventana_temporal": {
+        "inicio": null,
+        "fin": null
+      },
+      "n_ips_distintas": 1,
+      "ips_distintas": [
+        "172.16.96.116"
+      ],
+      "por_ip": {
+        "172.16.96.116": {
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [],
+          "n_eventos": 1,
+          "n_como_origen": 1,
+          "n_como_destino": 0
+        }
+      },
+      "usuarios": {},
+      "n_usuarios_distintos": 0,
+      "codigos_respuesta": {},
+      "entidades": [
+        {
+          "ip": "172.16.96.116",
+          "n_eventos": 1,
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [],
+          "n_como_origen": 1,
+          "n_como_destino": 0
+        }
+      ],
+      "cronologia": [],
+      "cronologia_omitidos": 0,
+      "raw_procedencia": {
+        "sha256": "3dc27fd49507fc94ad719273814ddbae57e9058044b185f0dc84513aebde530a",
+        "lineas": 20,
+        "bytes": 3479
+      },
+      "reputacion_ips": {
+        "172.16.96.116": {
+          "fuente": "fallback",
+          "ip": "172.16.96.116",
+          "score": 0,
+          "nota": "IP privada/local",
+          "categoria": "limpio"
+        }
+      }
+    },
+    "preprocessing_metadata": {
+      "schema_version": "2.0",
+      "total_lineas_fisicas": 20,
+      "total_eventos": 20,
+      "decoder_distribution": {
+        "text": 20
+      },
+      "product_distribution": {},
+      "vendor_distribution": {},
+      "version_distribution": {},
+      "protocol_distribution": {},
+      "profile_distribution": {},
+      "severity_distribution": {},
+      "event_categories": {},
+      "event_outcomes": {},
+      "entities": {
+        "ip": {
+          "172.16.96.116": 1
+        }
+      },
+      "time_window": {
+        "inicio": null,
+        "fin": null
+      },
+      "parsing": {
+        "parsed_events": 0,
+        "fallback_events": 20,
+        "coverage": 0.0
+      },
+      "segments": [
+        {
+          "index": 0,
+          "decoder": "text",
+          "line_start": 1,
+          "line_end": 20,
+          "n_records": 20,
+          "confidence": 0.1,
+          "decoder_inicial": "text",
+          "confidence_inicial": 0.1,
+          "decoder_distribution": {
+            "text": 20
+          },
+          "context": {}
+        }
+      ],
+      "entities_resumen": {
+        "ip": 1
+      },
+      "config": {
+        "LOG_DETECTION_CHUNK_SIZE": 50,
+        "LOG_ENABLE_MULTILINE": true,
+        "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+        "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+        "LOG_MAX_EVENTS": 100000,
+        "LOG_MAX_FILE_BYTES": 52428800,
+        "LOG_MAX_RAW_SAMPLES": 20,
+        "LOG_MAX_UNMAPPED_FIELDS": 100,
+        "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+        "LOG_PARSING_MODE": "hybrid",
+        "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+        "LOG_PRESERVE_RAW": true
+      }
+    },
+    "parsing_warnings": [],
+    "raw_samples": [
+      {
+        "decoder": "text",
+        "texto": "1129456912 2005.10.16 R24-M0-N4-I:J18-U01 2005-10-16-03.01.52.266920 R24-M0-N4-I:J18-U01 RAS KERNEL INFO ciod: generated 58 core files for program /home/spelce1/HPCC_IBM/Urgent/COP/64K/opt_co_dc.rts"
+      }
+    ],
+    "evidencia_logs": [
+      {
+        "uid": "log_record_000001",
+        "record_number": 1,
+        "line_start": 1,
+        "line_end": 1,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000002",
+        "record_number": 2,
+        "line_start": 2,
+        "line_end": 2,
+        "timestamp": null,
+        "source_ip": "172.16.96.116"
+      },
+      {
+        "uid": "log_record_000003",
+        "record_number": 3,
+        "line_start": 3,
+        "line_end": 3,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000004",
+        "record_number": 4,
+        "line_start": 4,
+        "line_end": 4,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000005",
+        "record_number": 5,
+        "line_start": 5,
+        "line_end": 5,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000006",
+        "record_number": 6,
+        "line_start": 6,
+        "line_end": 6,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000007",
+        "record_number": 7,
+        "line_start": 7,
+        "line_end": 7,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000008",
+        "record_number": 8,
+        "line_start": 8,
+        "line_end": 8,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000009",
+        "record_number": 9,
+        "line_start": 9,
+        "line_end": 9,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000010",
+        "record_number": 10,
+        "line_start": 10,
+        "line_end": 10,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000011",
+        "record_number": 11,
+        "line_start": 11,
+        "line_end": 11,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000012",
+        "record_number": 12,
+        "line_start": 12,
+        "line_end": 12,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000013",
+        "record_number": 13,
+        "line_start": 13,
+        "line_end": 13,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000014",
+        "record_number": 14,
+        "line_start": 14,
+        "line_end": 14,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000015",
+        "record_number": 15,
+        "line_start": 15,
+        "line_end": 15,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000016",
+        "record_number": 16,
+        "line_start": 16,
+        "line_end": 16,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000017",
+        "record_number": 17,
+        "line_start": 17,
+        "line_end": 17,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000018",
+        "record_number": 18,
+        "line_start": 18,
+        "line_end": 18,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000019",
+        "record_number": 19,
+        "line_start": 19,
+        "line_end": 19,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000020",
+        "record_number": 20,
+        "line_start": 20,
+        "line_end": 20,
+        "timestamp": null
+      }
+    ],
+    "evidencia_logs_omitidos": 0,
+    "eventos_reconstruidos": [
+      {
+        "event_id": "event_001",
+        "evidence_uids": [
+          "log_record_000001",
+          "log_record_000002"
+        ],
+        "timestamp": null,
+        "event_type": "process_crash",
+        "description": "Fallo en la ejecución del binario opt_co_dc.rts con generación de múltiples archivos core dump en el entorno HPC.",
+        "confidence": null
+      }
+    ],
+    "secuencia_temporal": [],
+    "tecnicas_atribuidas": [],
+    "invalid_evidence_uid_count": 0,
+    "d11_warnings": [],
+    "telemetry": {
+      "llm_call_count": 5,
+      "input_tokens": 4100,
+      "output_tokens": 973,
+      "total_tokens": 7879,
+      "execution_time": 38.97265,
+      "replan_count": 0,
+      "intentos_correccion": 1,
+      "invalid_evidence_uid_count": 0,
+      "d11_warning_count": 0,
+      "llm_calls": [
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 667,
+          "output_tokens": 298,
+          "total_tokens": 1428,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 463,
+          "duration_s": 7.382,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 843,
+          "output_tokens": 200,
+          "total_tokens": 1618,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 575,
+          "duration_s": 7.936,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 250,
+          "output_tokens": 60,
+          "total_tokens": 450,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 140,
+          "duration_s": 5.143,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 203,
+          "output_tokens": 109,
+          "total_tokens": 1317,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 1005,
+          "duration_s": 10.357,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 2137,
+          "output_tokens": 306,
+          "total_tokens": 3066,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 623,
+          "duration_s": 8.092,
+          "error": null
+        }
+      ]
+    },
+    "firma": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+    "plan": {
+      "plan_version": 1,
+      "objetivo": "Analizar los registros en texto no estructurado para clasificar la actividad de la IP interna 172.16.96.116 y determinar si existen indicios de compromiso o anomalías operacionales.",
+      "pasos": [
+        {
+          "id": 1,
+          "accion": "triage",
+          "objetivo": "Examinar el contenido en texto libre para decodificar los eventos, identificar el tipo de servicio involucrado y evaluar si representan actividad maliciosa o benigna de la IP 172.16.96.116.",
+          "estado": "ejecutado"
+        },
+        {
+          "id": 2,
+          "accion": "mitigacion",
+          "objetivo": "Definir recomendaciones de contención o ajustes en las reglas de registro y monitoreo basadas en los hallazgos del análisis de texto.",
+          "estado": "ejecutado"
+        }
+      ],
+      "criterios_finalizacion": [
+        "Clasificación completa del contenido de los eventos no estructurados.",
+        "Determinación del nivel de riesgo asociado a la IP 172.16.96.116.",
+        "Entrega de recomendaciones de mitigación o mejora en la ingesta de logs."
+      ]
+    },
+    "plan_objetivo": "Analizar los registros en texto no estructurado para clasificar la actividad de la IP interna 172.16.96.116 y determinar si existen indicios de compromiso o anomalías operacionales.",
+    "paso_actual": 2,
+    "historial_ejecucion": [
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_planificador",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "plan v1, 2 pasos: ['triage', 'mitigacion']"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 1,
+        "nodo": "agente_analista_triage",
+        "accion": "triage",
+        "estado": "ejecutado",
+        "resumen": "diagnóstico producido"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_selector_herramientas",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "usar_cve=False"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 2,
+        "nodo": "agente_ingeniero_mitigacion",
+        "accion": "mitigacion",
+        "estado": "ejecutado",
+        "resumen": "5 comandos propuestos"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "tool_validar_comandos",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "comandos válidos"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_auditor_final",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "confianza=0.9 cobertura_suficiente=True"
+      }
+    ],
+    "desviaciones_plan": [],
+    "historial_planes": [],
+    "replan_count": 0,
+    "diagnostico": "Los eventos corresponden a registros de sistema/núcleo de un entorno de computación de alto rendimiento (HPC / BlueGene RAS logs), registrando la generación de archivos core dump ('generated 58 core files') asociados a la ejecución del programa '/home/spelce1/HPCC_IBM/Urgent/COP/64K/opt_co_dc.rts'. No se observan indicios de compromiso de seguridad, accesos no autorizados ni actividad maliciosa atribuible a la IP 172.16.96.116; la actividad constituye una anomalía estrictamente operacional ligada al fallo de un proceso de software.",
+    "necesita_rag": false,
+    "usar_cve": false,
+    "razon_seleccion": "El diagnóstico confirma que se trata de un fallo operacional interno (core dumps de una aplicación en entorno HPC) y descarta cualquier indicio de ataque, compromiso o vulnerabilidad de seguridad explotable.",
+    "contexto_rag": [],
+    "tecnicas_mitre": [],
+    "cves_encontrados": [],
+    "comandos_mitigacion": [
+      "df -h /home/spelce1",
+      "find /home/spelce1/HPCC_IBM/Urgent/COP/64K/ -maxdepth 1 -name 'core*' -ls",
+      "coredumpctl list --no-legend | tail -n 20",
+      "dmesg -T | grep -E -i 'segfault|trap|killed process' | tail -n 20",
+      "systemctl status systemd-coredump.socket"
+    ],
+    "comandos_validos": true,
+    "motivos_rechazo": [],
+    "intentos_correccion": 1,
+    "confianza": 0.9,
+    "hay_incidente": false,
+    "hay_anomalia": true,
+    "evaluacion_auditor": "El diagnóstico es correcto. Los registros reflejan la terminación anormal y generación de volcados de memoria (core dumps) de una aplicación en un entorno HPC (BlueGene), lo cual representa una anomalía exclusivamente operativa y de estabilidad de software, sin indicios de actividad maliciosa ni compromiso de seguridad.",
+    "cobertura_auditor": true,
+    "cobertura_suficiente": true,
+    "motivo_replanificacion": "",
+    "requiere_replanificacion": false,
+    "_firma": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+    "_error_api": null,
+    "requiere_revision_humana": false,
+    "output_contract_version": "d11-v1"
+  }
+}

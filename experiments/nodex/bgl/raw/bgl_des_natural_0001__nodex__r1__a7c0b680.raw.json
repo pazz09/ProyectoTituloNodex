@@ -1,0 +1,488 @@
+{
+  "case_id": "bgl_des_natural_0001",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "bgl_des_natural_0001__nodex__r1__a7c0b680",
+  "estado_crudo": {
+    "resumen_logs": {
+      "formato_detectado": "text",
+      "total_lineas": 20,
+      "servicios": {
+        "desconocido": 20
+      },
+      "eventos": {
+        "evento_normal": 20
+      },
+      "ventana_temporal": {
+        "inicio": null,
+        "fin": null
+      },
+      "n_ips_distintas": 1,
+      "ips_distintas": [
+        "172.16.96.116"
+      ],
+      "por_ip": {
+        "172.16.96.116": {
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [],
+          "n_eventos": 2,
+          "n_como_origen": 2,
+          "n_como_destino": 0
+        }
+      },
+      "usuarios": {},
+      "n_usuarios_distintos": 0,
+      "codigos_respuesta": {},
+      "entidades": [
+        {
+          "ip": "172.16.96.116",
+          "n_eventos": 2,
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [],
+          "n_como_origen": 2,
+          "n_como_destino": 0
+        }
+      ],
+      "cronologia": [],
+      "cronologia_omitidos": 0,
+      "raw_procedencia": {
+        "sha256": "3a18aafbc977b081386316ebb50a7302358c5d19e563ca30232d9434bdcb0310",
+        "lineas": 20,
+        "bytes": 2826
+      },
+      "reputacion_ips": {
+        "172.16.96.116": {
+          "fuente": "fallback",
+          "ip": "172.16.96.116",
+          "score": 0,
+          "nota": "IP privada/local",
+          "categoria": "limpio"
+        }
+      }
+    },
+    "preprocessing_metadata": {
+      "schema_version": "2.0",
+      "total_lineas_fisicas": 20,
+      "total_eventos": 20,
+      "decoder_distribution": {
+        "text": 20
+      },
+      "product_distribution": {},
+      "vendor_distribution": {},
+      "version_distribution": {},
+      "protocol_distribution": {},
+      "profile_distribution": {},
+      "severity_distribution": {},
+      "event_categories": {},
+      "event_outcomes": {},
+      "entities": {
+        "ip": {
+          "172.16.96.116": 2
+        }
+      },
+      "time_window": {
+        "inicio": null,
+        "fin": null
+      },
+      "parsing": {
+        "parsed_events": 0,
+        "fallback_events": 20,
+        "coverage": 0.0
+      },
+      "segments": [
+        {
+          "index": 0,
+          "decoder": "text",
+          "line_start": 1,
+          "line_end": 20,
+          "n_records": 20,
+          "confidence": 0.1,
+          "decoder_inicial": "text",
+          "confidence_inicial": 0.1,
+          "decoder_distribution": {
+            "text": 20
+          },
+          "context": {}
+        }
+      ],
+      "entities_resumen": {
+        "ip": 1
+      },
+      "config": {
+        "LOG_DETECTION_CHUNK_SIZE": 50,
+        "LOG_ENABLE_MULTILINE": true,
+        "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+        "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+        "LOG_MAX_EVENTS": 100000,
+        "LOG_MAX_FILE_BYTES": 52428800,
+        "LOG_MAX_RAW_SAMPLES": 20,
+        "LOG_MAX_UNMAPPED_FIELDS": 100,
+        "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+        "LOG_PARSING_MODE": "hybrid",
+        "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+        "LOG_PRESERVE_RAW": true
+      }
+    },
+    "parsing_warnings": [],
+    "raw_samples": [
+      {
+        "decoder": "text",
+        "texto": "1117838570 2005.06.03 R02-M1-N0-C:J12-U11 2005-06-03-15.42.50.675872 R02-M1-N0-C:J12-U11 RAS KERNEL INFO instruction cache parity error corrected"
+      }
+    ],
+    "evidencia_logs": [
+      {
+        "uid": "log_record_000001",
+        "record_number": 1,
+        "line_start": 1,
+        "line_end": 1,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000002",
+        "record_number": 2,
+        "line_start": 2,
+        "line_end": 2,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000003",
+        "record_number": 3,
+        "line_start": 3,
+        "line_end": 3,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000004",
+        "record_number": 4,
+        "line_start": 4,
+        "line_end": 4,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000005",
+        "record_number": 5,
+        "line_start": 5,
+        "line_end": 5,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000006",
+        "record_number": 6,
+        "line_start": 6,
+        "line_end": 6,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000007",
+        "record_number": 7,
+        "line_start": 7,
+        "line_end": 7,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000008",
+        "record_number": 8,
+        "line_start": 8,
+        "line_end": 8,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000009",
+        "record_number": 9,
+        "line_start": 9,
+        "line_end": 9,
+        "timestamp": null,
+        "source_ip": "172.16.96.116"
+      },
+      {
+        "uid": "log_record_000010",
+        "record_number": 10,
+        "line_start": 10,
+        "line_end": 10,
+        "timestamp": null,
+        "source_ip": "172.16.96.116"
+      },
+      {
+        "uid": "log_record_000011",
+        "record_number": 11,
+        "line_start": 11,
+        "line_end": 11,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000012",
+        "record_number": 12,
+        "line_start": 12,
+        "line_end": 12,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000013",
+        "record_number": 13,
+        "line_start": 13,
+        "line_end": 13,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000014",
+        "record_number": 14,
+        "line_start": 14,
+        "line_end": 14,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000015",
+        "record_number": 15,
+        "line_start": 15,
+        "line_end": 15,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000016",
+        "record_number": 16,
+        "line_start": 16,
+        "line_end": 16,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000017",
+        "record_number": 17,
+        "line_start": 17,
+        "line_end": 17,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000018",
+        "record_number": 18,
+        "line_start": 18,
+        "line_end": 18,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000019",
+        "record_number": 19,
+        "line_start": 19,
+        "line_end": 19,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000020",
+        "record_number": 20,
+        "line_start": 20,
+        "line_end": 20,
+        "timestamp": null
+      }
+    ],
+    "evidencia_logs_omitidos": 0,
+    "eventos_reconstruidos": [
+      {
+        "event_id": "event_001",
+        "evidence_uids": [
+          "log_record_000001",
+          "log_record_000002",
+          "log_record_000003",
+          "log_record_000004",
+          "log_record_000005",
+          "log_record_000006",
+          "log_record_000007",
+          "log_record_000008",
+          "log_record_000009",
+          "log_record_000010",
+          "log_record_000011",
+          "log_record_000012",
+          "log_record_000013",
+          "log_record_000014",
+          "log_record_000015",
+          "log_record_000016",
+          "log_record_000017",
+          "log_record_000018",
+          "log_record_000019",
+          "log_record_000020"
+        ],
+        "timestamp": null,
+        "event_type": "hardware_cache_parity_error",
+        "description": "Reporte de errores de paridad de caché de instrucciones corregidos registrados por el subsistema RAS del kernel.",
+        "confidence": null
+      }
+    ],
+    "secuencia_temporal": [],
+    "tecnicas_atribuidas": [],
+    "invalid_evidence_uid_count": 0,
+    "d11_warnings": [],
+    "telemetry": {
+      "llm_call_count": 5,
+      "input_tokens": 3976,
+      "output_tokens": 1196,
+      "total_tokens": 7437,
+      "execution_time": 32.738425,
+      "replan_count": 0,
+      "intentos_correccion": 1,
+      "invalid_evidence_uid_count": 0,
+      "d11_warning_count": 0,
+      "llm_calls": [
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 669,
+          "output_tokens": 289,
+          "total_tokens": 1322,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 364,
+          "duration_s": 7.359,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 814,
+          "output_tokens": 191,
+          "total_tokens": 1795,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 790,
+          "duration_s": 8.254,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 217,
+          "output_tokens": 62,
+          "total_tokens": 402,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 123,
+          "duration_s": 3.233,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 170,
+          "output_tokens": 91,
+          "total_tokens": 849,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 588,
+          "duration_s": 5.668,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 2106,
+          "output_tokens": 563,
+          "total_tokens": 3069,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 400,
+          "duration_s": 8.164,
+          "error": null
+        }
+      ]
+    },
+    "firma": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+    "plan": {
+      "plan_version": 1,
+      "objetivo": "Evaluar los 20 eventos en texto libre no parseados para determinar la naturaleza de la actividad de la IP local 172.16.96.116 y definir medidas preventivas o de contención si procede.",
+      "pasos": [
+        {
+          "id": 1,
+          "accion": "triage",
+          "objetivo": "Analizar el contenido de las líneas de texto no estructuradas para identificar patrones de ataque, servicios involucrados y clasificar el nivel de amenaza.",
+          "estado": "ejecutado"
+        },
+        {
+          "id": 2,
+          "accion": "mitigacion",
+          "objetivo": "Proponer acciones de contención, ajuste en la captura/normalización de logs o políticas de seguridad según los hallazgos del diagnóstico inicial.",
+          "estado": "ejecutado"
+        }
+      ],
+      "criterios_finalizacion": [
+        "Identificación de la actividad asociada a la IP 172.16.96.116 en los registros en texto libre",
+        "Determinación del impacto o severidad de los eventos analizados",
+        "Generación de recomendaciones operativas y de mitigación basadas en el resultado del triage"
+      ]
+    },
+    "plan_objetivo": "Evaluar los 20 eventos en texto libre no parseados para determinar la naturaleza de la actividad de la IP local 172.16.96.116 y definir medidas preventivas o de contención si procede.",
+    "paso_actual": 2,
+    "historial_ejecucion": [
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_planificador",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "plan v1, 2 pasos: ['triage', 'mitigacion']"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 1,
+        "nodo": "agente_analista_triage",
+        "accion": "triage",
+        "estado": "ejecutado",
+        "resumen": "diagnóstico producido"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_selector_herramientas",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "usar_cve=False"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 2,
+        "nodo": "agente_ingeniero_mitigacion",
+        "accion": "mitigacion",
+        "estado": "ejecutado",
+        "resumen": "4 comandos propuestos"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "tool_validar_comandos",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "comandos válidos"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_auditor_final",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "confianza=0.85 cobertura_suficiente=True"
+      }
+    ],
+    "desviaciones_plan": [],
+    "historial_planes": [],
+    "replan_count": 0,
+    "diagnostico": "Los eventos analizados corresponden a registros operativos de sistema y hardware (específicamente logs RAS de kernel reportando 'instruction cache parity error corrected'), no existiendo evidencia de actividad maliciosa, intrusión o compromiso de seguridad relacionado con la IP privada 172.16.96.116. Se clasifica como falso positivo de seguridad / actividad benigna de infraestructura. No se requieren medidas de contención, únicamente seguimiento por parte del equipo de hardware/sistemas si los errores de paridad persisten.",
+    "necesita_rag": false,
+    "usar_cve": false,
+    "razon_seleccion": "El diagnóstico concluye que se trata de un falso positivo relacionado con registros operativos de hardware/kernel (errores de paridad corregidos) y no con una vulnerabilidad de software o ataque explotable.",
+    "contexto_rag": [],
+    "tecnicas_mitre": [],
+    "cves_encontrados": [],
+    "comandos_mitigacion": [
+      "dmesg -T | grep -iE 'parity error|cache'",
+      "journalctl -k -b | grep -iE 'ras|mce|parity'",
+      "which ras-mc-ctl >/dev/null 2>&1 && ras-mc-ctl --errors || true",
+      "which ipmitool >/dev/null 2>&1 && ipmitool sel elist || true"
+    ],
+    "comandos_validos": true,
+    "motivos_rechazo": [],
+    "intentos_correccion": 1,
+    "confianza": 0.85,
+    "hay_incidente": false,
+    "hay_anomalia": true,
+    "evaluacion_auditor": "Los registros reportan eventos de hardware corregidos (errores de paridad en caché de instrucciones) capturados por subsistemas RAS/MCE del kernel. Constituyen una anomalía operativa a nivel de infraestructura física/hardware, pero no presentan indicios de compromiso de seguridad ni actividad maliciosa.",
+    "cobertura_auditor": true,
+    "cobertura_suficiente": true,
+    "motivo_replanificacion": "",
+    "requiere_replanificacion": false,
+    "_firma": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+    "_error_api": null,
+    "requiere_revision_humana": false,
+    "output_contract_version": "d11-v1"
+  }
+}

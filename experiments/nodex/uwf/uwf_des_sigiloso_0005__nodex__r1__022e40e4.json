@@ -1,0 +1,92 @@
+{
+  "case_id": "uwf_des_sigiloso_0005",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "uwf_des_sigiloso_0005__nodex__r1__022e40e4",
+  "salida": {
+    "case_id": "uwf_des_sigiloso_0005",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-19 01:55:05.631610",
+        "entities": [],
+        "event_type": "network_scan",
+        "evidence_uids": [
+          "CN3VM84ft0ysAtEVnd",
+          "CHJBu53gJwxbmLgjbe",
+          "CYAJKC1yIOIZsN4cve"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-19 02:25:50.880377",
+        "entities": [],
+        "event_type": "network_scan",
+        "evidence_uids": [
+          "CJH5HC1bvMCjG3kaek",
+          "CuxULr3cOAdyedrMij",
+          "CKTSwbUvGgDTHcvu6"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": [
+        {
+          "id": "T1590.002",
+          "name": "Gather Victim Network Information: DNS",
+          "evidence_uids": [
+            "CN3VM84ft0ysAtEVnd",
+            "CKTSwbUvGgDTHcvu6"
+          ]
+        }
+      ]
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe observa un comportamiento anómalo de alto volumen enfocado en el servicio DNS (puerto 53/UDP), donde la IP externa 143.88.255.10 generó 265 solicitudes dirigidas al servidor interno 10.0.10.1 en una ventana de 30 minutos. La totalidad de estas conexiones muestran estado S0 (sin respuesta registrada) y se clasifican como fallidas o críticas. Este patrón es característico de un sondeo masivo o reconocimiento activo sobre la infraestructura de resolución de nombres (T1590.002), o bien un intento de establecimiento de canal encubierto/abuso de protocolo DNS (T1071.004) no respondido por el objetivo. Se recomienda bloquear el tráfico entrante desde 143.88.255.10 a nivel de firewall de perímetro y revisar las políticas de exposición externa del servidor 10.0.10.1.\n\n## Evaluación del auditor\n\nSe confirma el diagnóstico de sondeo persistente y no autorizado contra el servicio DNS en 10.0.10.1:53/udp proveniente de la IP 143.88.255.10. Los registros evidencian ráfagas constantes de paquetes con estado S0 (sin respuesta), lo cual es coherente con escaneo y reconocimiento activo (T1590.002). Las acciones de mitigación recomendadas mediante iptables y ufw son pertinentes.\n\n## Comandos de mitigación propuestos\n\n- iptables -I INPUT -s 143.88.255.10 -j DROP\n- iptables -I FORWARD -s 143.88.255.10 -d 10.0.10.1 -p udp --dport 53 -j DROP\n- iptables -I FORWARD -s 143.88.255.10 -j DROP\n- ufw insert 1 deny from 143.88.255.10\n- conntrack -D -s 143.88.255.10"
+    },
+    "_meta": {
+      "run_id": "uwf_des_sigiloso_0005__nodex__r1__022e40e4",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_des_sigiloso_0005__nodex__r1__022e40e4.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:33:03+00:00"
+  }
+}

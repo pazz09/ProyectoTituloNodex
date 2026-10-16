@@ -1,0 +1,2094 @@
+{
+  "esquema": "resultados-v1",
+  "datos_ficticios": false,
+  "depuracion": true,
+  "reportable": false,
+  "config_version": "piloto-flash38-20261015",
+  "consolidacion": "20261015T220652Z",
+  "generado_utc": "2026-10-15T22:06:52+00:00",
+  "protocolo_version": "1.0",
+  "subconjunto": "piloto",
+  "particion": "desarrollo",
+  "arquitecturas": [
+    "nodex_multiagente",
+    "baseline_reglas",
+    "gemini_externo"
+  ],
+  "integridad": {
+    "corridas_esperadas": 72,
+    "corridas_presentes": 72,
+    "corridas_completas": 72,
+    "corridas_ausentes": [],
+    "corridas_fallidas": [],
+    "corridas_con_fallback": [],
+    "fallback_determinable": true,
+    "modelo_principal": "gemini-3.8-flash",
+    "corridas_con_telemetria_previa_a_d11": 0,
+    "corridas_sin_tokens": 0,
+    "corridas_con_tokens_parciales": [],
+    "corridas_sin_razonamiento": 0,
+    "corridas_sin_version_de_modelo": 0,
+    "advertencias": [
+      {
+        "codigo": "resultados_de_depuracion",
+        "severidad": "alta",
+        "mensaje": "resultados de DEPURACIÓN (desarrollo/piloto): no son reportables ni se citan en el informe",
+        "n": 0
+      },
+      {
+        "codigo": "consultas_externas_bloqueadas",
+        "severidad": "info",
+        "mensaje": "intentos de consulta a NVD/AbuseIPDB bloqueados, con respaldo local (política de la campaña final pendiente)",
+        "n": 203
+      }
+    ]
+  },
+  "tablas": {
+    "d1_deteccion": {
+      "titulo": "Detección por dataset y arquitectura",
+      "seccion": "11.1",
+      "descripcion": "Micro: una matriz con todas las corridas evaluables. Una celda vacía es «sin dato», no cero.",
+      "columnas": [
+        {
+          "clave": "dataset",
+          "etiqueta": "Dataset",
+          "tipo": "texto"
+        },
+        {
+          "clave": "arquitectura",
+          "etiqueta": "Arquitectura",
+          "tipo": "texto"
+        },
+        {
+          "clave": "n_corridas",
+          "etiqueta": "Corridas",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_evaluables",
+          "etiqueta": "Evaluables",
+          "tipo": "entero"
+        },
+        {
+          "clave": "no_evaluables",
+          "etiqueta": "No evaluables",
+          "tipo": "entero"
+        },
+        {
+          "clave": "tp",
+          "etiqueta": "TP",
+          "tipo": "entero"
+        },
+        {
+          "clave": "fp",
+          "etiqueta": "FP",
+          "tipo": "entero"
+        },
+        {
+          "clave": "fn",
+          "etiqueta": "FN",
+          "tipo": "entero"
+        },
+        {
+          "clave": "tn",
+          "etiqueta": "TN",
+          "tipo": "entero"
+        },
+        {
+          "clave": "accuracy",
+          "etiqueta": "Exactitud",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "precision",
+          "etiqueta": "Precisión",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "recall",
+          "etiqueta": "Exhaustividad",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "f1",
+          "etiqueta": "F1",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "fpr",
+          "etiqueta": "FPR",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "fnr",
+          "etiqueta": "FNR",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "f1_macro_condiciones",
+          "etiqueta": "F1 macro (condiciones)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "f1_media_repeticiones",
+          "etiqueta": "F1 media (repeticiones)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "f1_desv_repeticiones",
+          "etiqueta": "F1 desv. (repeticiones)",
+          "tipo": "proporcion"
+        }
+      ],
+      "filas": [
+        {
+          "dataset": "bgl",
+          "arquitectura": "baseline_reglas",
+          "n_corridas": 8,
+          "n_evaluables": 8,
+          "no_evaluables": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 4,
+          "tn": 4,
+          "accuracy": 0.5,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "fpr": 0.0,
+          "fnr": 1.0,
+          "f1_macro_condiciones": 0.0,
+          "f1_media_repeticiones": 0.0,
+          "f1_desv_repeticiones": null
+        },
+        {
+          "dataset": "bgl",
+          "arquitectura": "gemini_externo",
+          "n_corridas": 8,
+          "n_evaluables": 8,
+          "no_evaluables": 0,
+          "tp": 4,
+          "fp": 3,
+          "fn": 0,
+          "tn": 1,
+          "accuracy": 0.625,
+          "precision": 0.5714285714285714,
+          "recall": 1.0,
+          "f1": 0.7272727272727273,
+          "fpr": 0.75,
+          "fnr": 0.0,
+          "f1_macro_condiciones": 0.7333333333333334,
+          "f1_media_repeticiones": 0.7272727272727273,
+          "f1_desv_repeticiones": null
+        },
+        {
+          "dataset": "bgl",
+          "arquitectura": "nodex_multiagente",
+          "n_corridas": 8,
+          "n_evaluables": 8,
+          "no_evaluables": 0,
+          "tp": 3,
+          "fp": 0,
+          "fn": 1,
+          "tn": 4,
+          "accuracy": 0.875,
+          "precision": 1.0,
+          "recall": 0.75,
+          "f1": 0.8571428571428571,
+          "fpr": 0.0,
+          "fnr": 0.25,
+          "f1_macro_condiciones": 0.8333333333333333,
+          "f1_media_repeticiones": 0.8571428571428571,
+          "f1_desv_repeticiones": null
+        },
+        {
+          "dataset": "hdfs",
+          "arquitectura": "baseline_reglas",
+          "n_corridas": 8,
+          "n_evaluables": 8,
+          "no_evaluables": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 3,
+          "tn": 5,
+          "accuracy": 0.625,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0,
+          "fpr": 0.0,
+          "fnr": 1.0,
+          "f1_macro_condiciones": 0.0,
+          "f1_media_repeticiones": 0.0,
+          "f1_desv_repeticiones": null
+        },
+        {
+          "dataset": "hdfs",
+          "arquitectura": "gemini_externo",
+          "n_corridas": 8,
+          "n_evaluables": 8,
+          "no_evaluables": 0,
+          "tp": 0,
+          "fp": 1,
+          "fn": 3,
+          "tn": 4,
+          "accuracy": 0.5,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "fpr": 0.2,
+          "fnr": 1.0,
+          "f1_macro_condiciones": 0.0,
+          "f1_media_repeticiones": 0.0,
+          "f1_desv_repeticiones": null
+        },
+        {
+          "dataset": "hdfs",
+          "arquitectura": "nodex_multiagente",
+          "n_corridas": 8,
+          "n_evaluables": 8,
+          "no_evaluables": 0,
+          "tp": 0,
+          "fp": 1,
+          "fn": 3,
+          "tn": 4,
+          "accuracy": 0.5,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "fpr": 0.2,
+          "fnr": 1.0,
+          "f1_macro_condiciones": 0.0,
+          "f1_media_repeticiones": 0.0,
+          "f1_desv_repeticiones": null
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "baseline_reglas",
+          "n_corridas": 8,
+          "n_evaluables": 8,
+          "no_evaluables": 0,
+          "tp": 4,
+          "fp": 4,
+          "fn": 0,
+          "tn": 0,
+          "accuracy": 0.5,
+          "precision": 0.5,
+          "recall": 1.0,
+          "f1": 0.6666666666666666,
+          "fpr": 1.0,
+          "fnr": 0.0,
+          "f1_macro_condiciones": 0.6666666666666666,
+          "f1_media_repeticiones": 0.6666666666666666,
+          "f1_desv_repeticiones": null
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "gemini_externo",
+          "n_corridas": 8,
+          "n_evaluables": 8,
+          "no_evaluables": 0,
+          "tp": 2,
+          "fp": 2,
+          "fn": 2,
+          "tn": 2,
+          "accuracy": 0.5,
+          "precision": 0.5,
+          "recall": 0.5,
+          "f1": 0.5,
+          "fpr": 0.5,
+          "fnr": 0.5,
+          "f1_macro_condiciones": 0.4,
+          "f1_media_repeticiones": 0.5,
+          "f1_desv_repeticiones": null
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "nodex_multiagente",
+          "n_corridas": 8,
+          "n_evaluables": 8,
+          "no_evaluables": 0,
+          "tp": 3,
+          "fp": 3,
+          "fn": 1,
+          "tn": 1,
+          "accuracy": 0.5,
+          "precision": 0.5,
+          "recall": 0.75,
+          "f1": 0.6,
+          "fpr": 0.75,
+          "fnr": 0.25,
+          "f1_macro_condiciones": 0.5833333333333333,
+          "f1_media_repeticiones": 0.6,
+          "f1_desv_repeticiones": null
+        }
+      ]
+    },
+    "d1_condiciones": {
+      "titulo": "Detección por condición",
+      "seccion": "11.1",
+      "descripcion": null,
+      "columnas": [
+        {
+          "clave": "dataset",
+          "etiqueta": "Dataset",
+          "tipo": "texto"
+        },
+        {
+          "clave": "arquitectura",
+          "etiqueta": "Arquitectura",
+          "tipo": "texto"
+        },
+        {
+          "clave": "condicion",
+          "etiqueta": "Condición",
+          "tipo": "texto"
+        },
+        {
+          "clave": "n_evaluables",
+          "etiqueta": "Evaluables",
+          "tipo": "entero"
+        },
+        {
+          "clave": "tp",
+          "etiqueta": "TP",
+          "tipo": "entero"
+        },
+        {
+          "clave": "fp",
+          "etiqueta": "FP",
+          "tipo": "entero"
+        },
+        {
+          "clave": "fn",
+          "etiqueta": "FN",
+          "tipo": "entero"
+        },
+        {
+          "clave": "tn",
+          "etiqueta": "TN",
+          "tipo": "entero"
+        },
+        {
+          "clave": "precision",
+          "etiqueta": "Precisión",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "recall",
+          "etiqueta": "Exhaustividad",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "f1",
+          "etiqueta": "F1",
+          "tipo": "proporcion"
+        }
+      ],
+      "filas": [
+        {
+          "dataset": "bgl",
+          "arquitectura": "baseline_reglas",
+          "condicion": "balanceado",
+          "n_evaluables": 4,
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "tn": 2,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        {
+          "dataset": "bgl",
+          "arquitectura": "baseline_reglas",
+          "condicion": "natural",
+          "n_evaluables": 4,
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "tn": 2,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        {
+          "dataset": "bgl",
+          "arquitectura": "gemini_externo",
+          "condicion": "balanceado",
+          "n_evaluables": 4,
+          "tp": 2,
+          "fp": 2,
+          "fn": 0,
+          "tn": 0,
+          "precision": 0.5,
+          "recall": 1.0,
+          "f1": 0.6666666666666666
+        },
+        {
+          "dataset": "bgl",
+          "arquitectura": "gemini_externo",
+          "condicion": "natural",
+          "n_evaluables": 4,
+          "tp": 2,
+          "fp": 1,
+          "fn": 0,
+          "tn": 1,
+          "precision": 0.6666666666666666,
+          "recall": 1.0,
+          "f1": 0.8
+        },
+        {
+          "dataset": "bgl",
+          "arquitectura": "nodex_multiagente",
+          "condicion": "balanceado",
+          "n_evaluables": 4,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "tn": 2,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        {
+          "dataset": "bgl",
+          "arquitectura": "nodex_multiagente",
+          "condicion": "natural",
+          "n_evaluables": 4,
+          "tp": 1,
+          "fp": 0,
+          "fn": 1,
+          "tn": 2,
+          "precision": 1.0,
+          "recall": 0.5,
+          "f1": 0.6666666666666666
+        },
+        {
+          "dataset": "hdfs",
+          "arquitectura": "baseline_reglas",
+          "condicion": "balanceado",
+          "n_evaluables": 4,
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "tn": 2,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        {
+          "dataset": "hdfs",
+          "arquitectura": "baseline_reglas",
+          "condicion": "natural",
+          "n_evaluables": 4,
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "tn": 3,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        {
+          "dataset": "hdfs",
+          "arquitectura": "gemini_externo",
+          "condicion": "balanceado",
+          "n_evaluables": 4,
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "tn": 2,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        {
+          "dataset": "hdfs",
+          "arquitectura": "gemini_externo",
+          "condicion": "natural",
+          "n_evaluables": 4,
+          "tp": 0,
+          "fp": 1,
+          "fn": 1,
+          "tn": 2,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        {
+          "dataset": "hdfs",
+          "arquitectura": "nodex_multiagente",
+          "condicion": "balanceado",
+          "n_evaluables": 4,
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "tn": 2,
+          "precision": null,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        {
+          "dataset": "hdfs",
+          "arquitectura": "nodex_multiagente",
+          "condicion": "natural",
+          "n_evaluables": 4,
+          "tp": 0,
+          "fp": 1,
+          "fn": 1,
+          "tn": 2,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "baseline_reglas",
+          "condicion": "sigiloso",
+          "n_evaluables": 4,
+          "tp": 2,
+          "fp": 2,
+          "fn": 0,
+          "tn": 0,
+          "precision": 0.5,
+          "recall": 1.0,
+          "f1": 0.6666666666666666
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "baseline_reglas",
+          "condicion": "visible",
+          "n_evaluables": 4,
+          "tp": 2,
+          "fp": 2,
+          "fn": 0,
+          "tn": 0,
+          "precision": 0.5,
+          "recall": 1.0,
+          "f1": 0.6666666666666666
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "gemini_externo",
+          "condicion": "sigiloso",
+          "n_evaluables": 4,
+          "tp": 0,
+          "fp": 1,
+          "fn": 2,
+          "tn": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "gemini_externo",
+          "condicion": "visible",
+          "n_evaluables": 4,
+          "tp": 2,
+          "fp": 1,
+          "fn": 0,
+          "tn": 1,
+          "precision": 0.6666666666666666,
+          "recall": 1.0,
+          "f1": 0.8
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "nodex_multiagente",
+          "condicion": "sigiloso",
+          "n_evaluables": 4,
+          "tp": 1,
+          "fp": 1,
+          "fn": 1,
+          "tn": 1,
+          "precision": 0.5,
+          "recall": 0.5,
+          "f1": 0.5
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "nodex_multiagente",
+          "condicion": "visible",
+          "n_evaluables": 4,
+          "tp": 2,
+          "fp": 2,
+          "fn": 0,
+          "tn": 0,
+          "precision": 0.5,
+          "recall": 1.0,
+          "f1": 0.6666666666666666
+        }
+      ]
+    },
+    "d2_reconstruccion": {
+      "titulo": "Reconstrucción del incidente",
+      "seccion": "11.2",
+      "descripcion": null,
+      "columnas": [
+        {
+          "clave": "dataset",
+          "etiqueta": "Dataset",
+          "tipo": "texto"
+        },
+        {
+          "clave": "arquitectura",
+          "etiqueta": "Arquitectura",
+          "tipo": "texto"
+        },
+        {
+          "clave": "n_corridas",
+          "etiqueta": "Corridas",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_evaluables",
+          "etiqueta": "Evaluables",
+          "tipo": "entero"
+        },
+        {
+          "clave": "no_evaluables",
+          "etiqueta": "No evaluables",
+          "tipo": "entero"
+        },
+        {
+          "clave": "micro_precision",
+          "etiqueta": "Precisión (micro)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "micro_recall",
+          "etiqueta": "Exhaustividad (micro)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "micro_f1",
+          "etiqueta": "F1 (micro)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "macro_precision",
+          "etiqueta": "Precisión (macro)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "macro_recall",
+          "etiqueta": "Exhaustividad (macro)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "macro_f1",
+          "etiqueta": "F1 (macro)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "exact_match",
+          "etiqueta": "Coincidencia exacta",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "f1_media_repeticiones",
+          "etiqueta": "F1 media (repeticiones)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "f1_desv_repeticiones",
+          "etiqueta": "F1 desv. (repeticiones)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "uids_inventados",
+          "etiqueta": "Uids inventados",
+          "tipo": "entero"
+        }
+      ],
+      "filas": [
+        {
+          "dataset": "uwf",
+          "arquitectura": "gemini_externo",
+          "n_corridas": 8,
+          "n_evaluables": 4,
+          "no_evaluables": 0,
+          "micro_precision": 0.4810126582278481,
+          "micro_recall": 0.6031746031746031,
+          "micro_f1": 0.5352112676056338,
+          "macro_precision": 0.39747023809523807,
+          "macro_recall": 0.7916666666666666,
+          "macro_f1": 0.40336597307221544,
+          "exact_match": 0.0,
+          "f1_media_repeticiones": 0.5352112676056338,
+          "f1_desv_repeticiones": null,
+          "uids_inventados": 0
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "nodex_multiagente",
+          "n_corridas": 8,
+          "n_evaluables": 4,
+          "no_evaluables": 0,
+          "micro_precision": 0.36363636363636365,
+          "micro_recall": 0.09523809523809523,
+          "micro_f1": 0.1509433962264151,
+          "macro_precision": 0.3578643578643579,
+          "macro_recall": 0.2875,
+          "macro_f1": 0.17344179722505484,
+          "exact_match": 0.0,
+          "f1_media_repeticiones": 0.1509433962264151,
+          "f1_desv_repeticiones": null,
+          "uids_inventados": 0
+        }
+      ]
+    },
+    "d3_mitre": {
+      "titulo": "Identificación MITRE ATT&CK (nivel técnica)",
+      "seccion": "11.3",
+      "descripcion": null,
+      "columnas": [
+        {
+          "clave": "dataset",
+          "etiqueta": "Dataset",
+          "tipo": "texto"
+        },
+        {
+          "clave": "arquitectura",
+          "etiqueta": "Arquitectura",
+          "tipo": "texto"
+        },
+        {
+          "clave": "n_corridas",
+          "etiqueta": "Corridas",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_evaluables",
+          "etiqueta": "Evaluables",
+          "tipo": "entero"
+        },
+        {
+          "clave": "no_evaluables",
+          "etiqueta": "No evaluables",
+          "tipo": "entero"
+        },
+        {
+          "clave": "micro_precision",
+          "etiqueta": "Precisión (micro)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "micro_recall",
+          "etiqueta": "Exhaustividad (micro)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "micro_f1",
+          "etiqueta": "F1 (micro)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "macro_precision",
+          "etiqueta": "Precisión (macro)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "macro_recall",
+          "etiqueta": "Exhaustividad (macro)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "macro_f1",
+          "etiqueta": "F1 (macro)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "exact_match",
+          "etiqueta": "Coincidencia exacta",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "f1_media_repeticiones",
+          "etiqueta": "F1 media (repeticiones)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "f1_desv_repeticiones",
+          "etiqueta": "F1 desv. (repeticiones)",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "atribuciones_sin_evidencia",
+          "etiqueta": "Atribuciones sin evidencia",
+          "tipo": "entero"
+        }
+      ],
+      "filas": [
+        {
+          "dataset": "uwf",
+          "arquitectura": "gemini_externo",
+          "n_corridas": 8,
+          "n_evaluables": 2,
+          "no_evaluables": 2,
+          "micro_precision": 0.5,
+          "micro_recall": 0.5,
+          "micro_f1": 0.5,
+          "macro_precision": 0.5,
+          "macro_recall": 0.5,
+          "macro_f1": 0.5,
+          "exact_match": 0.5,
+          "f1_media_repeticiones": 0.5,
+          "f1_desv_repeticiones": null,
+          "atribuciones_sin_evidencia": 0
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "nodex_multiagente",
+          "n_corridas": 8,
+          "n_evaluables": 3,
+          "no_evaluables": 1,
+          "micro_precision": 0.3333333333333333,
+          "micro_recall": 0.25,
+          "micro_f1": 0.2857142857142857,
+          "macro_precision": 0.3333333333333333,
+          "macro_recall": 0.3333333333333333,
+          "macro_f1": 0.3333333333333333,
+          "exact_match": 0.3333333333333333,
+          "f1_media_repeticiones": 0.2857142857142857,
+          "f1_desv_repeticiones": null,
+          "atribuciones_sin_evidencia": 0
+        }
+      ]
+    },
+    "d4_rubrica": {
+      "titulo": "Rúbrica del reporte (escala 0 a 3)",
+      "seccion": "11.4",
+      "descripcion": "Dos evaluadores humanos. Concordancia por acuerdo exacto, hasta un nivel y diferencia absoluta media; no se calcula kappa. En el último criterio, 3 significa ausencia de información no sustentada.",
+      "columnas": [
+        {
+          "clave": "dataset",
+          "etiqueta": "Dataset",
+          "tipo": "texto"
+        },
+        {
+          "clave": "arquitectura",
+          "etiqueta": "Arquitectura",
+          "tipo": "texto"
+        },
+        {
+          "clave": "n_reportes",
+          "etiqueta": "Reportes",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_evaluadores",
+          "etiqueta": "Evaluadores",
+          "tipo": "entero"
+        },
+        {
+          "clave": "completitud",
+          "etiqueta": "Completitud",
+          "tipo": "numero"
+        },
+        {
+          "clave": "correccion_factual",
+          "etiqueta": "Corrección factual",
+          "tipo": "numero"
+        },
+        {
+          "clave": "coherencia_con_evidencia",
+          "etiqueta": "Coherencia con evidencia",
+          "tipo": "numero"
+        },
+        {
+          "clave": "claridad",
+          "etiqueta": "Claridad",
+          "tipo": "numero"
+        },
+        {
+          "clave": "informacion_no_sustentada",
+          "etiqueta": "Sin información inventada",
+          "tipo": "numero"
+        },
+        {
+          "clave": "promedio_global",
+          "etiqueta": "Promedio global",
+          "tipo": "numero"
+        },
+        {
+          "clave": "acuerdo_exacto",
+          "etiqueta": "Acuerdo exacto",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "acuerdo_hasta_un_nivel",
+          "etiqueta": "Acuerdo ±1 nivel",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "diferencia_absoluta_media",
+          "etiqueta": "Diferencia absoluta media",
+          "tipo": "numero"
+        },
+        {
+          "clave": "desacuerdos_relevantes",
+          "etiqueta": "Desacuerdos de 2+ niveles",
+          "tipo": "entero"
+        }
+      ],
+      "filas": []
+    },
+    "consumo": {
+      "titulo": "Consumo y comportamiento operacional",
+      "seccion": "11.5",
+      "descripcion": "Solo promedian las corridas completas: una corrida cortada consumió menos y haría parecer más eficiente a la arquitectura que más falla. Si el proveedor no informó los tokens, la celda queda vacía; no se estiman. Una llamada fallida deja el total de su corrida en None y la deja fuera de las medias de tokens («Corridas con total None»); lo que sí se sabe de esas corridas se muestra aparte como suma parcial («Tokens parciales», ≥, un piso), nunca como total.",
+      "columnas": [
+        {
+          "clave": "dataset",
+          "etiqueta": "Dataset",
+          "tipo": "texto"
+        },
+        {
+          "clave": "arquitectura",
+          "etiqueta": "Arquitectura",
+          "tipo": "texto"
+        },
+        {
+          "clave": "n_completas",
+          "etiqueta": "Completas",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_no_completas",
+          "etiqueta": "No completas",
+          "tipo": "entero"
+        },
+        {
+          "clave": "tiempo_medio_s",
+          "etiqueta": "Tiempo medio (s)",
+          "tipo": "numero"
+        },
+        {
+          "clave": "tiempo_mediana_s",
+          "etiqueta": "Tiempo mediana (s)",
+          "tipo": "numero"
+        },
+        {
+          "clave": "llamadas_medias",
+          "etiqueta": "Llamadas al modelo",
+          "tipo": "numero"
+        },
+        {
+          "clave": "tokens_entrada_medios",
+          "etiqueta": "Tokens de entrada",
+          "tipo": "numero"
+        },
+        {
+          "clave": "tokens_salida_medios",
+          "etiqueta": "Tokens de salida",
+          "tipo": "numero"
+        },
+        {
+          "clave": "tokens_razonamiento_medios",
+          "etiqueta": "Tokens de razonamiento",
+          "tipo": "numero"
+        },
+        {
+          "clave": "tokens_totales_medios",
+          "etiqueta": "Tokens totales",
+          "tipo": "numero"
+        },
+        {
+          "clave": "versiones_devueltas",
+          "etiqueta": "Versión devuelta por la API",
+          "tipo": "texto"
+        },
+        {
+          "clave": "replan_medio",
+          "etiqueta": "Replanificaciones",
+          "tipo": "numero"
+        },
+        {
+          "clave": "correcciones_medias",
+          "etiqueta": "Correcciones",
+          "tipo": "numero"
+        },
+        {
+          "clave": "n_con_fallback",
+          "etiqueta": "Con fallback",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_sin_tokens",
+          "etiqueta": "Corridas con total None",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_llamadas_fallidas",
+          "etiqueta": "Llamadas fallidas",
+          "tipo": "entero"
+        },
+        {
+          "clave": "tokens_parciales",
+          "etiqueta": "Tokens parciales (≥, piso)",
+          "tipo": "texto"
+        }
+      ],
+      "filas": [
+        {
+          "dataset": "bgl",
+          "arquitectura": "baseline_reglas",
+          "n_completas": 8,
+          "n_no_completas": 0,
+          "tiempo_medio_s": 0.022132074998808093,
+          "tiempo_mediana_s": 0.021494749991688877,
+          "llamadas_medias": 0.0,
+          "tokens_entrada_medios": null,
+          "tokens_salida_medios": null,
+          "tokens_razonamiento_medios": null,
+          "tokens_totales_medios": null,
+          "versiones_devueltas": null,
+          "replan_medio": null,
+          "correcciones_medias": null,
+          "n_llamadas_fallidas": null,
+          "tokens_parciales": null,
+          "n_con_fallback": null,
+          "n_sin_tokens": null
+        },
+        {
+          "dataset": "bgl",
+          "arquitectura": "gemini_externo",
+          "n_completas": 8,
+          "n_no_completas": 0,
+          "tiempo_medio_s": 18.17369717499605,
+          "tiempo_mediana_s": 19.228549349994864,
+          "llamadas_medias": 1.0,
+          "tokens_entrada_medios": 2759.0,
+          "tokens_salida_medios": 1242.875,
+          "tokens_razonamiento_medios": 1133.25,
+          "tokens_totales_medios": 5135.125,
+          "versiones_devueltas": "gemini-3.8-flash",
+          "replan_medio": null,
+          "correcciones_medias": null,
+          "n_llamadas_fallidas": 0,
+          "tokens_parciales": null,
+          "n_con_fallback": 0,
+          "n_sin_tokens": 0
+        },
+        {
+          "dataset": "bgl",
+          "arquitectura": "nodex_multiagente",
+          "n_completas": 8,
+          "n_no_completas": 0,
+          "tiempo_medio_s": 38.560238375,
+          "tiempo_mediana_s": 38.379862,
+          "llamadas_medias": 5.125,
+          "tokens_entrada_medios": 3992.25,
+          "tokens_salida_medios": 788.125,
+          "tokens_razonamiento_medios": 2990.375,
+          "tokens_totales_medios": 7770.75,
+          "versiones_devueltas": "gemini-3.8-flash",
+          "replan_medio": 0.0,
+          "correcciones_medias": 1.0,
+          "n_llamadas_fallidas": 0,
+          "tokens_parciales": null,
+          "n_con_fallback": 0,
+          "n_sin_tokens": 0
+        },
+        {
+          "dataset": "hdfs",
+          "arquitectura": "baseline_reglas",
+          "n_completas": 8,
+          "n_no_completas": 0,
+          "tiempo_medio_s": 0.02071613750013057,
+          "tiempo_mediana_s": 0.020711500008474104,
+          "llamadas_medias": 0.0,
+          "tokens_entrada_medios": null,
+          "tokens_salida_medios": null,
+          "tokens_razonamiento_medios": null,
+          "tokens_totales_medios": null,
+          "versiones_devueltas": null,
+          "replan_medio": null,
+          "correcciones_medias": null,
+          "n_llamadas_fallidas": null,
+          "tokens_parciales": null,
+          "n_con_fallback": null,
+          "n_sin_tokens": null
+        },
+        {
+          "dataset": "hdfs",
+          "arquitectura": "gemini_externo",
+          "n_completas": 8,
+          "n_no_completas": 0,
+          "tiempo_medio_s": 10.548628874996211,
+          "tiempo_mediana_s": 9.318228849981097,
+          "llamadas_medias": 1.0,
+          "tokens_entrada_medios": 1318.25,
+          "tokens_salida_medios": 339.25,
+          "tokens_razonamiento_medios": 1097.125,
+          "tokens_totales_medios": 2754.625,
+          "versiones_devueltas": "gemini-3.8-flash",
+          "replan_medio": null,
+          "correcciones_medias": null,
+          "n_llamadas_fallidas": 0,
+          "tokens_parciales": null,
+          "n_con_fallback": 0,
+          "n_sin_tokens": 0
+        },
+        {
+          "dataset": "hdfs",
+          "arquitectura": "nodex_multiagente",
+          "n_completas": 8,
+          "n_no_completas": 0,
+          "tiempo_medio_s": 32.18451325,
+          "tiempo_mediana_s": 33.510951000000006,
+          "llamadas_medias": 5.0,
+          "tokens_entrada_medios": 6132.0,
+          "tokens_salida_medios": 850.625,
+          "tokens_razonamiento_medios": 2635.625,
+          "tokens_totales_medios": 9618.25,
+          "versiones_devueltas": "gemini-3.8-flash",
+          "replan_medio": 0.0,
+          "correcciones_medias": 1.0,
+          "n_llamadas_fallidas": 0,
+          "tokens_parciales": null,
+          "n_con_fallback": 0,
+          "n_sin_tokens": 0
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "baseline_reglas",
+          "n_completas": 8,
+          "n_no_completas": 0,
+          "tiempo_medio_s": 0.051526587496482534,
+          "tiempo_mediana_s": 0.051493199993274175,
+          "llamadas_medias": 0.0,
+          "tokens_entrada_medios": null,
+          "tokens_salida_medios": null,
+          "tokens_razonamiento_medios": null,
+          "tokens_totales_medios": null,
+          "versiones_devueltas": null,
+          "replan_medio": null,
+          "correcciones_medias": null,
+          "n_llamadas_fallidas": null,
+          "tokens_parciales": null,
+          "n_con_fallback": null,
+          "n_sin_tokens": null
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "gemini_externo",
+          "n_completas": 8,
+          "n_no_completas": 0,
+          "tiempo_medio_s": 50.68963596249159,
+          "tiempo_mediana_s": 49.31714289999218,
+          "llamadas_medias": 1.0,
+          "tokens_entrada_medios": 50341.25,
+          "tokens_salida_medios": 1739.125,
+          "tokens_razonamiento_medios": 5630.375,
+          "tokens_totales_medios": 57710.75,
+          "versiones_devueltas": "gemini-3.8-flash",
+          "replan_medio": null,
+          "correcciones_medias": null,
+          "n_llamadas_fallidas": 0,
+          "tokens_parciales": null,
+          "n_con_fallback": 0,
+          "n_sin_tokens": 0
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "nodex_multiagente",
+          "n_completas": 8,
+          "n_no_completas": 0,
+          "tiempo_medio_s": 58.708501,
+          "tiempo_mediana_s": 52.1470395,
+          "llamadas_medias": 6.625,
+          "tokens_entrada_medios": 67453.5,
+          "tokens_salida_medios": 2039.5,
+          "tokens_razonamiento_medios": 5626.25,
+          "tokens_totales_medios": 75119.25,
+          "versiones_devueltas": "gemini-3.8-flash",
+          "replan_medio": 0.125,
+          "correcciones_medias": 1.125,
+          "n_llamadas_fallidas": 0,
+          "tokens_parciales": null,
+          "n_con_fallback": 0,
+          "n_sin_tokens": 0
+        }
+      ]
+    },
+    "consultas_externas": {
+      "titulo": "Intentos de consulta externa (NVD, AbuseIPDB)",
+      "seccion": "11.5",
+      "descripcion": "Para decidir con datos la política de consultas externas de la campaña final (decisión pendiente; cualquiera que se elija debe declararse en el informe). En el piloto las llamadas HTTP se bloquean y responde el respaldo local. Estado «no aplica»: la arquitectura no usa herramientas externas (Gemini directo, baseline). «Sin registro»: corridas anteriores a este registro. Ninguno de los dos es lo mismo que 0 intentos.",
+      "columnas": [
+        {
+          "clave": "dataset",
+          "etiqueta": "Dataset",
+          "tipo": "texto"
+        },
+        {
+          "clave": "arquitectura",
+          "etiqueta": "Arquitectura",
+          "tipo": "texto"
+        },
+        {
+          "clave": "herramienta",
+          "etiqueta": "Herramienta",
+          "tipo": "texto"
+        },
+        {
+          "clave": "n_corridas",
+          "etiqueta": "Corridas",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_con_registro",
+          "etiqueta": "Con registro",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_corridas_con_intentos",
+          "etiqueta": "Corridas con intentos",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_consultas",
+          "etiqueta": "Consultas a la herramienta",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_intentos_externos",
+          "etiqueta": "Intentos de salida a la red",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_bloqueados",
+          "etiqueta": "Bloqueados",
+          "tipo": "entero"
+        },
+        {
+          "clave": "n_respaldo_respondio",
+          "etiqueta": "Respondió el respaldo local",
+          "tipo": "entero"
+        },
+        {
+          "clave": "estado",
+          "etiqueta": "Estado",
+          "tipo": "texto"
+        }
+      ],
+      "filas": [
+        {
+          "dataset": "bgl",
+          "arquitectura": "baseline_reglas",
+          "herramienta": "abuseipdb",
+          "n_corridas": 8,
+          "n_con_registro": null,
+          "n_corridas_con_intentos": null,
+          "n_consultas": null,
+          "n_intentos_externos": null,
+          "n_bloqueados": null,
+          "n_respaldo_respondio": null,
+          "estado": "no aplica"
+        },
+        {
+          "dataset": "bgl",
+          "arquitectura": "baseline_reglas",
+          "herramienta": "nvd",
+          "n_corridas": 8,
+          "n_con_registro": null,
+          "n_corridas_con_intentos": null,
+          "n_consultas": null,
+          "n_intentos_externos": null,
+          "n_bloqueados": null,
+          "n_respaldo_respondio": null,
+          "estado": "no aplica"
+        },
+        {
+          "dataset": "bgl",
+          "arquitectura": "gemini_externo",
+          "herramienta": "abuseipdb",
+          "n_corridas": 8,
+          "n_con_registro": null,
+          "n_corridas_con_intentos": null,
+          "n_consultas": null,
+          "n_intentos_externos": null,
+          "n_bloqueados": null,
+          "n_respaldo_respondio": null,
+          "estado": "no aplica"
+        },
+        {
+          "dataset": "bgl",
+          "arquitectura": "gemini_externo",
+          "herramienta": "nvd",
+          "n_corridas": 8,
+          "n_con_registro": null,
+          "n_corridas_con_intentos": null,
+          "n_consultas": null,
+          "n_intentos_externos": null,
+          "n_bloqueados": null,
+          "n_respaldo_respondio": null,
+          "estado": "no aplica"
+        },
+        {
+          "dataset": "bgl",
+          "arquitectura": "nodex_multiagente",
+          "herramienta": "abuseipdb",
+          "n_corridas": 8,
+          "n_con_registro": 8,
+          "n_corridas_con_intentos": 2,
+          "n_consultas": 2,
+          "n_intentos_externos": 2,
+          "n_bloqueados": 2,
+          "n_respaldo_respondio": 2,
+          "estado": "medido"
+        },
+        {
+          "dataset": "bgl",
+          "arquitectura": "nodex_multiagente",
+          "herramienta": "nvd",
+          "n_corridas": 8,
+          "n_con_registro": 8,
+          "n_corridas_con_intentos": 0,
+          "n_consultas": 0,
+          "n_intentos_externos": 0,
+          "n_bloqueados": 0,
+          "n_respaldo_respondio": 0,
+          "estado": "medido"
+        },
+        {
+          "dataset": "hdfs",
+          "arquitectura": "baseline_reglas",
+          "herramienta": "abuseipdb",
+          "n_corridas": 8,
+          "n_con_registro": null,
+          "n_corridas_con_intentos": null,
+          "n_consultas": null,
+          "n_intentos_externos": null,
+          "n_bloqueados": null,
+          "n_respaldo_respondio": null,
+          "estado": "no aplica"
+        },
+        {
+          "dataset": "hdfs",
+          "arquitectura": "baseline_reglas",
+          "herramienta": "nvd",
+          "n_corridas": 8,
+          "n_con_registro": null,
+          "n_corridas_con_intentos": null,
+          "n_consultas": null,
+          "n_intentos_externos": null,
+          "n_bloqueados": null,
+          "n_respaldo_respondio": null,
+          "estado": "no aplica"
+        },
+        {
+          "dataset": "hdfs",
+          "arquitectura": "gemini_externo",
+          "herramienta": "abuseipdb",
+          "n_corridas": 8,
+          "n_con_registro": null,
+          "n_corridas_con_intentos": null,
+          "n_consultas": null,
+          "n_intentos_externos": null,
+          "n_bloqueados": null,
+          "n_respaldo_respondio": null,
+          "estado": "no aplica"
+        },
+        {
+          "dataset": "hdfs",
+          "arquitectura": "gemini_externo",
+          "herramienta": "nvd",
+          "n_corridas": 8,
+          "n_con_registro": null,
+          "n_corridas_con_intentos": null,
+          "n_consultas": null,
+          "n_intentos_externos": null,
+          "n_bloqueados": null,
+          "n_respaldo_respondio": null,
+          "estado": "no aplica"
+        },
+        {
+          "dataset": "hdfs",
+          "arquitectura": "nodex_multiagente",
+          "herramienta": "abuseipdb",
+          "n_corridas": 8,
+          "n_con_registro": 8,
+          "n_corridas_con_intentos": 8,
+          "n_consultas": 43,
+          "n_intentos_externos": 43,
+          "n_bloqueados": 43,
+          "n_respaldo_respondio": 43,
+          "estado": "medido"
+        },
+        {
+          "dataset": "hdfs",
+          "arquitectura": "nodex_multiagente",
+          "herramienta": "nvd",
+          "n_corridas": 8,
+          "n_con_registro": 8,
+          "n_corridas_con_intentos": 0,
+          "n_consultas": 0,
+          "n_intentos_externos": 0,
+          "n_bloqueados": 0,
+          "n_respaldo_respondio": 0,
+          "estado": "medido"
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "baseline_reglas",
+          "herramienta": "abuseipdb",
+          "n_corridas": 8,
+          "n_con_registro": null,
+          "n_corridas_con_intentos": null,
+          "n_consultas": null,
+          "n_intentos_externos": null,
+          "n_bloqueados": null,
+          "n_respaldo_respondio": null,
+          "estado": "no aplica"
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "baseline_reglas",
+          "herramienta": "nvd",
+          "n_corridas": 8,
+          "n_con_registro": null,
+          "n_corridas_con_intentos": null,
+          "n_consultas": null,
+          "n_intentos_externos": null,
+          "n_bloqueados": null,
+          "n_respaldo_respondio": null,
+          "estado": "no aplica"
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "gemini_externo",
+          "herramienta": "abuseipdb",
+          "n_corridas": 8,
+          "n_con_registro": null,
+          "n_corridas_con_intentos": null,
+          "n_consultas": null,
+          "n_intentos_externos": null,
+          "n_bloqueados": null,
+          "n_respaldo_respondio": null,
+          "estado": "no aplica"
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "gemini_externo",
+          "herramienta": "nvd",
+          "n_corridas": 8,
+          "n_con_registro": null,
+          "n_corridas_con_intentos": null,
+          "n_consultas": null,
+          "n_intentos_externos": null,
+          "n_bloqueados": null,
+          "n_respaldo_respondio": null,
+          "estado": "no aplica"
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "nodex_multiagente",
+          "herramienta": "abuseipdb",
+          "n_corridas": 8,
+          "n_con_registro": 8,
+          "n_corridas_con_intentos": 8,
+          "n_consultas": 158,
+          "n_intentos_externos": 158,
+          "n_bloqueados": 158,
+          "n_respaldo_respondio": 158,
+          "estado": "medido"
+        },
+        {
+          "dataset": "uwf",
+          "arquitectura": "nodex_multiagente",
+          "herramienta": "nvd",
+          "n_corridas": 8,
+          "n_con_registro": 8,
+          "n_corridas_con_intentos": 0,
+          "n_consultas": 0,
+          "n_intentos_externos": 0,
+          "n_bloqueados": 0,
+          "n_respaldo_respondio": 0,
+          "estado": "medido"
+        }
+      ]
+    },
+    "comparacion": {
+      "titulo": "NODEX frente al baseline y a Gemini directo",
+      "seccion": "11.6",
+      "descripcion": "Sin umbrales de aprobado: se comparan las arquitecturas entre sí y se describe cada resultado. Una celda vacía es «no aplica o sin dato».",
+      "columnas": [
+        {
+          "clave": "dataset",
+          "etiqueta": "Dataset",
+          "tipo": "texto"
+        },
+        {
+          "clave": "metrica",
+          "etiqueta": "Métrica",
+          "tipo": "texto"
+        },
+        {
+          "clave": "nodex_multiagente",
+          "etiqueta": "NODEX",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "baseline_reglas",
+          "etiqueta": "Baseline",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "gemini_externo",
+          "etiqueta": "Gemini directo",
+          "tipo": "proporcion"
+        },
+        {
+          "clave": "comparable",
+          "etiqueta": "Tipo de comparación",
+          "tipo": "texto"
+        },
+        {
+          "clave": "nota",
+          "etiqueta": "Nota",
+          "tipo": "texto"
+        }
+      ],
+      "filas": [
+        {
+          "dataset": "bgl",
+          "metrica": "D1_precision",
+          "nodex_multiagente": 1.0,
+          "baseline_reglas": null,
+          "gemini_externo": 0.5714285714285714,
+          "comparable": "pareada",
+          "nota": "NODEX y el baseline responden la misma pregunta."
+        },
+        {
+          "dataset": "bgl",
+          "metrica": "D1_recall",
+          "nodex_multiagente": 0.75,
+          "baseline_reglas": 0.0,
+          "gemini_externo": 1.0,
+          "comparable": "pareada",
+          "nota": "NODEX y el baseline responden la misma pregunta."
+        },
+        {
+          "dataset": "bgl",
+          "metrica": "D1_f1",
+          "nodex_multiagente": 0.8571428571428571,
+          "baseline_reglas": 0.0,
+          "gemini_externo": 0.7272727272727273,
+          "comparable": "pareada",
+          "nota": "NODEX y el baseline responden la misma pregunta."
+        },
+        {
+          "dataset": "bgl",
+          "metrica": "tiempo_medio_s",
+          "nodex_multiagente": 38.560238375,
+          "baseline_reglas": 0.022132074998808093,
+          "gemini_externo": 18.17369717499605,
+          "comparable": "sistema completo vs modelo",
+          "nota": "Gemini directo no usa RAG ni herramientas, por diseño: compara el sistema completo con el modelo, no una sola variable."
+        },
+        {
+          "dataset": "hdfs",
+          "metrica": "D1_precision",
+          "nodex_multiagente": 0.0,
+          "baseline_reglas": null,
+          "gemini_externo": 0.0,
+          "comparable": "pareada",
+          "nota": "NODEX y el baseline responden la misma pregunta."
+        },
+        {
+          "dataset": "hdfs",
+          "metrica": "D1_recall",
+          "nodex_multiagente": 0.0,
+          "baseline_reglas": 0.0,
+          "gemini_externo": 0.0,
+          "comparable": "pareada",
+          "nota": "NODEX y el baseline responden la misma pregunta."
+        },
+        {
+          "dataset": "hdfs",
+          "metrica": "D1_f1",
+          "nodex_multiagente": 0.0,
+          "baseline_reglas": 0.0,
+          "gemini_externo": 0.0,
+          "comparable": "pareada",
+          "nota": "NODEX y el baseline responden la misma pregunta."
+        },
+        {
+          "dataset": "hdfs",
+          "metrica": "tiempo_medio_s",
+          "nodex_multiagente": 32.18451325,
+          "baseline_reglas": 0.02071613750013057,
+          "gemini_externo": 10.548628874996211,
+          "comparable": "sistema completo vs modelo",
+          "nota": "Gemini directo no usa RAG ni herramientas, por diseño: compara el sistema completo con el modelo, no una sola variable."
+        },
+        {
+          "dataset": "uwf",
+          "metrica": "D1_precision",
+          "nodex_multiagente": 0.5,
+          "baseline_reglas": 0.5,
+          "gemini_externo": 0.5,
+          "comparable": "contextual",
+          "nota": "El baseline responde la pregunta operativa y UWF pregunta por actividad maliciosa: la comparación con el baseline no es pareada."
+        },
+        {
+          "dataset": "uwf",
+          "metrica": "D1_recall",
+          "nodex_multiagente": 0.75,
+          "baseline_reglas": 1.0,
+          "gemini_externo": 0.5,
+          "comparable": "contextual",
+          "nota": "El baseline responde la pregunta operativa y UWF pregunta por actividad maliciosa: la comparación con el baseline no es pareada."
+        },
+        {
+          "dataset": "uwf",
+          "metrica": "D1_f1",
+          "nodex_multiagente": 0.6,
+          "baseline_reglas": 0.6666666666666666,
+          "gemini_externo": 0.5,
+          "comparable": "contextual",
+          "nota": "El baseline responde la pregunta operativa y UWF pregunta por actividad maliciosa: la comparación con el baseline no es pareada."
+        },
+        {
+          "dataset": "uwf",
+          "metrica": "D2_f1",
+          "nodex_multiagente": 0.1509433962264151,
+          "baseline_reglas": null,
+          "gemini_externo": 0.5352112676056338,
+          "comparable": "sin baseline",
+          "nota": "El baseline no produce esta salida: no aplica."
+        },
+        {
+          "dataset": "uwf",
+          "metrica": "D2_exact_match",
+          "nodex_multiagente": 0.0,
+          "baseline_reglas": null,
+          "gemini_externo": 0.0,
+          "comparable": "sin baseline",
+          "nota": "El baseline no produce esta salida: no aplica."
+        },
+        {
+          "dataset": "uwf",
+          "metrica": "D3_f1",
+          "nodex_multiagente": 0.2857142857142857,
+          "baseline_reglas": null,
+          "gemini_externo": 0.5,
+          "comparable": "sin baseline",
+          "nota": "El baseline no produce esta salida: no aplica."
+        },
+        {
+          "dataset": "uwf",
+          "metrica": "D3_exact_match",
+          "nodex_multiagente": 0.3333333333333333,
+          "baseline_reglas": null,
+          "gemini_externo": 0.5,
+          "comparable": "sin baseline",
+          "nota": "El baseline no produce esta salida: no aplica."
+        },
+        {
+          "dataset": "uwf",
+          "metrica": "tiempo_medio_s",
+          "nodex_multiagente": 58.708501,
+          "baseline_reglas": 0.051526587496482534,
+          "gemini_externo": 50.68963596249159,
+          "comparable": "sistema completo vs modelo",
+          "nota": "Gemini directo no usa RAG ni herramientas, por diseño: compara el sistema completo con el modelo, no una sola variable."
+        }
+      ]
+    },
+    "errores_d1": {
+      "titulo": "Falsos positivos y falsos negativos",
+      "seccion": "11.7",
+      "descripcion": "FP: el sistema afirmó actividad que la referencia no tiene. FN: la referencia la tiene y el sistema no la detectó.",
+      "columnas": [
+        {
+          "clave": "run_id",
+          "etiqueta": "Corrida",
+          "tipo": "texto"
+        },
+        {
+          "clave": "dataset",
+          "etiqueta": "Dataset",
+          "tipo": "texto"
+        },
+        {
+          "clave": "condicion",
+          "etiqueta": "Condición",
+          "tipo": "texto"
+        },
+        {
+          "clave": "arquitectura",
+          "etiqueta": "Arquitectura",
+          "tipo": "texto"
+        },
+        {
+          "clave": "repeticion",
+          "etiqueta": "Rep.",
+          "tipo": "entero"
+        },
+        {
+          "clave": "resultado",
+          "etiqueta": "Tipo",
+          "tipo": "texto"
+        },
+        {
+          "clave": "prediccion",
+          "etiqueta": "Predicción",
+          "tipo": "texto"
+        },
+        {
+          "clave": "referencia",
+          "etiqueta": "Referencia",
+          "tipo": "texto"
+        }
+      ],
+      "filas": [
+        {
+          "run_id": "bgl_des_balanceado_0000__reglas__r1__f9afcffc",
+          "case_id": "bgl_des_balanceado_0000",
+          "dataset": "bgl",
+          "condicion": "balanceado",
+          "arquitectura": "baseline_reglas",
+          "repeticion": 1,
+          "resultado": "FN",
+          "prediccion": "BENIGN",
+          "referencia": "anomalo"
+        },
+        {
+          "run_id": "bgl_des_balanceado_0001__reglas__r1__90d6c499",
+          "case_id": "bgl_des_balanceado_0001",
+          "dataset": "bgl",
+          "condicion": "balanceado",
+          "arquitectura": "baseline_reglas",
+          "repeticion": 1,
+          "resultado": "FN",
+          "prediccion": "BENIGN",
+          "referencia": "anomalo"
+        },
+        {
+          "run_id": "bgl_des_balanceado_0002__gemext__r1__5de7ac27",
+          "case_id": "bgl_des_balanceado_0002",
+          "dataset": "bgl",
+          "condicion": "balanceado",
+          "arquitectura": "gemini_externo",
+          "repeticion": 1,
+          "resultado": "FP",
+          "prediccion": "MALICIOUS",
+          "referencia": "normal"
+        },
+        {
+          "run_id": "bgl_des_balanceado_0003__gemext__r1__222e37b4",
+          "case_id": "bgl_des_balanceado_0003",
+          "dataset": "bgl",
+          "condicion": "balanceado",
+          "arquitectura": "gemini_externo",
+          "repeticion": 1,
+          "resultado": "FP",
+          "prediccion": "MALICIOUS",
+          "referencia": "normal"
+        },
+        {
+          "run_id": "bgl_des_natural_0001__reglas__r1__a44e6c08",
+          "case_id": "bgl_des_natural_0001",
+          "dataset": "bgl",
+          "condicion": "natural",
+          "arquitectura": "baseline_reglas",
+          "repeticion": 1,
+          "resultado": "FN",
+          "prediccion": "BENIGN",
+          "referencia": "anomalo"
+        },
+        {
+          "run_id": "bgl_des_natural_0005__nodex__r1__f733000f",
+          "case_id": "bgl_des_natural_0005",
+          "dataset": "bgl",
+          "condicion": "natural",
+          "arquitectura": "nodex_multiagente",
+          "repeticion": 1,
+          "resultado": "FN",
+          "prediccion": "BENIGN",
+          "referencia": "anomalo"
+        },
+        {
+          "run_id": "bgl_des_natural_0005__reglas__r1__dadb47dd",
+          "case_id": "bgl_des_natural_0005",
+          "dataset": "bgl",
+          "condicion": "natural",
+          "arquitectura": "baseline_reglas",
+          "repeticion": 1,
+          "resultado": "FN",
+          "prediccion": "BENIGN",
+          "referencia": "anomalo"
+        },
+        {
+          "run_id": "bgl_des_natural_0013__gemext__r1__bd2651b8",
+          "case_id": "bgl_des_natural_0013",
+          "dataset": "bgl",
+          "condicion": "natural",
+          "arquitectura": "gemini_externo",
+          "repeticion": 1,
+          "resultado": "FP",
+          "prediccion": "MALICIOUS",
+          "referencia": "normal"
+        },
+        {
+          "run_id": "hdfs_des_balanceado_0004__gemext__r1__6ecb9a9e",
+          "case_id": "hdfs_des_balanceado_0004",
+          "dataset": "hdfs",
+          "condicion": "balanceado",
+          "arquitectura": "gemini_externo",
+          "repeticion": 1,
+          "resultado": "FN",
+          "prediccion": "BENIGN",
+          "referencia": "anomalo"
+        },
+        {
+          "run_id": "hdfs_des_balanceado_0004__nodex__r1__2c455dd7",
+          "case_id": "hdfs_des_balanceado_0004",
+          "dataset": "hdfs",
+          "condicion": "balanceado",
+          "arquitectura": "nodex_multiagente",
+          "repeticion": 1,
+          "resultado": "FN",
+          "prediccion": "BENIGN",
+          "referencia": "anomalo"
+        },
+        {
+          "run_id": "hdfs_des_balanceado_0004__reglas__r1__99d3fe28",
+          "case_id": "hdfs_des_balanceado_0004",
+          "dataset": "hdfs",
+          "condicion": "balanceado",
+          "arquitectura": "baseline_reglas",
+          "repeticion": 1,
+          "resultado": "FN",
+          "prediccion": "BENIGN",
+          "referencia": "anomalo"
+        },
+        {
+          "run_id": "hdfs_des_balanceado_0005__gemext__r1__07b291fb",
+          "case_id": "hdfs_des_balanceado_0005",
+          "dataset": "hdfs",
+          "condicion": "balanceado",
+          "arquitectura": "gemini_externo",
+          "repeticion": 1,
+          "resultado": "FN",
+          "prediccion": "BENIGN",
+          "referencia": "anomalo"
+        },
+        {
+          "run_id": "hdfs_des_balanceado_0005__nodex__r1__a8744426",
+          "case_id": "hdfs_des_balanceado_0005",
+          "dataset": "hdfs",
+          "condicion": "balanceado",
+          "arquitectura": "nodex_multiagente",
+          "repeticion": 1,
+          "resultado": "FN",
+          "prediccion": "BENIGN",
+          "referencia": "anomalo"
+        },
+        {
+          "run_id": "hdfs_des_balanceado_0005__reglas__r1__a46212f4",
+          "case_id": "hdfs_des_balanceado_0005",
+          "dataset": "hdfs",
+          "condicion": "balanceado",
+          "arquitectura": "baseline_reglas",
+          "repeticion": 1,
+          "resultado": "FN",
+          "prediccion": "BENIGN",
+          "referencia": "anomalo"
+        },
+        {
+          "run_id": "hdfs_des_natural_0000__gemext__r1__67c94e70",
+          "case_id": "hdfs_des_natural_0000",
+          "dataset": "hdfs",
+          "condicion": "natural",
+          "arquitectura": "gemini_externo",
+          "repeticion": 1,
+          "resultado": "FN",
+          "prediccion": "BENIGN",
+          "referencia": "anomalo"
+        },
+        {
+          "run_id": "hdfs_des_natural_0000__nodex__r1__8463c143",
+          "case_id": "hdfs_des_natural_0000",
+          "dataset": "hdfs",
+          "condicion": "natural",
+          "arquitectura": "nodex_multiagente",
+          "repeticion": 1,
+          "resultado": "FN",
+          "prediccion": "BENIGN",
+          "referencia": "anomalo"
+        },
+        {
+          "run_id": "hdfs_des_natural_0000__reglas__r1__de683383",
+          "case_id": "hdfs_des_natural_0000",
+          "dataset": "hdfs",
+          "condicion": "natural",
+          "arquitectura": "baseline_reglas",
+          "repeticion": 1,
+          "resultado": "FN",
+          "prediccion": "BENIGN",
+          "referencia": "anomalo"
+        },
+        {
+          "run_id": "hdfs_des_natural_0007__gemext__r1__a2d7780a",
+          "case_id": "hdfs_des_natural_0007",
+          "dataset": "hdfs",
+          "condicion": "natural",
+          "arquitectura": "gemini_externo",
+          "repeticion": 1,
+          "resultado": "FP",
+          "prediccion": "MALICIOUS",
+          "referencia": "normal"
+        },
+        {
+          "run_id": "hdfs_des_natural_0007__nodex__r1__ae168016",
+          "case_id": "hdfs_des_natural_0007",
+          "dataset": "hdfs",
+          "condicion": "natural",
+          "arquitectura": "nodex_multiagente",
+          "repeticion": 1,
+          "resultado": "FP",
+          "prediccion": "MALICIOUS",
+          "referencia": "normal"
+        },
+        {
+          "run_id": "uwf_des_sigiloso_0004__gemext__r1__26482208",
+          "case_id": "uwf_des_sigiloso_0004",
+          "dataset": "uwf",
+          "condicion": "sigiloso",
+          "arquitectura": "gemini_externo",
+          "repeticion": 1,
+          "resultado": "FN",
+          "prediccion": "BENIGN",
+          "referencia": "anomalo"
+        },
+        {
+          "run_id": "uwf_des_sigiloso_0004__nodex__r1__8d766ff7",
+          "case_id": "uwf_des_sigiloso_0004",
+          "dataset": "uwf",
+          "condicion": "sigiloso",
+          "arquitectura": "nodex_multiagente",
+          "repeticion": 1,
+          "resultado": "FN",
+          "prediccion": "BENIGN",
+          "referencia": "anomalo"
+        },
+        {
+          "run_id": "uwf_des_sigiloso_0005__gemext__r1__5981b99b",
+          "case_id": "uwf_des_sigiloso_0005",
+          "dataset": "uwf",
+          "condicion": "sigiloso",
+          "arquitectura": "gemini_externo",
+          "repeticion": 1,
+          "resultado": "FN",
+          "prediccion": "BENIGN",
+          "referencia": "anomalo"
+        },
+        {
+          "run_id": "uwf_des_sigiloso_0008__gemext__r1__4ab19a1f",
+          "case_id": "uwf_des_sigiloso_0008",
+          "dataset": "uwf",
+          "condicion": "sigiloso",
+          "arquitectura": "gemini_externo",
+          "repeticion": 1,
+          "resultado": "FP",
+          "prediccion": "MALICIOUS",
+          "referencia": "normal"
+        },
+        {
+          "run_id": "uwf_des_sigiloso_0008__nodex__r1__7c62b466",
+          "case_id": "uwf_des_sigiloso_0008",
+          "dataset": "uwf",
+          "condicion": "sigiloso",
+          "arquitectura": "nodex_multiagente",
+          "repeticion": 1,
+          "resultado": "FP",
+          "prediccion": "MALICIOUS",
+          "referencia": "normal"
+        },
+        {
+          "run_id": "uwf_des_sigiloso_0008__reglas__r1__0348379e",
+          "case_id": "uwf_des_sigiloso_0008",
+          "dataset": "uwf",
+          "condicion": "sigiloso",
+          "arquitectura": "baseline_reglas",
+          "repeticion": 1,
+          "resultado": "FP",
+          "prediccion": "MALICIOUS",
+          "referencia": "normal"
+        },
+        {
+          "run_id": "uwf_des_sigiloso_0010__reglas__r1__c3d38ce8",
+          "case_id": "uwf_des_sigiloso_0010",
+          "dataset": "uwf",
+          "condicion": "sigiloso",
+          "arquitectura": "baseline_reglas",
+          "repeticion": 1,
+          "resultado": "FP",
+          "prediccion": "MALICIOUS",
+          "referencia": "normal"
+        },
+        {
+          "run_id": "uwf_des_visible_0007__nodex__r1__7be817ec",
+          "case_id": "uwf_des_visible_0007",
+          "dataset": "uwf",
+          "condicion": "visible",
+          "arquitectura": "nodex_multiagente",
+          "repeticion": 1,
+          "resultado": "FP",
+          "prediccion": "MALICIOUS",
+          "referencia": "normal"
+        },
+        {
+          "run_id": "uwf_des_visible_0007__reglas__r1__dcf63490",
+          "case_id": "uwf_des_visible_0007",
+          "dataset": "uwf",
+          "condicion": "visible",
+          "arquitectura": "baseline_reglas",
+          "repeticion": 1,
+          "resultado": "FP",
+          "prediccion": "MALICIOUS",
+          "referencia": "normal"
+        },
+        {
+          "run_id": "uwf_des_visible_0009__gemext__r1__0737d882",
+          "case_id": "uwf_des_visible_0009",
+          "dataset": "uwf",
+          "condicion": "visible",
+          "arquitectura": "gemini_externo",
+          "repeticion": 1,
+          "resultado": "FP",
+          "prediccion": "MALICIOUS",
+          "referencia": "normal"
+        },
+        {
+          "run_id": "uwf_des_visible_0009__nodex__r1__4f3d941a",
+          "case_id": "uwf_des_visible_0009",
+          "dataset": "uwf",
+          "condicion": "visible",
+          "arquitectura": "nodex_multiagente",
+          "repeticion": 1,
+          "resultado": "FP",
+          "prediccion": "MALICIOUS",
+          "referencia": "normal"
+        },
+        {
+          "run_id": "uwf_des_visible_0009__reglas__r1__8dbb5e25",
+          "case_id": "uwf_des_visible_0009",
+          "dataset": "uwf",
+          "condicion": "visible",
+          "arquitectura": "baseline_reglas",
+          "repeticion": 1,
+          "resultado": "FP",
+          "prediccion": "MALICIOUS",
+          "referencia": "normal"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "case_id": "uwf_des_visible_0000",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "uwf_des_visible_0000__nodex__r1__6182d617",
+  "telemetria": {
+    "llm_call_count": 6,
+    "input_tokens": 59674,
+    "output_tokens": 2130,
+    "total_tokens": 66437,
+    "execution_time": 52.645835,
+    "replan_count": 0,
+    "intentos_correccion": 1,
+    "invalid_evidence_uid_count": 0,
+    "d11_warning_count": 0,
+    "llm_calls": [
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 3450,
+        "output_tokens": 376,
+        "total_tokens": 4392,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 566,
+        "duration_s": 9.573,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 3644,
+        "output_tokens": 187,
+        "total_tokens": 4347,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 516,
+        "duration_s": 5.772,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 4350,
+        "output_tokens": 203,
+        "total_tokens": 5049,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 496,
+        "duration_s": 6.845,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 315,
+        "output_tokens": 57,
+        "total_tokens": 627,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 255,
+        "duration_s": 4.378,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 243,
+        "output_tokens": 285,
+        "total_tokens": 1877,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 1349,
+        "duration_s": 10.379,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 47672,
+        "output_tokens": 1022,
+        "total_tokens": 50145,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 1451,
+        "duration_s": 15.491,
+        "error": null
+      }
+    ],
+    "n_llamadas_fallidas": 0,
+    "duracion_llamadas_s": 52.438,
+    "reasoning_tokens": 4633,
+    "modelos_efectivos": [
+      "gemini-3.8-flash"
+    ],
+    "campos_parciales": {},
+    "tiempo_total_runner_s": 52.64858060001279,
+    "previa_a_d11": false,
+    "output_contract_version": "d11-v1",
+    "diagnostico_runner": {
+      "arquitectura": "nodex_multiagente",
+      "thread_id": "exp__uwf_des_visible_0000__nodex__r1__6182d617",
+      "execution_time": 52.64858060001279,
+      "error": null,
+      "claves_ausentes_en_el_estado": [],
+      "replan_count": 0,
+      "intentos_correccion": 1,
+      "historial_ejecucion": 8,
+      "d11_presente_en_el_estado": true
+    }
+  }
+}

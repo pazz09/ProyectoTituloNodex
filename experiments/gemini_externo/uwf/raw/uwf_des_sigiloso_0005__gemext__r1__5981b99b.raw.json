@@ -1,0 +1,81 @@
+{
+  "case_id": "uwf_des_sigiloso_0005",
+  "dataset": "uwf",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "uwf_des_sigiloso_0005__gemext__r1__5981b99b",
+  "estado_crudo": {
+    "diagnostico": "Anomalía operativa de infraestructura por fallo generalizado de resolución DNS. El host/forwarder 143.88.255.10 realiza ráfagas continuas y estrictamente periódicas (cada ~30.25 segundos) de consultas DNS hacia el servidor 10.0.10.1:53 sin recibir ninguna respuesta (estado S0, 0 bytes retornados). A su vez, clientes internos (como 143.88.10.11) intentan consultar a 143.88.255.10 sin obtener contestación, y otros hosts (143.88.1.51) experimentan retardos fijos de 5 segundos (timeout DNS) al consultar a 143.88.1.1. También fallan consultas a servidores raíz de Internet (199.9.14.201 y 2001:500:1::53). No existe evidencia de actividad maliciosa ni compromiso de seguridad.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "El tráfico observado se compone exclusivamente de tráfico de red legítimo y de gestión (DNS, DHCPv6, ICMPv6, LLMNR, NetBIOS). La alta periodicidad de ~30.25 segundos no constituye un canal C2, sino la cadencia típica de reintento o health check de un resolvedor/forwarder DNS ante un upstream inaccesible en la dirección RFC 1918 (10.0.10.1). La limitación principal es la ausencia del archivo dns.log para inspeccionar los registros qtype y qname específicos, pero el patrón en conn.log sustenta plenamente un problema de conectividad o indisponibilidad del servicio de nombres.",
+    "comandos_mitigacion": [
+      "systemctl status named || systemctl status bind9 || systemctl status dnsmasq",
+      "ping -c 4 10.0.10.1",
+      "traceroute -n 10.0.10.1",
+      "dig @10.0.10.1 version.bind chaos txt",
+      "iptables -L -n -v | grep 53"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-DNS-UPSTREAM-FAIL",
+        "evidence_uids": [
+          "CN3VM84ft0ysAtEVnd",
+          "CHJBu53gJwxbmLgjbe",
+          "CYAJKC1yIOIZsN4cve",
+          "C6UiOlj6k0miNY1te",
+          "CUKtGo2FVpwoU51Mmb",
+          "C9UeTL24wWmTM03jrf"
+        ],
+        "timestamp": "2021-12-19 01:55:05",
+        "event_type": "DNS_RESOLUTION_TIMEOUT",
+        "description": "El host 143.88.255.10 envía ráfagas continuas de consultas DNS UDP a 10.0.10.1:53 cada ~30.25 segundos sin recibir respuesta (S0)."
+      },
+      {
+        "event_id": "EVT-DNS-CLIENT-UNRESPONSIVE",
+        "evidence_uids": [
+          "CSZC8n3JZVzo2v5hC2",
+          "CU2e073jBzw6uSJBi7",
+          "CsL2R74HTwr1kDvW09"
+        ],
+        "timestamp": "2021-12-19 02:01:00",
+        "event_type": "DNS_CLIENT_FAILURE",
+        "description": "El cliente 143.88.10.11 consulta al servidor local 143.88.255.10:53 y no obtiene respuesta (S0), reflejando la degradación del servicio."
+      },
+      {
+        "event_id": "EVT-DNS-TIMEOUT-INTERNAL",
+        "evidence_uids": [
+          "CtGGaI1HmQXDUjs44i",
+          "C4EC4f3i1sC0h1OBz8",
+          "C6dyyM3nmzvYVh1Vke",
+          "CM81wd4YbpWwUSilYd"
+        ],
+        "timestamp": "2021-12-19 01:56:48",
+        "event_type": "DNS_LATENCY_TIMEOUT",
+        "description": "El host 143.88.1.51 experimenta una latencia fija de 5.00 segundos en cada resolución frente a 143.88.1.1, consistente con retransmisiones y tiempos de espera DNS."
+      },
+      {
+        "event_id": "EVT-DNS-ROOT-FAIL",
+        "evidence_uids": [
+          "CUwuJF4DFSI310iMf6",
+          "C6si491wOTGOiRjbPd"
+        ],
+        "timestamp": "2021-12-19 01:58:34",
+        "event_type": "DNS_ROOT_QUERY_FAIL",
+        "description": "Peticiones directas a servidores raíz (199.9.14.201 y 2001:500:1::53) quedan sin respuesta (S0), evidenciando bloqueo o fallo de enlace externo."
+      }
+    ],
+    "secuencia_temporal": [
+      "2021-12-19 01:55:05 - Inicio del ciclo de consultas DNS fallidas de 143.88.255.10 hacia 10.0.10.1 (UID: CN3VM84ft0ysAtEVnd).",
+      "2021-12-19 01:56:48 - 143.88.1.51 sufre degradación con latencias de timeout de 5 segundos hacia 143.88.1.1 (UID: CtGGaI1HmQXDUjs44i).",
+      "2021-12-19 01:58:34 - Intentos de consulta hacia root nameservers IPv6 fallan sin respuesta (UID: C6si491wOTGOiRjbPd).",
+      "2021-12-19 02:01:00 - Cliente 143.88.10.11 no recibe respuesta de 143.88.255.10 (UID: CSZC8n3JZVzo2v5hC2).",
+      "2021-12-19 02:00:24 a 02:25:50 - Continúan los reintentos periódicos en ráfaga cada 30.25 segundos hacia 10.0.10.1 manteniéndose en estado S0."
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

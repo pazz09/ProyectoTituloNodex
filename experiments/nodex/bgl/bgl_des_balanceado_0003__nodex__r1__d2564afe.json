@@ -1,0 +1,41 @@
+{
+  "case_id": "bgl_des_balanceado_0003",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "bgl_des_balanceado_0003__nodex__r1__d2564afe",
+  "salida": {
+    "case_id": "bgl_des_balanceado_0003",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos registros analizados corresponden a eventos informativos del sistema operativo a nivel de kernel (RAS KERNEL INFO), característicos de la arquitectura BlueGene/L (IBM), donde se reportan estados de registros de hardware (iar, dear). No se evidencian anomalías de seguridad, intentos de intrusión, movimientos laterales ni indicadores de compromiso (IoCs). Se concluye que se trata de actividad benigna y operativa del sistema.\n\n## Evaluación del auditor\n\nEl diagnóstico es adecuado. Los registros corresponden a mensajes informativos de nivel de kernel (RAS KERNEL INFO) característicos del sistema BlueGene/L, reflejando operaciones normales y reporte de registros de hardware sin evidencia de anomalías ni compromiso de seguridad."
+    },
+    "_meta": {
+      "run_id": "bgl_des_balanceado_0003__nodex__r1__d2564afe",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_des_balanceado_0003__nodex__r1__d2564afe.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:15:56+00:00"
+  }
+}

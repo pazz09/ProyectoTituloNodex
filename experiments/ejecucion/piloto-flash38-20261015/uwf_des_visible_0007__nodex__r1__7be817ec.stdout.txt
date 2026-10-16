@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3818 salida=409 razonamiento=676 total=4903
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=4095 salida=153 razonamiento=401 total=4649
+   → Solicitando RAG (Se observan 239 intentos fallidos y conexiones sin respuesta (estado S0) sobre DNS de 143.88.255.10 hacia 10.0.10.1. Para discernir con precisión si el patrón corresponde a exfiltración/tunelado DNS (T1071.004, T1048.003) o a un intento de denegación de servicio/escaneo, es necesario consultar la base de conocimiento y el historial de casos similares según lo contemplado en el plan de investigación.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1071.004, T1584.002, T1590.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=4784 salida=200 razonamiento=686 total=5670
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=312 salida=64 razonamiento=255 total=631
+   → usar_cve: False | Razón: El diagnóstico describe sondeo, escaneo o reconocimiento genérico contra el servicio DNS sin especificar software, proveedor ni versión del resolver (por ejemplo, BIND, Windows DNS), por lo que no es posible realizar una búsqueda precisa de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=247 salida=224 razonamiento=1127 total=1598
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=48242 salida=894 razonamiento=783 total=49919
+   → Confianza final: 0.90 | hay_anomalia=True | hay_incidente=True | cobertura_suficiente=True | El diagnóstico es preciso al identificar un flujo recurrente y anómalo de consultas DNS UDP desde la IP pública 143.88.255.10 hacia la IP privada 10.0.10.1 con estado S0 (sin respuesta), lo cual denota una actividad de sondeo o escaneo de servicios DNS sin establecimiento de canal C2. Las acciones de contención perimetral y limitación de tasa son adecuadas.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

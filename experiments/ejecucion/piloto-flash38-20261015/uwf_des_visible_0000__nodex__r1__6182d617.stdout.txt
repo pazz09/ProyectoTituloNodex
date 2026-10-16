@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3450 salida=376 razonamiento=566 total=4392
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3644 salida=187 razonamiento=516 total=4347
+   → Solicitando RAG (Se detecta un volumen anómalo y concentrado de eventos críticos e intentos fallidos en tráfico DNS (143.88.255.10 hacia 10.0.10.1 con 212 eventos) y tráfico de red interno (143.88.18.12 hacia 143.88.18.11 con 60 eventos). Es necesario consultar la base de conocimiento y técnicas de MITRE ATT&CK (como T1071.004 para túneles DNS o T1498/T1499 para DoS/amplificación) e historial previo para determinar si corresponde a exfiltración, escaneo/reconocimiento o denegación de servicio.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1584.002, T1071.004, T1590.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=4350 salida=203 razonamiento=496 total=5049
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=315 salida=57 razonamiento=255 total=627
+   → usar_cve: False | Razón: El diagnóstico describe actividad anómala a nivel de protocolo y red (reconocimiento o canalización encubierta sobre DNS) sin identificar un software, producto o versión específica vulnerable para consultar vulnerabilidades CVE.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=243 salida=285 razonamiento=1349 total=1877
+   → 8 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=47672 salida=1022 razonamiento=1451 total=50145
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=True | cobertura_suficiente=True | Se confirman dos comportamientos anómalos y maliciosos: un escaneo sistemático de puertos TCP (SYN flood / SYN scan con estado SH) desde 143.88.18.12 hacia 143.88.18.11 afectando múltiples servicios estándar (SSH, RDP, SMB, HTTP, bases de datos), y una ráfaga sostenida de peticiones DNS no respondidas (estado S0) desde 143.88.255.10 hacia el servidor interno 10.0.10.1. Ambas actividades corresponden a reconocimiento activo y escaneo de servicios de red.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

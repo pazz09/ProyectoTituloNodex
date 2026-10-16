@@ -1,0 +1,17 @@
+﻿dataset,metrica,nodex_multiagente,baseline_reglas,gemini_externo,comparable,nota
+bgl,D1_precision,1.0,,0.5714285714285714,pareada,NODEX y el baseline responden la misma pregunta.
+bgl,D1_recall,0.75,0.0,1.0,pareada,NODEX y el baseline responden la misma pregunta.
+bgl,D1_f1,0.8571428571428571,0.0,0.7272727272727273,pareada,NODEX y el baseline responden la misma pregunta.
+bgl,tiempo_medio_s,38.560238375,0.022132074998808093,18.17369717499605,sistema completo vs modelo,"Gemini directo no usa RAG ni herramientas, por diseño: compara el sistema completo con el modelo, no una sola variable."
+hdfs,D1_precision,0.0,,0.0,pareada,NODEX y el baseline responden la misma pregunta.
+hdfs,D1_recall,0.0,0.0,0.0,pareada,NODEX y el baseline responden la misma pregunta.
+hdfs,D1_f1,0.0,0.0,0.0,pareada,NODEX y el baseline responden la misma pregunta.
+hdfs,tiempo_medio_s,32.18451325,0.02071613750013057,10.548628874996211,sistema completo vs modelo,"Gemini directo no usa RAG ni herramientas, por diseño: compara el sistema completo con el modelo, no una sola variable."
+uwf,D1_precision,0.5,0.5,0.5,contextual,El baseline responde la pregunta operativa y UWF pregunta por actividad maliciosa: la comparación con el baseline no es pareada.
+uwf,D1_recall,0.75,1.0,0.5,contextual,El baseline responde la pregunta operativa y UWF pregunta por actividad maliciosa: la comparación con el baseline no es pareada.
+uwf,D1_f1,0.6,0.6666666666666666,0.5,contextual,El baseline responde la pregunta operativa y UWF pregunta por actividad maliciosa: la comparación con el baseline no es pareada.
+uwf,D2_f1,0.1509433962264151,,0.5352112676056338,sin baseline,El baseline no produce esta salida: no aplica.
+uwf,D2_exact_match,0.0,,0.0,sin baseline,El baseline no produce esta salida: no aplica.
+uwf,D3_f1,0.2222222222222222,,0.25,sin baseline,El baseline no produce esta salida: no aplica.
+uwf,D3_exact_match,0.25,,0.25,sin baseline,El baseline no produce esta salida: no aplica.
+uwf,tiempo_medio_s,58.708501,0.051526587496482534,50.68963596249159,sistema completo vs modelo,"Gemini directo no usa RAG ni herramientas, por diseño: compara el sistema completo con el modelo, no una sola variable."

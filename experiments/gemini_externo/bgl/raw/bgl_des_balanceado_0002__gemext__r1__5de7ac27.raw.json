@@ -1,0 +1,80 @@
+{
+  "case_id": "bgl_des_balanceado_0002",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "bgl_des_balanceado_0002__gemext__r1__5de7ac27",
+  "estado_crudo": {
+    "diagnostico": "Fallas de hardware y excepciones operativas a nivel de procesador y memoria en un supercomputador IBM Blue Gene/L. Se observa un fallo crítico de energía en una tarjeta de nodo (PGOOD/MPGOOD error), errores de memoria corregibles (ECC/CE) y un alto volumen de excepciones de alineación en la unidad de punto flotante Double-Hummer, además de volcados de registros de excepciones (iar/dear). No existe evidencia de actividad maliciosa o intrusión.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "Los registros corresponden exclusivamente al subsistema RAS (Reliability, Availability, and Serviceability) del kernel y descubrimiento de hardware en Blue Gene/L. La pérdida de PGOOD/MPGOOD en el nodo R11-M1-N7 es una falla física de suministro eléctrico. Los mensajes de 'double-hummer alignment exceptions' reflejan problemas de compilación u optimización matemática en aplicaciones científicas concurrentes, no un vector de ataque. Las excepciones IAR/DEAR y errores de memoria DDR son fallos y degradaciones operativas estándar.",
+    "comandos_mitigacion": [
+      "service card replace R11-M1-N7",
+      "mmdiag --hardware",
+      "bg_console -e 'locate node card R11-M1-N7'"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-01",
+        "evidence_uids": [
+          "1125084490",
+          "1125084517",
+          "1125084553",
+          "1125084580",
+          "1125084639",
+          "1125084695"
+        ],
+        "timestamp": "2005-08-26-12.28.10 a 2005-08-26-12.31.35",
+        "event_type": "KERNEL_EXCEPTION_DUMP",
+        "description": "Registro de direcciones de excepción de instrucción y datos (iar/dear) en múltiples nodos de cómputo."
+      },
+      {
+        "event_id": "EVT-02",
+        "evidence_uids": [
+          "1125087561",
+          "1125114716",
+          "1125149105",
+          "1125209512"
+        ],
+        "timestamp": "2005-08-26-13.19.21 a 2005-08-27-23.11.52",
+        "event_type": "ECC_MEMORY_CORRECTION",
+        "description": "Errores corregibles de memoria DDR detectados por el controlador ECC en distintos nodos."
+      },
+      {
+        "event_id": "EVT-03",
+        "evidence_uids": [
+          "1125193792"
+        ],
+        "timestamp": "2005-08-27-18.49.52.912954",
+        "event_type": "POWER_HARDWARE_FAILURE",
+        "description": "Fallo de suministro de energía en la tarjeta de nodo R11-M1-N7 (PGOOD y MPGOOD no afirmados, cerrojos de error activos)."
+      },
+      {
+        "event_id": "EVT-04",
+        "evidence_uids": [
+          "1125219517",
+          "1125219610",
+          "1125220160",
+          "1125220268",
+          "1125221152",
+          "1125221429"
+        ],
+        "timestamp": "2005-08-28-01.58.37 a 2005-08-28-02.30.29",
+        "event_type": "FPU_ALIGNMENT_EXCEPTIONS",
+        "description": "Masivas excepciones de alineación de hardware en la unidad de punto flotante Double-Hummer durante ejecución de cargas de trabajo."
+      }
+    ],
+    "secuencia_temporal": [
+      "2005-08-26 12:28:10 - 12:31:35: Se generan múltiples excepciones de kernel en varios racks (R60, R64, R65, R66, R67, R77).",
+      "2005-08-26 13:19:21 - 2005-08-27 23:11:52: Registro de errores de memoria corregibles (CE/DDR) en R14, R74 y R36.",
+      "2005-08-27 18:49:52: Falla de hardware grave por pérdida de energía (PGOOD/MPGOOD error latch) en la tarjeta R11-M1-N7.",
+      "2005-08-28 01:58:37 - 02:30:29: Ráfaga de cientos de millones de excepciones de alineación en procesadores de múltiples nodos."
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

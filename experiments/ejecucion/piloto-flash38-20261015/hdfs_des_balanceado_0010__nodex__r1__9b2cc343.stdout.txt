@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1189 salida=287 razonamiento=379 total=1855
+   → Plan v1: ['triage', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=1307 salida=154 razonamiento=272 total=1733
+   → No hace falta RAG (El lote presenta 100% de cobertura de parsing, severidad INFO en todos los eventos y comportamiento operativo típico de HDFS entre IPs locales limpias, sin anomalías que justifiquen consulta a memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=227 salida=41 razonamiento=337 total=605
+   → usar_cve: False | Razón: El diagnóstico confirma actividad operacional legítima y normal de HDFS, sin indicios de ataque, explotación o vulnerabilidades asociadas.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=142 salida=137 razonamiento=872 total=1151
+   → 3 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2803 salida=151 razonamiento=274 total=3228
+   → Confianza final: 1.00 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es completamente acertado. Los registros corresponden a transacciones y operaciones operacionales estándar del cluster HDFS (DataNode, FSNamesystem y FSDataset), incluyendo transferencias y limpiezas rutinarias de bloques sin anomalías ni fallos.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

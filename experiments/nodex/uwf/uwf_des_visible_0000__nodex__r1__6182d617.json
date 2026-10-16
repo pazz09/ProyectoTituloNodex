@@ -1,0 +1,107 @@
+{
+  "case_id": "uwf_des_visible_0000",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "uwf_des_visible_0000__nodex__r1__6182d617",
+  "salida": {
+    "case_id": "uwf_des_visible_0000",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-17 13:00:47.631896",
+        "entities": [],
+        "event_type": "dns_query_flood",
+        "evidence_uids": [
+          "C4vGuv2GsIdW656IXl",
+          "CIujUM1DTeqmLRRUC3",
+          "CCersZ2uKuONh6Wnfh"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-17 13:19:50.781",
+        "entities": [],
+        "event_type": "port_scan_syn",
+        "evidence_uids": [
+          "CDvhTZ3ITOK5lzuNk6",
+          "C1ABS36DFUr6ONIGk",
+          "CXyiwY2LXWtIfF7aqi",
+          "CmmT982Q318Lvft2De"
+        ]
+      },
+      {
+        "uid": "event_003",
+        "timestamp": "2021-12-17 13:24:59.630496",
+        "entities": [],
+        "event_type": "dns_query_flood",
+        "evidence_uids": [
+          "ChK3QF1N5VByJJ72Ea",
+          "CQ7eM31wOxwOY3JWy5"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002",
+      "event_003"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": [
+        {
+          "id": "T1046",
+          "name": "Network Service Discovery",
+          "evidence_uids": [
+            "CDvhTZ3ITOK5lzuNk6",
+            "C1ABS36DFUr6ONIGk",
+            "CXyiwY2LXWtIfF7aqi",
+            "CmmT982Q318Lvft2De",
+            "CuA7KH235l5j3vjO0d"
+          ]
+        }
+      ]
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe observa un patrón anómalo de tráfico de red caracterizado por 280 eventos críticos e intentos fallidos sobre un total de 300 registros. La actividad principal proviene de la IP 143.88.255.10, la cual generó 212 peticiones DNS fallidas dirigidas hacia el host interno 10.0.10.1, junto con 60 conexiones no exitosas entre 143.88.18.12 y 143.88.18.11. Este comportamiento sugiere una actividad de reconocimiento o enumeración de nombres de dominio y servicios DNS (T1590.002), o bien intentos fallidos de comunicación y canalización encubierta a través del protocolo DNS (T1071.004).\n\n## Evaluación del auditor\n\nSe confirman dos comportamientos anómalos y maliciosos: un escaneo sistemático de puertos TCP (SYN flood / SYN scan con estado SH) desde 143.88.18.12 hacia 143.88.18.11 afectando múltiples servicios estándar (SSH, RDP, SMB, HTTP, bases de datos), y una ráfaga sostenida de peticiones DNS no respondidas (estado S0) desde 143.88.255.10 hacia el servidor interno 10.0.10.1. Ambas actividades corresponden a reconocimiento activo y escaneo de servicios de red.\n\n## Comandos de mitigación propuestos\n\n- iptables -I INPUT -s 143.88.255.10 -j DROP\n- iptables -I FORWARD -s 143.88.255.10 -d 10.0.10.1 -j DROP\n- iptables -I FORWARD -s 143.88.18.12 -d 143.88.18.11 -j DROP\n- iptables -I INPUT -s 143.88.18.12 -j DROP\n- ip route add blackhole 143.88.255.10\n- iptables -I INPUT -p udp --dport 53 -m hashlimit --hashlimit-name DNS_LIMIT --hashlimit-above 20/sec --hashlimit-burst 40 --hashlimit-mode srcip -j DROP\n- iptables -I INPUT -p tcp --dport 53 -m hashlimit --hashlimit-name DNS_LIMIT_TCP --hashlimit-above 20/sec --hashlimit-burst 40 --hashlimit-mode srcip -j DROP\n- iptables-save > /etc/iptables/rules.v4"
+    },
+    "_meta": {
+      "run_id": "uwf_des_visible_0000__nodex__r1__6182d617",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_des_visible_0000__nodex__r1__6182d617.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:41:15+00:00"
+  }
+}

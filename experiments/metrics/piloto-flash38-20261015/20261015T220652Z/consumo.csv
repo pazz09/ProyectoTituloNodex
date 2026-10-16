@@ -1,0 +1,10 @@
+﻿dataset,arquitectura,n_completas,n_no_completas,tiempo_medio_s,tiempo_mediana_s,llamadas_medias,tokens_entrada_medios,tokens_salida_medios,tokens_razonamiento_medios,tokens_totales_medios,versiones_devueltas,replan_medio,correcciones_medias,n_con_fallback,n_sin_tokens,n_llamadas_fallidas,tokens_parciales
+bgl,baseline_reglas,8,0,0.022132074998808093,0.021494749991688877,0.0,,,,,,,,,,,
+bgl,gemini_externo,8,0,18.17369717499605,19.228549349994864,1.0,2759.0,1242.875,1133.25,5135.125,gemini-3.8-flash,,,0,0,0,
+bgl,nodex_multiagente,8,0,38.560238375,38.379862,5.125,3992.25,788.125,2990.375,7770.75,gemini-3.8-flash,0.0,1.0,0,0,0,
+hdfs,baseline_reglas,8,0,0.02071613750013057,0.020711500008474104,0.0,,,,,,,,,,,
+hdfs,gemini_externo,8,0,10.548628874996211,9.318228849981097,1.0,1318.25,339.25,1097.125,2754.625,gemini-3.8-flash,,,0,0,0,
+hdfs,nodex_multiagente,8,0,32.18451325,33.510951000000006,5.0,6132.0,850.625,2635.625,9618.25,gemini-3.8-flash,0.0,1.0,0,0,0,
+uwf,baseline_reglas,8,0,0.051526587496482534,0.051493199993274175,0.0,,,,,,,,,,,
+uwf,gemini_externo,8,0,50.68963596249159,49.31714289999218,1.0,50341.25,1739.125,5630.375,57710.75,gemini-3.8-flash,,,0,0,0,
+uwf,nodex_multiagente,8,0,58.708501,52.1470395,6.625,67453.5,2039.5,5626.25,75119.25,gemini-3.8-flash,0.125,1.125,0,0,0,

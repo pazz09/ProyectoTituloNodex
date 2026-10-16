@@ -1,0 +1,95 @@
+{
+  "case_id": "uwf_des_visible_0009",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "uwf_des_visible_0009__nodex__r1__4f3d941a",
+  "salida": {
+    "case_id": "uwf_des_visible_0009",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-19 00:50:03.381134",
+        "entities": [],
+        "event_type": "network_scan_probe",
+        "evidence_uids": [
+          "CnmmeK1Y0R7aUzNPnb",
+          "CxAROQj9iwIkgtnsg",
+          "C9LiwY1s42wFO47w19"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-19 01:22:19.382964",
+        "entities": [],
+        "event_type": "network_scan_probe",
+        "evidence_uids": [
+          "CQT0cdgRPEcnrZye8",
+          "CUy9w44AXAtQLfuQfi",
+          "Cku6s6130k7hf6AdV6",
+          "COE5H34elg7i4qqJf7",
+          "CRXbYs4PDzwJzF7Jr3"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": [
+        {
+          "id": "T1590.002",
+          "name": "Gather Victim Network Information: DNS",
+          "evidence_uids": [
+            "CnmmeK1Y0R7aUzNPnb",
+            "CxAROQj9iwIkgtnsg",
+            "CRXbYs4PDzwJzF7Jr3"
+          ]
+        }
+      ]
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe observa un volumen anómalo y concentrado de tráfico DNS (UDP/53) dirigido desde la IP externa 143.88.255.10 hacia el resolver interno 10.0.10.1, sumando 266 intentos con estado de conexión incompleto (S0) y categorizados como fallidos/críticos en una ventana de ~32 minutos. Este comportamiento es compatible con actividades de reconocimiento externo sobre la infraestructura de nombres de dominio (T1590.002) o intentos de abuso de resolución/C2 mediante DNS (T1071.004) que no están obteniendo respuesta válida. Se recomienda el bloqueo preventivo perimetral de la IP 143.88.255.10 y verificar las políticas del firewall para impedir consultas DNS entrantes directas a 10.0.10.1 desde orígenes públicos no autorizados.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto y consistente con la evidencia observada en los logs de Zeek. Se constata un tráfico repetitivo y anómalo de paquetes DNS (UDP/53) procedentes de la dirección externa 143.88.255.10 hacia la IP interna 10.0.10.1 con estado S0 (sin respuesta registrada), lo que refleja un sondeo/reconocimiento o intento de abuso de resolución DNS. Las reglas de firewall propuestas neutralizan la IP de origen y restringen el acceso perimetral indebido.\n\n## Comandos de mitigación propuestos\n\n- iptables -I INPUT 1 -s 143.88.255.10 -j DROP\n- iptables -I FORWARD 1 -s 143.88.255.10 -j DROP\n- ufw insert 1 deny from 143.88.255.10 to any\n- iptables -I FORWARD 2 -d 10.0.10.1 -p udp --dport 53 ! -s 10.0.0.0/8 -j DROP\n- iptables -I FORWARD 3 -d 10.0.10.1 -p tcp --dport 53 ! -s 10.0.0.0/8 -j DROP"
+    },
+    "_meta": {
+      "run_id": "uwf_des_visible_0009__nodex__r1__4f3d941a",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_des_visible_0009__nodex__r1__4f3d941a.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:46:22+00:00"
+  }
+}

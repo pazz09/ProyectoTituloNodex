@@ -1,0 +1,79 @@
+{
+  "case_id": "uwf_des_sigiloso_0010",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "uwf_des_sigiloso_0010__nodex__r1__59b4c089",
+  "salida": {
+    "case_id": "uwf_des_sigiloso_0010",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-26 02:28:40.630572",
+        "entities": [],
+        "event_type": "dns_request_failed",
+        "evidence_uids": [
+          "CHDXcfRsi32UJ6Trk"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-26 02:57:55.132863",
+        "entities": [],
+        "event_type": "dns_request_failed",
+        "evidence_uids": [
+          "CfGJYg1WA7lM2SlMI5"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe confirma un patrón consistente con una desconfiguración operativa en el host 143.88.255.10, el cual envió 266 solicitudes DNS infructuosas/fallidas a la dirección IP privada 10.0.10.1 en un lapso de ~29 minutos sin recibir respuesta válida. Este comportamiento apunta a una asignación incorrecta o desactualizada del servidor DNS primario/de reenvío (apuntando a una IP no alcanzable o servicio DNS inactivo en 10.0.10.1), descartándose indicios de exfiltración activa o túnel DNS dado el carácter reiterado y fallido del tráfico sin payloads variables efectivos. Acciones de remediación diagnóstica sin impacto: 1) Verificar la configuración de red y resolutores DNS en el host 143.88.255.10 (resolv.conf o configuración de adaptador). 2) Validar si el servicio DNS en 10.0.10.1 debe estar activo o si el host debe apuntar al resolver legítimo del segmento (ej. 143.88.1.1). 3) Reconfigurar el servidor DNS hacia el resolver operativo sin interrumpir servicios.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Se observa un volumen reiterado de solicitudes DNS (UDP/53) originadas en 143.88.255.10 hacia la IP privada 10.0.10.1 con estado de conexión 'S0' (sin respuesta), lo que refleja una falla de conectividad o desconfiguración del resolver DNS y no un incidente de seguridad malicioso ni exfiltración.\n\n## Comandos de mitigación propuestos\n\n- cp /etc/resolv.conf /etc/resolv.conf.bak\n- sed -i 's/nameserver 10.0.10.1/nameserver 143.88.1.1/g' /etc/resolv.conf\n- resolvectl dns $(ip route show default | awk '{print $5}' | head -n1) 143.88.1.1 2>/dev/null || true\n- resolvectl flush-caches 2>/dev/null || systemd-resolve --flush-caches 2>/dev/null || true\n- iptables -I OUTPUT -d 10.0.10.1 -p udp --dport 53 -j REJECT --reject-with icmp-port-unreachable\n- iptables -I OUTPUT -d 10.0.10.1 -p tcp --dport 53 -j REJECT --reject-with tcp-reset"
+    },
+    "_meta": {
+      "run_id": "uwf_des_sigiloso_0010__nodex__r1__59b4c089",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_des_sigiloso_0010__nodex__r1__59b4c089.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:37:52+00:00"
+  }
+}

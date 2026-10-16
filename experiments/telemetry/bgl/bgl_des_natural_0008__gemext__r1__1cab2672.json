@@ -1,0 +1,75 @@
+{
+  "case_id": "bgl_des_natural_0008",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "bgl_des_natural_0008__gemext__r1__1cab2672",
+  "telemetria": {
+    "llm_call_count": 1,
+    "input_tokens": 3006,
+    "output_tokens": 246,
+    "total_tokens": 3686,
+    "execution_time": 6.9629772000189405,
+    "reasoning_tokens": 434,
+    "llm_calls": [
+      {
+        "model": "gemini-3.8-flash",
+        "model_version": "gemini-3.8-flash",
+        "input_tokens": 3006,
+        "output_tokens": 246,
+        "total_tokens": 3686,
+        "reasoning_tokens": 434
+      }
+    ],
+    "replan_count": null,
+    "intentos_correccion": null,
+    "modelo_solicitado": "gemini-3.8-flash",
+    "modelo_efectivo": "gemini-3.8-flash",
+    "n_llamadas_fallidas": 0,
+    "duracion_llamadas_s": null,
+    "modelos_efectivos": [
+      "gemini-3.8-flash"
+    ],
+    "campos_parciales": {},
+    "tiempo_total_runner_s": 6.9629772000189405,
+    "previa_a_d11": false,
+    "output_contract_version": "d11-v1",
+    "diagnostico_runner": {
+      "arquitectura": "gemini_externo",
+      "modelo": "gemini-3.8-flash",
+      "temperatura": 0.0,
+      "llamadas_llm": 1,
+      "execution_time": 6.9629772000189405,
+      "error": null,
+      "sin_rag": true,
+      "sin_herramientas": true,
+      "sin_estado_langgraph": true,
+      "reintentos": 0,
+      "fallback_de_modelo": false,
+      "telemetry": {
+        "llm_call_count": 1,
+        "input_tokens": 3006,
+        "output_tokens": 246,
+        "total_tokens": 3686,
+        "execution_time": 6.9629772000189405,
+        "reasoning_tokens": 434,
+        "llm_calls": [
+          {
+            "model": "gemini-3.8-flash",
+            "model_version": "gemini-3.8-flash",
+            "input_tokens": 3006,
+            "output_tokens": 246,
+            "total_tokens": 3686,
+            "reasoning_tokens": 434
+          }
+        ],
+        "replan_count": null,
+        "intentos_correccion": null,
+        "modelo_solicitado": "gemini-3.8-flash",
+        "modelo_efectivo": "gemini-3.8-flash"
+      },
+      "campos_ausentes_en_la_respuesta": []
+    }
+  }
+}

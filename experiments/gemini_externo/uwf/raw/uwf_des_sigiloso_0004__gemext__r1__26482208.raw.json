@@ -1,0 +1,81 @@
+{
+  "case_id": "uwf_des_sigiloso_0004",
+  "dataset": "uwf",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "uwf_des_sigiloso_0004__gemext__r1__26482208",
+  "estado_crudo": {
+    "diagnostico": "Anomalía operativa de red por indisponibilidad o falla de enrutamiento hacia el servidor DNS interno 10.0.10.1. El host/forwarder 143.88.255.10 realiza ráfagas periódicas de consultas DNS cada ~30 segundos hacia 10.0.10.1:53 sin recibir ninguna respuesta (estado Zeek S0, resp_pkts=0). A su vez, clientes internos como 143.88.10.11 experimentan fallos al consultar a 143.88.255.10. No se observa actividad maliciosa ni comunicación con infraestructura hostil externa.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "La cadencia periódica de ~30 segundos de 143.88.255.10 podría superficialmente sugerir un beaconing, pero el destino es una IP privada interna (RFC 1918, local_resp=T) en el puerto 53/UDP, y el host actúa como intermediario/servidor DNS para otros clientes (ej. 143.88.10.11). Dado que el 100% de los intentos hacia 10.0.10.1 quedan en estado S0 sin bytes de respuesta, se concluye que se trata de un problema de disponibilidad de infraestructura (servidor DNS caído, ruta inaccesible o filtrado por firewall interno) y no de un compromiso de seguridad.",
+    "comandos_mitigacion": [
+      "ping -c 4 10.0.10.1",
+      "traceroute -n -U -p 53 10.0.10.1",
+      "dig @10.0.10.1 -p 53 localhost +time=2 +tries=1",
+      "systemctl status systemd-resolved",
+      "ip route get 10.0.10.1"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-01",
+        "evidence_uids": [
+          "CMVz024Flvrg67l0U3",
+          "CbKvJo2VR2LpW0avYj",
+          "C3C2Uo1y25s9vHSrEd",
+          "CmGm8ygXRpzy20PRc"
+        ],
+        "timestamp": "2021-12-17 14:54:13.882541",
+        "event_type": "DNS_QUERY_TIMEOUT",
+        "description": "Ráfaga inicial de consultas DNS desde 143.88.255.10 hacia 10.0.10.1:53 sin respuesta (estado S0, 0 bytes recibidos)."
+      },
+      {
+        "event_id": "EVT-02",
+        "evidence_uids": [
+          "CEz7iNN0gElkr19F",
+          "CzQiLs2na87d73Rzda",
+          "C398Om21qkn8votaNd",
+          "Cy7AmL2n3xLXQ6K9Zc",
+          "CI3REG4Tu6Yyaczc77"
+        ],
+        "timestamp": "2021-12-17 14:54:44.131785 - 2021-12-17 14:56:45.130325",
+        "event_type": "PERIODIC_DNS_RETRY",
+        "description": "Reintentos continuos a intervalos de aproximadamente 30 segundos hacia 10.0.10.1:53 manteniendo un estado S0 continuo."
+      },
+      {
+        "event_id": "EVT-03",
+        "evidence_uids": [
+          "CMa9NF3REGgUxAHcVj",
+          "CVkUIf11GNbaiQWIhg",
+          "CBaHBE211gFoTBK6U9"
+        ],
+        "timestamp": "2021-12-17 15:07:51.080000",
+        "event_type": "CLIENT_DNS_TIMEOUT",
+        "description": "Cliente interno 143.88.10.11 intenta resolver nombres consultando a 143.88.255.10:53, quedando igualmente en timeout (estado S0)."
+      },
+      {
+        "event_id": "EVT-04",
+        "evidence_uids": [
+          "CJ3sxV3jjI11vGuzF3",
+          "CcYo461N4lVkiK2rOk",
+          "CKM2ZI7N1PLCTEUJ",
+          "CEXWt04ODVkJg6vMu"
+        ],
+        "timestamp": "2021-12-17 15:23:28.381670",
+        "event_type": "PERSISTENT_DNS_OUTAGE",
+        "description": "Persistencia de los fallos de resolución hacia 10.0.10.1 hasta el final de la captura."
+      }
+    ],
+    "secuencia_temporal": [
+      "2021-12-17 14:54:13 - Comienzan los intentos fallidos periódicos (cada 30s) de resolución DNS desde 143.88.255.10 hacia 10.0.10.1:53.",
+      "2021-12-17 14:54:46 - Conexiones normales y exitosas de otros hosts (143.88.1.51) consultando a su propio servidor DNS local (143.88.1.1).",
+      "2021-12-17 15:07:51 - El host 143.88.10.11 envía consultas a 143.88.255.10:53 sin recibir respuesta.",
+      "2021-12-17 15:23:28 - Finaliza la captura de logs con 143.88.255.10 continuando sus ráfagas no respondidas hacia 10.0.10.1."
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3469 salida=391 razonamiento=2042 total=5902
+   → Plan v1: ['triage', 'rag', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3715 salida=147 razonamiento=484 total=4346
+   → Solicitando RAG (Se observan 261 intentos DNS anómalos y fallidos sin respuesta (estado S0) de 143.88.255.10 hacia 10.0.10.1. Conforme al plan de investigación, es necesario consultar la memoria histórica y MITRE ATT&CK para evaluar y diferenciar técnicas de abuso de DNS (como DNS Tunneling T1071.004, Exfiltración T1048 o DoS/Amplificación T1498) frente a casos previos similares antes de emitir un diagnóstico definitivo.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1071.004, T1584.002, T1590.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=4423 salida=214 razonamiento=527 total=5164
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=320 salida=47 razonamiento=254 total=621
+   → usar_cve: False | Razón: El diagnóstico señala actividades de reconocimiento o fuerza bruta contra el protocolo DNS genérico sin especificar un software, producto o versión de servidor DNS vulnerable para consultar CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=255 salida=130 razonamiento=1047 total=1432
+   → 4 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=48072 salida=670 razonamiento=1885 total=50627
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=True | cobertura_suficiente=True | El diagnóstico es preciso. La evidencia de Zeek muestra cientos de conexiones UDP hacia el puerto 53 del host interno 10.0.10.1 desde la IP 143.88.255.10 en estado S0 (sin respuesta), lo cual denota un sondeo o actividad de reconocimiento recurrente sobre infraestructura DNS interna. Las medidas de bloqueo perimetral propuestas son pertinentes.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

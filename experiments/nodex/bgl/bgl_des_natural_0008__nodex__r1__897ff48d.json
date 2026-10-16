@@ -1,0 +1,41 @@
+{
+  "case_id": "bgl_des_natural_0008",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "bgl_des_natural_0008__nodex__r1__897ff48d",
+  "salida": {
+    "case_id": "bgl_des_natural_0008",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nActividad operativa benigna. Los registros corresponden a telemetría de nivel informativo del kernel en una arquitectura de supercomputación BlueGene/L (RAS KERNEL INFO), monitorizando el rendimiento de controladores de señal y memoria DDR corregible. No existen indicadores de compromiso (IoC), técnicas de ataque ni amenazas a la seguridad.\n\n## Evaluación del auditor\n\nLos registros corresponden a telemetría operacional estándar de nivel informativo del kernel (RAS KERNEL INFO) en arquitectura BlueGene/L. No se observan anomalías operativas críticas ni indicios de actividad maliciosa o compromiso de seguridad."
+    },
+    "_meta": {
+      "run_id": "bgl_des_natural_0008__nodex__r1__897ff48d",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_des_natural_0008__nodex__r1__897ff48d.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:20:03+00:00"
+  }
+}

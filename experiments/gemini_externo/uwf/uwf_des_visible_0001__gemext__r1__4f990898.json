@@ -1,0 +1,119 @@
+{
+  "case_id": "uwf_des_visible_0001",
+  "dataset": "uwf",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "uwf_des_visible_0001__gemext__r1__4f990898",
+  "salida": {
+    "case_id": "uwf_des_visible_0001",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "EVT-001",
+        "timestamp": "2021-12-19 00:00:08.630389",
+        "entities": [],
+        "event_type": "DNS_Resolution_Failure_Beaconing",
+        "evidence_uids": [
+          "CzsOI8rXp5Yqws7Bb",
+          "CA79tu4xwecdEdZfEk",
+          "CJfktIzKhZGOvkKO3",
+          "CeWETq4Wd9Ve8wHIrj",
+          "C3ksa24VSovmA3k1Xj"
+        ]
+      },
+      {
+        "uid": "EVT-002",
+        "timestamp": "2021-12-19 00:14:22.168",
+        "entities": [],
+        "event_type": "TCP_Port_Scan",
+        "evidence_uids": [
+          "CgEcHkI46wwgJbdBk",
+          "CyaZde3zuALAGSU1of",
+          "CYbaFY1hiOlT6GrvFd",
+          "CsznoC4xGCIIL3Aml",
+          "CtFMOj1Hzi94blNUDj",
+          "CQoWFY3EORylbcpON1",
+          "COaDk61BXzom5YPiO",
+          "C95ILJ1UISEuhYkPx6",
+          "CMV8Q843ngiIsVQPBk",
+          "CuReSd41YJFCqQjcv8"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": [
+        {
+          "id": "T1046",
+          "name": "Network Service Discovery",
+          "evidence_uids": [
+            "CgEcHkI46wwgJbdBk",
+            "CyaZde3zuALAGSU1of",
+            "CYbaFY1hiOlT6GrvFd",
+            "CsznoC4xGCIIL3Aml",
+            "CtFMOj1Hzi94blNUDj",
+            "CbY05n4XdnSNJ5IpAc",
+            "CRO4752EdEgVGZ9kRb",
+            "CAn8oL3vCCn2rZAaA7",
+            "CgQqCS2kK5s7gNjOhe",
+            "CHTK613r8ihKzyzs21",
+            "CkXJBE3F5Hw45jnfga",
+            "COGD1z4lYU0nC9oo41",
+            "CQoWFY3EORylbcpON1",
+            "CrGxab1jVrGqP6Ew3h",
+            "CmmzYy2rougEMWDg57",
+            "CFl6312QWibFsW7iK8",
+            "COaDk61BXzom5YPiO",
+            "C95ILJ1UISEuhYkPx6",
+            "C0s5An2TgYbvBeYdi8",
+            "Cmqsw41lK0bqSYPAa",
+            "CcqA372pcHbuL9Slej",
+            "CRNDcz4TnDIbxIqRJa",
+            "CsXySIqROe1Bi7aG8",
+            "C8VMO74H0z13NzVzTd",
+            "CPr7WI48NNGqRCRAd",
+            "Cm7k9w19tPqvhSr2Ic",
+            "CuGfua2UwD7IlAMPbg",
+            "C2hQP42KHHIEz3LHp5",
+            "CK1pOd2iCVhl90zID7",
+            "Cg768d4VZCaenDMal6",
+            "C4Am0q1s7ESv6zYqMb",
+            "CQ4gpK3egmHDYApwWf",
+            "CLvHBH360lw3w2rTd6",
+            "CP1svr2uLS28AKtDui",
+            "COKOTt4Jeh6f7DnCje",
+            "CmBCDl4FWUiwsmuLzl",
+            "CMV8Q843ngiIsVQPBk",
+            "C6D4zQ1f8m0ASFdwW",
+            "CuReSd41YJFCqQjcv8"
+          ]
+        }
+      ]
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe identifica un escaneo de puertos horizontal/vertical sistemático (reconocimiento de red) ejecutado desde la dirección IP 143.88.5.11 hacia 143.88.5.12 sobre múltiples servicios TCP estándar (FTP, SSH, Telnet, HTTP, HTTPS, SMB, RDP, MySQL, etc.) entre las 00:14:22 y las 00:14:23. Simultáneamente, se observa una anomalía de red consistente en intentos continuos y periódicos (cada ~30 segundos) de resolución DNS desde 143.88.255.10 hacia la IP privada 10.0.10.1 que quedan sin respuesta (estado S0), indicando una falta de conectividad o desconfiguración del servidor DNS para ese host.\n\n## Evaluación del auditor\n\nLa evidencia de reconocimiento activo (T1046) es contundente: un único host origen (143.88.5.11) contacta decenas de puertos TCP comunes en rápida sucesión (en menos de dos segundos), recibiendo combinaciones de S0 (sin respuesta/filtrado) y RSTO (puertos cerrados respondiendo con reset). No obstante, los logs de Zeek muestran únicamente el tráfico a nivel de flujo de red (conn.log), por lo que no es posible determinar la carga útil del paquete ni si alguna explotación posterior tuvo éxito inmediatamente después del barrido.\n\n## Comandos de mitigación propuestos\n\n- iptables -A INPUT -s 143.88.5.11 -j DROP\n- iptables -A FORWARD -s 143.88.5.11 -j DROP\n- pkill -u <attacker_user> || true"
+    },
+    "_meta": {
+      "run_id": "uwf_des_visible_0001__gemext__r1__4f990898",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "uwf_des_visible_0001__gemext__r1__4f990898.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:44:08+00:00"
+  }
+}

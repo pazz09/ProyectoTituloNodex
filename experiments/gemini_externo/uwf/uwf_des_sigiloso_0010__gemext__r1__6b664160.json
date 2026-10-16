@@ -1,0 +1,41 @@
+{
+  "case_id": "uwf_des_sigiloso_0010",
+  "dataset": "uwf",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "uwf_des_sigiloso_0010__gemext__r1__6b664160",
+  "salida": {
+    "case_id": "uwf_des_sigiloso_0010",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe observa una anomalia operativa recurrente en la infraestructura de resolucion DNS. La estacion o dispositivo con IP 143.88.255.10 emite ráfagas periodicas de consultas DNS UDP hacia el servidor interno 10.0.10.1 (puerto 53) en intervalos matematicamente constantes de aproximadamente 30.25 segundos. Todas estas conexiones finalizan en estado 'S0' (sin respuesta del servidor, 0 bytes/paquetes retornados). Adicionalmente, el host 143.88.1.51 experimenta demoras o timeouts de exactamente 5 segundos al consultar 143.88.1.1. No se identifican indicadores concluyentes de compromiso, comando y control (C2) externo ni tunelizacion maliciosa demostrable, sino una falla de servicio, falta de enrutamiento o mala configuracion de resolver DNS en el cliente.\n\n## Evaluación del auditor\n\nEl patron periodico estricto (30.25s) podria sugerir superficialmente un mecanismo de beaconing de malware; sin embargo, el destino es una IP privada (10.0.10.1) que no responde (S0) y los tamaños de paquete son tipicos de reintentos de resolucion estandar de un servicio desatendido. Sin registros de la capa de aplicacion DNS que muestren nombres de dominio sospechosos, no existe sustento probatorio para calificarlo como incidente de seguridad ni para mapear tecnicas de MITRE ATT&CK sin incurrir en falsos positivos.\n\n## Comandos de mitigación propuestos\n\n- ping -c 4 10.0.10.1\n- traceroute -n 10.0.10.1\n- iptables -L -n -v | grep 53\n- systemctl status named || systemctl status bind9 || systemctl status systemd-resolved\n- tcpdump -nn -i any host 143.88.255.10 and port 53"
+    },
+    "_meta": {
+      "run_id": "uwf_des_sigiloso_0010__gemext__r1__6b664160",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "uwf_des_sigiloso_0010__gemext__r1__6b664160.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:39:55+00:00"
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "case_id": "uwf_des_visible_0001",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "uwf_des_visible_0001__nodex__r1__eedaf904",
+  "salida": {
+    "case_id": "uwf_des_visible_0001",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-19 00:00:08.630389",
+        "entities": [],
+        "event_type": "unanswered_dns_request",
+        "evidence_uids": [
+          "CzsOI8rXp5Yqws7Bb"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-19 00:14:22.168",
+        "entities": [],
+        "event_type": "port_scan_detected",
+        "evidence_uids": [
+          "CgEcHkI46wwgJbdBk",
+          "CsznoC4xGCIIL3Aml",
+          "CQoWFY3EORylbcpON1",
+          "CQ4gpK3egmHDYApwWf",
+          "CMV8Q843ngiIsVQPBk"
+        ]
+      },
+      {
+        "uid": "event_003",
+        "timestamp": "2021-12-19 00:25:51.385604",
+        "entities": [],
+        "event_type": "unanswered_dns_request",
+        "evidence_uids": [
+          "C7CnhE4Ywukw87Hcy2"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002",
+      "event_003"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": [
+        {
+          "id": "T1046",
+          "name": "Network Service Discovery",
+          "evidence_uids": [
+            "CgEcHkI46wwgJbdBk",
+            "CsznoC4xGCIIL3Aml",
+            "CQoWFY3EORylbcpON1",
+            "CQ4gpK3egmHDYApwWf",
+            "CMV8Q843ngiIsVQPBk"
+          ]
+        }
+      ]
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe observa un volumen anómalo y concentrado de tráfico DNS no respondido (estado de conexión S0) desde la IP 143.88.255.10 hacia el resolver interno 10.0.10.1 (puerto 53/UDP), con 211 intentos fallidos en un lapso de 25 minutos. Este comportamiento es consistente con intentos de reconocimiento de infraestructura DNS interna (T1590.002) o intentos fallidos de establecimiento de canal encubierto/DNS tunneling para comando y control (T1071.004). Adicionalmente, se detecta tráfico anómalo fallido entre 143.88.5.11 y 143.88.5.12 (60 eventos), lo que sugiere escaneo lateral o actividad no autorizada en el segmento. Se recomienda inspeccionar los registros de queries DNS (dns.log) para analizar los dominios consultados y contener temporalmente el tráfico desde 143.88.255.10.\n\n## Evaluación del auditor\n\nEl diagnóstico es acertado. Se confirma una anomalía persistente de tráfico DNS saliente sin respuesta desde 143.88.255.10 hacia 10.0.10.1 con periodicidad regular de 30 segundos. Además, se identifica con claridad un incidente de seguridad consistente en un escaneo de puertos horizontal/vertical (T1046) ejecutado por 143.88.5.11 hacia 143.88.5.12 a las 00:14:22-00:14:23, impactando puertos críticos (21, 22, 23, 80, 135, 139, 443, 445, 3306, 3389, 8080) y puertos efímeros.\n\n## Comandos de mitigación propuestos\n\n- iptables -I INPUT -s 143.88.255.10 -j DROP\n- iptables -I FORWARD -s 143.88.255.10 -d 10.0.10.1 -p udp --dport 53 -j DROP\n- iptables -I FORWARD -s 143.88.255.10 -d 10.0.10.1 -p tcp --dport 53 -j DROP\n- iptables -I FORWARD -s 143.88.5.11 -d 143.88.5.12 -j DROP\n- iptables -I FORWARD -s 143.88.5.12 -d 143.88.5.11 -j DROP\n- conntrack -D -s 143.88.255.10\n- tcpdump -nn -i any host 143.88.255.10 and port 53 -w /var/log/dns_t1071_investigation.pcap -c 500 &\n- grep -E '143\\.88\\.255\\.10' /var/log/*dns*.log 2>/dev/null | tail -n 100"
+    },
+    "_meta": {
+      "run_id": "uwf_des_visible_0001__nodex__r1__eedaf904",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_des_visible_0001__nodex__r1__eedaf904.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:42:57+00:00"
+  }
+}

@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1368 salida=235 razonamiento=707 total=2310
+   → Plan v1: ['triage', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=1498 salida=245 razonamiento=494 total=2237
+   → No hace falta RAG (El plan de investigación especifica que no se contempla consultar memoria histórica, la cobertura del parsing es del 100% y los datos del resumen son suficientes para caracterizar el comportamiento como tráfico operacional interno del clúster HDFS sin indicadores de compromiso.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=333 salida=61 razonamiento=64 total=458
+   → usar_cve: False | Razón: El diagnóstico concluye que los eventos corresponden a la operativa interna rutinaria y anomalías de rendimiento de Hadoop HDFS, descartando explícitamente cualquier explotación de vulnerabilidades o compromiso de seguridad.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=233 salida=225 razonamiento=1059 total=1517
+   → 6 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=3025 salida=732 razonamiento=490 total=4247
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros reflejan la operativa rutinaria de un clúster HDFS (asignación, servicio, verificación y eliminación de bloques en tareas de MapReduce). El único evento de advertencia (WARN en log_record_000004) corresponde a una excepción operacional al servir un bloque en el DataNode (típicamente desconexión de cliente o timeout de I/O), lo cual califica como una anomalía operativa sin ningún impacto ni indicio de compromiso de seguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

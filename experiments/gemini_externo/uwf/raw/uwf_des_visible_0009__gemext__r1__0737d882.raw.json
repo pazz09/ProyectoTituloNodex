@@ -1,0 +1,86 @@
+{
+  "case_id": "uwf_des_visible_0009",
+  "dataset": "uwf",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "uwf_des_visible_0009__gemext__r1__0737d882",
+  "estado_crudo": {
+    "diagnostico": "Se observa un patrón continuo de balizamiento (beaconing) mediante consultas DNS UDP desde la dirección IP 143.88.255.10 hacia un servidor DNS no responsivo en la IP privada 10.0.10.1:53. Las conexiones ocurren en ráfagas con un intervalo regular estricto de aproximadamente 30.25 segundos a lo largo de más de 32 minutos. En cada ráfaga se envían entre 1 y 7 peticiones con tamaños de carga útiles característicos de 78 y 102 bytes, sin recibir respuesta alguna (estado Zeek 'S0'). Esta actividad es consistente con un malware intentando establecer comunicación C2 o tunelización/exfiltración vía DNS hacia una infraestructura de resolución local inexistente o caída.",
+    "hay_anomalia": true,
+    "hay_incidente": true,
+    "confianza": 0.85,
+    "evaluacion_auditor": "El comportamiento muestra una periodicidad automatizada matemática (~30.25 s) y tamaños de consulta DNS elevados (78 y 102 bytes de payload) con número variable de peticiones por ráfaga, lo que sustenta la hipótesis de balizamiento malicioso (C2 / DNS tunneling). No obstante, al tratarse únicamente del registro de conexiones (conn.log) y no disponer de los nombres de dominio consultados (dns.log), existe una probabilidad residual de que se trate de un software legítimo mal configurado o un agente de telemetría/monitorización intentando contactar cíclicamente con un resolver interno fuera de servicio.",
+    "comandos_mitigacion": [
+      "iptables -A FORWARD -s 143.88.255.10 -j DROP",
+      "iptables -A INPUT -s 143.88.255.10 -j DROP",
+      "tcpdump -i any host 143.88.255.10 and port 53 -w /tmp/dns_incident_143.88.255.10.pcap",
+      "ss -tunap | grep ':53'",
+      "lsof -i UDP:53"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-001",
+        "evidence_uids": [
+          "CnmmeK1Y0R7aUzNPnb",
+          "CxAROQj9iwIkgtnsg",
+          "C9LiwY1s42wFO47w19"
+        ],
+        "timestamp": "2021-12-19 00:50:03.381134",
+        "event_type": "DNS_BEACON_START",
+        "description": "Inicio observado de ráfaga de consultas DNS (3 peticiones) desde 143.88.255.10 hacia 10.0.10.1:53 sin obtener respuesta (S0)."
+      },
+      {
+        "event_id": "EVT-002",
+        "evidence_uids": [
+          "C1s82D2A3c4KNnLFWk",
+          "C4ut7f2Npe7vBUahG6",
+          "C7Hwra3RUnz1goNBCg",
+          "CrTYm94sU0RIvOkQ4g",
+          "COQEd73bC3RmiQ3ut5",
+          "Cq5sLs1etp1UYa6kr8",
+          "Ct3tav1VZEb2hNj4jc"
+        ],
+        "timestamp": "2021-12-19 00:52:04.380559",
+        "event_type": "DNS_BURST_PEAK",
+        "description": "Ráfaga múltiple de 7 consultas DNS simultáneas hacia 10.0.10.1:53 con paquetes retransmitidos (hasta 204 bytes en C1s82D2A3c4KNnLFWk), manteniendo estado S0."
+      },
+      {
+        "event_id": "EVT-003",
+        "evidence_uids": [
+          "CQT0cdgRPEcnrZye8",
+          "CUy9w44AXAtQLfuQfi",
+          "Cku6s6130k7hf6AdV6",
+          "COE5H34elg7i4qqJf7",
+          "CRXbYs4PDzwJzF7Jr3"
+        ],
+        "timestamp": "2021-12-19 01:22:19.382964",
+        "event_type": "DNS_BEACON_PERSISTENT",
+        "description": "Persistencia de la actividad de balizamiento periódica tras más de 32 minutos, emitiendo 5 consultas DNS no atendidas."
+      }
+    ],
+    "secuencia_temporal": [
+      "2021-12-19 00:50:03 - El host 143.88.255.10 inicia ráfagas regulares de consultas DNS UDP hacia el destino 10.0.10.1 en el puerto 53.",
+      "2021-12-19 00:50:03 a 01:22:19 - Con una cadencia estricta de 30.25 segundos, se emiten entre 1 y 7 consultas simultáneas por ciclo. Todas resultan infructuosas (estado S0, 0 bytes de respuesta).",
+      "En paralelo, otros equipos de la red (ej. 143.88.1.51) resuelven DNS de manera habitual con 143.88.1.1 (estado SF), lo que confirma que el resolver corporativo operativo es 143.88.1.1 y no 10.0.10.1."
+    ],
+    "tecnicas_atribuidas": [
+      {
+        "technique_id": "T1071.004",
+        "technique_name": "Application Layer Protocol: DNS",
+        "evidence_uids": [
+          "CnmmeK1Y0R7aUzNPnb",
+          "CxAROQj9iwIkgtnsg",
+          "C9LiwY1s42wFO47w19",
+          "CEWOGCBrbY7HaTOA6",
+          "CtzUN81YyLuLyQVl7h",
+          "C1s82D2A3c4KNnLFWk",
+          "CQT0cdgRPEcnrZye8"
+        ],
+        "justification": "Generación periódica y estructurada de tráfico DNS UDP hacia el puerto 53 a intervalos fijos de ~30.25 s con tamaños de carga repetitivos (78 y 102 bytes), característica propia del balizamiento C2 mediante protocolos de capa de aplicación."
+      }
+    ],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

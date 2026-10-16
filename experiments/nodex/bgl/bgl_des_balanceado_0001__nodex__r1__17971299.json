@@ -1,0 +1,51 @@
+{
+  "case_id": "bgl_des_balanceado_0001",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "bgl_des_balanceado_0001__nodex__r1__17971299",
+  "salida": {
+    "case_id": "bgl_des_balanceado_0001",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "hardware_memory_error",
+        "evidence_uids": [
+          "log_record_000001"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos eventos analizados corresponden a registros de telemetría y fiabilidad del sistema (RAS - Reliability, Availability, and Serviceability) del kernel de un supercomputador (arquitectura IBM BlueGene/L). El registro de muestra clasificado como 'RAS KERNEL INFO CE' describe un error corregible de hardware/memoria (Correctable Error, CE) en el componente R30-M0-NB-C:J09-U01. No se observan indicadores de compromiso (IoC), vectores de ataque ni tácticas/técnicas mapeables a MITRE ATT&CK. No se requieren acciones de contención de seguridad, sino seguimiento a nivel de mantenimiento de hardware para prevenir fallos no corregibles en los módulos de memoria afectados.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Los registros corresponden a eventos de telemetría RAS del kernel que reportan errores corregibles (CE) a nivel de memoria física/hardware en la arquitectura de supercomputación. Se trata de una anomalía de hardware puramente operativa, sin evidencia de intrusión, compromiso o actividad maliciosa.\n\n## Comandos de mitigación propuestos\n\n- dmesg -T | grep -iE 'edac|memory error|correctable'\n- edac-util -v\n- ras-mc-ctl --error-count\n- systemctl status rasdaemon\n- journalctl -k --grep='CE|EDAC|RAS' -n 50\n- ipmitool sel list"
+    },
+    "_meta": {
+      "run_id": "bgl_des_balanceado_0001__nodex__r1__17971299",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_des_balanceado_0001__nodex__r1__17971299.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:13:14+00:00"
+  }
+}

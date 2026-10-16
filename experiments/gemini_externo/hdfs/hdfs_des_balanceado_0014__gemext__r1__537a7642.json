@@ -1,0 +1,41 @@
+{
+  "case_id": "hdfs_des_balanceado_0014",
+  "dataset": "hdfs",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "hdfs_des_balanceado_0014__gemext__r1__537a7642",
+  "salida": {
+    "case_id": "hdfs_des_balanceado_0014",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl log muestra operaciones completamente normales y rutinarias en un clúster Apache Hadoop HDFS. Se observan eventos estándar de ciclo de vida de bloques (nivel INFO), incluyendo finalización normal de PacketResponder, asignación de bloques para tareas MapReduce ('sortrand'), borrado periódico/rutinario de bloques por FSDataset, recepción de bloques mediante DataXceiver y actualización de mapeo de réplicas en NameSystem. No existe evidencia de degradación del sistema ni actividad maliciosa.\n\n## Evaluación del auditor\n\nTodos los registros analizados presentan nivel INFO y corresponden a transacciones típicas de almacenamiento distribuido en HDFS durante la ejecución de una tarea MapReduce estándar ('sortrand'). No se registran excepciones, bloqueos de I/O, desconexiones inesperadas, accesos no autorizados ni anomalías de red o hardware."
+    },
+    "_meta": {
+      "run_id": "hdfs_des_balanceado_0014__gemext__r1__537a7642",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "hdfs_des_balanceado_0014__gemext__r1__537a7642.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:26:14+00:00"
+  }
+}

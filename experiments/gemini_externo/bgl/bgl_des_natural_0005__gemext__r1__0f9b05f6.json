@@ -1,0 +1,110 @@
+{
+  "case_id": "bgl_des_natural_0005",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "bgl_des_natural_0005__gemext__r1__0f9b05f6",
+  "salida": {
+    "case_id": "bgl_des_natural_0005",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "EVT-01",
+        "timestamp": "2005-11-10-23.03.41.120402",
+        "entities": [],
+        "event_type": "Hardware/CPU Exception",
+        "evidence_uids": [
+          "1131692621",
+          "1131692641",
+          "1131692649",
+          "1131693152"
+        ]
+      },
+      {
+        "uid": "EVT-02",
+        "timestamp": "2005-11-11-04.39.52.183132",
+        "entities": [],
+        "event_type": "App Crash & Correctable Memory Errors",
+        "evidence_uids": [
+          "1131712792",
+          "1131720323",
+          "1131764302"
+        ]
+      },
+      {
+        "uid": "EVT-03",
+        "timestamp": "2005-11-14-18.25.23.269634",
+        "entities": [],
+        "event_type": "Kernel Termination & Network Desync",
+        "evidence_uids": [
+          "1132021523",
+          "1132021541",
+          "1132021542"
+        ]
+      },
+      {
+        "uid": "EVT-04",
+        "timestamp": "2005-11-15-05.41.23.201247",
+        "entities": [],
+        "event_type": "Interconnect Warning & Core Dumps",
+        "evidence_uids": [
+          "1132062083",
+          "1132067079",
+          "1132069983",
+          "1132070039"
+        ]
+      },
+      {
+        "uid": "EVT-05",
+        "timestamp": "2005-11-15-09.43.17.181620",
+        "entities": [],
+        "event_type": "Hardware Inventory Mismatch",
+        "evidence_uids": [
+          "1132076597",
+          "1132076952"
+        ]
+      },
+      {
+        "uid": "EVT-06",
+        "timestamp": "2005-11-15-19.19.28.379713",
+        "entities": [],
+        "event_type": "Execution Failure & Retransmissions",
+        "evidence_uids": [
+          "1132111168",
+          "1132111278",
+          "1132232535",
+          "1132234526"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl registro corresponde a eventos operativos, fallos de hardware y errores de ejecución de aplicaciones en un supercomputador IBM BlueGene/L. Se observan fallos de alineación en coma flotante, terminaciones anómalas del kernel (rts reason 1004), errores de protocolo en la red de árbol (tree network packet mismatch), múltiples volcados de memoria (core dumps) en aplicaciones científicas MPI (SPaSM y hellow), discrepancias de VPD en tarjetas de nodos (posible mantenimiento o sustitución de componentes) y un error de permisos en el sistema de archivos al intentar ejecutar un binario. No existe evidencia de actividad maliciosa ni compromiso de seguridad.\n\n## Evaluación del auditor\n\nSe analizaron detalladamente los 20 registros del subsistema RAS de BlueGene/L. Todos los eventos se explican mediante causas operativas normales en entornos HPC: degradación física/hardware (errores CE DDR, retransmisiones en la red torus), anomalías de red interna entre nodos de cómputo y errores a nivel de software/aplicación (crashes de procesos MPI y 'Permission denied' al cargar un ejecutable). La ausencia de vectores de ataque, comandos interactivos o accesos no autorizados descarta un incidente de seguridad cibernética.\n\n## Comandos de mitigación propuestos\n\n- chmod +x /bgl/apps/followup/SPaSM_static/SPaSM.460-1115\n- ls -la /bgl/apps/followup/SPaSM_static/\n- service bluegene status"
+    },
+    "_meta": {
+      "run_id": "bgl_des_natural_0005__gemext__r1__0f9b05f6",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_des_natural_0005__gemext__r1__0f9b05f6.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:19:41+00:00"
+  }
+}

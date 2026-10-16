@@ -1,0 +1,41 @@
+{
+  "case_id": "hdfs_des_natural_0002",
+  "dataset": "hdfs",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "hdfs_des_natural_0002__gemext__r1__b53b58ba",
+  "salida": {
+    "case_id": "hdfs_des_natural_0002",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl log muestra operaciones completamente normales y rutinarias en un clúster Hadoop HDFS. Se observan procesos estándar de recepción de bloques (DataNode$PacketResponder, DataXceiver), asignación de bloques durante la ejecución de tareas de MapReduce (FSNamesystem.allocateBlock para un trabajo temporal), finalización normal de PacketResponder y eliminación/depuración de bloques (FSDataset, FSNamesystem.delete). No existen advertencias, errores (WARN, ERROR, FATAL) ni rastros de comportamiento malicioso.\n\n## Evaluación del auditor\n\nTodos los registros corresponden a eventos de nivel INFO de operaciones habituales de HDFS distribuidas en el tiempo. No se detectan anomalías en el ciclo de vida de los bloques ni patrones que indiquen compromiso de seguridad o fallas de hardware/software."
+    },
+    "_meta": {
+      "run_id": "hdfs_des_natural_0002__gemext__r1__b53b58ba",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "hdfs_des_natural_0002__gemext__r1__b53b58ba.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:28:30+00:00"
+  }
+}

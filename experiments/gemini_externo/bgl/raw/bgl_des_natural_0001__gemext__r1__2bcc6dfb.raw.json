@@ -1,0 +1,94 @@
+{
+  "case_id": "bgl_des_natural_0001",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "bgl_des_natural_0001__gemext__r1__2bcc6dfb",
+  "estado_crudo": {
+    "diagnostico": "El registro corresponde a eventos operativos y de hardware de una supercomputadora IBM Blue Gene/L (sistema RAS). Se observan errores de paridad de caché de instrucciones corregidos, excepciones de alineación de punto flotante ('double-hummer'), errores de memoria corregibles (CE), fallos fatales de comunicación por socket en el demonio de control de E/S ('ciod') hacia 172.16.96.116, seguidos de múltiples caídas de procesos que generan volcados de memoria ('generating core'). No existe evidencia de intrusión, compromiso o actividad maliciosa; se trata enteramente de fallos operacionales y degradación de software/hardware.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.98,
+    "evaluacion_auditor": "La hipótesis de fallo puramente operativo es altamente consistente con la telemetría RAS de Blue Gene/L. No se identifican vectores de ataque, ejecuciones anómalas de comandos interactivos ni escaladas de privilegios. Las fallas de sockets en ciod y las posteriores generaciones de 'core' se deben a la terminación anormal de trabajos paralelos distribuidos tras la interrupción del flujo de control.",
+    "comandos_mitigacion": [
+      "mmgetstate -a",
+      "squeue -t R",
+      "dmesg -T | grep -i 'parity\\|ecc\\|alignment'",
+      "find / -name 'core.[0-9]*' -mtime -2 -ls"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-01",
+        "evidence_uids": [
+          "1117838570",
+          "1117838573",
+          "1117838976",
+          "1117838978"
+        ],
+        "timestamp": "2005-06-03-15.42.50.675872",
+        "event_type": "HARDWARE_CACHE_PARITY_ERROR",
+        "description": "Errores de paridad corregidos en la caché de instrucciones en el nodo R02-M1-N0-C:J12-U11."
+      },
+      {
+        "event_id": "EVT-02",
+        "evidence_uids": [
+          "1117842440",
+          "1117842974",
+          "1117843015"
+        ],
+        "timestamp": "2005-06-03-16.47.20.730545",
+        "event_type": "KERNEL_ALIGNMENT_EXCEPTION",
+        "description": "Excepciones masivas de alineación 'double-hummer' (PowerPC 440 FPU) en los nodos R23, R24 y R21."
+      },
+      {
+        "event_id": "EVT-03",
+        "evidence_uids": [
+          "1117848119",
+          "1117942120"
+        ],
+        "timestamp": "2005-06-03-18.21.59.871925",
+        "event_type": "HARDWARE_MEMORY_CORRECTABLE_ERROR",
+        "description": "Detección de errores corregibles de memoria (CE) en R16-M1-N2-C:J17-U01 y R30-M0-N7-C:J08-U01."
+      },
+      {
+        "event_id": "EVT-04",
+        "evidence_uids": [
+          "1117869872",
+          "1117869876"
+        ],
+        "timestamp": "2005-06-04-00.24.32.432192",
+        "event_type": "APPLICATION_COMMUNICATION_FATAL",
+        "description": "Fallo crítico en el subsistema ciod al leer el prefijo de mensaje en el socket de control hacia 172.16.96.116 en nodos de E/S R04 y R27."
+      },
+      {
+        "event_id": "EVT-05",
+        "evidence_uids": [
+          "1117955341",
+          "1117955392",
+          "1117956980",
+          "1117957045",
+          "1117959501",
+          "1117959513",
+          "1117959563",
+          "1117973759",
+          "1117973786"
+        ],
+        "timestamp": "2005-06-05-00.09.01.903373",
+        "event_type": "APPLICATION_CORE_DUMP",
+        "description": "Caída masiva de procesos y generación de archivos core en múltiples nodos de cómputo (R25, R24, R20, R21, R31, R36)."
+      }
+    ],
+    "secuencia_temporal": [
+      "2005-06-03 15:42:50 - 15:49:38: Errores reiterados de paridad en caché de instrucciones en R02-M1-N0-C:J12-U11.",
+      "2005-06-03 16:47:20 - 16:56:55: Múltiples excepciones de alineación double-hummer en nodos R23, R24 y R21.",
+      "2005-06-03 18:21:59: Detección de error de memoria corregible (CE) en R16.",
+      "2005-06-04 00:24:32 - 00:24:36: Caída fatal de conexión socket en ciod hacia 172.16.96.116 en nodos de E/S.",
+      "2005-06-04 20:28:40: Nuevo error de memoria corregible (CE) en R30.",
+      "2005-06-05 00:09:01 - 05:16:26: Cascada de fallos de aplicación con generación de volcados de memoria (core dumps) en múltiples nodos."
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

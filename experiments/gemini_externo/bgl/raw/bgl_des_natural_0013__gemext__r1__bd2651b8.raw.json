@@ -1,0 +1,76 @@
+{
+  "case_id": "bgl_des_natural_0013",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "bgl_des_natural_0013__gemext__r1__bd2651b8",
+  "estado_crudo": {
+    "diagnostico": "Se observan múltiples volcados de registros de excepción del kernel (IAR - Instruction Address Register y DEAR - Data Exception Address Register) junto con un volumen masivo de excepciones de alineación de punto flotante (45684 floating point alignment exceptions) distribuidas a través de varios nodos de procesamiento de un supercomputador BlueGene/L (midplane R62-M0). Este comportamiento corresponde a problemas de ejecución a nivel de software o computación científica (código no optimizado/desalineado o errores de memoria de una aplicación en ejecución) que provocan sobrecarga de interrupciones en el kernel, constituyendo una anomalía operativa sin impacto ni indicios de seguridad maliciosa.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "Los registros corresponden al subsistema RAS (Reliability, Availability, and Serviceability) del kernel de BlueGene/L. La presencia de registros 'iar/dear' y advertencias sobre excepciones de punto flotante son características típicas de cargas de trabajo HPC que realizan accesos de memoria no alineados. No existe actividad de intrusión, persistencia, escalada de privilegios ni compromiso de datos.",
+    "comandos_mitigacion": [
+      "# Para mitigar excepciones de alineación en aplicaciones PowerPC/BlueGene, compilar con flags de alineación estricta y optimización (ej. xlc):",
+      "xlc -O3 -qalign=natural -qarch=440d programa.c -o programa",
+      "# Verificar y detener la carga de trabajo HPC problemática que satura el midplane R62:",
+      "qdel <job_id>"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-01",
+        "evidence_uids": [
+          "1131125519",
+          "1131125543",
+          "1131125932",
+          "1131125954",
+          "1131125989",
+          "1131126038",
+          "1131126144",
+          "1131126148",
+          "1131126178",
+          "1131126200",
+          "1131126215",
+          "1131126633",
+          "1131126699",
+          "1131126706",
+          "1131126736",
+          "1131126738",
+          "1131126747"
+        ],
+        "timestamp": "2005-11-04-09.31.59.900525",
+        "event_type": "KERNEL_REGISTER_EXCEPTION_DUMP",
+        "description": "Serie continua de registros de excepciones de memoria del kernel (IAR/DEAR) capturados en múltiples nodos de cómputo del midplane R62-M0."
+      },
+      {
+        "event_id": "EVT-02",
+        "evidence_uids": [
+          "1131127186"
+        ],
+        "timestamp": "2005-11-04-09.59.46.036595",
+        "event_type": "FLOATING_POINT_ALIGNMENT_EXCEPTIONS",
+        "description": "El nodo R62-M0-N9-C:J08-U11 reporta 45684 excepciones de alineación de punto flotante en el kernel."
+      },
+      {
+        "event_id": "EVT-03",
+        "evidence_uids": [
+          "1131127207",
+          "1131127212"
+        ],
+        "timestamp": "2005-11-04-10.00.07.211412",
+        "event_type": "KERNEL_REGISTER_EXCEPTION_DUMP",
+        "description": "Persistencia de volcados de registros de excepciones de dirección e instrucciones en nodos R62-M0-N1 y R62-M0-NF."
+      }
+    ],
+    "secuencia_temporal": [
+      "2005-11-04 09:31:59 - Registro inicial de fallo de dirección en R62-M0-N0-C:J14-U01 (UID 1131125519)",
+      "2005-11-04 09:32:23 a 09:52:27 - Excepciones sucesivas IAR/DEAR en nodos N4, NE, N2, N8, N6, NB, N1, ND, NA, NC",
+      "2005-11-04 09:59:46 - Acumulación masiva de 45684 excepciones de alineación de punto flotante en nodo N9 (UID 1131127186)",
+      "2005-11-04 10:00:07 a 10:00:12 - Nuevas excepciones IAR/DEAR registradas en nodos N1 y NF (UIDs 1131127207, 1131127212)"
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

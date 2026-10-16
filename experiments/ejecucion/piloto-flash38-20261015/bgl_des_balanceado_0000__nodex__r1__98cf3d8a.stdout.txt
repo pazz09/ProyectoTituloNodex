@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=667 salida=298 razonamiento=463 total=1428
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=843 salida=200 razonamiento=575 total=1618
+   → No hace falta RAG (El registro crudo evidencia con claridad un evento operacional de tipo core dump en HPC y el plan de investigación no contempla la consulta de memoria histórica, permitiendo diagnosticar la ausencia de compromiso directamente.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=250 salida=60 razonamiento=140 total=450
+   → usar_cve: False | Razón: El diagnóstico confirma que se trata de un fallo operacional interno (core dumps de una aplicación en entorno HPC) y descarta cualquier indicio de ataque, compromiso o vulnerabilidad de seguridad explotable.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=203 salida=109 razonamiento=1005 total=1317
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2137 salida=306 razonamiento=623 total=3066
+   → Confianza final: 0.90 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros reflejan la terminación anormal y generación de volcados de memoria (core dumps) de una aplicación en un entorno HPC (BlueGene), lo cual representa una anomalía exclusivamente operativa y de estabilidad de software, sin indicios de actividad maliciosa ni compromiso de seguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

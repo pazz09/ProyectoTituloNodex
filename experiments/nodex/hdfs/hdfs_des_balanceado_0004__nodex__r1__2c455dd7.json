@@ -1,0 +1,63 @@
+{
+  "case_id": "hdfs_des_balanceado_0004",
+  "dataset": "hdfs",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "hdfs_des_balanceado_0004__nodex__r1__2c455dd7",
+  "salida": {
+    "case_id": "hdfs_des_balanceado_0004",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2008-11-09 21:04:58",
+        "entities": [],
+        "event_type": "hdfs_block_reception",
+        "evidence_uids": [
+          "log_record_000001"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2008-11-10 21:07:10",
+        "entities": [],
+        "event_type": "hdfs_block_deletion",
+        "evidence_uids": [
+          "log_record_000004"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nActividad operativa benigna y rutinaria del clúster Hadoop HDFS. Los registros corresponden a transferencias y recepción normal de bloques entre DataNodes y servicios de gestión de bloques (fsdataset, fsnamesystem) en una red interna privada (10.251.0.0/16). No se evidencian fallos de autenticación, errores de sistema ni patrones anómalos o maliciosos.\n\n## Evaluación del auditor\n\nLos registros corresponden exclusivamente a operaciones rutinarias y normales del clúster HDFS (recepción, confirmación, registro y eliminación habitual de bloques de datos en DataNodes y NameSystem con severidad INFO). No se observan fallos, errores ni indicios de actividad maliciosa."
+    },
+    "_meta": {
+      "run_id": "hdfs_des_balanceado_0004__nodex__r1__2c455dd7",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "hdfs_des_balanceado_0004__nodex__r1__2c455dd7.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:22:21+00:00"
+  }
+}

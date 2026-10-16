@@ -1,0 +1,19 @@
+﻿dataset,arquitectura,herramienta,n_corridas,n_con_registro,n_corridas_con_intentos,n_consultas,n_intentos_externos,n_bloqueados,n_respaldo_respondio,nota
+bgl,baseline_reglas,abuseipdb,8,,,,,,,no usa herramientas externas
+bgl,baseline_reglas,nvd,8,,,,,,,no usa herramientas externas
+bgl,gemini_externo,abuseipdb,8,,,,,,,no usa herramientas externas
+bgl,gemini_externo,nvd,8,,,,,,,no usa herramientas externas
+bgl,nodex_multiagente,abuseipdb,8,8,2,2,2,2,2,las llamadas HTTP se bloquean y responde el respaldo local; política de la campaña final PENDIENTE
+bgl,nodex_multiagente,nvd,8,8,0,0,0,0,0,las llamadas HTTP se bloquean y responde el respaldo local; política de la campaña final PENDIENTE
+hdfs,baseline_reglas,abuseipdb,8,,,,,,,no usa herramientas externas
+hdfs,baseline_reglas,nvd,8,,,,,,,no usa herramientas externas
+hdfs,gemini_externo,abuseipdb,8,,,,,,,no usa herramientas externas
+hdfs,gemini_externo,nvd,8,,,,,,,no usa herramientas externas
+hdfs,nodex_multiagente,abuseipdb,8,8,8,43,43,43,43,las llamadas HTTP se bloquean y responde el respaldo local; política de la campaña final PENDIENTE
+hdfs,nodex_multiagente,nvd,8,8,0,0,0,0,0,las llamadas HTTP se bloquean y responde el respaldo local; política de la campaña final PENDIENTE
+uwf,baseline_reglas,abuseipdb,8,,,,,,,no usa herramientas externas
+uwf,baseline_reglas,nvd,8,,,,,,,no usa herramientas externas
+uwf,gemini_externo,abuseipdb,8,,,,,,,no usa herramientas externas
+uwf,gemini_externo,nvd,8,,,,,,,no usa herramientas externas
+uwf,nodex_multiagente,abuseipdb,8,8,8,158,158,158,158,las llamadas HTTP se bloquean y responde el respaldo local; política de la campaña final PENDIENTE
+uwf,nodex_multiagente,nvd,8,8,0,0,0,0,0,las llamadas HTTP se bloquean y responde el respaldo local; política de la campaña final PENDIENTE

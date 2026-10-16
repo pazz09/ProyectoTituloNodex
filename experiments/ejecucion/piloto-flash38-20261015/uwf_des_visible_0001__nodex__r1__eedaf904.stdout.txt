@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3797 salida=402 razonamiento=676 total=4875
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=4041 salida=184 razonamiento=291 total=4516
+   → Solicitando RAG (Se detecta un volumen anómalo y masivo de intentos fallidos DNS (estado S0) desde 143.88.255.10 hacia 10.0.10.1, así como actividad anómala entre 143.88.5.11 y 143.88.5.12. Para correlacionar con precisión las técnicas de MITRE ATT&CK (como T1071.004 para túneles DNS/C2 o T1046 para escaneo de servicios) y comparar con patrones de exfiltración o reconocimiento en incidentes previos, se requiere consultar la memoria histórica antes de emitir un diagnóstico definitivo.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1584.002, T1071.004, T1590.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=4746 salida=250 razonamiento=545 total=5541
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=362 salida=54 razonamiento=233 total=649
+   → usar_cve: False | Razón: El diagnóstico describe actividades de reconocimiento o túneles DNS y escaneo lateral sin identificar software, versiones específicas ni vulnerabilidades explotables asociadas a un producto concreto.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=297 salida=323 razonamiento=632 total=1252
+   → 8 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=47733 salida=1016 razonamiento=2070 total=50819
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=True | cobertura_suficiente=True | El diagnóstico es acertado. Se confirma una anomalía persistente de tráfico DNS saliente sin respuesta desde 143.88.255.10 hacia 10.0.10.1 con periodicidad regular de 30 segundos. Además, se identifica con claridad un incidente de seguridad consistente en un escaneo de puertos horizontal/vertical (T1046) ejecutado por 143.88.5.11 hacia 143.88.5.12 a las 00:14:22-00:14:23, impactando puertos críticos (21, 22, 23, 80, 135, 139, 443, 445, 3306, 3389, 8080) y puertos efímeros.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

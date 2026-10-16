@@ -1,0 +1,41 @@
+{
+  "case_id": "hdfs_des_balanceado_0014",
+  "dataset": "hdfs",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "hdfs_des_balanceado_0014__nodex__r1__e67bae44",
+  "salida": {
+    "case_id": "hdfs_des_balanceado_0014",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nActividad operacional normal del clúster HDFS. Todos los eventos registrados corresponden a operaciones rutinarias de DataNode y NameSystem (bloques y PacketResponder) con nivel de severidad INFO, originados desde direcciones IP privadas internas limpias y sin indicios de fallos, anomalías ni actividad maliciosa.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Los registros analizados reflejan operaciones rutinarias y esperadas dentro de un clúster HDFS (terminación de PacketResponder, asignación, almacenamiento, recepción y eliminación de bloques) bajo severidad INFO, sin errores, excepciones ni comportamientos sospechosos."
+    },
+    "_meta": {
+      "run_id": "hdfs_des_balanceado_0014__nodex__r1__e67bae44",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "hdfs_des_balanceado_0014__nodex__r1__e67bae44.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-15T21:25:30+00:00"
+  }
+}

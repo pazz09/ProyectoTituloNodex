@@ -1,0 +1,27 @@
+{
+  "case_id": "uwf_des_visible_0007",
+  "dataset": "uwf",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "uwf_des_visible_0007__gemext__r1__945d57b3",
+  "estado_crudo": {
+    "diagnostico": "Anomalía de red y servicio DNS operativo: falla generalizada de conectividad hacia servidores DNS upstream y reenviadores (forwarders). El host 143.88.255.10 intenta reiteradamente consultar a 10.0.10.1:53 cada 30 segundos sin obtener respuesta (estado S0). Asimismo, consultas a los servidores raíz de DNS de Internet (root servers) por parte de 143.88.0.2 y la máquina IPv6 fe80::250:56ff:fe9e:f1c3 quedan en estado S0 sin respuesta. Esto provoca degradación y timeouts sistemáticos de ~5 segundos en resoluciones DNS de clientes como 143.88.1.51. No se observan evidencias de actividad maliciosa ni compromiso.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "El patrón de tráfico refleja problemas operativos de infraestructura y enrutamiento de red. No existen indicios de C2, escaneo hostil, exfiltración ni movimiento lateral. Las consultas de 143.88.255.10 hacia 10.0.10.1 son periódicas y estandarizadas (78 y 102 bytes), consistentes con reintentos de resolución de un servidor DNS local cuyo upstream es inalcanzable. Además, las peticiones que 143.88.255.1 hace a 143.88.255.10 son respondidas normalmente, descartando que el nodo esté fuera de servicio.",
+    "comandos_mitigacion": [
+      "ping -c 4 10.0.10.1",
+      "traceroute -n -U -p 53 10.0.10.1",
+      "dig @10.0.10.1 localhost",
+      "iptables -L -n -v | grep 53",
+      "systemctl status bind9 || systemctl status named || systemctl status systemd-resolved"
+    ],
+    "eventos_reconstruidos": [],
+    "secuencia_temporal": [],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

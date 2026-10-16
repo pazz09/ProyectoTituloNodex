@@ -1,0 +1,103 @@
+{
+  "case_id": "bgl_des_natural_0005",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "piloto-flash38-20261015",
+  "run_id": "bgl_des_natural_0005__gemext__r1__0f9b05f6",
+  "estado_crudo": {
+    "diagnostico": "El registro corresponde a eventos operativos, fallos de hardware y errores de ejecución de aplicaciones en un supercomputador IBM BlueGene/L. Se observan fallos de alineación en coma flotante, terminaciones anómalas del kernel (rts reason 1004), errores de protocolo en la red de árbol (tree network packet mismatch), múltiples volcados de memoria (core dumps) en aplicaciones científicas MPI (SPaSM y hellow), discrepancias de VPD en tarjetas de nodos (posible mantenimiento o sustitución de componentes) y un error de permisos en el sistema de archivos al intentar ejecutar un binario. No existe evidencia de actividad maliciosa ni compromiso de seguridad.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "Se analizaron detalladamente los 20 registros del subsistema RAS de BlueGene/L. Todos los eventos se explican mediante causas operativas normales en entornos HPC: degradación física/hardware (errores CE DDR, retransmisiones en la red torus), anomalías de red interna entre nodos de cómputo y errores a nivel de software/aplicación (crashes de procesos MPI y 'Permission denied' al cargar un ejecutable). La ausencia de vectores de ataque, comandos interactivos o accesos no autorizados descarta un incidente de seguridad cibernética.",
+    "comandos_mitigacion": [
+      "chmod +x /bgl/apps/followup/SPaSM_static/SPaSM.460-1115",
+      "ls -la /bgl/apps/followup/SPaSM_static/",
+      "service bluegene status"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-01",
+        "evidence_uids": [
+          "1131692621",
+          "1131692641",
+          "1131692649",
+          "1131693152"
+        ],
+        "timestamp": "2005-11-10-23.03.41.120402",
+        "event_type": "Hardware/CPU Exception",
+        "description": "Excepciones de registros iar/dear y más de 480.000 excepciones de alineación de coma flotante en nodos de cómputo."
+      },
+      {
+        "event_id": "EVT-02",
+        "evidence_uids": [
+          "1131712792",
+          "1131720323",
+          "1131764302"
+        ],
+        "timestamp": "2005-11-11-04.39.52.183132",
+        "event_type": "App Crash & Correctable Memory Errors",
+        "description": "Fallo de la aplicación SPaSM_mpi generando 128 core files, seguido de detección y corrección de errores de paridad DDR (Correctable Errors)."
+      },
+      {
+        "event_id": "EVT-03",
+        "evidence_uids": [
+          "1132021523",
+          "1132021541",
+          "1132021542"
+        ],
+        "timestamp": "2005-11-14-18.25.23.269634",
+        "event_type": "Kernel Termination & Network Desync",
+        "description": "Terminación fatal del kernel (código 1004) asociada a desincronización y recepción de paquetes inesperados en la red de árbol (tipo 3 en vez de tipo 57)."
+      },
+      {
+        "event_id": "EVT-04",
+        "evidence_uids": [
+          "1132062083",
+          "1132067079",
+          "1132069983",
+          "1132070039"
+        ],
+        "timestamp": "2005-11-15-05.41.23.201247",
+        "event_type": "Interconnect Warning & Core Dumps",
+        "description": "Advertencia en el cableado de la red torus z+ y múltiples caídas de trabajos MPI generando volcados de memoria."
+      },
+      {
+        "event_id": "EVT-05",
+        "evidence_uids": [
+          "1132076597",
+          "1132076952"
+        ],
+        "timestamp": "2005-11-15-09.43.17.181620",
+        "event_type": "Hardware Inventory Mismatch",
+        "description": "Discrepancias en la verificación de datos Vital Product Data (VPD) en tarjetas de procesador (slots J04 y J10)."
+      },
+      {
+        "event_id": "EVT-06",
+        "evidence_uids": [
+          "1132111168",
+          "1132111278",
+          "1132232535",
+          "1132234526"
+        ],
+        "timestamp": "2005-11-15-19.19.28.379713",
+        "event_type": "Execution Failure & Retransmissions",
+        "description": "Nueva caída de kernel en rack R57, fallo de carga por permisos denegados en la imagen del programa SPaSM y retransmisiones masivas corregidas en red torus."
+      }
+    ],
+    "secuencia_temporal": [
+      "2005-11-10 23:03:41 a 23:12:32: Excepciones de registros de hardware y coma flotante en nodo R63.",
+      "2005-11-11 04:39:52 a 18:58:22: Caída de trabajo MPI SPaSM con 128 core files y errores de memoria DDR corregibles.",
+      "2005-11-14 18:25:23 a 18:25:42: Error fatal de kernel (motivo 1004) y desajuste de paquetes de red tipo 57 vs 3 en R46.",
+      "2005-11-15 05:41:23 a 07:53:59: Alerta de red torus z+ y múltiples fallos de aplicaciones generando core files.",
+      "2005-11-15 09:43:17 a 09:49:12: Comprobaciones de VPD identifican discrepancias de hardware en R23 y R67.",
+      "2005-11-15 19:19:28 a 19:21:18: Recurrencia de caída de kernel y error de paquetes de red de árbol en R57.",
+      "2005-11-17 05:02:15: Fallo de ejecución de SPaSM.460-1115 por 'Permission denied'.",
+      "2005-11-17 05:35:26: Detección y corrección de 18.507.114 retransmisiones en la red torus z-."
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

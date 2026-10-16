@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1799 salida=312 razonamiento=380 total=2491
+   → Plan v1: ['triage', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=1897 salida=155 razonamiento=482 total=2534
+   → No hace falta RAG (El lote presenta una cobertura de parsing del 100%, la información es unívocamente operacional y benigna, y el plan de investigación no contempla la necesidad de consultar memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=234 salida=39 razonamiento=308 total=581
+   → usar_cve: False | Razón: El diagnóstico confirma que se trata de actividad operativa normal y benigna sin indicios de vulnerabilidades o ataques de seguridad.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=149 salida=6 razonamiento=546 total=701
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2836 salida=210 razonamiento=900 total=3946
+   → Confianza final: 1.00 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros analizados muestran exclusivamente operaciones rutinarias y normales del sistema de archivos distribuido HDFS (recepción, despacho, actualización y eliminación de bloques de datos) ejecutadas entre nodos internos (10.x.x.x) con severidad INFO, sin anomalías operativas ni indicios de compromiso de seguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.
