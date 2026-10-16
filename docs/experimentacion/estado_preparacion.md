@@ -1945,62 +1945,67 @@ que lo acompañan. Nada de lo que sigue usa resultados de la campaña: no existe
 | Antes | Ahora | Por qué |
 |---|---|---|
 | D-2: N = 3 repeticiones en evaluación | **N = 2** para NODEX y Gemini directo; baseline N = 1 (es determinístico) | lo pide el profesor guía |
-| Los 142 casos de evaluación de BGL y UWF (subconjunto `evaluacion`) | **40 casos** (`campana_final`): 30 de BGL y 10 de UWF | presupuesto total de **USD 6** (verificaciones, reintentos y márgenes incluidos) |
+| Los 142 casos de evaluación de BGL y UWF (subconjunto `evaluacion`) | **40 casos** (`campana_final_v2`): 30 de BGL y 10 de UWF | presupuesto total de **USD 6** (verificaciones, reintentos y márgenes incluidos) |
 | Modelo | sin cambio: `gemini-3.8-flash`, respaldo apagado, temperatura 0 | decisión cerrada; no se comparan otros modelos, ni Batch ni Flex |
 | HDFS | sin cambio: auxiliar (D-7), **fuera** de la campaña principal, de sus agregados y de su costo | ver 25.5 |
 
-`orquestador.REPETICIONES["evaluacion"]` pasó de 3 a 2 (con prueba). El subconjunto `evaluacion.json` (142 casos) se
-conserva sin tocar; la campaña usa `experiments/subconjuntos/campana_final.json`.
+`orquestador.REPETICIONES["evaluacion"]` pasó de 3 a 2 (con prueba). `evaluacion.json` (142 casos) se conserva sin
+tocar. `campana_final.json` es una **primera selección, sustituida y nunca usada** (estratificaba solo por condición);
+la campaña usa `experiments/subconjuntos/campana_final_v2.json`.
 
-### 25.2 Selección de casos (fijada antes de correr)
+### 25.2 Selección de casos v2 (fijada antes de correr, semilla 20261015)
 
-`src/experimentation/seleccion_campana.py`, semilla registrada **20261015**. Estratificada por **condición** y con
-los casos de la rúbrica humana incluidos:
+`src/experimentation/seleccion_campana.py`. Estratificada por **condición y por etiqueta de referencia**
+(positivo/negativo), con los 12 casos de la rúbrica incluidos:
 
-| Dataset / condición | Casos disponibles | Cupo | De la rúbrica | Completados al azar |
+| Dataset / condición | Disponibles (+ / −) | Cupo (+ / −) | De la rúbrica | Total |
 |---|---|---|---|---|
-| BGL balanceado | 12 | 12 (entra completo) | 3 | 9 |
-| BGL natural | 50 | 18 | 3 | 15 |
-| UWF visible | 40 | 5 | 3 | 2 |
-| UWF sigiloso | 40 | 5 | 3 | 2 |
+| BGL balanceado | 6 / 6 | 6 / 6 (entra completo) | 3 | 12 |
+| BGL natural | 14 / 36 | **8** / 10 | 3 | 18 |
+| UWF visible | 20 / 20 | 2 / 3 | 3 | 5 |
+| UWF sigiloso | 20 / 20 | 3 / 2 | 3 | 5 |
+
+BGL: 14 positivos y 16 negativos (30). UWF: **5 positivos y 5 negativos** (10), 5 por condición. **BGL natural**
+tiene 14 positivos de 50 (28 %): se toman 8 de 18 (44 %) para que la exhaustividad tenga base. Consecuencia que debe
+informarse: la precisión dentro de «natural» ya no representa la prevalencia natural. Con 14 positivos en
+los 30 casos de BGL la exhaustividad tendrá un intervalo de Wilson ancho (ver 25.4).
 
 **Entran los 12 casos de la rúbrica** (6 de BGL y 6 de UWF): `bgl_eva_balanceado_0001/0005/0006`,
 `bgl_eva_natural_0002/0016/0031`, `uwf_eva_sigiloso_0013/0018/0024`, `uwf_eva_visible_0004/0027/0028`.
 
-**No se estratifica por veredicto** (positivo/negativo): el módulo solo lee las listas de ids de `evaluacion.json` y
-`rubrica.json` y **no abre `ground_truth/` ni `cases/`** (hay una prueba que lo verifica). La proporción de positivos
-queda la que declaran los manifiestos por condición (BGL balanceado 50 %, BGL natural 28 %, UWF 50 %) y la
-composición real de la muestra no se miró antes de correr. Consecuencia: el número de positivos por celda es una
-variable aleatoria; con 10 casos de UWF y ~5 positivos esperados, las estimaciones de exhaustividad y precisión
-serán muy anchas (por eso la vista muestra intervalos de Wilson y un aviso de muestras chicas, 25.4).
+**Uso de las etiquetas.** `seleccion_campana.py` es código de **preparación**: lee la etiqueta de referencia
+(`etiqueta_deteccion`) de los casos de evaluación, igual que `subconjuntos.py`, **solo para repartir cupos**, y no
+escribe la etiqueta de cada caso (el archivo lleva ids y conteos por estrato). Ningún módulo que ejecute una
+arquitectura lo importa ni importa `subconjuntos.py`, y ninguno arma rutas a `ground_truth/` (pruebas que lo
+verifican; las únicas apariciones de la palabra son: el nombre del subdirectorio en `persistencia.SUBDIRECTORIOS`,
+que solo se crea, y una clave de diccionario de dos herramientas de desarrollo sobre `data/logs`).
 
-Plan resultante: NODEX 80 corridas (BGL 60 + UWF 20), Gemini directo 80, baseline 40 = **200 corridas**.
+Plan: NODEX 80 corridas (BGL 60 + UWF 20), Gemini directo 80, baseline 40 = **200 corridas**.
 
 ### 25.3 Costo esperado y riesgo frente al presupuesto
 
-Con los costos **medidos en el piloto** (8 corridas por celda, `gemini-3.8-flash`, USD 0,75 por millón de entrada y
-3,75 de salida con razonamiento incluido, vigentes hasta el 31-dic-2026):
+Costos **medidos en el piloto** (8 corridas por celda y, ahora, por etiqueta: 4 y 4), `gemini-3.8-flash`,
+USD 0,75 por millón de entrada y 3,75 de salida con razonamiento, vigentes hasta el 31-dic-2026. El costo cambia
+con la etiqueta: en BGL los positivos cuestan más (NODEX 0,0184 frente a 0,0159); en UWF los positivos de NODEX
+cuestan menos (0,0720 frente a 0,0866). Con la mezcla de la selección v2:
 
-| Celda | Costo por corrida: mínimo / media / máximo (USD) | Tiempo medio / máximo |
-|---|---|---|
-| NODEX · BGL | 0,0131 / 0,0172 / 0,0224 | 39 s / 49 s |
-| Gemini directo · BGL | 0,0048 / 0,0110 / 0,0156 | 18 s / 26 s |
-| NODEX · UWF | 0,0652 / 0,0793 / 0,1361 | 59 s / 101 s |
-| Gemini directo · UWF | 0,0522 / 0,0654 / 0,0866 | 51 s / 78 s |
+| Plan N = 2 (160 corridas con modelo) | USD |
+|---|---|
+| Mínimo / **media** / máximo observado | 3,70 / **4,57** / 5,88 |
+| Simulación (remuestreo con semilla): p5 – p95 (máximo) | 4,39 – 4,77 (5,06) |
+| P(> 5,00) / P(> 6,00) | 0,01 % / 0 % |
+| **Etapa A** (repetición 1): media, p5 – p95 | 2,28 ; 2,16 – 2,42 (máx. de la simulación 2,64) |
+| P(A × 2 > 5,00), que bloquearía la Etapa B | 0,6 % |
 
-| Plan | Corridas con modelo | Costo mín. / media / máx. (USD) | Simulación p5 – p95 (máx.) | P(> 5,00) | P(> 6,00) | Horas (media – máx.) |
-|---|---|---|---|---|---|---|
-| **N = 2 · BGL 30 + UWF 10** | 160 | 3,42 / **4,58** / 6,73 | 4,39 – 4,78 (5,21) | 0,08 % | 0 % | 1,6 – 2,2 |
-| N = 3 · BGL 20 + UWF 8 | 168 | 3,89 / 5,16 / 7,62 | 4,96 – 5,38 (5,75) | 90 % | 0 % | 1,7 – 2,4 |
+Margen: **USD 1,43** frente a los 6 y USD 0,43 frente al tope de gasto de 5,00. UWF explica ~63 % del costo. El
+«máximo» suma el peor caso observado de **todas** las corridas a la vez (no es esperable). Tiempo (pared, con el
+arranque de cada proceso): media **2,1 h**, 2,7 h con todas las corridas en su máximo observado; con replanificaciones
+puede acercarse a 3 h.
 
-Lectura: el «máximo» de 6,73 suma el peor caso observado de **todas** las corridas a la vez (no es esperable). El
-costo esperado de N = 2 es **USD 4,58**, con un margen de **USD 1,42** frente a los 6 y de USD 0,42 frente al tope de
-gasto de 5,00. **N = 3 con menos casos tiene más riesgo**: su costo esperado (5,16) ya supera el tope de 5,00, que
-lo detendría antes de terminar con ~90 % de probabilidad. UWF explica el 63 % del costo del plan elegido (son corridas
-de ~300 eventos). Límites de la estimación: 8 observaciones por celda; el remuestreo no puede superar lo ya observado y
-subestima las colas; los casos de evaluación pueden ser más grandes que los de desarrollo; el modo «sin reputación
-externa» cambia el comportamiento de NODEX respecto del piloto. Por eso el tope de gasto se evalúa **antes de cada
-corrida** con el máximo observado de su celda (25.6) y se recalcula desde la telemetría guardada.
+**Límite de la estimación y primer aviso de la verificación (25.7):** 4 observaciones por celda-etiqueta; el remuestreo no
+puede superar lo observado y subestima las colas. En la verificación, NODEX en `uwf_des_visible_0000` costó
+**USD 0,1405 frente a 0,0701 en el piloto** (11 llamadas frente a 6, una replanificación): por encima del máximo
+de esa celda en el piloto (0,1361). Es una sola observación; el tope y la compuerta están para eso.
 
 ### 25.4 Enmiendas a la evaluación y a la vista (todas antes de la campaña)
 
@@ -2021,7 +2026,8 @@ corrida** con el máximo observado de su celda (25.6) y se recalcula desde la te
   (`<run_id>.llm_json.json`; son las inválidas **tras** el reintento interno de `llm_json`). La salud estructural
   informa el porcentaje real de NODEX donde antes decía «no medido».
 - **Bug corregido en el lanzador:** `informe_de_corrida` leía siempre la repetición 1; con N = 2 habría mezclado la
-  telemetría de la repetición 2 con la 1.
+  telemetría de la repetición 2 con la 1. Ahora lee la repetición de la corrida (con prueba que usa tokens distintos
+  en cada repetición).
 
 ### 25.5 HDFS: auxiliar y amenaza a la validez
 
@@ -2030,48 +2036,65 @@ y rotulado **«auxiliar / validación técnica»**. La razón de validez: `HDFS_
 etiqueta de anomalía de HDFS depende de **secuencias completas por bloque** que no están en el archivo, y en el piloto
 **ninguna arquitectura detectó los 3 casos anómalos**. Una cifra de detección sobre HDFS no mide la capacidad del
 sistema sino la información disponible: **amenaza a la validez**, no un resultado. Si al final sobra presupuesto, se
-**propondrá** una muestra pequeña de HDFS aparte; **no se ejecuta sin autorización**.
+**propondrá** una muestra pequeña de HDFS aparte; **no se ejecuta sin autorización**. En la verificación mínima no se
+corrió HDFS (no hacía falta para la campaña).
 
-### 25.6 Tope de gasto acumulado de USD 5,00 (lanzador)
+### 25.6 Etapas de la campaña y tope de gasto (lanzador)
 
-`campana.py` calcula el gasto desde los tokens **medidos** (telemetría guardada) y la tabla de precios vigente ese
-día (el razonamiento se factura como salida). Antes de **cada** corrida: gasto acumulado + costo **máximo observado**
-de la celda de la corrida siguiente (el mayor entre lo medido en la campaña y el piloto de referencia, `--config-referencia`)
-no puede superar el tope; si lo superaría, se detiene (**código 5**), de forma **reanudable** (las corridas guardadas
-no se repiten; el gasto se recalcula, no hay contador aparte que perder). Se revisa también después de cada corrida.
-Una corrida fallida sin tokens deja un costo **parcial** (un piso) que se informa aparte. Sin precio vigente, no se
-lanza nada. El gasto acumulado se imprime por corrida y queda por etapa en el informe y en `gasto.json`. Se
-mantienen **3 fallas de infraestructura seguidas** (código 4) y **2 h por corrida**. Etapas por dataset
-(`--dataset bgl` y luego `--dataset uwf`). Pruebas con 20 defectos reintroducidos a propósito, todos detectados.
-Los USD 5,00 dejan USD 1,00 de margen para verificaciones y reintentos dentro de los USD 6.
+- **Etapa A** = repetición 1 de **todos** los casos (BGL primero y UWF después): NODEX, Gemini directo y baseline.
+  **Etapa B** = repetición 2 (NODEX y Gemini directo; el baseline no se repite).
+- **Compuerta de la Etapa B:** se lanza sola **solo si el gasto real de la Etapa A × 2 no supera USD 5,00** (igualdad
+  permitida). Si lo supera, no lanza nada, termina con **código 6** y guarda el gasto real en
+  `informe_etapaB.json`. La compuerta vive en `ejecutar_etapa` (no hay atajo con `--etapa B`) y exige que A haya
+  terminado. Salvaguarda adicional (mía, a decidir si se quiere quitar): si la Etapa A no sale limpia (corrida fallida,
+  fallback o versión distinta), `--campana` tampoco sigue a B.
+- **Tope de gasto acumulado de USD 5,00:** el gasto se recalcula desde los tokens **medidos** (telemetría guardada) y
+  la tabla de precios vigente ese día (el razonamiento se factura como salida). Antes de **cada** corrida: gasto
+  acumulado + costo **máximo observado** de su celda (el mayor entre lo medido en la campaña y el piloto de referencia,
+  `--config-referencia`) no puede superar el tope; si lo superaría, se detiene (**código 5**), de forma **reanudable**
+  (las corridas guardadas no se repiten; no hay contador aparte que perder). Se revisa también después de cada corrida.
+  Una corrida fallida sin tokens deja un costo **parcial** (un piso) que se informa aparte. Sin precio vigente, no se
+  lanza nada. Gasto por corrida y por etapa en pantalla, en el informe y en `gasto.json`.
+- Se mantienen **3 fallas de infraestructura seguidas** (código 4) y **2 h por corrida**.
+- Pruebas con defectos reintroducidos a propósito (20 en el tope, 13 en las etapas), todos detectados.
 
-### 25.7 Modo «sin reputación externa» (NODEX)
+### 25.7 Modo «sin reputación externa» y verificación mínima
 
-Modo opt-in `REPUTACION_SIN_ENRIQUECIMIENTO` (apagado por omisión; congelado como parámetro): `corroborar_ips` no
-consulta nada ni usa la caché y devuelve `fuente: sin_reputacion` y `score: None`, de modo que ninguna IP recibe
-puntaje. El registro de consultas lo distingue (`sin_reputacion`) de un respaldo local. **Declaración propuesta para
-el informe:** *«NODEX se evaluó sin enriquecimiento de reputación externa.»* El diff está pendiente de aprobación.
+Modo opt-in `REPUTACION_SIN_ENRIQUECIMIENTO` (commit `4e117a7`, diff aprobado por la usuaria el 15-oct-2026): apagado por
+omisión, congelado como parámetro. Con el modo encendido, `check_ip_reputation` no consulta AbuseIPDB ni usa la heurística
+local, y `corroborar_ips` ni lee ni escribe la caché: ninguna IP recibe puntaje (`score` None). El registro de
+consultas lo distingue (`sin_reputacion`) del respaldo local. **Declaración propuesta para el informe:**
+*«NODEX se evaluó sin enriquecimiento de reputación externa.»*
 
-### 25.8 Lecturas de metadatos de evaluación y declaración sobre inspección manual
+**Verificación mínima (no reportable)**, configuración `verificacion-sinrep-20261015`, solo NODEX, un caso de desarrollo
+por dataset:
 
-- **Lo que leí yo (Claude)** durante esta preparación: solo **ids** (`evaluacion.json`, `rubrica.json`,
-  `campana_final.json`) y **conteos agregados** de los manifiestos (casos, prevalencia efectiva, positivos por
-  condición). No abrí ningún caso ni referencia de la partición de evaluación, y no lo hace ningún código de esta
-  sección.
-- **Declaración de la usuaria (15-oct-2026):** nadie del equipo abrió casos de la partición de evaluación a mano.
-  Se registra como declaración de la usuaria; no es verificable desde el repositorio.
-- **Precisión necesaria:** los archivos `rubrica.json` y `evaluacion.json` se generaron el 4–14-oct con
-  `subconjuntos.py`, que **sí lee la etiqueta de referencia (no el contenido) de los casos de evaluación** para
-  estratificar la rúbrica y contar positivos por condición. Es una lectura previa, de código y de las etiquetas, hecha antes
-  de que existiera cualquier salida de las arquitecturas; no es una inspección manual. `seleccion_campana.py`
-  (la selección de 25.2) no abre `ground_truth/`.
-- **Declaración propuesta para el informe:** *«Las particiones de evaluación no fueron inspeccionadas manualmente
-  antes de la campaña.»* (con la precisión anterior sobre la preselección por etiquetas).
+| Caso | Llamadas | Tokens (entrada / salida / razonamiento) | USD | Consultas | Piloto |
+|---|---|---|---|---|---|
+| `bgl_des_balanceado_0000` | 5 | 4.013 / 1.121 / 2.014 | 0,0148 | 1 (`abuseipdb`, `sin_reputacion`) | 5 llamadas, 0,0172 |
+| `uwf_des_visible_0000` | 11 | 117.615 / 4.037 / 9.906 | 0,1405 | 19 (`abuseipdb`, `sin_reputacion`) | 6 llamadas, 0,0701 |
 
-### 25.9 Pendiente para lanzar (no se lanza nada sin tu autorización explícita)
+Total USD 0,155. **Ninguna petición HTTP real** a servicios de reputación: 0 intentos externos, 0 bloqueados, 0
+respaldos locales, y todas las respuestas con fuente `sin_reputacion` (las únicas peticiones salientes son las del
+modelo). JSON inválido: 0 de 5 y 0 de 11. Ambas completas, con el modelo pedido y sin fallback. Costo de UWF: **x2 frente
+al piloto** por una replanificación (ver 25.3).
 
-1. Aprobar el diff del modo «sin reputación externa» (`src/tools/reputation.py`, `src/config.py`).
-2. Verificación mínima NODEX (1 caso de BGL y 1 de UWF de **desarrollo**, no reportable) con la configuración nueva.
-3. Congelar el `config_version` de la campaña sobre un árbol limpio y `--verificar-config`.
-4. Plan en seco final y tu autorización explícita.
-5. Rúbrica humana: dos evaluadores y un camino autorizado para darles el caso y su referencia.
+### 25.8 Declaraciones sobre las particiones de evaluación (reemplaza la anterior)
+
+- **Declaración de la usuaria (15-oct-2026):** nadie del equipo abrió casos de la partición de evaluación a mano. Se
+  registra como declaración de la usuaria; no es verificable desde el repositorio.
+- **Lo que leyó Claude** durante esta preparación: **ids** (`evaluacion.json`, `rubrica.json`, `campana_final*.json`) y
+  **conteos agregados** de los manifiestos. No abrió ningún caso ni referencia de evaluación.
+- **El código de preparación** (`subconjuntos.py`, el 4–14-oct, y `seleccion_campana.py`, el 15-oct) **lee la etiqueta de
+  referencia (no el contenido) de los casos de evaluación** únicamente para estratificar los subconjuntos, antes de que
+  existiera cualquier salida de las arquitecturas evaluadas.
+- **Declaración para el informe (reemplaza la propuesta anterior):** *«Las particiones de evaluación no fueron
+  inspeccionadas manualmente. El código de preparación leyó sus etiquetas de referencia únicamente para estratificar los
+  subconjuntos, antes de producirse cualquier salida de las arquitecturas evaluadas.»*
+
+### 25.9 Pendiente para lanzar (no se lanza nada sin autorización explícita)
+
+1. Congelar el `config_version` de la campaña sobre un árbol limpio y `--verificar-config` (el comando de lanzamiento
+   es `--campana`, que corre A y, si la compuerta lo permite, B).
+2. Plan en seco final y autorización explícita de la usuaria.
+3. Rúbrica humana: dos evaluadores y un camino autorizado para darles el caso y su referencia.
