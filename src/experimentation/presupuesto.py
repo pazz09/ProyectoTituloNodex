@@ -60,14 +60,18 @@ def gasto_acumulado(raiz_repo: Path, config_version: str, precios: dict, modelo:
     vigencia = estimacion.precio_vigente(precios, modelo, fecha)
     if vigencia is None:
         raise ValueError(f"no hay precio vigente de {modelo} el {fecha}: no se puede medir el gasto")
-    por_corrida, parciales = {}, []
+    por_corrida, parciales, por_repeticion = {}, [], {}
     for d in _telemetrias(raiz_repo, config_version):
         c = costo_de_telemetria(d.get("telemetria"), vigencia)
         por_corrida[d["run_id"]] = round(c["usd"], 6)
+        repeticion = d.get("repeticion")
+        por_repeticion[repeticion] = por_repeticion.get(repeticion, 0.0) + c["usd"]
         if c["parcial"]:
             parciales.append(d["run_id"])
     return {"usd": round(sum(por_corrida.values()), 6), "corridas": len(por_corrida),
             "corridas_con_costo_parcial": parciales, "por_corrida": por_corrida,
+            # Gasto por número de repetición: la Etapa A es la repetición 1 (y el baseline, que no cuesta).
+            "por_repeticion": {k: round(v, 6) for k, v in sorted(por_repeticion.items(), key=lambda kv: str(kv[0]))},
             "fecha_de_precios": fecha, "vigencia": {"desde": vigencia.get("desde"),
                                                    "hasta": vigencia.get("hasta")}}
 

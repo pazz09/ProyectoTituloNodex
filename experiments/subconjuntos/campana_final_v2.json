@@ -1,0 +1,177 @@
+{
+  "proposito": "campaña final con presupuesto de USD 6: submuestra de la partición de evaluación",
+  "particion": "evaluacion",
+  "decision": "cambio de alcance del 15-oct-2026: USD 6 en total, N=2 (pedido del profesor guía) y casos reducidos; HDFS es auxiliar (D-7) y no entra",
+  "muestreo": "estratificado por condición y por etiqueta de referencia, con los casos de la rúbrica incluidos; la etiqueta se usa solo en el código de preparación",
+  "semilla": 20261015,
+  "cupos": {
+    "bgl/balanceado": {
+      "anomalo": 6,
+      "normal": 6
+    },
+    "bgl/natural": {
+      "anomalo": 8,
+      "normal": 10
+    },
+    "uwf/sigiloso": {
+      "anomalo": 3,
+      "normal": 2
+    },
+    "uwf/visible": {
+      "anomalo": 2,
+      "normal": 3
+    }
+  },
+  "casos_de_la_rubrica": {
+    "incluidos": [
+      "bgl_eva_balanceado_0001",
+      "bgl_eva_balanceado_0005",
+      "bgl_eva_balanceado_0006",
+      "bgl_eva_natural_0002",
+      "bgl_eva_natural_0016",
+      "bgl_eva_natural_0031",
+      "uwf_eva_sigiloso_0013",
+      "uwf_eva_sigiloso_0018",
+      "uwf_eva_sigiloso_0024",
+      "uwf_eva_visible_0004",
+      "uwf_eva_visible_0027",
+      "uwf_eva_visible_0028"
+    ],
+    "n_incluidos": 12,
+    "n_en_la_rubrica": 12,
+    "fuera_por_cupo": []
+  },
+  "preseleccionada_antes_de_resultados": true,
+  "protocolo_version": "1.0",
+  "datasets": {
+    "bgl": {
+      "balanceado": {
+        "composicion": {
+          "entregados": 12,
+          "positivos": 6,
+          "negativos": 6,
+          "por_etiqueta": {
+            "anomalo": {
+              "disponibles": 6,
+              "entregados": 6,
+              "de_la_rubrica": 2
+            },
+            "normal": {
+              "disponibles": 6,
+              "entregados": 6,
+              "de_la_rubrica": 1
+            }
+          }
+        },
+        "case_ids": [
+          "bgl_eva_balanceado_0000",
+          "bgl_eva_balanceado_0001",
+          "bgl_eva_balanceado_0002",
+          "bgl_eva_balanceado_0003",
+          "bgl_eva_balanceado_0004",
+          "bgl_eva_balanceado_0005",
+          "bgl_eva_balanceado_0006",
+          "bgl_eva_balanceado_0007",
+          "bgl_eva_balanceado_0008",
+          "bgl_eva_balanceado_0009",
+          "bgl_eva_balanceado_0010",
+          "bgl_eva_balanceado_0011"
+        ]
+      },
+      "natural": {
+        "composicion": {
+          "entregados": 18,
+          "positivos": 8,
+          "negativos": 10,
+          "por_etiqueta": {
+            "anomalo": {
+              "disponibles": 14,
+              "entregados": 8,
+              "de_la_rubrica": 1
+            },
+            "normal": {
+              "disponibles": 36,
+              "entregados": 10,
+              "de_la_rubrica": 2
+            }
+          }
+        },
+        "case_ids": [
+          "bgl_eva_natural_0001",
+          "bgl_eva_natural_0002",
+          "bgl_eva_natural_0003",
+          "bgl_eva_natural_0006",
+          "bgl_eva_natural_0009",
+          "bgl_eva_natural_0010",
+          "bgl_eva_natural_0011",
+          "bgl_eva_natural_0013",
+          "bgl_eva_natural_0016",
+          "bgl_eva_natural_0020",
+          "bgl_eva_natural_0022",
+          "bgl_eva_natural_0025",
+          "bgl_eva_natural_0031",
+          "bgl_eva_natural_0034",
+          "bgl_eva_natural_0038",
+          "bgl_eva_natural_0042",
+          "bgl_eva_natural_0044",
+          "bgl_eva_natural_0046"
+        ]
+      }
+    },
+    "uwf": {
+      "sigiloso": {
+        "composicion": {
+          "entregados": 5,
+          "positivos": 3,
+          "negativos": 2,
+          "por_etiqueta": {
+            "anomalo": {
+              "disponibles": 20,
+              "entregados": 3,
+              "de_la_rubrica": 2
+            },
+            "normal": {
+              "disponibles": 20,
+              "entregados": 2,
+              "de_la_rubrica": 1
+            }
+          }
+        },
+        "case_ids": [
+          "uwf_eva_sigiloso_0001",
+          "uwf_eva_sigiloso_0013",
+          "uwf_eva_sigiloso_0018",
+          "uwf_eva_sigiloso_0024",
+          "uwf_eva_sigiloso_0031"
+        ]
+      },
+      "visible": {
+        "composicion": {
+          "entregados": 5,
+          "positivos": 2,
+          "negativos": 3,
+          "por_etiqueta": {
+            "anomalo": {
+              "disponibles": 20,
+              "entregados": 2,
+              "de_la_rubrica": 1
+            },
+            "normal": {
+              "disponibles": 20,
+              "entregados": 3,
+              "de_la_rubrica": 2
+            }
+          }
+        },
+        "case_ids": [
+          "uwf_eva_visible_0004",
+          "uwf_eva_visible_0009",
+          "uwf_eva_visible_0027",
+          "uwf_eva_visible_0028",
+          "uwf_eva_visible_0038"
+        ]
+      }
+    }
+  },
+  "n_casos": 40
+}

@@ -299,12 +299,14 @@ def congelar(
     try:
         from src.experimentation.datasets.particion import SEMILLA_PARTICION
         from src.experimentation.datasets.uwf_casos import SEMILLA_UWF
+        from src.experimentation.seleccion_campana import SEMILLA_SELECCION
         from src.experimentation.subconjuntos import SEMILLA_SUBCONJUNTOS
 
         semillas = {
             "particion": SEMILLA_PARTICION,
             "uwf_casos": SEMILLA_UWF,
             "subconjuntos": SEMILLA_SUBCONJUNTOS,
+            "seleccion_campana": SEMILLA_SELECCION,
         }
     except ImportError:
         semillas = {}

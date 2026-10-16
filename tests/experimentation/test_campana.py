@@ -778,3 +778,210 @@ def test_si_la_ultima_corrida_de_la_etapa_deja_el_gasto_sobre_el_tope_la_etapa_n
                                        tope_gasto=0.55, correr=correr)
     assert codigo == campana.SALIDA_TOPE_DE_GASTO
     assert "acaba de terminar" in _informe_guardado(repo, "informe_etapa1.json")["motivo_de_parada"]
+
+
+# --- etapas de la campaña: A = repetición 1, B = repetición 2 -------------------------------------------------
+
+@pytest.fixture
+def repo_evaluacion(repo):
+    """Un subconjunto de EVALUACIÓN ficticio (N=2): 3 casos de BGL y 2 de UWF. Solo ids, sin casos."""
+    datos = {"particion": "evaluacion", "datasets": {
+        "uwf": {"visible": {"case_ids": ["uwf_eva_visible_0001", "uwf_eva_visible_0002"]}},
+        "bgl": {"natural": {"case_ids": ["bgl_eva_natural_0001", "bgl_eva_natural_0002",
+                                         "bgl_eva_natural_0003"]}}}}
+    (repo / "experiments" / "subconjuntos" / "mini.json").write_text(json.dumps(datos), encoding="utf-8")
+    return repo
+
+
+def _etapa(repo, etapa, usd=0.10, lanzadas=None, tope=5.0, correr=None):
+    return campana.ejecutar_etapa(repo, repo / ".env", CONFIG, "mini", etapa, hoy=HOY, tope_gasto=tope,
+                                  correr=correr or _correr_con_costo(repo, usd, lanzadas))
+
+
+def _plan_mini(repo):
+    sub = orquestador.cargar_subconjunto(repo, "mini")
+    return sub, orquestador.planificar(repo, sub, CONFIG, campana.ARQUITECTURAS_PILOTO)
+
+
+def test_la_etapa_A_es_la_repeticion_1_de_todos_los_casos_con_BGL_antes_que_UWF(repo_evaluacion, monkeypatch):
+    monkeypatch.setattr(campana, "informe_de_corrida", _informe_limpio)
+    lanzadas = []
+    codigo, _ = _etapa(repo_evaluacion, "A", lanzadas=lanzadas)
+    assert codigo == campana.SALIDA_OK and len(lanzadas) == 5 * 3          # 5 casos × 3 arquitecturas
+    assert [d for _, d, _ in lanzadas] == ["bgl"] * 9 + ["uwf"] * 6
+    assert {a for a, _, _ in lanzadas} == {"nodex_multiagente", "baseline_reglas", "gemini_externo"}
+    _, plan = _plan_mini(repo_evaluacion)
+    assert {e["repeticion"] for e in plan.ya_hechas} == {1}                 # nada de la repetición 2
+
+
+def test_la_etapa_B_es_la_repeticion_2_solo_de_NODEX_y_Gemini_y_el_baseline_no_se_repite(
+        repo_evaluacion, monkeypatch):
+    monkeypatch.setattr(campana, "informe_de_corrida", _informe_limpio)
+    _etapa(repo_evaluacion, "A")
+    sub, plan = _plan_mini(repo_evaluacion)
+    b = campana.entradas_de_la_etapa(plan, sub, "B")
+    assert len(b) == 5 * 2 and {e["repeticion"] for e in b} == {2}
+    assert "baseline_reglas" not in {e["arquitectura"] for e in b}
+    lanzadas = []
+    codigo, _ = _etapa(repo_evaluacion, "B", lanzadas=lanzadas)
+    assert codigo == campana.SALIDA_OK and len(lanzadas) == 10
+
+
+def test_la_campana_lanza_A_completa_y_despues_B_nunca_mezcladas(repo_evaluacion, monkeypatch):
+    monkeypatch.setattr(campana, "informe_de_corrida", _informe_limpio)
+    orden = []
+    base = _correr_con_costo(repo_evaluacion, 0.10)
+
+    def correr(r, b, c, e, p, v, l):
+        orden.append(e["repeticion"])
+        return base(r, b, c, e, p, v, l)
+
+    codigo, resultado = campana.ejecutar_campana_por_etapas(
+        repo_evaluacion, repo_evaluacion / ".env", CONFIG, "mini", correr=correr, hoy=HOY)
+    assert codigo == campana.SALIDA_OK and resultado["B"]["lanzada"] is True
+    assert orden == [1] * 15 + [2] * 10                      # primero todo A, después todo B
+
+
+def test_si_el_gasto_real_de_A_por_2_no_supera_el_tope_B_se_autoriza(repo_evaluacion, monkeypatch):
+    monkeypatch.setattr(campana, "informe_de_corrida", _informe_limpio)
+    _etapa(repo_evaluacion, "A", usd=0.20)                  # 10 corridas con modelo × 0,20 = 2,00
+    congelada = campana.leer_configuracion(repo_evaluacion, CONFIG)
+    d = campana.decidir_etapa_b(repo_evaluacion, congelada, 5.0, HOY, pendientes_de_a=0)
+    assert d["autorizada"] is True and d["gasto_real_etapa_a_usd"] == pytest.approx(2.0)
+    assert d["proyeccion_etapa_b_usd"] == pytest.approx(4.0)
+
+
+def test_si_el_gasto_real_de_A_por_2_supera_el_tope_B_no_se_lanza_y_se_informa_el_gasto(
+        repo_evaluacion, monkeypatch, capsys):
+    monkeypatch.setattr(campana, "informe_de_corrida", _informe_limpio)
+    _etapa(repo_evaluacion, "A", usd=0.30)                  # 10 × 0,30 = 3,00; × 2 = 6,00 > 5,00
+    lanzadas = []
+    codigo, informes = _etapa(repo_evaluacion, "B", usd=0.30, lanzadas=lanzadas)
+    assert codigo == campana.SALIDA_ETAPA_B_NO_AUTORIZADA and lanzadas == [] and informes == []
+    informe = _informe_guardado(repo_evaluacion, "informe_etapaB.json")
+    decision = informe["decision_etapa_b"]
+    assert decision["autorizada"] is False and decision["gasto_real_etapa_a_usd"] == pytest.approx(3.0)
+    assert decision["proyeccion_etapa_b_usd"] == pytest.approx(6.0) and decision["tope_usd"] == 5.0
+    assert "supera el tope" in informe["motivo_de_parada"]
+    assert "Compuerta de la Etapa B" in capsys.readouterr().out
+
+
+def test_la_proyeccion_exactamente_igual_al_tope_deja_pasar_a_B(repo_evaluacion, monkeypatch):
+    monkeypatch.setattr(campana, "informe_de_corrida", _informe_limpio)
+    # 4.000.000 tokens de entrada a USD 0,75 por millón = 3,00 exactos; × 2 = 6,00 justo.
+    ident = IdentidadCorrida("bgl_eva_natural_0001", "bgl", "nodex_multiagente", 1, CONFIG)
+    persistencia.guardar(ident, repo_evaluacion, salida={"x": 1}, ejecucion={"estado": "completa"},
+                         telemetria={"llm_calls": [{"input_tokens": 4_000_000, "output_tokens": 0}]})
+    congelada = campana.leer_configuracion(repo_evaluacion, CONFIG)
+    assert campana.decidir_etapa_b(repo_evaluacion, congelada, 6.0, HOY, 0)["autorizada"] is True
+    assert campana.decidir_etapa_b(repo_evaluacion, congelada, 5.99, HOY, 0)["autorizada"] is False
+
+
+def test_la_campana_no_lanza_nada_de_B_si_la_compuerta_la_rechaza(repo_evaluacion, monkeypatch):
+    monkeypatch.setattr(campana, "informe_de_corrida", _informe_limpio)
+    lanzadas = []
+    codigo, resultado = campana.ejecutar_campana_por_etapas(
+        repo_evaluacion, repo_evaluacion / ".env", CONFIG, "mini", hoy=HOY,
+        correr=_correr_con_costo(repo_evaluacion, 0.30, lanzadas))      # A = 3,00; × 2 = 6,00 > 5,00
+    assert codigo == campana.SALIDA_ETAPA_B_NO_AUTORIZADA and resultado["B"]["lanzada"] is False
+    assert len(lanzadas) == 15                                           # solo la Etapa A
+    _, plan = _plan_mini(repo_evaluacion)
+    assert all(e["repeticion"] == 1 for e in plan.ya_hechas) and len(plan.ya_hechas) == 15
+
+
+def test_los_codigos_de_salida_son_distintos_y_el_de_B_es_el_6():
+    codigos = [campana.SALIDA_OK, campana.SALIDA_ETAPA_NO_LIMPIA, campana.SALIDA_FALLAS_SEGUIDAS,
+               campana.SALIDA_TOPE_DE_GASTO, campana.SALIDA_ETAPA_B_NO_AUTORIZADA]
+    assert codigos == [0, 3, 4, 5, 6] and len(set(codigos)) == 5
+
+
+def test_B_no_se_puede_lanzar_directamente_sin_terminar_A(repo_evaluacion, monkeypatch):
+    """La compuerta vive en `ejecutar_etapa`, no en quien la llama: no hay atajo."""
+    monkeypatch.setattr(campana, "informe_de_corrida", _informe_limpio)
+    lanzadas = []
+    codigo, _ = _etapa(repo_evaluacion, "B", lanzadas=lanzadas)
+    assert codigo == campana.SALIDA_ETAPA_B_NO_AUTORIZADA and lanzadas == []
+    assert "no terminó" in _informe_guardado(repo_evaluacion, "informe_etapaB.json")["motivo_de_parada"]
+
+
+def test_si_A_no_sale_limpia_la_campana_no_sigue_a_B(repo_evaluacion, monkeypatch):
+    monkeypatch.setattr(campana, "informe_de_corrida", _informe_limpio)
+    base = _correr_con_costo(repo_evaluacion, 0.01)
+
+    def correr(r, b, c, e, p, v, l):
+        res = base(r, b, c, e, p, v, l)
+        return {**res, "estado": "error_contrato", "error": "x"} if e["case_id"].endswith("_0002") else res
+
+    codigo, resultado = campana.ejecutar_campana_por_etapas(
+        repo_evaluacion, repo_evaluacion / ".env", CONFIG, "mini", correr=correr, hoy=HOY)
+    assert codigo == campana.SALIDA_ETAPA_NO_LIMPIA and resultado["B"]["lanzada"] is False
+
+
+def test_el_gasto_de_A_cuenta_solo_la_repeticion_1_aunque_B_ya_haya_corrido(repo_evaluacion, monkeypatch):
+    monkeypatch.setattr(campana, "informe_de_corrida", _informe_limpio)
+    _etapa(repo_evaluacion, "A", usd=0.10)
+    _etapa(repo_evaluacion, "B", usd=0.10)
+    congelada = campana.leer_configuracion(repo_evaluacion, CONFIG)
+    d = campana.decidir_etapa_b(repo_evaluacion, congelada, 5.0, HOY, 0)
+    assert d["gasto_real_etapa_a_usd"] == pytest.approx(1.0, abs=1e-4)          # no 2,0
+
+
+def test_el_informe_de_cada_corrida_lee_su_propia_repeticion(repo_evaluacion):
+    """Con N=2 el informe de una corrida de la repetición 2 trae SUS tokens y no los de la 1."""
+    for rep, tokens in ((1, 111), (2, 222)):
+        ident = IdentidadCorrida("bgl_eva_natural_0001", "bgl", "gemini_externo", rep, CONFIG)
+        persistencia.guardar(ident, repo_evaluacion, salida={"x": 1}, ejecucion={"estado": "completa"},
+                             telemetria={"llm_calls": [{"input_tokens": tokens, "output_tokens": 1,
+                                                        "model_version": "gemini-3.8-flash"}],
+                                         "input_tokens": tokens})
+    congelada = {**CONGELADA, "config_version": CONFIG}
+    for rep, esperado in ((1, 111), (2, 222)):
+        ident = IdentidadCorrida("bgl_eva_natural_0001", "bgl", "gemini_externo", rep, CONFIG)
+        corrida = {"run_id": ident.run_id, "case_id": ident.case_id, "dataset": "bgl",
+                   "arquitectura": "gemini_externo", "repeticion": rep, "estado": "completa",
+                   "error": None, "segundos": 1.0}
+        assert campana.informe_de_corrida(repo_evaluacion, corrida, congelada)["tokens"]["entrada"] == esperado
+
+
+def test_correr_una_devuelve_la_repeticion_de_la_corrida(repo_con_chroma, monkeypatch):
+    repo_raiz[:] = [repo_con_chroma]
+    monkeypatch.setattr(campana, "ejecutar_hijo", _hijo_falso())
+    r = campana.correr_una(repo_con_chroma, {}, CONGELADA, ENTRADA, "desarrollo", CONFIG,
+                           repo_con_chroma / "logs", tope_s=5)
+    assert r["repeticion"] == 1
+
+
+def test_el_plan_en_seco_muestra_las_etapas_A_y_B(repo_evaluacion, capsys):
+    campana.main(["--subconjunto", "mini", "--config-version", CONFIG], raiz=repo_evaluacion)
+    salida = capsys.readouterr().out
+    assert "A = 15 corridas" in salida and "B = 10 corridas" in salida
+
+
+# --- verificaciones con una sola arquitectura ----------------------------------------------------------------
+
+def test_una_verificacion_puede_correr_solo_nodex(repo, monkeypatch):
+    monkeypatch.setattr(campana, "informe_de_corrida", _informe_limpio)
+    lanzadas = []
+    codigo, informes = campana.ejecutar_etapa(
+        repo, repo / ".env", CONFIG, "piloto", 1, hoy=HOY,
+        correr=_correr_con_costo(repo, 0.10, lanzadas), arquitecturas=("nodex_multiagente",))
+    assert codigo == campana.SALIDA_OK and [a for a, _, _ in lanzadas] == ["nodex_multiagente"]
+
+
+def test_el_plan_en_seco_con_arquitecturas_acotadas_lo_dice(repo_evaluacion, capsys):
+    campana.main(["--subconjunto", "mini", "--config-version", CONFIG, "--arquitecturas",
+                  "nodex_multiagente"], raiz=repo_evaluacion)
+    salida = capsys.readouterr().out
+    assert "nodex_multiagente" in salida and "gemini_externo " not in salida.split("estimación")[0]
+
+
+def test_la_campana_completa_no_acepta_arquitecturas_acotadas(repo_evaluacion):
+    with pytest.raises(SystemExit):
+        campana.main(["--subconjunto", "mini", "--config-version", CONFIG, "--arquitecturas",
+                      "nodex_multiagente", "--campana", "--ejecutar", "--env", ".env"], raiz=repo_evaluacion)
+
+
+def test_arquitecturas_desconocidas_se_rechazan(repo_evaluacion):
+    with pytest.raises(SystemExit):
+        campana.main(["--subconjunto", "mini", "--config-version", CONFIG, "--arquitecturas", "otra"],
+                     raiz=repo_evaluacion)

@@ -173,3 +173,15 @@ def test_mas_corridas_en_la_celda_mas_cara_aumentan_el_riesgo(tmp_path):
     poco = pr.riesgo_de_superar(c, {("nodex_multiagente", "uwf"): 3}, (6.0,), n_simulaciones=2000)
     mucho = pr.riesgo_de_superar(c, {("nodex_multiagente", "uwf"): 6}, (6.0,), n_simulaciones=2000)
     assert mucho["prob_de_superar"]["6.0"] > poco["prob_de_superar"]["6.0"]
+
+
+def test_el_gasto_se_desglosa_por_repeticion(tmp_path):
+    for run, rep, tokens in (("a1", 1, 1_000_000), ("a2", 1, 2_000_000), ("b1", 2, 4_000_000)):
+        ruta = tmp_path / "experiments" / "telemetry" / "bgl" / f"{run}.json"
+        ruta.parent.mkdir(parents=True, exist_ok=True)
+        ruta.write_text(json.dumps({"config_version": "cfg", "run_id": run, "arquitectura": "gemini_externo",
+                                    "dataset": "bgl", "repeticion": rep,
+                                    "telemetria": {"llm_calls": [_llamada(tokens, 0, 0)]}}), encoding="utf-8")
+    g = pr.gasto_acumulado(tmp_path, "cfg", PRECIOS, "m", "2026-10-15")
+    assert g["por_repeticion"] == {1: pytest.approx(3.0), 2: pytest.approx(4.0)}
+    assert g["usd"] == pytest.approx(7.0)

@@ -69,6 +69,13 @@ ESTADOS_DE_INFRAESTRUCTURA = ("error_api", "timeout")
 #: Códigos de salida.
 SALIDA_OK, SALIDA_ETAPA_NO_LIMPIA, SALIDA_FALLAS_SEGUIDAS = 0, 3, 4
 SALIDA_TOPE_DE_GASTO = 5
+SALIDA_ETAPA_B_NO_AUTORIZADA = 6
+
+#: Etapas de la campaña final. A = repetición 1 de todos los casos (NODEX, Gemini directo y baseline,
+#: BGL primero y UWF después). B = repetición 2 (NODEX y Gemini directo). B solo corre si
+#: «gasto real de A × 2» no supera el tope de gasto; si lo supera, se detiene y se informa.
+ETAPAS_DE_CAMPANA = {"A": 1, "B": 2}
+FACTOR_PROYECCION_ETAPA_B = 2
 
 #: Tope de gasto acumulado de la campaña (USD). El presupuesto total es 6,00; el resto es el margen.
 TOPE_GASTO_USD = 5.00
@@ -225,8 +232,14 @@ def _primer_caso(subconjunto: dict) -> str:
     return orquestador._casos_del_subconjunto(subconjunto)[0][1]
 
 
-def entradas_de_la_etapa(plan, subconjunto: dict, etapa: int) -> list[dict]:
-    """Etapa 1: un solo caso con las tres arquitecturas. Etapa 2: todo lo demás."""
+def entradas_de_la_etapa(plan, subconjunto: dict, etapa: int | str) -> list[dict]:
+    """Etapa 1: un solo caso con las tres arquitecturas. Etapa 2: todo lo demás.
+
+    Etapas de campaña: «A» = repetición 1 de todos los casos; «B» = repetición 2. Dentro de cada una
+    el orden es el del plan: BGL antes que UWF, y por caso.
+    """
+    if etapa in ETAPAS_DE_CAMPANA:
+        return [e for e in plan.pendientes if e["repeticion"] == ETAPAS_DE_CAMPANA[etapa]]
     primero = _primer_caso(subconjunto)
     if etapa == 1:
         return [e for e in plan.pendientes if e["case_id"] == primero]
@@ -285,6 +298,11 @@ def describir_plan(raiz: Path, subconjunto: dict, plan, congelada: dict | None) 
     e2 = entradas_de_la_etapa(plan, subconjunto, 2)
     lineas.append(f"etapas: 1 = {len(e1)} corridas (caso {_primer_caso(subconjunto)}), "
                   f"2 = {len(e2)} corridas")
+    ea = entradas_de_la_etapa(plan, subconjunto, "A")
+    eb = entradas_de_la_etapa(plan, subconjunto, "B")
+    lineas.append(f"etapas de campaña: A = {len(ea)} corridas (repetición 1, BGL y luego UWF), "
+                  f"B = {len(eb)} corridas (repetición 2); B solo corre si el gasto real de A × "
+                  f"{FACTOR_PROYECCION_ETAPA_B} no supera el tope")
     lineas.append(f"tope por corrida: {TOPE_CORRIDA_S // 3600} h | se detiene tras "
                   f"{MAX_FALLAS_DE_INFRAESTRUCTURA_SEGUIDAS} fallas de infraestructura seguidas")
     lineas.append(f"tope de gasto acumulado: USD {TOPE_GASTO_USD:.2f} (por omisión; --tope-gasto)")
@@ -529,10 +547,63 @@ def _detener_por_gasto(raiz: Path, config_version: str, etapa: int, revision: di
     return SALIDA_TOPE_DE_GASTO, informes
 
 
+def decidir_etapa_b(raiz: Path, congelada: dict, tope_gasto: float, hoy: str,
+                    pendientes_de_a: int) -> dict:
+    """¿Se puede lanzar la Etapa B? Solo si A terminó y el gasto REAL de A × 2 no supera el tope.
+
+    El gasto de A se recalcula desde la telemetría guardada (repetición 1), con los tokens medidos y los
+    precios vigentes `hoy`. Un gasto de A × 2 exactamente igual al tope sí se permite.
+    """
+    from src.experimentation import presupuesto
+
+    modelo = (congelada.get("parametros") or {}).get("LLM_MODEL_PRIMARY") or ""
+    gasto = presupuesto.gasto_acumulado(raiz, congelada["config_version"], estimacion.leer_precios(raiz),
+                                        modelo, hoy)
+    gasto_a = round(gasto["por_repeticion"].get(ETAPAS_DE_CAMPANA["A"], 0.0), 6)
+    proyectado = round(gasto_a * FACTOR_PROYECCION_ETAPA_B, 6)
+    decision = {"gasto_real_etapa_a_usd": gasto_a, "factor": FACTOR_PROYECCION_ETAPA_B,
+                "proyeccion_etapa_b_usd": proyectado, "tope_usd": tope_gasto,
+                "etapa_a_pendientes": pendientes_de_a,
+                "corridas_con_costo_parcial": gasto["corridas_con_costo_parcial"]}
+    if pendientes_de_a:
+        decision.update(autorizada=False, motivo=f"la Etapa A no terminó: faltan {pendientes_de_a} corridas")
+    elif proyectado > tope_gasto:
+        decision.update(autorizada=False, motivo=(
+            f"el gasto real de la Etapa A (USD {gasto_a:.4f}) × {FACTOR_PROYECCION_ETAPA_B} = "
+            f"USD {proyectado:.4f} supera el tope de USD {tope_gasto:.2f}"))
+    else:
+        decision.update(autorizada=True, motivo=(
+            f"USD {gasto_a:.4f} × {FACTOR_PROYECCION_ETAPA_B} = USD {proyectado:.4f} no supera "
+            f"USD {tope_gasto:.2f}"))
+    return decision
+
+
+def ejecutar_campana_por_etapas(raiz: Path, ruta_env: Path, config_version: str, subconjunto_nombre: str,
+                                correr=correr_una, tope_gasto: float = TOPE_GASTO_USD,
+                                hoy: str | None = None, config_referencia: str | None = None
+                                ) -> tuple[int, dict]:
+    """Etapa A y, solo si corresponde, Etapa B. Se detiene en la primera que no salga bien."""
+    resultado: dict = {}
+    codigo, informes = ejecutar_etapa(raiz, ruta_env, config_version, subconjunto_nombre, "A",
+                                      correr=correr, tope_gasto=tope_gasto, hoy=hoy,
+                                      config_referencia=config_referencia)
+    resultado["A"] = {"codigo": codigo, "corridas": len(informes)}
+    if codigo != SALIDA_OK:
+        resultado["B"] = {"lanzada": False, "motivo": "la Etapa A no salió limpia"}
+        return codigo, resultado
+    codigo, informes = ejecutar_etapa(raiz, ruta_env, config_version, subconjunto_nombre, "B",
+                                      correr=correr, tope_gasto=tope_gasto, hoy=hoy,
+                                      config_referencia=config_referencia)
+    resultado["B"] = {"lanzada": codigo != SALIDA_ETAPA_B_NO_AUTORIZADA, "codigo": codigo,
+                      "corridas": len(informes)}
+    return codigo, resultado
+
+
 def ejecutar_etapa(raiz: Path, ruta_env: Path, config_version: str, subconjunto_nombre: str,
-                   etapa: int, correr=correr_una, tope_gasto: float = TOPE_GASTO_USD,
+                   etapa: int | str, correr=correr_una, tope_gasto: float = TOPE_GASTO_USD,
                    hoy: str | None = None, dataset: str | None = None,
-                   config_referencia: str | None = None) -> tuple[int, list[dict]]:
+                   config_referencia: str | None = None,
+                   arquitecturas: tuple[str, ...] = ARQUITECTURAS_PILOTO) -> tuple[int, list[dict]]:
     """Corre una etapa. Devuelve `(código de salida, informes)`.
 
     Se detiene (en este orden de importancia) por tres fallas de infraestructura seguidas o
@@ -542,7 +613,7 @@ def ejecutar_etapa(raiz: Path, ruta_env: Path, config_version: str, subconjunto_
     hoy = hoy or datetime.now(timezone.utc).strftime("%Y-%m-%d")
     congelada = leer_configuracion(raiz, config_version)
     subconjunto = orquestador.cargar_subconjunto(raiz, subconjunto_nombre)
-    plan = orquestador.planificar(raiz, subconjunto, config_version, ARQUITECTURAS_PILOTO)
+    plan = orquestador.planificar(raiz, subconjunto, config_version, arquitecturas)
     entradas = entradas_de_la_etapa(plan, subconjunto, etapa)
     if dataset:
         entradas = [e for e in entradas if e["dataset"] == dataset]
@@ -555,6 +626,21 @@ def ejecutar_etapa(raiz: Path, ruta_env: Path, config_version: str, subconjunto_
         print(f"NO SE PUEDE MEDIR EL GASTO: {e}. No se lanza nada.", flush=True)
         return SALIDA_TOPE_DE_GASTO, []
     gasto_inicial = revision["gasto_acumulado_usd"]
+    if etapa == "B":
+        # La compuerta de la Etapa B vive AQUÍ, no en quien la llama: nadie puede saltársela.
+        decision = decidir_etapa_b(
+            raiz, congelada, tope_gasto, hoy,
+            pendientes_de_a=len(entradas_de_la_etapa(plan, subconjunto, "A")))
+        _anotar_gasto(raiz, config_version, {
+            "momento": datetime.now(timezone.utc).isoformat(timespec="seconds"), "etapa": "B",
+            "decision_etapa_b": decision})
+        print(f"Compuerta de la Etapa B: {decision['motivo']}", flush=True)
+        if not decision["autorizada"]:
+            _guardar_informe(carpeta_logs, "B", [], detenido=True,
+                             motivo_de_parada="compuerta de la Etapa B: " + decision["motivo"],
+                             subconjunto=subconjunto, gasto={"inicial_usd": gasto_inicial, **revision},
+                             decision_etapa_b=decision)
+            return SALIDA_ETAPA_B_NO_AUTORIZADA, []
     if revision["supera"]:
         return _detener_por_gasto(raiz, config_version, etapa, revision, [], congelada, subconjunto,
                                   gasto_inicial, "el gasto acumulado ya supera el tope")
@@ -606,7 +692,7 @@ def ejecutar_etapa(raiz: Path, ruta_env: Path, config_version: str, subconjunto_
 def _guardar_informe(carpeta: Path, etapa: int, informes: list[dict], detenido: bool,
                      limpia: bool | None = None, motivos: list[str] | None = None,
                      motivo_de_parada: str | None = None, subconjunto: dict | None = None,
-                     gasto: dict | None = None) -> None:
+                     gasto: dict | None = None, decision_etapa_b: dict | None = None) -> None:
     carpeta.mkdir(parents=True, exist_ok=True)
     destino = carpeta / f"informe_etapa{etapa}.json"
     if destino.exists():
@@ -617,6 +703,7 @@ def _guardar_informe(carpeta: Path, etapa: int, informes: list[dict], detenido: 
         "etapa": etapa, "detenido": detenido, "detenido_por_fallas_seguidas":
             detenido and motivo_de_parada == "fallas de infraestructura seguidas",
         "motivo_de_parada": motivo_de_parada, "limpia": limpia,
+        "decision_etapa_b": decision_etapa_b,
         "motivos": motivos or [], "etiqueta": etiqueta_de_resultados(subconjunto or {}),
         "gasto": {**gasto, "de_la_etapa_usd": round(
             gasto.get("gasto_acumulado_usd", 0.0) - gasto.get("inicial_usd", 0.0), 6)} if gasto else None,
@@ -637,8 +724,14 @@ def main(argv: list[str] | None = None, raiz: Path | None = None) -> int:
                    help="muestra la configuración efectiva frente a la congelada; no usa la red")
     p.add_argument("--ejecutar", action="store_true",
                    help="HACE LLAMADAS AL MODELO. Sin esto solo se muestra el plan.")
-    p.add_argument("--etapa", type=int, choices=(1, 2),
-                   help="1 = un caso con las tres arquitecturas; 2 = el resto")
+    p.add_argument("--etapa", choices=("1", "2", "A", "B"),
+                   help="1 = un caso con las tres arquitecturas; 2 = el resto; A = repetición 1 de todos "
+                        "los casos; B = repetición 2 (solo si el gasto real de A × 2 no supera el tope)")
+    p.add_argument("--arquitecturas",
+                   help="lista separada por comas (p. ej. nodex_multiagente); por omisión las tres. "
+                        "Para verificaciones; la campaña usa las tres")
+    p.add_argument("--campana", action="store_true",
+                   help="Etapa A y, si la compuerta lo permite, Etapa B. HACE LLAMADAS AL MODELO.")
     p.add_argument("--dataset", help="limita la etapa a un dataset (la campaña: primero bgl, luego uwf)")
     p.add_argument("--tope-gasto", type=float, default=TOPE_GASTO_USD,
                    help=f"tope de gasto acumulado en USD (por omisión {TOPE_GASTO_USD:.2f})")
@@ -681,14 +774,22 @@ def main(argv: list[str] | None = None, raiz: Path | None = None) -> int:
         return SALIDA_OK if v["coincide"] else SALIDA_ETAPA_NO_LIMPIA
 
     subconjunto = orquestador.cargar_subconjunto(raiz, a.subconjunto)
-    plan = orquestador.planificar(raiz, subconjunto, a.config_version, ARQUITECTURAS_PILOTO)
+    arquitecturas = tuple(a.arquitecturas.split(",")) if a.arquitecturas else ARQUITECTURAS_PILOTO
+    desconocidas = set(arquitecturas) - set(ARQUITECTURAS_PILOTO)
+    if desconocidas:
+        p.error(f"arquitecturas desconocidas: {sorted(desconocidas)}")
+    plan = orquestador.planificar(raiz, subconjunto, a.config_version, arquitecturas)
     print(describir_plan(raiz, subconjunto, plan, congelada))
 
     if not a.ejecutar:
         print("\n(sin --ejecutar: no se hizo ninguna llamada)")
         return SALIDA_OK
-    if not (a.env and a.etapa):
-        p.error("--ejecutar necesita --env y --etapa")
+    if not (a.env and (a.etapa or a.campana)):
+        p.error("--ejecutar necesita --env y --etapa (o --campana)")
+    if a.campana and a.arquitecturas:
+        p.error("--campana corre siempre las tres arquitecturas; --arquitecturas es solo para verificaciones")
+    if a.campana and a.etapa:
+        p.error("--campana corre las etapas A y B; no se combina con --etapa")
     if congelada is None:
         p.error(f"no existe la configuración congelada de {a.config_version}: usar --congelar")
     problemas = comprobar_codigo(raiz, congelada)
@@ -700,9 +801,17 @@ def main(argv: list[str] | None = None, raiz: Path | None = None) -> int:
         print(f"LA CONFIGURACIÓN EFECTIVA NO COINCIDE CON LA CONGELADA: {v['distintos']}")
         return SALIDA_ETAPA_NO_LIMPIA
 
-    codigo, informes = ejecutar_etapa(raiz, Path(a.env), a.config_version, a.subconjunto, a.etapa,
+    if a.campana:
+        codigo, resultado = ejecutar_campana_por_etapas(
+            raiz, Path(a.env), a.config_version, a.subconjunto, tope_gasto=a.tope_gasto,
+            config_referencia=a.config_referencia)
+        print(f"Campaña por etapas: {json.dumps(resultado, ensure_ascii=False)} -> código {codigo}")
+        return codigo
+    etapa = int(a.etapa) if a.etapa.isdigit() else a.etapa
+    codigo, informes = ejecutar_etapa(raiz, Path(a.env), a.config_version, a.subconjunto, etapa,
                                       tope_gasto=a.tope_gasto, dataset=a.dataset,
-                                      config_referencia=a.config_referencia)
+                                      config_referencia=a.config_referencia,
+                                      arquitecturas=arquitecturas)
     print(f"\nInforme de la etapa {a.etapa}:")
     imprimir_informe(informes)
     limpia, motivos = etapa_limpia(informes, congelada)
