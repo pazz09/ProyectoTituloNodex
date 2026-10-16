@@ -59,6 +59,8 @@ CONFIGURACION_PILOTO = {
     "LLM_MODEL_FALLBACK": "gemini-3.8-flash",     # sin efecto con el respaldo apagado
     "LLM_SIN_RESPALDO": "true",
     "TEMPERATURE": "0",
+    # NODEX se evalúa sin enriquecimiento de reputación externa (decisión del 15-oct-2026).
+    "REPUTACION_SIN_ENRIQUECIMIENTO": "true",
 }
 ARQUITECTURAS_PILOTO = ("nodex_multiagente", "baseline_reglas", "gemini_externo")
 
@@ -85,15 +87,17 @@ GENERACION = {
     "response_mime_type": "application/json",
     "thinking_level": "no se envía: rige el valor por omisión del modelo",
     "respaldo_de_modelo": "apagado (LLM_SIN_RESPALDO=true)",
+    "reputacion_externa": "apagada (REPUTACION_SIN_ENRIQUECIMIENTO=true): ninguna IP recibe puntaje",
     "reintentos_con_espera": "activos sobre el mismo modelo (503, 429 por minuto)",
     "gemini_directo": "hereda el mismo modelo y temperatura que NODEX",
 }
 RECURSOS_EXTERNOS = {
     "nvd": "bloqueado con respaldo local; cada intento de consulta se registra por corrida",
-    "abuseipdb": "bloqueado con respaldo local; cada intento de consulta se registra por corrida",
+    "abuseipdb": ("no se consulta ni hay heurística local: modo sin reputación externa "
+                  "(REPUTACION_SIN_ENRIQUECIMIENTO=true); cada llamada queda registrada como sin_reputacion"),
     "politica_campana_final": (
-        "DECISIÓN PENDIENTE: consultas reales o respaldo local. Cualquiera de las dos "
-        "debe declararse en el informe."),
+        "DECIDIDA el 15-oct-2026: NODEX se evalúa sin enriquecimiento de reputación externa (AbuseIPDB) "
+        "y sin consultas reales a NVD (bloqueadas, con respaldo local registrado)."),
 }
 
 

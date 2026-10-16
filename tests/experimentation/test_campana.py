@@ -108,9 +108,10 @@ def test_el_entorno_del_hijo_usa_lo_congelado_aunque_el_env_diga_otra_cosa(tmp_p
 def test_la_configuracion_del_piloto_es_flash_sin_respaldo_y_temperatura_cero():
     assert campana.CONFIGURACION_PILOTO == {
         "LLM_MODEL_PRIMARY": "gemini-3.8-flash", "LLM_MODEL_FALLBACK": "gemini-3.8-flash",
-        "LLM_SIN_RESPALDO": "true", "TEMPERATURE": "0"}
+        "LLM_SIN_RESPALDO": "true", "TEMPERATURE": "0", "REPUTACION_SIN_ENRIQUECIMIENTO": "true"}
     assert "generateContent" in campana.GENERACION["api"]
-    assert "DECISIÓN PENDIENTE" in campana.RECURSOS_EXTERNOS["politica_campana_final"]
+    assert "sin enriquecimiento de reputación externa" in campana.RECURSOS_EXTERNOS["politica_campana_final"]
+    assert "DECISIÓN PENDIENTE" not in json.dumps(campana.RECURSOS_EXTERNOS)
     assert "hereda" in campana.GENERACION["gemini_directo"]
 
 
@@ -123,7 +124,7 @@ def test_el_congelado_registra_generacion_y_recursos_externos(tmp_path):
     c = congelar("t", RAIZ, modulo_config=modulo, generacion=campana.GENERACION,
                  recursos_externos=campana.RECURSOS_EXTERNOS)
     assert c.generacion["api"].startswith("generateContent")
-    assert "DECISIÓN PENDIENTE" in c.recursos_externos["politica_campana_final"]
+    assert "sin enriquecimiento de reputación externa" in c.recursos_externos["politica_campana_final"]
     assert c.credenciales_presentes["GEMINI_API_KEY"] is True      # solo presencia
     otro = congelar("t", RAIZ, modulo_config=modulo, generacion={"api": "otra"},
                     recursos_externos=campana.RECURSOS_EXTERNOS)
