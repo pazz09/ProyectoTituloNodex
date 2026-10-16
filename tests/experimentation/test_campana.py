@@ -986,3 +986,34 @@ def test_arquitecturas_desconocidas_se_rechazan(repo_evaluacion):
     with pytest.raises(SystemExit):
         campana.main(["--subconjunto", "mini", "--config-version", CONFIG, "--arquitecturas", "otra"],
                      raiz=repo_evaluacion)
+
+
+# --- plan en seco con costo y rango ---------------------------------------------------------------------------
+
+def _sembrar_referencia(repo, config="piloto-ref"):
+    """Corridas medidas de referencia: NODEX y Gemini en BGL y UWF, de costo 0,10 / 0,20 / 0,30 USD."""
+    for arq in ("nodex_multiagente", "gemini_externo"):
+        for ds in ("bgl", "uwf"):
+            for i, usd in enumerate((0.10, 0.20, 0.30)):
+                ident = IdentidadCorrida(f"{ds}_des_{i}", ds, arq, 1, config)
+                persistencia.guardar(ident, repo, salida={"x": 1}, ejecucion={"estado": "completa"},
+                                     telemetria={"llm_calls": [{"input_tokens": round(usd / 0.75 * 1e6),
+                                                                "output_tokens": 0}]})
+
+
+def test_el_plan_en_seco_con_referencia_muestra_minimo_media_maximo_riesgo_y_etapa_A(
+        repo_evaluacion, capsys):
+    _sembrar_referencia(repo_evaluacion)
+    campana.main(["--subconjunto", "mini", "--config-version", CONFIG, "--config-referencia", "piloto-ref"],
+                 raiz=repo_evaluacion)
+    salida = capsys.readouterr().out
+    # 3 casos de BGL y 2 de UWF, N=2, NODEX y Gemini: 4 × 6 + 4 × 4... = 20 corridas con modelo,
+    # costos por corrida 0,10 / 0,20 / 0,30 -> mínimo 2,00, media 4,00, máximo 6,00.
+    assert "mínimo 2.00 | media 4.00 | máximo observado 6.00" in salida
+    assert "p5" in salida and "P(> 5.00)" in salida and "margen frente a USD 6,00" in salida
+    assert "Etapa A: mínimo 1.00 | media 2.00 | máximo 3.00" in salida
+
+
+def test_el_plan_en_seco_sin_referencia_no_inventa_un_rango(repo_evaluacion, capsys):
+    campana.main(["--subconjunto", "mini", "--config-version", CONFIG], raiz=repo_evaluacion)
+    assert "costo con rango" not in capsys.readouterr().out

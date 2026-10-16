@@ -256,7 +256,48 @@ def etiqueta_de_resultados(subconjunto: dict) -> str:
             else "depuracion_no_reportable")
 
 
-def describir_plan(raiz: Path, subconjunto: dict, plan, congelada: dict | None) -> str:
+def _lineas_de_costo_con_rango(raiz: Path, plan, modelo: str | None, hoy: str,
+                               config_referencia: str | None) -> list[str]:
+    """Costo del plan con los costos por corrida MEDIDOS de una configuración de referencia: mínimo,
+    media y máximo observados (no solo el promedio), el riesgo frente a los topes y el costo de la Etapa A."""
+    from src.experimentation import presupuesto
+
+    if not (config_referencia and modelo):
+        return []
+    try:
+        celdas = presupuesto.costos_por_celda(raiz, config_referencia, estimacion.leer_precios(raiz),
+                                              modelo, hoy)
+    except ValueError as e:
+        return [f"  costo con rango: sin calcular — {e}"]
+    por_celda, por_celda_a = {}, {}
+    for e in plan.pendientes:
+        clave = (e["arquitectura"], e["dataset"])
+        por_celda[clave] = por_celda.get(clave, 0) + 1
+        if e["repeticion"] == ETAPAS_DE_CAMPANA["A"]:
+            por_celda_a[clave] = por_celda_a.get(clave, 0) + 1
+    r = presupuesto.costo_esperado_de_un_plan(celdas, por_celda)
+    ra = presupuesto.costo_esperado_de_un_plan(celdas, por_celda_a)
+    riesgo = presupuesto.riesgo_de_superar(celdas, por_celda, (TOPE_GASTO_USD, 6.0))
+    riesgo_a = presupuesto.riesgo_de_superar(celdas, por_celda_a, (TOPE_GASTO_USD / FACTOR_PROYECCION_ETAPA_B,))
+    lineas = [
+        f"costo con rango (medido en {config_referencia}, precios del {hoy}):",
+        f"  plan completo: mínimo {r['minimo']:.2f} | media {r['media']:.2f} | máximo observado {r['maximo']:.2f} USD",
+        f"  simulado (semilla {riesgo['semilla']}): p5 {riesgo['p5']:.2f} | mediana {riesgo['mediana']:.2f} | "
+        f"p95 {riesgo['p95']:.2f} | p99 {riesgo['p99']:.2f} | máx. {riesgo['maximo_simulado']:.2f}",
+        f"  P(> {TOPE_GASTO_USD:.2f}) = {100 * riesgo['prob_de_superar'][str(TOPE_GASTO_USD)]:.2f} % | "
+        f"P(> 6.00) = {100 * riesgo['prob_de_superar']['6.0']:.2f} %",
+        f"  margen frente a USD 6,00: {6.0 - r['media']:.2f} (con la media) | {6.0 - r['maximo']:.2f} (con el máximo observado)",
+        f"  Etapa A: mínimo {ra['minimo']:.2f} | media {ra['media']:.2f} | máximo {ra['maximo']:.2f} USD; "
+        f"P(A × {FACTOR_PROYECCION_ETAPA_B} > {TOPE_GASTO_USD:.2f}) = "
+        f"{100 * riesgo_a['prob_de_superar'][str(TOPE_GASTO_USD / FACTOR_PROYECCION_ETAPA_B)]:.2f} %",
+    ]
+    if r["celdas_sin_medicion"]:
+        lineas.append(f"  celdas sin medición (no suman): {r['celdas_sin_medicion']}")
+    return lineas
+
+
+def describir_plan(raiz: Path, subconjunto: dict, plan, congelada: dict | None,
+                   config_referencia: str | None = None) -> str:
     resumen = plan.resumen()
     modelo = ((congelada or {}).get("parametros") or {}).get("LLM_MODEL_PRIMARY")
     lineas = [
@@ -302,6 +343,7 @@ def describir_plan(raiz: Path, subconjunto: dict, plan, congelada: dict | None) 
     e2 = entradas_de_la_etapa(plan, subconjunto, 2)
     lineas.append(f"etapas: 1 = {len(e1)} corridas (caso {_primer_caso(subconjunto)}), "
                   f"2 = {len(e2)} corridas")
+    lineas += _lineas_de_costo_con_rango(raiz, plan, modelo, hoy, config_referencia)
     ea = entradas_de_la_etapa(plan, subconjunto, "A")
     eb = entradas_de_la_etapa(plan, subconjunto, "B")
     lineas.append(f"etapas de campaña: A = {len(ea)} corridas (repetición 1, BGL y luego UWF), "
@@ -783,7 +825,7 @@ def main(argv: list[str] | None = None, raiz: Path | None = None) -> int:
     if desconocidas:
         p.error(f"arquitecturas desconocidas: {sorted(desconocidas)}")
     plan = orquestador.planificar(raiz, subconjunto, a.config_version, arquitecturas)
-    print(describir_plan(raiz, subconjunto, plan, congelada))
+    print(describir_plan(raiz, subconjunto, plan, congelada, a.config_referencia))
 
     if not a.ejecutar:
         print("\n(sin --ejecutar: no se hizo ninguna llamada)")
