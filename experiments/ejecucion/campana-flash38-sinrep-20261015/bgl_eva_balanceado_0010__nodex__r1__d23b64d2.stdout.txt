@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=527 salida=264 razonamiento=445 total=1236
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=676 salida=183 razonamiento=457 total=1316
+   → No hace falta RAG (El plan de investigación explícitamente no contempla consultar memoria histórica y la muestra cruda permite identificar con claridad que se trata de logs del sistema Blue Gene/L de depuración/fallo de software científico, sin requerir contexto adicional de amenazas.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=219 salida=49 razonamiento=368 total=636
+   → usar_cve: False | Razón: No se identificaron vulnerabilidades específicas ni actividad maliciosa; los eventos corresponden a fallos operacionales de la aplicación y generación de core dumps en un entorno HPC.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=172 salida=5 razonamiento=1767 total=1944
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=1982 salida=561 razonamiento=631 total=3174
+   → Confianza final: 0.90 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | Los registros corresponden a fallos operacionales y volcados de memoria (core dumps) en la ejecución de una aplicación MPI en un entorno Blue Gene/L. Si bien representan un comportamiento anómalo a nivel de software/sistema, no constituyen un incidente de seguridad ni comprometen la infraestructura.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

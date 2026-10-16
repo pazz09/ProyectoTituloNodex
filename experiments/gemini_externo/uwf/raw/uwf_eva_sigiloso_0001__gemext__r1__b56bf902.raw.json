@@ -1,0 +1,116 @@
+{
+  "case_id": "uwf_eva_sigiloso_0001",
+  "dataset": "uwf",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "uwf_eva_sigiloso_0001__gemext__r1__b56bf902",
+  "estado_crudo": {
+    "diagnostico": "Se identifica un patrón persistente y automatizado de balizamiento (beaconing) sobre DNS generado por el host 143.88.255.10 hacia la IP 10.0.10.1:53 a intervalos rigurosamente periódicos de aproximadamente 30.25 segundos. Todas las solicitudes DNS fallan (estado Zeek S0, sin respuesta), lo que evidencia un servidor C2 o resolver inalcanzable. Paralelamente, se observa una ráfaga de conexiones SMB/DCE-RPC autenticadas mediante NTLM entre 143.88.6.11 y 143.88.6.12, así como fallos en consultas DNS a servidores raíz desde 143.88.0.2.",
+    "hay_anomalia": true,
+    "hay_incidente": true,
+    "confianza": 0.9,
+    "evaluacion_auditor": "La cadencia temporal idéntica (~30.25 segundos) y los tamaños de payload DNS fijos (78 y 102 bytes) apuntan fuertemente a un implante de Command and Control por DNS. Sin embargo, al tratarse de un conn.log de Zeek sin el dns.log adjunto, no es posible inspeccionar los FQDN consultados (p. ej., dominios generados por DGA o subdominios codificados para tunelado), por lo que existe una mínima posibilidad de que sea un servicio o script desconfigurado reintentando resolver contra una IP interna inactiva.",
+    "comandos_mitigacion": [
+      "iptables -A FORWARD -s 143.88.255.10 -j DROP",
+      "iptables -A INPUT -s 143.88.255.10 -j DROP",
+      "tcpdump -i any host 143.88.255.10 and port 53 -nn -s0 -w /tmp/dns_beacon_capture.pcap",
+      "ss -tupn | grep ':53'",
+      "lsof -i UDP:53"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-001",
+        "evidence_uids": [
+          "CW0RnB64lI6FMiXq7"
+        ],
+        "timestamp": "2021-12-19 07:34:23.885004",
+        "event_type": "dns_beacon_start",
+        "description": "Inicio observado de intentos periódicos de comunicación DNS no correspondida desde 143.88.255.10 hacia 10.0.10.1."
+      },
+      {
+        "event_id": "EVT-002",
+        "evidence_uids": [
+          "C9ScXf2RnyOf0aNKdd",
+          "C2xT652vJOXgGZF5Y3",
+          "CPMW4U2lAn5vH0aOV2",
+          "CtpRKvZGMfKcGfVLi",
+          "CGBCtO2pAgQjg0Higa",
+          "CaXZUy2W8vsa07UAZe",
+          "CcmNtE57Y9U0Xhxm9",
+          "Cn7bd91o6akYJXi9zf",
+          "C1ZpeA3QGw5XGPncMk",
+          "CdaU6Q2WlLBLKlsHq6",
+          "CvbJIFKXYWpqurSs7"
+        ],
+        "timestamp": "2021-12-19 07:34:54 - 07:39:56",
+        "event_type": "periodic_dns_beaconing",
+        "description": "Ráfagas sucesivas de solicitudes DNS UDP en intervalos de 30 segundos exactos (estado S0, orig_bytes 78/102)."
+      },
+      {
+        "event_id": "EVT-003",
+        "evidence_uids": [
+          "CJ6eTf2y4n5Q4oCFug",
+          "CVfq4H3DQPWTxhxcOh",
+          "CRUwE2v5dibS3F4B6",
+          "CjvQSM1nEkaQuwBdef"
+        ],
+        "timestamp": "2021-12-19 07:48:26.910 - 07:48:27.112",
+        "event_type": "smb_dcerpc_session",
+        "description": "Secuencia rápida de conexiones SMB y DCE-RPC con autenticación NTLM/GSSAPI establecidas exitosamente entre 143.88.6.11 y 143.88.6.12."
+      },
+      {
+        "event_id": "EVT-004",
+        "evidence_uids": [
+          "C2xGEQ2hAmjJDsRjY3",
+          "CS3ngN28Y73XZjHR3f",
+          "CWwDdmOucDsMGmyZg"
+        ],
+        "timestamp": "2021-12-19 07:48:30 - 08:05:09",
+        "event_type": "persistent_c2_attempts",
+        "description": "Continuación sostenida del balizamiento DNS hacia 10.0.10.1 hasta el final del periodo de registro."
+      }
+    ],
+    "secuencia_temporal": [
+      "2021-12-19 07:34:23 - El host 143.88.255.10 emite la primera petición DNS hacia 10.0.10.1 registrada en el log.",
+      "2021-12-19 07:34:54 a 07:48:00 - Sucesión regular de consultas DNS cada ~30.25 segundos sin recibir respuestas del servidor.",
+      "2021-12-19 07:48:26 - El host 143.88.6.11 ejecuta múltiples conexiones SMB/RPC autenticadas contra 143.88.6.12 en menos de un segundo.",
+      "2021-12-19 07:48:30 a 08:05:09 - El host 143.88.255.10 mantiene ininterrumpidamente el balizamiento DNS hacia 10.0.10.1."
+    ],
+    "tecnicas_atribuidas": [
+      {
+        "technique_id": "T1071.004",
+        "technique_name": "Application Layer Protocol: DNS",
+        "evidence_uids": [
+          "CW0RnB64lI6FMiXq7",
+          "C9ScXf2RnyOf0aNKdd",
+          "C2xT652vJOXgGZF5Y3",
+          "CPMW4U2lAn5vH0aOV2",
+          "CtpRKvZGMfKcGfVLi",
+          "CGBCtO2pAgQjg0Higa",
+          "CaXZUy2W8vsa07UAZe",
+          "CcmNtE57Y9U0Xhxm9",
+          "C1ZpeA3QGw5XGPncMk",
+          "CvbJIFKXYWpqurSs7",
+          "C2xGEQ2hAmjJDsRjY3",
+          "CS3ngN28Y73XZjHR3f",
+          "CWwDdmOucDsMGmyZg"
+        ],
+        "justification": "Tráfico UDP puerto 53 periódico y automatizado a intervalos fijos de ~30.25 segundos desde 143.88.255.10 con longitudes invariables, característico de beaconing C2 sobre protocolo DNS."
+      },
+      {
+        "technique_id": "T1021.002",
+        "technique_name": "Remote Services: SMB/Windows Admin Shares",
+        "evidence_uids": [
+          "CJ6eTf2y4n5Q4oCFug",
+          "CVfq4H3DQPWTxhxcOh",
+          "CRUwE2v5dibS3F4B6",
+          "CjvQSM1nEkaQuwBdef"
+        ],
+        "justification": "Conexiones TCP al puerto 445 completadas con éxito empleando DCE-RPC, GSSAPI y NTLM entre estaciones internas en una ventana temporal sub-segundo."
+      }
+    ],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "case_id": "uwf_eva_sigiloso_0024",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "uwf_eva_sigiloso_0024__nodex__r1__6dba062c",
+  "salida": {
+    "case_id": "uwf_eva_sigiloso_0024",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-17 23:21:25.382073",
+        "entities": [],
+        "event_type": "dns_request_timeout",
+        "evidence_uids": [
+          "CNvd5j17kRKYOw9mi1",
+          "CzmuG52ac5O2sNzX5h"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-17 23:51:10.130569",
+        "entities": [],
+        "event_type": "dns_request_timeout",
+        "evidence_uids": [
+          "CxKHx5MMwv2yK4exh"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nTráfico anómalo originado por un fallo operativo de conectividad DNS y no por actividad maliciosa (C2/DGA). El host 143.88.255.10 envió 264 solicitudes DNS hacia el resolver interno 10.0.10.1:53/udp a lo largo de 30 minutos sin obtener respuesta alguna (estado Zeek S0, 0 bytes devueltos). La repetición constante y el fracaso de las conexiones apuntan a un servidor DNS inaccesible, inactivo o mal configurado en el cliente, desencadenando bucles de reintento estándar. Se recomienda verificar la disponibilidad del servicio DNS en 10.0.10.1 y la configuración de red en 143.88.255.10 antes de aplicar bloqueos o contenciones agresivas.\n\n## Evaluación del auditor\n\nEl diagnóstico es preciso y coincide con la evidencia observada en los logs de Zeek. El host 143.88.255.10 genera múltiples intentos de conexión DNS hacia 10.0.10.1:53/udp con estado S0 (sin respuesta del servidor), lo que denota una falla operativa de conectividad o resolución DNS en lugar de una amenaza activa o tráfico de C2/DGA. Las recomendaciones y comandos de diagnóstico propuestos son pertinentes y suficientes.\n\n## Comandos de mitigación propuestos\n\n- ping -c 4 10.0.10.1\n- nc -zvu -w 3 10.0.10.1 53\n- dig @10.0.10.1 test.local +time=2 +tries=2\n- tcpdump -nn -i any host 143.88.255.10 and udp port 53 -c 20\n- iptables -L INPUT -n -v | grep ':53 '"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_sigiloso_0024__nodex__r1__6dba062c",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1568.002",
+          "name": "Domain Generation Algorithms",
+          "similitud": null
+        },
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_sigiloso_0024__nodex__r1__6dba062c.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:47:38+00:00"
+  }
+}

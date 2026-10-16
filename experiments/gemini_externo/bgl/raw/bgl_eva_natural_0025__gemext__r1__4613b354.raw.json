@@ -1,0 +1,79 @@
+{
+  "case_id": "bgl_eva_natural_0025",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0025__gemext__r1__4613b354",
+  "estado_crudo": {
+    "diagnostico": "Se observan eventos operacionales y fallos de software/hardware en un clúster IBM BlueGene/L. Los eventos incluyen errores de memoria corregibles (DDR ECC CE), fallos en el cambio de directorio de trabajo del demonio de control de E/S (ciod: LOGIN chdir failed) para rutas compartidas, y múltiples caídas anormales de aplicaciones paralelas (sppm y SPaSM_mpi) resultando en la generación masiva de volcados de memoria (core files). No existe evidencia de actividad maliciosa o brecha de seguridad.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "Los registros corresponden exclusivamente a telemetría estándar RAS (Reliability, Availability, and Serviceability) de HPC. Los fallos 'LOGIN chdir failed' señalan problemas de montaje, permisos o inexistencia de directorios en el sistema de archivos distribuido (NFS/GPFS). Los volcados de memoria de 'sppm' y 'SPaSM_mpi' corresponden a excepciones y fallos de segmentación en programas científicos de usuario.",
+    "comandos_mitigacion": [
+      "showmount -e <servidor_nfs> || df -h /home/germann2 /p/bg1/da",
+      "gdb /home/germann2/BGL-demo/SPaSM_mpi core.<pid>",
+      "bglstatus -j <job_id> || ras_query --subsystem KERNEL --level FATAL"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-01",
+        "evidence_uids": [
+          "1124225022",
+          "1124233921",
+          "1124519271",
+          "1124611136",
+          "1124611166"
+        ],
+        "timestamp": "2005-08-16-13.43.42.931133 a 2005-08-21-00.59.26.072269",
+        "event_type": "Hardware Memory Error Correction",
+        "description": "Detección y corrección automática de errores en módulos DDR (Correctable Errors) a nivel de kernel."
+      },
+      {
+        "event_id": "EVT-02",
+        "evidence_uids": [
+          "1124306491",
+          "1124722015",
+          "1124798068"
+        ],
+        "timestamp": "2005-08-17-12.21.31.579167 a 2005-08-23-04.54.28.532357",
+        "event_type": "Filesystem / Application Login Failure",
+        "description": "Fallo crítico en el demonio ciod al intentar acceder a los directorios de trabajo de ejecución (/p/bg1/da, /home/germann2/SPaSM_static, /home/germann2/BGL-demo)."
+      },
+      {
+        "event_id": "EVT-03",
+        "evidence_uids": [
+          "1124394179",
+          "1124394227",
+          "1124394255",
+          "1124546691",
+          "1124547186",
+          "1124736611",
+          "1124738105",
+          "1124738119",
+          "1124741118",
+          "1124741126",
+          "1124741161",
+          "1124818171"
+        ],
+        "timestamp": "2005-08-18-12.42.59.378202 a 2005-08-23-10.29.31.137434",
+        "event_type": "Application Crash / Core Dump Generation",
+        "description": "Terminación anormal masiva de procesos paralelos sppm y SPaSM_mpi con generación de archivos core."
+      }
+    ],
+    "secuencia_temporal": [
+      "2005-08-16 13:43:42 - 16:12:01: Ocurrencia de errores corregibles de hardware en memoria DDR.",
+      "2005-08-17 12:21:31: Fallo fatal en ciod al cambiar al directorio /p/bg1/da.",
+      "2005-08-18 12:42:59 - 12:44:15: Caída de la aplicación sppm en múltiples nodos de cómputo, generando 64 core files por bloque.",
+      "2005-08-19 23:27:51 a 2005-08-21 00:59:26: Errores adicionales de memoria corregidos por el kernel.",
+      "2005-08-22 07:46:55: Error de directorio inexistente al intentar ejecutar en /home/germann2/SPaSM_static.",
+      "2005-08-22 11:50:11 - 13:06:01: Múltiples fallos concurrentes en el programa SPaSM_mpi generando hasta 128 archivos core por nodo.",
+      "2005-08-23 04:54:28: Nuevo fallo de chdir sobre /home/germann2/BGL-demo.",
+      "2005-08-23 10:29:31: Reincidencia de caída y generación de 128 core files para SPaSM_mpi."
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

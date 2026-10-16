@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=532 salida=183 razonamiento=762 total=1477
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=655 salida=195 razonamiento=807 total=1657
+   → No hace falta RAG (A pesar de la cobertura nula del parser determinístico, el registro crudo identifica con claridad eventos de depuración/fallo de kernel (core dumps). Sumado a que el plan de investigación excluye expresamente la consulta de memoria histórica, los datos son suficientes para diagnosticar una incidencia de estabilidad de software sin componentes maliciosos aparentes.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=203 salida=63 razonamiento=156 total=422
+   → usar_cve: False | Razón: El diagnóstico indica que se trata de un problema operativo y de estabilidad del sistema (volcados de memoria en el kernel/RAS) sin vectores de intrusión, indicadores de compromiso ni servicios vulnerables específicos identificados para consultar CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=156 salida=80 razonamiento=602 total=838
+   → 6 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2041 salida=560 razonamiento=829 total=3430
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | Los registros corresponden a mensajes de diagnóstico y fiabilidad (RAS) a nivel de kernel que reportan excepciones de software y generación de volcados de memoria (core dumps). Representan fallos de estabilidad operativa del sistema y no una intrusión o actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

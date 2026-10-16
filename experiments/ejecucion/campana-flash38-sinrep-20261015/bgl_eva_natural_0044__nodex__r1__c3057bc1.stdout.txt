@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=526 salida=196 razonamiento=729 total=1451
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=649 salida=205 razonamiento=950 total=1804
+   → No hace falta RAG (El plan de investigación descarta la consulta de memoria histórica y la muestra de registros sin estructurar es suficiente para identificar que se trata de eventos operativos de fallos de procesos (core dump) en un entorno HPC/RAS sin componentes de ciberataque.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=233 salida=59 razonamiento=300 total=592
+   → usar_cve: False | Razón: El diagnóstico indica que se trata de una falla operativa y generación de un volcado de memoria (core dump) a nivel de kernel/infraestructura, sin indicios de ataque, explotación ni vulnerabilidades específicas identificadas.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=186 salida=98 razonamiento=608 total=892
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2089 salida=313 razonamiento=577 total=2979
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros muestran eventos de volcado de memoria (core dump) en un entorno de supercómputo BlueGene/L debido a una terminación anómala de proceso. Se trata de un fallo de estabilidad operacional o defecto de software, no de un incidente de ciberseguridad. Los comandos sugeridos para inspeccionar el coredump y los registros del sistema son pertinentes.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

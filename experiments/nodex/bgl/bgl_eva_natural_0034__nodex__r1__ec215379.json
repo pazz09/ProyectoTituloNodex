@@ -1,0 +1,70 @@
+{
+  "case_id": "bgl_eva_natural_0034",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0034__nodex__r1__ec215379",
+  "salida": {
+    "case_id": "bgl_eva_natural_0034",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "core_dump_generation",
+        "evidence_uids": [
+          "log_record_000001",
+          "log_record_000002",
+          "log_record_000003",
+          "log_record_000004",
+          "log_record_000005",
+          "log_record_000006",
+          "log_record_000007",
+          "log_record_000008",
+          "log_record_000009",
+          "log_record_000010",
+          "log_record_000011",
+          "log_record_000012",
+          "log_record_000013",
+          "log_record_000014",
+          "log_record_000015",
+          "log_record_000016",
+          "log_record_000017",
+          "log_record_000018",
+          "log_record_000019",
+          "log_record_000020"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos registros analizados corresponden a mensajes del subsistema RAS/Kernel de una arquitectura de computación distribuida/supercomputación (nodos Blue Gene/L, RAS KERNEL INFO) reportando la generación de volcados de memoria (core dump, ej. 'generating core.46425'). No se detecta actividad maliciosa, indicadores de compromiso ni tácticas asociadas a MITRE ATT&CK; se clasifica como evento operativo/incidente de estabilidad de software a nivel de aplicación o sistema. Se sugiere correlacionar con los procesos en ejecución en el nodo R25-M1-NB-C:J11-U01 para depuración de software.\n\n## Evaluación del auditor\n\nEl diagnóstico es adecuado al caracterizar los registros como fallos de procesos con generación de volcados de memoria (core dumps) en un entorno Blue Gene/L. Se trata de una anomalía operativa de estabilidad de software sin indicadores de compromiso o actividad maliciosa.\n\n## Comandos de mitigación propuestos\n\n- dmesg -T | grep -iE 'segfault|trap|killed process|core dump'\n- sysctl kernel.core_pattern\n- coredumpctl list --no-legend 2>/dev/null || find / -maxdepth 3 -name 'core.*' -ls 2>/dev/null\n- journalctl -k -p 3 --no-pager -n 50\n- find /var/crash /tmp -maxdepth 2 -name 'core.*' -type f -mtime +3 -delete 2>/dev/null"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0034__nodex__r1__ec215379",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0034__nodex__r1__ec215379.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:15:42+00:00"
+  }
+}

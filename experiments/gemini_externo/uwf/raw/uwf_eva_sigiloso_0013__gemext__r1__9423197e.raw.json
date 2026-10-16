@@ -1,0 +1,86 @@
+{
+  "case_id": "uwf_eva_sigiloso_0013",
+  "dataset": "uwf",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "uwf_eva_sigiloso_0013__gemext__r1__9423197e",
+  "estado_crudo": {
+    "diagnostico": "Se identifica una anomalía operativa severa en la infraestructura de resolución DNS sin evidencia de incidente de seguridad malicioso. El host 143.88.255.10 realiza consultas DNS periódicas cada ~30.25 segundos hacia 10.0.10.1:53 que no obtienen respuesta (estado S0), indicando un servidor DNS interno caído o una ruta inaccesible. Paralelamente, las consultas DNS de 143.88.1.51 hacia 143.88.1.1 demoran exactamente 5.00 segundos en responder (SF), evidenciando degradación o timeout en el resolvedor primario antes de responder. Adicionalmente, se observan intentos fallidos de resolución hacia servidores raíz DNS desde 143.88.0.2.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.9,
+    "evaluacion_auditor": "El comportamiento repetitivo cada 30 segundos hacia 10.0.10.1:53 podría asemejarse superficialmente a un beaconing C2 sobre DNS. Sin embargo, apunta a una IP interna RFC 1918 fija, carece de jitter, mantiene tamaños constantes de consulta (78 y 102 bytes) y queda completamente sin respuesta (S0). Esto, sumado a los retardos sistemáticos de 5 segundos en 143.88.1.1 y fallos hacia los root servers, confirma problemas generalizados de enrutamiento y configuración de resolución de nombres, no actividad adversaria.",
+    "comandos_mitigacion": [
+      "resolvectl status",
+      "cat /etc/resolv.conf",
+      "traceroute -U -p 53 10.0.10.1",
+      "dig @10.0.10.1 localhost",
+      "systemctl status named || systemctl status bind9 || systemctl status dnsmasq",
+      "journalctl -u systemd-resolved -e"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-001",
+        "evidence_uids": [
+          "CSLj4O3nkwboY2Mng",
+          "Cekthb1d6Fm5V8Fp2k",
+          "C6uBXq3QA4Q5sCYCp1",
+          "CypRpqDa7NpETEOhk",
+          "C917Yh1jyoZtcdKZvd",
+          "CrX8CZ1xVkeqlDvEw8"
+        ],
+        "timestamp": "2021-12-19 09:05:39",
+        "event_type": "DNS_RESOLUTION_FAILURE_PERIODIC",
+        "description": "Ráfagas periódicas de consultas DNS UDP (78 y 102 bytes) desde 143.88.255.10 hacia 10.0.10.1:53 con intervalo exacto de 30.25 segundos sin recibir respuesta (S0)."
+      },
+      {
+        "event_id": "EVT-002",
+        "evidence_uids": [
+          "CBFOC616375qPqCaZ",
+          "CayA1uwH6M9TcNUW8",
+          "CCFYbR3afoWsNc7YW4",
+          "CbAGRo4ZBA0xyq95Cc",
+          "C8Q1BQ1g34oQYk2yH4",
+          "CLSDbP1thU0vkXEl49"
+        ],
+        "timestamp": "2021-12-19 09:06:47",
+        "event_type": "DNS_RESOLVER_LATENCY_TIMEOUT",
+        "description": "Consultas DNS desde el cliente 143.88.1.51 hacia el resolvedor 143.88.1.1:53 que experimentan un retardo sistemático de ~5.004 segundos antes de completarse (SF), indicando espera por timeout de un forwarder o servidor primario."
+      },
+      {
+        "event_id": "EVT-003",
+        "evidence_uids": [
+          "CgZ58HERLthMQQxI7",
+          "C1d90d4BmOO7qckF01"
+        ],
+        "timestamp": "2021-12-19 09:26:53",
+        "event_type": "DNS_ROOT_QUERY_FAILURE",
+        "description": "Intentos de consulta DNS desde 143.88.0.2 hacia servidores raíz de Internet (198.41.0.4 y 192.203.230.10) que quedan sin respuesta (S0), sugiriendo bloqueo de egress UDP/53 o fallo de conectividad externa."
+      },
+      {
+        "event_id": "EVT-004",
+        "evidence_uids": [
+          "CUSUiwClAwfSaypOf",
+          "CAvSyG2l5tAVW1DVKf",
+          "COaNm32jdpVtMYJts4",
+          "CXojyU2zOh8oR1MuB3"
+        ],
+        "timestamp": "2021-12-19 09:28:45",
+        "event_type": "LOCAL_DNS_SERVICE_ACTIVE",
+        "description": "El host 143.88.255.10 atiende y responde exitosamente consultas DNS entrantes originadas por 143.88.255.1 (SF), confirmando que actúa como servidor DNS local."
+      }
+    ],
+    "secuencia_temporal": [
+      "2021-12-19 09:05:39 - Inician intentos fallidos recurrentes de resolución DNS desde 143.88.255.10 hacia 10.0.10.1 a intervalos de 30 segundos.",
+      "2021-12-19 09:06:47 - Se observan consultas DNS del host 143.88.1.51 hacia 143.88.1.1 con latencia estricta de 5.00 segundos por solicitud.",
+      "2021-12-19 09:14:40 - Tráfico HTTP bidireccional estándar y breve entre 143.88.5.11 y 143.88.5.12.",
+      "2021-12-19 09:26:53 - 143.88.0.2 intenta contactar a root servers DNS (198.41.0.4 y 192.203.230.10) sin éxito.",
+      "2021-12-19 09:28:45 - 143.88.255.10 responde consultas locales a 143.88.255.1, demostrando operatividad local pese al forwarder caído.",
+      "2021-12-19 09:34:23 - Continúa la degradación de red y los reintentos hacia 10.0.10.1 hasta el final de la captura."
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

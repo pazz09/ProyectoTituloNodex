@@ -1,0 +1,30 @@
+{
+  "case_id": "bgl_eva_natural_0016",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0016__gemext__r1__22f99cbe",
+  "estado_crudo": {
+    "diagnostico": "El registro corresponde a eventos operativos de un supercomputador IBM Blue Gene/L. Se observan múltiples fallas de hardware y de inicialización del sistema: degradación física de tarjetas de cómputo (fallos de energía PGOOD/MPGOOD en R26-M0-N7, problemas de detección de ensamblaje en tarjetas de nodos en el rack R40/R70/R44), fallo fatal en el entrenamiento de enlaces de red torus/tree (R00-M0-N6), y fallos de ejecución en aplicaciones de prueba de escala (ciod reportando formato ejecutable inválido o corrupto para allreduce.rts). No existe evidencia de intrusión, compromiso malicioso o actividad atribuible a un adversario; se trata estrictamente de fallas operativas y de hardware.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "La evidencia muestra exclusivamente fallas físicas de hardware (rieles de alimentación, enlaces ópticos/eléctricos de la topología toroidal de interconexión) y errores operacionales de configuración/ensamblaje de binarios MPI en el subsistema de cómputo paralelo. No se detectan patrones de reconocimiento externo, elevación de privilegios, persistencia ni exfiltración.",
+    "comandos_mitigacion": [
+      "# Realizar diagnóstico de hardware en las tarjetas de nodo afectadas",
+      "service_action --node-card R26-M0-N7 --status",
+      "# Reemplazar o aislar la tarjeta con falla de alimentación PGOOD/MPGOOD",
+      "service_action --node-card R26-M0-N7 --replace",
+      "# Verificar y reentrenar enlaces de red en el midplane R00-M0-N6",
+      "bgl_link_test --rack R00 --midplane M0",
+      "# Recompilar y verificar la integridad de la imagen del binario ejecutado por ciod",
+      "file /bgl/apps/scaletest/performance/MINIBEN/mb_243_0810/allreduce.rts"
+    ],
+    "eventos_reconstruidos": [],
+    "secuencia_temporal": [],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

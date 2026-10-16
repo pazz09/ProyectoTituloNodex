@@ -1,0 +1,84 @@
+{
+  "case_id": "uwf_eva_sigiloso_0001",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "uwf_eva_sigiloso_0001__nodex__r1__823582fe",
+  "salida": {
+    "case_id": "uwf_eva_sigiloso_0001",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-19 07:34:23.885004",
+        "entities": [],
+        "event_type": "network_connection_timeout",
+        "evidence_uids": [
+          "CW0RnB64lI6FMiXq7"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-19 07:34:53.631445",
+        "entities": [],
+        "event_type": "network_connection_established",
+        "evidence_uids": [
+          "C19lAs3OM73fi1c31i"
+        ]
+      },
+      {
+        "uid": "event_003",
+        "timestamp": "2021-12-19 08:05:09.133161",
+        "entities": [],
+        "event_type": "network_connection_timeout",
+        "evidence_uids": [
+          "CSUekOYRIq4VbijM4"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002",
+      "event_003"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl tráfico observado entre 143.88.255.10 y 10.0.10.1 corresponde a fallos de conectividad con un servidor resolver DNS inalcanzable y no a un incidente de compromiso o túnel malicioso. Los registros muestran 260 intentos DNS unidireccionales en estado S0 (paquetes enviados sin bytes ni respuestas de retorno), consistentes con reintentos sistemáticos de resolución ante un servidor que no responde. Se descarta actividad de C2/exfiltración funcional por DNS en este flujo, recomendando verificar la configuración de red y enrutamiento hacia 10.0.10.1 en lugar de aplicar bloqueos de contención de seguridad.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Los registros evidencian un flujo recurrente y persistente de peticiones DNS dirigidas desde 143.88.255.10 hacia 10.0.10.1 con estado de conexión S0 (sin respuesta/SYN-sent), lo que denota indisponibilidad o problemas de enrutamiento hacia dicho servidor resolver DNS. Al mismo tiempo, otros hosts resuelven adecuadamente contra 143.88.1.1 (SF), confirmando que se trata de una anomalía netamente operativa/infraestructura y no de un canal encubierto, túnel DNS o incidente de seguridad.\n\n## Comandos de mitigación propuestos\n\n- ip route get 10.0.10.1\n- ping -c 4 10.0.10.1\n- traceroute -n -m 15 -U -p 53 10.0.10.1\n- nc -zvu -w 3 10.0.10.1 53\n- cat /etc/resolv.conf\n- iptables -S OUTPUT"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_sigiloso_0001__nodex__r1__823582fe",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1568.002",
+          "name": "Domain Generation Algorithms",
+          "similitud": null
+        },
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_sigiloso_0001__nodex__r1__823582fe.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:38:11+00:00"
+  }
+}

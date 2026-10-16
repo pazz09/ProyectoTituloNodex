@@ -1,0 +1,29 @@
+{
+  "case_id": "bgl_eva_balanceado_0011",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0011__gemext__r1__128fc195",
+  "estado_crudo": {
+    "diagnostico": "Se observa la generación recurrente y distribuida de volcados de memoria (core dumps) en múltiples nodos de un clúster Blue Gene/L en dos periodos distintos (15 de julio de 2005 y 17 de julio de 2005). Este comportamiento es característico de fallos o excepciones fatales en aplicaciones paralelas distribuidas (por ejemplo, fallos de segmentación en trabajos MPI) o problemas de software a nivel de kernel/runtime en los nodos de cómputo. No se detectan indicadores de compromiso ni actividad maliciosa.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "La evidencia muestra exclusivamente mensajes informativos de nivel KERNEL ('generating core.<pid>') emitidos por el subsistema RAS en diversos nodos. Aunque representa una falla operativa de software o hardware que afecta la disponibilidad de los procesos de cómputo, no existen elementos que apunten a una intrusión deliberada, malware o ataque cibernético.",
+    "comandos_mitigacion": [
+      "gdb --core=/var/log/core.50988 <binario_asociado>",
+      "file core.*",
+      "squeue -j <job_id> || llq",
+      "dmesg -T | grep -i 'segfault'"
+    ],
+    "eventos_reconstruidos": [],
+    "secuencia_temporal": [
+      "2005-07-15 23:45:35 a 23:49:42: Primera oleada de fallos de procesos y generación de core dumps en 7 nodos distintos (R13, R03, R11, R06, R02, R07).",
+      "2005-07-17 03:57:12 a 04:04:38: Segunda oleada de generación de core dumps en 13 nodos distintos (R36, R22, R33, R37, R21, R27, R23, R31)."
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

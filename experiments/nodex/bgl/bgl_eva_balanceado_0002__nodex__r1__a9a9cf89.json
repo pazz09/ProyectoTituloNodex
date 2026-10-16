@@ -1,0 +1,51 @@
+{
+  "case_id": "bgl_eva_balanceado_0002",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0002__nodex__r1__a9a9cf89",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0002",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "storage_mount_failure",
+        "evidence_uids": [
+          "log_record_000001"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos registros corresponden a mensajes operacionales de kernel y hardware de un clúster de supercomputación (registro BlueGene/L RAS). El evento analizado ('RAS KERNEL FATAL Lustre mount FAILED : bglio46 : point /p/gb1') indica un fallo operativo en el montaje del sistema de archivos distribuido Lustre en el nodo R02-M1-N8-I:J18-U01. No se identifican indicadores de compromiso ni patrones de actividad maliciosa o técnicas MITRE ATT&CK. La naturaleza del evento es un fallo de infraestructura/almacenamiento. Como contramedida, se debe verificar el estado y conectividad del servicio de almacenamiento Lustre (servidor bglio46) y los permisos o integridad del punto de montaje /p/gb1.\n\n## Evaluación del auditor\n\nEl diagnóstico es preciso al identificar los registros como eventos operacionales de RAS en un entorno BlueGene/L. La falla fatal en el montaje de Lustre corresponde a una anomalía de infraestructura y almacenamiento, sin indicadores de intrusión o actividad maliciosa. Los comandos de verificación son pertinentes para resolver la incidencia operativa.\n\n## Comandos de mitigación propuestos\n\n- ping -c 4 bglio46\n- nc -zvw5 bglio46 988\n- lctl ping bglio46\n- ls -ld /p/gb1\n- dmesg -T | grep -iE 'lustre|lnet'\n- journalctl -xe --no-pager | grep -i lustre"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0002__nodex__r1__a9a9cf89",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0002__nodex__r1__a9a9cf89.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T01:45:34+00:00"
+  }
+}

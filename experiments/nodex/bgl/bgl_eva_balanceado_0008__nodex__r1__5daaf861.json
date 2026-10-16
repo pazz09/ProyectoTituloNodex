@@ -1,0 +1,51 @@
+{
+  "case_id": "bgl_eva_balanceado_0008",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0008__nodex__r1__5daaf861",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0008",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "core_dump_generation",
+        "evidence_uids": [
+          "log_record_000001"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos registros corresponden a trazas de confiabilidad, disponibilidad y servicio (RAS) del kernel de un supercomputador (formato BlueGene/L). La muestra indica la generación de un volcado de memoria ('generating core.26918') a nivel informativo (INFO). No se observan indicadores de compromiso (IoC) ni patrones de ataque cibernético; se trata de un evento operativo asociado a la terminación anormal o fallo de un proceso en el nodo de cómputo R37-M0-NA-C:J15-U01. Recomendación: remitir al equipo de ingeniería de sistemas/HPC para analizar el core dump del proceso afectado y verificar estabilidad del software o hardware del nodo.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Los registros reflejan la terminación anómala de un proceso y la consiguiente generación de un volcado de memoria (core dump) en un nodo de supercómputo BlueGene/L. No existen indicios de actividad maliciosa ni vectores de intrusión, tratándose de un fallo operativo o de software que debe ser analizado por el equipo de ingeniería HPC.\n\n## Comandos de mitigación propuestos\n\n- coredumpctl info 26918 || find / -name 'core.26918' 2>/dev/null\n- dmesg -T --level=err,warn\n- sysctl kernel.core_pattern\n- df -h /var/crash /tmp"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0008__nodex__r1__5daaf861",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0008__nodex__r1__5daaf861.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T01:53:20+00:00"
+  }
+}

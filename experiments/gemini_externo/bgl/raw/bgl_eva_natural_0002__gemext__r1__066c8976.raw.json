@@ -1,0 +1,84 @@
+{
+  "case_id": "bgl_eva_natural_0002",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0002__gemext__r1__066c8976",
+  "estado_crudo": {
+    "diagnostico": "Degradación operacional y fallos de conectividad de red y hardware en un sistema IBM BlueGene/L. Se observan múltiples errores críticos del demonio ciod (Control and I/O Daemon) perdiendo comunicación por socket con el nodo de control/gestión 172.16.96.116 (Connection reset by peer, Connection timed out, Link has been severed), además de registros de fallo de kernel (kernel dump/crash) en nodos de cómputo y errores corregibles de memoria (CE sym). No existe evidencia de actividad maliciosa ni intrusión de seguridad.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "Los eventos corresponden estrictamente a telemetría de fallos físicos y de comunicación de un clúster HPC (BlueGene/L RAS logs). Las señales SIGTERM (signal 15) hacia ciod corresponden a la terminación estándar o forzada de trabajos tras la pérdida de sockets. No se detectan accesos no autorizados, anomalías de autenticación, escaneos ni explotación de vulnerabilidades.",
+    "comandos_mitigacion": [
+      "ping -c 4 172.16.96.116",
+      "ip route get 172.16.96.116",
+      "ethtool -S <interfaz_red>"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-01",
+        "evidence_uids": [
+          "1132609304",
+          "1132609342",
+          "1132613223",
+          "1132613769"
+        ],
+        "timestamp": "2005-11-21-13.41.44.752517",
+        "event_type": "Fallo de comunicación CioStream",
+        "description": "Nodos de E/S experimentan reinicio y tiempo de espera agotado en la conexión de socket con 172.16.96.116."
+      },
+      {
+        "event_id": "EVT-02",
+        "evidence_uids": [
+          "1132675121"
+        ],
+        "timestamp": "2005-11-22-07.58.41.090225",
+        "event_type": "Error de hardware de memoria",
+        "description": "Detección de error de memoria corregible (CE sym 14) en nodo R26-M1-N1-C:J02-U11."
+      },
+      {
+        "event_id": "EVT-03",
+        "evidence_uids": [
+          "1132841276",
+          "1133051996"
+        ],
+        "timestamp": "2005-11-24-06.07.56.407913",
+        "event_type": "Fallo fatal de kernel",
+        "description": "Registro de excepción fatal de kernel y volcado de registros en el nodo R03-M1-NF-C:J07-U01."
+      },
+      {
+        "event_id": "EVT-04",
+        "evidence_uids": [
+          "1132853885",
+          "1132912103",
+          "1133009333",
+          "1133044906"
+        ],
+        "timestamp": "2005-11-24-09.38.05.459006",
+        "event_type": "Pérdida de enlace de red",
+        "description": "Múltiples nodos I/O pierden el enlace físico o lógico (Link has been severed) hacia 172.16.96.116."
+      },
+      {
+        "event_id": "EVT-05",
+        "evidence_uids": [
+          "1133280774"
+        ],
+        "timestamp": "2005-11-29-08.12.54.614554",
+        "event_type": "Degradación de red de interconexión",
+        "description": "Múltiples eventos de resincronización en la red Tree del supercomputador detectados en R55-M0-N9-C:J06-U11."
+      }
+    ],
+    "secuencia_temporal": [
+      "2005-11-21 13:41:44 a 14:56:09 - Fallos iniciales de conexión y resets de socket ciod hacia 172.16.96.116",
+      "2005-11-22 07:58:41 - Detección de error de memoria corregible",
+      "2005-11-24 06:07:56 - Fallo crítico de kernel en el nodo R03-M1-NF-C:J07-U01",
+      "2005-11-24 a 2005-11-26 - Múltiples fallos tipo 'Link has been severed' y terminación de procesos ciod vía SIGTERM",
+      "2005-11-29 08:12:54 - Desincronización y problemas de transporte en la red de interconexión interna (Tree network)"
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

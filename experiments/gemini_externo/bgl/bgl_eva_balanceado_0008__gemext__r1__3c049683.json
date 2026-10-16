@@ -1,0 +1,86 @@
+{
+  "case_id": "bgl_eva_balanceado_0008",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0008__gemext__r1__3c049683",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0008",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "EVT-01",
+        "timestamp": "2005-06-29 17:32:42 - 17:43:35",
+        "entities": [],
+        "event_type": "Procesos caídos (Core Dump Generation)",
+        "evidence_uids": [
+          "1120091562",
+          "1120091766",
+          "1120091839",
+          "1120091979",
+          "1120092016",
+          "1120092072",
+          "1120092194",
+          "1120092215"
+        ]
+      },
+      {
+        "uid": "EVT-02",
+        "timestamp": "2005-06-29 18:13:08 - 18:25:24",
+        "entities": [],
+        "event_type": "Excepciones de alineación FPU",
+        "evidence_uids": [
+          "1120093988",
+          "1120094424",
+          "1120094724"
+        ]
+      },
+      {
+        "uid": "EVT-03",
+        "timestamp": "2005-06-30 08:24:51 - 08:36:03",
+        "entities": [],
+        "event_type": "Nueva ráfaga de Core Dumps",
+        "evidence_uids": [
+          "1120145091",
+          "1120145216",
+          "1120145227",
+          "1120145530",
+          "1120145605",
+          "1120145611",
+          "1120145615",
+          "1120145688",
+          "1120145763"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe observan eventos de fallos de ejecución en nodos de un supercomputador IBM BlueGene/L distribuidos en dos períodos de tiempo (29 de junio de 2005 y 30 de junio de 2005). Los registros muestran múltiples caídas de procesos con generación de volcados de memoria ('generating core.<pid>') en diversas tarjetas de computación, acompañadas por un alto volumen recurrente de excepciones de alineación de hardware en la unidad de coma flotante ('double-hummer alignment exceptions'). Esto corresponde a errores operativos/software en trabajos computacionales o desalineación de instrucciones en la FPU 'Double-Hummer', sin indicios de intrusión o actividad maliciosa.\n\n## Evaluación del auditor\n\nLa evidencia proviene de registros RAS del kernel de BlueGene/L. La generación masiva de volcados de memoria y excepciones de alineación confirma anomalías operativas/de software a gran escala. No obstante, no existe ningún indicador de compromiso, compromiso de integridad ni vector de ataque que señale un incidente de seguridad de la información.\n\n## Comandos de mitigación propuestos\n\n- readelf -h core.*\n- gdb -c core.26918 --batch -ex 'bt'\n- find /var/log -name 'core.*' -mtime +1 -delete"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0008__gemext__r1__3c049683",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0008__gemext__r1__3c049683.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T01:54:15+00:00"
+  }
+}

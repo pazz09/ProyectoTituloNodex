@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=528 salida=202 razonamiento=885 total=1615
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=659 salida=272 razonamiento=508 total=1439
+   → No hace falta RAG (A pesar de la falta de estructuración en el parsing, el formato de log es un estándar conocido de sistemas HPC (BlueGene/L RAS logs) y la muestra evidencia con claridad eventos benignos de depuración/fallo de software a nivel de kernel, permitiendo un diagnóstico certero sin requerir consulta a memoria histórica ni mapeo MITRE ATT&CK.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=285 salida=64 razonamiento=175 total=524
+   → usar_cve: False | Razón: El diagnóstico indica que se trata de un fallo operativo/software interno (core dump) en un clúster HPC BlueGene/L sin indicios de actividad maliciosa ni servicios vulnerables expuestos que requieran búsqueda de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=238 salida=70 razonamiento=506 total=814
+   → 4 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2113 salida=313 razonamiento=886 total=3312
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros corresponden a eventos de fiabilidad y servicio (RAS) del kernel de un clúster BlueGene/L, donde se documenta la generación de un archivo core dump tras la caída de un proceso. Se trata de un comportamiento anómalo a nivel operativo o de software, pero no representa un incidente de seguridad ni actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

@@ -1,0 +1,51 @@
+{
+  "case_id": "bgl_eva_balanceado_0007",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0007__nodex__r1__d3a8547d",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0007",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "core_dump_generated",
+        "evidence_uids": [
+          "log_record_000001"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos eventos corresponden a registros de confiabilidad, disponibilidad y servicio (RAS) del kernel en un entorno de supercomputación (IBM Blue Gene/L). La muestra evidencia la generación de un volcado de memoria ('generating core.26078') a nivel de nodo/kernel, lo cual representa un fallo o terminación anómala de una aplicación o proceso interno del sistema operativo, y no un indicador de compromiso (IoC) o intrusión maliciosa. Se recomienda remitir el incidente al equipo de administración de sistemas/HPC para depurar el proceso involucrado.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Los registros reflejan la generación de un volcado de memoria (core dump) en un entorno Blue Gene/L debido a la terminación anómala de un proceso o aplicación. Se trata de una anomalía operativa y de fiabilidad del sistema (RAS), sin indicios de compromiso o actividad maliciosa.\n\n## Comandos de mitigación propuestos\n\n- dmesg -T | grep -E -i 'segfault|trap|killed|core'\n- coredumpctl info 26078 2>/dev/null || file core.26078\n- gdb --batch -ex 'bt full' -c core.26078 2>/dev/null\n- sysctl kernel.core_pattern\n- journalctl -k --since '1 hour ago' | grep -i 'error'"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0007__nodex__r1__d3a8547d",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0007__nodex__r1__d3a8547d.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T01:52:12+00:00"
+  }
+}

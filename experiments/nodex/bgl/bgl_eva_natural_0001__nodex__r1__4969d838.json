@@ -1,0 +1,62 @@
+{
+  "case_id": "bgl_eva_natural_0001",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0001__nodex__r1__4969d838",
+  "salida": {
+    "case_id": "bgl_eva_natural_0001",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "network_communication_error",
+        "evidence_uids": [
+          "log_record_000001",
+          "log_record_000002",
+          "log_record_000005"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "network_communication_error",
+        "evidence_uids": [
+          "log_record_000007"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLa actividad registrada corresponde a eventos operativos y de infraestructura del clúster HPC (IBM BlueGene/L RAS logs) y no a un incidente de seguridad malicioso. El mensaje 'ciod: Error reading message prefix after LOAD_MESSAGE on CioStream socket... Link has been severed' indica una interrupción o corte de enlace de red a nivel de sockets entre nodos de cómputo/I/O y las IPs internas reportadas (172.16.96.116 y 10.7.0.130). No se observan vectores de ataque, persistencia ni compromiso. Al tratarse de fallos de comunicación operativa/hardware, no se requieren medidas de contención de seguridad (bloqueo/aislamiento); se recomienda derivar el caso al equipo de infraestructura/HPC para verificar la estabilidad de los enlaces y hardware de red.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Los registros corresponden a fallas operativas de comunicación de sockets y corte de enlaces de red en el subsistema I/O de un clúster HPC (ciod de BlueGene/L), afectando direcciones IP internas. No hay indicios de intrusión, explotación ni actividad adversaria, por lo que constituye una anomalía de infraestructura y no un incidente de ciberseguridad.\n\n## Comandos de mitigación propuestos\n\n- ping -c 4 172.16.96.116\n- ping -c 4 10.7.0.130\n- tracepath -n 172.16.96.116\n- tracepath -n 10.7.0.130\n- ip -s link show\n- ss -tan -o state close-wait,fin-wait-1,fin-wait-2\n- dmesg -T | grep -E -i 'link down|carrier|error|drop'"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0001__nodex__r1__4969d838",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0001__nodex__r1__4969d838.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T01:59:40+00:00"
+  }
+}

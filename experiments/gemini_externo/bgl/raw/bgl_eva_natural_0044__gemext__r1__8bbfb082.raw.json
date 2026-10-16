@@ -1,0 +1,26 @@
+{
+  "case_id": "bgl_eva_natural_0044",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0044__gemext__r1__8bbfb082",
+  "estado_crudo": {
+    "diagnostico": "Se identifican registros de un supercomputador IBM Blue Gene/L donde múltiples nodos de cómputo experimentan fallos de aplicación concurrentes (generación de volcados de memoria 'core dump') y conteos masivos de excepciones de alineación en la unidad de punto flotante ('double-hummer alignment exceptions'). Esto corresponde a una anomalía operativa y de rendimiento provocada por software científico mal optimizado, problemas de alineación en memoria o fallos en la ejecución de procesos paralelos, descartándose un incidente de seguridad malicioso.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "El comportamiento está acotado al subsistema KERNEL/RAS de IBM Blue Gene/L. Las excepciones 'double-hummer' señalan operaciones SIMD/FPU con direccionamiento no alineado que son manejadas por el kernel, seguidas o acompañadas de procesos MPI que abortan y generan volcados de memoria. No hay indicios de vectores de compromiso, escalada, persistencia ni tráfico sospechoso.",
+    "comandos_mitigacion": [
+      "file core.*",
+      "gdb --batch -ex 'thread apply all bt' /path/al/ejecutable core.16095",
+      "mpirun -np <num_procs> -check_mpi ...",
+      "xlc -qalign=natural -O3 -qarch=440d -qtune=440d source.c -o binary"
+    ],
+    "eventos_reconstruidos": [],
+    "secuencia_temporal": [],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

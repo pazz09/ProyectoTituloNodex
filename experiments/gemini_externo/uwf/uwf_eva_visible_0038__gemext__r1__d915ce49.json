@@ -1,0 +1,95 @@
+{
+  "case_id": "uwf_eva_visible_0038",
+  "dataset": "uwf",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "uwf_eva_visible_0038__gemext__r1__d915ce49",
+  "salida": {
+    "case_id": "uwf_eva_visible_0038",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "EVT-001",
+        "timestamp": "2021-12-26 07:10:00.132306",
+        "entities": [],
+        "event_type": "DNS_SERVER_UNREACHABLE",
+        "evidence_uids": [
+          "CIvYt73dK6QXNRQfz6",
+          "CiWUJW1geENDyEASbb",
+          "CwSEfiftqd6ORwPt9",
+          "C47gcb1SV9biDKsl3j",
+          "CTYBYw4edtoMaviZf9"
+        ]
+      },
+      {
+        "uid": "EVT-002",
+        "timestamp": "2021-12-26 07:10:30.486162",
+        "entities": [],
+        "event_type": "DNS_LOCAL_RESOLUTION_SUCCESS",
+        "evidence_uids": [
+          "CmZDWYTsEDhgee88l",
+          "Ct3kDE48T0ol8EujF9",
+          "CSEKM93TAMCNCINjw",
+          "CbGbQv1jvWmlz5sWD",
+          "CPNUZl17blLVVFahQk"
+        ]
+      },
+      {
+        "uid": "EVT-003",
+        "timestamp": "2021-12-26 07:10:47.895657",
+        "entities": [],
+        "event_type": "DNS_RECURSION_TIMEOUT",
+        "evidence_uids": [
+          "CIAyDD30JUTMxB9SA1",
+          "CTSrfu2syX4PbZo9u8",
+          "CWXgGd4RGZ1Ez6CNi7",
+          "CocWxE3aCdtHonOgsi",
+          "CWzhuB4aA8BsnHUy24"
+        ]
+      },
+      {
+        "uid": "EVT-004",
+        "timestamp": "2021-12-26 07:11:19.837470",
+        "entities": [],
+        "event_type": "DNS_ROOT_HINTS_FAILURE",
+        "evidence_uids": [
+          "Ct4icX2Jkrti57vLg7",
+          "CPkXOb1uFEqayuPB22",
+          "CS4CAz4wKir7RVTPHj",
+          "CyM62M1NLRhKiLIef8",
+          "CzbJ4740VbObNIc7aa",
+          "Clu7Bz3sv9UqXcbRCf"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nAnomalía de sistema por fallo y degradación operativa del servicio de resolución DNS en la red. No se identifica un incidente de seguridad ni actividad maliciosa. Se evidencia que: 1) El host 143.88.255.10 realiza consultas DNS recurrentes cada ~30 segundos hacia un resolver local inaccesible (10.0.10.1:53), resultando en estado S0 (sin respuesta). 2) Las consultas del host 143.88.1.51 hacia el resolver 143.88.1.1 experimentan sistemáticamente un retraso exacto de 5.00 segundos, atribuible a timeouts de resolución recursiva. 3) El resolver recursivo 143.88.0.2 falla al intentar comunicarse con los servidores raíz de DNS de Internet (E-Root 192.203.230.10, F-Root 192.5.5.241, B-Root 199.7.91.13, J-Root 192.58.128.30 e IPv6), lo que indica bloqueo perimetral o pérdida de conectividad externa para tráfico UDP/53. Solo las consultas a zonas locales o en caché (e.g., desde 143.88.1.53) se resuelven inmediatamente.\n\n## Evaluación del auditor\n\nHipótesis alternativa evaluada: La periodicidad estricta de 30 segundos en las conexiones originadas por 143.88.255.10 podría sugerir balizamiento (beaconing) de malware hacia C2 mediante DNS. Sin embargo, dicha hipótesis se descarta porque el destino es una dirección privada RFC 1918 (10.0.10.1:53, típicamente una puerta de enlace o servidor DNS corporativo), los paquetes tienen un tamaño estándar de consulta (78 y 102 bytes con 2 paquetes por retransmisión), y coexiste con fallos generalizados de resolución hacia servidores raíz externos y timeouts recursivos de 5 segundos en otros clientes. El comportamiento de 143.88.255.10 es consistente con un sondeo automatizado de servicio (healthcheck) o un cliente intentando resolver nombres contra un servidor inactivo. La confianza no alcanza 1.0 porque el log de conexiones Zeek (conn.log) no incluye el payload DNS (campos de query/FQDN) para verificar la naturaleza de las solicitudes.\n\n## Comandos de mitigación propuestos\n\n- dig @10.0.10.1 -p 53 localhost +time=2 +tries=1\n- ping -c 4 10.0.10.1\n- traceroute -U -p 53 192.5.5.241\n- systemctl status named || systemctl status unbound || systemctl status bind9\n- iptables -L -n -v | grep 53\n- tcpdump -ni any 'udp port 53 and (host 10.0.10.1 or host 192.5.5.241)' -c 20"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_visible_0038__gemext__r1__d915ce49",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "uwf_eva_visible_0038__gemext__r1__d915ce49.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T03:07:50+00:00"
+  }
+}

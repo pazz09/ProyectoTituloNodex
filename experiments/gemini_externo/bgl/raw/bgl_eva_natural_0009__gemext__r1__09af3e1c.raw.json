@@ -1,0 +1,82 @@
+{
+  "case_id": "bgl_eva_natural_0009",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0009__gemext__r1__09af3e1c",
+  "estado_crudo": {
+    "diagnostico": "Fallas operativas y de ejecución en clúster de alto rendimiento (IBM Blue Gene/L). Se observan múltiples fallas de software distribuidas con generación de volcados de memoria (core dumps) en nodos de cómputo, una desconexión anómala del demonio de control de E/S (ciod) con el socket de control 172.16.96.116:51706, y errores de hardware/memoria corregibles (error de paridad en caché de instrucciones y error CE de memoria ECC). No existe evidencia de actividad maliciosa.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "Los registros corresponden exclusivamente al subsistema RAS de una supercomputadora Blue Gene/L. Los eventos fatales de ciod y la generación concurrente de coredumps son característicos de cancelaciones o caídas abruptas de trabajos MPI paralelos. Los errores de paridad y CE corresponden a eventos físicos de hardware ya corregidos por los mecanismos de tolerancia a fallas. No hay vectores de ataque observables.",
+    "comandos_mitigacion": [
+      "sdiag",
+      "cat /proc/meminfo",
+      "dmesg -T | grep -iE 'error|parity|ce|fault'",
+      "gdb /path/to/executable /path/to/core.2605"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-01",
+        "evidence_uids": [
+          "1118916047",
+          "1118916053",
+          "1118916060",
+          "1118916076"
+        ],
+        "timestamp": "2005-06-16-03.00.47.249279",
+        "event_type": "APPLICATION_CRASH",
+        "description": "Falla concurrente de procesos de usuario en múltiples nodos de cómputo (R21, R27, R24, R23), generando archivos de volcado de memoria (core.2605, core.6037, core.886, core.3053, core.2790)."
+      },
+      {
+        "event_id": "EVT-02",
+        "evidence_uids": [
+          "1118958902"
+        ],
+        "timestamp": "2005-06-16-14.55.02.074340",
+        "event_type": "IO_COMMUNICATION_FAILURE",
+        "description": "Fallo crítico en el demonio de E/S (ciod) en el nodo I/O R32-M1-N8-I al fallar la lectura del prefijo de mensaje en el stream de control hacia 172.16.96.116:51706."
+      },
+      {
+        "event_id": "EVT-03",
+        "evidence_uids": [
+          "1118964552",
+          "1119103692"
+        ],
+        "timestamp": "2005-06-16-16.29.12.853302",
+        "event_type": "HARDWARE_MEMORY_ERROR",
+        "description": "Detección y corrección de error de paridad en caché de instrucciones en nodo R02-M1-N0 y error corregible de memoria (CE sym 2) en nodo R16-M1-N2."
+      },
+      {
+        "event_id": "EVT-04",
+        "evidence_uids": [
+          "1119290966",
+          "1119291000",
+          "1119291039",
+          "1119291044",
+          "1119291099",
+          "1119291235",
+          "1119291291"
+        ],
+        "timestamp": "2005-06-20-11.09.26.582302",
+        "event_type": "APPLICATION_CRASH_CLUSTER",
+        "description": "Oleada masiva de terminaciones anormales de procesos generando core dumps en múltiples nodos (R16, R17, R00, R12, R11, R01, R13)."
+      }
+    ],
+    "secuencia_temporal": [
+      "2005-06-16 03:00:47 - Generación de múltiples core dumps en varios nodos de cómputo por fallo de job paralelo.",
+      "2005-06-16 14:55:02 - Error fatal ciod por interrupción en socket de control hacia 172.16.96.116.",
+      "2005-06-16 16:29:12 - Corrección automática de error de paridad en caché de instrucciones (R02-M1-N0).",
+      "2005-06-17 17:42:38 - Caída aislada de proceso con core dump en R12-M1-NB.",
+      "2005-06-18 07:08:12 - Registro de error corregible de memoria ECC en R16-M1-N2.",
+      "2005-06-18 20:25:10 - Core dump aislado en R36-M0-NF.",
+      "2005-06-19 00:34:14 - Ráfaga de core dumps en nodos R04, R05 y R01.",
+      "2005-06-20 11:09:26 a 11:14:51 - Caída sincronizada de aplicación paralela generando core dumps a través de 7 nodos distintos."
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

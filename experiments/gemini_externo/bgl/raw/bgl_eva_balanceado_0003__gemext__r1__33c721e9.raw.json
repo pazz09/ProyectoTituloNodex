@@ -1,0 +1,84 @@
+{
+  "case_id": "bgl_eva_balanceado_0003",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0003__gemext__r1__33c721e9",
+  "estado_crudo": {
+    "diagnostico": "Fallas operativas y errores de ejecución en un clúster de supercomputación IBM BlueGene/L. Se observan caídas de procesos con generación de core dumps masivos en múltiples nodos de cómputo, una terminación fatal del kernel del sistema de tiempo de ejecución (RTS) por encabezado de mensaje corrupto/inválido en R20-M1-N8-C:J12-U01, y posteriormente una serie de excepciones de alineación de punto flotante en diversos nodos, características de problemas en código numérico compilado o fallos de hardware/software sin indicios de ciberataque.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "La evidencia muestra exclusivamente registros de fiabilidad, disponibilidad y servicio (RAS) del kernel de BlueGene/L. Las anomalías corresponden a fallos típicos de aplicaciones paralelas/MPI (coredumps simultáneos), fallos en el subsistema de comunicación RTS y excepciones arquitectónicas de punto flotante de PowerPC. No se observan vectores de ataque, movimiento lateral, escalada de privilegios ni manipulación maliciosa.",
+    "comandos_mitigacion": [
+      "gdb /path/to/binary /path/to/core.23150",
+      "mpirun -check-communication",
+      "powerpc-linux-gnu-gcc -Wall -Wfloat-conversion -O2 -mno-strict-align code.c -o code"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-01",
+        "evidence_uids": [
+          "1121707096",
+          "1121707109",
+          "1121707209",
+          "1121707280",
+          "1121707362",
+          "1121707363",
+          "1121707390",
+          "1121707427",
+          "1121707460"
+        ],
+        "timestamp": "2005-07-18-10.18.16.381095 a 2005-07-18-10.24.20.440509",
+        "event_type": "APPLICATION_CRASH",
+        "description": "Fallo en cascada de procesos de usuario en múltiples nodos de cómputo con generación de volcados de memoria (core dumps)."
+      },
+      {
+        "event_id": "EVT-02",
+        "evidence_uids": [
+          "1121727206",
+          "1121727746"
+        ],
+        "timestamp": "2005-07-18-15.53.26.229596 a 2005-07-18-16.02.26.154455",
+        "event_type": "KERNEL_PANIC_FATAL",
+        "description": "Terminación anormal fatal del kernel de tiempo de ejecución (rts) debido a un encabezado de mensaje inválido/corrupto en el nodo R20-M1-N8-C:J12-U01."
+      },
+      {
+        "event_id": "EVT-03",
+        "evidence_uids": [
+          "1121736053"
+        ],
+        "timestamp": "2005-07-18-18.20.53.293303",
+        "event_type": "APPLICATION_CRASH",
+        "description": "Generación aislada de core dump adicional (core.176) en R02-M1-N5-C:J17-U01."
+      },
+      {
+        "event_id": "EVT-04",
+        "evidence_uids": [
+          "1121900469",
+          "1121900596",
+          "1121900682",
+          "1121900708",
+          "1121900851",
+          "1121900875",
+          "1121901038",
+          "1121901046"
+        ],
+        "timestamp": "2005-07-20-16.01.09.861175 a 2005-07-20-16.10.46.120814",
+        "event_type": "CPU_EXCEPTION",
+        "description": "Múltiples excepciones de alineación de coma flotante reportadas por el kernel en distintos nodos de cómputo durante la ejecución de una tarea paralela."
+      }
+    ],
+    "secuencia_temporal": [
+      "2005-07-18 10:18:16 - Comienza generación sucesiva de core dumps en múltiples nodos (R21, R22, R30, R23, R36, R26, R27, R34, R23).",
+      "2005-07-18 15:53:26 - Nodo R20 sufre terminación fatal de kernel por encabezado de mensaje RTS corrupto (invalid cpu/type).",
+      "2005-07-18 16:02:26 - Nodo R00 entra en estado de parada fatal 'debug wait enable'.",
+      "2005-07-18 18:20:53 - Generación de core dump en nodo R02.",
+      "2005-07-20 16:01:09 a 16:10:46 - Ráfaga recurrente de 8 excepciones de alineación de punto flotante en diversos nodos (R33, R24, R30, R35, R32, R10, R16, R00)."
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

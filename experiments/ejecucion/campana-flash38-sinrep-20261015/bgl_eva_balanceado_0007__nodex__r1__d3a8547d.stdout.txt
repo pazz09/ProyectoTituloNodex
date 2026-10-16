@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=532 salida=237 razonamiento=591 total=1360
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=658 salida=191 razonamiento=526 total=1375
+   → No hace falta RAG (El plan de investigación especifica no consultar memoria histórica para este caso y el patrón observado en la muestra cruda corresponde claramente a eventos operacionales y diagnósticos de kernel/HPC (core dumps), permitiendo emitir una evaluación de seguridad directa.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=229 salida=59 razonamiento=120 total=408
+   → usar_cve: False | Razón: El diagnóstico indica que se trata de un fallo interno del sistema o terminación anómala de un proceso (core dump) y no de un ataque o vulnerabilidad de seguridad conocida que requiera búsqueda de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=182 salida=109 razonamiento=771 total=1062
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2096 salida=299 razonamiento=462 total=2857
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros reflejan la generación de un volcado de memoria (core dump) en un entorno Blue Gene/L debido a la terminación anómala de un proceso o aplicación. Se trata de una anomalía operativa y de fiabilidad del sistema (RAS), sin indicios de compromiso o actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

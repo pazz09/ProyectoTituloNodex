@@ -1,0 +1,26 @@
+{
+  "case_id": "bgl_eva_balanceado_0005",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0005__gemext__r1__361ad45d",
+  "estado_crudo": {
+    "diagnostico": "El registro corresponde a eventos operativos y de fallo de hardware/software en un supercomputador IBM Blue Gene/L. Se observan múltiples fallas operativas y de infraestructura: errores de retransmisión en la red Torus, terminaciones normales de procesos mediante SIGTERM (signal 15), volcado masivo de archivos core dumps por el fallo de la aplicación científica de dinámica molecular ('ddcMDbglV'), fallo crítico de montaje del sistema de archivos distribuido Lustre ('bglio78'), fallos de hardware tipo Machine Check de lectura en registros DCR recurrentes en el nodo 'R26-M0-N0-I:J18-U11', y pérdidas de conexión en los sockets de control de E/S ('CioStream'). No existe evidencia de intrusión, ataque ni actividad maliciosa.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.98,
+    "evaluacion_auditor": "La hipótesis de incidente de seguridad se descarta debido a que todas las entradas reflejan estados estándar de telemetría de fiabilidad, disponibilidad y servicio (RAS) del kernel y runtime de Blue Gene/L. Las anomalías observadas corresponden a degradación física de hardware (errores de bus DCR y memoria CE), inestabilidad de red de almacenamiento (Lustre) y caídas de software científico en ejecución paralela, sin patrones de explotación o acceso no autorizado.",
+    "comandos_mitigacion": [
+      "mmdiag --all",
+      "lctl ping 172.16.96.116",
+      "bglfree R26-M0-N0-I:J18-U11",
+      "ras_check -node R26-M0-N0-I:J18-U11"
+    ],
+    "eventos_reconstruidos": [],
+    "secuencia_temporal": [],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=524 salida=251 razonamiento=614 total=1389
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=653 salida=203 razonamiento=291 total=1147
+   → No hace falta RAG (El plan de investigación explícitamente no contempla consultar memoria histórica y la muestra cruda es suficiente para categorizar el evento como una incidencia operativa de depuración en un sistema HPC sin impacto en seguridad.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=250 salida=46 razonamiento=132 total=428
+   → usar_cve: False | Razón: El diagnóstico indica un fallo operativo interno y generación de core dump sin indicios de actividad maliciosa, ataque o software vulnerable específico susceptible de consulta CVE.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=203 salida=64 razonamiento=502 total=769
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2072 salida=284 razonamiento=428 total=2784
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | Los registros corresponden a trazas operativas RAS de supercómputo (IBM BlueGene/L) documentando una excepción y generación de core dump (core.23150). Representa una anomalía de estabilidad operativa de software o hardware sin indicios de compromiso, abuso o actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

@@ -1,0 +1,71 @@
+{
+  "case_id": "uwf_eva_visible_0027",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "uwf_eva_visible_0027__nodex__r1__1d85bf33",
+  "salida": {
+    "case_id": "uwf_eva_visible_0027",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2022-01-02 05:31:29.634125",
+        "entities": [],
+        "event_type": "dns_request_timeout",
+        "evidence_uids": [
+          "Crufd24zmgnFaCFECf",
+          "CViZ3T1AFU9OvRrwel",
+          "C9lhv24ebkAyBe49Yc"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nFallo operativo de red / servicio DNS. El tráfico entre 143.88.255.10 y 10.0.10.1 (puerto 53 UDP) corresponde a reintentos periódicos de resolución DNS frente a un resolver inalcanzable o fuera de servicio. Zeek clasifica los 262 flujos con estado S0 (solicitud enviada sin respuesta del destino) y 0 bytes de respuesta en una ventana de 31 minutos (~8.5 intentos/minuto). Este comportamiento y tasa de emisión descartan un ataque deliberado de denegación de servicio o exfiltración masiva, siendo característico del comportamiento por defecto de timeouts y reintentos del cliente DNS cuando el resolver primario configurado no responde.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Se observa tráfico DNS periódico desde 143.88.255.10 hacia 10.0.10.1 (puerto 53 UDP) con estado S0 (sin respuesta), consistente con reintentos estándar de resolución de un cliente hacia un servidor DNS inalcanzable u offline. No hay evidencia de ataque de denegación de servicio, exfiltración ni actividad maliciosa.\n\n## Comandos de mitigación propuestos\n\n- iptables -I FORWARD 1 -d 10.0.10.1 -p udp --dport 53 -j REJECT --reject-with icmp-port-unreachable\n- iptables -I OUTPUT 1 -d 10.0.10.1 -p udp --dport 53 -j REJECT --reject-with icmp-port-unreachable\n- conntrack -D -p udp -d 10.0.10.1 --dport 53\n- ip route get 10.0.10.1\n- systemctl status named || systemctl status bind9 || systemctl status systemd-resolved"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_visible_0027__nodex__r1__1d85bf33",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_visible_0027__nodex__r1__1d85bf33.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:58:50+00:00"
+  }
+}

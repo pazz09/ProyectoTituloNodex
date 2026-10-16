@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=720 salida=306 razonamiento=572 total=1598
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=882 salida=106 razonamiento=199 total=1187
+   → Solicitando RAG (La cobertura de parsing es del 0% y los registros crudos no coinciden claramente con eventos estándar de autenticación (muestran logs de kernel/hardware), por lo que se requiere consultar la memoria histórica y técnicas MITRE ATT&CK para correlacionar patrones anómalos previos y caracterizar adecuadamente la actividad de la IP 172.16.96.116.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1685.001, T1685.004, T1654
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=1626 salida=221 razonamiento=679 total=2526
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=322 salida=64 razonamiento=121 total=507
+   → usar_cve: False | Razón: El diagnóstico concluye que se trata de un falso positivo derivado de un error de parsing de telemetría de hardware/kernel (errores DDR), descartando actividad maliciosa y sin identificar servicios o vulnerabilidades de software explotadas.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=268 salida=126 razonamiento=1123 total=1517
+   → 4 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=3146 salida=399 razonamiento=1440 total=4985
+   → Confianza final: 0.90 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto al descartar un incidente de seguridad. Se trata de una anomalía operativa/hardware (errores de memoria DDR corregidos reportados por RAS/kernel) que fue erróneamente clasificada como fallos de autenticación debido a un fallo en el parser (0% de cobertura). No existe evidencia de actividad maliciosa ni justificación para aplicar bloqueos IP o técnicas de MITRE ATT&CK.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

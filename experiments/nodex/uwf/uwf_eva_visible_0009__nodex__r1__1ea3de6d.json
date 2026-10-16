@@ -1,0 +1,81 @@
+{
+  "case_id": "uwf_eva_visible_0009",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "uwf_eva_visible_0009__nodex__r1__1ea3de6d",
+  "salida": {
+    "case_id": "uwf_eva_visible_0009",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-19 03:49:02.130622",
+        "entities": [],
+        "event_type": "dns_request_burst",
+        "evidence_uids": [
+          "CUjMCs3wKH4vNmvCV9",
+          "CsRFk515EFBckVXrr5",
+          "CGGEDh26gxMSQ1TgK"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-19 04:07:53.375",
+        "entities": [],
+        "event_type": "port_scan",
+        "evidence_uids": [
+          "CfSFRxUfrrip5VyY3",
+          "CNM3a71naQdfdjxXoh",
+          "C5mz8a3woAbHFlMs5l",
+          "CysBBYYHo8wOox6K6",
+          "CfiK6z2bQc7UUlK2Gc"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": [
+        {
+          "id": "T1046",
+          "name": "Network Service Discovery",
+          "evidence_uids": [
+            "CfSFRxUfrrip5VyY3",
+            "CNM3a71naQdfdjxXoh",
+            "C5mz8a3woAbHFlMs5l",
+            "CysBBYYHo8wOox6K6",
+            "CfiK6z2bQc7UUlK2Gc"
+          ]
+        }
+      ]
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe observa un patrón anómalo de tráfico de red compuesto por 300 eventos de Zeek, donde destacan 278 eventos catalogados como críticos. El foco principal de actividad maliciosa o anómala proviene de la IP 143.88.255.10 dirigida a 10.0.10.1, registrando 206 intentos fallidos en servicios DNS en un lapso de 25 minutos, lo que sugiere un posible escaneo, sondeo de infraestructura interna o intento de abuso de resolución DNS (como ráfagas de consultas fallidas o tunneling interrumpido). Asimismo, se detecta actividad sospechosa unidireccional entre 143.88.18.12 y 143.88.18.11 con 60 intentos fallidos. Dado el alto volumen de anomalías y fallos repetitivos hacia el segmento interno, se recomienda aislar o restringir temporalmente el tráfico originado desde 143.88.255.10 y 143.88.18.12, e inspeccionar a nivel de paquete las consultas DNS específicas generadas hacia 10.0.10.1.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Se identifica con claridad un escaneo de puertos TCP activo desde 143.88.18.12 hacia 143.88.18.11 (múltiples puertos comunes como 21, 22, 23, 25, 80, 443, 3389, 5900 con estado SH en rápida sucesión), así como un sondeo persistente e infructuoso de consultas DNS desde 143.88.255.10 hacia 10.0.10.1 con estado S0. Las medidas de contención mediante iptables y conntrack, junto con la captura de tráfico, son plenamente justificadas y pertinentes.\n\n## Comandos de mitigación propuestos\n\n- iptables -I INPUT 1 -s 143.88.255.10 -j DROP\n- iptables -I FORWARD 1 -s 143.88.255.10 -j DROP\n- iptables -I INPUT 1 -s 143.88.18.12 -j DROP\n- iptables -I FORWARD 1 -s 143.88.18.12 -j DROP\n- conntrack -D -s 143.88.255.10\n- conntrack -D -s 143.88.18.12\n- tcpdump -i any -nn -v 'host 10.0.10.1 and port 53' -w /var/log/dns_incident_10.0.10.1.pcap -c 1000 &"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_visible_0009__nodex__r1__1ea3de6d",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "uwf_eva_visible_0009__nodex__r1__1ea3de6d.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:57:01+00:00"
+  }
+}

@@ -1,0 +1,625 @@
+{
+  "case_id": "bgl_eva_natural_0046",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0046__nodex__r1__f250df09",
+  "estado_crudo": {
+    "resumen_logs": {
+      "formato_detectado": "text",
+      "total_lineas": 20,
+      "servicios": {
+        "desconocido": 20
+      },
+      "eventos": {
+        "evento_normal": 20
+      },
+      "ventana_temporal": {
+        "inicio": null,
+        "fin": null
+      },
+      "n_ips_distintas": 0,
+      "ips_distintas": [],
+      "por_ip": {},
+      "usuarios": {},
+      "n_usuarios_distintos": 0,
+      "codigos_respuesta": {},
+      "entidades": [],
+      "cronologia": [],
+      "cronologia_omitidos": 0,
+      "raw_procedencia": {
+        "sha256": "441862354e965ebfcef761ccccf518bcd61b02ced5be31e934388737604ee70c",
+        "lineas": 20,
+        "bytes": 2534
+      },
+      "reputacion_ips": {}
+    },
+    "preprocessing_metadata": {
+      "schema_version": "2.0",
+      "total_lineas_fisicas": 20,
+      "total_eventos": 20,
+      "decoder_distribution": {
+        "text": 20
+      },
+      "product_distribution": {},
+      "vendor_distribution": {},
+      "version_distribution": {},
+      "protocol_distribution": {},
+      "profile_distribution": {},
+      "severity_distribution": {},
+      "event_categories": {},
+      "event_outcomes": {},
+      "entities": {},
+      "time_window": {
+        "inicio": null,
+        "fin": null
+      },
+      "parsing": {
+        "parsed_events": 0,
+        "fallback_events": 20,
+        "coverage": 0.0
+      },
+      "segments": [
+        {
+          "index": 0,
+          "decoder": "text",
+          "line_start": 1,
+          "line_end": 20,
+          "n_records": 20,
+          "confidence": 0.1,
+          "decoder_inicial": "text",
+          "confidence_inicial": 0.1,
+          "decoder_distribution": {
+            "text": 20
+          },
+          "context": {}
+        }
+      ],
+      "entities_resumen": {},
+      "config": {
+        "LOG_DETECTION_CHUNK_SIZE": 50,
+        "LOG_ENABLE_MULTILINE": true,
+        "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+        "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+        "LOG_MAX_EVENTS": 100000,
+        "LOG_MAX_FILE_BYTES": 52428800,
+        "LOG_MAX_RAW_SAMPLES": 20,
+        "LOG_MAX_UNMAPPED_FIELDS": 100,
+        "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+        "LOG_PARSING_MODE": "hybrid",
+        "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+        "LOG_PRESERVE_RAW": true
+      }
+    },
+    "parsing_warnings": [],
+    "raw_samples": [
+      {
+        "decoder": "text",
+        "texto": "1120351671 2005.07.02 R05-M1-NE-C:J12-U01 2005-07-02-17.47.51.984240 R05-M1-NE-C:J12-U01 RAS KERNEL INFO generating core.2117"
+      }
+    ],
+    "evidencia_logs": [
+      {
+        "uid": "log_record_000001",
+        "record_number": 1,
+        "line_start": 1,
+        "line_end": 1,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000002",
+        "record_number": 2,
+        "line_start": 2,
+        "line_end": 2,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000003",
+        "record_number": 3,
+        "line_start": 3,
+        "line_end": 3,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000004",
+        "record_number": 4,
+        "line_start": 4,
+        "line_end": 4,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000005",
+        "record_number": 5,
+        "line_start": 5,
+        "line_end": 5,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000006",
+        "record_number": 6,
+        "line_start": 6,
+        "line_end": 6,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000007",
+        "record_number": 7,
+        "line_start": 7,
+        "line_end": 7,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000008",
+        "record_number": 8,
+        "line_start": 8,
+        "line_end": 8,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000009",
+        "record_number": 9,
+        "line_start": 9,
+        "line_end": 9,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000010",
+        "record_number": 10,
+        "line_start": 10,
+        "line_end": 10,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000011",
+        "record_number": 11,
+        "line_start": 11,
+        "line_end": 11,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000012",
+        "record_number": 12,
+        "line_start": 12,
+        "line_end": 12,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000013",
+        "record_number": 13,
+        "line_start": 13,
+        "line_end": 13,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000014",
+        "record_number": 14,
+        "line_start": 14,
+        "line_end": 14,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000015",
+        "record_number": 15,
+        "line_start": 15,
+        "line_end": 15,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000016",
+        "record_number": 16,
+        "line_start": 16,
+        "line_end": 16,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000017",
+        "record_number": 17,
+        "line_start": 17,
+        "line_end": 17,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000018",
+        "record_number": 18,
+        "line_start": 18,
+        "line_end": 18,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000019",
+        "record_number": 19,
+        "line_start": 19,
+        "line_end": 19,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000020",
+        "record_number": 20,
+        "line_start": 20,
+        "line_end": 20,
+        "timestamp": null
+      }
+    ],
+    "evidencia_logs_omitidos": 0,
+    "eventos_reconstruidos": [
+      {
+        "event_id": "event_001",
+        "evidence_uids": [
+          "log_record_000001"
+        ],
+        "timestamp": null,
+        "event_type": "core_dump_generated",
+        "description": "Terminación anómala del proceso 2117 y generación de volcado de memoria en el nodo R05-M1-NE-C:J12-U01.",
+        "confidence": null
+      }
+    ],
+    "secuencia_temporal": [],
+    "tecnicas_atribuidas": [],
+    "invalid_evidence_uid_count": 0,
+    "d11_warnings": [],
+    "telemetry": {
+      "llm_call_count": 11,
+      "input_tokens": 9468,
+      "output_tokens": 2272,
+      "total_tokens": 22059,
+      "execution_time": 112.58734,
+      "replan_count": 1,
+      "intentos_correccion": 2,
+      "invalid_evidence_uid_count": 0,
+      "d11_warning_count": 0,
+      "llm_calls": [
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 524,
+          "output_tokens": 178,
+          "total_tokens": 1483,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 781,
+          "duration_s": 8.067,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 654,
+          "output_tokens": 279,
+          "total_tokens": 5516,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 4583,
+          "duration_s": 43.447,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 306,
+          "output_tokens": 48,
+          "total_tokens": 524,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 170,
+          "duration_s": 3.986,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 259,
+          "output_tokens": 161,
+          "total_tokens": 1149,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 729,
+          "duration_s": 6.22,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 2225,
+          "output_tokens": 286,
+          "total_tokens": 3695,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 1184,
+          "duration_s": 9.51,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 1446,
+          "output_tokens": 442,
+          "total_tokens": 2517,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 629,
+          "duration_s": 7.03,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 698,
+          "output_tokens": 113,
+          "total_tokens": 1124,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 313,
+          "duration_s": 3.425,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 670,
+          "output_tokens": 171,
+          "total_tokens": 1253,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 412,
+          "duration_s": 5.573,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 265,
+          "output_tokens": 48,
+          "total_tokens": 552,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 239,
+          "duration_s": 7.606,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 218,
+          "output_tokens": 203,
+          "total_tokens": 1019,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 598,
+          "duration_s": 6.977,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 2203,
+          "output_tokens": 343,
+          "total_tokens": 3227,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 681,
+          "duration_s": 10.547,
+          "error": null
+        }
+      ]
+    },
+    "firma": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+    "plan": {
+      "plan_version": 2,
+      "objetivo": "Profundizar en el análisis del volcado de memoria (core.2117) en BlueGene/L RAS para descartar un vector de explotación por desbordamiento de memoria o denegación de servicio frente a una falla operativa.",
+      "pasos": [
+        {
+          "id": 1,
+          "accion": "triage",
+          "objetivo": "Reevaluar detalladamente los registros del nodo R05-M1-NE-C:J12-U01 y el contexto de generación del core dump para caracterizar el tipo de fallo de kernel o proceso.",
+          "estado": "ejecutado"
+        },
+        {
+          "id": 2,
+          "accion": "rag",
+          "objetivo": "Consultar técnicas MITRE ATT&CK y casos históricos sobre explotación de memoria, fallos inducidos y desbordamientos en entornos de computación de alto rendimiento.",
+          "estado": "ejecutado"
+        },
+        {
+          "id": 3,
+          "accion": "cve",
+          "objetivo": "Buscar vulnerabilidades conocidas asociadas a componentes de BlueGene/L RAS y kernels relacionados con cierres inesperados o volcados de memoria.",
+          "estado": "omitido",
+          "motivo": "No se especifica ningún servicio, software o vulnerabilidad concreta en el diagnóstico, indicando más bien un fallo operativo interno sin evidencia de explotación o CVE identificable."
+        },
+        {
+          "id": 4,
+          "accion": "mitigacion",
+          "objetivo": "Generar recomendaciones específicas para el análisis forense del core dump, endurecimiento del nodo y reglas de ingesta/monitoreo estructurado de logs RAS.",
+          "estado": "ejecutado"
+        }
+      ],
+      "criterios_finalizacion": [
+        "Evaluación de causa raíz entre fallo operacional vs explotación maliciosa concluida.",
+        "Correlación con técnicas MITRE ATT&CK y vulnerabilidades BlueGene/L finalizada.",
+        "Plan de mitigación y procedimientos forenses para el archivo core.2117 formulados."
+      ]
+    },
+    "plan_objetivo": "Profundizar en el análisis del volcado de memoria (core.2117) en BlueGene/L RAS para descartar un vector de explotación por desbordamiento de memoria o denegación de servicio frente a una falla operativa.",
+    "paso_actual": 4,
+    "historial_ejecucion": [
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_planificador",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "plan v1, 2 pasos: ['triage', 'mitigacion']"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 1,
+        "nodo": "agente_analista_triage",
+        "accion": "triage",
+        "estado": "ejecutado",
+        "resumen": "diagnóstico producido"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_selector_herramientas",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "usar_cve=False"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 2,
+        "nodo": "agente_ingeniero_mitigacion",
+        "accion": "mitigacion",
+        "estado": "ejecutado",
+        "resumen": "6 comandos propuestos"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "tool_validar_comandos",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "comandos válidos"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_auditor_final",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "confianza=0.85 cobertura_suficiente=False"
+      },
+      {
+        "plan_version": 2,
+        "step_id": null,
+        "nodo": "agente_planificador",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "plan v2, 4 pasos: ['triage', 'rag', 'cve', 'mitigacion']"
+      },
+      {
+        "plan_version": 2,
+        "step_id": 1,
+        "nodo": "agente_analista_triage",
+        "accion": "triage",
+        "estado": "ejecutado",
+        "resumen": "solicitó contexto histórico (RAG)"
+      },
+      {
+        "plan_version": 2,
+        "step_id": 2,
+        "nodo": "tool_consultar_rag",
+        "accion": "rag",
+        "estado": "ejecutado",
+        "resumen": "0 patrones, 0 técnicas MITRE"
+      },
+      {
+        "plan_version": 2,
+        "step_id": 1,
+        "nodo": "agente_analista_triage",
+        "accion": "triage",
+        "estado": "ejecutado",
+        "resumen": "diagnóstico producido"
+      },
+      {
+        "plan_version": 2,
+        "step_id": null,
+        "nodo": "agente_selector_herramientas",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "usar_cve=False"
+      },
+      {
+        "plan_version": 2,
+        "step_id": 4,
+        "nodo": "agente_ingeniero_mitigacion",
+        "accion": "mitigacion",
+        "estado": "ejecutado",
+        "resumen": "7 comandos propuestos"
+      },
+      {
+        "plan_version": 2,
+        "step_id": null,
+        "nodo": "tool_validar_comandos",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "comandos válidos"
+      },
+      {
+        "plan_version": 2,
+        "step_id": null,
+        "nodo": "agente_auditor_final",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "confianza=0.75 cobertura_suficiente=False"
+      }
+    ],
+    "desviaciones_plan": [],
+    "historial_planes": [
+      {
+        "version": 1,
+        "plan": {
+          "plan_version": 1,
+          "objetivo": "Analizar las 20 líneas de eventos en texto libre no estructurado para evaluar posibles anomalías de seguridad y proponer medidas de contención y mejora de ingesta.",
+          "pasos": [
+            {
+              "id": 1,
+              "accion": "triage",
+              "objetivo": "Realizar diagnóstico inicial e inspeccionar el contenido de texto plano sin estructurar para identificar entidades y posibles indicios de compromiso.",
+              "estado": "ejecutado"
+            },
+            {
+              "id": 2,
+              "accion": "mitigacion",
+              "objetivo": "Proponer acciones de contención o recomendaciones para el correcto parseo y monitoreo de los eventos identificados.",
+              "estado": "ejecutado"
+            }
+          ],
+          "criterios_finalizacion": [
+            "Diagnóstico inicial de las 20 líneas de texto completado.",
+            "Recomendaciones de mitigación o remediación generadas."
+          ]
+        },
+        "motivo_reemplazo": "Se requiere inspeccionar el contenido del archivo core.2117 y analizar los registros estructurados del nodo para descartar de forma definitiva un vector de explotación (desbordamiento de memoria o DoS) frente a una falla operativa de software.",
+        "resultados_asociados": {
+          "eventos_reconstruidos": [
+            {
+              "event_id": "event_001",
+              "evidence_uids": [
+                "log_record_000001"
+              ],
+              "timestamp": null,
+              "event_type": "core_dump_generated",
+              "description": "Registro de generación de volcado de memoria (core.2117) en nodo BlueGene/L RAS a nivel de kernel.",
+              "confidence": null
+            }
+          ],
+          "secuencia_temporal": [],
+          "tecnicas_atribuidas": [],
+          "intentos_correccion": 1,
+          "diagnostico": "Los eventos corresponden a registros de infraestructura de alto rendimiento (BlueGene/L RAS) donde se reporta la generación de un volcado de memoria ('generating core.2117') en el nodo R05-M1-NE-C:J12-U01 a nivel de kernel. No se aprecian indicadores directos de compromiso (IoCs) ni actividad maliciosa interactiva, tratándose preliminarmente de un fallo operativo o inestabilidad de aplicación. Medidas recomendadas: 1) Contención/Operaciones: Analizar el volcado de memoria (core dump) para verificar si la caída fue provocada por una excepción interna o un intento de explotación de memoria (posible DoS/Buffer Overflow). 2) Mejora de ingesta: Implementar un parser estructurado (Grok/regex) específico para formatos RAS/BGL para normalizar marcas de tiempo, componentes y niveles de severidad.",
+          "evaluacion_auditor": "El diagnóstico es adecuado al identificar la generación de un volcado de memoria como una anomalía operativa a nivel de infraestructura/kernel sin evidencia de compromiso malicioso directo.",
+          "hay_anomalia": true,
+          "hay_incidente": false,
+          "confianza": 0.85,
+          "cobertura_auditor": false,
+          "cobertura_suficiente": false,
+          "n_pasos_ejecutados": 2,
+          "n_pasos_fallidos": 0
+        }
+      }
+    ],
+    "replan_count": 1,
+    "diagnostico": "Se observa en los registros de RAS KERNEL del sistema BlueGene/L la generación de un volcado de memoria (core.2117). El evento refleja una terminación anómala del proceso 2117 en el nodo R05-M1-NE-C:J12-U01. En el lote actual no se aprecian direcciones IP, accesos remotos ni indicadores de compromiso explícitos que confirmen explotación activa por desbordamiento de búfer o denegación de servicio intencionada. Por tanto, no se descarta una falla operativa interna del software o del hardware frente a un vector de ataque, requiriéndose el análisis directo del archivo core dump para determinar la causa raíz del fallo.",
+    "necesita_rag": false,
+    "usar_cve": false,
+    "razon_seleccion": "No se especifica ningún servicio, software o vulnerabilidad concreta en el diagnóstico, indicando más bien un fallo operativo interno sin evidencia de explotación o CVE identificable.",
+    "contexto_rag": [],
+    "tecnicas_mitre": [],
+    "cves_encontrados": [],
+    "comandos_mitigacion": [
+      "chmod 0600 core.2117 2>/dev/null || true",
+      "sha256sum core.2117 > core.2117.sha256 2>/dev/null || true",
+      "sysctl -w fs.suid_dumpable=0",
+      "sysctl -w kernel.core_uses_pid=1",
+      "echo 'fs.suid_dumpable = 0' > /etc/sysctl.d/99-core-dump-hardening.conf",
+      "auditctl -a always,exit -F arch=b64 -S kill,tgkill,tkill -k process_termination",
+      "dmesg -T | grep -E 'segfault|trap|general protection' | tail -n 20"
+    ],
+    "comandos_validos": true,
+    "motivos_rechazo": [],
+    "intentos_correccion": 1,
+    "confianza": 0.75,
+    "hay_incidente": false,
+    "hay_anomalia": true,
+    "evaluacion_auditor": "El registro describe la generación de un core dump (core.2117) tras la terminación anómala de un proceso en un nodo de BlueGene/L. Aunque constituye una anomalía operativa del sistema, no existen indicadores de compromiso, vectores de ataque remotos ni actividad maliciosa evidente en los registros analizados.",
+    "cobertura_auditor": false,
+    "cobertura_suficiente": false,
+    "motivo_replanificacion": "Se requiere el análisis forense y de depuración del archivo de volcado de memoria (core.2117), así como registros complementarios del sistema operativo y de red, sumado a que el preprocesamiento del lote tuvo un 0% de cobertura de parseo.",
+    "requiere_replanificacion": true,
+    "_firma": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+    "_error_api": null,
+    "requiere_revision_humana": false,
+    "output_contract_version": "d11-v1"
+  }
+}

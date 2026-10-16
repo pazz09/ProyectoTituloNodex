@@ -1,0 +1,110 @@
+{
+  "case_id": "bgl_eva_balanceado_0009",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0009__gemext__r1__3da13f35",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0009",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "EVT-01",
+        "timestamp": "2005-07-13-21.06.14 a 2005-07-13-21.10.48",
+        "entities": [],
+        "event_type": "Application Failure / Core Dump",
+        "evidence_uids": [
+          "1121313974",
+          "1121314001",
+          "1121314022",
+          "1121314138",
+          "1121314248"
+        ]
+      },
+      {
+        "uid": "EVT-02",
+        "timestamp": "2005-07-14-16.20.22",
+        "entities": [],
+        "event_type": "File Permission Error",
+        "evidence_uids": [
+          "1121383222"
+        ]
+      },
+      {
+        "uid": "EVT-03",
+        "timestamp": "2005-07-14-23.18.19",
+        "entities": [],
+        "event_type": "Configuration Topology Error",
+        "evidence_uids": [
+          "1121408299"
+        ]
+      },
+      {
+        "uid": "EVT-04",
+        "timestamp": "2005-07-15-08.41.01 a 2005-07-15-11.14.31",
+        "entities": [],
+        "event_type": "Application Failure / Core Dump",
+        "evidence_uids": [
+          "1121442061",
+          "1121442070",
+          "1121442075",
+          "1121442115",
+          "1121442124",
+          "1121451271"
+        ]
+      },
+      {
+        "uid": "EVT-05",
+        "timestamp": "2005-07-15-20.30.59",
+        "entities": [],
+        "event_type": "Hardware Memory ECC Correction",
+        "evidence_uids": [
+          "1121484659"
+        ]
+      },
+      {
+        "uid": "EVT-06",
+        "timestamp": "2005-07-15-23.03.26 a 2005-07-15-23.09.04",
+        "entities": [],
+        "event_type": "Application Failure / Core Dump",
+        "evidence_uids": [
+          "1121493806",
+          "1121493886",
+          "1121493913",
+          "1121494125",
+          "1121494129",
+          "1121494144"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl registro corresponde a eventos operativos y de ejecución en un supercomputador IBM Blue Gene/L. Se observan múltiples volcados de memoria (core dumps) derivados de fallos en procesos de computación científica (ej. suite sweep3d ejecutada por el usuario pakin1), un error de permisos en el sistema de archivos al intentar crear un mapa de nodos, un error de configuración de dimensiones físicas de la red toroidal (coordenada Z excede el límite físico) y un fallo de paridad de memoria RAM corregido por ECC (1 ddr error detected and corrected). No existe evidencia de actividad maliciosa ni intrusión; se trata exclusivamente de incidencias operativas y fallos de software/hardware normales en entornos HPC.\n\n## Evaluación del auditor\n\nLa hipótesis de compromiso de seguridad se descarta. Los eventos corresponden a patrones típicos de fallos de aplicación y configuración en HPC: core dumps provocados por fallos en tareas MPI o abortos de aplicación, errores de configuración de topología de red en ciod y fallos de hardware transitorios corregidos automáticamente por hardware ECC."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0009__gemext__r1__3da13f35",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0009__gemext__r1__3da13f35.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T01:56:28+00:00"
+  }
+}

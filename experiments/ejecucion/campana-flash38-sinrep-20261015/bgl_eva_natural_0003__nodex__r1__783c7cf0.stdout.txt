@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=680 salida=299 razonamiento=791 total=1770
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=863 salida=264 razonamiento=619 total=1746
+   → No hace falta RAG (El plan de investigación no contempla consultar memoria histórica y los registros crudos suministrados son suficientes para identificar el origen (logs de IBM Blue Gene/L), el servicio (`ciod`) y la naturaleza operacional/no maliciosa del error.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=303 salida=65 razonamiento=157 total=525
+   → usar_cve: False | Razón: El diagnóstico concluye que no hay actividad maliciosa ni vulnerabilidad de seguridad explotada, sino un error de ejecución/formato de binario en una aplicación de supercomputación (IBM Blue Gene/L).
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=256 salida=216 razonamiento=883 total=1355
+   → 6 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2297 salida=292 razonamiento=523 total=3112
+   → Confianza final: 0.90 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es preciso. Los registros reflejan un fallo operativo de ejecución en una supercomputadora Blue Gene/L (ciod reportando 'Exec format error: invalid or missing program image' para el binario allreduce.rts). No existen indicios de actividad maliciosa ni intrusión; se trata estrictamente de un problema de compatibilidad, ruta o permisos de binario en HPC.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3047 salida=390 razonamiento=873 total=4310
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3312 salida=148 razonamiento=386 total=3846
+   → Solicitando RAG (El resumen muestra 261 fallos DNS entre 143.88.255.10 y 10.0.10.1 sin detallar tipos de registro (queries), nombres de dominio ni códigos de respuesta (RCODEs), por lo que se requiere consultar la base de conocimiento histórico y técnicas MITRE ATT&CK (como T1071.004 y T1048.003) para correlacionar patrones y discernir con precisión entre tunneling, escaneo o denegación de servicio.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1584.002, T1071.004, T1590.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=4021 salida=211 razonamiento=479 total=4711
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=323 salida=66 razonamiento=129 total=518
+   → usar_cve: False | Razón: El diagnóstico describe técnicas de reconocimiento o tunelización DNS (T1590.002, T1071.004) sin mencionar un software, versión o vulnerabilidad específica que requiera la búsqueda de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=258 salida=234 razonamiento=875 total=1367
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=48201 salida=755 razonamiento=1913 total=50869
+   → Confianza final: 0.90 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | Se observa un tráfico constante de consultas DNS UDP (puerto 53) desde 143.88.255.10 hacia 10.0.10.1 con estado de conexión 'S0' (sin respuesta del servidor). El diagnóstico confunde la ausencia de respuesta a nivel de transporte (S0) con respuestas DNS de error como NXDOMAIN, proponiendo comandos para filtrar logs de NXDOMAIN que no existirán para estas conexiones unidireccionales. Además, la tasa (~8 consultas cada 30 segundos) y la regularidad temporal son características de reintentos periódicos de un resolver o servicio local mal configurado apuntando a un servidor DNS inalcanzable, no de fuerza bruta/enumeración de subdominios ni DNS tunneling.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

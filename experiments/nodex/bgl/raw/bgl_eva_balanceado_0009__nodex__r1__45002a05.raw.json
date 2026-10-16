@@ -1,0 +1,670 @@
+{
+  "case_id": "bgl_eva_balanceado_0009",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0009__nodex__r1__45002a05",
+  "estado_crudo": {
+    "resumen_logs": {
+      "formato_detectado": "auth_log",
+      "total_lineas": 20,
+      "servicios": {
+        "desconocido": 20
+      },
+      "eventos": {
+        "evento_critico": 1,
+        "evento_normal": 19
+      },
+      "ventana_temporal": {
+        "inicio": null,
+        "fin": null
+      },
+      "n_ips_distintas": 0,
+      "ips_distintas": [],
+      "por_ip": {},
+      "usuarios": {},
+      "n_usuarios_distintos": 0,
+      "codigos_respuesta": {},
+      "entidades": [],
+      "cronologia": [
+        {
+          "n": 6,
+          "timestamp": null,
+          "servicio": null,
+          "evento": "evento_critico",
+          "mensaje": "1121383222 2005.07.14 R01-M0-N0-I:J18-U11 2005-07-14-16.20.22.672549 R01-M0-N0-I:J18-U11 RAS APP FATAL ciod: Error creating node map from file /home/pakin1/sweep3d-2.2b/results/ran…"
+        }
+      ],
+      "cronologia_omitidos": 0,
+      "raw_procedencia": {
+        "sha256": "0fb8f6c99b7a2a4ed68f9a4ef919e06bcf44d16293603aacaaec0fddba416755",
+        "lineas": 20,
+        "bytes": 2786
+      },
+      "reputacion_ips": {}
+    },
+    "preprocessing_metadata": {
+      "schema_version": "2.0",
+      "total_lineas_fisicas": 20,
+      "total_eventos": 20,
+      "decoder_distribution": {
+        "text": 20
+      },
+      "product_distribution": {},
+      "vendor_distribution": {},
+      "version_distribution": {},
+      "protocol_distribution": {},
+      "profile_distribution": {
+        "auth_log": 1
+      },
+      "severity_distribution": {},
+      "event_categories": {
+        "authentication": 1
+      },
+      "event_outcomes": {
+        "failure": 1
+      },
+      "entities": {},
+      "time_window": {
+        "inicio": null,
+        "fin": null
+      },
+      "parsing": {
+        "parsed_events": 0,
+        "fallback_events": 20,
+        "coverage": 0.0
+      },
+      "segments": [
+        {
+          "index": 0,
+          "decoder": "text",
+          "line_start": 1,
+          "line_end": 20,
+          "n_records": 20,
+          "confidence": 0.1,
+          "decoder_inicial": "text",
+          "confidence_inicial": 0.1,
+          "decoder_distribution": {
+            "text": 20
+          },
+          "context": {}
+        }
+      ],
+      "entities_resumen": {},
+      "config": {
+        "LOG_DETECTION_CHUNK_SIZE": 50,
+        "LOG_ENABLE_MULTILINE": true,
+        "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+        "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+        "LOG_MAX_EVENTS": 100000,
+        "LOG_MAX_FILE_BYTES": 52428800,
+        "LOG_MAX_RAW_SAMPLES": 20,
+        "LOG_MAX_UNMAPPED_FIELDS": 100,
+        "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+        "LOG_PARSING_MODE": "hybrid",
+        "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+        "LOG_PRESERVE_RAW": true
+      }
+    },
+    "parsing_warnings": [],
+    "raw_samples": [
+      {
+        "decoder": "text",
+        "texto": "1121313974 2005.07.13 R21-M0-N9-C:J17-U11 2005-07-13-21.06.14.855951 R21-M0-N9-C:J17-U11 RAS KERNEL INFO generating core.27704"
+      }
+    ],
+    "evidencia_logs": [
+      {
+        "uid": "log_record_000001",
+        "record_number": 1,
+        "line_start": 1,
+        "line_end": 1,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000002",
+        "record_number": 2,
+        "line_start": 2,
+        "line_end": 2,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000003",
+        "record_number": 3,
+        "line_start": 3,
+        "line_end": 3,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000004",
+        "record_number": 4,
+        "line_start": 4,
+        "line_end": 4,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000005",
+        "record_number": 5,
+        "line_start": 5,
+        "line_end": 5,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000006",
+        "record_number": 6,
+        "line_start": 6,
+        "line_end": 6,
+        "timestamp": null,
+        "event_category": "authentication",
+        "event_action": "login",
+        "event_outcome": "failure"
+      },
+      {
+        "uid": "log_record_000007",
+        "record_number": 7,
+        "line_start": 7,
+        "line_end": 7,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000008",
+        "record_number": 8,
+        "line_start": 8,
+        "line_end": 8,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000009",
+        "record_number": 9,
+        "line_start": 9,
+        "line_end": 9,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000010",
+        "record_number": 10,
+        "line_start": 10,
+        "line_end": 10,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000011",
+        "record_number": 11,
+        "line_start": 11,
+        "line_end": 11,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000012",
+        "record_number": 12,
+        "line_start": 12,
+        "line_end": 12,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000013",
+        "record_number": 13,
+        "line_start": 13,
+        "line_end": 13,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000014",
+        "record_number": 14,
+        "line_start": 14,
+        "line_end": 14,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000015",
+        "record_number": 15,
+        "line_start": 15,
+        "line_end": 15,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000016",
+        "record_number": 16,
+        "line_start": 16,
+        "line_end": 16,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000017",
+        "record_number": 17,
+        "line_start": 17,
+        "line_end": 17,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000018",
+        "record_number": 18,
+        "line_start": 18,
+        "line_end": 18,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000019",
+        "record_number": 19,
+        "line_start": 19,
+        "line_end": 19,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000020",
+        "record_number": 20,
+        "line_start": 20,
+        "line_end": 20,
+        "timestamp": null
+      }
+    ],
+    "evidencia_logs_omitidos": 0,
+    "eventos_reconstruidos": [
+      {
+        "event_id": "event_001",
+        "evidence_uids": [
+          "log_record_000006"
+        ],
+        "timestamp": null,
+        "event_type": "authentication_failure",
+        "description": "Fallo de inicio de sesión registrado en los registros del sistema.",
+        "confidence": null
+      }
+    ],
+    "secuencia_temporal": [],
+    "tecnicas_atribuidas": [],
+    "invalid_evidence_uid_count": 0,
+    "d11_warnings": [],
+    "telemetry": {
+      "llm_call_count": 11,
+      "input_tokens": 12133,
+      "output_tokens": 2012,
+      "total_tokens": 22248,
+      "execution_time": 93.708417,
+      "replan_count": 1,
+      "intentos_correccion": 2,
+      "invalid_evidence_uid_count": 0,
+      "d11_warning_count": 0,
+      "llm_calls": [
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 564,
+          "output_tokens": 166,
+          "total_tokens": 1629,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 899,
+          "duration_s": 10.246,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 681,
+          "output_tokens": 109,
+          "total_tokens": 1275,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 485,
+          "duration_s": 5.427,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 1444,
+          "output_tokens": 208,
+          "total_tokens": 2068,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 416,
+          "duration_s": 6.204,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 309,
+          "output_tokens": 61,
+          "total_tokens": 807,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 437,
+          "duration_s": 5.514,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 255,
+          "output_tokens": 135,
+          "total_tokens": 800,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 410,
+          "duration_s": 6.355,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 3005,
+          "output_tokens": 340,
+          "total_tokens": 4976,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 1631,
+          "duration_s": 14.785,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 1645,
+          "output_tokens": 278,
+          "total_tokens": 2836,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 913,
+          "duration_s": 11.023,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 702,
+          "output_tokens": 253,
+          "total_tokens": 1756,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 801,
+          "duration_s": 9.322,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 295,
+          "output_tokens": 55,
+          "total_tokens": 550,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 200,
+          "duration_s": 3.524,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 241,
+          "output_tokens": 115,
+          "total_tokens": 1057,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 701,
+          "duration_s": 7.956,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 2992,
+          "output_tokens": 292,
+          "total_tokens": 4494,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 1210,
+          "duration_s": 13.171,
+          "error": null
+        }
+      ]
+    },
+    "firma": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:1,evento_normal:19] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:1] cobertura=0.0",
+    "plan": {
+      "plan_version": 2,
+      "objetivo": "Investigar el origen del volcado de memoria (core.27704) en el subsistema RAS Kernel para descartar explotación de software y definir medidas forenses y operativas.",
+      "pasos": [
+        {
+          "id": 1,
+          "accion": "triage",
+          "objetivo": "Examinar los detalles del volcado core.27704 y registros del subsistema RAS Kernel para determinar el proceso afectado y descartar indicios de explotación o corrupción intencionada de memoria.",
+          "estado": "ejecutado"
+        },
+        {
+          "id": 2,
+          "accion": "mitigacion",
+          "objetivo": "Establecer acciones para la preservación forense del volcado de memoria, endurecimiento de la gestión de core dumps y ajuste de reglas de ingestión/parsing para eventos RAS Kernel.",
+          "estado": "ejecutado"
+        }
+      ],
+      "criterios_finalizacion": [
+        "Determinación del binario/proceso asociado a core.27704 y evaluación de potencial explotación de memoria.",
+        "Procedimiento de recolección forense y remediación de estabilidad operativa documentado."
+      ]
+    },
+    "plan_objetivo": "Investigar el origen del volcado de memoria (core.27704) en el subsistema RAS Kernel para descartar explotación de software y definir medidas forenses y operativas.",
+    "paso_actual": 2,
+    "historial_ejecucion": [
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_planificador",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "plan v1, 2 pasos: ['triage', 'mitigacion']"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 1,
+        "nodo": "agente_analista_triage",
+        "accion": "triage",
+        "estado": "ejecutado",
+        "resumen": "solicitó contexto histórico (RAG)"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "tool_consultar_rag",
+        "accion": "rag",
+        "estado": "ejecutado",
+        "resumen": "0 patrones, 3 técnicas MITRE"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 1,
+        "nodo": "agente_analista_triage",
+        "accion": "triage",
+        "estado": "ejecutado",
+        "resumen": "diagnóstico producido"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_selector_herramientas",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "usar_cve=False"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 2,
+        "nodo": "agente_ingeniero_mitigacion",
+        "accion": "mitigacion",
+        "estado": "ejecutado",
+        "resumen": "6 comandos propuestos"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "tool_validar_comandos",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "comandos válidos"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_auditor_final",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "confianza=0.85 cobertura_suficiente=False"
+      },
+      {
+        "plan_version": 2,
+        "step_id": null,
+        "nodo": "agente_planificador",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "plan v2, 2 pasos: ['triage', 'mitigacion']"
+      },
+      {
+        "plan_version": 2,
+        "step_id": 1,
+        "nodo": "agente_analista_triage",
+        "accion": "triage",
+        "estado": "ejecutado",
+        "resumen": "diagnóstico producido"
+      },
+      {
+        "plan_version": 2,
+        "step_id": null,
+        "nodo": "agente_selector_herramientas",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "usar_cve=False"
+      },
+      {
+        "plan_version": 2,
+        "step_id": 2,
+        "nodo": "agente_ingeniero_mitigacion",
+        "accion": "mitigacion",
+        "estado": "ejecutado",
+        "resumen": "6 comandos propuestos"
+      },
+      {
+        "plan_version": 2,
+        "step_id": null,
+        "nodo": "tool_validar_comandos",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "comandos válidos"
+      },
+      {
+        "plan_version": 2,
+        "step_id": null,
+        "nodo": "agente_auditor_final",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "confianza=0.85 cobertura_suficiente=True"
+      }
+    ],
+    "desviaciones_plan": [
+      {
+        "plan_version": 1,
+        "accion": "rag",
+        "nodo": "tool_consultar_rag",
+        "evidencia": "el triage solicitó contexto histórico",
+        "motivo": "el plan no incluía un paso de recuperación de memoria"
+      }
+    ],
+    "historial_planes": [
+      {
+        "version": 1,
+        "plan": {
+          "plan_version": 1,
+          "objetivo": "Analizar e investigar el evento crítico de autenticación no estructurado y definir medidas de respuesta.",
+          "pasos": [
+            {
+              "id": 1,
+              "accion": "triage",
+              "objetivo": "Inspeccionar las líneas en texto libre para categorizar el evento crítico y evaluar el alcance de los registros de autenticación.",
+              "estado": "ejecutado"
+            },
+            {
+              "id": 2,
+              "accion": "mitigacion",
+              "objetivo": "Proponer directrices de contención y aseguramiento frente a las anomalías de autenticación identificadas.",
+              "estado": "ejecutado"
+            }
+          ],
+          "criterios_finalizacion": [
+            "Naturaleza e impacto del evento crítico determinados mediante el triage.",
+            "Plan de mitigación y contención establecido para los accesos o fallos observados."
+          ]
+        },
+        "motivo_reemplazo": "La cobertura de parsing es del 0% y no se cuenta con los metadatos estructurados ni el binario específico que causó el core dump para verificar de manera concluyente si el fallo estuvo asociado a una explotación de software o a una falla no maliciosa.",
+        "resultados_asociados": {
+          "eventos_reconstruidos": [
+            {
+              "event_id": "event_001",
+              "evidence_uids": [
+                "log_record_000006"
+              ],
+              "timestamp": null,
+              "event_type": "process_crash",
+              "description": "Fallo de proceso en subsistema RAS Kernel con generación de volcado de memoria core.27704.",
+              "confidence": null
+            }
+          ],
+          "secuencia_temporal": [],
+          "tecnicas_atribuidas": [],
+          "intentos_correccion": 1,
+          "diagnostico": "El análisis del lote revela una discrepancia entre la clasificación preliminar de autenticación y el contenido real de los registros. La muestra cruda ('generating core.27704' en subsistema RAS KERNEL) corresponde a logs de sistema/núcleo (aparentemente arquitectura HPC/BlueGene) reportando la generación de un volcado de memoria (core dump) por fallo de proceso, y no a eventos de autenticación ni a manipulación maliciosa de registros. Con una cobertura de parsing del 0% y sin evidencias de actividad adversaria, ninguna de las técnicas MITRE ATT&CK sugeridas (T1685.001, T1685.004, T1654) aplica a este evento. Se clasifica preliminarmente como fallo operativo/estabilidad de sistema y se recomienda adaptar los analizadores léxicos para logs de tipo RAS/Kernel.",
+          "evaluacion_auditor": "El diagnóstico es acertado al identificar que los eventos reflejan fallos operativos del sistema (generación de un volcado de memoria core.27704) y no eventos de autenticación ni técnicas de manipulación maliciosa de logs (T1685, T1654). Al tratarse de un fallo de estabilidad operativa sin indicios de actividad adversaria, no constituye un incidente de seguridad.",
+          "hay_anomalia": true,
+          "hay_incidente": false,
+          "confianza": 0.85,
+          "cobertura_auditor": false,
+          "cobertura_suficiente": false,
+          "n_pasos_ejecutados": 2,
+          "n_pasos_fallidos": 0
+        }
+      }
+    ],
+    "replan_count": 1,
+    "diagnostico": "El evento analizado corresponde a la generación de un volcado de memoria (core.27704) por parte del subsistema RAS KERNEL en el nodo R21-M0-N9-C:J17-U11, clasificado a nivel INFO. En el conjunto de registros proporcionado no se observan indicios de actividad hostil, explotación remota ni autenticación sospechosa; la causa apunta a una terminación anómala del proceso (p. ej., fallo de segmentación o error de aplicación/hardware en el entorno Blue Gene/HPC). Se recomienda realizar análisis forense/post-mortem del archivo core.27704 mediante depurador (gdb) para inspeccionar la pila de llamadas (stack trace), validar la integridad del binario involucrado y monitorizar la estabilidad del nodo.",
+    "necesita_rag": false,
+    "usar_cve": false,
+    "razon_seleccion": "El diagnóstico no identifica ninguna vulnerabilidad específica ni software vulnerable explotado; se trata de una terminación anómala del proceso (core dump) sin indicios de actividad maliciosa o ataque.",
+    "contexto_rag": [],
+    "tecnicas_mitre": [
+      {
+        "texto": "Disable or Modify Windows Event Log. Adversaries may disable or modify the Windows Event Log to limit data that can be leveraged for detections and audits. Windows Event Log records user and system activity such as login attempts and process creation.(Citation: EventLog_Core_Technologies) This data is used by security tools and analysts to generate detections. \n\nThe EventLog service maintains event logs from various system components and applications. By default, the service automatically starts when a system powers on. An audit policy, maintained by the Local Security Policy (secpol.msc), defines which system events the EventLog service logs. Security audit policy settings can be changed by running secpol.msc, then navigating to `Security Settings\\Local Policies\\Audit Policy` for basic au",
+        "meta": {
+          "is_subtechnique": true,
+          "name": "Disable or Modify Windows Event Log",
+          "url": "https://attack.mitre.org/techniques/T1685/001",
+          "tactics": "defense-impairment",
+          "technique_id": "T1685.001"
+        },
+        "similitud": 0.537
+      },
+      {
+        "texto": "Disable or Modify Linux Audit System Log. Adversaries may disable or modify the Linux Audit system to hide malicious activity and avoid detection. Linux admins use the Linux Audit system to track security-relevant information on a system. The Linux Audit system operates at the kernel-level and maintains event logs on application and system activity such as process, network, file, and login events based on pre-configured rules. \n\nOften referred to as `auditd`, this is the name of the daemon used to write events to disk and is governed by the parameters set in the `audit.conf` configuration file. Two primary ways to configure the log generation rules are through the command line `auditctl` utility and the file `/etc/audit/audit.rules`, containing a sequence of `auditctl` commands loaded at b",
+        "meta": {
+          "tactics": "defense-impairment",
+          "technique_id": "T1685.004",
+          "is_subtechnique": true,
+          "name": "Disable or Modify Linux Audit System Log",
+          "url": "https://attack.mitre.org/techniques/T1685/004"
+        },
+        "similitud": 0.498
+      },
+      {
+        "texto": "Log Enumeration. Adversaries may enumerate system and service logs to find useful data. These logs may highlight various types of valuable insights for an adversary, such as user authentication records ([Account Discovery](https://attack.mitre.org/techniques/T1087)), security or vulnerable software ([Software Discovery](https://attack.mitre.org/techniques/T1518)), or hosts within a compromised network ([Remote System Discovery](https://attack.mitre.org/techniques/T1018)).\n\nHost binaries may be leveraged to collect system logs. Examples include using `wevtutil.exe` or [PowerShell](https://attack.mitre.org/techniques/T1059/001) on Windows to access and/or export security event information.(Citation: WithSecure Lazarus-NoPineapple Threat Intel Report 2023)(Citation: Cadet Blizzard emerges as ",
+        "meta": {
+          "name": "Log Enumeration",
+          "url": "https://attack.mitre.org/techniques/T1654",
+          "technique_id": "T1654",
+          "tactics": "discovery",
+          "is_subtechnique": false
+        },
+        "similitud": 0.468
+      }
+    ],
+    "cves_encontrados": [],
+    "comandos_mitigacion": [
+      "file core.27704",
+      "gdb --batch -ex 'thread apply all bt full' -c core.27704",
+      "dmesg -T | grep -E -i 'segfault|trap|oom|killed' | tail -n 25",
+      "journalctl -p 3 -xb --no-pager",
+      "edac-util -v",
+      "rpm -Va --nomtime 2>/dev/null || dpkg --verify 2>/dev/null"
+    ],
+    "comandos_validos": true,
+    "motivos_rechazo": [],
+    "intentos_correccion": 1,
+    "confianza": 0.85,
+    "hay_incidente": false,
+    "hay_anomalia": true,
+    "evaluacion_auditor": "El diagnóstico es consistente al determinar que el volcado de memoria (core dump) en el nodo HPC representa una anomalía operativa o fallo de proceso de software/hardware, sin evidencia de actividad maliciosa o intrusión. Las acciones recomendadas con gdb, dmesg y validación de integridad son técnicamente pertinentes para depurar el error.",
+    "cobertura_auditor": true,
+    "cobertura_suficiente": true,
+    "motivo_replanificacion": "",
+    "requiere_replanificacion": false,
+    "_firma": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:1,evento_normal:19] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:1] cobertura=0.0",
+    "_error_api": null,
+    "requiere_revision_humana": false,
+    "output_contract_version": "d11-v1"
+  }
+}

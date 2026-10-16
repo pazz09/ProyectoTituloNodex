@@ -1,0 +1,70 @@
+{
+  "case_id": "bgl_eva_balanceado_0005",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0005__nodex__r1__e2fdf0b5",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0005",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "network_transmission_error",
+        "evidence_uids": [
+          "log_record_000001",
+          "log_record_000002",
+          "log_record_000003",
+          "log_record_000004",
+          "log_record_000005",
+          "log_record_000006",
+          "log_record_000007",
+          "log_record_000008",
+          "log_record_000009",
+          "log_record_000010",
+          "log_record_000011",
+          "log_record_000012",
+          "log_record_000013",
+          "log_record_000014",
+          "log_record_000015",
+          "log_record_000016",
+          "log_record_000017",
+          "log_record_000018",
+          "log_record_000019",
+          "log_record_000020"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nNo se observan indicios de actividad maliciosa ni anómala de seguridad. Las trazas corresponden a registros operativos de infraestructura de supercómputo (BGL RAS KERNEL INFO) que reportan errores de transmisión corregidos en la red torus. La IP privada 172.16.96.116 no presenta intentos de autenticación fallidos ni patrones sospechosos; se trata de actividad técnica rutinaria/benigna a nivel de kernel/hardware.\n\n## Evaluación del auditor\n\nLos registros corresponden a mensajes BGL RAS KERNEL INFO sobre errores de transmisión corregidos en la red torus de infraestructura de supercómputo. Aunque representan una anomalía operativa de hardware/red, no existe evidencia de actividad maliciosa ni compromiso de seguridad."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0005__nodex__r1__e2fdf0b5",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0005__nodex__r1__e2fdf0b5.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T01:49:39+00:00"
+  }
+}

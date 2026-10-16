@@ -1,0 +1,94 @@
+{
+  "case_id": "bgl_eva_natural_0002",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0002__gemext__r1__066c8976",
+  "salida": {
+    "case_id": "bgl_eva_natural_0002",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "EVT-01",
+        "timestamp": "2005-11-21-13.41.44.752517",
+        "entities": [],
+        "event_type": "Fallo de comunicación CioStream",
+        "evidence_uids": [
+          "1132609304",
+          "1132609342",
+          "1132613223",
+          "1132613769"
+        ]
+      },
+      {
+        "uid": "EVT-02",
+        "timestamp": "2005-11-22-07.58.41.090225",
+        "entities": [],
+        "event_type": "Error de hardware de memoria",
+        "evidence_uids": [
+          "1132675121"
+        ]
+      },
+      {
+        "uid": "EVT-03",
+        "timestamp": "2005-11-24-06.07.56.407913",
+        "entities": [],
+        "event_type": "Fallo fatal de kernel",
+        "evidence_uids": [
+          "1132841276",
+          "1133051996"
+        ]
+      },
+      {
+        "uid": "EVT-04",
+        "timestamp": "2005-11-24-09.38.05.459006",
+        "entities": [],
+        "event_type": "Pérdida de enlace de red",
+        "evidence_uids": [
+          "1132853885",
+          "1132912103",
+          "1133009333",
+          "1133044906"
+        ]
+      },
+      {
+        "uid": "EVT-05",
+        "timestamp": "2005-11-29-08.12.54.614554",
+        "entities": [],
+        "event_type": "Degradación de red de interconexión",
+        "evidence_uids": [
+          "1133280774"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nDegradación operacional y fallos de conectividad de red y hardware en un sistema IBM BlueGene/L. Se observan múltiples errores críticos del demonio ciod (Control and I/O Daemon) perdiendo comunicación por socket con el nodo de control/gestión 172.16.96.116 (Connection reset by peer, Connection timed out, Link has been severed), además de registros de fallo de kernel (kernel dump/crash) en nodos de cómputo y errores corregibles de memoria (CE sym). No existe evidencia de actividad maliciosa ni intrusión de seguridad.\n\n## Evaluación del auditor\n\nLos eventos corresponden estrictamente a telemetría de fallos físicos y de comunicación de un clúster HPC (BlueGene/L RAS logs). Las señales SIGTERM (signal 15) hacia ciod corresponden a la terminación estándar o forzada de trabajos tras la pérdida de sockets. No se detectan accesos no autorizados, anomalías de autenticación, escaneos ni explotación de vulnerabilidades.\n\n## Comandos de mitigación propuestos\n\n- ping -c 4 172.16.96.116\n- ip route get 172.16.96.116\n- ethtool -S <interfaz_red>"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0002__gemext__r1__066c8976",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0002__gemext__r1__066c8976.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:02:03+00:00"
+  }
+}

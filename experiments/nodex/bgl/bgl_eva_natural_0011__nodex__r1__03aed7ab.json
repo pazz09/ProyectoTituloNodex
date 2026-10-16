@@ -1,0 +1,51 @@
+{
+  "case_id": "bgl_eva_natural_0011",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0011__nodex__r1__03aed7ab",
+  "salida": {
+    "case_id": "bgl_eva_natural_0011",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "core_dump_generation",
+        "evidence_uids": [
+          "log_record_000001"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos eventos corresponden a registros de fiabilidad, disponibilidad y servicio (RAS) del kernel de un clúster de alto rendimiento (específicamente arquitectura IBM BlueGene/L, evidente por el formato de localización de nodos 'R33-M0-NF-C:J07-U11'). La línea de muestra documenta un evento 'KERNEL INFO generating core.2522', lo que indica la generación de un volcado de memoria (core dump) tras el fallo o terminación anómala de un proceso/aplicación en el nodo de cómputo. No se observan indicadores de compromiso ni actividad maliciosa; se trata de una incidencia operativa/de software. Como acción, se recomienda notificar al equipo de administración de sistemas/HPC para analizar el archivo core dump si persiste la inestabilidad de la aplicación.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Los registros corresponden a eventos de fiabilidad y servicio (RAS) del kernel de un clúster BlueGene/L, donde se documenta la generación de un archivo core dump tras la caída de un proceso. Se trata de un comportamiento anómalo a nivel operativo o de software, pero no representa un incidente de seguridad ni actividad maliciosa.\n\n## Comandos de mitigación propuestos\n\n- find / -name 'core.2522' 2>/dev/null\n- dmesg -T | grep -E -i 'segfault|killed|core dump'\n- sysctl kernel.core_pattern\n- journalctl -k -n 100 --no-pager"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0011__nodex__r1__03aed7ab",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0011__nodex__r1__03aed7ab.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:07:25+00:00"
+  }
+}

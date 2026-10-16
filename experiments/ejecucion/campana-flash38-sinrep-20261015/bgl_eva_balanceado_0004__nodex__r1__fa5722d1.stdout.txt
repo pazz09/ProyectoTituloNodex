@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=527 salida=182 razonamiento=633 total=1342
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=661 salida=234 razonamiento=708 total=1603
+   → No hace falta RAG (Aunque la cobertura de parsing automático fue del 0% debido al formato de texto no estándar, la muestra del registro crudo permite identificar con claridad la procedencia y naturaleza del evento (logs de sistema RAS KERNEL FATAL). Al descartarse un contexto de intrusión de seguridad y alineándose con el plan de investigación que no requiere memoria histórica, es posible diagnosticar directamente como fallo operativo/hardware.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=232 salida=53 razonamiento=328 total=613
+   → usar_cve: False | Razón: El incidente corresponde a un fallo de estabilidad de hardware o del kernel en una supercomputadora, sin indicios de actividad maliciosa, vectores de ataque ni servicios vulnerables identificados.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=185 salida=83 razonamiento=865 total=1133
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2073 salida=328 razonamiento=554 total=2955
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | Los registros evidencian un fallo operativo crítico a nivel de kernel/hardware (RAS KERNEL FATAL) en un nodo de supercomputación Blue Gene/L. No existen vectores de ataque, persistencia ni compromiso de seguridad, tratándose de una falla de estabilidad o hardware.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

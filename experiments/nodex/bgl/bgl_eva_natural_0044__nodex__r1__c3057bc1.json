@@ -1,0 +1,51 @@
+{
+  "case_id": "bgl_eva_natural_0044",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0044__nodex__r1__c3057bc1",
+  "salida": {
+    "case_id": "bgl_eva_natural_0044",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "process_crash",
+        "evidence_uids": [
+          "log_record_000001"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos registros corresponden a mensajes RAS (Reliability, Availability, and Serviceability) a nivel de kernel típicos de arquitecturas de supercómputo (BlueGene/L). El evento registrado ('generating core.16095') indica la generación de un volcado de memoria (core dump) tras el fallo o terminación anormal de un proceso del sistema/aplicación. No se evidencian indicadores de compromiso, vectores de ataque ni actividad de actores maliciosos; se trata de una anomalía operativa/estabilidad de software que debe ser derivada al equipo de administración de sistemas e infraestructura.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Los registros muestran eventos de volcado de memoria (core dump) en un entorno de supercómputo BlueGene/L debido a una terminación anómala de proceso. Se trata de un fallo de estabilidad operacional o defecto de software, no de un incidente de ciberseguridad. Los comandos sugeridos para inspeccionar el coredump y los registros del sistema son pertinentes.\n\n## Comandos de mitigación propuestos\n\n- coredumpctl info 16095\n- find / -name 'core.16095' -ls 2>/dev/null\n- dmesg -T | grep -E -i 'segfault|killed|trap|16095'\n- journalctl -xe --priority=err..crit\n- df -h /var/lib/systemd/coredump /var/crash /tmp"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0044__nodex__r1__c3057bc1",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0044__nodex__r1__c3057bc1.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:19:14+00:00"
+  }
+}

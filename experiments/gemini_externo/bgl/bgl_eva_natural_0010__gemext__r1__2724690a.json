@@ -1,0 +1,86 @@
+{
+  "case_id": "bgl_eva_natural_0010",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0010__gemext__r1__2724690a",
+  "salida": {
+    "case_id": "bgl_eva_natural_0010",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "EVT-01",
+        "timestamp": "2005-06-09-17.26.08.386218",
+        "entities": [],
+        "event_type": "CORRECTABLE_ERROR",
+        "evidence_uids": [
+          "1118363168"
+        ]
+      },
+      {
+        "uid": "EVT-02",
+        "timestamp": "2005-06-09-19.37.23.866536",
+        "entities": [],
+        "event_type": "CORE_DUMP",
+        "evidence_uids": [
+          "1118371043",
+          "1118371064"
+        ]
+      },
+      {
+        "uid": "EVT-03",
+        "timestamp": "2005-06-11-17.32.07.581048",
+        "entities": [],
+        "event_type": "FATAL_TLB_FAILURE",
+        "evidence_uids": [
+          "1118536327",
+          "1118536959",
+          "1118537212",
+          "1118537261",
+          "1118537622",
+          "1118537694",
+          "1118538129",
+          "1118538182",
+          "1118538836",
+          "1118539141",
+          "1118539342",
+          "1118539682",
+          "1118539891",
+          "1118540457",
+          "1118541065",
+          "1118541373",
+          "1118541965"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe observa una serie de fallos críticos de hardware y memoria a nivel de kernel en un sistema de supercomputación (Blue Gene/L). Específicamente, tras algunos volcados de memoria preliminares en otros nodos, el nodo 'R30-M0-N9-C:J16-U01' experimenta repetidas interrupciones críticas por fallo de Data TLB (Translation Lookaside Buffer), lo que indica un fallo persistente en la unidad de gestión de memoria (MMU) o procesador del nodo. No existe evidencia alguna de actividad maliciosa o intrusión.\n\n## Evaluación del auditor\n\nLa evidencia técnica muestra eventos operativos y de fiabilidad (RAS logs) de fallos a nivel de procesador/memoria (Data TLB error interrupts continuos en el mismo componente físico). No se identifican vectores de ataque, comandos sospechosos, persistencia ni movimiento lateral. La alta frecuencia de TLB errors en una sola ubicación confirma degradación o avería física de hardware.\n\n## Comandos de mitigación propuestos\n\n- service bg_control mark_node_offline R30-M0-N9-C:J16-U01\n- diag_bgl --test memory --node R30-M0-N9-C:J16-U01"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0010__gemext__r1__2724690a",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0010__gemext__r1__2724690a.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:07:08+00:00"
+  }
+}

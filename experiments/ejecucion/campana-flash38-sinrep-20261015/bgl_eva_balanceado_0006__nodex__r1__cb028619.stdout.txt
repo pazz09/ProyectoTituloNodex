@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=668 salida=216 razonamiento=607 total=1491
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=828 salida=206 razonamiento=564 total=1598
+   → No hace falta RAG (A pesar de la cobertura nula en el preprocesamiento estructurado, la muestra de registros crudos revela de forma concluyente que se trata de telemetría operativa estándar de kernel (RAS). No existen indicios de amenaza o técnicas de ataque que justifiquen una correlación con la base de conocimiento MITRE ATT&CK.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=218 salida=49 razonamiento=108 total=375
+   → usar_cve: False | Razón: El diagnóstico concluye que los eventos corresponden a actividad benigna y métricas operativas normales del kernel, sin evidencia de explotación, ataques ni servicios vulnerables identificados.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=171 salida=10 razonamiento=402 total=583
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=1998 salida=259 razonamiento=697 total=2954
+   → Confianza final: 0.85 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El analisis concluye correctamente que los registros corresponden a telemetria rutinaria de diagnostico e infraestructura a nivel de kernel (metricas operativas), sin presencia de patrones de ataque, anomalias operacionales ni incidentes de seguridad asociados a la direccion 10.1.1.164.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

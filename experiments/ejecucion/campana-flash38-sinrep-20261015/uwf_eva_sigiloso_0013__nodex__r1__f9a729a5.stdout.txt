@@ -1,0 +1,82 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3388 salida=340 razonamiento=515 total=4243
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3605 salida=149 razonamiento=260 total=4014
+   → Solicitando RAG (Se detecta un patrón anómalo de 244 intentos fallidos/conexiones unilaterales (S0) dirigidas al servicio DNS (10.0.10.1:53) provenientes de la IP 143.88.255.10. Conforme al objetivo del plan de investigación, es necesario consultar la memoria histórica para correlacionar con técnicas MITRE ATT&CK específicas (e.g., DNS Amplification/DoS, Network Service Scanning) y evaluar casos previos para definir las acciones de contención pertinentes.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1071.004, T1584.002, T1590.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=4319 salida=197 razonamiento=519 total=5035
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=315 salida=72 razonamiento=223 total=610
+   → usar_cve: False | Razón: El diagnóstico describe una actividad de reconocimiento o tunelización DNS (T1590.002 / T1071.004) y no se especifica ningún software, versión o producto de servidor DNS vulnerable que requiera búsqueda de CVEs específicos.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=244 salida=99 razonamiento=1149 total=1492
+   → 3 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=48045 salida=818 razonamiento=4319 total=53182
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=False | Se observa un comportamiento anómalo consistente en ráfagas periódicas de consultas UDP al puerto 53 de la IP 10.0.10.1 que finalizan sin respuesta (estado S0). Sin embargo, el intervalo regular de reintento de aproximadamente 30 segundos y la ausencia total de respuestas del destino apuntan con alta probabilidad a una falla operativa o mala configuración de red (un resolver DNS inalcanzable o fuera de servicio), en lugar de un canal encubierto de C2 (T1071.004) o reconocimiento malicioso (T1590.002). Bloquear mediante iptables sin verificar si se trata de un cliente legítimo con DNS mal configurado resulta prematuro y potencialmente perjudicial.
+   🔀 Router Finalización → agente_planificador (replanifica: cobertura insuficiente)
+👉 Transición completada en: 'agente_auditor_final'
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=4678 salida=290 razonamiento=601 total=5569
+   → Plan v2: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3602 salida=337 razonamiento=544 total=4483
+   → No hace falta RAG (El lote cuenta con un 100% de cobertura de parsing y evidencia técnica unívoca: 244 consultas DNS unilaterales con estado S0 (sin respuesta) hacia 10.0.10.1, lo cual es suficiente para corroborar la hipótesis operacional sin necesidad de consultar el historial.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=374 salida=56 razonamiento=147 total=577
+   → usar_cve: False | Razón: El diagnóstico indica un fallo operacional o de conectividad de red (resolver DNS inalcanzable y reintentos sin respuesta) sin identificar un ataque, software vulnerable específico ni explotación de vulnerabilidades.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=303 salida=164 razonamiento=1102 total=1569
+   → 7 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=48169 salida=720 razonamiento=1101 total=49990
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Se observa un fallo operativo de resolución de nombres en el que 143.88.255.10 realiza consultas DNS hacia 10.0.10.1:53 sin obtener respuesta (estado de conexión Zeek S0), provocando reintentos continuos. No existe evidencia de actividad maliciosa, exfiltración ni abuso de protocolo. Los comandos de validación y remediación no disruptivos son pertinentes.
+   🔀 Router Finalización → END (MAX_REPLANS=1 alcanzado)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

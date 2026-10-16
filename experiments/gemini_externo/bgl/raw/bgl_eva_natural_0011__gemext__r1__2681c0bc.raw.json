@@ -1,0 +1,74 @@
+{
+  "case_id": "bgl_eva_natural_0011",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0011__gemext__r1__2681c0bc",
+  "estado_crudo": {
+    "diagnostico": "Fallo en cascada de software o aplicación distribuida en un supercomputador IBM BlueGene/L. Se observa la generación inicial de volcados de memoria (core dumps) en múltiples nodos de cómputo, seguida de interrupciones fatales de almacenamiento de datos (Data Storage Interrupt - DSI en PowerPC) y fallos fatales de ejecución en una dirección de instrucción recurrente (0x00004ed8). Se trata de un error de ejecución/memoria en el kernel o aplicación de cómputo paralelo, sin indicios de intrusión o ciberataque.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "La evidencia muestra mensajes del subsistema RAS de kernel típicos de fallos por violaciones de acceso a memoria (DSI) y terminación anormal de procesos en clústeres HPC. No existe ningún indicador de compromiso, vector de ataque o comportamiento malicioso identificable en los registros.",
+    "comandos_mitigacion": [
+      "mmjob -k <job_id>",
+      "bg_console -e 'reboot midplane'",
+      "gdb /path/to/binary core.2522"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-01",
+        "evidence_uids": [
+          "1118732642",
+          "1118758243",
+          "1118758269",
+          "1118758278",
+          "1118758308"
+        ],
+        "timestamp": "2005-06-14-00.04.02.552133 / 2005-06-14-07.11.48.689764",
+        "event_type": "CORE_DUMP_GENERATION",
+        "description": "Procesos en diversos nodos generan volcados de núcleo de depuración (core dumps) tras errores no controlados."
+      },
+      {
+        "event_id": "EVT-02",
+        "evidence_uids": [
+          "1118765205",
+          "1118765277",
+          "1118765328",
+          "1118765360",
+          "1118765370",
+          "1118765511",
+          "1118765631"
+        ],
+        "timestamp": "2005-06-14-09.06.45.752792 - 2005-06-14-09.13.51.996954",
+        "event_type": "KERNEL_FATAL_DSI",
+        "description": "Excepciones críticas de kernel por interrupción de almacenamiento de datos (DSI/page fault de arquitectura PowerPC) en múltiples nodos secuencialmente."
+      },
+      {
+        "event_id": "EVT-03",
+        "evidence_uids": [
+          "1118765676",
+          "1118765746",
+          "1118765795",
+          "1118765825",
+          "1118765858",
+          "1118766090",
+          "1118766119"
+        ],
+        "timestamp": "2005-06-14-09.14.36.498843 - 2005-06-14-09.21.59.021659",
+        "event_type": "KERNEL_FATAL_INSTRUCTION_FAULT",
+        "description": "Colapso fatal repetido de procesos en los nodos en la dirección de instrucción exacta 0x00004ed8."
+      }
+    ],
+    "secuencia_temporal": [
+      "2005-06-14 00:04:02 - Se registra el primer core dump en el nodo R33-M0-NF-C:J07-U11",
+      "2005-06-14 07:10:43 a 07:11:48 - Múltiples nodos generan volcados de memoria (core.1711, core.2332, core.4505, core.1521)",
+      "2005-06-14 09:06:45 a 09:13:51 - Múltiples nodos presentan fallos fatales de tipo 'data storage interrupt'",
+      "2005-06-14 09:14:36 a 09:21:59 - Fallos fatales sucesivos convergen en la dirección de memoria de instrucción 0x00004ed8"
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

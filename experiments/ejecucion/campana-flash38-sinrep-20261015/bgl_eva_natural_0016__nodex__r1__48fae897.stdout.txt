@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1091 salida=203 razonamiento=740 total=2034
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=1261 salida=153 razonamiento=751 total=2165
+   → No hace falta RAG (A pesar de la falta de estructura en el preprocesamiento, la muestra del texto crudo identifica con claridad telemetría interna benigna de descubrimiento de hardware ('DISCOVERY INFO Ido chip status changed') en segmentos de red privada sin patrones de amenaza ni necesidad de correlación externa.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=175 salida=44 razonamiento=192 total=411
+   → usar_cve: False | Razón: El diagnóstico indica actividad completamente benigna de hardware/red interna sin indicios de ataques, anomalías de seguridad ni software vulnerable específico a consultar.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=128 salida=60 razonamiento=620 total=808
+   → 3 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2059 salida=186 razonamiento=941 total=3186
+   → Confianza final: 0.75 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es adecuado. Los registros analizados corresponden a mensajes informativos de diagnóstico y estado de componentes de hardware en una red de clúster/HPC. No se observan anomalías operativas ni patrones de actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

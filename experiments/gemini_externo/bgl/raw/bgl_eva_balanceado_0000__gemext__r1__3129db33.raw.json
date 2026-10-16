@@ -1,0 +1,34 @@
+{
+  "case_id": "bgl_eva_balanceado_0000",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0000__gemext__r1__3129db33",
+  "estado_crudo": {
+    "diagnostico": "Los registros corresponden a mensajes de RAS (Reliability, Availability, and Serviceability) de un supercomputador IBM Blue Gene/L. Indican problemas operativos de hardware y del sistema de archivos distribuido/NFS, incluyendo múltiples fallos de ciod (ciod: Error loading / LOGIN chdir failed) debidos a problemas de permisos, rutas inexistentes y errores de E/S (Input/output error), cortes de enlace de red de control (Link has been severed), advertencias en la red Torus y múltiples errores de paridad/ECC corregidos en memoria DDR. No se observa actividad maliciosa ni indicadores de intrusión.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "Las alertas 'APP FATAL' y 'KERNEL INFO' describen comportamientos operativos anómalos pero comunes en computación de alto rendimiento (HPC): jobs por lotes intentando acceder a binarios sin los permisos de ejecución adecuados o que no existen, desincronización o degradación en el almacenamiento compartido (/p/gb1, /bgl/apps) causando I/O error, y fallos de memoria física ECC corregidos de forma transparente por el hardware. Aunque hay fallos de permisos ('Permission denied'), se originan en el subsistema ciod al despachar trabajos de usuarios (stella, spelce1) sobre el sistema de archivos del clúster, sin trazas de escalada de privilegios o acciones adversarias.",
+    "comandos_mitigacion": [
+      "fsck -y /p/gb1",
+      "showq",
+      "bglstatus",
+      "dmesg | grep -i 'ddr\\|ecc\\|torus'"
+    ],
+    "eventos_reconstruidos": [],
+    "secuencia_temporal": [
+      "2005-12-08 22:18:58 - Fallo de carga de binario ddcMDbglV por archivo no encontrado (1134109138)",
+      "2005-12-09 00:38:10 a 04:13:41 - Corrección de errores de paridad DDR en nodos de cómputo (1134117490, 1134130421)",
+      "2005-12-09 12:14:16 a 12:49:48 - Serie de fallos en ciod por 'Permission denied' y 'No such file or directory' al lanzar ejecutables (1134159256, 1134159495, 1134159559, 1134160405, 1134160534, 1134160697, 1134161333, 1134161388)",
+      "2005-12-11 19:19:09 - Error de E/S en cambio de directorio del usuario stella (1134357549)",
+      "2005-12-13 09:52:35 a 09:53:18 - Caída de sockets CioStream hacia 172.16.96.116 (1134496355, 1134496398)",
+      "2005-12-14 15:03:14 - Advertencia de interrupción crítica en cable de red Torus z+ (1134601394)",
+      "2005-12-14 21:05:56 a 21:56:23 - Errores adicionales de memoria DDR corregidos (1134623156, 1134626183)"
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

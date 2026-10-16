@@ -1,0 +1,73 @@
+{
+  "case_id": "bgl_eva_balanceado_0010",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0010__gemext__r1__132a6823",
+  "estado_crudo": {
+    "diagnostico": "Registros de eventos de hardware y software del supercomputador IBM BlueGene/L. Se observa un fallo en la ejecución de la aplicación científica paralela 'SPaSM_mpi' que generó 128 volcados de memoria (core files), un error corregible de memoria DDR (ECC) y múltiples excepciones de alineación de punto flotante ('double-hummer alignment exceptions') acompañadas de volcados de registros IAR/DEAR de procesadores PowerPC 440. No existe evidencia de actividad maliciosa ni compromiso de seguridad.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.98,
+    "evaluacion_auditor": "La evidencia técnica muestra exclusivamente problemas operativos y de rendimiento típicos de entornos HPC: fallos de ejecución a nivel de proceso MPI, errores de paridad/ECC en módulos de memoria y desalineación de memoria en instrucciones SIMD del procesador Double-Hummer FPU. Se descarta un incidente de seguridad de la información.",
+    "comandos_mitigacion": [
+      "gdb /home/germann2/BGL-demo/SPaSM_mpi core",
+      "find /home/germann2/BGL-demo/ -name 'core*' -mtime +7 -delete"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-01",
+        "evidence_uids": [
+          "1124818189"
+        ],
+        "timestamp": "2005-08-23-10.29.49.877845",
+        "event_type": "APPLICATION_CRASH",
+        "description": "Fallo y generación masiva de 128 archivos core del programa MPI SPaSM_mpi a través del demonio ciod."
+      },
+      {
+        "event_id": "EVT-02",
+        "evidence_uids": [
+          "1124972563"
+        ],
+        "timestamp": "2005-08-25-05.22.43.295317",
+        "event_type": "HARDWARE_ECC_CORRECTION",
+        "description": "Detección y corrección automática de un error de memoria DDR en el nodo R71-M0-NF-C:J04-U01."
+      },
+      {
+        "event_id": "EVT-03",
+        "evidence_uids": [
+          "1125082053",
+          "1125082080",
+          "1125082154",
+          "1125082191",
+          "1125082746",
+          "1125082766",
+          "1125082778",
+          "1125083016",
+          "1125083240",
+          "1125083293",
+          "1125083309",
+          "1125083411",
+          "1125083438",
+          "1125083510",
+          "1125083592",
+          "1125083604",
+          "1125083702",
+          "1125083731"
+        ],
+        "timestamp": "2005-08-26-11.47.33.903841",
+        "event_type": "PROCESSOR_ALIGNMENT_EXCEPTION",
+        "description": "Ocurrencia reiterada de millones de excepciones de alineación de datos en unidades Double-Hummer FPU y captura de registros IAR/DEAR a lo largo de múltiples nodos de cómputo."
+      }
+    ],
+    "secuencia_temporal": [
+      "2005-08-23 10:29:49: Finalización anómala de SPaSM_mpi con volcado de 128 core files.",
+      "2005-08-25 05:22:43: Error de memoria DDR detectado y corregido en nodo R71-M0-NF-C:J04-U01.",
+      "2005-08-26 11:47:33 - 12:15:31: Múltiples nodos reportan millones de excepciones de alineación Double-Hummer y registros IAR/DEAR."
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

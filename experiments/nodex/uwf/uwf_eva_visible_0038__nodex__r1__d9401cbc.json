@@ -1,0 +1,89 @@
+{
+  "case_id": "uwf_eva_visible_0038",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "uwf_eva_visible_0038__nodex__r1__d9401cbc",
+  "salida": {
+    "case_id": "uwf_eva_visible_0038",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-26 07:10:00.132306",
+        "entities": [],
+        "event_type": "dns_request_timeout",
+        "evidence_uids": [
+          "CIvYt73dK6QXNRQfz6"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-26 07:10:30.486162",
+        "entities": [],
+        "event_type": "dns_request_success",
+        "evidence_uids": [
+          "CmZDWYTsEDhgee88l"
+        ]
+      },
+      {
+        "uid": "event_003",
+        "timestamp": "2021-12-26 07:38:14.134771",
+        "entities": [],
+        "event_type": "dns_request_timeout",
+        "evidence_uids": [
+          "CTcs4J3xPdup6FBqFi"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002",
+      "event_003"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe observa un patrón consistente de falla de resolución o conectividad operativa hacia el servidor DNS 10.0.10.1 por parte de 143.88.255.10. La totalidad de las 262 peticiones dirigidas a este destino presentan estado 'S0' (SYN/petición enviada sin respuesta recibida, 0 bytes de retorno), lo que denota que el servidor DNS local/interno 10.0.10.1 está inalcanzable, inactivo o descartando el tráfico UDP en el puerto 53. No hay evidencia de canal C2 bidireccional ni de exfiltración exitosa hacia ese destino. Se recomienda verificar la disponibilidad del servicio DNS en 10.0.10.1 y las rutas/reglas de firewall intermedias antes de considerar medidas de bloqueo a 143.88.255.10.\n\n## Evaluación del auditor\n\nEl diagnóstico es preciso y adecuado. Los registros de Zeek reflejan un patrón constante de consultas DNS UDP hacia la dirección IP interna 10.0.10.1 que culminan en estado S0 (sin respuesta), mientras que otras estaciones de la red resuelven correctamente contra 143.88.1.1 (SF). Se trata de una falla operativa de conectividad o indisponibilidad del servicio DNS en 10.0.10.1, descartándose actividad maliciosa o compromiso de seguridad.\n\n## Comandos de mitigación propuestos\n\n- ping -c 4 10.0.10.1\n- ip route get 10.0.10.1\n- nc -zvu -w 3 10.0.10.1 53\n- iptables -vnL OUTPUT --line-numbers | grep -E '(10.0.10.1|53)'\n- iptables -I OUTPUT -p udp -s 143.88.255.10 -d 10.0.10.1 --dport 53 -m limit --limit 30/minute --limit-burst 10 -j ACCEPT\n- iptables -A OUTPUT -p udp -s 143.88.255.10 -d 10.0.10.1 --dport 53 -j LOG --log-prefix '[FW-DNS-S0-RATE-EXCEEDED]: ' --log-level 4\n- iptables -A OUTPUT -p udp -s 143.88.255.10 -d 10.0.10.1 --dport 53 -j DROP"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_visible_0038__nodex__r1__d9401cbc",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_visible_0038__nodex__r1__d9401cbc.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T03:05:31+00:00"
+  }
+}

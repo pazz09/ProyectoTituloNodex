@@ -1,0 +1,88 @@
+{
+  "case_id": "bgl_eva_natural_0009",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0009__gemext__r1__09af3e1c",
+  "salida": {
+    "case_id": "bgl_eva_natural_0009",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "EVT-01",
+        "timestamp": "2005-06-16-03.00.47.249279",
+        "entities": [],
+        "event_type": "APPLICATION_CRASH",
+        "evidence_uids": [
+          "1118916047",
+          "1118916053",
+          "1118916060",
+          "1118916076"
+        ]
+      },
+      {
+        "uid": "EVT-02",
+        "timestamp": "2005-06-16-14.55.02.074340",
+        "entities": [],
+        "event_type": "IO_COMMUNICATION_FAILURE",
+        "evidence_uids": [
+          "1118958902"
+        ]
+      },
+      {
+        "uid": "EVT-03",
+        "timestamp": "2005-06-16-16.29.12.853302",
+        "entities": [],
+        "event_type": "HARDWARE_MEMORY_ERROR",
+        "evidence_uids": [
+          "1118964552",
+          "1119103692"
+        ]
+      },
+      {
+        "uid": "EVT-04",
+        "timestamp": "2005-06-20-11.09.26.582302",
+        "entities": [],
+        "event_type": "APPLICATION_CRASH_CLUSTER",
+        "evidence_uids": [
+          "1119290966",
+          "1119291000",
+          "1119291039",
+          "1119291044",
+          "1119291099",
+          "1119291235",
+          "1119291291"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nFallas operativas y de ejecución en clúster de alto rendimiento (IBM Blue Gene/L). Se observan múltiples fallas de software distribuidas con generación de volcados de memoria (core dumps) en nodos de cómputo, una desconexión anómala del demonio de control de E/S (ciod) con el socket de control 172.16.96.116:51706, y errores de hardware/memoria corregibles (error de paridad en caché de instrucciones y error CE de memoria ECC). No existe evidencia de actividad maliciosa.\n\n## Evaluación del auditor\n\nLos registros corresponden exclusivamente al subsistema RAS de una supercomputadora Blue Gene/L. Los eventos fatales de ciod y la generación concurrente de coredumps son característicos de cancelaciones o caídas abruptas de trabajos MPI paralelos. Los errores de paridad y CE corresponden a eventos físicos de hardware ya corregidos por los mecanismos de tolerancia a fallas. No hay vectores de ataque observables.\n\n## Comandos de mitigación propuestos\n\n- sdiag\n- cat /proc/meminfo\n- dmesg -T | grep -iE 'error|parity|ce|fault'\n- gdb /path/to/executable /path/to/core.2605"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0009__gemext__r1__09af3e1c",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0009__gemext__r1__09af3e1c.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:05:45+00:00"
+  }
+}

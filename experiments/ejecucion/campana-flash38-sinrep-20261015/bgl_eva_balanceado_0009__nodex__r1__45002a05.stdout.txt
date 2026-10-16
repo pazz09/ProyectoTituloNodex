@@ -1,0 +1,82 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=564 salida=166 razonamiento=899 total=1629
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=681 salida=109 razonamiento=485 total=1275
+   → Solicitando RAG (El lote presenta una cobertura de parsing del 0% con todos los eventos en texto libre y campos clave vacíos (sin IPs, usuarios ni servicios definidos). Además, la muestra cruda revela eventos de kernel/core dump de supercomputación (RAS KERNEL) posiblemente mal clasificados como eventos de autenticación, por lo que se requiere consultar el historial y técnicas MITRE ATT&CK para contextualizar adecuadamente el comportamiento.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1685.001, T1685.004, T1654
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=1444 salida=208 razonamiento=416 total=2068
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=309 salida=61 razonamiento=437 total=807
+   → usar_cve: False | Razón: El diagnóstico concluye que se trata de un fallo operativo y de estabilidad del sistema (generación de core dump) sin evidencia de actividad maliciosa, y no se identifica ningún servicio, software o versión específica vulnerable para consultar.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=255 salida=135 razonamiento=410 total=800
+   → 6 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=3005 salida=340 razonamiento=1631 total=4976
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=False | El diagnóstico es acertado al identificar que los eventos reflejan fallos operativos del sistema (generación de un volcado de memoria core.27704) y no eventos de autenticación ni técnicas de manipulación maliciosa de logs (T1685, T1654). Al tratarse de un fallo de estabilidad operativa sin indicios de actividad adversaria, no constituye un incidente de seguridad.
+   🔀 Router Finalización → agente_planificador (replanifica: cobertura insuficiente)
+👉 Transición completada en: 'agente_auditor_final'
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1645 salida=278 razonamiento=913 total=2836
+   → Plan v2: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=702 salida=253 razonamiento=801 total=1756
+   → No hace falta RAG (El plan de investigación establece explícitamente no contemplar la consulta de memoria histórica para este caso, y la información disponible en las líneas de registro permite caracterizar el evento y definir las acciones de respuesta técnica correspondientes.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=295 salida=55 razonamiento=200 total=550
+   → usar_cve: False | Razón: El diagnóstico no identifica ninguna vulnerabilidad específica ni software vulnerable explotado; se trata de una terminación anómala del proceso (core dump) sin indicios de actividad maliciosa o ataque.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=241 salida=115 razonamiento=701 total=1057
+   → 6 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2992 salida=292 razonamiento=1210 total=4494
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es consistente al determinar que el volcado de memoria (core dump) en el nodo HPC representa una anomalía operativa o fallo de proceso de software/hardware, sin evidencia de actividad maliciosa o intrusión. Las acciones recomendadas con gdb, dmesg y validación de integridad son técnicamente pertinentes para depurar el error.
+   🔀 Router Finalización → END (MAX_REPLANS=1 alcanzado)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

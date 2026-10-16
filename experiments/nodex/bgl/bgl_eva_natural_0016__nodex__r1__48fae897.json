@@ -1,0 +1,41 @@
+{
+  "case_id": "bgl_eva_natural_0016",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0016__nodex__r1__48fae897",
+  "salida": {
+    "case_id": "bgl_eva_natural_0016",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nTráfico y registros benignos correspondientes a eventos de diagnóstico y descubrimiento de hardware/red interna (mensajes informativos de cambio de estado de chips/Ido chip en infraestructura HPC/clúster). No se observan intentos de acceso no autorizado, anomalías de seguridad ni técnicas asociadas a actores maliciosos.\n\n## Evaluación del auditor\n\nEl diagnóstico es adecuado. Los registros analizados corresponden a mensajes informativos de diagnóstico y estado de componentes de hardware en una red de clúster/HPC. No se observan anomalías operativas ni patrones de actividad maliciosa.\n\n## Comandos de mitigación propuestos\n\n- logger -p auth.info \"Auditoría de seguridad: Tráfico HPC y eventos de hardware evaluados como benignos. No se requieren reglas de bloqueo.\"\n- dmesg --level=err,crit,alert,emerg\n- iptables -S"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0016__nodex__r1__48fae897",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0016__nodex__r1__48fae897.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:09:58+00:00"
+  }
+}

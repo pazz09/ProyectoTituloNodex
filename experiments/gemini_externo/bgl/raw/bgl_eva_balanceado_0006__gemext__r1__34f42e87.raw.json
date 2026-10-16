@@ -1,0 +1,74 @@
+{
+  "case_id": "bgl_eva_balanceado_0006",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0006__gemext__r1__34f42e87",
+  "estado_crudo": {
+    "diagnostico": "Los registros corresponden a operaciones rutinarias de telemetría RAS (Reliability, Availability, and Serviceability) en un supercomputador IBM BlueGene/L. Se observan anomalías de hardware y software operativo: múltiples errores de memoria corregibles (CE / DDR correctable errors), desalineación masiva de enteros en ejecución (integer alignment exceptions) en un nodo de cómputo, resincronización de enlaces de red de árbol y el apagado planificado de una tarjeta de nodos para mantenimiento físico (Service Action 648). No existe evidencia de actividad maliciosa ni intrusión de seguridad.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.98,
+    "evaluacion_auditor": "El diagnóstico es de alta certeza. Los logs provienen de componentes del kernel de BlueGene/L y del subsistema HARDWARE. Las alertas corresponden típicamente al desgaste o fluctuaciones normales en sistemas HPC a gran escala (errores de ECC corregidos y manejo por software de desalineación de memoria). No hay patrones de explotación, denegación deliberada de servicio ni compromiso de credenciales.",
+    "comandos_mitigacion": [],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-001",
+        "evidence_uids": [
+          "1133474785",
+          "1133475318",
+          "1133573986",
+          "1133625592",
+          "1133691676",
+          "1133700378",
+          "1133700386",
+          "1133706305"
+        ],
+        "timestamp": "2005-12-01-14.06.25.612025",
+        "event_type": "HARDWARE_MEMORY_CE",
+        "description": "Detección recurrente de errores corregibles de memoria DDR (CE sym) en múltiples nodos del sistema."
+      },
+      {
+        "event_id": "EVT-002",
+        "evidence_uids": [
+          "1133630999"
+        ],
+        "timestamp": "2005-12-03-09.29.59.645290",
+        "event_type": "HARDWARE_SERVICE_ACTION",
+        "description": "Apagado de la tarjeta de nodo R10-M1-N2 para mantenimiento físico como parte de la acción de servicio programada 648 (PrepareForService)."
+      },
+      {
+        "event_id": "EVT-003",
+        "evidence_uids": [
+          "1133638373"
+        ],
+        "timestamp": "2005-12-03-11.32.53.165837",
+        "event_type": "SOFTWARE_ALIGNMENT_EXCEPTION",
+        "description": "El kernel detectó más de 35 millones de excepciones de desalineación de enteros en el nodo R56-M0-NA-C:J15-U11, lo que ocasiona sobrecarga por emulación de software."
+      },
+      {
+        "event_id": "EVT-004",
+        "evidence_uids": [
+          "1133646587"
+        ],
+        "timestamp": "2005-12-03-13.49.47.382429",
+        "event_type": "NETWORK_SYNC_EVENT",
+        "description": "Receptor de árbol de interconexión entró en estado de resincronización en el nodo R55-M0-N9-C:J06-U11."
+      }
+    ],
+    "secuencia_temporal": [
+      "2005-12-01 08:47:21 a 09:32:43 - Registro basal de interrupciones y temporizadores de señal RBS en varios nodos sin anomalías.",
+      "2005-12-01 14:06:25 a 14:15:18 - Primeros eventos de errores de memoria corregidos por ECC en R47-M1-N4-C:J17-U11 y R20-M1-NB-C:J09-U01.",
+      "2005-12-02 17:39:46 - Registro de error corregido de memoria en R66-M0-N1-C:J03-U01.",
+      "2005-12-03 07:59:52 - Detección y corrección de error DDR en R06-M1-NF-C:J12-U01.",
+      "2005-12-03 09:29:59 - Apagado de la tarjeta de nodo R10-M1-N2 para tareas de servicio técnico (Service Action 648).",
+      "2005-12-03 11:32:53 - Registro de 35.591.540 excepciones de alineación de enteros en R56-M0-NA-C:J15-U11.",
+      "2005-12-03 13:49:47 - Evento de resincronización en el receptor de la red tipo árbol en R55-M0-N9-C:J06-U11.",
+      "2005-12-04 02:21:16 a 06:25:05 - Múltiples errores adicionales de memoria corregibles (CE) registrados en diferentes nodos (R65, R60, R21, R74)."
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

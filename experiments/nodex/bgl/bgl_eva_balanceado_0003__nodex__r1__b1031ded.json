@@ -1,0 +1,51 @@
+{
+  "case_id": "bgl_eva_balanceado_0003",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0003__nodex__r1__b1031ded",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0003",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "system_core_dump",
+        "evidence_uids": [
+          "log_record_000001"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos registros corresponden a trazas de confiabilidad, disponibilidad y servicio (RAS) del kernel de una supercomputadora (específicamente arquitectura IBM BlueGene/L, con identificadores de rack/nodo como R21-M1-N2-C:J07-U01). El evento registrado ('generating core.23150') indica la generación de un volcado de memoria (core dump) tras un fallo operativo o excepción a nivel de sistema/aplicación interna. No se observan indicios de actividad maliciosa, intrusión o técnicas asociadas a MITRE ATT&CK, tratándose de un incidente de estabilidad operativa del hardware/software.\n\n## Evaluación del auditor\n\nLos registros corresponden a trazas operativas RAS de supercómputo (IBM BlueGene/L) documentando una excepción y generación de core dump (core.23150). Representa una anomalía de estabilidad operativa de software o hardware sin indicios de compromiso, abuso o actividad maliciosa.\n\n## Comandos de mitigación propuestos\n\n- coredumpctl list\n- coredumpctl info 23150\n- dmesg --level=err,crit,alert,emerg -T\n- journalctl -p 3 -xb\n- sysctl -w fs.suid_dumpable=0"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0003__nodex__r1__b1031ded",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0003__nodex__r1__b1031ded.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T01:47:02+00:00"
+  }
+}

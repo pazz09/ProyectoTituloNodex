@@ -1,0 +1,94 @@
+{
+  "case_id": "bgl_eva_natural_0042",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0042__gemext__r1__8e624536",
+  "salida": {
+    "case_id": "bgl_eva_natural_0042",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "EVT-01",
+        "timestamp": "2005-06-23-17.02.44.950044",
+        "entities": [],
+        "event_type": "FPU_ALIGNMENT_EXCEPTION",
+        "evidence_uids": [
+          "1119571364",
+          "1119571369",
+          "1119572030"
+        ]
+      },
+      {
+        "uid": "EVT-02",
+        "timestamp": "2005-06-24-08.09.59.585592",
+        "entities": [],
+        "event_type": "MEMORY_CORRECTABLE_ERROR",
+        "evidence_uids": [
+          "1119625799",
+          "1119638161",
+          "1119677904"
+        ]
+      },
+      {
+        "uid": "EVT-03",
+        "timestamp": "2005-06-25-03.02.47.673562",
+        "entities": [],
+        "event_type": "FPU_ALIGNMENT_EXCEPTION_SPIKE",
+        "evidence_uids": [
+          "1119693767",
+          "1119695647",
+          "1119695690",
+          "1119695755"
+        ]
+      },
+      {
+        "uid": "EVT-04",
+        "timestamp": "2005-06-25-08.55.15.625203",
+        "entities": [],
+        "event_type": "PROCESS_CRASH_CORE_DUMP",
+        "evidence_uids": [
+          "1119714915",
+          "1119714992",
+          "1119715100",
+          "1119715124",
+          "1119715242",
+          "1119715309",
+          "1119715342",
+          "1119715346",
+          "1119715392",
+          "1119715413"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nRegistros de eventos de hardware y sistema operativo correspondientes a un supercomputador IBM BlueGene/L. Se observan excepciones masivas de alineación en la unidad de punto flotante de doble precisión (double-hummer alignment exceptions), errores de memoria corregibles (CE - Correctable Errors) y la generación simultánea de volcados de memoria (core dumps) en múltiples nodos de cómputo entre las 08:55 y las 09:03 del 2005-06-25. Este patrón es característico del fallo o caída abrupta de una aplicación paralela (ej. trabajo MPI) provocada por excepciones de punto flotante no alineadas o errores de memoria/segmentación, y no corresponde a un compromiso de seguridad.\n\n## Evaluación del auditor\n\nExiste alta certeza de que se trata de una anomalía operativa/hardware/software en un cluster HPC BlueGene/L y no de un ciberataque. Los mensajes provienen del subsistema RAS del kernel, informando fallos de ejecución científica (Double-Hummer FPU) y errores ECC de memoria que culminaron en un aborto general del job paralelo (core dumping distribuido). No hay evidencia de vectores de ataque, acceso no autorizado ni persistencia.\n\n## Comandos de mitigación propuestos\n\n- gdb /path/to/binary /path/to/core.24721 --batch -ex 'bt'\n- scontrol show job <job_id>\n- bglstatus -e"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0042__gemext__r1__8e624536",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0042__gemext__r1__8e624536.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:18:56+00:00"
+  }
+}

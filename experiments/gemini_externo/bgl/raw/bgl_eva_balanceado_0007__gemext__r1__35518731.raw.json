@@ -1,0 +1,76 @@
+{
+  "case_id": "bgl_eva_balanceado_0007",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0007__gemext__r1__35518731",
+  "estado_crudo": {
+    "diagnostico": "Múltiples nodos de cómputo en un clúster IBM BlueGene/L están registrando la generación repetida de volcados de memoria (core dumps) correspondientes a terminaciones anormales de procesos (crashes). Los eventos se concentran en tres oleadas temporales principales (alrededor de 13:19-13:25, 16:52-16:54 y 17:31-17:49 UTC) afectando a diversos componentes de rack y nodos. No se observan evidencias de actividad maliciosa ni vectores de ataque; el comportamiento es consistente con fallos a nivel de aplicación distribuida (HPC job crash) o inestabilidad de software.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "La evidencia muestra exclusivamente mensajes informativos de RAS KERNEL notificando la creación de archivos core dump tras la finalización anómala de procesos. Dado que no existen trazas de autenticación no autorizada, ejecución de comandos sospechosos, persistencia o tráfico anómalo, se clasifica como una anomalía operativa/de fiabilidad del sistema y se descarta un incidente de seguridad.",
+    "comandos_mitigacion": [
+      "gdb /ruta/al/binario /ruta/core.26078 --batch -ex 'bt full'",
+      "squeue -j <job_id> || bjobs -l",
+      "dmesg -T | grep -E -i 'segfault|oom|trap'",
+      "find /var/log/ -name 'core.*' -mtime -1 -exec ls -lh {} +"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-01",
+        "evidence_uids": [
+          "1120940346",
+          "1120940349",
+          "1120940357",
+          "1120940402",
+          "1120940548",
+          "1120940599",
+          "1120940618",
+          "1120940634",
+          "1120940659",
+          "1120940700"
+        ],
+        "timestamp": "2005-07-09-13.19.06.210518",
+        "event_type": "PROCESS_CRASH_CLUSTER",
+        "description": "Primera ráfaga de caídas de procesos y generación de archivos core dump a través de múltiples nodos de cómputo (R24, R32, R10, R17, R16, R14, R06, R15, R00)."
+      },
+      {
+        "event_id": "EVT-02",
+        "evidence_uids": [
+          "1120953127",
+          "1120953142",
+          "1120953217",
+          "1120953260"
+        ],
+        "timestamp": "2005-07-09-16.52.07.005910",
+        "event_type": "PROCESS_CRASH_CLUSTER",
+        "description": "Segunda ráfaga de generación de core dumps en nodos R27, R21, R35 y R31."
+      },
+      {
+        "event_id": "EVT-03",
+        "evidence_uids": [
+          "1120955479",
+          "1120955633",
+          "1120955677",
+          "1120956526",
+          "1120956527",
+          "1120956557"
+        ],
+        "timestamp": "2005-07-09-17.31.19.922132",
+        "event_type": "PROCESS_CRASH_CLUSTER",
+        "description": "Tercera ráfaga de caídas de procesos en nodos R26, R34, R37 y R20."
+      }
+    ],
+    "secuencia_temporal": [
+      "2005-07-09 13:19:06 - Se registra el primer core dump (PID 26078) en R24-M0-N6-C:J07-U01.",
+      "2005-07-09 13:19:09 a 13:25:00 - Secuencia de 9 core dumps adicionales en diversos nodos durante la misma ventana operativa.",
+      "2005-07-09 16:52:07 a 16:54:20 - Se produce una nueva serie de 4 core dumps en nodos R27, R21, R35 y R31.",
+      "2005-07-09 17:31:19 a 17:49:17 - Se observan 6 core dumps más, finalizando en el nodo R20-M0-N5-C:J07-U11."
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

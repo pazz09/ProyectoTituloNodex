@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=526 salida=182 razonamiento=697 total=1405
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=648 salida=203 razonamiento=837 total=1688
+   → No hace falta RAG (A pesar de la cobertura nula del parser automatizado, la muestra en crudo es inequívoca: corresponde a eventos estándar de depuración/caída de procesos (core dump) en logs RAS de HPC, permitiendo descartar un compromiso de seguridad de forma concluyente sin necesidad de consultar el historial.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=228 salida=56 razonamiento=148 total=432
+   → usar_cve: False | Razón: El diagnóstico no identifica actividad maliciosa, vectores de ataque ni vulnerabilidades o servicios específicos atacados; se trata de una incidencia operacional de estabilidad y volcado de memoria.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=181 salida=70 razonamiento=585 total=836
+   → 4 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2056 salida=346 razonamiento=1083 total=3485
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | Los registros corresponden a mensajes de fiabilidad y servicio (RAS) del kernel reportando la generación de un volcado de memoria (core.13753) en un nodo de supercómputo. Se trata de una anomalía operativa por fallo de proceso o inestabilidad del sistema, sin evidencia de intrusión, explotación o actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

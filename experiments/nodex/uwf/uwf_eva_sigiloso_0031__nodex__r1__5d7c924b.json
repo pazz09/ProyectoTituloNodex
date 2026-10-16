@@ -1,0 +1,89 @@
+{
+  "case_id": "uwf_eva_sigiloso_0031",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "uwf_eva_sigiloso_0031__nodex__r1__5d7c924b",
+  "salida": {
+    "case_id": "uwf_eva_sigiloso_0031",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2022-01-02 11:04:44.881936",
+        "entities": [],
+        "event_type": "dns_request_timeout",
+        "evidence_uids": [
+          "CrlEBu45WKRkspIW9i"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2022-01-02 11:05:32.842884",
+        "entities": [],
+        "event_type": "dns_query_success",
+        "evidence_uids": [
+          "CnSgc92f4oNHuXelL4"
+        ]
+      },
+      {
+        "uid": "event_003",
+        "timestamp": "2022-01-02 11:32:28.632106",
+        "entities": [],
+        "event_type": "dns_request_timeout",
+        "evidence_uids": [
+          "CHNOxk2l8y5oGheOli"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002",
+      "event_003"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLa actividad anómala observada corresponde a un problema de conectividad o desconfiguración de red y no a tráfico malicioso (C2 o exfiltración). El host 143.88.255.10 genera 268 intentos de consulta DNS hacia la IP interna 10.0.10.1 en un intervalo de 28 minutos, registrándose todos con estado Zeek 'S0' (solicitud enviada sin respuesta/timeout, 0 bytes devueltos). En contraste, otros clientes como 143.88.1.51 resuelven correctamente contra 143.88.1.1. No hay indicios de túneles DNS ni tráfico bidireccional malicioso. Medidas operativas recomendadas: 1) Verificar la configuración de red y servidores DNS en el host 143.88.255.10 (apuntando a un resolver DNS inalcanzable o inexistente 10.0.10.1); 2) Validar el estado operativo y enrutamiento hacia 10.0.10.1; 3) Ajustar reglas de alertas SOC para evitar falsos positivos por reintentos de resolución DNS en hosts desconfigurados.\n\n## Evaluación del auditor\n\nEl diagnóstico es preciso: los logs reflejan un problema operativo/desconfiguración de red donde el host 143.88.255.10 intenta resolver DNS repetidamente contra una IP interna (10.0.10.1) que no responde (estado Zeek S0), mientras que otros equipos resuelven con éxito contra 143.88.1.1. No se observa actividad maliciosa ni túneles C2.\n\n## Comandos de mitigación propuestos\n\n- iptables -t nat -A PREROUTING -s 143.88.255.10 -d 10.0.10.1 -p udp --dport 53 -j DNAT --to-destination 143.88.1.1:53\n- iptables -t nat -A PREROUTING -s 143.88.255.10 -d 10.0.10.1 -p tcp --dport 53 -j DNAT --to-destination 143.88.1.1:53\n- iptables -A FORWARD -s 143.88.255.10 -d 10.0.10.1 -p udp --dport 53 -m limit --limit 2/min --limit-burst 5 -j ACCEPT\n- iptables -A FORWARD -s 143.88.255.10 -d 10.0.10.1 -p udp --dport 53 -j REJECT --reject-with icmp-host-unreachable\n- ip route get 10.0.10.1\n- tcpdump -nn -i any host 143.88.255.10 and port 53 -c 20"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_sigiloso_0031__nodex__r1__5d7c924b",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1568.002",
+          "name": "Domain Generation Algorithms",
+          "similitud": null
+        },
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_sigiloso_0031__nodex__r1__5d7c924b.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:50:52+00:00"
+  }
+}

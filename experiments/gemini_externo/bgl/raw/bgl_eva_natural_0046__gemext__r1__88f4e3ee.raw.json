@@ -1,0 +1,74 @@
+{
+  "case_id": "bgl_eva_natural_0046",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0046__gemext__r1__88f4e3ee",
+  "estado_crudo": {
+    "diagnostico": "Se observa la generación recurrente de volcados de memoria (core dumps) en múltiples nodos de cómputo de un supercomputador BlueGene/L. Esto indica la terminación anormal o aborto de aplicaciones o procesos distribuidos en el clúster. No existe evidencia de actividad maliciosa ni vectores de ataque; se trata de una anomalía de software/operativa del entorno HPC.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "Los registros consisten exclusivamente en mensajes 'RAS KERNEL INFO generating core.<PID>' distribuidos en diferentes racks y nodos en dos sesiones temporales principales (2005-07-02 y 2005-07-03). Si bien la generación simultánea de core dumps representa un fallo en las tareas de usuario o procesos de sistema, los logs carecen de cualquier indicador de intrusión, escalada de privilegios o explotación intencionada.",
+    "comandos_mitigacion": [
+      "gdb /path/to/binary /path/to/core.2117 --eval-command='bt full' --batch",
+      "bglstatus --nodes",
+      "dmesg -T | grep -E 'segfault|trap|killed'"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-01",
+        "evidence_uids": [
+          "1120351671",
+          "1120351682",
+          "1120351719"
+        ],
+        "timestamp": "2005-07-02-17.47.51.984240",
+        "event_type": "Proceso Abortado / Core Dump",
+        "description": "Fallo de procesos y generación de core dumps en nodos de los racks R05 y R04."
+      },
+      {
+        "event_id": "EVT-02",
+        "evidence_uids": [
+          "1120446972",
+          "1120446979",
+          "1120447005",
+          "1120447017",
+          "1120447042",
+          "1120447058",
+          "1120447377",
+          "1120447387",
+          "1120447451",
+          "1120447561",
+          "1120447592"
+        ],
+        "timestamp": "2005-07-03-20.16.12.324256",
+        "event_type": "Fallo distribuido de procesos",
+        "description": "Casacada de core dumps en múltiples nodos (R36, R22, R26, R20, R37, R23, R32, R24, R34) durante una ejecución de carga de trabajo distribuida."
+      },
+      {
+        "event_id": "EVT-03",
+        "evidence_uids": [
+          "1120449671",
+          "1120449678",
+          "1120449800",
+          "1120449840",
+          "1120449964",
+          "1120450102"
+        ],
+        "timestamp": "2005-07-03-21.01.11.603590",
+        "event_type": "Fallo distribuido de procesos",
+        "description": "Segunda oleada de fallos de procesos y generación de archivos core en nodos de racks R31, R37, R21, R27 y R22."
+      }
+    ],
+    "secuencia_temporal": [
+      "2005-07-02 17:47:51 a 17:48:39 - Generación inicial de core dumps en tres nodos (PIDs 2117, 3293, 1351).",
+      "2005-07-03 20:16:12 a 20:26:32 - Múltiples procesos abortan en rápida sucesión a través de 11 nodos del clúster.",
+      "2005-07-03 21:01:11 a 21:08:22 - Oleada adicional de terminaciones de procesos con volcados de memoria en 6 nodos."
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

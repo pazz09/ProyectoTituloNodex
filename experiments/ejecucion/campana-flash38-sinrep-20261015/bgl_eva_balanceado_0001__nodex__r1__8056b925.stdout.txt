@@ -1,0 +1,82 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=719 salida=219 razonamiento=1066 total=2004
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=870 salida=189 razonamiento=975 total=2034
+   → No hace falta RAG (El plan de investigación no contempla el uso de memoria histórica y la muestra de registro crudo permite determinar unívocamente que se trata de registros de kernel/hardware mal clasificados como eventos de autenticación, siendo suficiente para emitir el diagnóstico directamente.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=225 salida=56 razonamiento=211 total=492
+   → usar_cve: False | Razón: El diagnóstico confirma un falso positivo correspondiente a telemetría de hardware (registros RAS de kernel/errores corregibles) sin evidencia de ataque, vulnerabilidad de software explotable ni compromiso de seguridad.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=171 salida=96 razonamiento=1499 total=1766
+   → 3 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2188 salida=243 razonamiento=2033 total=4464
+   → Confianza final: 0.80 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=False | El diagnóstico identifica correctamente la actividad como telemetría de hardware (registros RAS con errores corregibles CE sym 27), lo cual constituye una anomalía operativa de hardware y no un incidente de seguridad malicioso. Se valida el descarte de acciones de bloqueo hacia la IP interna.
+   🔀 Router Finalización → agente_planificador (replanifica: cobertura insuficiente)
+👉 Transición completada en: 'agente_auditor_final'
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1655 salida=414 razonamiento=1562 total=3631
+   → Plan v2: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=915 salida=106 razonamiento=448 total=1469
+   → Solicitando RAG (El lote presenta una cobertura de parsing del 0% y una clasificación inicial errónea como auth_log frente a registros crudos que corresponden a telemetría de hardware RAS de supercomputación. Se requiere consultar la memoria histórica y bases de conocimiento para contrastar patrones de falsos positivos de autenticación y comportamiento documentado de eventos RAS antes de emitir un diagnóstico definitivo.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1685.001, T1685.004, T1654
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=1645 salida=142 razonamiento=1024 total=2811
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=243 salida=60 razonamiento=136 total=439
+   → usar_cve: False | Razón: El diagnóstico confirma que se trata de un falso positivo causado por telemetría legítima de hardware y errores de parsing, sin presencia de vulnerabilidades de software ni actividad maliciosa que justifique la búsqueda de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=189 salida=65 razonamiento=853 total=1107
+   → 3 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2939 salida=372 razonamiento=1815 total=5126
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El análisis determina que se trata de una anomalía exclusivamente de hardware/infraestructura (errores de memoria corregibles o Correctable Errors en arquitectura supercomputacional) y no de un incidente de seguridad. Los supuestos eventos de fallo de autenticación derivan de una interpretación errónea del parser sobre registros de telemetría RAS/EDAC. No se observa actividad maliciosa ni técnicas MITRE aplicables.
+   🔀 Router Finalización → END (MAX_REPLANS=1 alcanzado)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

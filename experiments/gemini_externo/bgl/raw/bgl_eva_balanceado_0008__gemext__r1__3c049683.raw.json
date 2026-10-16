@@ -1,0 +1,74 @@
+{
+  "case_id": "bgl_eva_balanceado_0008",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0008__gemext__r1__3c049683",
+  "estado_crudo": {
+    "diagnostico": "Se observan eventos de fallos de ejecución en nodos de un supercomputador IBM BlueGene/L distribuidos en dos períodos de tiempo (29 de junio de 2005 y 30 de junio de 2005). Los registros muestran múltiples caídas de procesos con generación de volcados de memoria ('generating core.<pid>') en diversas tarjetas de computación, acompañadas por un alto volumen recurrente de excepciones de alineación de hardware en la unidad de coma flotante ('double-hummer alignment exceptions'). Esto corresponde a errores operativos/software en trabajos computacionales o desalineación de instrucciones en la FPU 'Double-Hummer', sin indicios de intrusión o actividad maliciosa.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "La evidencia proviene de registros RAS del kernel de BlueGene/L. La generación masiva de volcados de memoria y excepciones de alineación confirma anomalías operativas/de software a gran escala. No obstante, no existe ningún indicador de compromiso, compromiso de integridad ni vector de ataque que señale un incidente de seguridad de la información.",
+    "comandos_mitigacion": [
+      "readelf -h core.*",
+      "gdb -c core.26918 --batch -ex 'bt'",
+      "find /var/log -name 'core.*' -mtime +1 -delete"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-01",
+        "evidence_uids": [
+          "1120091562",
+          "1120091766",
+          "1120091839",
+          "1120091979",
+          "1120092016",
+          "1120092072",
+          "1120092194",
+          "1120092215"
+        ],
+        "timestamp": "2005-06-29 17:32:42 - 17:43:35",
+        "event_type": "Procesos caídos (Core Dump Generation)",
+        "description": "Múltiples nodos del clúster experimentan caídas de procesos y generan archivos de volcado de memoria (core dumps)."
+      },
+      {
+        "event_id": "EVT-02",
+        "evidence_uids": [
+          "1120093988",
+          "1120094424",
+          "1120094724"
+        ],
+        "timestamp": "2005-06-29 18:13:08 - 18:25:24",
+        "event_type": "Excepciones de alineación FPU",
+        "description": "Se registran 344.040 excepciones de alineación en la unidad de punto flotante Double-Hummer en nodos de cómputo específicos."
+      },
+      {
+        "event_id": "EVT-03",
+        "evidence_uids": [
+          "1120145091",
+          "1120145216",
+          "1120145227",
+          "1120145530",
+          "1120145605",
+          "1120145611",
+          "1120145615",
+          "1120145688",
+          "1120145763"
+        ],
+        "timestamp": "2005-06-30 08:24:51 - 08:36:03",
+        "event_type": "Nueva ráfaga de Core Dumps",
+        "description": "Segunda oleada de fallos de procesos y generación de core dumps en múltiples nodos del supercomputador."
+      }
+    ],
+    "secuencia_temporal": [
+      "2005-06-29 17:32:42 a 17:43:35: Ráfaga inicial de fallos de proceso generando volcados core en racks R37, R32, R15, R04, R05, R23, R12 y R16.",
+      "2005-06-29 18:13:08 a 18:25:24: Registro masivo idéntico de 344.040 excepciones de alineación Double-Hummer en R36, R10 y R03.",
+      "2005-06-30 08:24:51 a 08:36:03: Segunda ráfaga de caídas de procesos en racks R26, R22, R17, R16, R00, R11 y R06 con generación de core dumps."
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

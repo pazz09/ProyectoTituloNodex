@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=525 salida=187 razonamiento=821 total=1533
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=651 salida=181 razonamiento=728 total=1560
+   → No hace falta RAG (El plan de investigación descarta expresamente la consulta de memoria histórica y la muestra cruda evidencia con claridad eventos benignos/operativos de fallos de kernel/core dumps, permitiendo un diagnóstico directo sin requerir correlación externa.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=221 salida=53 razonamiento=168 total=442
+   → usar_cve: False | Razón: El diagnóstico no identifica un ataque, vulnerabilidad específica ni un servicio determinado; se trata de una caída operativa del sistema (volcado de memoria) sin indicios de actividad maliciosa.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=174 salida=69 razonamiento=530 total=773
+   → 4 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2048 salida=271 razonamiento=445 total=2764
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | Los registros corresponden a mensajes de volcado de memoria (core dump) en un entorno de computación, lo que representa una anomalía operativa por fallo o terminación anormal de un proceso sin indicios de actividad maliciosa o compromiso de seguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

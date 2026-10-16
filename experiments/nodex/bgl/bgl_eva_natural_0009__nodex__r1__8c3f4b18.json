@@ -1,0 +1,52 @@
+{
+  "case_id": "bgl_eva_natural_0009",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0009__nodex__r1__8c3f4b18",
+  "salida": {
+    "case_id": "bgl_eva_natural_0009",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "core_dump_generation",
+        "evidence_uids": [
+          "log_record_000001",
+          "log_record_000006"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos registros corresponden a eventos operativos del sistema (logs de tipo RAS KERNEL de supercomputación/BlueGene) indicando la generación de volcados de memoria (core dumps, ej. 'generating core.2605') y no a actividad maliciosa ni tráfico de red hostil. La IP interna 172.16.96.116 no presenta indicios de compromiso, ataques de fuerza bruta o escaneos. Se recomienda supervisión del estado del nodo o aplicación a nivel de administración de sistemas/infraestructura para investigar la causa del fallo que generó el volcado, sin requerir medidas de contención de seguridad.\n\n## Evaluación del auditor\n\nEl diagnóstico es adecuado al identificar los registros como eventos de volcado de memoria (core dumps) correspondientes a fallos operativos a nivel de sistema o aplicación (RAS KERNEL), descartando tráfico malicioso o actividad hostil. Si bien existe una anomalía técnica/operativa por la falla del software, no constituye un incidente de seguridad."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0009__nodex__r1__8c3f4b18",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0009__nodex__r1__8c3f4b18.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:04:47+00:00"
+  }
+}

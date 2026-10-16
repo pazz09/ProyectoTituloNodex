@@ -1,0 +1,25 @@
+{
+  "case_id": "bgl_eva_natural_0038",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0038__gemext__r1__6e0e429a",
+  "estado_crudo": {
+    "diagnostico": "Se observa una serie recurrente de fallos de procesos que provocan la generación de volcados de memoria ('generating core.<pid>') a través de múltiples nodos de cómputo en un supercomputador BlueGene/L. No existen indicios de actividad maliciosa o intrusión; se trata de una anomalía operativa provocada por errores a nivel de aplicación (por ejemplo, excepciones no controladas o abortos en cálculos paralelos/MPI).",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "Los registros corresponden a mensajes estándar del kernel RAS de BlueGene/L documentando la terminación anómala de procesos y el correspondiente volcado de core. Si bien la frecuencia de core dumps a través de diversos racks/nodos indica una falla generalizada en la ejecución de un trabajo distribuido, no existe ningún indicador de compromiso (IoC) ni patrones que justifiquen una intrusión de seguridad.",
+    "comandos_mitigacion": [
+      "gdb --core=/ruta/al/core.<pid> /ruta/al/binario --batch -ex 'bt'",
+      "coredumpctl list",
+      "squeue -u <usuario> # o equivalente del gestor de carga (LoadLeveler) para identificar el trabajo causante"
+    ],
+    "eventos_reconstruidos": [],
+    "secuencia_temporal": [],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

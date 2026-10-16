@@ -1,0 +1,89 @@
+{
+  "case_id": "uwf_eva_visible_0004",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "uwf_eva_visible_0004__nodex__r1__a1f4d6b9",
+  "salida": {
+    "case_id": "uwf_eva_visible_0004",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-17 16:20:26.630528",
+        "entities": [],
+        "event_type": "dns_request_unanswered",
+        "evidence_uids": [
+          "CZGAxQ2SmWBXBtj7ac",
+          "CnleWC32XXitJgLN72"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-17 16:35:52.282",
+        "entities": [],
+        "event_type": "network_port_scan",
+        "evidence_uids": [
+          "CgLc2r16KKjawNK486",
+          "CW1rJU3i8X5NnW2IFc",
+          "CLTC2c4FoX1FKSGv63",
+          "Cd4w7LEQsVEFsN5f"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": [
+        {
+          "id": "T1046",
+          "name": "Network Service Discovery",
+          "evidence_uids": [
+            "CgLc2r16KKjawNK486",
+            "CW1rJU3i8X5NnW2IFc",
+            "CLTC2c4FoX1FKSGv63",
+            "Cd4w7LEQsVEFsN5f"
+          ]
+        }
+      ]
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe ha identificado un volumen anómalo y concentrado de tráfico hacia el servicio DNS (puerto 53 UDP) dirigido al host 10.0.10.1 desde la IP 143.88.255.10, totalizando 213 eventos con estado de conexión fallido (S0, sin respuesta). De forma simultánea, la IP 143.88.18.12 registra 60 eventos fallidos hacia 143.88.18.11. El patrón refleja un sondeo agresivo o intento de denegación de servicio/abuso del protocolo DNS, el cual debe ser monitoreado bajo la técnica T1071.004 ante posibles intentos de canalización o comunicación mediante el protocolo de capa de aplicación DNS. Como medida de contención, se recomienda bloquear temporalmente en firewall el tráfico proveniente de 143.88.255.10 y 143.88.18.12 hacia los servidores DNS internos y verificar la integridad de las zonas DNS.\n\n## Evaluación del auditor\n\nEl diagnóstico presenta un error crítico de apreciación: clasifica todo el tráfico bajo la técnica T1071.004 (DNS C2) e indica erróneamente que la IP 143.88.18.12 genera tráfico DNS fallido. En realidad, los registros demuestran con claridad que 143.88.18.12 ejecuta un escaneo de puertos TCP sistemático (T1046) hacia 143.88.18.11 apuntando a más de 30 servicios distintos (SSH, Telnet, RDP, SMB, HTTP, MySQL, VNC, etc.) con estado SH en una fracción de segundo. En cuanto a 143.88.255.10, envía ráfagas periódicas de consultas DNS UDP hacia 10.0.10.1 sin respuesta (S0), pero atribuir T1071.004 resulta infundado sin inspección del payload. Las acciones de contención propuestas son deficientes al limitar el bloqueo de 143.88.18.12 únicamente al puerto 53.\n\n## Comandos de mitigación propuestos\n\n- iptables -I INPUT 1 -s 143.88.255.10 -p udp --dport 53 -j DROP\n- iptables -I INPUT 1 -s 143.88.255.10 -p tcp --dport 53 -j DROP\n- iptables -I INPUT 1 -s 143.88.18.12 -p udp --dport 53 -j DROP\n- iptables -I INPUT 1 -s 143.88.18.12 -p tcp --dport 53 -j DROP\n- ufw insert 1 deny from 143.88.255.10 to any port 53\n- ufw insert 1 deny from 143.88.18.12 to any port 53\n- named-checkconf -z\n- journalctl -u named -u bind9 --since \"1 hour ago\" --no-pager"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_visible_0004__nodex__r1__a1f4d6b9",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_visible_0004__nodex__r1__a1f4d6b9.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:54:29+00:00"
+  }
+}

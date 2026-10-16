@@ -1,0 +1,70 @@
+{
+  "case_id": "bgl_eva_balanceado_0011",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0011__nodex__r1__ca91b6b6",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0011",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "core_dump_generation",
+        "evidence_uids": [
+          "log_record_000001",
+          "log_record_000002",
+          "log_record_000003",
+          "log_record_000004",
+          "log_record_000005",
+          "log_record_000006",
+          "log_record_000007",
+          "log_record_000008",
+          "log_record_000009",
+          "log_record_000010",
+          "log_record_000011",
+          "log_record_000012",
+          "log_record_000013",
+          "log_record_000014",
+          "log_record_000015",
+          "log_record_000016",
+          "log_record_000017",
+          "log_record_000018",
+          "log_record_000019",
+          "log_record_000020"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos registros corresponden a mensajes del sistema RAS (Reliability, Availability and Serviceability) a nivel de KERNEL en nodos de cómputo (arquitectura tipo BlueGene), notificando la generación de volcados de memoria ('generating core.50988'). No se observan vectores de intrusión, direcciones IP externas ni indicadores de compromiso de seguridad; se trata de una incidencia operativa/de estabilidad derivada de fallos o excepciones en aplicaciones/sistema.\n\n## Evaluación del auditor\n\nLos registros corresponden a mensajes de diagnóstico y fiabilidad (RAS) a nivel de kernel que reportan excepciones de software y generación de volcados de memoria (core dumps). Representan fallos de estabilidad operativa del sistema y no una intrusión o actividad maliciosa.\n\n## Comandos de mitigación propuestos\n\n- dmesg -T --level=err,crit,alert,emerg\n- journalctl -k -b -p 3 --no-pager\n- coredumpctl list\n- sysctl -a | grep -E 'kernel.core_pattern|fs.suid_dumpable'\n- df -h\n- ulimit -c 0"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0011__nodex__r1__ca91b6b6",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0011__nodex__r1__ca91b6b6.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T01:58:20+00:00"
+  }
+}

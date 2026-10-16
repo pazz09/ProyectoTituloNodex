@@ -1,0 +1,60 @@
+{
+  "case_id": "bgl_eva_natural_0031",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0031__gemext__r1__6286a69c",
+  "salida": {
+    "case_id": "bgl_eva_natural_0031",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "EVT-01",
+        "timestamp": "2005-06-14-10.58.54.996783",
+        "entities": [],
+        "event_type": "KERNEL_PANIC_EXCEPTION",
+        "evidence_uids": [
+          "1118771934"
+        ]
+      },
+      {
+        "uid": "EVT-02",
+        "timestamp": "2005-06-14-11.15.27.823191",
+        "entities": [],
+        "event_type": "RUNTIME_INTERNAL_ERROR",
+        "evidence_uids": [
+          "1118772927"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nFallas críticas a nivel de kernel y runtime en múltiples nodos de cómputo de un supercomputador BlueGene/L (RAS KERNEL FATAL). Los mensajes corresponden a volcados de registros de estado del procesador (Machine State Register, Program Interrupt, SPRs) y un error interno del runtime system ('rts internal error'), lo que indica una anomalía de hardware o de ejecución a nivel de sistema operativo/runtime, sin evidencia de actividad maliciosa.\n\n## Evaluación del auditor\n\nEl registro muestra volcados de diagnóstico estándar del subsistema RAS (Reliability, Availability and Serviceability) del kernel de BlueGene/L frente a excepciones del procesador PowerPC (interrupción de programa, volcados de registros MSR, CR, LR, XER, CTR). No se observa ninguna traza de compromiso, vectores de ataque, persistencia ni acciones de un adversario.\n\n## Comandos de mitigación propuestos\n\n- # Verificar estado de hardware y diagnóstico en el Service Node / Control System\n- bglstatus -e\n- # Reiniciar los nodos afectados tras validación de diagnóstico\n- service bluegene restart"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0031__gemext__r1__6286a69c",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0031__gemext__r1__6286a69c.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:15:26+00:00"
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "case_id": "uwf_eva_visible_0038",
+  "dataset": "uwf",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "uwf_eva_visible_0038__gemext__r1__d915ce49",
+  "estado_crudo": {
+    "diagnostico": "Anomalía de sistema por fallo y degradación operativa del servicio de resolución DNS en la red. No se identifica un incidente de seguridad ni actividad maliciosa. Se evidencia que: 1) El host 143.88.255.10 realiza consultas DNS recurrentes cada ~30 segundos hacia un resolver local inaccesible (10.0.10.1:53), resultando en estado S0 (sin respuesta). 2) Las consultas del host 143.88.1.51 hacia el resolver 143.88.1.1 experimentan sistemáticamente un retraso exacto de 5.00 segundos, atribuible a timeouts de resolución recursiva. 3) El resolver recursivo 143.88.0.2 falla al intentar comunicarse con los servidores raíz de DNS de Internet (E-Root 192.203.230.10, F-Root 192.5.5.241, B-Root 199.7.91.13, J-Root 192.58.128.30 e IPv6), lo que indica bloqueo perimetral o pérdida de conectividad externa para tráfico UDP/53. Solo las consultas a zonas locales o en caché (e.g., desde 143.88.1.53) se resuelven inmediatamente.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.92,
+    "evaluacion_auditor": "Hipótesis alternativa evaluada: La periodicidad estricta de 30 segundos en las conexiones originadas por 143.88.255.10 podría sugerir balizamiento (beaconing) de malware hacia C2 mediante DNS. Sin embargo, dicha hipótesis se descarta porque el destino es una dirección privada RFC 1918 (10.0.10.1:53, típicamente una puerta de enlace o servidor DNS corporativo), los paquetes tienen un tamaño estándar de consulta (78 y 102 bytes con 2 paquetes por retransmisión), y coexiste con fallos generalizados de resolución hacia servidores raíz externos y timeouts recursivos de 5 segundos en otros clientes. El comportamiento de 143.88.255.10 es consistente con un sondeo automatizado de servicio (healthcheck) o un cliente intentando resolver nombres contra un servidor inactivo. La confianza no alcanza 1.0 porque el log de conexiones Zeek (conn.log) no incluye el payload DNS (campos de query/FQDN) para verificar la naturaleza de las solicitudes.",
+    "comandos_mitigacion": [
+      "dig @10.0.10.1 -p 53 localhost +time=2 +tries=1",
+      "ping -c 4 10.0.10.1",
+      "traceroute -U -p 53 192.5.5.241",
+      "systemctl status named || systemctl status unbound || systemctl status bind9",
+      "iptables -L -n -v | grep 53",
+      "tcpdump -ni any 'udp port 53 and (host 10.0.10.1 or host 192.5.5.241)' -c 20"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-001",
+        "evidence_uids": [
+          "CIvYt73dK6QXNRQfz6",
+          "CiWUJW1geENDyEASbb",
+          "CwSEfiftqd6ORwPt9",
+          "C47gcb1SV9biDKsl3j",
+          "CTYBYw4edtoMaviZf9"
+        ],
+        "timestamp": "2021-12-26 07:10:00.132306",
+        "event_type": "DNS_SERVER_UNREACHABLE",
+        "description": "El host 143.88.255.10 envía ráfagas continuas de consultas DNS cada ~30 segundos hacia 10.0.10.1:53 sin recibir respuesta (conn_state S0, 2 paquetes transmitidos por intento)."
+      },
+      {
+        "event_id": "EVT-002",
+        "evidence_uids": [
+          "CmZDWYTsEDhgee88l",
+          "Ct3kDE48T0ol8EujF9",
+          "CSEKM93TAMCNCINjw",
+          "CbGbQv1jvWmlz5sWD",
+          "CPNUZl17blLVVFahQk"
+        ],
+        "timestamp": "2021-12-26 07:10:30.486162",
+        "event_type": "DNS_LOCAL_RESOLUTION_SUCCESS",
+        "description": "El cliente 143.88.1.53 resuelve consultas DNS exitosamente contra 143.88.1.1 en menos de 1 milisegundo (conn_state SF), correspondiente a respuestas autoritativas locales o en caché."
+      },
+      {
+        "event_id": "EVT-003",
+        "evidence_uids": [
+          "CIAyDD30JUTMxB9SA1",
+          "CTSrfu2syX4PbZo9u8",
+          "CWXgGd4RGZ1Ez6CNi7",
+          "CocWxE3aCdtHonOgsi",
+          "CWzhuB4aA8BsnHUy24"
+        ],
+        "timestamp": "2021-12-26 07:10:47.895657",
+        "event_type": "DNS_RECURSION_TIMEOUT",
+        "description": "El cliente 143.88.1.51 experimenta latencias de resolución de exactamente 5.00 segundos hacia 143.88.1.1:53, coincidente con la expiración del temporizador de reintento/timeout de consultas recursivas."
+      },
+      {
+        "event_id": "EVT-004",
+        "evidence_uids": [
+          "Ct4icX2Jkrti57vLg7",
+          "CPkXOb1uFEqayuPB22",
+          "CS4CAz4wKir7RVTPHj",
+          "CyM62M1NLRhKiLIef8",
+          "CzbJ4740VbObNIc7aa",
+          "Clu7Bz3sv9UqXcbRCf"
+        ],
+        "timestamp": "2021-12-26 07:11:19.837470",
+        "event_type": "DNS_ROOT_HINTS_FAILURE",
+        "description": "El resolver 143.88.0.2 intenta iterativamente contactar a los servidores DNS raíz (E-Root, F-Root, B-Root, J-Root) en IPv4 e IPv6 sin recibir respuesta (conn_state S0, 1 paquete enviado), evidenciando fallo o bloqueo del tráfico saliente UDP/53 hacia Internet."
+      }
+    ],
+    "secuencia_temporal": [
+      "2021-12-26 07:10:00: Inicio de ráfagas periódicas de consultas DNS no respondidas (S0) de 143.88.255.10 a 10.0.10.1 con intervalo constante de 30 segundos.",
+      "2021-12-26 07:10:30: Consultas locales de 143.88.1.53 a 143.88.1.1 se completan normalmente (<1 ms), confirmando que el daemon DNS local responde para registros locales/cacheados.",
+      "2021-12-26 07:10:47: Consultas de 143.88.1.51 a 143.88.1.1 tardan 5.00 segundos en responder, evidenciando timeout en la resolución de nombres recursivos externos.",
+      "2021-12-26 07:11:19: El servidor 143.88.0.2 intenta contactar a E-Root (192.203.230.10) sin éxito (S0).",
+      "2021-12-26 07:13:19: Nuevo intento fallido de 143.88.0.2 hacia F-Root (192.5.5.241).",
+      "2021-12-26 07:27:30 - 07:27:33: Intentos fallidos de resolución raíz hacia direcciones IPv6 (2001:dc3::35 y 2001:500:12::d0d).",
+      "2021-12-26 07:30:19 - 07:34:33: Fallos consecutivos de contacto hacia B-Root (199.7.91.13) y J-Root (192.58.128.30).",
+      "2021-12-26 07:10:00 - 07:38:14: Las ráfagas periódicas de 143.88.255.10 y los timeouts de 5s de 143.88.1.51 persisten a lo largo de toda la captura sin recuperación del servicio."
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

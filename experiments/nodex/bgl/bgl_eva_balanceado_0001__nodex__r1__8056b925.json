@@ -1,0 +1,68 @@
+{
+  "case_id": "bgl_eva_balanceado_0001",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0001__nodex__r1__8056b925",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0001",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "hardware_telemetry_error",
+        "evidence_uids": [
+          "log_record_000014",
+          "log_record_000019"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nTras la inspección de los registros no estructurados analizados en el lote, se valida que los eventos catalogados erróneamente como críticos y de autenticación corresponden en realidad a telemetría legítima de hardware y kernel de arquitectura supercomputacional (mensajes RAS que reportan 'CE' o Correctable Errors a nivel de memoria). No existe evidencia de actividad maliciosa ni compromiso de seguridad, tratándose de un falso positivo originado por fallos en el perfil de parsing (0% de cobertura). Ninguna de las técnicas de MITRE ATT&CK listadas aplica a esta telemetría de infraestructura.\n\n## Evaluación del auditor\n\nEl análisis determina que se trata de una anomalía exclusivamente de hardware/infraestructura (errores de memoria corregibles o Correctable Errors en arquitectura supercomputacional) y no de un incidente de seguridad. Los supuestos eventos de fallo de autenticación derivan de una interpretación errónea del parser sobre registros de telemetría RAS/EDAC. No se observa actividad maliciosa ni técnicas MITRE aplicables.\n\n## Comandos de mitigación propuestos\n\n- edac-util -v\n- ras-mc-ctl --summary\n- dmesg -T | grep -iE 'EDAC|RAS|correctable error' | tail -n 30"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0001__nodex__r1__8056b925",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1685.001",
+          "name": "Disable or Modify Windows Event Log",
+          "similitud": null
+        },
+        {
+          "id": "T1685.004",
+          "name": "Disable or Modify Linux Audit System Log",
+          "similitud": null
+        },
+        {
+          "id": "T1654",
+          "name": "Log Enumeration",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "bgl_eva_balanceado_0001__nodex__r1__8056b925.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T01:39:30+00:00"
+  }
+}

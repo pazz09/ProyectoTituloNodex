@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=529 salida=205 razonamiento=755 total=1489
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=654 salida=188 razonamiento=608 total=1450
+   → No hace falta RAG (A pesar de la falta de estructura en el preprocesamiento, la muestra de texto crudo permite identificar claramente trazas de hardware/kernel de Blue Gene/L (RAS KERNEL FATAL). Al descartarse actividad atribuible a un adversario y tratarse de fallos de confiabilidad del sistema, es posible diagnosticar directamente sin consultar la memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=202 salida=50 razonamiento=165 total=417
+   → usar_cve: False | Razón: El diagnóstico no identifica vectores de ataque, intrusión ni explotación de vulnerabilidades en servicios expuestos; los registros corresponden a fallos internos de hardware o del kernel del sistema.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=155 salida=6 razonamiento=1097 total=1258
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=1965 salida=554 razonamiento=429 total=2948
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | Se confirma la presencia de una anomalía operativa debida a un fallo fatal del kernel por interrupción de programa ('program interrupt: fp cr field') en registros RAS de IBM Blue Gene/L. No existen indicios de actividad maliciosa, intrusión o vector de ataque cibernético, tratándose de un problema de hardware o software a nivel de kernel.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

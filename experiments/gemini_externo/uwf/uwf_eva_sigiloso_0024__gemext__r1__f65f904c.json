@@ -1,0 +1,91 @@
+{
+  "case_id": "uwf_eva_sigiloso_0024",
+  "dataset": "uwf",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "uwf_eva_sigiloso_0024__gemext__r1__f65f904c",
+  "salida": {
+    "case_id": "uwf_eva_sigiloso_0024",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "EVT-001",
+        "timestamp": "2021-12-17 23:21:25.382073",
+        "entities": [],
+        "event_type": "DNS_RESOLUTION_FAILURE",
+        "evidence_uids": [
+          "CNvd5j17kRKYOw9mi1",
+          "CzmuG52ac5O2sNzX5h"
+        ]
+      },
+      {
+        "uid": "EVT-002",
+        "timestamp": "2021-12-17 23:21:55.630866",
+        "entities": [],
+        "event_type": "PERIODIC_DNS_RETRY_LOOP",
+        "evidence_uids": [
+          "CAhNHj1gcSZuTKBLR6",
+          "Cl8oFAR9uaV4jsPZ3",
+          "CGM8p7bEJy7c1thmg",
+          "COm1nL1U9jIB6VEmn4",
+          "C6UGul1nh6Z7kpeLU",
+          "CaEPWo4lmjWnhHErt4"
+        ]
+      },
+      {
+        "uid": "EVT-003",
+        "timestamp": "2021-12-17 23:22:18.618953",
+        "entities": [],
+        "event_type": "DNS_SERVICE_LATENCY",
+        "evidence_uids": [
+          "CHgUky4n8gCl8y6W58",
+          "CtQopk2nORGdzWNOQ",
+          "COd1RNlhkgPQWJO1e",
+          "CfsfxE4oX9UF8Lyxtk"
+        ]
+      },
+      {
+        "uid": "EVT-004",
+        "timestamp": "2021-12-17 23:33:23.048393",
+        "entities": [],
+        "event_type": "DNS_ROOT_QUERY_TIMEOUT",
+        "evidence_uids": [
+          "CpGpdL3pVjYLVY3bwe",
+          "CLUYOG2mKz5Blw8xW2",
+          "CHT9K53wi618ajkAJ7",
+          "CGGKTB2SIGxroGlzX5",
+          "CdePVa2haxuamJBgu2"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nFallo sistemático de resolución DNS y degradación en la infraestructura de nombres. El host 143.88.255.10 realiza consultas DNS periódicas cada aproximadamente 30 segundos dirigidas a la dirección privada 10.0.10.1 (puerto 53/UDP), las cuales resultan invariablemente en estado S0 (sin respuesta y con retransmisión). Al mismo tiempo, el servidor DNS 143.88.0.2 experimenta fallos de conectividad hacia servidores raíz externos (a.root, b.root, e.root, k.root), y el host 143.88.1.51 sufre retrasos de resolución de aproximadamente 5 segundos con 143.88.1.1. No se identifican patrones de explotación, exfiltración ni comando y control; se trata de una anomalía operativa por configuración errónea o indisponibilidad de resolvedores.\n\n## Evaluación del auditor\n\nSe evaluó la posibilidad de que el tráfico periódico cada ~30.25 segundos desde 143.88.255.10 correspondiera a un canal encubierto o beaconing DNS (T1071.004). Sin embargo, la hipótesis se descarta debido a que: 1) El destino es una IP de ámbito privado (10.0.10.1) que no devuelve ninguna respuesta (resp_bytes=0, S0), imposibilitando cualquier comunicación C2 bidireccional; 2) Los tamaños de carga son constantes (78 y 102 bytes), propios de reintentos estándar de consultas DNS directas e inversas o nombres de servicio locales; 3) Se observan otros síntomas concurrentes de degradación de red DNS (timeouts de 5s en 143.88.1.1 e incomunicación con root servers desde 143.88.0.2). Por tanto, se clasifica como anomalía operativa y fallo de red/servicio, sin evidencia de actividad maliciosa.\n\n## Comandos de mitigación propuestos\n\n- cat /etc/resolv.conf\n- ping -c 4 10.0.10.1\n- traceroute -n -q 2 10.0.10.1\n- dig @10.0.10.1 localhost +time=2 +tries=1\n- sed -i 's/10.0.10.1/143.88.1.1/g' /etc/resolv.conf"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_sigiloso_0024__gemext__r1__f65f904c",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "uwf_eva_sigiloso_0024__gemext__r1__f65f904c.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:49:34+00:00"
+  }
+}

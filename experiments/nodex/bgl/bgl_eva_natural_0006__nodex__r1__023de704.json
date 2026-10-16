@@ -1,0 +1,70 @@
+{
+  "case_id": "bgl_eva_natural_0006",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0006__nodex__r1__023de704",
+  "salida": {
+    "case_id": "bgl_eva_natural_0006",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "hardware_tlb_error",
+        "evidence_uids": [
+          "log_record_000001",
+          "log_record_000002",
+          "log_record_000003",
+          "log_record_000004",
+          "log_record_000005",
+          "log_record_000006",
+          "log_record_000007",
+          "log_record_000008",
+          "log_record_000009",
+          "log_record_000010",
+          "log_record_000011",
+          "log_record_000012",
+          "log_record_000013",
+          "log_record_000014",
+          "log_record_000015",
+          "log_record_000016",
+          "log_record_000017",
+          "log_record_000018",
+          "log_record_000019",
+          "log_record_000020"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos registros corresponden a mensajes de fiabilidad y servicio (RAS) a nivel de kernel de arquitectura de supercomputación (típicos de Blue Gene/L). El evento observado ('RAS KERNEL FATAL data TLB error interrupt') corresponde a un fallo crítico de hardware/memoria relacionado con la Translation Lookaside Buffer (TLB), no a una intrusión o vector de ataque cibernético. Se descarta actividad maliciosa y se cataloga como incidente operativo de hardware.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Los registros describen interrupciones críticas de fiabilidad y servicio (RAS KERNEL FATAL data TLB error interrupt), correspondientes a una falla de hardware/memoria en la unidad TLB de un nodo de cómputo. No existe evidencia de actividad maliciosa ni intrusión de seguridad.\n\n## Comandos de mitigación propuestos\n\n- dmesg -T --level=emerg,alert,crit,err > /var/log/tlb_hardware_failure.log\n- journalctl -k -b -p 0..3 --no-pager > /var/log/kernel_ras_event.log\n- which scontrol >/dev/null 2>&1 && scontrol update NodeName=$(hostname -s) State=DRAIN Reason='RAS KERNEL FATAL data TLB error' || echo 'Node isolation: Slurm not detected'\n- which ras-mc-ctl >/dev/null 2>&1 && ras-mc-ctl --summary || echo 'rasdaemon no disponible'\n- sync"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0006__nodex__r1__023de704",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0006__nodex__r1__023de704.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:03:39+00:00"
+  }
+}

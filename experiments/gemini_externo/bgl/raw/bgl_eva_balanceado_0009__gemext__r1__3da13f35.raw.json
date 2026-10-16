@@ -1,0 +1,97 @@
+{
+  "case_id": "bgl_eva_balanceado_0009",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0009__gemext__r1__3da13f35",
+  "estado_crudo": {
+    "diagnostico": "El registro corresponde a eventos operativos y de ejecución en un supercomputador IBM Blue Gene/L. Se observan múltiples volcados de memoria (core dumps) derivados de fallos en procesos de computación científica (ej. suite sweep3d ejecutada por el usuario pakin1), un error de permisos en el sistema de archivos al intentar crear un mapa de nodos, un error de configuración de dimensiones físicas de la red toroidal (coordenada Z excede el límite físico) y un fallo de paridad de memoria RAM corregido por ECC (1 ddr error detected and corrected). No existe evidencia de actividad maliciosa ni intrusión; se trata exclusivamente de incidencias operativas y fallos de software/hardware normales en entornos HPC.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "La hipótesis de compromiso de seguridad se descarta. Los eventos corresponden a patrones típicos de fallos de aplicación y configuración en HPC: core dumps provocados por fallos en tareas MPI o abortos de aplicación, errores de configuración de topología de red en ciod y fallos de hardware transitorios corregidos automáticamente por hardware ECC.",
+    "comandos_mitigacion": [],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-01",
+        "evidence_uids": [
+          "1121313974",
+          "1121314001",
+          "1121314022",
+          "1121314138",
+          "1121314248"
+        ],
+        "timestamp": "2005-07-13-21.06.14 a 2005-07-13-21.10.48",
+        "event_type": "Application Failure / Core Dump",
+        "description": "Múltiples nodos de cómputo generan volcados de núcleo (core dumps) debido a la terminación anormal de procesos."
+      },
+      {
+        "event_id": "EVT-02",
+        "evidence_uids": [
+          "1121383222"
+        ],
+        "timestamp": "2005-07-14-16.20.22",
+        "event_type": "File Permission Error",
+        "description": "Fallo crítico en ciod al no poder generar un archivo de mapeo de nodos en /home/pakin1/sweep3d-2.2b/results/ por permisos denegados."
+      },
+      {
+        "event_id": "EVT-03",
+        "evidence_uids": [
+          "1121408299"
+        ],
+        "timestamp": "2005-07-14-23.18.19",
+        "event_type": "Configuration Topology Error",
+        "description": "Error en ciod al procesar el archivo de mapa de nodos torus: la coordenada Z especificada excede la dimensión física máxima del clúster."
+      },
+      {
+        "event_id": "EVT-04",
+        "evidence_uids": [
+          "1121442061",
+          "1121442070",
+          "1121442075",
+          "1121442115",
+          "1121442124",
+          "1121451271"
+        ],
+        "timestamp": "2005-07-15-08.41.01 a 2005-07-15-11.14.31",
+        "event_type": "Application Failure / Core Dump",
+        "description": "Segunda ráfaga de volcados de memoria en múltiples nodos de cómputo de diferentes racks."
+      },
+      {
+        "event_id": "EVT-05",
+        "evidence_uids": [
+          "1121484659"
+        ],
+        "timestamp": "2005-07-15-20.30.59",
+        "event_type": "Hardware Memory ECC Correction",
+        "description": "El kernel detecta y corrige un error de paridad de memoria DDR en el rank 0, símbolo 33, bit 7."
+      },
+      {
+        "event_id": "EVT-06",
+        "evidence_uids": [
+          "1121493806",
+          "1121493886",
+          "1121493913",
+          "1121494125",
+          "1121494129",
+          "1121494144"
+        ],
+        "timestamp": "2005-07-15-23.03.26 a 2005-07-15-23.09.04",
+        "event_type": "Application Failure / Core Dump",
+        "description": "Tercera secuencia de generación de core dumps en múltiples nodos de cómputo de los racks R36, R20, R37 y R31."
+      }
+    ],
+    "secuencia_temporal": [
+      "2005-07-13 21:06:14 a 21:10:48: Ráfaga inicial de fallos de procesos y core dumps en nodos de cómputo (R21, R37, R23).",
+      "2005-07-14 16:20:22: Fallo por permisos denegados en la ejecución de ciod vinculada al benchmark sweep3d del usuario pakin1.",
+      "2005-07-14 23:18:19: Error de configuración en topología de red toroidal al sobrepasar dimensiones físicas en el mapeo de nodos.",
+      "2005-07-15 08:41:01 a 11:14:31: Serie sucesiva de terminaciones anómalas de procesos y generación de archivos core.",
+      "2005-07-15 20:30:59: Detección y corrección exitosa de error en memoria DDR en R33-M0-N6-C:J13-U11.",
+      "2005-07-15 23:03:26 a 23:09:04: Nueva oleada masiva de core dumps en nodos de cálculo."
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

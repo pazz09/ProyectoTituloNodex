@@ -1,0 +1,41 @@
+{
+  "case_id": "bgl_eva_natural_0022",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0022__gemext__r1__426bef56",
+  "salida": {
+    "case_id": "bgl_eva_natural_0022",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl log corresponde a un supercomputador IBM Blue Gene/L (arquitectura PowerPC 440). Muestra dos tipos de comportamientos operativos: primero, la generación recurrente de archivos core dump (generating core.<pid>) en múltiples nodos de cómputo en distintas franjas horarias (07:57, 14:41-14:46, 18:40-18:43, 19:07-19:09), lo cual indica fallos fatales o caídas de procesos en aplicaciones paralelas; segundo, el registro masivo de excepciones de alineación aritmética ('double-hummer alignment exceptions') entre las 15:40 y 15:43. 'Double-Hummer' es la unidad de punto flotante dual de la arquitectura Blue Gene/L. Estas excepciones y caídas reflejan problemas de compilación, acceso a memoria desalineada o abortos de trabajos HPC científicos, y no actividad cibernética hostil.\n\n## Evaluación del auditor\n\nExiste una clara degradación y fallo a nivel de aplicación del sistema (core dumps masivos y excepciones de hardware/FPU cuantificadas en cientos de millones), lo que confirma una anomalía de sistema. Sin embargo, no se aprecian patrones de intrusión, persistencia, manipulación no autorizada ni vulneraciones de políticas de seguridad. Todo el comportamiento es típico de cargas de trabajo HPC que experimentan errores de código o desbordamientos."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0022__gemext__r1__426bef56",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0022__gemext__r1__426bef56.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:13:09+00:00"
+  }
+}

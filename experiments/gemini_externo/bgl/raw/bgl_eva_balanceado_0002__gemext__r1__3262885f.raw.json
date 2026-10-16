@@ -1,0 +1,95 @@
+{
+  "case_id": "bgl_eva_balanceado_0002",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0002__gemext__r1__3262885f",
+  "estado_crudo": {
+    "diagnostico": "El registro corresponde a eventos operativos y de diagnóstico RAS (Reliability, Availability, and Serviceability) del supercomputador IBM BlueGene/L. Se identifican múltiples fallas operativas recurrentes, principalmente fallos en el montaje del sistema de archivos distribuido Lustre (/p/gb1) en nodos de E/S (bglio*), errores leves de hardware corregidos (errores de bus torus y memoria DDR/CE), una discrepancia de hardware VPD tras reemplazo o lectura de tarjeta de nodos, y errores de ejecución en ciod (archivos no encontrados y caída de enlaces de comunicación). No existen indicadores de compromiso o actividad maliciosa.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "La evidencia muestra degradación y fallos de infraestructura a nivel de sistema de archivos paralelo (Lustre) y problemas de conectividad de E/S característicos de entornos HPC. Los fallos fatales de ciod (LOGIN chdir y carga de binarios) se correlacionan directamente con la indisponibilidad de las rutas montadas en Lustre. La evaluación de que no es un incidente de seguridad se basa en la ausencia de vectores de ataque, persistencia, escalada de privilegios o tráfico sospechoso; son exclusivamente eventos de estabilidad operativa y fallos de hardware/almacenamiento.",
+    "comandos_mitigacion": [
+      "lctl ping <MGS/MDS_NID>",
+      "mount -t lustre <MGS_NID>:/sp/gb1 /p/gb1",
+      "dmesg | grep -i lustre",
+      "ping -c 4 172.16.96.116"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-001",
+        "evidence_uids": [
+          "1125690043",
+          "1125692642",
+          "1125694345",
+          "1125759503",
+          "1125871271",
+          "1126202752"
+        ],
+        "timestamp": "2005-09-02T12:40:43.759217",
+        "event_type": "filesystem_mount_failure",
+        "description": "Fallos repetidos y distribuidos de montaje del sistema de archivos Lustre (/p/gb1) a través de múltiples nodos I/O (bglio46, bglio136, bglio75, bglio736, bglio336, bglio23)."
+      },
+      {
+        "event_id": "EVT-002",
+        "evidence_uids": [
+          "1125701454"
+        ],
+        "timestamp": "2005-09-02T15:50:54.754016",
+        "event_type": "hardware_vpd_mismatch",
+        "description": "Fallo de coincidencia en la verificación de datos vitales de producto (VPD) en el nodo U11 del slot J18 de la tarjeta de procesador R63-M1-N0."
+      },
+      {
+        "event_id": "EVT-003",
+        "evidence_uids": [
+          "1125749350",
+          "1126421175",
+          "1126434160"
+        ],
+        "timestamp": "2005-09-03T05:09:10.001351",
+        "event_type": "application_io_failure",
+        "description": "Fallos fatales en el demonio ciod al acceder a directorios inexistentes, cargar imágenes de programas y ruptura de enlace por socket con el host 172.16.96.116."
+      },
+      {
+        "event_id": "EVT-004",
+        "evidence_uids": [
+          "1125730913",
+          "1125797779",
+          "1125817576",
+          "1126180040",
+          "1126267442",
+          "1126272208",
+          "1126275477",
+          "1126526629"
+        ],
+        "timestamp": "2005-09-03T00:01:53.125988",
+        "event_type": "correctable_hardware_errors",
+        "description": "Detección y corrección continua de errores de hardware en el bus de red torus y memoria DDR (correctable errors CE) en distintos nodos de cómputo."
+      }
+    ],
+    "secuencia_temporal": [
+      "2005-09-02 12:40:43 - Fallo inicial de montaje de Lustre en bglio46 (UID: 1125690043)",
+      "2005-09-02 13:24:02 - Fallo de montaje de Lustre en bglio136 (UID: 1125692642)",
+      "2005-09-02 13:52:25 - Fallo de montaje de Lustre en bglio75 (UID: 1125694345)",
+      "2005-09-02 15:50:54 - Discrepancia en comprobación VPD en R63-M1-N0 (UID: 1125701454)",
+      "2005-09-03 00:01:53 - Corrección de error de canal de entrada torus x+ (UID: 1125730913)",
+      "2005-09-03 05:09:10 - Error de ciod: directorio /LAPACK_440d/BLAS no encontrado (UID: 1125749350)",
+      "2005-09-03 07:58:23 - Fallo de montaje de Lustre en bglio736 (UID: 1125759503)",
+      "2005-09-03 18:36:19 a 2005-09-04 00:06:16 - Errores de memoria corregibles (CE) (UIDs: 1125797779, 1125817576)",
+      "2005-09-04 15:01:11 - Fallo de montaje de Lustre en bglio336 (UID: 1125871271)",
+      "2005-09-08 04:47:20 - Error de memoria corregible (CE) (UID: 1126180040)",
+      "2005-09-08 11:05:52 - Fallo de montaje de Lustre en bglio23 (UID: 1126202752)",
+      "2005-09-08 13:38:11 - Desconexión del depurador en ciod (UID: 1126211891)",
+      "2005-09-08 13:38:26 - Inconsistencia de código de mensaje en paquete de nodo (UID: 1126211906)",
+      "2005-09-09 05:04:02 a 07:17:57 - Errores corregibles en torus y memoria DDR (UIDs: 1126267442, 1126272208, 1126275477)",
+      "2005-09-10 23:46:15 - Fallo de carga de binario de pruebas IMB-MPI1 en ciod (UID: 1126421175)",
+      "2005-09-11 03:22:40 - Enlace de socket ciod cortado hacia 172.16.96.116 (UID: 1126434160)",
+      "2005-09-12 05:03:49 - Supresión de interrupciones del mismo tipo en R20-M1-N8 (UID: 1126526629)"
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

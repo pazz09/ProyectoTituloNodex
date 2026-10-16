@@ -1,0 +1,82 @@
+{
+  "case_id": "uwf_eva_sigiloso_0024",
+  "dataset": "uwf",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "uwf_eva_sigiloso_0024__gemext__r1__f65f904c",
+  "estado_crudo": {
+    "diagnostico": "Fallo sistemático de resolución DNS y degradación en la infraestructura de nombres. El host 143.88.255.10 realiza consultas DNS periódicas cada aproximadamente 30 segundos dirigidas a la dirección privada 10.0.10.1 (puerto 53/UDP), las cuales resultan invariablemente en estado S0 (sin respuesta y con retransmisión). Al mismo tiempo, el servidor DNS 143.88.0.2 experimenta fallos de conectividad hacia servidores raíz externos (a.root, b.root, e.root, k.root), y el host 143.88.1.51 sufre retrasos de resolución de aproximadamente 5 segundos con 143.88.1.1. No se identifican patrones de explotación, exfiltración ni comando y control; se trata de una anomalía operativa por configuración errónea o indisponibilidad de resolvedores.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.92,
+    "evaluacion_auditor": "Se evaluó la posibilidad de que el tráfico periódico cada ~30.25 segundos desde 143.88.255.10 correspondiera a un canal encubierto o beaconing DNS (T1071.004). Sin embargo, la hipótesis se descarta debido a que: 1) El destino es una IP de ámbito privado (10.0.10.1) que no devuelve ninguna respuesta (resp_bytes=0, S0), imposibilitando cualquier comunicación C2 bidireccional; 2) Los tamaños de carga son constantes (78 y 102 bytes), propios de reintentos estándar de consultas DNS directas e inversas o nombres de servicio locales; 3) Se observan otros síntomas concurrentes de degradación de red DNS (timeouts de 5s en 143.88.1.1 e incomunicación con root servers desde 143.88.0.2). Por tanto, se clasifica como anomalía operativa y fallo de red/servicio, sin evidencia de actividad maliciosa.",
+    "comandos_mitigacion": [
+      "cat /etc/resolv.conf",
+      "ping -c 4 10.0.10.1",
+      "traceroute -n -q 2 10.0.10.1",
+      "dig @10.0.10.1 localhost +time=2 +tries=1",
+      "sed -i 's/10.0.10.1/143.88.1.1/g' /etc/resolv.conf"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-001",
+        "evidence_uids": [
+          "CNvd5j17kRKYOw9mi1",
+          "CzmuG52ac5O2sNzX5h"
+        ],
+        "timestamp": "2021-12-17 23:21:25.382073",
+        "event_type": "DNS_RESOLUTION_FAILURE",
+        "description": "El host 143.88.255.10 inicia ráfagas de consultas DNS hacia 10.0.10.1:53 sin obtener respuesta (estado S0, 2 paquetes transmitidos por reintento)."
+      },
+      {
+        "event_id": "EVT-002",
+        "evidence_uids": [
+          "CAhNHj1gcSZuTKBLR6",
+          "Cl8oFAR9uaV4jsPZ3",
+          "CGM8p7bEJy7c1thmg",
+          "COm1nL1U9jIB6VEmn4",
+          "C6UGul1nh6Z7kpeLU",
+          "CaEPWo4lmjWnhHErt4"
+        ],
+        "timestamp": "2021-12-17 23:21:55.630866",
+        "event_type": "PERIODIC_DNS_RETRY_LOOP",
+        "description": "Persistencia de consultas DNS no respondidas desde 143.88.255.10 hacia 10.0.10.1 con intervalo estricto de ~30 segundos."
+      },
+      {
+        "event_id": "EVT-003",
+        "evidence_uids": [
+          "CHgUky4n8gCl8y6W58",
+          "CtQopk2nORGdzWNOQ",
+          "COd1RNlhkgPQWJO1e",
+          "CfsfxE4oX9UF8Lyxtk"
+        ],
+        "timestamp": "2021-12-17 23:22:18.618953",
+        "event_type": "DNS_SERVICE_LATENCY",
+        "description": "Consultas DNS de 143.88.1.51 a 143.88.1.1 presentan latencia excesiva y tiempos de espera fijos de ~5 segundos antes de completarse."
+      },
+      {
+        "event_id": "EVT-004",
+        "evidence_uids": [
+          "CpGpdL3pVjYLVY3bwe",
+          "CLUYOG2mKz5Blw8xW2",
+          "CHT9K53wi618ajkAJ7",
+          "CGGKTB2SIGxroGlzX5",
+          "CdePVa2haxuamJBgu2"
+        ],
+        "timestamp": "2021-12-17 23:33:23.048393",
+        "event_type": "DNS_ROOT_QUERY_TIMEOUT",
+        "description": "El servidor/nodo 143.88.0.2 intenta contactar a servidores raíz DNS en Internet (192.5.5.241, 198.41.0.4, 192.203.230.10, 192.58.128.30, 193.0.14.129) resultando en pérdidas de paquetes sin respuesta."
+      }
+    ],
+    "secuencia_temporal": [
+      "2021-12-17 23:21:25 - Inicio del ciclo de consultas DNS fallidas de 143.88.255.10 a 10.0.10.1",
+      "2021-12-17 23:22:18 - Detección de demoras de 5.0 segundos en la resolución provista por 143.88.1.1",
+      "2021-12-17 23:33:23 - Fallo de consultas externas de 143.88.0.2 hacia servidores raíz DNS (b.root-servers.net y subsiguientes)",
+      "2021-12-17 23:51:10 - Continuación constante del ciclo de reintentos infructuosos a 10.0.10.1 cada 30.25 segundos sin restablecimiento del servicio"
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

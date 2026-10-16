@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=531 salida=250 razonamiento=769 total=1550
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=654 salida=206 razonamiento=1146 total=2006
+   → No hace falta RAG (A pesar de la falta de estructura en el resumen preprocesado (cobertura 0%), la muestra de registro crudo permite identificar claramente el origen de los logs como telemetría operativa de supercómputo y clasificar el incidente como un fallo de sistema no malicioso sin requerir contexto adicional.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=222 salida=53 razonamiento=206 total=481
+   → usar_cve: False | Razón: El diagnóstico concluye que no hay actividad maliciosa ni vectores de ataque, sino un fallo operativo o inestabilidad de software, sin identificar un servicio vulnerable específico para consultar CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=175 salida=58 razonamiento=477 total=710
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2038 salida=578 razonamiento=568 total=3184
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | Los registros corresponden a eventos del subsistema RAS de Blue Gene/L reportando la generación de volcados de memoria (core dumps) tras la terminación anormal de procesos en nodos de cómputo. Se trata de una falla de estabilidad o error de software netamente operacional, sin evidencia de actividad maliciosa ni vectores de intrusión.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

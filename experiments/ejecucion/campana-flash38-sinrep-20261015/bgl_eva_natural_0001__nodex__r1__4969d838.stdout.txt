@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=826 salida=208 razonamiento=857 total=1891
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=1013 salida=261 razonamiento=1592 total=2866
+   → No hace falta RAG (El plan de investigación no contempla memoria histórica y la muestra cruda evidencia con claridad fallos operativos en demonios I/O (ciod) de un clúster HPC, permitiendo descartar actividad maliciosa sin necesidad de contexto externo.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=291 salida=50 razonamiento=375 total=716
+   → usar_cve: False | Razón: El evento corresponde a un fallo operativo y de infraestructura de red en un clúster HPC, sin indicios de ataque malicioso ni explotación de vulnerabilidades de software específicas.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=244 salida=133 razonamiento=918 total=1295
+   → 7 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2259 salida=450 razonamiento=581 total=3290
+   → Confianza final: 0.90 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros corresponden a fallas operativas de comunicación de sockets y corte de enlaces de red en el subsistema I/O de un clúster HPC (ciod de BlueGene/L), afectando direcciones IP internas. No hay indicios de intrusión, explotación ni actividad adversaria, por lo que constituye una anomalía de infraestructura y no un incidente de ciberseguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

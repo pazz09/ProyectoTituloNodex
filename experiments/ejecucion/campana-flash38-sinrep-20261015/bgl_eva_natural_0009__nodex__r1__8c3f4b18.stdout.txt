@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=681 salida=252 razonamiento=372 total=1305
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=822 salida=198 razonamiento=441 total=1461
+   → No hace falta RAG (El plan de investigación no contempla memoria histórica y la muestra cruda evidencia con claridad que se trata de logs operativos de kernel/sistema (RAS KERNEL INFO) sin vectores de ataque de seguridad.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=246 salida=60 razonamiento=373 total=679
+   → usar_cve: False | Razón: El diagnóstico indica que se trata de fallos operativos internos del sistema (core dumps) y descarta actividad maliciosa o compromiso, por lo que no se identifica un servicio vulnerable o vector de ataque específico para consultar CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=199 salida=6 razonamiento=1658 total=1863
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2029 salida=319 razonamiento=1038 total=3386
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es adecuado al identificar los registros como eventos de volcado de memoria (core dumps) correspondientes a fallos operativos a nivel de sistema o aplicación (RAS KERNEL), descartando tráfico malicioso o actividad hostil. Si bien existe una anomalía técnica/operativa por la falla del software, no constituye un incidente de seguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

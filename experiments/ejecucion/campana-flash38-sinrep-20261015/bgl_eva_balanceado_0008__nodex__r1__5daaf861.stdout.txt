@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=532 salida=276 razonamiento=393 total=1201
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=664 salida=226 razonamiento=452 total=1342
+   → No hace falta RAG (El plan de investigación excluye la memoria histórica y la muestra cruda permite identificar claramente el origen (logs de RAS de BlueGene) y la naturaleza operacional/fallo de software del evento sin requerir correlación externa.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=261 salida=62 razonamiento=217 total=540
+   → usar_cve: False | Razón: El diagnóstico confirma que se trata de un evento operativo interno (fallo de proceso y volcado de memoria en un nodo BlueGene/L) sin indicios de ataque ni servicios o vulnerabilidades específicas que requieran consulta de CVE.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=214 salida=69 razonamiento=458 total=741
+   → 4 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2088 salida=325 razonamiento=834 total=3247
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros reflejan la terminación anómala de un proceso y la consiguiente generación de un volcado de memoria (core dump) en un nodo de supercómputo BlueGene/L. No existen indicios de actividad maliciosa ni vectores de intrusión, tratándose de un fallo operativo o de software que debe ser analizado por el equipo de ingeniería HPC.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

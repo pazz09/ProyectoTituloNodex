@@ -1,0 +1,82 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=524 salida=178 razonamiento=781 total=1483
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=654 salida=279 razonamiento=4583 total=5516
+   → No hace falta RAG (El plan de investigación no contempla consultar memoria histórica y la muestra en texto libre resulta suficiente para determinar que se trata de fallas de kernel/core dumps en nodos de computación, permitiendo formular el diagnóstico y las recomendaciones de ingesta sin requerir RAG.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=306 salida=48 razonamiento=170 total=524
+   → usar_cve: False | Razón: El diagnóstico indica un fallo operativo preliminar o inestabilidad interna en infraestructura BlueGene/L sin identificar un software específico con versión vulnerable ni evidencia concreta de explotación.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=259 salida=161 razonamiento=729 total=1149
+   → 6 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2225 salida=286 razonamiento=1184 total=3695
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=False | El diagnóstico es adecuado al identificar la generación de un volcado de memoria como una anomalía operativa a nivel de infraestructura/kernel sin evidencia de compromiso malicioso directo.
+   🔀 Router Finalización → agente_planificador (replanifica: cobertura insuficiente)
+👉 Transición completada en: 'agente_auditor_final'
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1446 salida=442 razonamiento=629 total=2517
+   → Plan v2: ['triage', 'rag', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=698 salida=113 razonamiento=313 total=1124
+   → Solicitando RAG (La cobertura de parsing es del 0% y los registros se encuentran en texto libre con un evento de volcado de memoria (generating core.2117) en BlueGene/L. Dado que el objetivo es descartar una explotación por desbordamiento de memoria o DoS frente a una falla operativa, es indispensable contrastar el comportamiento con técnicas MITRE ATT&CK y casos históricos en entornos HPC antes de emitir un veredicto.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 0 técnicas MITRE ATT&CK relacionadas (colección vacía o sin similitud suficiente).
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=670 salida=171 razonamiento=412 total=1253
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=265 salida=48 razonamiento=239 total=552
+   → usar_cve: False | Razón: No se especifica ningún servicio, software o vulnerabilidad concreta en el diagnóstico, indicando más bien un fallo operativo interno sin evidencia de explotación o CVE identificable.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=218 salida=203 razonamiento=598 total=1019
+   → 7 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2203 salida=343 razonamiento=681 total=3227
+   → Confianza final: 0.75 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=False | El registro describe la generación de un core dump (core.2117) tras la terminación anómala de un proceso en un nodo de BlueGene/L. Aunque constituye una anomalía operativa del sistema, no existen indicadores de compromiso, vectores de ataque remotos ni actividad maliciosa evidente en los registros analizados.
+   🔀 Router Finalización → END (MAX_REPLANS=1 alcanzado)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

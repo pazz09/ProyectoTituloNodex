@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=720 salida=293 razonamiento=498 total=1511
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=929 salida=93 razonamiento=517 total=1539
+   → Solicitando RAG (La cobertura de parsing es del 0%, impidiendo una interpretación estructural confiable de los eventos clasificados como críticos. Se requiere consultar la base de conocimiento histórico y las técnicas de MITRE ATT&CK sobre anomalías en autenticación para contextualizar adecuadamente la actividad de la IP 172.16.96.116.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1685.001, T1685.004, T1654
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=1670 salida=226 razonamiento=654 total=2550
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=321 salida=55 razonamiento=145 total=521
+   → usar_cve: False | Razón: El diagnóstico concluye que los eventos corresponden a fallos operacionales de infraestructura HPC (Blue Gene/ciod) y no a un ataque malicioso ni a la explotación de una vulnerabilidad específica.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=267 salida=101 razonamiento=469 total=837
+   → 3 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=3188 salida=509 razonamiento=1081 total=4778
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros analizados corresponden a errores operacionales de infraestructura HPC (ciod/Blue Gene: 'Error loading... No such file or directory') que fueron erróneamente categorizados como fallos de autenticación por el analizador sintáctico. No se evidencian acciones maliciosas, intrusiones ni técnicas de evasión de defensas, tratándose de un falso positivo de seguridad derivado de un problema operacional.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

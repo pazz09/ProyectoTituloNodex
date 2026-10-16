@@ -1,0 +1,82 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3112 salida=394 razonamiento=2154 total=5660
+   → Plan v1: ['triage', 'rag', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3326 salida=107 razonamiento=518 total=3951
+   → Solicitando RAG (Se requiere consultar las técnicas MITRE ATT&CK y el historial de casos sobre abuso de protocolo DNS, denegación de servicio o escaneos anómalos para caracterizar con precisión el ataque de 143.88.255.10 hacia 10.0.10.1 y fundamentar las medidas de contención recomendadas.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1071.004, T1568.002, T1584.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=4033 salida=268 razonamiento=477 total=4778
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=380 salida=57 razonamiento=188 total=625
+   → usar_cve: False | Razón: El diagnóstico describe una actividad anómala de red asociada a técnicas de Comando y Control (DGA o túnel DNS) y no menciona ningún software específico ni versión vulnerable que requiera búsqueda de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=315 salida=239 razonamiento=1016 total=1570
+   → 7 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=48247 salida=784 razonamiento=2541 total=51572
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=False | Se observa un comportamiento anómalo consistente en ráfagas periódicas de paquetes UDP al puerto 53 de la IP 10.0.10.1 sin obtener respuesta (estado de conexión S0 en Zeek). Sin embargo, atribuir esta actividad a DGA (T1568.002) o canal C2 encubierto por DNS (T1071.004) es una conclusión infundada y especulativa. El estado S0 en UDP indica falta total de respuesta del servidor (típico de un resolvedor DNS inaccesible, inactivo o mal configurado en el cliente), a diferencia de DGA donde un resolvedor funcional respondería típicamente con NXDOMAIN (estado SF). Además, los logs disponibles son de conexión a nivel de transporte y no contienen el payload DNS (nombres de dominio o tipos de registro) para justificar sospecha maliciosa.
+   🔀 Router Finalización → agente_planificador (replanifica: cobertura insuficiente)
+👉 Transición completada en: 'agente_auditor_final'
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=4571 salida=370 razonamiento=631 total=5572
+   → Plan v2: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3322 salida=374 razonamiento=472 total=4168
+   → No hace falta RAG (El resumen del lote cuenta con 100% de cobertura y evidencia técnica suficiente (estados S0, distribución unidireccional sin respuestas y contraste con otros resolvers funcionales) para diferenciar de forma concluyente una falla de configuración de un ataque, cumpliendo con la directiva del plan de no requerir memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=406 salida=62 razonamiento=173 total=641
+   → usar_cve: False | Razón: El diagnóstico concluye que la actividad se debe a una desconfiguración de red y problemas de conectividad (consultas DNS hacia un resolver inalcanzable), descartando actividad maliciosa o la explotación de vulnerabilidades específicas.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=341 salida=337 razonamiento=1327 total=2005
+   → 6 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=48350 salida=657 razonamiento=830 total=49837
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es preciso: los logs reflejan un problema operativo/desconfiguración de red donde el host 143.88.255.10 intenta resolver DNS repetidamente contra una IP interna (10.0.10.1) que no responde (estado Zeek S0), mientras que otros equipos resuelven con éxito contra 143.88.1.1. No se observa actividad maliciosa ni túneles C2.
+   🔀 Router Finalización → END (MAX_REPLANS=1 alcanzado)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

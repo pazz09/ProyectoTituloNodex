@@ -1,0 +1,92 @@
+{
+  "case_id": "uwf_eva_visible_0028",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "uwf_eva_visible_0028__nodex__r1__9387132f",
+  "salida": {
+    "case_id": "uwf_eva_visible_0028",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-17 18:59:15.382531",
+        "entities": [],
+        "event_type": "dns_request_unanswered",
+        "evidence_uids": [
+          "Ceni8hHI43gmMFWul",
+          "Cl5NqurlbdYOxZDai"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-17 18:59:45.630519",
+        "entities": [],
+        "event_type": "dns_request_retry",
+        "evidence_uids": [
+          "CohoM43q9rMCchrV5l",
+          "Cqvsv7pyM9qugmYd"
+        ]
+      },
+      {
+        "uid": "event_003",
+        "timestamp": "2021-12-17 19:30:00.630218",
+        "entities": [],
+        "event_type": "dns_request_retry",
+        "evidence_uids": [
+          "CgHZY84kQh9nygm504",
+          "CJxHfHuVJgkAFjIL1"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002",
+      "event_003"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe observa un volumen anómalo y concentrado de tráfico DNS originado por la IP 143.88.255.10 hacia el servidor DNS interno 10.0.10.1, registrando 261 intentos fallidos en un lapso de 30 minutos. Este patrón de consultas no resueltas/fallidas es consistente con actividades de reconocimiento y enumeración de subdominios o nombres de host mediante DNS (T1590.002), o bien intentos fallidos de establecimiento de canal encubierto/DNS tunneling (T1071.004). Se recomienda bloquear temporalmente las consultas de la IP 143.88.255.10, inspeccionar los tipos de registro y nombres de dominio consultados (NXDOMAIN) en los logs detallados de Zeek, y verificar si el host de origen se encuentra comprometido.\n\n## Evaluación del auditor\n\nSe observa un tráfico constante de consultas DNS UDP (puerto 53) desde 143.88.255.10 hacia 10.0.10.1 con estado de conexión 'S0' (sin respuesta del servidor). El diagnóstico confunde la ausencia de respuesta a nivel de transporte (S0) con respuestas DNS de error como NXDOMAIN, proponiendo comandos para filtrar logs de NXDOMAIN que no existirán para estas conexiones unidireccionales. Además, la tasa (~8 consultas cada 30 segundos) y la regularidad temporal son características de reintentos periódicos de un resolver o servicio local mal configurado apuntando a un servidor DNS inalcanzable, no de fuerza bruta/enumeración de subdominios ni DNS tunneling.\n\n## Comandos de mitigación propuestos\n\n- iptables -I INPUT -s 143.88.255.10 -p udp --dport 53 -j DROP\n- iptables -I INPUT -s 143.88.255.10 -p tcp --dport 53 -j DROP\n- ufw insert 1 deny from 143.88.255.10 to 10.0.10.1 port 53\n- tcpdump -nn -i any host 143.88.255.10 and port 53 -c 100 -w /tmp/dns_recon_143.88.255.10.pcap\n- grep -E '143.88.255.10.*(NXDOMAIN|NXRRSET)' /opt/zeek/logs/current/dns.log | awk '{print $9, $10, $13, $14, $15}'"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_visible_0028__nodex__r1__9387132f",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_visible_0028__nodex__r1__9387132f.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T03:03:29+00:00"
+  }
+}

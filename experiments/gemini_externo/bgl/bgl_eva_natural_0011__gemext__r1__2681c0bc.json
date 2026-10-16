@@ -1,0 +1,85 @@
+{
+  "case_id": "bgl_eva_natural_0011",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0011__gemext__r1__2681c0bc",
+  "salida": {
+    "case_id": "bgl_eva_natural_0011",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "EVT-01",
+        "timestamp": "2005-06-14-00.04.02.552133 / 2005-06-14-07.11.48.689764",
+        "entities": [],
+        "event_type": "CORE_DUMP_GENERATION",
+        "evidence_uids": [
+          "1118732642",
+          "1118758243",
+          "1118758269",
+          "1118758278",
+          "1118758308"
+        ]
+      },
+      {
+        "uid": "EVT-02",
+        "timestamp": "2005-06-14-09.06.45.752792 - 2005-06-14-09.13.51.996954",
+        "entities": [],
+        "event_type": "KERNEL_FATAL_DSI",
+        "evidence_uids": [
+          "1118765205",
+          "1118765277",
+          "1118765328",
+          "1118765360",
+          "1118765370",
+          "1118765511",
+          "1118765631"
+        ]
+      },
+      {
+        "uid": "EVT-03",
+        "timestamp": "2005-06-14-09.14.36.498843 - 2005-06-14-09.21.59.021659",
+        "entities": [],
+        "event_type": "KERNEL_FATAL_INSTRUCTION_FAULT",
+        "evidence_uids": [
+          "1118765676",
+          "1118765746",
+          "1118765795",
+          "1118765825",
+          "1118765858",
+          "1118766090",
+          "1118766119"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nFallo en cascada de software o aplicación distribuida en un supercomputador IBM BlueGene/L. Se observa la generación inicial de volcados de memoria (core dumps) en múltiples nodos de cómputo, seguida de interrupciones fatales de almacenamiento de datos (Data Storage Interrupt - DSI en PowerPC) y fallos fatales de ejecución en una dirección de instrucción recurrente (0x00004ed8). Se trata de un error de ejecución/memoria en el kernel o aplicación de cómputo paralelo, sin indicios de intrusión o ciberataque.\n\n## Evaluación del auditor\n\nLa evidencia muestra mensajes del subsistema RAS de kernel típicos de fallos por violaciones de acceso a memoria (DSI) y terminación anormal de procesos en clústeres HPC. No existe ningún indicador de compromiso, vector de ataque o comportamiento malicioso identificable en los registros.\n\n## Comandos de mitigación propuestos\n\n- mmjob -k <job_id>\n- bg_console -e 'reboot midplane'\n- gdb /path/to/binary core.2522"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0011__gemext__r1__2681c0bc",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0011__gemext__r1__2681c0bc.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:08:16+00:00"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "case_id": "uwf_eva_visible_0004",
+  "dataset": "uwf",
+  "arquitectura": "baseline_reglas",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "uwf_eva_visible_0004__reglas__r1__0e731f15",
+  "estado_crudo": {
+    "diagnostico_baseline": {
+      "regla_disparada": "proporcion_fallidos",
+      "detalle": "279/300 eventos fallidos (93% > 10%)",
+      "pregunta_respondida": "operativa",
+      "desalineacion_de_pregunta": true,
+      "nota_desalineacion": "el baseline responde la pregunta operativa; este caso es de seguridad. La comparación es contextual, no pareada",
+      "determinista": true,
+      "error": null
+    }
+  }
+}

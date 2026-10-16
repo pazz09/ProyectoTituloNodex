@@ -1,0 +1,70 @@
+{
+  "case_id": "bgl_eva_natural_0006",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0006__gemext__r1__00fa2fae",
+  "salida": {
+    "case_id": "bgl_eva_natural_0006",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "EVT-01",
+        "timestamp": "2005-06-11-21.17.32.188993",
+        "entities": [],
+        "event_type": "KERNEL_HARDWARE_FAILURE",
+        "evidence_uids": [
+          "1118549852",
+          "1118549971",
+          "1118550514",
+          "1118550590",
+          "1118550729",
+          "1118550833",
+          "1118551483",
+          "1118552349",
+          "1118552553",
+          "1118552691",
+          "1118552811",
+          "1118552875",
+          "1118553263",
+          "1118553888",
+          "1118554196",
+          "1118554603",
+          "1118554838",
+          "1118555213",
+          "1118555299",
+          "1118555531"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nFallo crítico y reiterado de hardware o memoria en el nodo de cómputo R30-M0-N9-C:J16-U01 del supercomputador BlueGene/L. Se registran múltiples eventos 'data TLB error interrupt' clasificados como FATAL a nivel de KERNEL, lo que denota una falla recurrente en la unidad de manejo de memoria (MMU/TLB) del procesador o corrupción en las estructuras de traducción de memoria física/virtual.\n\n## Evaluación del auditor\n\nLos registros provienen exclusivamente del subsistema RAS (Reliability, Availability and Serviceability) del kernel de BlueGene/L y corresponden a fallas a nivel de arquitectura del procesador (Translation Lookaside Buffer). No existen vectores de ataque, accesos no autorizados, ejecuciones arbitrarias ni comunicación anómala de red. La certeza de que se trata de una anomalía física u operativa y no de un incidente de ciberseguridad es prácticamente absoluta.\n\n## Comandos de mitigación propuestos\n\n- mmc_service -n R30-M0-N9-C:J16-U01 --drain\n- bgl_boot --partition R30-M0-N9 --diag\n- systemctl isolate maintenance.target"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0006__gemext__r1__00fa2fae",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0006__gemext__r1__00fa2fae.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:04:29+00:00"
+  }
+}

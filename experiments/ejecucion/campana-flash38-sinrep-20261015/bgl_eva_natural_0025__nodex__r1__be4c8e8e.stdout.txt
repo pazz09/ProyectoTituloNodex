@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=532 salida=189 razonamiento=891 total=1612
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=675 salida=259 razonamiento=495 total=1429
+   → No hace falta RAG (El plan de investigación no contempla consultar memoria histórica y la muestra cruda permite identificar con claridad que se trata de telemetría benigna de hardware/kernel (RAS CE en BlueGene/L), descartando amenazas de seguridad sin requerir contexto adicional.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=288 salida=59 razonamiento=115 total=462
+   → usar_cve: False | Razón: El evento corresponde a un error físico de hardware/memoria corregible (RAS/ECC) sin evidencia de actividad maliciosa, explotación de software ni vulnerabilidades de seguridad aplicables.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=241 salida=99 razonamiento=460 total=800
+   → 4 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2145 salida=264 razonamiento=348 total=2757
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros corresponden a eventos de telemetría RAS del kernel en una arquitectura BlueGene/L reportando errores corregibles de memoria (ECC Correctable Errors). Se trata de una anomalía a nivel de hardware/operacional sin indicios de compromiso o actividad maliciosa de seguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

@@ -1,0 +1,629 @@
+{
+  "case_id": "bgl_eva_balanceado_0000",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0000__nodex__r1__98fc6b41",
+  "estado_crudo": {
+    "resumen_logs": {
+      "formato_detectado": "auth_log",
+      "total_lineas": 20,
+      "servicios": {
+        "desconocido": 20
+      },
+      "eventos": {
+        "evento_critico": 7,
+        "evento_normal": 13
+      },
+      "ventana_temporal": {
+        "inicio": null,
+        "fin": null
+      },
+      "n_ips_distintas": 1,
+      "ips_distintas": [
+        "172.16.96.116"
+      ],
+      "por_ip": {
+        "172.16.96.116": {
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [],
+          "n_eventos": 2,
+          "n_como_origen": 2,
+          "n_como_destino": 0
+        }
+      },
+      "usuarios": {},
+      "n_usuarios_distintos": 0,
+      "codigos_respuesta": {},
+      "entidades": [
+        {
+          "ip": "172.16.96.116",
+          "n_eventos": 2,
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [],
+          "n_como_origen": 2,
+          "n_como_destino": 0
+        }
+      ],
+      "cronologia": [
+        {
+          "n": 4,
+          "timestamp": null,
+          "servicio": null,
+          "evento": "evento_critico",
+          "mensaje": "1134159256 2005.12.09 R20-M1-N4-I:J18-U01 2005-12-09-12.14.16.349690 R20-M1-N4-I:J18-U01 RAS APP FATAL ciod: Error loading /p/gb1/stella/SPPM/1322/sppm_DD: invalid or missing progr…"
+        },
+        {
+          "n": 5,
+          "timestamp": null,
+          "servicio": null,
+          "evento": "evento_critico",
+          "mensaje": "1134159495 2005.12.09 R27-M0-N4-I:J18-U11 2005-12-09-12.18.15.322330 R27-M0-N4-I:J18-U11 RAS APP FATAL ciod: Error loading /bgl/apps/SWL/stability/MDCASK/WORK/1383/inferno: invalid…"
+        },
+        {
+          "n": 6,
+          "timestamp": null,
+          "servicio": null,
+          "evento": "evento_critico",
+          "mensaje": "1134159559 2005.12.09 R03-M0-N0-I:J18-U11 2005-12-09-12.19.19.226546 R03-M0-N0-I:J18-U11 RAS APP FATAL ciod: Error loading /p/gb1/stella/UMT2K/1372/umt2k_DD: invalid or missing pro…"
+        },
+        {
+          "n": 7,
+          "timestamp": null,
+          "servicio": null,
+          "evento": "evento_critico",
+          "mensaje": "1134160405 2005.12.09 R06-M0-N4-I:J18-U01 2005-12-09-12.33.25.851921 R06-M0-N4-I:J18-U01 RAS APP FATAL ciod: Error loading /bgl/apps/SWL/stability/NEWS05/news05_DD: invalid or miss…"
+        },
+        {
+          "n": 8,
+          "timestamp": null,
+          "servicio": null,
+          "evento": "evento_critico",
+          "mensaje": "1134160534 2005.12.09 R61-M1-N8-I:J18-U01 2005-12-09-12.35.34.641975 R61-M1-N8-I:J18-U01 RAS APP FATAL ciod: Error loading /p/gb1/stella/UMT2K/1325/umt2k_DD: invalid or missing pro…"
+        },
+        {
+          "n": 9,
+          "timestamp": null,
+          "servicio": null,
+          "evento": "evento_critico",
+          "mensaje": "1134160697 2005.12.09 R64-M0-N8-I:J18-U11 2005-12-09-12.38.17.827307 R64-M0-N8-I:J18-U11 RAS APP FATAL ciod: Error loading /p/gb1/stella/UMT2K/1369/umt2k_DD: invalid or missing pro…"
+        },
+        {
+          "n": 17,
+          "timestamp": null,
+          "servicio": null,
+          "evento": "evento_critico",
+          "mensaje": "1134599601 2005.12.14 R76-M1-N0-I:J18-U01 2005-12-14-14.33.21.188706 R76-M1-N0-I:J18-U01 RAS APP FATAL ciod: Error loading /g/g0/spelce1/Tuned/SPaSM-base/rundir/SPaSM.baseline: inv…"
+        }
+      ],
+      "cronologia_omitidos": 0,
+      "raw_procedencia": {
+        "sha256": "c4b49da9702d3519626dfeb65547d11bb28da2d7ecf566f965553f0a675c7e2b",
+        "lineas": 20,
+        "bytes": 4089
+      },
+      "reputacion_ips": {
+        "172.16.96.116": {
+          "fuente": "sin_reputacion",
+          "ip": "172.16.96.116",
+          "score": null,
+          "nota": "modo sin reputación externa: ninguna IP recibe puntaje",
+          "categoria": "desconocido"
+        }
+      }
+    },
+    "preprocessing_metadata": {
+      "schema_version": "2.0",
+      "total_lineas_fisicas": 20,
+      "total_eventos": 20,
+      "decoder_distribution": {
+        "text": 20
+      },
+      "product_distribution": {},
+      "vendor_distribution": {},
+      "version_distribution": {},
+      "protocol_distribution": {},
+      "profile_distribution": {
+        "auth_log": 7
+      },
+      "severity_distribution": {},
+      "event_categories": {
+        "authentication": 7
+      },
+      "event_outcomes": {
+        "failure": 7
+      },
+      "entities": {
+        "ip": {
+          "172.16.96.116": 2
+        }
+      },
+      "time_window": {
+        "inicio": null,
+        "fin": null
+      },
+      "parsing": {
+        "parsed_events": 0,
+        "fallback_events": 20,
+        "coverage": 0.0
+      },
+      "segments": [
+        {
+          "index": 0,
+          "decoder": "text",
+          "line_start": 1,
+          "line_end": 20,
+          "n_records": 20,
+          "confidence": 0.1,
+          "decoder_inicial": "text",
+          "confidence_inicial": 0.1,
+          "decoder_distribution": {
+            "text": 20
+          },
+          "context": {}
+        }
+      ],
+      "entities_resumen": {
+        "ip": 1
+      },
+      "config": {
+        "LOG_DETECTION_CHUNK_SIZE": 50,
+        "LOG_ENABLE_MULTILINE": true,
+        "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+        "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+        "LOG_MAX_EVENTS": 100000,
+        "LOG_MAX_FILE_BYTES": 52428800,
+        "LOG_MAX_RAW_SAMPLES": 20,
+        "LOG_MAX_UNMAPPED_FIELDS": 100,
+        "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+        "LOG_PARSING_MODE": "hybrid",
+        "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+        "LOG_PRESERVE_RAW": true
+      }
+    },
+    "parsing_warnings": [],
+    "raw_samples": [
+      {
+        "decoder": "text",
+        "texto": "1134109138 2005.12.08 R20-M1-N0-I:J18-U11 2005-12-08-22.18.58.098120 R20-M1-N0-I:J18-U11 RAS APP FATAL ciod: Error loading /g/g90/glosli/src/ddcMD/ddcMD1.1.17/bin/ddcMDbglV: invalid or missing program image, No such file or directory"
+      }
+    ],
+    "evidencia_logs": [
+      {
+        "uid": "log_record_000001",
+        "record_number": 1,
+        "line_start": 1,
+        "line_end": 1,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000002",
+        "record_number": 2,
+        "line_start": 2,
+        "line_end": 2,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000003",
+        "record_number": 3,
+        "line_start": 3,
+        "line_end": 3,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000004",
+        "record_number": 4,
+        "line_start": 4,
+        "line_end": 4,
+        "timestamp": null,
+        "event_category": "authentication",
+        "event_action": "login",
+        "event_outcome": "failure"
+      },
+      {
+        "uid": "log_record_000005",
+        "record_number": 5,
+        "line_start": 5,
+        "line_end": 5,
+        "timestamp": null,
+        "event_category": "authentication",
+        "event_action": "login",
+        "event_outcome": "failure"
+      },
+      {
+        "uid": "log_record_000006",
+        "record_number": 6,
+        "line_start": 6,
+        "line_end": 6,
+        "timestamp": null,
+        "event_category": "authentication",
+        "event_action": "login",
+        "event_outcome": "failure"
+      },
+      {
+        "uid": "log_record_000007",
+        "record_number": 7,
+        "line_start": 7,
+        "line_end": 7,
+        "timestamp": null,
+        "event_category": "authentication",
+        "event_action": "login",
+        "event_outcome": "failure"
+      },
+      {
+        "uid": "log_record_000008",
+        "record_number": 8,
+        "line_start": 8,
+        "line_end": 8,
+        "timestamp": null,
+        "event_category": "authentication",
+        "event_action": "login",
+        "event_outcome": "failure"
+      },
+      {
+        "uid": "log_record_000009",
+        "record_number": 9,
+        "line_start": 9,
+        "line_end": 9,
+        "timestamp": null,
+        "event_category": "authentication",
+        "event_action": "login",
+        "event_outcome": "failure"
+      },
+      {
+        "uid": "log_record_000010",
+        "record_number": 10,
+        "line_start": 10,
+        "line_end": 10,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000011",
+        "record_number": 11,
+        "line_start": 11,
+        "line_end": 11,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000012",
+        "record_number": 12,
+        "line_start": 12,
+        "line_end": 12,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000013",
+        "record_number": 13,
+        "line_start": 13,
+        "line_end": 13,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000014",
+        "record_number": 14,
+        "line_start": 14,
+        "line_end": 14,
+        "timestamp": null,
+        "source_ip": "172.16.96.116"
+      },
+      {
+        "uid": "log_record_000015",
+        "record_number": 15,
+        "line_start": 15,
+        "line_end": 15,
+        "timestamp": null,
+        "source_ip": "172.16.96.116"
+      },
+      {
+        "uid": "log_record_000016",
+        "record_number": 16,
+        "line_start": 16,
+        "line_end": 16,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000017",
+        "record_number": 17,
+        "line_start": 17,
+        "line_end": 17,
+        "timestamp": null,
+        "event_category": "authentication",
+        "event_action": "login",
+        "event_outcome": "failure"
+      },
+      {
+        "uid": "log_record_000018",
+        "record_number": 18,
+        "line_start": 18,
+        "line_end": 18,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000019",
+        "record_number": 19,
+        "line_start": 19,
+        "line_end": 19,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000020",
+        "record_number": 20,
+        "line_start": 20,
+        "line_end": 20,
+        "timestamp": null
+      }
+    ],
+    "evidencia_logs_omitidos": 0,
+    "eventos_reconstruidos": [
+      {
+        "event_id": "event_001",
+        "evidence_uids": [
+          "log_record_000004",
+          "log_record_000005",
+          "log_record_000006",
+          "log_record_000007",
+          "log_record_000008",
+          "log_record_000009",
+          "log_record_000017"
+        ],
+        "timestamp": null,
+        "event_type": "execution_failure",
+        "description": "Eventos de error de carga de binarios en ciod clasificados erróneamente por el parser como fallos de inicio de sesión.",
+        "confidence": null
+      },
+      {
+        "event_id": "event_002",
+        "evidence_uids": [
+          "log_record_000014",
+          "log_record_000015"
+        ],
+        "timestamp": null,
+        "event_type": "network_connection",
+        "description": "Registros asociados a la IP interna 172.16.96.116 en el entorno HPC sin actividad maliciosa vinculada.",
+        "confidence": null
+      }
+    ],
+    "secuencia_temporal": [],
+    "tecnicas_atribuidas": [],
+    "invalid_evidence_uid_count": 0,
+    "d11_warnings": [],
+    "telemetry": {
+      "llm_call_count": 6,
+      "input_tokens": 7095,
+      "output_tokens": 1277,
+      "total_tokens": 11736,
+      "execution_time": 41.71751,
+      "replan_count": 0,
+      "intentos_correccion": 1,
+      "invalid_evidence_uid_count": 0,
+      "d11_warning_count": 0,
+      "llm_calls": [
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 720,
+          "output_tokens": 293,
+          "total_tokens": 1511,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 498,
+          "duration_s": 7.55,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 929,
+          "output_tokens": 93,
+          "total_tokens": 1539,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 517,
+          "duration_s": 4.887,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 1670,
+          "output_tokens": 226,
+          "total_tokens": 2550,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 654,
+          "duration_s": 7.856,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 321,
+          "output_tokens": 55,
+          "total_tokens": 521,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 145,
+          "duration_s": 3.098,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 267,
+          "output_tokens": 101,
+          "total_tokens": 837,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 469,
+          "duration_s": 6.396,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 3188,
+          "output_tokens": 509,
+          "total_tokens": 4778,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 1081,
+          "duration_s": 11.768,
+          "error": null
+        }
+      ]
+    },
+    "firma": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_critico:7,evento_normal:13] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:7] cobertura=0.0",
+    "plan": {
+      "plan_version": 1,
+      "objetivo": "Investigar los eventos críticos de autenticación no estructurados y la actividad de la IP 172.16.96.116 para determinar posibles accesos no autorizados y definir medidas de mitigación.",
+      "pasos": [
+        {
+          "id": 1,
+          "accion": "triage",
+          "objetivo": "Analizar las líneas de registro en texto plano para identificar la naturaleza de los 7 eventos críticos de autenticación y el rol de la IP 172.16.96.116.",
+          "estado": "ejecutado"
+        },
+        {
+          "id": 2,
+          "accion": "rag",
+          "objetivo": "Consultar la base de conocimiento y técnicas de MITRE ATT&CK relacionadas con anomalías y ataques a mecanismos de autenticación.",
+          "estado": "ejecutado"
+        },
+        {
+          "id": 3,
+          "accion": "mitigacion",
+          "objetivo": "Proponer recomendaciones y acciones de contención para aislar la amenaza y proteger los vectores de autenticación comprometidos.",
+          "estado": "ejecutado"
+        }
+      ],
+      "criterios_finalizacion": [
+        "Determinar la causa y severidad de los 7 eventos críticos de autenticación.",
+        "Identificar el impacto y alcance de las acciones originadas por la IP 172.16.96.116.",
+        "Disponer de un conjunto de medidas de mitigación aplicables al incidente."
+      ]
+    },
+    "plan_objetivo": "Investigar los eventos críticos de autenticación no estructurados y la actividad de la IP 172.16.96.116 para determinar posibles accesos no autorizados y definir medidas de mitigación.",
+    "paso_actual": 3,
+    "historial_ejecucion": [
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_planificador",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "plan v1, 3 pasos: ['triage', 'rag', 'mitigacion']"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 1,
+        "nodo": "agente_analista_triage",
+        "accion": "triage",
+        "estado": "ejecutado",
+        "resumen": "solicitó contexto histórico (RAG)"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 2,
+        "nodo": "tool_consultar_rag",
+        "accion": "rag",
+        "estado": "ejecutado",
+        "resumen": "0 patrones, 3 técnicas MITRE"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 1,
+        "nodo": "agente_analista_triage",
+        "accion": "triage",
+        "estado": "ejecutado",
+        "resumen": "diagnóstico producido"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_selector_herramientas",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "usar_cve=False"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 3,
+        "nodo": "agente_ingeniero_mitigacion",
+        "accion": "mitigacion",
+        "estado": "ejecutado",
+        "resumen": "3 comandos propuestos"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "tool_validar_comandos",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "comandos válidos"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_auditor_final",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "confianza=0.85 cobertura_suficiente=True"
+      }
+    ],
+    "desviaciones_plan": [],
+    "historial_planes": [],
+    "replan_count": 0,
+    "diagnostico": "Tras analizar el lote de eventos y la muestra cruda ('ciod: Error loading... No such file or directory'), se determina que los registros no corresponden a eventos de autenticación ni a intrusiones de red, sino a fallos de ejecución a nivel de aplicación e infraestructura HPC (mensajes RAS de Blue Gene/ciod por ausencia de binarios). La IP privada interna 172.16.96.116 cuenta con solo 2 eventos registrados, sin registrar intentos de autenticación fallidos ni usuarios asociados. Ninguna de las técnicas MITRE ATT&CK propuestas (T1685.001, T1685.004, T1654) aplica a la evidencia observada, ya que no se detecta evasión de defensas ni enumeración de registros. Se descarta actividad maliciosa activa y se recomienda corregir el clasificador de parsing del origen para evitar falsos positivos de eventos críticos de autenticación.",
+    "necesita_rag": false,
+    "usar_cve": false,
+    "razon_seleccion": "El diagnóstico concluye que los eventos corresponden a fallos operacionales de infraestructura HPC (Blue Gene/ciod) y no a un ataque malicioso ni a la explotación de una vulnerabilidad específica.",
+    "contexto_rag": [],
+    "tecnicas_mitre": [
+      {
+        "texto": "Disable or Modify Windows Event Log. Adversaries may disable or modify the Windows Event Log to limit data that can be leveraged for detections and audits. Windows Event Log records user and system activity such as login attempts and process creation.(Citation: EventLog_Core_Technologies) This data is used by security tools and analysts to generate detections. \n\nThe EventLog service maintains event logs from various system components and applications. By default, the service automatically starts when a system powers on. An audit policy, maintained by the Local Security Policy (secpol.msc), defines which system events the EventLog service logs. Security audit policy settings can be changed by running secpol.msc, then navigating to `Security Settings\\Local Policies\\Audit Policy` for basic au",
+        "meta": {
+          "is_subtechnique": true,
+          "tactics": "defense-impairment",
+          "name": "Disable or Modify Windows Event Log",
+          "url": "https://attack.mitre.org/techniques/T1685/001",
+          "technique_id": "T1685.001"
+        },
+        "similitud": 0.534
+      },
+      {
+        "texto": "Disable or Modify Linux Audit System Log. Adversaries may disable or modify the Linux Audit system to hide malicious activity and avoid detection. Linux admins use the Linux Audit system to track security-relevant information on a system. The Linux Audit system operates at the kernel-level and maintains event logs on application and system activity such as process, network, file, and login events based on pre-configured rules. \n\nOften referred to as `auditd`, this is the name of the daemon used to write events to disk and is governed by the parameters set in the `audit.conf` configuration file. Two primary ways to configure the log generation rules are through the command line `auditctl` utility and the file `/etc/audit/audit.rules`, containing a sequence of `auditctl` commands loaded at b",
+        "meta": {
+          "name": "Disable or Modify Linux Audit System Log",
+          "technique_id": "T1685.004",
+          "url": "https://attack.mitre.org/techniques/T1685/004",
+          "is_subtechnique": true,
+          "tactics": "defense-impairment"
+        },
+        "similitud": 0.486
+      },
+      {
+        "texto": "Log Enumeration. Adversaries may enumerate system and service logs to find useful data. These logs may highlight various types of valuable insights for an adversary, such as user authentication records ([Account Discovery](https://attack.mitre.org/techniques/T1087)), security or vulnerable software ([Software Discovery](https://attack.mitre.org/techniques/T1518)), or hosts within a compromised network ([Remote System Discovery](https://attack.mitre.org/techniques/T1018)).\n\nHost binaries may be leveraged to collect system logs. Examples include using `wevtutil.exe` or [PowerShell](https://attack.mitre.org/techniques/T1059/001) on Windows to access and/or export security event information.(Citation: WithSecure Lazarus-NoPineapple Threat Intel Report 2023)(Citation: Cadet Blizzard emerges as ",
+        "meta": {
+          "technique_id": "T1654",
+          "is_subtechnique": false,
+          "tactics": "discovery",
+          "url": "https://attack.mitre.org/techniques/T1654",
+          "name": "Log Enumeration"
+        },
+        "similitud": 0.469
+      }
+    ],
+    "cves_encontrados": [],
+    "comandos_mitigacion": [
+      "logger -p auth.notice -t SEC_AUDIT \"Falso positivo confirmado: IP 172.16.96.116 corresponde a errores operacionales de ciod/HPC, no a actividad maliciosa\"",
+      "ss -tunap | grep 172.16.96.116",
+      "journalctl -g \"ciod: Error loading\" -n 50 --no-pager"
+    ],
+    "comandos_validos": true,
+    "motivos_rechazo": [],
+    "intentos_correccion": 1,
+    "confianza": 0.85,
+    "hay_incidente": false,
+    "hay_anomalia": true,
+    "evaluacion_auditor": "El diagnóstico es correcto. Los registros analizados corresponden a errores operacionales de infraestructura HPC (ciod/Blue Gene: 'Error loading... No such file or directory') que fueron erróneamente categorizados como fallos de autenticación por el analizador sintáctico. No se evidencian acciones maliciosas, intrusiones ni técnicas de evasión de defensas, tratándose de un falso positivo de seguridad derivado de un problema operacional.",
+    "cobertura_auditor": true,
+    "cobertura_suficiente": true,
+    "motivo_replanificacion": "",
+    "requiere_replanificacion": false,
+    "_firma": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_critico:7,evento_normal:13] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:7] cobertura=0.0",
+    "_error_api": null,
+    "requiere_revision_humana": false,
+    "output_contract_version": "d11-v1"
+  }
+}

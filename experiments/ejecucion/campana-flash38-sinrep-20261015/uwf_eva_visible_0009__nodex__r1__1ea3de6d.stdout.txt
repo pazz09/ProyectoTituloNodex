@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3830 salida=407 razonamiento=689 total=4926
+   → Plan v1: ['triage', 'rag', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=4032 salida=190 razonamiento=408 total=4630
+   → Solicitando RAG (Se observa un volumen masivo de eventos críticos y fallidos en tráfico DNS (principalmente de 143.88.255.10 hacia 10.0.10.1 con 206 intentos fallidos, además de actividad anómala entre 143.88.18.12 y 143.88.18.11). Dado que el resumen carece del detalle de las consultas DNS (nombres de dominio, tipos de registro, payloads) y el objetivo explícito del plan requiere correlacionar con técnicas MITRE ATT&CK (como DNS tunneling, exfiltración o DoS) y precedentes históricos, es necesario consultar la memoria histórica antes de emitir un diagnóstico definitivo.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 0 técnicas MITRE ATT&CK relacionadas (colección vacía o sin similitud suficiente).
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=4009 salida=288 razonamiento=370 total=4667
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=394 salida=67 razonamiento=258 total=719
+   → usar_cve: False | Razón: El diagnóstico describe un patrón de comportamiento anómalo (escaneo, sondeo y posibles ráfagas DNS/tunneling) a nivel de red sin identificar un software, producto o versión de servidor DNS específico vulnerable que permita una búsqueda precisa de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=329 salida=221 razonamiento=944 total=1494
+   → 7 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=46967 salida=910 razonamiento=1644 total=49521
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=True | cobertura_suficiente=True | El diagnóstico es correcto. Se identifica con claridad un escaneo de puertos TCP activo desde 143.88.18.12 hacia 143.88.18.11 (múltiples puertos comunes como 21, 22, 23, 25, 80, 443, 3389, 5900 con estado SH en rápida sucesión), así como un sondeo persistente e infructuoso de consultas DNS desde 143.88.255.10 hacia 10.0.10.1 con estado S0. Las medidas de contención mediante iptables y conntrack, junto con la captura de tráfico, son plenamente justificadas y pertinentes.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

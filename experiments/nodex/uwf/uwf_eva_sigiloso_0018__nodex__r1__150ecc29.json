@@ -1,0 +1,89 @@
+{
+  "case_id": "uwf_eva_sigiloso_0018",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "uwf_eva_sigiloso_0018__nodex__r1__150ecc29",
+  "salida": {
+    "case_id": "uwf_eva_sigiloso_0018",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-26 09:41:45.380404",
+        "entities": [],
+        "event_type": "dns_query_failure",
+        "evidence_uids": [
+          "CyiKiK2sfCk0YNgx1d"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-26 09:43:04.555047",
+        "entities": [],
+        "event_type": "dns_query_success",
+        "evidence_uids": [
+          "CCkKrQ3HuuHKVGMLJ8"
+        ]
+      },
+      {
+        "uid": "event_003",
+        "timestamp": "2021-12-26 10:12:30.632025",
+        "entities": [],
+        "event_type": "dns_query_failure",
+        "evidence_uids": [
+          "CMxshC2PgGCBCv2Wjf"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002",
+      "event_003"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl incidente corresponde principalmente a una falla operativa o desconfiguración de red. La dirección 143.88.255.10 emitió 266 solicitudes DNS (puerto 53/UDP) hacia 10.0.10.1 en un intervalo de ~30 minutos sin obtener respuesta alguna (conexiones en estado S0 en Zeek, 0 bytes de retorno). No se observan indicadores de beaconing malicioso ni patrones de exfiltración o tunelado DNS avanzados hacia destinos externos sospechosos, sino intentos reiterados de resolución hacia una IP privada no alcanzable o fuera de servicio. Como medidas de verificación y mitigación: 1) Verificar la configuración de servidores DNS en 143.88.255.10 (resolv.conf o configuración de red/DHCP) para corregir el resolver primario; 2) Validar el estado del servicio DNS y la accesibilidad de red/enrutamiento y reglas de firewall hacia 10.0.10.1; 3) Reconfigurar el host hacia un resolvedor funcional de la organización (como 143.88.1.1, que muestra tráfico normal en el lote).\n\n## Evaluación del auditor\n\nEl diagnóstico es preciso y está sólidamente sustentado. El tráfico analizado muestra múltiples solicitudes DNS (UDP/53) desde el host 143.88.255.10 hacia la IP privada 10.0.10.1 que quedan en estado S0 (sin respuesta), lo cual evidencia una falla operativa por servidor inalcanzable o desconfiguración del resolver. Al mismo tiempo, otros hosts resuelven correctamente contra 143.88.1.1 (estado SF). No existen indicios de C2, tunelado malicioso ni actividad de intrusión.\n\n## Comandos de mitigación propuestos\n\n- ip route get 10.0.10.1\n- ping -c 3 10.0.10.1\n- dig @143.88.1.1 google.com +time=2 +tries=1\n- sudo cp /etc/resolv.conf /etc/resolv.conf.bak.$(date +%F_%T)\n- sudo sed -i '/nameserver 10.0.10.1/d' /etc/resolv.conf\n- grep -q 'nameserver 143.88.1.1' /etc/resolv.conf || echo 'nameserver 143.88.1.1' | sudo tee -a /etc/resolv.conf\n- sudo resolvectl dns $(ip -o route get 143.88.1.1 | awk '{print $3}') 143.88.1.1 2>/dev/null || true\n- sudo resolvectl flush-caches 2>/dev/null || sudo systemd-resolve --flush-caches 2>/dev/null || true\n- sudo iptables -A OUTPUT -d 10.0.10.1 -p udp --dport 53 -j REJECT --reject-with icmp-port-unreachable"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_sigiloso_0018__nodex__r1__150ecc29",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1583.002",
+          "name": "DNS Server",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_sigiloso_0018__nodex__r1__150ecc29.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:44:36+00:00"
+  }
+}

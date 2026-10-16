@@ -1,0 +1,99 @@
+{
+  "case_id": "uwf_eva_sigiloso_0013",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "uwf_eva_sigiloso_0013__nodex__r1__f9a729a5",
+  "salida": {
+    "case_id": "uwf_eva_sigiloso_0013",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-19 09:05:39.133316",
+        "entities": [],
+        "event_type": "dns_query_failed",
+        "evidence_uids": [
+          "CSLj4O3nkwboY2Mng"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-19 09:05:39.135036",
+        "entities": [],
+        "event_type": "dns_query_failed",
+        "evidence_uids": [
+          "Cekthb1d6Fm5V8Fp2k"
+        ]
+      },
+      {
+        "uid": "event_003",
+        "timestamp": "2021-12-19 09:28:45.032989",
+        "entities": [],
+        "event_type": "dns_query_success",
+        "evidence_uids": [
+          "CUSUiwClAwfSaypOf"
+        ]
+      },
+      {
+        "uid": "event_004",
+        "timestamp": "2021-12-19 09:34:23.381838",
+        "entities": [],
+        "event_type": "dns_query_failed",
+        "evidence_uids": [
+          "CrX8CZ1xVkeqlDvEw8"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002",
+      "event_003",
+      "event_004"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe confirma la hipótesis de problema operacional o resolver inalcanzable. El host 143.88.255.10 envió 244 solicitudes DNS por UDP hacia el resolver 10.0.10.1:53 en un lapso de ~29 minutos sin recibir respuesta alguna (estado S0 en Zeek, 0 bytes y 0 eventos como origen devueltos por 10.0.10.1), lo que genera reintentos constantes fallidos. Acciones de diagnóstico y contención no disruptivas: 1) Verificar conectividad básica de red y estado del servicio DNS en 10.0.10.1 (comprobar rutas, reglas de firewall/ACL intermedias y proceso de escucha en puerto 53 UDP); 2) Validar la configuración de red y resolver DNS en 143.88.255.10, asignando temporalmente un resolver alternativo funcional (ej. 143.88.1.1 u otro DNS corporativo activo) para restaurar la resolución de nombres sin interrumpir servicios.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Se observa un fallo operativo de resolución de nombres en el que 143.88.255.10 realiza consultas DNS hacia 10.0.10.1:53 sin obtener respuesta (estado de conexión Zeek S0), provocando reintentos continuos. No existe evidencia de actividad maliciosa, exfiltración ni abuso de protocolo. Los comandos de validación y remediación no disruptivos son pertinentes.\n\n## Comandos de mitigación propuestos\n\n- ping -c 3 10.0.10.1\n- nc -zvu -w 3 10.0.10.1 53\n- traceroute -n -U -p 53 10.0.10.1\n- dig @10.0.10.1 +time=2 +tries=1 test.local\n- dig @143.88.1.1 +time=2 +tries=1 test.local\n- cp /etc/resolv.conf /etc/resolv.conf.bak\n- sed -i '1inameserver 143.88.1.1' /etc/resolv.conf"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_sigiloso_0013__nodex__r1__f9a729a5",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_sigiloso_0013__nodex__r1__f9a729a5.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:41:18+00:00"
+  }
+}

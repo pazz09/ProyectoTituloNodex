@@ -1,0 +1,92 @@
+{
+  "case_id": "uwf_eva_sigiloso_0013",
+  "dataset": "uwf",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "uwf_eva_sigiloso_0013__gemext__r1__9423197e",
+  "salida": {
+    "case_id": "uwf_eva_sigiloso_0013",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "EVT-001",
+        "timestamp": "2021-12-19 09:05:39",
+        "entities": [],
+        "event_type": "DNS_RESOLUTION_FAILURE_PERIODIC",
+        "evidence_uids": [
+          "CSLj4O3nkwboY2Mng",
+          "Cekthb1d6Fm5V8Fp2k",
+          "C6uBXq3QA4Q5sCYCp1",
+          "CypRpqDa7NpETEOhk",
+          "C917Yh1jyoZtcdKZvd",
+          "CrX8CZ1xVkeqlDvEw8"
+        ]
+      },
+      {
+        "uid": "EVT-002",
+        "timestamp": "2021-12-19 09:06:47",
+        "entities": [],
+        "event_type": "DNS_RESOLVER_LATENCY_TIMEOUT",
+        "evidence_uids": [
+          "CBFOC616375qPqCaZ",
+          "CayA1uwH6M9TcNUW8",
+          "CCFYbR3afoWsNc7YW4",
+          "CbAGRo4ZBA0xyq95Cc",
+          "C8Q1BQ1g34oQYk2yH4",
+          "CLSDbP1thU0vkXEl49"
+        ]
+      },
+      {
+        "uid": "EVT-003",
+        "timestamp": "2021-12-19 09:26:53",
+        "entities": [],
+        "event_type": "DNS_ROOT_QUERY_FAILURE",
+        "evidence_uids": [
+          "CgZ58HERLthMQQxI7",
+          "C1d90d4BmOO7qckF01"
+        ]
+      },
+      {
+        "uid": "EVT-004",
+        "timestamp": "2021-12-19 09:28:45",
+        "entities": [],
+        "event_type": "LOCAL_DNS_SERVICE_ACTIVE",
+        "evidence_uids": [
+          "CUSUiwClAwfSaypOf",
+          "CAvSyG2l5tAVW1DVKf",
+          "COaNm32jdpVtMYJts4",
+          "CXojyU2zOh8oR1MuB3"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe identifica una anomalía operativa severa en la infraestructura de resolución DNS sin evidencia de incidente de seguridad malicioso. El host 143.88.255.10 realiza consultas DNS periódicas cada ~30.25 segundos hacia 10.0.10.1:53 que no obtienen respuesta (estado S0), indicando un servidor DNS interno caído o una ruta inaccesible. Paralelamente, las consultas DNS de 143.88.1.51 hacia 143.88.1.1 demoran exactamente 5.00 segundos en responder (SF), evidenciando degradación o timeout en el resolvedor primario antes de responder. Adicionalmente, se observan intentos fallidos de resolución hacia servidores raíz DNS desde 143.88.0.2.\n\n## Evaluación del auditor\n\nEl comportamiento repetitivo cada 30 segundos hacia 10.0.10.1:53 podría asemejarse superficialmente a un beaconing C2 sobre DNS. Sin embargo, apunta a una IP interna RFC 1918 fija, carece de jitter, mantiene tamaños constantes de consulta (78 y 102 bytes) y queda completamente sin respuesta (S0). Esto, sumado a los retardos sistemáticos de 5 segundos en 143.88.1.1 y fallos hacia los root servers, confirma problemas generalizados de enrutamiento y configuración de resolución de nombres, no actividad adversaria.\n\n## Comandos de mitigación propuestos\n\n- resolvectl status\n- cat /etc/resolv.conf\n- traceroute -U -p 53 10.0.10.1\n- dig @10.0.10.1 localhost\n- systemctl status named || systemctl status bind9 || systemctl status dnsmasq\n- journalctl -u systemd-resolved -e"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_sigiloso_0013__gemext__r1__9423197e",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "uwf_eva_sigiloso_0013__gemext__r1__9423197e.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:43:32+00:00"
+  }
+}

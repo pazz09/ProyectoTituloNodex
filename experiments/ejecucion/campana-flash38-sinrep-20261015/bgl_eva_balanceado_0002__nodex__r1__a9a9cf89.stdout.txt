@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=680 salida=275 razonamiento=434 total=1389
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=831 salida=263 razonamiento=639 total=1733
+   → No hace falta RAG (El registro crudo es suficiente para identificar claramente que se trata de errores de sistema/almacenamiento (Lustre mount FAILED en supercomputador) y no de un incidente de ciberseguridad, sumado a que el plan de investigación no contempla la consulta de memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=283 salida=51 razonamiento=166 total=500
+   → usar_cve: False | Razón: El evento analizado corresponde a un fallo operativo y de infraestructura relacionado con el montaje del sistema de archivos Lustre, sin evidencia de explotación de vulnerabilidades ni actividad maliciosa.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=236 salida=82 razonamiento=668 total=986
+   → 6 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2143 salida=304 razonamiento=814 total=3261
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es preciso al identificar los registros como eventos operacionales de RAS en un entorno BlueGene/L. La falla fatal en el montaje de Lustre corresponde a una anomalía de infraestructura y almacenamiento, sin indicadores de intrusión o actividad maliciosa. Los comandos de verificación son pertinentes para resolver la incidencia operativa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

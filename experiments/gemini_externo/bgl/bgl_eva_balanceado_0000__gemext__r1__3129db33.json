@@ -1,0 +1,41 @@
+{
+  "case_id": "bgl_eva_balanceado_0000",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0000__gemext__r1__3129db33",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0000",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos registros corresponden a mensajes de RAS (Reliability, Availability, and Serviceability) de un supercomputador IBM Blue Gene/L. Indican problemas operativos de hardware y del sistema de archivos distribuido/NFS, incluyendo múltiples fallos de ciod (ciod: Error loading / LOGIN chdir failed) debidos a problemas de permisos, rutas inexistentes y errores de E/S (Input/output error), cortes de enlace de red de control (Link has been severed), advertencias en la red Torus y múltiples errores de paridad/ECC corregidos en memoria DDR. No se observa actividad maliciosa ni indicadores de intrusión.\n\n## Evaluación del auditor\n\nLas alertas 'APP FATAL' y 'KERNEL INFO' describen comportamientos operativos anómalos pero comunes en computación de alto rendimiento (HPC): jobs por lotes intentando acceder a binarios sin los permisos de ejecución adecuados o que no existen, desincronización o degradación en el almacenamiento compartido (/p/gb1, /bgl/apps) causando I/O error, y fallos de memoria física ECC corregidos de forma transparente por el hardware. Aunque hay fallos de permisos ('Permission denied'), se originan en el subsistema ciod al despachar trabajos de usuarios (stella, spelce1) sobre el sistema de archivos del clúster, sin trazas de escalada de privilegios o acciones adversarias.\n\n## Comandos de mitigación propuestos\n\n- fsck -y /p/gb1\n- showq\n- bglstatus\n- dmesg | grep -i 'ddr\\|ecc\\|torus'"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0000__gemext__r1__3129db33",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0000__gemext__r1__3129db33.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T01:39:09+00:00"
+  }
+}

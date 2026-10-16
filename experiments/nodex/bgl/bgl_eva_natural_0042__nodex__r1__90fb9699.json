@@ -1,0 +1,70 @@
+{
+  "case_id": "bgl_eva_natural_0042",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0042__nodex__r1__90fb9699",
+  "salida": {
+    "case_id": "bgl_eva_natural_0042",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "hardware_alignment_exception_info",
+        "evidence_uids": [
+          "log_record_000001",
+          "log_record_000002",
+          "log_record_000003",
+          "log_record_000004",
+          "log_record_000005",
+          "log_record_000006",
+          "log_record_000007",
+          "log_record_000008",
+          "log_record_000009",
+          "log_record_000010",
+          "log_record_000011",
+          "log_record_000012",
+          "log_record_000013",
+          "log_record_000014",
+          "log_record_000015",
+          "log_record_000016",
+          "log_record_000017",
+          "log_record_000018",
+          "log_record_000019",
+          "log_record_000020"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos eventos corresponden a registros operacionales de fiabilidad y diagnóstico (RAS) del kernel de una supercomputadora IBM Blue Gene/L. El mensaje específico ('double-hummer alignment exceptions' con severidad INFO) hace referencia a excepciones benignas en el manejo de operaciones de la FPU dual (Double-Hummer) en procesadores PowerPC 440. No existe evidencia de actividad maliciosa, intrusión ni compromiso de seguridad.\n\n## Evaluación del auditor\n\nLos registros corresponden a mensajes operacionales informativos (INFO) del subsistema RAS de una supercomputadora IBM Blue Gene/L referentes a excepciones de alineación 'double-hummer' manejadas por el kernel. No representan una falla, degradación crítica del sistema ni actividad maliciosa."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0042__nodex__r1__90fb9699",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0042__nodex__r1__90fb9699.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:18:06+00:00"
+  }
+}

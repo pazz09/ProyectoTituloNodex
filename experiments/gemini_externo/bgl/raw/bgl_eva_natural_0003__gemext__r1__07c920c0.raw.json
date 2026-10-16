@@ -1,0 +1,33 @@
+{
+  "case_id": "bgl_eva_natural_0003",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0003__gemext__r1__07c920c0",
+  "estado_crudo": {
+    "diagnostico": "Fallas operativas y errores de ejecución de trabajos en un clúster Blue Gene/L (BGL). Los registros evidencian intentos fallidos de ejecución por incompatibilidad o corrupción de binarios ('Exec format error'), directorios de trabajo inexistentes ('LOGIN chdir(pwd) failed: No such file or directory'), archivos de programa faltantes, pérdida de conexión en sockets de I/O ('Link has been severed'), sintaxis errónea en mapas de nodos y terminaciones estándar del kernel RTS. No existe evidencia de actividad maliciosa, intrusión ni compromiso de seguridad.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "El análisis se basa exclusivamente en mensajes del subsistema RAS (Reliability, Availability, and Serviceability) y del daemon de control I/O (ciod) de IBM Blue Gene/L. La causa más probable de los fallos masivos 'Exec format error' es la compilación incorrecta de binarios de prueba de rendimiento (MINIBEN) o problemas en el sistema de archivos compartido. Los demás eventos corresponden a errores de usuario y desconexiones transitorias comunes en entornos HPC. La ausencia de logs de autenticación de red o shell impide descartar absolutamente actividad externa previa, pero dentro de los datos proporcionados no existe ningún indicador de compromiso.",
+    "comandos_mitigacion": [
+      "file /bgl/apps/scaletest/performance/MINIBEN/mb_243_0810/allreduce.rts",
+      "ls -ld /bgl/apps/scaletest/stability/MDCASK/WORK/65576/",
+      "head -n 5 /home/auselton/bgl/mapfiles/bgl.128mps.f64.map",
+      "ping -c 4 172.16.96.116"
+    ],
+    "eventos_reconstruidos": [],
+    "secuencia_temporal": [
+      "2005-08-12 23:29:03 a 23:52:00: Múltiples nodos de cómputo fallan al cargar /bgl/apps/scaletest/performance/MINIBEN/mb_243_0810/allreduce.rts debido a 'Exec format error'.",
+      "2005-08-13 13:54:16 a 13:54:57: Nodos R27-M1-NC-I:J18-U11 y R61-M1-NC-I:J18-U01 reportan fallo al cambiar al directorio de trabajo en inicio de sesión (chdir failed).",
+      "2005-08-13 16:39:08: Nodo R60-M1-NC-I:J18-U01 falla al cargar imagen inferno por fichero no encontrado.",
+      "2005-08-14 19:02:39: Nodo R21-M0-N8-I:J18-U11 experimenta desconexión abrupta del enlace en socket CioStream hacia 172.16.96.116.",
+      "2005-08-15 11:51:36: Detección de error de sintaxis en el archivo de mapa de nodos bgl.128mps.f64.map.",
+      "2005-08-15 21:45:19 a 21:45:40: Terminación anómala del kernel RTS en nodos R71-M0-NA-C:J12-U11 y R63-M0-N4-C:J16-U01 (códigos 1003 y 1004)."
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

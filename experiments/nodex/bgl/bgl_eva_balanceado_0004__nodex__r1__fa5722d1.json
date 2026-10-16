@@ -1,0 +1,51 @@
+{
+  "case_id": "bgl_eva_balanceado_0004",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0004__nodex__r1__fa5722d1",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0004",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "kernel_fatal_error",
+        "evidence_uids": [
+          "log_record_000001"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos registros corresponden a mensajes de fiabilidad y servicio (RAS) del kernel en un entorno de supercomputación (formato característico de arquitectura IBM Blue Gene/L). La muestra evidencia un fallo crítico de ejecución ('RAS KERNEL FATAL instruction address: 0x00004ed8') en el nodo 'R07-M0-NC-C:J10-U01'. No se observan indicadores de compromiso, vectores de ataque ni actividad maliciosa interactiva; se trata de un incidente de estabilidad de hardware o fallo de kernel/memoria.\n\n## Evaluación del auditor\n\nLos registros evidencian un fallo operativo crítico a nivel de kernel/hardware (RAS KERNEL FATAL) en un nodo de supercomputación Blue Gene/L. No existen vectores de ataque, persistencia ni compromiso de seguridad, tratándose de una falla de estabilidad o hardware.\n\n## Comandos de mitigación propuestos\n\n- dmesg -T --level=emerg,alert,crit,err\n- journalctl -k -p 0..3 -n 100 --no-pager\n- ipmitool sel elist\n- edac-util -v\n- sysctl -a | grep -E 'kernel.panic|kernel.unknown_nmi_panic'"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0004__nodex__r1__fa5722d1",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0004__nodex__r1__fa5722d1.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T01:48:16+00:00"
+  }
+}

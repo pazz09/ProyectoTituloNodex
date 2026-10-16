@@ -1,0 +1,67 @@
+{
+  "case_id": "bgl_eva_balanceado_0009",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0009__nodex__r1__45002a05",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0009",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "authentication_failure",
+        "evidence_uids": [
+          "log_record_000006"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl evento analizado corresponde a la generación de un volcado de memoria (core.27704) por parte del subsistema RAS KERNEL en el nodo R21-M0-N9-C:J17-U11, clasificado a nivel INFO. En el conjunto de registros proporcionado no se observan indicios de actividad hostil, explotación remota ni autenticación sospechosa; la causa apunta a una terminación anómala del proceso (p. ej., fallo de segmentación o error de aplicación/hardware en el entorno Blue Gene/HPC). Se recomienda realizar análisis forense/post-mortem del archivo core.27704 mediante depurador (gdb) para inspeccionar la pila de llamadas (stack trace), validar la integridad del binario involucrado y monitorizar la estabilidad del nodo.\n\n## Evaluación del auditor\n\nEl diagnóstico es consistente al determinar que el volcado de memoria (core dump) en el nodo HPC representa una anomalía operativa o fallo de proceso de software/hardware, sin evidencia de actividad maliciosa o intrusión. Las acciones recomendadas con gdb, dmesg y validación de integridad son técnicamente pertinentes para depurar el error.\n\n## Comandos de mitigación propuestos\n\n- file core.27704\n- gdb --batch -ex 'thread apply all bt full' -c core.27704\n- dmesg -T | grep -E -i 'segfault|trap|oom|killed' | tail -n 25\n- journalctl -p 3 -xb --no-pager\n- edac-util -v\n- rpm -Va --nomtime 2>/dev/null || dpkg --verify 2>/dev/null"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0009__nodex__r1__45002a05",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1685.001",
+          "name": "Disable or Modify Windows Event Log",
+          "similitud": null
+        },
+        {
+          "id": "T1685.004",
+          "name": "Disable or Modify Linux Audit System Log",
+          "similitud": null
+        },
+        {
+          "id": "T1654",
+          "name": "Log Enumeration",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "bgl_eva_balanceado_0009__nodex__r1__45002a05.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T01:54:36+00:00"
+  }
+}

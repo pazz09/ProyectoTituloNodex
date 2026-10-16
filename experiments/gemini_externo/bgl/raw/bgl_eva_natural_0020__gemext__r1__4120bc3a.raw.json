@@ -1,0 +1,67 @@
+{
+  "case_id": "bgl_eva_natural_0020",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0020__gemext__r1__4120bc3a",
+  "estado_crudo": {
+    "diagnostico": "Falla generalizada o caída en cascada de procesos de usuario o tareas de computación distribuida en múltiples nodos de un supercomputador BlueGene/L. La secuencia de registros muestra múltiples nodos generando volcados de memoria (core dumps) en un lapso de aproximadamente 17 minutos, lo cual es indicativo de un crash de aplicación paralela (ej. error de segmentación MPI) o una condición de falla operativa en el clúster, sin evidencia de actividad maliciosa.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "El log se limita a registrar mensajes de tipo 'RAS KERNEL INFO generating core.<id>' provenientes del subsistema RAS de BlueGene/L. Aunque evidencia un fallo de software o aplicación a gran escala en el clúster, no contiene artefactos, vectores de ataque, accesos no autorizados ni patrones atribuibles a un actor malicioso.",
+    "comandos_mitigacion": [
+      "gdb /ruta/al/binario /ruta/a/core.13753 --batch -ex 'bt'",
+      "cqstat",
+      "bglmaster_status"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-01",
+        "evidence_uids": [
+          "1120968137"
+        ],
+        "timestamp": "2005-07-09-21.02.17.017814",
+        "event_type": "PROCESS_CRASH",
+        "description": "El nodo R22-M0-ND-C:J13-U11 genera el primer volcado de memoria (core.13753)."
+      },
+      {
+        "event_id": "EVT-02",
+        "evidence_uids": [
+          "1120968273",
+          "1120968310",
+          "1120968439",
+          "1120968530",
+          "1120968585",
+          "1120968609",
+          "1120968690",
+          "1120968838",
+          "1120968857",
+          "1120968887",
+          "1120968941",
+          "1120969022",
+          "1120969071",
+          "1120969099",
+          "1120969138",
+          "1120969145",
+          "1120969149",
+          "1120969163",
+          "1120969179"
+        ],
+        "timestamp": "2005-07-09-21.04.33.975556 a 2005-07-09-21.19.39.649600",
+        "event_type": "CASCADING_CRASHES",
+        "description": "Falla propagada a través de múltiples racks (R10, R11, R13, R20, R21, R22, R24, R25, R27, R30, R31, R33, R34, R35, R36) generando múltiples core dumps sucesivos."
+      }
+    ],
+    "secuencia_temporal": [
+      "2005-07-09 21:02:17 - Primer volcado de memoria registrado en nodo R22-M0-ND-C:J13-U11 (core.13753)",
+      "2005-07-09 21:04:33 a 21:11:30 - Volcados sucesivos en racks R33, R34, R25, R35, R20, R27, R30",
+      "2005-07-09 21:13:58 a 21:15:41 - Propagación de caídas hacia nodos del rack R11, R10 y R13",
+      "2005-07-09 21:17:02 a 21:19:39 - Ocurrencia simultánea y densa de core dumps en nodos de R30, R35, R22, R21, R24, R36 y R31"
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

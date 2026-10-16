@@ -1,0 +1,84 @@
+{
+  "case_id": "uwf_eva_visible_0028",
+  "dataset": "uwf",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "uwf_eva_visible_0028__gemext__r1__fb167d59",
+  "estado_crudo": {
+    "diagnostico": "El tráfico analizado evidencia una anomalía operativa de red consistente en un fallo continuo de resolución DNS y posible desconfiguración de enrutamiento o caída de servidor. El host 143.88.255.10 envía ráfagas periódicas de consultas DNS UDP (puerto 53) cada aproximadamente 30 segundos hacia la dirección privada 10.0.10.1. Todas las conexiones finalizan en estado S0 (sin respuesta del servidor, 0 bytes y 0 paquetes recibidos). Asimismo, se observan intentos fallidos de resolución hacia servidores raíz por parte de 143.88.0.2 (S0) y demoras de timeout de ~5 segundos en las consultas de 143.88.1.51 hacia 143.88.1.1. No existe evidencia de actividad maliciosa intencional, exfiltración, escaneo hostil o balizamiento C2 funcional; se trata de una anomalía de disponibilidad/configuración de infraestructura.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "El patrón de envío cada ~30 segundos hacia 10.0.10.1 podría recordar a balizas (beacons) automatizadas, pero el destino es una IP privada interna y el volumen (2 a 10 consultas por ciclo) se corresponde exactamente con reintentos estándar de clientes de resolución de nombres ante un servidor primario inalcanzable. Tampoco existe denegación de servicio por saturación dado el bajísimo volumen de tráfico. Por tanto, clasificar esto como incidente de seguridad sería un falso positivo; se diagnostica únicamente como anomalía operativa.",
+    "comandos_mitigacion": [
+      "ping -c 4 10.0.10.1",
+      "traceroute 10.0.10.1",
+      "systemctl status systemd-resolved",
+      "cat /etc/resolv.conf",
+      "dig @10.0.10.1 localhost",
+      "ip route show"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-01",
+        "evidence_uids": [
+          "CNp69N30MREIpWdOI",
+          "Cumf0T3GxSYRua1sla",
+          "CfVw2qBxu3dGNx10g",
+          "CR1px94LdbwSeWgKIl"
+        ],
+        "timestamp": "2021-12-17 18:58:56.939659",
+        "event_type": "DNS_RESOLUTION_DELAY",
+        "description": "El host 143.88.1.51 realiza consultas DNS a 143.88.1.1 que experimentan una demora sostenida de exactamente ~5 segundos por conexión antes de completar el intercambio (SF)."
+      },
+      {
+        "event_id": "EVT-02",
+        "evidence_uids": [
+          "Ceni8hHI43gmMFWul",
+          "Cl5NqurlbdYOxZDai",
+          "CohoM43q9rMCchrV5l",
+          "Cqvsv7pyM9qugmYd"
+        ],
+        "timestamp": "2021-12-17 18:59:15.382531",
+        "event_type": "DNS_SERVER_UNRESPONSIVE",
+        "description": "Inicio de intentos cíclicos de consulta DNS por parte de 143.88.255.10 hacia el resolver interno 10.0.10.1:53, los cuales quedan sin respuesta (estado S0)."
+      },
+      {
+        "event_id": "EVT-03",
+        "evidence_uids": [
+          "ChLOCB1h15rMuzSGF9",
+          "Cwd6CqfneitzBY3ql",
+          "C7SIxM36uxf7vIuWQi",
+          "CZRzcR1H4zWIvrQ818",
+          "C6TbvC1VhPE0QecCa4"
+        ],
+        "timestamp": "2021-12-17 19:08:17.714328",
+        "event_type": "ROOT_DNS_FAILURES",
+        "description": "El host 143.88.0.2 intenta contactar a varios servidores DNS raíz de Internet (192.36.148.17, 198.97.190.53, 199.7.91.13, 199.9.14.201, 192.5.5.241, 193.0.14.129) sin obtener respuesta (S0), sugiriendo conectividad externa degradada o filtrado upstream."
+      },
+      {
+        "event_id": "EVT-04",
+        "evidence_uids": [
+          "CgHZY84kQh9nygm504",
+          "CFphRgy1h1AzE6tWc",
+          "CES20R1RmB0QUzH006",
+          "CKk6HF3iFBGJH3s1De",
+          "CJxHfHuVJgkAFjIL1"
+        ],
+        "timestamp": "2021-12-17 19:30:00.630218",
+        "event_type": "DNS_TIMEOUT_PERSISTENCE",
+        "description": "Persistencia de las consultas fallidas periódicas (cada ~30 segundos) de 143.88.255.10 hacia 10.0.10.1 a lo largo de todo el periodo capturado sin restablecimiento del servicio."
+      }
+    ],
+    "secuencia_temporal": [
+      "18:58:56 - 143.88.1.51 experimenta latencias de 5 segundos en respuestas DNS desde 143.88.1.1.",
+      "18:59:15 - 143.88.255.10 comienza a emitir solicitudes DNS hacia 10.0.10.1 en intervalos regulares de ~30 segundos sin recibir respuesta.",
+      "19:08:17 a 19:28:34 - 143.88.0.2 envía múltiples consultas a servidores DNS raíz de Internet sin éxito (estado S0).",
+      "19:30:00 - Las consultas infructuosas de 143.88.255.10 a 10.0.10.1 continúan de manera ininterrumpida."
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

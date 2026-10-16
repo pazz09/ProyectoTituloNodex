@@ -1,0 +1,49 @@
+{
+  "case_id": "bgl_eva_natural_0031",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0031__gemext__r1__6286a69c",
+  "estado_crudo": {
+    "diagnostico": "Fallas críticas a nivel de kernel y runtime en múltiples nodos de cómputo de un supercomputador BlueGene/L (RAS KERNEL FATAL). Los mensajes corresponden a volcados de registros de estado del procesador (Machine State Register, Program Interrupt, SPRs) y un error interno del runtime system ('rts internal error'), lo que indica una anomalía de hardware o de ejecución a nivel de sistema operativo/runtime, sin evidencia de actividad maliciosa.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "El registro muestra volcados de diagnóstico estándar del subsistema RAS (Reliability, Availability and Serviceability) del kernel de BlueGene/L frente a excepciones del procesador PowerPC (interrupción de programa, volcados de registros MSR, CR, LR, XER, CTR). No se observa ninguna traza de compromiso, vectores de ataque, persistencia ni acciones de un adversario.",
+    "comandos_mitigacion": [
+      "# Verificar estado de hardware y diagnóstico en el Service Node / Control System",
+      "bglstatus -e",
+      "# Reiniciar los nodos afectados tras validación de diagnóstico",
+      "service bluegene restart"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-01",
+        "evidence_uids": [
+          "1118771934"
+        ],
+        "timestamp": "2005-06-14-10.58.54.996783",
+        "event_type": "KERNEL_PANIC_EXCEPTION",
+        "description": "Fallo crítico en el nodo R24-M0-ND-C:J02-U11 con interrupción de programa por campo de punto flotante."
+      },
+      {
+        "event_id": "EVT-02",
+        "evidence_uids": [
+          "1118772927"
+        ],
+        "timestamp": "2005-06-14-11.15.27.823191",
+        "event_type": "RUNTIME_INTERNAL_ERROR",
+        "description": "Error interno del sistema de runtime (rts internal error) reportado en el nodo R27-M0-N6-C:J02-U11."
+      }
+    ],
+    "secuencia_temporal": [
+      "2005-06-14-10.58.54.996783: Inicio de registros de pánico del kernel y volcado de registros en nodos de cómputo.",
+      "2005-06-14-11.15.27.823191: Ocurrencia de 'rts internal error' en R27-M0-N6-C:J02-U11.",
+      "2005-06-14-11.23.44.638394: Registro final de volcado de excepciones de registros de procesador."
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

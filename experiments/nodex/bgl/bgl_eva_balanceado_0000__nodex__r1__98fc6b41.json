@@ -1,0 +1,83 @@
+{
+  "case_id": "bgl_eva_balanceado_0000",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0000__nodex__r1__98fc6b41",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0000",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "execution_failure",
+        "evidence_uids": [
+          "log_record_000004",
+          "log_record_000005",
+          "log_record_000006",
+          "log_record_000007",
+          "log_record_000008",
+          "log_record_000009",
+          "log_record_000017"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "network_connection",
+        "evidence_uids": [
+          "log_record_000014",
+          "log_record_000015"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nTras analizar el lote de eventos y la muestra cruda ('ciod: Error loading... No such file or directory'), se determina que los registros no corresponden a eventos de autenticación ni a intrusiones de red, sino a fallos de ejecución a nivel de aplicación e infraestructura HPC (mensajes RAS de Blue Gene/ciod por ausencia de binarios). La IP privada interna 172.16.96.116 cuenta con solo 2 eventos registrados, sin registrar intentos de autenticación fallidos ni usuarios asociados. Ninguna de las técnicas MITRE ATT&CK propuestas (T1685.001, T1685.004, T1654) aplica a la evidencia observada, ya que no se detecta evasión de defensas ni enumeración de registros. Se descarta actividad maliciosa activa y se recomienda corregir el clasificador de parsing del origen para evitar falsos positivos de eventos críticos de autenticación.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Los registros analizados corresponden a errores operacionales de infraestructura HPC (ciod/Blue Gene: 'Error loading... No such file or directory') que fueron erróneamente categorizados como fallos de autenticación por el analizador sintáctico. No se evidencian acciones maliciosas, intrusiones ni técnicas de evasión de defensas, tratándose de un falso positivo de seguridad derivado de un problema operacional.\n\n## Comandos de mitigación propuestos\n\n- logger -p auth.notice -t SEC_AUDIT \"Falso positivo confirmado: IP 172.16.96.116 corresponde a errores operacionales de ciod/HPC, no a actividad maliciosa\"\n- ss -tunap | grep 172.16.96.116\n- journalctl -g \"ciod: Error loading\" -n 50 --no-pager"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0000__nodex__r1__98fc6b41",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1685.001",
+          "name": "Disable or Modify Windows Event Log",
+          "similitud": null
+        },
+        {
+          "id": "T1685.004",
+          "name": "Disable or Modify Linux Audit System Log",
+          "similitud": null
+        },
+        {
+          "id": "T1654",
+          "name": "Log Enumeration",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "bgl_eva_balanceado_0000__nodex__r1__98fc6b41.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T01:38:09+00:00"
+  }
+}

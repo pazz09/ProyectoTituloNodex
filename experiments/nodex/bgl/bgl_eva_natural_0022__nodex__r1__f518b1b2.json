@@ -1,0 +1,51 @@
+{
+  "case_id": "bgl_eva_natural_0022",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0022__nodex__r1__f518b1b2",
+  "salida": {
+    "case_id": "bgl_eva_natural_0022",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "process_crash",
+        "evidence_uids": [
+          "log_record_000001"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos registros analizados corresponden a mensajes del núcleo del sistema (formato RAS KERNEL típico de entornos de supercomputación/BlueGene) indicando la generación de un volcado de memoria ('generating core.1129'). No se identifican indicadores de compromiso (IoCs), patrones de ataque interactivo ni actividad maliciosa; se trata de una caída o terminación anormal de un proceso a nivel operativo/aplicación. No se requieren medidas de contención de seguridad, sino derivación a administración de sistemas para análisis del volcado.\n\n## Evaluación del auditor\n\nLos registros corresponden a mensajes de volcado de memoria (core dump) en un entorno de computación, lo que representa una anomalía operativa por fallo o terminación anormal de un proceso sin indicios de actividad maliciosa o compromiso de seguridad.\n\n## Comandos de mitigación propuestos\n\n- coredumpctl list\n- dmesg -T | grep -E -i 'segfault|core dumped|killed' | tail -n 20\n- journalctl -p 3 -xb --no-pager | tail -n 50\n- sysctl kernel.core_pattern"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0022__nodex__r1__f518b1b2",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0022__nodex__r1__f518b1b2.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:12:17+00:00"
+  }
+}

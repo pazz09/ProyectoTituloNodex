@@ -1,0 +1,86 @@
+{
+  "case_id": "bgl_eva_natural_0046",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0046__gemext__r1__88f4e3ee",
+  "salida": {
+    "case_id": "bgl_eva_natural_0046",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "EVT-01",
+        "timestamp": "2005-07-02-17.47.51.984240",
+        "entities": [],
+        "event_type": "Proceso Abortado / Core Dump",
+        "evidence_uids": [
+          "1120351671",
+          "1120351682",
+          "1120351719"
+        ]
+      },
+      {
+        "uid": "EVT-02",
+        "timestamp": "2005-07-03-20.16.12.324256",
+        "entities": [],
+        "event_type": "Fallo distribuido de procesos",
+        "evidence_uids": [
+          "1120446972",
+          "1120446979",
+          "1120447005",
+          "1120447017",
+          "1120447042",
+          "1120447058",
+          "1120447377",
+          "1120447387",
+          "1120447451",
+          "1120447561",
+          "1120447592"
+        ]
+      },
+      {
+        "uid": "EVT-03",
+        "timestamp": "2005-07-03-21.01.11.603590",
+        "entities": [],
+        "event_type": "Fallo distribuido de procesos",
+        "evidence_uids": [
+          "1120449671",
+          "1120449678",
+          "1120449800",
+          "1120449840",
+          "1120449964",
+          "1120450102"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe observa la generación recurrente de volcados de memoria (core dumps) en múltiples nodos de cómputo de un supercomputador BlueGene/L. Esto indica la terminación anormal o aborto de aplicaciones o procesos distribuidos en el clúster. No existe evidencia de actividad maliciosa ni vectores de ataque; se trata de una anomalía de software/operativa del entorno HPC.\n\n## Evaluación del auditor\n\nLos registros consisten exclusivamente en mensajes 'RAS KERNEL INFO generating core.<PID>' distribuidos en diferentes racks y nodos en dos sesiones temporales principales (2005-07-02 y 2005-07-03). Si bien la generación simultánea de core dumps representa un fallo en las tareas de usuario o procesos de sistema, los logs carecen de cualquier indicador de intrusión, escalada de privilegios o explotación intencionada.\n\n## Comandos de mitigación propuestos\n\n- gdb /path/to/binary /path/to/core.2117 --eval-command='bt full' --batch\n- bglstatus --nodes\n- dmesg -T | grep -E 'segfault|trap|killed'"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0046__gemext__r1__88f4e3ee",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0046__gemext__r1__88f4e3ee.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:22:41+00:00"
+  }
+}

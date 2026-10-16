@@ -1,0 +1,71 @@
+{
+  "case_id": "bgl_eva_natural_0013",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0013__nodex__r1__32fb7363",
+  "salida": {
+    "case_id": "bgl_eva_natural_0013",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "hardware_telemetry_anomaly",
+        "evidence_uids": [
+          "log_record_000008",
+          "log_record_000009",
+          "log_record_000010",
+          "log_record_000011",
+          "log_record_000012"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nTras analizar los eventos crudos, se determina un falso positivo en la clasificación inicial de seguridad. Aunque el plan señalaba 5 eventos críticos de autenticación asociados a la IP 172.16.96.116, la muestra de logs en texto libre corresponde en realidad a registros de hardware y kernel de arquitectura supercomputadora/clúster (mensajes RAS KERNEL indicando 'ddr error(s) detected and corrected'). La cobertura de parsing fue del 0%, provocando una catalogación errónea como tráfico de autenticación. No existe evidencia de actividad maliciosa ni de manipulación de registros en el lote analizado, por lo que ninguna de las técnicas MITRE ATT&CK evaluadas aplica a este escenario. Como contención, se descartan bloqueos sobre la IP 172.16.96.116 y se recomienda ajustar las reglas de ingesta/parsers para separar telemetría de hardware de eventos de seguridad.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto al descartar un incidente de seguridad. Se trata de una anomalía operativa/hardware (errores de memoria DDR corregidos reportados por RAS/kernel) que fue erróneamente clasificada como fallos de autenticación debido a un fallo en el parser (0% de cobertura). No existe evidencia de actividad maliciosa ni justificación para aplicar bloqueos IP o técnicas de MITRE ATT&CK.\n\n## Comandos de mitigación propuestos\n\n- iptables -D INPUT -s 172.16.96.116 -j DROP 2>/dev/null || true\n- fail2ban-client unban 172.16.96.116 2>/dev/null || true\n- dmesg -T | grep -Ei 'ras|edac|ddr' | tail -n 20\n- ras-mc-ctl --summary 2>/dev/null || edac-util -s 2>/dev/null || true"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0013__nodex__r1__32fb7363",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1685.001",
+          "name": "Disable or Modify Windows Event Log",
+          "similitud": null
+        },
+        {
+          "id": "T1685.004",
+          "name": "Disable or Modify Linux Audit System Log",
+          "similitud": null
+        },
+        {
+          "id": "T1654",
+          "name": "Log Enumeration",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "bgl_eva_natural_0013__nodex__r1__32fb7363.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:08:35+00:00"
+  }
+}

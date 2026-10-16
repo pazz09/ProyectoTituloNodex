@@ -1,0 +1,58 @@
+{
+  "case_id": "bgl_eva_natural_0006",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0006__gemext__r1__00fa2fae",
+  "estado_crudo": {
+    "diagnostico": "Fallo crítico y reiterado de hardware o memoria en el nodo de cómputo R30-M0-N9-C:J16-U01 del supercomputador BlueGene/L. Se registran múltiples eventos 'data TLB error interrupt' clasificados como FATAL a nivel de KERNEL, lo que denota una falla recurrente en la unidad de manejo de memoria (MMU/TLB) del procesador o corrupción en las estructuras de traducción de memoria física/virtual.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.99,
+    "evaluacion_auditor": "Los registros provienen exclusivamente del subsistema RAS (Reliability, Availability and Serviceability) del kernel de BlueGene/L y corresponden a fallas a nivel de arquitectura del procesador (Translation Lookaside Buffer). No existen vectores de ataque, accesos no autorizados, ejecuciones arbitrarias ni comunicación anómala de red. La certeza de que se trata de una anomalía física u operativa y no de un incidente de ciberseguridad es prácticamente absoluta.",
+    "comandos_mitigacion": [
+      "mmc_service -n R30-M0-N9-C:J16-U01 --drain",
+      "bgl_boot --partition R30-M0-N9 --diag",
+      "systemctl isolate maintenance.target"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-01",
+        "evidence_uids": [
+          "1118549852",
+          "1118549971",
+          "1118550514",
+          "1118550590",
+          "1118550729",
+          "1118550833",
+          "1118551483",
+          "1118552349",
+          "1118552553",
+          "1118552691",
+          "1118552811",
+          "1118552875",
+          "1118553263",
+          "1118553888",
+          "1118554196",
+          "1118554603",
+          "1118554838",
+          "1118555213",
+          "1118555299",
+          "1118555531"
+        ],
+        "timestamp": "2005-06-11-21.17.32.188993",
+        "event_type": "KERNEL_HARDWARE_FAILURE",
+        "description": "Serie continua de interrupciones fatales por error de Data TLB registradas por el subsistema RAS en el nodo R30-M0-N9-C:J16-U01 entre las 21:17:32 y las 22:52:11."
+      }
+    ],
+    "secuencia_temporal": [
+      "2005-06-11-21.17.32.188993: Primer fallo fatal por data TLB error interrupt en el nodo R30-M0-N9-C:J16-U01 (UID: 1118549852).",
+      "2005-06-11-21.19.31.616037 a 2005-06-11-22.48.19.442753: Persistencia recurrente de fallos de interrupción TLB fatal a intervalos regulares.",
+      "2005-06-11-22.52.11.070355: Último evento registrado de error fatal TLB en el nodo R30-M0-N9-C:J16-U01 (UID: 1118555531)."
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

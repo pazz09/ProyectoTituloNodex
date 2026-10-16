@@ -1,0 +1,67 @@
+{
+  "case_id": "bgl_eva_natural_0034",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0034__gemext__r1__65b5a9f2",
+  "estado_crudo": {
+    "diagnostico": "Fallo en cascada o aborto de una aplicación distribuida (posiblemente un trabajo MPI) en múltiples nodos de cómputo del supercomputador BlueGene/L, evidenciado por la generación concurrente de volcados de memoria (core dumps) entre las 04:06 y 04:28 del 2005-07-17, seguido de un evento aislado el 2005-07-18.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "Los registros corresponden exclusivamente a mensajes de nivel INFO del subsistema RAS KERNEL reportando la generación de archivos 'core.<pid>'. Este comportamiento es típico de anomalías de software o fallos de aplicación a nivel HPC (por ejemplo, errores de segmentación o abortos de ejecución paralela), sin evidencia alguna de explotación, escalada de privilegios o actividad maliciosa externa o interna.",
+    "comandos_mitigacion": [
+      "gdb /ruta/al/binario core.46425 --batch -ex 'bt'",
+      "ulimit -c 0",
+      "ls -lh /var/log/messages",
+      "find / -name 'core.*' -type f -mtime -2 -exec ls -lh {} \\;"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-001",
+        "evidence_uids": [
+          "1121598391",
+          "1121598603",
+          "1121598608",
+          "1121598678",
+          "1121598731",
+          "1121598788",
+          "1121598991",
+          "1121599038",
+          "1121599136",
+          "1121599161",
+          "1121599219",
+          "1121599282",
+          "1121599303",
+          "1121599333",
+          "1121599491",
+          "1121599560",
+          "1121599608",
+          "1121599612",
+          "1121599720"
+        ],
+        "timestamp": "2005-07-17-04.06.31.496101 a 2005-07-17-04.28.40.989032",
+        "event_type": "APPLICATION_CRASH_CASCADE",
+        "description": "Múltiples nodos de cómputo en diferentes racks generan archivos core dump secuencialmente tras la finalización anormal de procesos."
+      },
+      {
+        "event_id": "EVT-002",
+        "evidence_uids": [
+          "1121706993"
+        ],
+        "timestamp": "2005-07-18-10.16.33.614707",
+        "event_type": "APPLICATION_CRASH_ISOLATED",
+        "description": "Fallo aislado en el nodo R37-M1-NE-C:J02-U11 con generación de core dump core.25367."
+      }
+    ],
+    "secuencia_temporal": [
+      "2005-07-17-04.06.31.496101: Inicio de la cascada de fallos con generación de core.46425 en R25-M1-NB-C:J11-U01.",
+      "2005-07-17-04.10.03 a 04.28.40: Generación continuada de core dumps en nodos de racks R13, R16, R10, R17, R12, R11, R01, R07, R04, R06, R31, R21, R14 y R00.",
+      "2005-07-18-10.16.33.614707: Incidencia posterior aislada en el nodo R37-M1-NE-C:J02-U11 con core.25367."
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

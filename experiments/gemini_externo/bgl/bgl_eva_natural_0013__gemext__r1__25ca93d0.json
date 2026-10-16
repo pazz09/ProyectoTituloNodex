@@ -1,0 +1,102 @@
+{
+  "case_id": "bgl_eva_natural_0013",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0013__gemext__r1__25ca93d0",
+  "salida": {
+    "case_id": "bgl_eva_natural_0013",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "EVT-01",
+        "timestamp": "2005-10-07T14:08:14.709280",
+        "entities": [],
+        "event_type": "HARDWARE_MEMORY_ECC",
+        "evidence_uids": [
+          "1128719294",
+          "1128832666",
+          "1128832724",
+          "1128832742",
+          "1128844166",
+          "1129158022",
+          "1129270727",
+          "1129271439",
+          "1129273479",
+          "1129352994",
+          "1129353114"
+        ]
+      },
+      {
+        "uid": "EVT-02",
+        "timestamp": "2005-10-10T12:00:06.181123",
+        "entities": [],
+        "event_type": "NETWORK_COMMUNICATION_FAILURE",
+        "evidence_uids": [
+          "1128970806"
+        ]
+      },
+      {
+        "uid": "EVT-03",
+        "timestamp": "2005-10-12T18:24:07.100662",
+        "entities": [],
+        "event_type": "APPLICATION_LAUNCH_FAILURE",
+        "evidence_uids": [
+          "1129166647",
+          "1129166670",
+          "1129166708",
+          "1129204934",
+          "1129204989",
+          "1129208349"
+        ]
+      },
+      {
+        "uid": "EVT-04",
+        "timestamp": "2005-10-14T00:04:42.389631",
+        "entities": [],
+        "event_type": "HARDWARE_NETWORK_RESYNCH",
+        "evidence_uids": [
+          "1129273482"
+        ]
+      },
+      {
+        "uid": "EVT-05",
+        "timestamp": "2005-10-15T21:46:23.436761",
+        "entities": [],
+        "event_type": "APPLICATION_CRASH",
+        "evidence_uids": [
+          "1129437983"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl registro corresponde a un supercomputador IBM Blue Gene/L y muestra múltiples fallos operativos y de hardware: errores corregibles de memoria DDR (ECC), desincronización de red interna (tree receiver), fallos en la carga de trabajos de computación por permisos denegados o archivos inexistentes a través del demonio ciod, un corte de enlace en sockets y un volcado de memoria (core dump) masivo tras el fallo de una aplicación HPC. No existe evidencia de intrusión, compromiso o actividad maliciosa intencionada.\n\n## Evaluación del auditor\n\nLa recurrencia de errores de memoria DDR y fallos de ejecución en ciod reflejan degradación de hardware y desajustes de configuración de permisos/rutas en el entorno HPC. Los errores de 'Permission denied' y 'No such file or directory' son típicos de scripts de envío de trabajos mal configurados o desincronización de montajes NFS en los nodos de E/S, sin indicios de explotación o movimiento lateral.\n\n## Comandos de mitigación propuestos\n\n- chmod +x /home/spelce1/HPCC_IBM/Urgent/COP/64K/vnm.rts\n- chmod +x /bgl/apps/followup/SPASM/spasm.254\n- ls -la /bgl/apps/followup/MINIBEN/MB_254_051007/torus-latency.rts\n- gdb /home/spelce1/HPCC_IBM/Urgent/COP/64K/opt_co_dc.rts core"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0013__gemext__r1__25ca93d0",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0013__gemext__r1__25ca93d0.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:09:35+00:00"
+  }
+}

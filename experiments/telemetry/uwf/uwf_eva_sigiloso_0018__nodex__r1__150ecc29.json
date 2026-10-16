@@ -1,0 +1,152 @@
+{
+  "case_id": "uwf_eva_sigiloso_0018",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "uwf_eva_sigiloso_0018__nodex__r1__150ecc29",
+  "telemetria": {
+    "llm_call_count": 11,
+    "input_tokens": 118312,
+    "output_tokens": 3466,
+    "total_tokens": 131783,
+    "execution_time": 121.38972,
+    "replan_count": 1,
+    "intentos_correccion": 2,
+    "invalid_evidence_uid_count": 0,
+    "d11_warning_count": 0,
+    "llm_calls": [
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 3552,
+        "output_tokens": 383,
+        "total_tokens": 4845,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 910,
+        "duration_s": 11.996,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 3782,
+        "output_tokens": 156,
+        "total_tokens": 4289,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 351,
+        "duration_s": 4.422,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 4478,
+        "output_tokens": 220,
+        "total_tokens": 5161,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 463,
+        "duration_s": 7.778,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 333,
+        "output_tokens": 60,
+        "total_tokens": 547,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 154,
+        "duration_s": 4.204,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 268,
+        "output_tokens": 195,
+        "total_tokens": 1998,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 1535,
+        "duration_s": 13.911,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 48116,
+        "output_tokens": 732,
+        "total_tokens": 51494,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 2646,
+        "duration_s": 27.636,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 4989,
+        "output_tokens": 346,
+        "total_tokens": 6530,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 1195,
+        "duration_s": 12.14,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 3790,
+        "output_tokens": 348,
+        "total_tokens": 4557,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 419,
+        "duration_s": 8.795,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 389,
+        "output_tokens": 56,
+        "total_tokens": 542,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 97,
+        "duration_s": 4.123,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 324,
+        "output_tokens": 297,
+        "total_tokens": 1794,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 1173,
+        "duration_s": 11.896,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 48291,
+        "output_tokens": 673,
+        "total_tokens": 50026,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 1062,
+        "duration_s": 14.278,
+        "error": null
+      }
+    ],
+    "n_llamadas_fallidas": 0,
+    "duracion_llamadas_s": 121.179,
+    "reasoning_tokens": 10005,
+    "modelos_efectivos": [
+      "gemini-3.8-flash"
+    ],
+    "campos_parciales": {},
+    "tiempo_total_runner_s": 121.39599749998888,
+    "previa_a_d11": false,
+    "output_contract_version": "d11-v1",
+    "diagnostico_runner": {
+      "arquitectura": "nodex_multiagente",
+      "thread_id": "exp__uwf_eva_sigiloso_0018__nodex__r1__150ecc29",
+      "execution_time": 121.39599749998888,
+      "error": null,
+      "claves_ausentes_en_el_estado": [],
+      "replan_count": 1,
+      "intentos_correccion": 1,
+      "historial_ejecucion": 14,
+      "d11_presente_en_el_estado": true
+    }
+  }
+}

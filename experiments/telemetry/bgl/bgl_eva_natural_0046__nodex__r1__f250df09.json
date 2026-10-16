@@ -1,0 +1,152 @@
+{
+  "case_id": "bgl_eva_natural_0046",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0046__nodex__r1__f250df09",
+  "telemetria": {
+    "llm_call_count": 11,
+    "input_tokens": 9468,
+    "output_tokens": 2272,
+    "total_tokens": 22059,
+    "execution_time": 112.58734,
+    "replan_count": 1,
+    "intentos_correccion": 2,
+    "invalid_evidence_uid_count": 0,
+    "d11_warning_count": 0,
+    "llm_calls": [
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 524,
+        "output_tokens": 178,
+        "total_tokens": 1483,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 781,
+        "duration_s": 8.067,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 654,
+        "output_tokens": 279,
+        "total_tokens": 5516,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 4583,
+        "duration_s": 43.447,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 306,
+        "output_tokens": 48,
+        "total_tokens": 524,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 170,
+        "duration_s": 3.986,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 259,
+        "output_tokens": 161,
+        "total_tokens": 1149,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 729,
+        "duration_s": 6.22,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 2225,
+        "output_tokens": 286,
+        "total_tokens": 3695,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 1184,
+        "duration_s": 9.51,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 1446,
+        "output_tokens": 442,
+        "total_tokens": 2517,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 629,
+        "duration_s": 7.03,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 698,
+        "output_tokens": 113,
+        "total_tokens": 1124,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 313,
+        "duration_s": 3.425,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 670,
+        "output_tokens": 171,
+        "total_tokens": 1253,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 412,
+        "duration_s": 5.573,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 265,
+        "output_tokens": 48,
+        "total_tokens": 552,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 239,
+        "duration_s": 7.606,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 218,
+        "output_tokens": 203,
+        "total_tokens": 1019,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 598,
+        "duration_s": 6.977,
+        "error": null
+      },
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 2203,
+        "output_tokens": 343,
+        "total_tokens": 3227,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 681,
+        "duration_s": 10.547,
+        "error": null
+      }
+    ],
+    "n_llamadas_fallidas": 0,
+    "duracion_llamadas_s": 112.388,
+    "reasoning_tokens": 10319,
+    "modelos_efectivos": [
+      "gemini-3.8-flash"
+    ],
+    "campos_parciales": {},
+    "tiempo_total_runner_s": 112.58752319999621,
+    "previa_a_d11": false,
+    "output_contract_version": "d11-v1",
+    "diagnostico_runner": {
+      "arquitectura": "nodex_multiagente",
+      "thread_id": "exp__bgl_eva_natural_0046__nodex__r1__f250df09",
+      "execution_time": 112.58752319999621,
+      "error": null,
+      "claves_ausentes_en_el_estado": [],
+      "replan_count": 1,
+      "intentos_correccion": 1,
+      "historial_ejecucion": 14,
+      "d11_presente_en_el_estado": true
+    }
+  }
+}

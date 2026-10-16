@@ -1,0 +1,76 @@
+{
+  "case_id": "bgl_eva_balanceado_0001",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0001__gemext__r1__308c7285",
+  "estado_crudo": {
+    "diagnostico": "El log corresponde a un supercomputador IBM BlueGene/L que registra fallos operativos y de hardware a lo largo de varias semanas. Se observan errores de memoria corregibles (Correctable Errors - CE), fallos de red en el bus torus ('warning for torus y+ wire'), desconexiones de sockets en el demonio de control de E/S ('ciod: Link has been severed'), terminaciones abruptas de aplicaciones paralelas con generación masiva de volcados de memoria (core dumps), y fallos de ejecución por permisos POSIX ('Permission denied') al intentar cargar binarios en la ruta de usuario. No existe evidencia de actividad maliciosa, intrusión o compromiso de seguridad cibernética.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "La hipótesis de incidente de seguridad se descarta debido a que los registros coinciden con el comportamiento operativo típico de fallos de hardware (ECC de DRAM, cableado torus) y problemas rutinarios de administración de trabajos HPC (permisos de archivos compartidos en NFS/GPFS y caídas de software de cálculo científico). La confianza es alta respecto a la presencia de anomalías de fiabilidad del sistema y la ausencia de ataque.",
+    "comandos_mitigacion": [
+      "chmod +rx /home/spelce1/HPCC_IBM/Urgent/Gunnels/VNM64/vnm.rts /home/spelce1/HPCC_IBM/Urgent/VNM/64K/vnm.rts",
+      "ls -ld /home/spelce1/HPCC_IBM/Urgent/Gunnels/VNM64 /home/spelce1/HPCC_IBM/Urgent/VNM/64K",
+      "ping -c 4 172.16.96.116"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-01",
+        "evidence_uids": [
+          "1127780591",
+          "1128597888"
+        ],
+        "timestamp": "2005-09-26-17.23.11.155275",
+        "event_type": "COMMUNICATION_FAILURE",
+        "description": "Fallo de conexión y ruptura de enlace socket en ciod hacia 172.16.96.116 tras intentar cargar mensajes de aplicación."
+      },
+      {
+        "event_id": "EVT-02",
+        "evidence_uids": [
+          "1127781971",
+          "1127960557",
+          "1128382008"
+        ],
+        "timestamp": "2005-09-26-17.46.11.092617",
+        "event_type": "APPLICATION_CRASH",
+        "description": "Caídas de procesos científicos paralelos (ddcMDbglV, tested_copro.rts, vnm.rts) que provocan la generación de decenas a cientos de ficheros core."
+      },
+      {
+        "event_id": "EVT-03",
+        "evidence_uids": [
+          "1128027755"
+        ],
+        "timestamp": "2005-09-29-14.02.35.872055",
+        "event_type": "HARDWARE_WARNING",
+        "description": "Interrupción crítica de hardware alertando sobre degradación o fallo en el cableado de red de interconexión torus (eje y+)."
+      },
+      {
+        "event_id": "EVT-04",
+        "evidence_uids": [
+          "1128170317",
+          "1128510395"
+        ],
+        "timestamp": "2005-10-01-05.38.37.246285",
+        "event_type": "FILE_PERMISSION_ERROR",
+        "description": "Error fatal de ciod al cargar ejecutables de usuario debido a permisos insuficientes o imágenes corruptas."
+      }
+    ],
+    "secuencia_temporal": [
+      "2005-09-23 15:52:07 a 2005-09-26 10:46:58: Detección continua de errores de memoria corregibles (CE) en nodos de cómputo.",
+      "2005-09-26 17:23:11: Desconexión abrupta del socket de E/S con 172.16.96.116.",
+      "2005-09-26 17:46:11: Crash de la aplicación ddcMDbglV generando 128 core files.",
+      "2005-09-28 19:22:37: Crash de tested_copro.rts generando 64 core files.",
+      "2005-09-29 14:02:35: Alerta crítica en el cableado físico de la red torus y+.",
+      "2005-10-01 05:38:37: Fallo de ejecución de vnm.rts por permiso denegado.",
+      "2005-10-03 16:26:48: Crash de vnm.rts generando 108 core files.",
+      "2005-10-05 04:06:35: Reincidencia de error de permiso denegado en vnm.rts (64K).",
+      "2005-10-06 04:24:48: Nueva ruptura de enlace en socket de comunicación con 172.16.96.116."
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

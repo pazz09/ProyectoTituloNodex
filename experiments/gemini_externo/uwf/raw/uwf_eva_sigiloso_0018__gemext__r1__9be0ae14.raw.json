@@ -1,0 +1,66 @@
+{
+  "case_id": "uwf_eva_sigiloso_0018",
+  "dataset": "uwf",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "uwf_eva_sigiloso_0018__gemext__r1__9be0ae14",
+  "estado_crudo": {
+    "diagnostico": "Fallo operativo de infraestructura y resolución DNS. El host 143.88.255.10 intenta comunicarse reiteradamente con un servidor DNS upstream en 10.0.10.1 cada 30 segundos sin obtener respuesta (conn_state S0, resp_pkts 0). A su vez, clientes internos como 143.88.10.11 intentan consultar a 143.88.255.10:53 también sin éxito. No se identifican indicadores de compromiso ni actividad maliciosa intencionada, sino una degradación de red o caída/desconfiguración de servicios DNS.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "El patrón de tráfico presenta una cadencia exacta de reintentos cada 30 segundos con tamaños de paquete homogéneos (78 y 102 bytes), característica de demonios de resolución o chequeos de salud (forwarders DNS/resolvers) ante servidores upstream inalcanzables. Aunque una periodicidad regular podría confundirse superficialmente con beaconing C2, el destino es una IP RFC 1918 interna que no emite respuesta alguna, y la tasa de paquetes es demasiado baja para ser una denegación de servicio (DoS). Por lo tanto, se descarta un incidente de seguridad.",
+    "comandos_mitigacion": [
+      "ping -c 4 10.0.10.1",
+      "traceroute 10.0.10.1",
+      "dig @10.0.10.1 localhost",
+      "systemctl status named || systemctl status bind9 || systemctl status dnsmasq",
+      "iptables -L -n -v | grep 53"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-001",
+        "evidence_uids": [
+          "CyiKiK2sfCk0YNgx1d",
+          "CGWAkv1zQAEnbE5Ew7",
+          "CbRwTg2wB5Imc3MHvf"
+        ],
+        "timestamp": "2021-12-26 09:41:45.380404",
+        "event_type": "dns_request_timeout",
+        "description": "Inicio de ráfagas periódicas de consultas DNS sin respuesta desde 143.88.255.10 hacia 10.0.10.1:53 con estado S0."
+      },
+      {
+        "event_id": "EVT-002",
+        "evidence_uids": [
+          "C6WMAl1rXEf9VFneV8",
+          "CxYTwx3UXdcagSk3M6",
+          "CHVq9Q1jpNl3aCI5H7"
+        ],
+        "timestamp": "2021-12-26 10:00:53.607000",
+        "event_type": "dns_service_unresponsive",
+        "description": "Cliente interno 143.88.10.11 consulta al resolver 143.88.255.10 en el puerto 53 sin recibir respuesta (S0), evidenciando impacto aguas abajo."
+      },
+      {
+        "event_id": "EVT-003",
+        "evidence_uids": [
+          "C1rSDb2lCf4EwiaZKd",
+          "Cz4GtM3QIh5qu3rKx3"
+        ],
+        "timestamp": "2021-12-26 09:51:49.036188",
+        "event_type": "root_dns_unreachable",
+        "description": "Intentos aislados y fallidos de 143.88.0.2 hacia servidores raíz de DNS (192.36.148.17 y 192.33.4.12) con estado S0, sugiriendo problemas adicionales de enrutamiento o filtrado externo."
+      }
+    ],
+    "secuencia_temporal": [
+      "09:41:45 - Comienzan los reintentos cíclicos de consultas DNS de 143.88.255.10 a 10.0.10.1 a intervalos aproximados de 30 segundos, finalizando todos en timeout (S0).",
+      "09:51:49 - El host 143.88.0.2 falla al consultar al root server 192.36.148.17:53.",
+      "10:00:53 - 143.88.10.11 intenta resolver nombres a través de 143.88.255.10 y no obtiene respuesta.",
+      "10:11:58 - 143.88.0.2 falla al consultar al root server 192.33.4.12:53.",
+      "10:12:30 - Persisten los reintentos infructuosos de 143.88.255.10 hacia 10.0.10.1."
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

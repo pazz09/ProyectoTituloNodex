@@ -1,0 +1,51 @@
+{
+  "case_id": "bgl_eva_natural_0025",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0025__nodex__r1__be4c8e8e",
+  "salida": {
+    "case_id": "bgl_eva_natural_0025",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "hardware_ecc_correctable_error",
+        "evidence_uids": [
+          "log_record_000001"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos registros corresponden a mensajes RAS (Reliability, Availability, and Serviceability) del kernel de un sistema HPC (arquitectura IBM BlueGene/L, nodo R06-M0-NB-C:J16-U01). El mensaje de muestra 'RAS KERNEL INFO CE sym 22, at 0x009c14e0, mask 0x20' indica la detección de un error corregible de memoria/ECC (Correctable Error) de severidad meramente informativa. No se identifican indicadores de compromiso (IoC), técnicas de adversarios ni actividad maliciosa. Se trata de un evento operacional/físico de hardware; no se requieren medidas de contención de seguridad, recomendándose únicamente monitoreo preventivo por parte del equipo de infraestructura para vigilar posible degradación del componente de memoria.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Los registros corresponden a eventos de telemetría RAS del kernel en una arquitectura BlueGene/L reportando errores corregibles de memoria (ECC Correctable Errors). Se trata de una anomalía a nivel de hardware/operacional sin indicios de compromiso o actividad maliciosa de seguridad.\n\n## Comandos de mitigación propuestos\n\n- dmesg -T | grep -iE 'ras|ecc|edac'\n- which edac-util >/dev/null 2>&1 && edac-util -v || true\n- which ras-mc-ctl >/dev/null 2>&1 && ras-mc-ctl --errors || true\n- which ipmitool >/dev/null 2>&1 && ipmitool sel elist || true"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0025__nodex__r1__be4c8e8e",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0025__nodex__r1__be4c8e8e.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:13:23+00:00"
+  }
+}

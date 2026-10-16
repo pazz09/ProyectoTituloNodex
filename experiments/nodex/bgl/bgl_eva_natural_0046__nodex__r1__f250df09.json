@@ -1,0 +1,51 @@
+{
+  "case_id": "bgl_eva_natural_0046",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0046__nodex__r1__f250df09",
+  "salida": {
+    "case_id": "bgl_eva_natural_0046",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "core_dump_generated",
+        "evidence_uids": [
+          "log_record_000001"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe observa en los registros de RAS KERNEL del sistema BlueGene/L la generación de un volcado de memoria (core.2117). El evento refleja una terminación anómala del proceso 2117 en el nodo R05-M1-NE-C:J12-U01. En el lote actual no se aprecian direcciones IP, accesos remotos ni indicadores de compromiso explícitos que confirmen explotación activa por desbordamiento de búfer o denegación de servicio intencionada. Por tanto, no se descarta una falla operativa interna del software o del hardware frente a un vector de ataque, requiriéndose el análisis directo del archivo core dump para determinar la causa raíz del fallo.\n\n## Evaluación del auditor\n\nEl registro describe la generación de un core dump (core.2117) tras la terminación anómala de un proceso en un nodo de BlueGene/L. Aunque constituye una anomalía operativa del sistema, no existen indicadores de compromiso, vectores de ataque remotos ni actividad maliciosa evidente en los registros analizados.\n\n## Comandos de mitigación propuestos\n\n- chmod 0600 core.2117 2>/dev/null || true\n- sha256sum core.2117 > core.2117.sha256 2>/dev/null || true\n- sysctl -w fs.suid_dumpable=0\n- sysctl -w kernel.core_uses_pid=1\n- echo 'fs.suid_dumpable = 0' > /etc/sysctl.d/99-core-dump-hardening.conf\n- auditctl -a always,exit -F arch=b64 -S kill,tgkill,tkill -k process_termination\n- dmesg -T | grep -E 'segfault|trap|general protection' | tail -n 20"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0046__nodex__r1__f250df09",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0046__nodex__r1__f250df09.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:20:27+00:00"
+  }
+}

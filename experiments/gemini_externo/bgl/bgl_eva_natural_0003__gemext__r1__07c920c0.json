@@ -1,0 +1,41 @@
+{
+  "case_id": "bgl_eva_natural_0003",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0003__gemext__r1__07c920c0",
+  "salida": {
+    "case_id": "bgl_eva_natural_0003",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nFallas operativas y errores de ejecución de trabajos en un clúster Blue Gene/L (BGL). Los registros evidencian intentos fallidos de ejecución por incompatibilidad o corrupción de binarios ('Exec format error'), directorios de trabajo inexistentes ('LOGIN chdir(pwd) failed: No such file or directory'), archivos de programa faltantes, pérdida de conexión en sockets de I/O ('Link has been severed'), sintaxis errónea en mapas de nodos y terminaciones estándar del kernel RTS. No existe evidencia de actividad maliciosa, intrusión ni compromiso de seguridad.\n\n## Evaluación del auditor\n\nEl análisis se basa exclusivamente en mensajes del subsistema RAS (Reliability, Availability, and Serviceability) y del daemon de control I/O (ciod) de IBM Blue Gene/L. La causa más probable de los fallos masivos 'Exec format error' es la compilación incorrecta de binarios de prueba de rendimiento (MINIBEN) o problemas en el sistema de archivos compartido. Los demás eventos corresponden a errores de usuario y desconexiones transitorias comunes en entornos HPC. La ausencia de logs de autenticación de red o shell impide descartar absolutamente actividad externa previa, pero dentro de los datos proporcionados no existe ningún indicador de compromiso.\n\n## Comandos de mitigación propuestos\n\n- file /bgl/apps/scaletest/performance/MINIBEN/mb_243_0810/allreduce.rts\n- ls -ld /bgl/apps/scaletest/stability/MDCASK/WORK/65576/\n- head -n 5 /home/auselton/bgl/mapfiles/bgl.128mps.f64.map\n- ping -c 4 172.16.96.116"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0003__gemext__r1__07c920c0",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0003__gemext__r1__07c920c0.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:03:20+00:00"
+  }
+}

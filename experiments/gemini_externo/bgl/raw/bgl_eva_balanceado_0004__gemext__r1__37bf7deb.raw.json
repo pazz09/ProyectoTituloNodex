@@ -1,0 +1,83 @@
+{
+  "case_id": "bgl_eva_balanceado_0004",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0004__gemext__r1__37bf7deb",
+  "estado_crudo": {
+    "diagnostico": "Fallo crítico en cascada del kernel en múltiples nodos de cómputo de un supercomputador IBM BlueGene/L. Los mensajes de error RAS KERNEL FATAL revelan excepciones de interrupción de almacenamiento de datos (data storage interrupt), comprobaciones de máquina en el fetch de instrucciones (machine check: i-fetch), instrucciones ilegales y accesos a direcciones de memoria inválidas recurrentes (dirección de instrucción 0x00004ed8 y dirección de datos 0x00000002). El patrón sugiere un error de software a bajo nivel (puntero desreferenciado/puntero nulo cercano a 0x0) o fallo en el bus/memoria de hardware durante la ejecución de un trabajo paralelo distribuido.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "Los registros corresponden exclusivamente a mensajes de fiabilidad, disponibilidad y servicio (RAS) del kernel de una arquitectura BlueGene/L. No existen rastros de compromiso, intentos de intrusión ni manipulación maliciosa de credenciales o servicios de red. El comportamiento se clasifica como una anomalía operativa/de hardware severa, sin indicadores de incidente de ciberseguridad.",
+    "comandos_mitigacion": [
+      "mmdiag --diagnostic",
+      "dmesg -T | grep -E 'kernel|fatal|panic'",
+      "ipmitool sel list"
+    ],
+    "eventos_reconstruidos": [
+      {
+        "event_id": "EVT-01",
+        "evidence_uids": [
+          "1118766139"
+        ],
+        "timestamp": "2005-06-14-09.22.19.720208",
+        "event_type": "KERNEL_FATAL_INSTRUCTION_ADDRESS",
+        "description": "Fallo fatal del kernel en el nodo R07-M0-NC-C:J10-U01 indicando la dirección de instrucción 0x00004ed8."
+      },
+      {
+        "event_id": "EVT-02",
+        "evidence_uids": [
+          "1118766804",
+          "1118766833",
+          "1118766935"
+        ],
+        "timestamp": "2005-06-14-09.33.24.217741",
+        "event_type": "KERNEL_FATAL_DATA_STORAGE_INTERRUPT",
+        "description": "Interrupciones de almacenamiento de datos y fallos en dirección 0x00004ed8 en nodos R24-M1-N0-C:J16-U01, R24-M1-ND-C:J11-U11 y R20-M1-NC-C:J05-U01."
+      },
+      {
+        "event_id": "EVT-03",
+        "evidence_uids": [
+          "1118767015",
+          "1118767049",
+          "1118767283",
+          "1118767320",
+          "1118767381"
+        ],
+        "timestamp": "2005-06-14-09.36.55.370589",
+        "event_type": "HARDWARE_CHECK_AND_DATA_FAULT",
+        "description": "Accesos a dirección de datos inválida 0x00000002, fallos de comprobación de máquina (i-fetch) e instrucción ilegal en nodos de los racks R20, R24 y R25."
+      },
+      {
+        "event_id": "EVT-04",
+        "evidence_uids": [
+          "1118767897",
+          "1118767942",
+          "1118767955",
+          "1118767965",
+          "1118768001",
+          "1118768017",
+          "1118768044",
+          "1118768070",
+          "1118768087",
+          "1118768111",
+          "1118768121"
+        ],
+        "timestamp": "2005-06-14-09.51.37.041158",
+        "event_type": "MASSIVE_KERNEL_PANIC_WAVE",
+        "description": "Oleada masiva y concurrente de interrupciones de almacenamiento de datos y fallos recurrentes en 0x00004ed8 y 0x00000002 en múltiples nodos de cómputo."
+      }
+    ],
+    "secuencia_temporal": [
+      "2005-06-14-09.22.19.720208: Primer fallo fatal de kernel en R07-M0-NC-C:J10-U01 (0x00004ed8)",
+      "2005-06-14-09.33.24.217741 - 2005-06-14-09.35.35.569986: Fallos fatales por data storage interrupt y dirección 0x00004ed8 en R24 y R20",
+      "2005-06-14-09.36.55.370589 - 2005-06-14-09.43.01.478244: Fallos en dirección 0x00000002, machine checks (i-fetch) e instrucción ilegal en R20, R24 y R25",
+      "2005-06-14-09.51.37.041158 - 2005-06-14-09.55.21.391576: Caída sincronizada de más de 10 nodos en múltiples racks por excepciones de kernel críticas"
+    ],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

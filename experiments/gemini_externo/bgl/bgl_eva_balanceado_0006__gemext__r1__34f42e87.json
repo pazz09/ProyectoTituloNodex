@@ -1,0 +1,85 @@
+{
+  "case_id": "bgl_eva_balanceado_0006",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0006__gemext__r1__34f42e87",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0006",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "EVT-001",
+        "timestamp": "2005-12-01-14.06.25.612025",
+        "entities": [],
+        "event_type": "HARDWARE_MEMORY_CE",
+        "evidence_uids": [
+          "1133474785",
+          "1133475318",
+          "1133573986",
+          "1133625592",
+          "1133691676",
+          "1133700378",
+          "1133700386",
+          "1133706305"
+        ]
+      },
+      {
+        "uid": "EVT-002",
+        "timestamp": "2005-12-03-09.29.59.645290",
+        "entities": [],
+        "event_type": "HARDWARE_SERVICE_ACTION",
+        "evidence_uids": [
+          "1133630999"
+        ]
+      },
+      {
+        "uid": "EVT-003",
+        "timestamp": "2005-12-03-11.32.53.165837",
+        "entities": [],
+        "event_type": "SOFTWARE_ALIGNMENT_EXCEPTION",
+        "evidence_uids": [
+          "1133638373"
+        ]
+      },
+      {
+        "uid": "EVT-004",
+        "timestamp": "2005-12-03-13.49.47.382429",
+        "entities": [],
+        "event_type": "NETWORK_SYNC_EVENT",
+        "evidence_uids": [
+          "1133646587"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos registros corresponden a operaciones rutinarias de telemetría RAS (Reliability, Availability, and Serviceability) en un supercomputador IBM BlueGene/L. Se observan anomalías de hardware y software operativo: múltiples errores de memoria corregibles (CE / DDR correctable errors), desalineación masiva de enteros en ejecución (integer alignment exceptions) en un nodo de cómputo, resincronización de enlaces de red de árbol y el apagado planificado de una tarjeta de nodos para mantenimiento físico (Service Action 648). No existe evidencia de actividad maliciosa ni intrusión de seguridad.\n\n## Evaluación del auditor\n\nEl diagnóstico es de alta certeza. Los logs provienen de componentes del kernel de BlueGene/L y del subsistema HARDWARE. Las alertas corresponden típicamente al desgaste o fluctuaciones normales en sistemas HPC a gran escala (errores de ECC corregidos y manejo por software de desalineación de memoria). No hay patrones de explotación, denegación deliberada de servicio ni compromiso de credenciales."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0006__gemext__r1__34f42e87",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0006__gemext__r1__34f42e87.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T01:51:40+00:00"
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "case_id": "bgl_eva_balanceado_0001",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0001__gemext__r1__308c7285",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0001",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "EVT-01",
+        "timestamp": "2005-09-26-17.23.11.155275",
+        "entities": [],
+        "event_type": "COMMUNICATION_FAILURE",
+        "evidence_uids": [
+          "1127780591",
+          "1128597888"
+        ]
+      },
+      {
+        "uid": "EVT-02",
+        "timestamp": "2005-09-26-17.46.11.092617",
+        "entities": [],
+        "event_type": "APPLICATION_CRASH",
+        "evidence_uids": [
+          "1127781971",
+          "1127960557",
+          "1128382008"
+        ]
+      },
+      {
+        "uid": "EVT-03",
+        "timestamp": "2005-09-29-14.02.35.872055",
+        "entities": [],
+        "event_type": "HARDWARE_WARNING",
+        "evidence_uids": [
+          "1128027755"
+        ]
+      },
+      {
+        "uid": "EVT-04",
+        "timestamp": "2005-10-01-05.38.37.246285",
+        "entities": [],
+        "event_type": "FILE_PERMISSION_ERROR",
+        "evidence_uids": [
+          "1128170317",
+          "1128510395"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl log corresponde a un supercomputador IBM BlueGene/L que registra fallos operativos y de hardware a lo largo de varias semanas. Se observan errores de memoria corregibles (Correctable Errors - CE), fallos de red en el bus torus ('warning for torus y+ wire'), desconexiones de sockets en el demonio de control de E/S ('ciod: Link has been severed'), terminaciones abruptas de aplicaciones paralelas con generación masiva de volcados de memoria (core dumps), y fallos de ejecución por permisos POSIX ('Permission denied') al intentar cargar binarios en la ruta de usuario. No existe evidencia de actividad maliciosa, intrusión o compromiso de seguridad cibernética.\n\n## Evaluación del auditor\n\nLa hipótesis de incidente de seguridad se descarta debido a que los registros coinciden con el comportamiento operativo típico de fallos de hardware (ECC de DRAM, cableado torus) y problemas rutinarios de administración de trabajos HPC (permisos de archivos compartidos en NFS/GPFS y caídas de software de cálculo científico). La confianza es alta respecto a la presencia de anomalías de fiabilidad del sistema y la ausencia de ataque.\n\n## Comandos de mitigación propuestos\n\n- chmod +rx /home/spelce1/HPCC_IBM/Urgent/Gunnels/VNM64/vnm.rts /home/spelce1/HPCC_IBM/Urgent/VNM/64K/vnm.rts\n- ls -ld /home/spelce1/HPCC_IBM/Urgent/Gunnels/VNM64 /home/spelce1/HPCC_IBM/Urgent/VNM/64K\n- ping -c 4 172.16.96.116"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0001__gemext__r1__308c7285",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0001__gemext__r1__308c7285.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T01:45:08+00:00"
+  }
+}

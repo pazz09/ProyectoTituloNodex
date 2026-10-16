@@ -1,0 +1,51 @@
+{
+  "case_id": "bgl_eva_natural_0020",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0020__nodex__r1__c44d157a",
+  "salida": {
+    "case_id": "bgl_eva_natural_0020",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "core_dump_generated",
+        "evidence_uids": [
+          "log_record_000001"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos registros analizados corresponden a mensajes RAS (Reliability, Availability, and Serviceability) a nivel de KERNEL en una arquitectura de supercomputación (nodo R22-M0-ND-C:J13-U11), indicando la generación de un volcado de memoria (generating core.13753). No se evidencia actividad maliciosa ni vectores de ataque asociados a MITRE ATT&CK; se clasifica como una incidencia operacional de estabilidad o fallo de aplicación que debe ser revisada por el equipo de administración de sistemas e infraestructura.\n\n## Evaluación del auditor\n\nLos registros corresponden a mensajes de fiabilidad y servicio (RAS) del kernel reportando la generación de un volcado de memoria (core.13753) en un nodo de supercómputo. Se trata de una anomalía operativa por fallo de proceso o inestabilidad del sistema, sin evidencia de intrusión, explotación o actividad maliciosa.\n\n## Comandos de mitigación propuestos\n\n- coredumpctl info 13753\n- dmesg -T | grep -Ei 'ras|segfault|core' | tail -n 50\n- journalctl -k -p 3 -n 50 --no-pager\n- ras-mc-ctl --summary"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0020__nodex__r1__c44d157a",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0020__nodex__r1__c44d157a.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:11:06+00:00"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "case_id": "bgl_eva_natural_0001",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0001__gemext__r1__048273ac",
+  "estado_crudo": {
+    "diagnostico": "El log corresponde a registros operativos y de depuración de un supercomputador IBM Blue Gene/L (BGL). Muestra fallos de hardware y operación estándar de clúster HPC: pérdidas de conexión de red/sockets en ciod, fallos de montaje de sistema de archivos Lustre (/p/gb1), errores de memoria corregidos (CE/DDR), problemas de alimentación eléctrica y estado de tarjeta de nodo (PGOOD/MPGOOD error latch), inconsistencia de datos vitales de producto (VPD mismatch), errores de rutas de trabajo inexistentes y aserciones de software internas en el demonio idoproxydb (idotransportmgr.cpp). No existe evidencia alguna de actividad maliciosa o compromiso de seguridad.",
+    "hay_anomalia": true,
+    "hay_incidente": false,
+    "confianza": 0.95,
+    "evaluacion_auditor": "Los eventos corresponden a errores de hardware, software interno de administración de nodos (MMCS/Ido) y del sistema de archivos distribuidos/rutas de usuario en un entorno HPC. Ningún evento presenta indicadores de compromiso o tácticas de intrusión cibernética.",
+    "comandos_mitigacion": [],
+    "eventos_reconstruidos": [],
+    "secuencia_temporal": [],
+    "tecnicas_atribuidas": [],
+    "tecnicas_mitre": [],
+    "output_contract_version": "d11-v1"
+  }
+}

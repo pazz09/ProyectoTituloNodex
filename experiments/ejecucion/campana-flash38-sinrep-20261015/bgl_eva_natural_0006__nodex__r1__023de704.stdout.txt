@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=532 salida=241 razonamiento=382 total=1155
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=660 salida=164 razonamiento=794 total=1618
+   → No hace falta RAG (La muestra cruda permite identificar con certeza técnica que se trata de errores de hardware/kernel RAS y no de incidentes de seguridad, sumado a que el plan de investigación no contempla el uso de memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=209 salida=47 razonamiento=156 total=412
+   → usar_cve: False | Razón: El diagnóstico confirma que se trata de un fallo operativo de hardware/memoria (TLB) y no de un ataque o vulnerabilidad de software explotable.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=162 salida=153 razonamiento=618 total=933
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2120 salida=539 razonamiento=366 total=3025
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros describen interrupciones críticas de fiabilidad y servicio (RAS KERNEL FATAL data TLB error interrupt), correspondientes a una falla de hardware/memoria en la unidad TLB de un nodo de cómputo. No existe evidencia de actividad maliciosa ni intrusión de seguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

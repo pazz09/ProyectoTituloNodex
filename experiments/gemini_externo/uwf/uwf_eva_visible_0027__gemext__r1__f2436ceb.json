@@ -1,0 +1,41 @@
+{
+  "case_id": "uwf_eva_visible_0027",
+  "dataset": "uwf",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "uwf_eva_visible_0027__gemext__r1__f2436ceb",
+  "salida": {
+    "case_id": "uwf_eva_visible_0027",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nAnomalía operativa de red consistente en fallos continuos de resolución DNS y problemas de conectividad de infraestructura. El host 143.88.255.10 realiza consultas DNS en ráfagas cada 30.25 segundos hacia el servidor 10.0.10.1:53, las cuales quedan totalmente sin respuesta (estado Zeek S0, 0 bytes de respuesta, 2 paquetes por intento correspondientes a retransmisión por timeout). Asimismo, se observan consultas fallidas a servidores raíz de DNS (199.7.91.13, 192.33.4.12, 192.58.128.30) desde 143.88.0.2, degradación con latencia de 5 segundos en 143.88.1.51 hacia 143.88.1.1, y peticiones DHCPv6 desatendidas. No existe evidencia de actividad maliciosa confirmada.\n\n## Evaluación del auditor\n\nSe evaluó rigurosamente si la periodicidad de ~30.25 segundos en las consultas DNS de 143.88.255.10 constituía tráfico de balizado C2 (Command and Control beaconing vía DNS). Sin embargo: 1) El destino es una dirección IP privada (10.0.10.1:53), correspondiente a un resolver interno; 2) Los tamaños fijos de 78 y 102 bytes son estándar para consultas de registros A y AAAA de nombres de dominio específicos; 3) El contexto global del log revela fallos generalizados de resolución e infraestructura (servidores raíz DNS inalcanzables, retardos de timeout de 5 segundos hacia 143.88.1.1 y solicitudes DHCPv6 sin respuesta). Este comportamiento corresponde típicamente a un servicio legítimo, agente de monitorización o tarea programada intentando resolver nombres contra un servidor DNS inalcanzable o desconfigurado. Por ende, se clasifica como anomalía operativa y no como incidente de seguridad.\n\n## Comandos de mitigación propuestos\n\n- cat /etc/resolv.conf\n- ip route get 10.0.10.1\n- traceroute -n 10.0.10.1\n- dig @143.88.1.1 localhost\n- resolvectl status\n- sed -i 's/10.0.10.1/143.88.1.1/g' /etc/resolv.conf"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_visible_0027__gemext__r1__f2436ceb",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "uwf_eva_visible_0027__gemext__r1__f2436ceb.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T03:01:33+00:00"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "case_id": "bgl_eva_natural_0038",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0038__nodex__r1__4bdc89c9",
+  "salida": {
+    "case_id": "bgl_eva_natural_0038",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "process_crash_coredump",
+        "evidence_uids": [
+          "log_record_000001",
+          "log_record_000002",
+          "log_record_000003",
+          "log_record_000004",
+          "log_record_000005",
+          "log_record_000006",
+          "log_record_000007",
+          "log_record_000008",
+          "log_record_000009",
+          "log_record_000010",
+          "log_record_000011",
+          "log_record_000012",
+          "log_record_000013",
+          "log_record_000014",
+          "log_record_000015",
+          "log_record_000016",
+          "log_record_000017",
+          "log_record_000018",
+          "log_record_000019",
+          "log_record_000020"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos registros corresponden a mensajes de log de arquitectura Blue Gene/L (sistema RAS KERNEL) reportando la generación de volcados de memoria ('generating core.47738') en nodos de cómputo (R27-M1-N9-C:J09-U11). No se aprecian indicadores de compromiso, vectores de ataque ni actividad maliciosa; la anomalía observada responde a un fallo de software o inestabilidad operativa del sistema que causó la terminación anormal de un proceso.\n\n## Evaluación del auditor\n\nLos registros corresponden a eventos del subsistema RAS de Blue Gene/L reportando la generación de volcados de memoria (core dumps) tras la terminación anormal de procesos en nodos de cómputo. Se trata de una falla de estabilidad o error de software netamente operacional, sin evidencia de actividad maliciosa ni vectores de intrusión.\n\n## Comandos de mitigación propuestos\n\n- coredumpctl list\n- coredumpctl info 47738\n- dmesg -T --level=err,crit\n- sysctl -w fs.suid_dumpable=0\n- ulimit -c 0"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0038__nodex__r1__4bdc89c9",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0038__nodex__r1__4bdc89c9.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:17:00+00:00"
+  }
+}

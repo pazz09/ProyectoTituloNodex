@@ -1,0 +1,41 @@
+{
+  "case_id": "bgl_eva_balanceado_0011",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0011__gemext__r1__128fc195",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0011",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe observa la generación recurrente y distribuida de volcados de memoria (core dumps) en múltiples nodos de un clúster Blue Gene/L en dos periodos distintos (15 de julio de 2005 y 17 de julio de 2005). Este comportamiento es característico de fallos o excepciones fatales en aplicaciones paralelas distribuidas (por ejemplo, fallos de segmentación en trabajos MPI) o problemas de software a nivel de kernel/runtime en los nodos de cómputo. No se detectan indicadores de compromiso ni actividad maliciosa.\n\n## Evaluación del auditor\n\nLa evidencia muestra exclusivamente mensajes informativos de nivel KERNEL ('generating core.<pid>') emitidos por el subsistema RAS en diversos nodos. Aunque representa una falla operativa de software o hardware que afecta la disponibilidad de los procesos de cómputo, no existen elementos que apunten a una intrusión deliberada, malware o ataque cibernético.\n\n## Comandos de mitigación propuestos\n\n- gdb --core=/var/log/core.50988 <binario_asociado>\n- file core.*\n- squeue -j <job_id> || llq\n- dmesg -T | grep -i 'segfault'"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0011__gemext__r1__128fc195",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0011__gemext__r1__128fc195.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T01:59:24+00:00"
+  }
+}

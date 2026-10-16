@@ -1,0 +1,58 @@
+{
+  "case_id": "bgl_eva_natural_0002",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_natural_0002__nodex__r1__6096ae94",
+  "salida": {
+    "case_id": "bgl_eva_natural_0002",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "network_connection_reset",
+        "evidence_uids": [
+          "log_record_000001",
+          "log_record_000003",
+          "log_record_000004",
+          "log_record_000005",
+          "log_record_000008",
+          "log_record_000010",
+          "log_record_000012",
+          "log_record_000015"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos eventos corresponden a registros operacionales del sistema BlueGene/L (logs RAS de la aplicación ciod) que reportan un error de socket ('Connection reset by peer') con el nodo interno 172.16.96.116:52930. No se evidencian indicadores de compromiso, actividad adversaria ni patrones de ataque; se trata de una anomalía o caída de conexión a nivel de infraestructura/red HPC. No se requieren medidas de contención de seguridad, recomendándose únicamente la verificación del servicio o nodo por parte del equipo de sistemas.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Los registros corresponden a eventos operacionales del entorno BlueGene/L (ciod) que reflejan fallos de socket ('Connection reset by peer') con el nodo interno 172.16.96.116. No existe evidencia de actividad maliciosa ni compromiso de seguridad, tratándose de una anomalía exclusivamente de infraestructura o red.\n\n## Comandos de mitigación propuestos\n\n- ping -c 4 172.16.96.116\n- traceroute -n 172.16.96.116\n- ss -tapn | grep 172.16.96.116\n- nc -zv -w 3 172.16.96.116 52930"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0002__nodex__r1__6096ae94",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0002__nodex__r1__6096ae94.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T02:01:09+00:00"
+  }
+}

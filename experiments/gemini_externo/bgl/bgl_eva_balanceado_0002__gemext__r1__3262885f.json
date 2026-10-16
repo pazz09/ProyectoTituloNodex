@@ -1,0 +1,92 @@
+{
+  "case_id": "bgl_eva_balanceado_0002",
+  "dataset": "bgl",
+  "arquitectura": "gemini_externo",
+  "repeticion": 1,
+  "config_version": "campana-flash38-sinrep-20261015",
+  "run_id": "bgl_eva_balanceado_0002__gemext__r1__3262885f",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0002",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "EVT-001",
+        "timestamp": "2005-09-02T12:40:43.759217",
+        "entities": [],
+        "event_type": "filesystem_mount_failure",
+        "evidence_uids": [
+          "1125690043",
+          "1125692642",
+          "1125694345",
+          "1125759503",
+          "1125871271",
+          "1126202752"
+        ]
+      },
+      {
+        "uid": "EVT-002",
+        "timestamp": "2005-09-02T15:50:54.754016",
+        "entities": [],
+        "event_type": "hardware_vpd_mismatch",
+        "evidence_uids": [
+          "1125701454"
+        ]
+      },
+      {
+        "uid": "EVT-003",
+        "timestamp": "2005-09-03T05:09:10.001351",
+        "entities": [],
+        "event_type": "application_io_failure",
+        "evidence_uids": [
+          "1125749350",
+          "1126421175",
+          "1126434160"
+        ]
+      },
+      {
+        "uid": "EVT-004",
+        "timestamp": "2005-09-03T00:01:53.125988",
+        "entities": [],
+        "event_type": "correctable_hardware_errors",
+        "evidence_uids": [
+          "1125730913",
+          "1125797779",
+          "1125817576",
+          "1126180040",
+          "1126267442",
+          "1126272208",
+          "1126275477",
+          "1126526629"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl registro corresponde a eventos operativos y de diagnóstico RAS (Reliability, Availability, and Serviceability) del supercomputador IBM BlueGene/L. Se identifican múltiples fallas operativas recurrentes, principalmente fallos en el montaje del sistema de archivos distribuido Lustre (/p/gb1) en nodos de E/S (bglio*), errores leves de hardware corregidos (errores de bus torus y memoria DDR/CE), una discrepancia de hardware VPD tras reemplazo o lectura de tarjeta de nodos, y errores de ejecución en ciod (archivos no encontrados y caída de enlaces de comunicación). No existen indicadores de compromiso o actividad maliciosa.\n\n## Evaluación del auditor\n\nLa evidencia muestra degradación y fallos de infraestructura a nivel de sistema de archivos paralelo (Lustre) y problemas de conectividad de E/S característicos de entornos HPC. Los fallos fatales de ciod (LOGIN chdir y carga de binarios) se correlacionan directamente con la indisponibilidad de las rutas montadas en Lustre. La evaluación de que no es un incidente de seguridad se basa en la ausencia de vectores de ataque, persistencia, escalada de privilegios o tráfico sospechoso; son exclusivamente eventos de estabilidad operativa y fallos de hardware/almacenamiento.\n\n## Comandos de mitigación propuestos\n\n- lctl ping <MGS/MDS_NID>\n- mount -t lustre <MGS_NID>:/sp/gb1 /p/gb1\n- dmesg | grep -i lustre\n- ping -c 4 172.16.96.116"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0002__gemext__r1__3262885f",
+      "arquitectura": "gemini_externo",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0002__gemext__r1__3262885f.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T01:46:31+00:00"
+  }
+}
