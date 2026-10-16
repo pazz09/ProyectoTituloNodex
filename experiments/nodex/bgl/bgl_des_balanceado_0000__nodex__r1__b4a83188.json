@@ -1,0 +1,70 @@
+{
+  "case_id": "bgl_des_balanceado_0000",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "verificacion-sinrep-20261015",
+  "run_id": "bgl_des_balanceado_0000__nodex__r1__b4a83188",
+  "salida": {
+    "case_id": "bgl_des_balanceado_0000",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "application_crash",
+        "evidence_uids": [
+          "log_record_000001",
+          "log_record_000002",
+          "log_record_000003",
+          "log_record_000004",
+          "log_record_000005",
+          "log_record_000006",
+          "log_record_000007",
+          "log_record_000008",
+          "log_record_000009",
+          "log_record_000010",
+          "log_record_000011",
+          "log_record_000012",
+          "log_record_000013",
+          "log_record_000014",
+          "log_record_000015",
+          "log_record_000016",
+          "log_record_000017",
+          "log_record_000018",
+          "log_record_000019",
+          "log_record_000020"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos eventos corresponden a registros operativos estándar de un entorno de supercomputación/HPC (Blue Gene / IBM RAS KERNEL) que informan sobre la generación de volcados de memoria (core dumps) para un proceso científico/computacional (/home/spelce1/HPCC_IBM/Urgent/COP/64K/opt_co_dc.rts). No se aprecian patrones de intrusión, escaneo malicioso, denegación de servicio ni actividad hostil atribuible a la IP privada 172.16.96.116. Se clasifica como actividad benigna de infraestructura/fallo de software de cálculo.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto al determinar que los registros corresponden a fallos de ejecución y generación de volcados de memoria (core dumps) de una aplicación científica en una infraestructura de computación de alto rendimiento (Blue Gene RAS). Constituye una anomalía de software/operativa sin indicios de compromiso de seguridad o actividad maliciosa."
+    },
+    "_meta": {
+      "run_id": "bgl_des_balanceado_0000__nodex__r1__b4a83188",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_des_balanceado_0000__nodex__r1__b4a83188.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T01:26:23+00:00"
+  }
+}

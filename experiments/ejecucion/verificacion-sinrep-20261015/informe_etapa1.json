@@ -1,0 +1,51 @@
+{
+  "etapa": 1,
+  "detenido": false,
+  "detenido_por_fallas_seguidas": false,
+  "motivo_de_parada": null,
+  "limpia": true,
+  "decision_etapa_b": null,
+  "motivos": [],
+  "etiqueta": "depuracion_no_reportable",
+  "gasto": {
+    "inicial_usd": 0,
+    "gasto_acumulado_usd": 0.014766,
+    "corridas_con_costo": 1,
+    "corridas_con_costo_parcial": [],
+    "maximo_de_la_siguiente_usd": 0.0,
+    "proyectado_usd": 0.014766,
+    "tope_usd": 1.0,
+    "supera": false,
+    "fecha_de_precios": "2026-10-16",
+    "de_la_etapa_usd": 0.014766
+  },
+  "informes": [
+    {
+      "run_id": "bgl_des_balanceado_0000__nodex__r1__b4a83188",
+      "arquitectura": "nodex_multiagente",
+      "dataset": "bgl",
+      "case_id": "bgl_des_balanceado_0000",
+      "estado": "completa",
+      "error": null,
+      "segundos": 63.8,
+      "credencial_presente": true,
+      "modelo_pedido": "gemini-3.8-flash",
+      "versiones_devueltas": [
+        "gemini-3.8-flash"
+      ],
+      "usa_fallback": false,
+      "llamadas": 5,
+      "llamadas_fallidas": 0,
+      "tokens": {
+        "entrada": 4013,
+        "salida": 1121,
+        "razonamiento": 2014,
+        "total": 7148,
+        "parcial": false
+      },
+      "intentos_de_consulta_externa": 0,
+      "json_llamadas": 5,
+      "json_invalidas": 0
+    }
+  ]
+}

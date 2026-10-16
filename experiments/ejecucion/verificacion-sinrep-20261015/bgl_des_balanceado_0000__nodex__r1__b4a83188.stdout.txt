@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=678 salida=278 razonamiento=523 total=1479
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=849 salida=221 razonamiento=393 total=1463
+   → No hace falta RAG (El plan de investigación explícitamente no contempla consultar memoria histórica y la muestra de los eventos crudos permite identificar de forma concluyente que se trata de registros de depuración/kernel de un clúster HPC, sin evidencias de compromiso de seguridad.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=250 salida=56 razonamiento=107 total=413
+   → usar_cve: False | Razón: El diagnóstico clasifica los eventos como actividad benigna de infraestructura y fallos de software operativo (core dumps en HPC), descartando intrusiones o ataques y sin identificar servicios vulnerables específicos a consultar.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=203 salida=6 razonamiento=502 total=711
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2033 salida=560 razonamiento=489 total=3082
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto al determinar que los registros corresponden a fallos de ejecución y generación de volcados de memoria (core dumps) de una aplicación científica en una infraestructura de computación de alto rendimiento (Blue Gene RAS). Constituye una anomalía de software/operativa sin indicios de compromiso de seguridad o actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

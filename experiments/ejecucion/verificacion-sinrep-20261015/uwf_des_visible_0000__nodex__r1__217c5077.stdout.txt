@@ -1,0 +1,82 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3574 salida=418 razonamiento=598 total=4590
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3818 salida=172 razonamiento=371 total=4361
+   → Solicitando RAG (Se detecta un volumen crítico de 212 fallos en consultas DNS desde 143.88.255.10 hacia 10.0.10.1 y 60 conexiones anómalas fallidas entre 143.88.18.12 y 143.88.18.11. Conforme al objetivo de investigación, es necesario correlacionar estos patrones con técnicas de MITRE ATT&CK (como DNS tunneling/exfiltración T1071.004, C2 o reconocimiento lateral) y revisar incidentes históricos similares para caracterizar adecuadamente la anomalía.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1071.004, T1584.002, T1568.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=4527 salida=272 razonamiento=408 total=5207
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=391 salida=62 razonamiento=200 total=653
+   → usar_cve: False | Razón: El diagnóstico describe comportamientos anómalos de red (DGA, túnel DNS y escaneo/movimiento lateral) sin especificar software, versiones o vulnerabilidades puntuales que justifiquen la búsqueda de CVEs específicos.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=319 salida=301 razonamiento=1491 total=2111
+   → 8 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=47763 salida=960 razonamiento=3051 total=51774
+   → Confianza final: 0.88 | hay_anomalia=True | hay_incidente=True | cobertura_suficiente=False | El diagnóstico identifica correctamente dos patrones anómalos: ráfagas periódicas de consultas DNS sin respuesta hacia 10.0.10.1 y un escaneo horizontal de múltiples puertos TCP entre 143.88.18.12 y 143.88.18.11 en un intervalo de segundos. Aunque la actividad de escaneo interno confirma un incidente de seguridad, la hipótesis sobre DGA o tunelización DNS no puede validarse únicamente con registros de conexión de Zeek, requiriendo los registros específicos de resolución DNS.
+   🔀 Router Finalización → agente_planificador (replanifica: cobertura insuficiente)
+👉 Transición completada en: 'agente_auditor_final'
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=4952 salida=313 razonamiento=744 total=6009
+   → Plan v2: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3776 salida=362 razonamiento=437 total=4575
+   → No hace falta RAG (El lote presenta una cobertura de parsing del 100% y los datos agregados evidencian con claridad los patrones de escaneo de puertos lateral y anomalía DNS masiva, además de que el plan de investigación especifica no consultar memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=415 salida=60 razonamiento=255 total=730
+   → usar_cve: False | Razón: El diagnóstico describe comportamientos anómalos de red (escaneo de puertos y posible túnel DNS/DoS) sin especificar aplicaciones, servicios o versiones de software vulnerables que permitan realizar una búsqueda de CVEs específica.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=343 salida=280 razonamiento=1021 total=1644
+   → 10 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=47737 salida=837 razonamiento=1330 total=49904
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=True | cobertura_suficiente=True | El diagnóstico es acertado en la identificación del escaneo de puertos vertical/horizontal realizado por 143.88.18.12 contra 143.88.18.11 en cuestión de segundos a múltiples puertos conocidos (SSH, RDP, SMB, HTTP, etc.), consistente con reconocimiento interno (T1046). Respecto al tráfico DNS masivo no respondido (S0) de 143.88.255.10 hacia 10.0.10.1, aunque anómalo en volumen, la falta de inspección de payload impide corroborar de manera definitiva exfiltración/túnel DNS (T1071.004), pudiendo tratarse de falta de conectividad al resolver o beaconing. Las medidas de contención propuestas son coherentes.
+   🔀 Router Finalización → END (MAX_REPLANS=1 alcanzado)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

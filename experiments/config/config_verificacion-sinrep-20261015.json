@@ -1,0 +1,112 @@
+{
+  "config_version": "verificacion-sinrep-20261015",
+  "esquema": "1.0",
+  "congelada_utc": "2026-10-16T01:26:13+00:00",
+  "git": {
+    "commit": "54ccfee4733d647f04fa94b1b57f7d595285342c",
+    "rama": "preparacion-entorno-pruebas",
+    "arbol_limpio": true
+  },
+  "parametros": {
+    "LLM_MODEL_PRIMARY": "gemini-3.8-flash",
+    "LLM_MODEL_FALLBACK": "gemini-3.8-flash",
+    "LLM_SIN_RESPALDO": true,
+    "REPUTACION_SIN_ENRIQUECIMIENTO": true,
+    "TEMPERATURE": 0.0,
+    "EMBEDDING_MODEL": "all-MiniLM-L6-v2",
+    "TOP_K_FEWSHOT": 3,
+    "TOP_K_ERRORS": 3,
+    "TOP_K_ATTACK": 3,
+    "ATTACK_MAX_CHARS_EMBED": 800,
+    "MAX_RAW_CHARS_EMBED": 2000,
+    "CONTEXTO_PREPROCESAMIENTO_MAX_CHARS": 2000,
+    "LOG_MAX_FILE_BYTES": 52428800,
+    "LOG_MAX_EVENTS": 100000,
+    "LOG_MAX_RAW_SAMPLES": 20,
+    "LOG_PRESERVE_RAW": true
+  },
+  "parametros_ausentes": [],
+  "credenciales_presentes": {
+    "GEMINI_API_KEY": true,
+    "GOOGLE_API_KEY": false,
+    "ABUSEIPDB_API_KEY": true,
+    "NVD_API_KEY": true
+  },
+  "prompts_sha256": {
+    "agente_analista_triage.py": "ea14fcae9f8c419ee2367e9a976c9fd8abcaf661c04ba8b3e8b31ed5c1ea5d63",
+    "agente_auditor_final.py": "62108341032c8a9d8cb87b3386c85e95d28f53c62b86df5dc5fdba63950e87f4",
+    "agente_ingeniero_mitigacion.py": "b55ad03bcee37032df5792897c29fbe55e0882687a059ce4224cb3c698ef477e",
+    "agente_planificador.py": "a6482fd33f429804b4d72696cb9fa7a6c8c5ec319b3bbcbf78730ece2716f9bb",
+    "agente_selector_herramientas.py": "bab7d2689d2d93a6fed1b4e4dc1c1d17891d92120e4cd304291702c400e20519"
+  },
+  "capa_experimental_sha256": {
+    "adapters": {
+      "__init__.py": "73e658b1a612d073da98a8aa6c8bc021bfdb2de81841cd91420dd671459f6d42",
+      "contrato_agentes.py": "2f27b8aa415f82acf6853d6e2708b51a41c6aea2eb5c99ab7ada67813023d7ee",
+      "extraccion.py": "34de7ad54fecefc16c139a1faa48c4c49ee6914269bc1f318902e564e7f0c559",
+      "nodex.py": "5636722b7f503f4b7c44aaa4c639041e5981ee2a58a4aa832c0cbf85f5b6c7ea"
+    },
+    "evaluators": {
+      "__init__.py": "bb6657b8c597411b856161612665137e256100c850fdfd87e6247fa932427d74",
+      "agregacion.py": "146c57b0841912e8e21a120a89f9ef89ae968d235f8fa78f6d71baa1b87343bc",
+      "conjuntos.py": "98b7bd1632d326c00750158a7fc8b231c45804753a33954434ffcca199dce160",
+      "consumo.py": "e8ffe02b2c28ebd034f171f135ab43bf4e6c8dedd7b5234fcf30c69889b662e9",
+      "deteccion.py": "9a3716a1bb963a74ba9ab458e2b1b7a7f84cae1d403c396c16e6c0d7e434a9cb",
+      "mitre.py": "a7154ff6278a22e64cc85a1efc409b2fb25aaf3015b2cc26676e3f7d4e02e6f9",
+      "reconstruccion.py": "d4e34bd7649496abab1fdcd0dd3ccb99d78fde6696e8b5a0294b245b9dc99eca",
+      "reporte.py": "0778a7700198a1b7ceaf4b5031bd2d64e8315ec6d111e486e728e446b148e16a"
+    },
+    "runtime": {
+      "__init__.py": "58cbac8bd29941630f551850d6aa9b0d8636975305ea49b7c05c3d4595d935af",
+      "configuracion.py": "de0d915a67e5e7fb1c347c55e3ec5c1b6ff2e43497204cf3e672b2b3b0f3f9c6",
+      "consultas_externas.py": "b19192c36fbf7f9d93ddcb41746264f9a1a14a122b5c358edd57c3fea2468d8d",
+      "exportacion.py": "76cf3e627f6d0fa0fe4ad5a12124ad3650d4f68d8c11e315b2b85621e69ee863",
+      "identidad.py": "c9614d379dde294070bc4cd6db0b946b614fd0c51344c5df216369c4a114768b",
+      "persistencia.py": "b3789bf3e2fc8d1a3f90f2d7c6389e9720fc37f40c2e5c25d17dd3c3826a28b0",
+      "telemetria.py": "d43e372ddee4ab3c835dc86b4cac2fc4f26fabe80177103b385159d894ad8993"
+    }
+  },
+  "datasets": {
+    "manifiestos_sha256": {
+      "bgl": "ad5bf0482d9dc466575fafc92bc1ac4200067c4c2dd35c03c570694866e60b99",
+      "hdfs": "5f23205742b57d43ab7669480cc7f0a9adadc23eab336eff32327265a9dd50d0",
+      "inventario_fuentes": "6cf2ebf70727a33071d0ea31cfa2ad8a76bb78a3a2585035d5ac1535f5b270ae",
+      "uwf": "414fd000c38c996c4568180ee74ae4ea8a68fdbf7b5f20f43f43f855081d5eaf",
+      "uwf_conversion": "293b1ec4ca0ffdb15e933ba481e3287895ed081113f7c552e0dfc735a55552bf"
+    }
+  },
+  "conocimiento": {
+    "inventario_sha256": "01cab7c4a7d8b486f74e4fc482ec0bc5bf7ab4fb09ce8d61c8c65ca11ddeddcf",
+    "poblado_sha256": "41b9d4757edc7f8d3535a4abc9fd3b9a503e8a0dd02db839a96c52e3032fd3d7",
+    "inventario_v2_sha256": "6801dd5881204f9db5aeb00916632cb313b036a27cc68e6d9dbd6ebbde1d5467",
+    "poblado_v2_sha256": "7924cb37b99a03718e1119e32317a42683793829b98372795f50693471e9ba3c",
+    "verificacion_v2_sha256": "f40452d947eb3bcb9a2b492faa4d101b2a178289b2b2245ceb18fc86ea381894"
+  },
+  "semillas": {
+    "particion": 20261003,
+    "uwf_casos": 20261003,
+    "subconjuntos": 20261004,
+    "seleccion_campana": 20261015
+  },
+  "entorno": {
+    "python": "3.13.5",
+    "plataforma": "Windows-11-10.0.26300-SP0"
+  },
+  "d11_integrado": true,
+  "generacion": {
+    "api": "generateContent (google-genai, Models.generate_content)",
+    "response_mime_type": "application/json",
+    "thinking_level": "no se envía: rige el valor por omisión del modelo",
+    "respaldo_de_modelo": "apagado (LLM_SIN_RESPALDO=true)",
+    "reputacion_externa": "apagada (REPUTACION_SIN_ENRIQUECIMIENTO=true): ninguna IP recibe puntaje",
+    "reintentos_con_espera": "activos sobre el mismo modelo (503, 429 por minuto)",
+    "gemini_directo": "hereda el mismo modelo y temperatura que NODEX",
+    "sdk_google_genai": "2.25.0"
+  },
+  "recursos_externos": {
+    "nvd": "bloqueado con respaldo local; cada intento de consulta se registra por corrida",
+    "abuseipdb": "no se consulta ni hay heurística local: modo sin reputación externa (REPUTACION_SIN_ENRIQUECIMIENTO=true); cada llamada queda registrada como sin_reputacion",
+    "politica_campana_final": "DECIDIDA el 15-oct-2026: NODEX se evalúa sin enriquecimiento de reputación externa (AbuseIPDB) y sin consultas reales a NVD (bloqueadas, con respaldo local registrado)."
+  },
+  "huella": "9ab44739f23a0528d46066e50a1a65c6a7526015e6c33ab3fbafe29ceafa0782"
+}

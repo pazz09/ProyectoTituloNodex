@@ -1,0 +1,96 @@
+{
+  "case_id": "uwf_des_visible_0000",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "verificacion-sinrep-20261015",
+  "run_id": "uwf_des_visible_0000__nodex__r1__217c5077",
+  "salida": {
+    "case_id": "uwf_des_visible_0000",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-17 13:00:47.631896",
+        "entities": [],
+        "event_type": "dns_request_flood",
+        "evidence_uids": [
+          "C4vGuv2GsIdW656IXl",
+          "CIujUM1DTeqmLRRUC3",
+          "CCersZ2uKuONh6Wnfh",
+          "CwTx5o1wHN0rkwF6Uk"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-17 13:19:50.781",
+        "entities": [],
+        "event_type": "network_port_scan",
+        "evidence_uids": [
+          "CDvhTZ3ITOK5lzuNk6",
+          "C1ABS36DFUr6ONIGk",
+          "CXivM12TkdkX3awdMi",
+          "CXyiwY2LXWtIfF7aqi"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": [
+        {
+          "id": "T1046",
+          "name": "Network Service Scanning",
+          "evidence_uids": [
+            "CDvhTZ3ITOK5lzuNk6",
+            "C1ABS36DFUr6ONIGk",
+            "CXivM12TkdkX3awdMi",
+            "CXyiwY2LXWtIfF7aqi"
+          ]
+        }
+      ]
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe identifican dos actividades anómalas principales en el tráfico de red analizado: 1) Escaneo de puertos y reconocimiento interno dirigido: La IP 143.88.18.12 genera 60 conexiones consecutivas y fallidas hacia el host 143.88.18.11 en un corto periodo de tiempo, consistente con técnicas de Network Service Scanning (T1046) para descubrimiento lateral. 2) Actividad DNS masiva y anómala: El host 143.88.255.10 genera 212 solicitudes DNS fallidas dirigidas hacia 10.0.10.1, patrón atribuible a un intento de túnel DNS encubierto/exfiltración (T1071.004) o a un ataque de denegación de servicio/amplificación DNS. Se recomienda la contención inmediata aislando 143.88.18.12 y 143.88.255.10 en firewall de red, inspección forense del host 143.88.18.11 para descartar compromiso y análisis de payload de las consultas DNS generadas por 143.88.255.10.\n\n## Evaluación del auditor\n\nEl diagnóstico es acertado en la identificación del escaneo de puertos vertical/horizontal realizado por 143.88.18.12 contra 143.88.18.11 en cuestión de segundos a múltiples puertos conocidos (SSH, RDP, SMB, HTTP, etc.), consistente con reconocimiento interno (T1046). Respecto al tráfico DNS masivo no respondido (S0) de 143.88.255.10 hacia 10.0.10.1, aunque anómalo en volumen, la falta de inspección de payload impide corroborar de manera definitiva exfiltración/túnel DNS (T1071.004), pudiendo tratarse de falta de conectividad al resolver o beaconing. Las medidas de contención propuestas son coherentes.\n\n## Comandos de mitigación propuestos\n\n- iptables -I INPUT -s 143.88.18.12 -j DROP\n- iptables -I FORWARD -s 143.88.18.12 -j DROP\n- iptables -I FORWARD -d 143.88.18.12 -j DROP\n- iptables -I INPUT -s 143.88.255.10 -j DROP\n- iptables -I FORWARD -s 143.88.255.10 -j DROP\n- iptables -I FORWARD -d 143.88.255.10 -j DROP\n- ip route add blackhole 143.88.18.12\n- ip route add blackhole 143.88.255.10\n- conntrack -D -s 143.88.18.12 || true\n- conntrack -D -s 143.88.255.10 || true"
+    },
+    "_meta": {
+      "run_id": "uwf_des_visible_0000__nodex__r1__217c5077",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1568.002",
+          "name": "Domain Generation Algorithms",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_des_visible_0000__nodex__r1__217c5077.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-16T01:27:27+00:00"
+  }
+}
