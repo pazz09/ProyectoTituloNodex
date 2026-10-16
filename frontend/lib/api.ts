@@ -131,6 +131,14 @@ export type EventoSse =
   | { tipo: 'nodo'; nombre: string; detalle: Record<string, unknown> }
   | { tipo: 'error'; mensaje: string }
   | { tipo: 'final'; reporte: ReporteFinal }
+  | {
+      tipo: 'registro_manual'
+      registrado: boolean
+      motivo: string
+      case_id?: string
+      repeticion?: number
+      config_version?: string
+    }
 
 async function detalleDelError(r: Response, porDefecto: string) {
   try {

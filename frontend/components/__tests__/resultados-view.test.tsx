@@ -661,3 +661,18 @@ describe('intervalos de confianza y consistencia entre repeticiones', () => {
     expect(c.querySelectorAll('#seccion-11-1 .aviso-tabla').length).toBeGreaterThanOrEqual(2)
   })
 })
+
+describe('evaluación manual: solo NODEX', () => {
+  it('con una sola arquitectura no se muestra la comparación con el baseline y Gemini directo', () => {
+    const soloNodex = { ...resumen, arquitecturas: ['nodex_multiagente'] } as unknown as ResumenResultados
+    const c = montar({ resumen: soloNodex })
+    expect(c.querySelector('#seccion-11-6')).toBeNull()
+    expect(c.querySelector('#aviso-baseline')).toBeNull()
+    expect(c.querySelector('#seccion-11-1')).not.toBeNull()
+    expect(c.querySelector('#seccion-11-7')).not.toBeNull()
+  })
+
+  it('con varias arquitecturas la comparación sigue apareciendo', () => {
+    expect(montar().querySelector('#seccion-11-6')).not.toBeNull()
+  })
+})

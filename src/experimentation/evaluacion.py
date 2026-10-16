@@ -188,8 +188,13 @@ def evaluar_corridas(
     subconjunto_nombre: str,
     config_version: str,
     arquitecturas: tuple[str, ...] = ARQUITECTURAS_CAMPANA,
+    repeticiones: int | None = None,
 ) -> ResultadoEvaluacion:
-    """Evalúa las corridas guardadas de un subconjunto. No ejecuta nada."""
+    """Evalúa las corridas guardadas de un subconjunto. No ejecuta nada.
+
+    `repeticiones` reemplaza las del protocolo para las arquitecturas con modelo. Lo usa la evaluación
+    manual (análisis uno por uno desde la interfaz), donde las repeticiones las decide quien analiza.
+    """
     subconjunto = cargar_subconjunto(raiz_repo, subconjunto_nombre)
     particion = subconjunto["particion"]
     resultado = ResultadoEvaluacion(
@@ -205,11 +210,11 @@ def evaluar_corridas(
         condicion = case_id.split("_")[2]
 
         for arquitectura in arquitecturas:
-            repeticiones = (
+            n_repeticiones = (
                 REPETICIONES_BASELINE if arquitectura == "baseline_reglas"
-                else REPETICIONES.get(particion, 1)
+                else (repeticiones or REPETICIONES.get(particion, 1))
             )
-            for repeticion in range(1, repeticiones + 1):
+            for repeticion in range(1, n_repeticiones + 1):
                 identidad = IdentidadCorrida(
                     case_id=case_id, dataset=dataset, arquitectura=arquitectura,
                     repeticion=repeticion, config_version=config_version,

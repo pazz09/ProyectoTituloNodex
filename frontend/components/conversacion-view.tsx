@@ -513,6 +513,34 @@ export function ConversacionView({
               )
             }
 
+            if (m.rol === 'registro') {
+              return (
+                <div className="msg msg-agente" key={m.id} id="registro-manual">
+                  <div className="msg-cabecera">
+                    <span className="icono">
+                      <FileText size={15} />
+                    </span>
+                    <strong>
+                      {m.registrado ? 'Registrado para las métricas' : 'No entra a las métricas'}
+                    </strong>
+                    <time>{m.hora}</time>
+                  </div>
+                  <div className="msg-cuerpo">
+                    <p>
+                      {m.registrado && m.caso ? (
+                        <>
+                          Caso <strong className="mono">{m.caso}</strong>, análisis nº {m.repeticion}. Las
+                          métricas (precisión, exhaustividad, F1…) aparecen en el módulo Resultados.
+                        </>
+                      ) : (
+                        m.motivo
+                      )}
+                    </p>
+                  </div>
+                </div>
+              )
+            }
+
             if (m.rol === 'error') {
               return (
                 <div className="msg msg-agente" key={m.id} style={{ borderColor: 'var(--crit-line)' }}>

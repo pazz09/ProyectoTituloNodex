@@ -18,6 +18,7 @@ es más simple y con menos piezas que puedan fallar el día de la demo.
 """
 
 import json
+import os
 import time
 import uuid
 from pathlib import Path
@@ -120,6 +121,23 @@ async def crear_analisis(archivo: UploadFile = File(...)):
     job_id = uuid.uuid4().hex
     _JOBS[job_id] = (raw_logs, archivo.filename or "(sin nombre)")
     return {"job_id": job_id, "nombre_archivo": archivo.filename}
+
+
+RAIZ_REPO = Path(__file__).resolve().parents[2]
+
+
+def _registrar_manual(job_id: str, nombre_archivo: str | None, raw_logs: str,
+                      reporte: dict | None, error: str | None) -> dict:
+    """Si el archivo es un caso del experimento, guarda el análisis para las métricas de «Resultados».
+
+    Evaluación manual (solo NODEX): ver `src/experimentation/manual.py`. Nunca rompe el stream.
+    """
+    try:
+        from src.experimentation import manual
+        return manual.registrar(RAIZ_REPO, job_id, nombre_archivo, raw_logs, reporte, error)
+    except Exception as e:  # noqa: BLE001
+        print(f"   ⚠️ No se pudo registrar el análisis {job_id} para las métricas manuales: {e}")
+        return {"registrado": False, "motivo": f"no se pudo registrar: {type(e).__name__}: {e}"}
 
 
 def _sse(evento: dict) -> str:
@@ -231,6 +249,13 @@ def registrar_feedback(job_id: str, cuerpo: Feedback):
     colecciones son append-only, así que quedan las dos entradas; es el
     comportamiento de `commit_feedback()` y no se altera acá.
     """
+    if os.environ.get("NODEX_MODO_EVALUACION") == "1":
+        # Evaluación manual: el feedback escribe en la memoria de largo plazo (ChromaDB) y cambiaría lo que el
+        # RAG le muestra a NODEX en los análisis siguientes, contaminando las métricas.
+        raise HTTPException(
+            409, "El feedback está deshabilitado en modo evaluación (NODEX_MODO_EVALUACION=1): "
+                 "escribiría en la memoria de largo plazo y alteraría los análisis siguientes.")
+
     corrida = historial.obtener_corrida(job_id)
     if corrida is None:
         raise HTTPException(404, f"No hay ninguna corrida con job_id {job_id}.")
@@ -309,6 +334,7 @@ def stream_analisis(job_id: str):
         resumen: dict = {}
         reporte: dict | None = None
         error: str | None = None
+        registro_manual_hecho = False
         try:
             for evento in analizar_lote_stream(raw_logs, thread_id=thread_id):
                 if evento.get("tipo") == "inicio":
@@ -317,6 +343,12 @@ def stream_analisis(job_id: str):
                     reporte = evento.get("reporte") or {}
                 elif evento.get("tipo") == "error":
                     error = evento.get("mensaje")
+                if evento.get("tipo") in ("final", "error") and not registro_manual_hecho:
+                    # Si el archivo es un caso del experimento, se guarda para las métricas de «Resultados» y
+                    # se avisa ANTES de reenviar `final`/`error`: la interfaz cierra el stream al recibirlos.
+                    registro_manual_hecho = True
+                    yield _sse({"tipo": "registro_manual",
+                                **_registrar_manual(job_id, nombre_archivo, raw_logs, reporte, error)})
                 yield _sse(evento)
         except PreprocesamientoError as e:
             # El preprocesamiento falla ANTES del primer evento ("inicio"):
@@ -342,6 +374,8 @@ def stream_analisis(job_id: str):
             # Va en `finally` para que una desconexión del navegador a mitad
             # del análisis no pierda el resultado: el grafo igual corrió y
             # gastó cuota, así que el registro debe quedar.
+            if not registro_manual_hecho:      # el stream se cortó o hubo una excepción
+                _registrar_manual(job_id, nombre_archivo, raw_logs, reporte, error)
             try:
                 historial.registrar_corrida(
                     job_id,

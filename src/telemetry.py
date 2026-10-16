@@ -16,6 +16,34 @@ def medir_ejecucion():
         _medicion.reset(token)
 
 
+def medir_pasos(generador):
+    """Mide un generador activando la medición solo DURANTE cada paso (cada `next()`).
+
+    `medir_ejecucion()` abre la medición con `ContextVar.set()` y la cierra con `reset(token)`. Eso sirve para
+    una función normal, pero NO para un generador que se consume por pasos desde otro contexto: el servidor web
+    (Starlette) avanza un generador síncrono con un hilo y una copia nueva del contexto en cada paso. Entonces
+    (1) el `reset` falla con «Token ... was created in a different Context» al terminar y (2) los pasos siguientes
+    ni siquiera ven la medición, así que los tokens y las llamadas quedarían sin registrar.
+
+    Acá la medición es un objeto propio del generador; en cada paso se la pone en el contexto de ESE paso y se
+    la saca en el mismo paso (set y reset siempre en el mismo contexto). El objeto es compartido, así que las
+    llamadas se acumulan entre pasos.
+    """
+    medicion = {"start": perf_counter(), "calls": []}
+    try:
+        while True:
+            token = _medicion.set(medicion)
+            try:
+                evento = next(generador)
+            except StopIteration:
+                return
+            finally:
+                _medicion.reset(token)
+            yield evento
+    finally:
+        generador.close()
+
+
 def iniciar_llamada(modelo):
     medicion = _medicion.get()
     if medicion is None:

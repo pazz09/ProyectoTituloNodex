@@ -660,6 +660,7 @@ export function ResultadosContenido(p: PropsContenido) {
             )}
           </Seccion>
 
+          {resumen.arquitecturas.length > 1 && (
           <Seccion
             numero="11.6"
             titulo="NODEX frente al baseline y a Gemini directo"
@@ -698,6 +699,7 @@ export function ResultadosContenido(p: PropsContenido) {
               <Vacio id="comparacion" />
             )}
           </Seccion>
+          )}
 
           <Seccion
             numero="11.7"

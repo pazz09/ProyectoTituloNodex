@@ -9,7 +9,7 @@ import time
 from src.config import CONFIDENCE_THRESHOLD
 from src.graph.build_graph import build_graph
 from src.output_contract import campos_d11, construir_evidencia
-from src.telemetry import medir_ejecucion, resumen_telemetria
+from src.telemetry import medir_ejecucion, medir_pasos, resumen_telemetria
 from src.tools.aggregation import firma_lote, preprocesar_lote
 from src.tools.reputation import ReputationCache, corroborar_ips
 from src.tools.tool_consultar_rag import ltm  # instancia compartida de LongTermMemory
@@ -206,8 +206,9 @@ def _analizar_lote(raw_logs: str, thread_id: str | None = None) -> dict:
 
 def analizar_lote_stream(raw_logs: str, thread_id: str | None = None):
     """Emite avances y reporte final, midiendo la ejecución completa."""
-    with medir_ejecucion():
-        yield from _analizar_lote_stream(raw_logs, thread_id)
+    # `medir_pasos` y no `medir_ejecucion`: este generador lo avanza por pasos el servidor web, cada uno en
+    # un contexto distinto (ver su docstring).
+    yield from medir_pasos(_analizar_lote_stream(raw_logs, thread_id))
 
 
 def _analizar_lote_stream(raw_logs: str, thread_id: str | None = None):

@@ -244,14 +244,17 @@ def test_el_historial_vacio_no_rompe(cliente):
 # --- el pipeline no cambia -------------------------------------------------
 
 def test_el_streaming_sigue_emitiendo_los_mismos_eventos(cliente, monkeypatch):
-    """El hook es aditivo: no debe alterar lo que ve el navegador."""
+    """El hook es aditivo: los eventos del grafo no cambian. Solo se agrega `registro_manual` (evaluación
+    manual, ver `src/experimentation/manual.py`), siempre ANTES de `final`: la interfaz cierra el stream al
+    recibir `final`."""
     _mock_stream(monkeypatch, EVENTOS_OK)
     r = cliente.post("/api/analizar",
                      files={"archivo": ("x.log", AUTH.encode(), "text/plain")})
     cuerpo = cliente.get(f"/api/stream/{r.json()['job_id']}").read().decode("utf-8")
     tipos = [json.loads(l[6:])["tipo"] for l in cuerpo.splitlines()
              if l.startswith("data: ")]
-    assert tipos == ["inicio", "nodo", "nodo", "final"]
+    assert [t for t in tipos if t != "registro_manual"] == ["inicio", "nodo", "nodo", "final"]
+    assert tipos.index("registro_manual") < tipos.index("final")
 
 
 def test_el_resumen_persistido_incluye_la_reputacion_de_las_ips(monkeypatch):

@@ -2098,3 +2098,88 @@ al piloto** por una replanificación (ver 25.3).
    es `--campana`, que corre A y, si la compuerta lo permite, B).
 2. Plan en seco final y autorización explícita de la usuaria.
 3. Rúbrica humana: dos evaluadores y un camino autorizado para darles el caso y su referencia.
+
+### 25.10 Etapa A: registro de ejecución (16-oct-2026)
+
+Lanzada con `--etapa A` (configuración `campana-flash38-sinrep-20261015`, huella `d1cc1803…965b`, commit `3dcfd869`,
+`--verificar-config` coincidente antes de la primera llamada). Un vigilante externo (no parte del sistema evaluado) revisa
+cada corrida y detiene el lanzador ante: fallback, modelo distinto del pedido, tokens `None`, JSON inválido repetido,
+consulta externa/bloqueada/respaldo, corrida no completa o costo atípico.
+
+- **Corrida atípica, registrada como dato y no como falla:** `bgl_eva_balanceado_0001` (NODEX, repetición 1): 11 llamadas
+  (frente a 5–6 habituales), **1 replanificación**, 11.622 tokens de razonamiento, **USD 0,0598**, 141 s de reloj. Modelo
+  `gemini-3.8-flash` en las 11 llamadas, sin fallback, JSON inválido 0 de 11, tokens completos, 1 consulta
+  (`abuseipdb`, `sin_reputacion`, sin petición externa). Superó 1,5 × el máximo observado de su tipo (USD 0,0224) y el
+  vigilante detuvo la etapa tras 5 corridas (gasto acumulado USD 0,0928). La replanificación es comportamiento normal del
+  sistema evaluado y `replan_count` es una métrica de consumo: **no se investigó ni se modificó**.
+- **Decisión de la usuaria (16-oct-2026):** continuar la Etapa A reanudando desde la corrida pendiente; el umbral por
+  corrida pasa a **5 × el máximo observado de su tipo**; el resto de las condiciones de detención no cambia (fallback,
+  modelo distinto, JSON inválido repetido, tokens `None`, consulta HTTP real, 3 fallas de infraestructura seguidas,
+  2 h por corrida, tope de USD 5,00); **pausa programada al terminar BGL**, antes de UWF. La Etapa B, la evaluación contra
+  el ground truth y la consolidación de acierto siguen sin autorizarse.
+
+### 25.11 Etapa A terminada (16-oct-2026) — solo ejecución, consumo e integridad
+
+Etapa A completa (repetición 1 de los 40 casos: NODEX, Gemini directo y baseline), lanzada en tres tandas con la misma
+configuración congelada (`--verificar-config` coincidente antes de cada una; HEAD siempre `3dcfd869`): BGL desde la corrida 1
+hasta una pausa, reanudación de BGL y UWF. **No se consolidaron métricas de acierto, no se abrió `ground_truth/` y no se
+lanzó la Etapa B.**
+
+- **Corridas:** 120 de 120 completas, 0 fallidas. Ninguna condición de detención se activó salvo el aviso de costo de la
+  primera tanda (ver 25.10). `model_version` siempre `gemini-3.8-flash`; 0 llamadas fallidas, 0 fallback, 0 tokens `None`,
+  0 costos parciales.
+- **JSON inválido de NODEX:** 0 de 265 respuestas. **Consultas externas:** 201, todas `abuseipdb` con fuente
+  `sin_reputacion`; intentos externos 0, bloqueos 0, respaldos 0.
+- **Gasto real de la Etapa A:** USD **2,811** (BGL 0,940 + UWF 1,872).
+
+| Dataset | Arquitectura | n | Suma (USD) | Media | Máximo |
+|---|---|---|---|---|---|
+| BGL | NODEX | 30 | 0,650 | 0,0217 | 0,0598 |
+| BGL | Gemini directo | 30 | 0,290 | 0,0097 | 0,0157 |
+| UWF | NODEX | 10 | 1,177 | 0,1177 | 0,1424 |
+| UWF | Gemini directo | 10 | 0,695 | 0,0695 | 0,0965 |
+| BGL y UWF | Baseline | 40 | 0 | 0 | 0 |
+
+- **Replanificaciones de NODEX (`replan_count`, métrica de consumo):** BGL 3 de 30 (10 %); **UWF 7 de 10 (70 %)**; total
+  de la Etapa A 10 de 40 (25 %). En UWF una replanificación pasa la corrida de 6 a 11 llamadas y de ~USD 0,073 a ~0,137
+  (media sin replan 0,0731, n = 3; con replan 0,1368, n = 7). Muy por encima de la tasa del piloto (1 de 8 en UWF), que es
+  lo que sustentaba la estimación de USD 4,57. No se investigó el motivo (decisión de la usuaria).
+- **Compuerta de la Etapa B** (gasto real de A × 2 ≤ tope): A × 2 = **USD 5,622**. Con el tope de 5,00 **se bloquearía**
+  (código 6, margen −0,622); con un tope de 6,00 **se lanzaría** (margen +0,378). El tope no se modificó. Proyección de la
+  campaña completa (A + B ≈ 2 A) más la verificación mínima (USD 0,155): **USD 5,777**, margen de 0,223 frente a los
+  USD 6 (remuestreo de B desde A: p5–p95 de B 2,61–3,01; P(total > 6) ≈ 3 %). Con el tope acumulado de 5,00, además, B se
+  detendría tras gastar ~USD 2,19 (78 % de una B típica).
+- **Tiempo:** ~41 min de reloj para BGL y ~31 min para UWF (NODEX en UWF: media 123 s, máximo 164 s por corrida).
+
+## 26. Cambio de enfoque: evaluación manual desde la interfaz, solo NODEX (16-oct-2026)
+
+**Decisión de la usuaria:** la evaluación se hace **solo con NODEX**, analizando los archivos **uno por uno desde la
+interfaz**, con control manual. La comparación con Gemini directo y el baseline de reglas se hace aparte (fuera de
+este sistema). No se lanza la Etapa B del lanzador automático (que corría las tres arquitecturas) y no se ejecuta
+Gemini directo ni el baseline.
+
+- **Lo ya corrido** (Etapa A del lanzador, config `campana-flash38-sinrep-20261015`, 120 corridas, USD 2,811) queda
+  guardado como **evidencia**: no se borra ni se consolida. Las salidas de Gemini directo y baseline siguen en
+  `experiments/gemini_externo/` y `experiments/baseline/` pero no entran a ninguna tabla.
+- **Cómo funciona ahora** (`src/experimentation/manual.py`): al adjuntar un archivo cuyo nombre es un caso del experimento
+  (p. ej. `uwf_eva_visible_0004.csv`), la API comprueba que el **contenido sea idéntico** al del caso (si no, lo analiza
+  pero no calcula métricas) y guarda el análisis en el formato del experimento bajo la configuración
+  `manual-desarrollo` o `manual-evaluacion`. El módulo **Resultados** consolida esas corridas al vuelo con la misma
+  evaluación del experimento (precisión, exhaustividad, F1, exactitud con intervalos de Wilson, D2/D3 en UWF, consumo,
+  consistencia entre repeticiones). La etiqueta se lee **solo al consolidar** (`evaluacion.py`), nunca dentro de NODEX.
+  Analizar el mismo caso de nuevo cuenta como otra repetición.
+- **Sin comparación:** con una sola arquitectura la vista oculta la sección 11.6 (NODEX frente al baseline y Gemini).
+- **Para que sea comparable con el experimento**, la API se lanza en modo evaluación con la configuración del experimento
+  (`gemini-3.8-flash`, sin respaldo, temperatura 0, sin reputación externa), la **base de conocimiento aislada**
+  (copia de `experiments/knowledge/chroma_v2`, no la memoria de producción) y `NODEX_MODO_EVALUACION=1`, que **deshabilita
+  el feedback** (escribe en la memoria de largo plazo y alteraría los análisis siguientes). La configuración efectiva de
+  cada análisis queda en su telemetría (`diagnostico_runner.configuracion_efectiva`).
+- **No hay configuración congelada ni verificación automática del entorno:** el resumen lo declara con un aviso.
+  La garantía de que la API se lanzó con la configuración correcta es de quien la lanza. El lanzador congelado
+  (`3dcfd869`) queda superado por estos cambios de código; una nueva campaña automática exigiría un `config_version` nuevo.
+- **Declaración sobre las particiones de evaluación:** adjuntar a mano archivos de `experiments/cases/.../evaluacion/`
+  a la interfaz implica abrir esos casos. La declaración de la sección 25.8 («nadie abrió casos de evaluación a mano») debe
+  actualizarse según lo que se haga: las etiquetas siguen sin conocerse por NODEX, pero la persona que los adjunta los maneja.
+- **Validación:** el puente se comprobó con el estado crudo de corridas reales del piloto (UWF y BGL): el veredicto, los
+  eventos, las técnicas MITRE y los estados por dimensión salen idénticos a lo que el experimento había guardado. Pruebas
+  automáticas (31) con 14 defectos reintroducidos a propósito, todos detectados salvo uno equivalente.

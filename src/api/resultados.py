@@ -94,6 +94,13 @@ def listar_resultados():
                     "consolidaciones": marcas,
                     "ultima": marcas[-1],
                 })
+    # Métricas de la evaluación manual (solo NODEX), armadas al vuelo desde los análisis guardados.
+    from datetime import datetime, timezone
+    from src.experimentation import manual
+    ahora = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    for particion in manual.particiones_con_analisis(RAIZ_EXPERIMENTOS.parent):
+        configuraciones.append({"config_version": manual.config_de(particion),
+                                "consolidaciones": [ahora], "ultima": ahora})
     return {"configuraciones": configuraciones}
 
 
@@ -101,6 +108,15 @@ def listar_resultados():
 def obtener_resultados(config_version: str, consolidacion: str | None = None):
     """El `resumen.json` de una consolidación (la última, si no se indica)."""
     _validar(_CONFIG, config_version, "config_version")
+    from src.experimentation import manual
+    if config_version.startswith(manual.PREFIJO_CONFIG):
+        particion = config_version[len(manual.PREFIJO_CONFIG):]
+        if particion not in manual.PARTICIONES.values():
+            raise HTTPException(status_code=404, detail="partición manual desconocida")
+        resumen = manual.construir_resumen(RAIZ_EXPERIMENTOS.parent, particion)
+        if resumen is None:
+            raise HTTPException(status_code=404, detail="todavía no hay análisis manuales guardados")
+        return resumen
     carpeta = RAIZ_EXPERIMENTOS / "metrics" / config_version
     marcas = _marcas(carpeta)
     if not marcas:

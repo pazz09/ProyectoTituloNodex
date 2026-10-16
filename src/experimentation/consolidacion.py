@@ -984,8 +984,11 @@ def consolidar(
     marca: str | None = None,
     datos_ficticios: bool = False,
     depuracion: bool | None = None,
+    repeticiones: int | None = None,
 ) -> Path:
     """Consolida una campaña y devuelve el directorio escrito.
+
+    `repeticiones`: ver `evaluar_corridas` (la evaluación manual lo usa).
 
     `depuracion`: marca los resultados como de DEPURACIÓN (no reportables). Por omisión es
     `True` para cualquier partición que no sea `evaluacion`: el desarrollo y el piloto
@@ -1000,7 +1003,8 @@ def consolidar(
         raise FileExistsError(
             f"{destino} ya existe. Las consolidaciones no se sobrescriben")
 
-    resultado = evaluar_corridas(raiz_repo, subconjunto, config_version, arquitecturas)
+    resultado = evaluar_corridas(raiz_repo, subconjunto, config_version, arquitecturas,
+                                 repeticiones=repeticiones)
     registros = resultado.registros
 
     if depuracion is None:

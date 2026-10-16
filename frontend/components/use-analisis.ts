@@ -26,6 +26,15 @@ export type Mensaje =
     }
   | { rol: 'cierre'; id: string; hora: string; corrida: Corrida }
   | { rol: 'error'; id: string; hora: string; mensaje: string }
+  | {
+      rol: 'registro'
+      id: string
+      hora: string
+      registrado: boolean
+      motivo: string
+      caso?: string
+      repeticion?: number
+    }
 
 function hora() {
   return new Date().toLocaleTimeString('es', {
@@ -108,6 +117,20 @@ export function useAnalisis() {
             nodo: ev.nombre as NombreNodo,
             visita,
             detalle: ev.detalle,
+          },
+        ])
+      } else if (ev.tipo === 'registro_manual') {
+        // Evaluación manual: avisa si este archivo entra a las métricas de «Resultados» (solo NODEX).
+        setMensajes((prev) => [
+          ...prev,
+          {
+            rol: 'registro',
+            id: 'registro',
+            hora: hora(),
+            registrado: ev.registrado,
+            motivo: ev.motivo,
+            caso: ev.case_id,
+            repeticion: ev.repeticion,
           },
         ])
       } else if (ev.tipo === 'error') {
