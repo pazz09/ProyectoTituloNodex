@@ -8,7 +8,13 @@ import os
 
 import requests
 
-from src.config import ABUSEIPDB_API_KEY, IP_CACHE_PATH, SCORE_MALICIOSO, SCORE_SOSPECHOSO
+from src.config import (
+    ABUSEIPDB_API_KEY,
+    IP_CACHE_PATH,
+    REPUTACION_SIN_ENRIQUECIMIENTO,
+    SCORE_MALICIOSO,
+    SCORE_SOSPECHOSO,
+)
 
 
 def categorizar_reputacion(score) -> str:
@@ -22,7 +28,14 @@ def categorizar_reputacion(score) -> str:
 
 
 def check_ip_reputation(ip: str) -> dict:
-    """Reputación de una IP. Primario: AbuseIPDB. Fallback: heurística local."""
+    """Reputación de una IP. Primario: AbuseIPDB. Fallback: heurística local.
+
+    Con `REPUTACION_SIN_ENRIQUECIMIENTO` (opt-in) no se consulta nada: ninguna IP recibe puntaje
+    (`score` None) y `categorizar_reputacion(None)` la deja «desconocido», igual para toda IP.
+    """
+    if REPUTACION_SIN_ENRIQUECIMIENTO:
+        return {"fuente": "sin_reputacion", "ip": ip, "score": None,
+                "nota": "modo sin reputación externa: ninguna IP recibe puntaje"}
     if ABUSEIPDB_API_KEY:
         try:
             r = requests.get(
@@ -54,8 +67,16 @@ def corroborar_ips(ips: list, cache: "ReputationCache | None" = None) -> dict:
     (cada IP se consulta una sola vez mientras esté en caché). Si no se pasa un
     `cache`, crea uno nuevo respaldado por `IP_CACHE_PATH` (ver config).
     """
-    cache = cache if cache is not None else ReputationCache()
     resultado = {}
+    if REPUTACION_SIN_ENRIQUECIMIENTO:
+        # Sin leer NI escribir la caché: una caché con puntajes reales de antes anularía el modo, y
+        # guardar «desconocido» ensuciaría la caché de producción.
+        for ip in ips:
+            info = check_ip_reputation(ip)
+            info["categoria"] = categorizar_reputacion(info.get("score"))
+            resultado[ip] = info
+        return resultado
+    cache = cache if cache is not None else ReputationCache()
     for ip in ips:
         info = cache.get(ip)
         if info is None:

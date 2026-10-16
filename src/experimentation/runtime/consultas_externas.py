@@ -91,7 +91,11 @@ def envolver(registro: RegistroConsultas, herramienta: str, modulo=None) -> None
             "bloqueado": bool(nuevos),
             "n_intentos_bloqueados": len(nuevos),
             "hosts": sorted(set(nuevos)),
-            "respaldo_respondio": fuente is not None and fuente != fuente_externa,
+            # «sin_reputacion» (modo REPUTACION_SIN_ENRIQUECIMIENTO) NO es el respaldo local: no se
+            # consultó nada ni se usó ninguna heurística. Se cuenta aparte.
+            "sin_reputacion": fuente == "sin_reputacion",
+            "respaldo_respondio": (fuente is not None and fuente != fuente_externa
+                                   and fuente != "sin_reputacion"),
             "fuente_respuesta": fuente,
         })
         return resultado

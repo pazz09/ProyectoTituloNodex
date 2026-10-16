@@ -1232,3 +1232,14 @@ def test_la_regla_es_una_funcion_pura_de_la_corrida_y_no_toca_a_d1(campana):
     raiz, _ = campana
     d1 = _fila(_consolidar(raiz), "d1_deteccion", "uwf", "nodex_multiagente")
     assert (d1["tp"], d1["fp"], d1["fn"], d1["tn"]) == (1, 1, 1, 1)
+
+
+def test_la_tabla_de_consultas_separa_sin_reputacion_del_respaldo_local(campana):
+    raiz, _ = campana
+    sin_rep = {"herramienta": "abuseipdb", "parametros": {"ip": "1.1.1.1"}, "intento_externo": False,
+               "bloqueado": False, "sin_reputacion": True, "respaldo_respondio": False,
+               "fuente_respuesta": "sin_reputacion"}
+    _guardar_consultas(raiz, "uwf_des_visible_0000", "uwf", [sin_rep, sin_rep, _consulta("abuseipdb")])
+    f = _fila_ext(_consolidar(raiz), "uwf", "nodex_multiagente", "abuseipdb")
+    assert f["n_consultas"] == 3 and f["n_sin_reputacion"] == 2
+    assert f["n_respaldo_respondio"] == 1 and f["n_intentos_externos"] == 1

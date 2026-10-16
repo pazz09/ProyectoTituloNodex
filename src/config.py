@@ -269,6 +269,13 @@ def _env_bool(nombre: str, default: bool) -> bool:
 # (p. ej. la comparación con `gemini_externo`, que nunca tiene respaldo).
 LLM_SIN_RESPALDO = _env_bool("LLM_SIN_RESPALDO", False)
 
+# Modo «sin reputación externa» (opt-in, apagado por omisión: producción no cambia). Con True,
+# `check_ip_reputation` (src/tools/reputation.py) NO consulta AbuseIPDB ni usa su heurística local:
+# ninguna IP recibe puntaje y su categoría es «desconocido», igual para toda IP. Sirve para una campaña
+# en que la reputación no debe formar parte de la medición (la heurística local es una función de la
+# forma de la dirección, no reputación real).
+REPUTACION_SIN_ENRIQUECIMIENTO = _env_bool("REPUTACION_SIN_ENRIQUECIMIENTO", False)
+
 
 # Modos de detección de formato (§9 del plan):
 #   batch   -- un decoder dominante para todo el lote (comportamiento v1)

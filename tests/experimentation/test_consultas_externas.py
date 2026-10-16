@@ -114,3 +114,24 @@ def test_una_lista_vacia_es_un_dato_y_la_ausencia_del_archivo_es_none(tmp_path):
     assert persistencia.leer_consultas_externas(IDENT, tmp_path) is None   # no se registró
     persistencia.guardar_consultas_externas(IDENT, tmp_path, [])
     assert persistencia.leer_consultas_externas(IDENT, tmp_path) == []     # no consultó nada
+
+
+# --- modo «sin reputación externa» ---------------------------------------------------------------------
+
+def test_en_el_modo_sin_reputacion_no_hay_intento_ni_respaldo_y_se_cuenta_aparte(instalado, monkeypatch):
+    monkeypatch.setattr(reputacion, "REPUTACION_SIN_ENRIQUECIMIENTO", True)
+    monkeypatch.setattr(reputacion, "ABUSEIPDB_API_KEY", "llave-ficticia")
+    r = reputacion.check_ip_reputation("8.8.8.8")
+    assert r["fuente"] == "sin_reputacion" and r["score"] is None
+    (c,) = instalado.consultas
+    assert c["intento_externo"] is False and c["bloqueado"] is False and instalado.bloqueados == []
+    assert c["sin_reputacion"] is True
+    assert c["respaldo_respondio"] is False                 # no es el respaldo local
+
+
+def test_el_respaldo_local_normal_sigue_contandose_como_respaldo(instalado, monkeypatch):
+    monkeypatch.setattr(reputacion, "REPUTACION_SIN_ENRIQUECIMIENTO", False)
+    monkeypatch.setattr(reputacion, "ABUSEIPDB_API_KEY", None)
+    reputacion.check_ip_reputation("10.0.0.1")
+    (c,) = instalado.consultas
+    assert c["respaldo_respondio"] is True and c["sin_reputacion"] is False

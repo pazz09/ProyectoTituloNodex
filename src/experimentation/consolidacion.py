@@ -705,7 +705,8 @@ def tabla_consultas_externas(registros, consultas_por_run: dict) -> dict:
             base = {"dataset": dataset, "arquitectura": arquitectura, "herramienta": herramienta,
                     "n_corridas": len(grupo), "n_con_registro": None, "n_corridas_con_intentos": None,
                     "n_consultas": None, "n_intentos_externos": None, "n_bloqueados": None,
-                    "n_respaldo_respondio": None, "estado": "no aplica"}
+                    "n_respaldo_respondio": None, "n_sin_reputacion": None,
+                    "estado": "no aplica"}
             if arquitectura != "nodex_multiagente":
                 filas.append(base)
                 continue
@@ -724,6 +725,8 @@ def tabla_consultas_externas(registros, consultas_por_run: dict) -> dict:
                 "n_intentos_externos": sum(1 for c in todas if c.get("intento_externo")),
                 "n_bloqueados": sum(1 for c in todas if c.get("bloqueado")),
                 "n_respaldo_respondio": sum(1 for c in todas if c.get("respaldo_respondio")),
+                # Consultas que el modo «sin reputación externa» contestó sin consultar nada.
+                "n_sin_reputacion": sum(1 for c in todas if c.get("sin_reputacion")),
                 "estado": "medido",
             })
     columnas = [
@@ -734,6 +737,7 @@ def tabla_consultas_externas(registros, consultas_por_run: dict) -> dict:
         ("n_intentos_externos", "Intentos de salida a la red", "entero"),
         ("n_bloqueados", "Bloqueados", "entero"),
         ("n_respaldo_respondio", "Respondió el respaldo local", "entero"),
+        ("n_sin_reputacion", "Sin reputación (modo)", "entero"),
         ("estado", "Estado"),
     ]
     return _tabla(
