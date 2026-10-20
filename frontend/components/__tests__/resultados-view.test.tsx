@@ -86,7 +86,8 @@ describe('sin datos', () => {
   it('no muestra ninguna cifra: ni tabla ni gráfico', () => {
     const c = montar({ lista: { configuraciones: [] }, resumen: null, configSeleccionada: null })
     expect(c.querySelector('#sin-resultados')).not.toBeNull()
-    expect(c.textContent).toContain('Todavía no hay resultados experimentales')
+    expect(c.textContent).toContain('Todavía no hay resultados')
+    expect(c.textContent).toContain('a medida que analizas casos')
     expect(c.querySelector('table')).toBeNull()
     expect(c.querySelector('svg:not([class*="lucide"])')).toBeNull()
   })

@@ -27,6 +27,7 @@ con `..` permitiría leer fuera de `experiments/`.
 from __future__ import annotations
 
 import json
+import os
 import re
 from pathlib import Path
 
@@ -35,6 +36,12 @@ from fastapi import APIRouter, HTTPException
 from src.experimentation.runtime.persistencia import CARPETA_POR_ARQUITECTURA
 
 router = APIRouter(prefix="/api/resultados", tags=["resultados"])
+
+#: ¿«Resultados» lista también las consolidaciones del EXPERIMENTO (piloto y campaña) que hay en
+#: `experiments/metrics/`? Por omisión NO: la pantalla muestra solo las métricas de los análisis manuales hechos
+#: desde la interfaz y, mientras no haya ninguno, el estado vacío. Los datos del experimento siguen guardados y
+#: se pueden ver con `RESULTADOS_MOSTRAR_EXPERIMENTO=1`. Es una variable de módulo para poder probarla.
+MOSTRAR_EXPERIMENTO: bool = os.environ.get("RESULTADOS_MOSTRAR_EXPERIMENTO") == "1"
 
 #: Carpeta de experimentos. Es una variable de módulo para que las pruebas la
 #: puedan apuntar a un directorio temporal.
@@ -83,7 +90,7 @@ def listar_resultados():
     """
     raiz = RAIZ_EXPERIMENTOS / "metrics"
     configuraciones = []
-    if raiz.is_dir():
+    if MOSTRAR_EXPERIMENTO and raiz.is_dir():
         for carpeta in sorted(raiz.iterdir()):
             if not carpeta.is_dir() or not _CONFIG.fullmatch(carpeta.name):
                 continue
