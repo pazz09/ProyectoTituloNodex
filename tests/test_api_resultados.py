@@ -52,6 +52,7 @@ def _escribir_resumen(raiz: Path, config=CONFIG, marca="20260101T000000Z", **kw)
 @pytest.fixture
 def cliente(tmp_path, monkeypatch):
     monkeypatch.setattr(resultados, "RAIZ_EXPERIMENTOS", tmp_path / "experiments")
+    monkeypatch.setattr(resultados, "MOSTRAR_EXPERIMENTO", True)     # estas pruebas son del listado del experimento
     return TestClient(api.app), tmp_path
 
 
@@ -291,3 +292,33 @@ def test_todas_las_rutas_de_resultados_son_de_solo_lectura(cliente):
     assert len(rutas) == 3
     for ruta, ops in rutas.items():
         assert set(ops) == {"get"}, ruta
+
+
+# --- el experimento guardado no se muestra por omisión ------------------------------------------------
+
+def test_por_omision_las_consolidaciones_del_experimento_no_se_listan_pero_siguen_guardadas(cliente, monkeypatch):
+    c, raiz = cliente
+    _escribir_resumen(raiz, config="piloto-flash38-20261015", marca="20261015T230314Z")
+    monkeypatch.setattr(resultados, "MOSTRAR_EXPERIMENTO", False)
+    assert c.get("/api/resultados").json() == {"configuraciones": []}            # estado vacío en la interfaz
+    assert (raiz / "experiments" / "metrics" / "piloto-flash38-20261015" / "20261015T230314Z"
+            / "resumen.json").is_file()                                           # los datos NO se borran
+    monkeypatch.setattr(resultados, "MOSTRAR_EXPERIMENTO", True)
+    assert [x["config_version"] for x in c.get("/api/resultados").json()["configuraciones"]] \
+        == ["piloto-flash38-20261015"]
+
+
+def test_el_flag_se_lee_de_la_variable_de_entorno(monkeypatch):
+    """Se carga una copia del módulo con otro nombre: no toca el módulo real que ya usa la aplicación."""
+    import importlib.util
+
+    def cargar():
+        spec = importlib.util.spec_from_file_location("resultados_copia", resultados.__file__)
+        modulo = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(modulo)
+        return modulo.MOSTRAR_EXPERIMENTO
+
+    monkeypatch.delenv("RESULTADOS_MOSTRAR_EXPERIMENTO", raising=False)
+    assert cargar() is False
+    monkeypatch.setenv("RESULTADOS_MOSTRAR_EXPERIMENTO", "1")
+    assert cargar() is True

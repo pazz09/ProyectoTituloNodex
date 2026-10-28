@@ -426,12 +426,14 @@ export function ResultadosContenido(p: PropsContenido) {
       {!p.cargando && !p.error && !resumen && (
         <section className="panel" id="sin-resultados">
           <div className="panel-head">
-            <h2>Todavía no hay resultados experimentales</h2>
+            <h2>Todavía no hay resultados</h2>
           </div>
           <div className="panel-body">
             <p className="prose empty">
-              Esta pantalla se llena cuando se consolidan las corridas de una campaña. Mientras
-              tanto no se muestra ninguna cifra: ni de ejemplo ni estimada.
+              Esta pantalla se llena a medida que analizas casos del experimento desde el módulo de
+              análisis (el archivo debe llamarse como el caso, por ejemplo uwf_eva_visible_0004.csv, y
+              tener su mismo contenido). Mientras no haya ningún análisis no se muestra ninguna cifra:
+              ni de ejemplo ni estimada.
             </p>
           </div>
         </section>
