@@ -1,0 +1,227 @@
+{
+  "creado_utc": "2026-11-10T04:56:05.428888+00:00",
+  "tope_gasto_usd": 2.5,
+  "alcance": "las 3 repeticiones del agente único",
+  "precios": {
+    "modelo": "gemini-3.8-flash",
+    "entrada_por_millon": 0.75,
+    "salida_por_millon": 3.75,
+    "vigencia_hasta": "2026-12-31",
+    "fuente": "https://ai.google.dev/gemini-api/docs/pricing",
+    "fecha_de_consulta": "2026-10-15",
+    "nota": "El razonamiento se factura como salida. Desde el 2027-01-01 el precio se duplica."
+  },
+  "metodo": {
+    "tokens_entrada": "caracteres del prompt + system del preflight / caracteres por token calibrados con el prompt del auditor de NODEX R1 reconstruido desde su estado crudo y su input_tokens medido",
+    "caracteres_por_token": {
+      "bgl": [
+        2.975206611570248,
+        3.1139723414401526
+      ],
+      "uwf": [
+        2.073865190765799,
+        2.0912992749395785
+      ]
+    },
+    "salida_y_razonamiento": {
+      "min": "última llamada de NODEX R1 (auditor), mínimo del dataset",
+      "max": "suma de todas las llamadas de NODEX R1 en el caso, máximo del dataset",
+      "valores": {
+        "bgl": [
+          1088,
+          4280
+        ],
+        "uwf": [
+          1226,
+          12166
+        ]
+      }
+    },
+    "reintento_json": "llm_json(retries=1): una respuesta inválida repite la solicitud; el peor caso duplica el costo"
+  },
+  "casos": [
+    {
+      "orden": 1,
+      "case_id": "bgl_eva_balanceado_0006",
+      "dataset": "bgl",
+      "prompt_chars": 3371,
+      "system_chars": 1996,
+      "tokens_entrada_min": 1724,
+      "tokens_entrada_max": 1804,
+      "salida_y_razonamiento_min": 1088,
+      "salida_y_razonamiento_max": 4280,
+      "usd_min": 0.00537,
+      "usd_max": 0.0174,
+      "usd_max_con_reintento_json": 0.03481
+    },
+    {
+      "orden": 2,
+      "case_id": "uwf_eva_visible_0004",
+      "dataset": "uwf",
+      "prompt_chars": 100338,
+      "system_chars": 1996,
+      "tokens_entrada_min": 48933,
+      "tokens_entrada_max": 49345,
+      "salida_y_razonamiento_min": 1226,
+      "salida_y_razonamiento_max": 12166,
+      "usd_min": 0.0413,
+      "usd_max": 0.08263,
+      "usd_max_con_reintento_json": 0.16526
+    },
+    {
+      "orden": 3,
+      "case_id": "bgl_eva_natural_0031",
+      "dataset": "bgl",
+      "prompt_chars": 3024,
+      "system_chars": 1996,
+      "tokens_entrada_min": 1612,
+      "tokens_entrada_max": 1687,
+      "salida_y_razonamiento_min": 1088,
+      "salida_y_razonamiento_max": 4280,
+      "usd_min": 0.00529,
+      "usd_max": 0.01732,
+      "usd_max_con_reintento_json": 0.03463
+    },
+    {
+      "orden": 4,
+      "case_id": "bgl_eva_balanceado_0005",
+      "dataset": "bgl",
+      "prompt_chars": 3416,
+      "system_chars": 1996,
+      "tokens_entrada_min": 1738,
+      "tokens_entrada_max": 1819,
+      "salida_y_razonamiento_min": 1088,
+      "salida_y_razonamiento_max": 4280,
+      "usd_min": 0.00538,
+      "usd_max": 0.01741,
+      "usd_max_con_reintento_json": 0.03483
+    },
+    {
+      "orden": 5,
+      "case_id": "bgl_eva_natural_0016",
+      "dataset": "bgl",
+      "prompt_chars": 4425,
+      "system_chars": 1996,
+      "tokens_entrada_min": 2062,
+      "tokens_entrada_max": 2158,
+      "salida_y_razonamiento_min": 1088,
+      "salida_y_razonamiento_max": 4280,
+      "usd_min": 0.00563,
+      "usd_max": 0.01767,
+      "usd_max_con_reintento_json": 0.03534
+    },
+    {
+      "orden": 6,
+      "case_id": "uwf_eva_visible_0027",
+      "dataset": "uwf",
+      "prompt_chars": 102021,
+      "system_chars": 1996,
+      "tokens_entrada_min": 49738,
+      "tokens_entrada_max": 50156,
+      "salida_y_razonamiento_min": 1226,
+      "salida_y_razonamiento_max": 12166,
+      "usd_min": 0.0419,
+      "usd_max": 0.08324,
+      "usd_max_con_reintento_json": 0.16648
+    },
+    {
+      "orden": 7,
+      "case_id": "uwf_eva_sigiloso_0018",
+      "dataset": "uwf",
+      "prompt_chars": 103338,
+      "system_chars": 1996,
+      "tokens_entrada_min": 50368,
+      "tokens_entrada_max": 50791,
+      "salida_y_razonamiento_min": 1226,
+      "salida_y_razonamiento_max": 12166,
+      "usd_min": 0.04237,
+      "usd_max": 0.08372,
+      "usd_max_con_reintento_json": 0.16743
+    },
+    {
+      "orden": 8,
+      "case_id": "bgl_eva_natural_0002",
+      "dataset": "bgl",
+      "prompt_chars": 3596,
+      "system_chars": 1996,
+      "tokens_entrada_min": 1796,
+      "tokens_entrada_max": 1880,
+      "salida_y_razonamiento_min": 1088,
+      "salida_y_razonamiento_max": 4280,
+      "usd_min": 0.00543,
+      "usd_max": 0.01746,
+      "usd_max_con_reintento_json": 0.03492
+    },
+    {
+      "orden": 9,
+      "case_id": "bgl_eva_balanceado_0001",
+      "dataset": "bgl",
+      "prompt_chars": 6795,
+      "system_chars": 1996,
+      "tokens_entrada_min": 2823,
+      "tokens_entrada_max": 2955,
+      "salida_y_razonamiento_min": 1088,
+      "salida_y_razonamiento_max": 4280,
+      "usd_min": 0.0062,
+      "usd_max": 0.01827,
+      "usd_max_con_reintento_json": 0.03653
+    },
+    {
+      "orden": 10,
+      "case_id": "uwf_eva_sigiloso_0024",
+      "dataset": "uwf",
+      "prompt_chars": 102979,
+      "system_chars": 1996,
+      "tokens_entrada_min": 50196,
+      "tokens_entrada_max": 50618,
+      "salida_y_razonamiento_min": 1226,
+      "salida_y_razonamiento_max": 12166,
+      "usd_min": 0.04224,
+      "usd_max": 0.08359,
+      "usd_max_con_reintento_json": 0.16717
+    },
+    {
+      "orden": 11,
+      "case_id": "uwf_eva_visible_0028",
+      "dataset": "uwf",
+      "prompt_chars": 102328,
+      "system_chars": 1996,
+      "tokens_entrada_min": 49885,
+      "tokens_entrada_max": 50304,
+      "salida_y_razonamiento_min": 1226,
+      "salida_y_razonamiento_max": 12166,
+      "usd_min": 0.04201,
+      "usd_max": 0.08335,
+      "usd_max_con_reintento_json": 0.1667
+    },
+    {
+      "orden": 12,
+      "case_id": "uwf_eva_sigiloso_0013",
+      "dataset": "uwf",
+      "prompt_chars": 103075,
+      "system_chars": 1996,
+      "tokens_entrada_min": 50242,
+      "tokens_entrada_max": 50664,
+      "salida_y_razonamiento_min": 1226,
+      "salida_y_razonamiento_max": 12166,
+      "usd_min": 0.04228,
+      "usd_max": 0.08362,
+      "usd_max_con_reintento_json": 0.16724
+    }
+  ],
+  "por_repeticion": {
+    "usd_min": 0.2854,
+    "usd_max": 0.6057,
+    "usd_peor_con_reintento": 1.2113
+  },
+  "total_3_repeticiones": {
+    "usd_min": 0.8562,
+    "usd_max": 1.817,
+    "usd_peor_con_reintento": 3.634
+  },
+  "costo_maximo_previo_por_dataset": {
+    "bgl": 0.03653,
+    "uwf": 0.16743
+  },
+  "regla": "Antes de cada caso: gasto real de las 3 repeticiones (recalculado desde la telemetría) + costo máximo del dataset (el mayor entre lo observado en la campaña y esta cota previa) no puede superar el tope; si lo supera, el lanzador se detiene antes de lanzar el caso."
+}

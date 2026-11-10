@@ -1,0 +1,349 @@
+{
+  "case_id": "bgl_eva_natural_0002",
+  "dataset": "bgl",
+  "arquitectura": "agente_unico",
+  "repeticion": 1,
+  "config_version": "agenteunico-12casos-r1-20261110",
+  "run_id": "bgl_eva_natural_0002__unico__r1__25090ab1",
+  "estado_crudo": {
+    "evidencia_logs": [
+      {
+        "uid": "log_record_000001",
+        "record_number": 1,
+        "line_start": 1,
+        "line_end": 1,
+        "timestamp": null,
+        "source_ip": "172.16.96.116"
+      },
+      {
+        "uid": "log_record_000002",
+        "record_number": 2,
+        "line_start": 2,
+        "line_end": 2,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000003",
+        "record_number": 3,
+        "line_start": 3,
+        "line_end": 3,
+        "timestamp": null,
+        "source_ip": "172.16.96.116"
+      },
+      {
+        "uid": "log_record_000004",
+        "record_number": 4,
+        "line_start": 4,
+        "line_end": 4,
+        "timestamp": null,
+        "source_ip": "172.16.96.116"
+      },
+      {
+        "uid": "log_record_000005",
+        "record_number": 5,
+        "line_start": 5,
+        "line_end": 5,
+        "timestamp": null,
+        "source_ip": "172.16.96.116"
+      },
+      {
+        "uid": "log_record_000006",
+        "record_number": 6,
+        "line_start": 6,
+        "line_end": 6,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000007",
+        "record_number": 7,
+        "line_start": 7,
+        "line_end": 7,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000008",
+        "record_number": 8,
+        "line_start": 8,
+        "line_end": 8,
+        "timestamp": null,
+        "source_ip": "172.16.96.116"
+      },
+      {
+        "uid": "log_record_000009",
+        "record_number": 9,
+        "line_start": 9,
+        "line_end": 9,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000010",
+        "record_number": 10,
+        "line_start": 10,
+        "line_end": 10,
+        "timestamp": null,
+        "source_ip": "172.16.96.116"
+      },
+      {
+        "uid": "log_record_000011",
+        "record_number": 11,
+        "line_start": 11,
+        "line_end": 11,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000012",
+        "record_number": 12,
+        "line_start": 12,
+        "line_end": 12,
+        "timestamp": null,
+        "source_ip": "172.16.96.116"
+      },
+      {
+        "uid": "log_record_000013",
+        "record_number": 13,
+        "line_start": 13,
+        "line_end": 13,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000014",
+        "record_number": 14,
+        "line_start": 14,
+        "line_end": 14,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000015",
+        "record_number": 15,
+        "line_start": 15,
+        "line_end": 15,
+        "timestamp": null,
+        "source_ip": "172.16.96.116"
+      },
+      {
+        "uid": "log_record_000016",
+        "record_number": 16,
+        "line_start": 16,
+        "line_end": 16,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000017",
+        "record_number": 17,
+        "line_start": 17,
+        "line_end": 17,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000018",
+        "record_number": 18,
+        "line_start": 18,
+        "line_end": 18,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000019",
+        "record_number": 19,
+        "line_start": 19,
+        "line_end": 19,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000020",
+        "record_number": 20,
+        "line_start": 20,
+        "line_end": 20,
+        "timestamp": null
+      }
+    ],
+    "evidencia_logs_omitidos": 0,
+    "eventos_reconstruidos": [],
+    "secuencia_temporal": [],
+    "tecnicas_atribuidas": [],
+    "invalid_evidence_uid_count": 0,
+    "d11_warnings": [],
+    "telemetry": {
+      "llm_call_count": 1,
+      "input_tokens": 2118,
+      "output_tokens": 191,
+      "total_tokens": 2840,
+      "execution_time": 7.961628,
+      "replan_count": 0,
+      "intentos_correccion": 0,
+      "invalid_evidence_uid_count": 0,
+      "d11_warning_count": 0,
+      "llm_calls": [
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 2118,
+          "output_tokens": 191,
+          "total_tokens": 2840,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 531,
+          "duration_s": 7.938,
+          "error": null
+        }
+      ]
+    },
+    "resumen_logs": {
+      "formato_detectado": "text",
+      "total_lineas": 20,
+      "servicios": {
+        "desconocido": 20
+      },
+      "eventos": {
+        "evento_normal": 20
+      },
+      "ventana_temporal": {
+        "inicio": null,
+        "fin": null
+      },
+      "n_ips_distintas": 1,
+      "ips_distintas": [
+        "172.16.96.116"
+      ],
+      "por_ip": {
+        "172.16.96.116": {
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [],
+          "n_eventos": 8,
+          "n_como_origen": 8,
+          "n_como_destino": 0
+        }
+      },
+      "usuarios": {},
+      "n_usuarios_distintos": 0,
+      "codigos_respuesta": {},
+      "entidades": [
+        {
+          "ip": "172.16.96.116",
+          "n_eventos": 8,
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [],
+          "n_como_origen": 8,
+          "n_como_destino": 0
+        }
+      ],
+      "cronologia": [],
+      "cronologia_omitidos": 0,
+      "raw_procedencia": {
+        "sha256": "e8f8c83830f6e2d133fdc16d53af61aef1c71e7d71b8348d3579447b825cc014",
+        "lineas": 20,
+        "bytes": 3629
+      },
+      "reputacion_ips": {
+        "172.16.96.116": {
+          "fuente": "sin_reputacion",
+          "ip": "172.16.96.116",
+          "score": null,
+          "nota": "modo sin reputación externa: ninguna IP recibe puntaje",
+          "categoria": "desconocido"
+        }
+      }
+    },
+    "preprocessing_metadata": {
+      "schema_version": "2.0",
+      "total_lineas_fisicas": 20,
+      "total_eventos": 20,
+      "decoder_distribution": {
+        "text": 20
+      },
+      "product_distribution": {},
+      "vendor_distribution": {},
+      "version_distribution": {},
+      "protocol_distribution": {},
+      "profile_distribution": {},
+      "severity_distribution": {},
+      "event_categories": {},
+      "event_outcomes": {},
+      "entities": {
+        "ip": {
+          "172.16.96.116": 8
+        }
+      },
+      "time_window": {
+        "inicio": null,
+        "fin": null
+      },
+      "parsing": {
+        "parsed_events": 0,
+        "fallback_events": 20,
+        "coverage": 0.0
+      },
+      "segments": [
+        {
+          "index": 0,
+          "decoder": "text",
+          "line_start": 1,
+          "line_end": 20,
+          "n_records": 20,
+          "confidence": 0.1,
+          "decoder_inicial": "text",
+          "confidence_inicial": 0.175,
+          "decoder_distribution": {
+            "text": 20
+          },
+          "context": {}
+        }
+      ],
+      "entities_resumen": {
+        "ip": 1
+      },
+      "config": {
+        "LOG_DETECTION_CHUNK_SIZE": 50,
+        "LOG_ENABLE_MULTILINE": true,
+        "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+        "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+        "LOG_MAX_EVENTS": 100000,
+        "LOG_MAX_FILE_BYTES": 52428800,
+        "LOG_MAX_RAW_SAMPLES": 20,
+        "LOG_MAX_UNMAPPED_FIELDS": 100,
+        "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+        "LOG_PARSING_MODE": "hybrid",
+        "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+        "LOG_PRESERVE_RAW": true
+      }
+    },
+    "parsing_warnings": [],
+    "raw_samples": [
+      {
+        "decoder": "text",
+        "texto": "1132609304 2005.11.21 R22-M0-N0-I:J18-U01 2005-11-21-13.41.44.752517 R22-M0-N0-I:J18-U01 RAS APP FATAL ciod: Error reading message prefix on CioStream socket to 172.16.96.116:52930, Connection reset by peer"
+      }
+    ],
+    "firma": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+    "plan": {},
+    "plan_objetivo": "",
+    "paso_actual": 0,
+    "historial_ejecucion": [],
+    "desviaciones_plan": [],
+    "historial_planes": [],
+    "replan_count": 0,
+    "diagnostico": "Registros en formato de texto no estructurado con 0% de cobertura de decodificación y sin indicios observables de actividad maliciosa.",
+    "necesita_rag": false,
+    "usar_cve": false,
+    "contexto_rag": [],
+    "tecnicas_mitre": [],
+    "cves_encontrados": [],
+    "comandos_mitigacion": [],
+    "comandos_validos": true,
+    "motivos_rechazo": [
+      "OK"
+    ],
+    "confianza": 0.3,
+    "hay_incidente": false,
+    "hay_anomalia": false,
+    "evaluacion_auditor": "Se procesaron 20 registros clasificados preliminarmente como normales sin marcas temporales ni datos estructurados suficientes. Se observa la presencia de la IP privada 172.16.96.116 en algunos registros, pero la falta de decodificación estructural impide confirmar anomalías u operaciones adversas.",
+    "intentos_correccion": 0,
+    "cobertura_auditor": null,
+    "cobertura_suficiente": null,
+    "motivo_replanificacion": "",
+    "requiere_replanificacion": false,
+    "_error_api": null,
+    "_firma": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+    "requiere_revision_humana": true,
+    "output_contract_version": "d11-v1"
+  }
+}

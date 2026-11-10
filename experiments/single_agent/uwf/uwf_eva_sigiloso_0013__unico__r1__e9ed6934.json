@@ -1,0 +1,93 @@
+{
+  "case_id": "uwf_eva_sigiloso_0013",
+  "dataset": "uwf",
+  "arquitectura": "agente_unico",
+  "repeticion": 1,
+  "config_version": "agenteunico-12casos-r1-20261110",
+  "run_id": "uwf_eva_sigiloso_0013__unico__r1__e9ed6934",
+  "salida": {
+    "case_id": "uwf_eva_sigiloso_0013",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-19 09:05:39.133316",
+        "entities": [],
+        "event_type": "dns_request_timeout",
+        "evidence_uids": [
+          "CSLj4O3nkwboY2Mng",
+          "Cekthb1d6Fm5V8Fp2k"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-19 09:28:45.032989",
+        "entities": [],
+        "event_type": "dns_request_successful",
+        "evidence_uids": [
+          "CUSUiwClAwfSaypOf",
+          "CAvSyG2l5tAVW1DVKf"
+        ]
+      },
+      {
+        "uid": "event_003",
+        "timestamp": "2021-12-19 09:34:23.381085",
+        "entities": [],
+        "event_type": "dns_request_timeout",
+        "evidence_uids": [
+          "C917Yh1jyoZtcdKZvd",
+          "CrX8CZ1xVkeqlDvEw8"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002",
+      "event_003"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nFalla de conectividad u operatividad con el servidor DNS 10.0.10.1, resultando en reintentos periódicos sin respuesta (estado S0) desde el host 143.88.255.10.\n\n## Evaluación del auditor\n\nSe observa un patrón sistemático de consultas DNS salientes desde 143.88.255.10 hacia la IP 10.0.10.1 en intervalos aproximados de 30 segundos, finalizando consistentemente en estado Zeek 'S0' (sin respuesta del servidor). No se aprecian patrones de exfiltración, tunelado activo ni explotación maliciosa; el comportamiento corresponde a un problema de enrutamiento, caída del servicio DNS de destino o configuración errónea de reenviador DNS.\n\n## Comandos de mitigación propuestos\n\n- ping -c 4 10.0.10.1\n- dig @10.0.10.1 localhost +time=2 +tries=1\n- traceroute -n -U -p 53 10.0.10.1"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_sigiloso_0013__unico__r1__e9ed6934",
+      "arquitectura": "agente_unico",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_sigiloso_0013__unico__r1__e9ed6934.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-10T05:05:54+00:00",
+    "resultado_incompleto": null
+  }
+}

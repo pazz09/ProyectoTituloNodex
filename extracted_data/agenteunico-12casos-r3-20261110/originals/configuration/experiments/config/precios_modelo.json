@@ -1,0 +1,16 @@
+{
+  "esquema": "2.0",
+  "nota": "Tabla CONFIGURABLE de precios por modelo, con vigencias. Los tokens de razonamiento se facturan como salida. Si falta fecha de consulta, fuente o el precio vigente en la fecha pedida, el costo es null, no 0.",
+  "moneda": "USD",
+  "fecha_de_consulta": "2026-10-15",
+  "fuente": "https://ai.google.dev/gemini-api/docs/pricing",
+  "nota_fecha_de_la_fuente": "El responsable del proyecto indica que la página no muestra fecha de actualización. La lectura automática del 15-oct-2026 mostró «Last updated 2026-10-15 UTC»: las dos observaciones no coinciden; verificar a mano antes de presupuestar.",
+  "modelos": {
+    "gemini-3.8-flash": {
+      "vigencias": [
+        {"desde": null, "hasta": "2026-12-31", "entrada_por_millon": 0.75, "salida_por_millon": 3.75},
+        {"desde": "2027-01-01", "hasta": null, "entrada_por_millon": 1.5, "salida_por_millon": 7.5}
+      ]
+    }
+  }
+}

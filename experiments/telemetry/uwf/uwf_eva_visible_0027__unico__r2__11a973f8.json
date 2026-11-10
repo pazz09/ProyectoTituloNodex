@@ -1,0 +1,58 @@
+{
+  "case_id": "uwf_eva_visible_0027",
+  "dataset": "uwf",
+  "arquitectura": "agente_unico",
+  "repeticion": 2,
+  "config_version": "agenteunico-12casos-r2-20261110",
+  "run_id": "uwf_eva_visible_0027__unico__r2__11a973f8",
+  "telemetria": {
+    "llm_call_count": 1,
+    "input_tokens": 49999,
+    "output_tokens": 741,
+    "total_tokens": 53356,
+    "execution_time": 28.13379,
+    "replan_count": 0,
+    "intentos_correccion": 0,
+    "invalid_evidence_uid_count": 0,
+    "d11_warning_count": 0,
+    "llm_calls": [
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 49999,
+        "output_tokens": 741,
+        "total_tokens": 53356,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 2616,
+        "duration_s": 28.077,
+        "error": null
+      }
+    ],
+    "n_llamadas_fallidas": 0,
+    "duracion_llamadas_s": 28.077,
+    "reasoning_tokens": 2616,
+    "modelos_efectivos": [
+      "gemini-3.8-flash"
+    ],
+    "campos_parciales": {},
+    "tiempo_total_runner_s": 28.136331699963193,
+    "previa_a_d11": false,
+    "output_contract_version": "d11-v1",
+    "diagnostico_runner": {
+      "arquitectura": "agente_unico",
+      "thread_id": "exp__uwf_eva_visible_0027__unico__r2__11a973f8",
+      "execution_time": 28.136331699963193,
+      "error": null,
+      "error_api_del_agente": null,
+      "resultado_incompleto": null,
+      "claves_ausentes_en_el_estado": [],
+      "replan_count": null,
+      "intentos_correccion": null,
+      "d11_presente_en_el_estado": true,
+      "n_candidatos_mitre": 3
+    },
+    "segundos_recuperacion_mitre": 0.098812,
+    "segundos_preprocesamiento_consulta_mitre": 0.069279,
+    "segundos_carga_memoria_rag": 14.469604,
+    "n_candidatos_mitre": 3
+  }
+}

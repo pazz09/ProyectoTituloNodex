@@ -1,0 +1,83 @@
+{
+  "case_id": "uwf_eva_visible_0027",
+  "dataset": "uwf",
+  "arquitectura": "agente_unico",
+  "repeticion": 3,
+  "config_version": "agenteunico-12casos-r3-20261110",
+  "run_id": "uwf_eva_visible_0027__unico__r3__c8998835",
+  "salida": {
+    "case_id": "uwf_eva_visible_0027",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2022-01-02 05:31:29.634125",
+        "entities": [],
+        "event_type": "dns_request_timeout",
+        "evidence_uids": [
+          "Crufd24zmgnFaCFECf",
+          "CViZ3T1AFU9OvRrwel",
+          "ClhmWE1zs0eUSnUQbl"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2022-01-02 06:02:14.881954",
+        "entities": [],
+        "event_type": "dns_request_timeout",
+        "evidence_uids": [
+          "Cw715L34PPrsuWkzS5",
+          "CdNzvz1pfJaSs9gyyg"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nFalla de comunicación repetitiva hacia un servidor DNS inalcanzable o mal configurado desde el host 143.88.255.10 hacia 10.0.10.1.\n\n## Evaluación del auditor\n\nEl host 143.88.255.10 genera ráfagas de consultas DNS cada 30 segundos dirigidas a la IP privada 10.0.10.1:53 con estado S0 (sin respuesta alguna). Paralelamente, otros equipos de la red resuelven DNS con normalidad (SF) contra 143.88.1.1. El patrón periódico y de bajo volumen es consistente con reintentos automáticos de resolución de nombres o un reenviador mal configurado apuntando a un resolver inactivo, sin evidencia suficiente de tunelado, exfiltración o compromiso malicioso.\n\n## Comandos de mitigación propuestos\n\n- tcpdump -nn -i any host 143.88.255.10 and port 53\n- ping -c 4 10.0.10.1\n- nc -zvu 10.0.10.1 53"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_visible_0027__unico__r3__c8998835",
+      "arquitectura": "agente_unico",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_visible_0027__unico__r3__c8998835.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-10T05:26:46+00:00",
+    "resultado_incompleto": null
+  }
+}

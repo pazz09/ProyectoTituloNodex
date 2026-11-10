@@ -1,0 +1,37 @@
+{
+  "config_version": "agenteunico-12casos-r2-20261110",
+  "created_utc": "2026-11-10T05:33:05.899830+00:00",
+  "extractor_sha256": "c812821f505683b7edfc951b757c0750f0d7f67832d89df496bc2c96fe62f6dc",
+  "arguments": [
+    "tools/export_single_agent_campaign.py",
+    "--config-version",
+    "agenteunico-12casos-r2-20261110"
+  ],
+  "cases": 12,
+  "required_missing": [],
+  "completed": 12,
+  "rules": [
+    "Copias byte a byte verificadas con SHA-256.",
+    "JSONL UTF-8: present=false significa campo ausente; value=null es null original.",
+    "Listas vacías, cadenas vacías, orden y duplicados se conservan.",
+    "source_json_pointer y array_index vinculan las proyecciones al archivo original.",
+    "Sin matching, métricas, evaluadores ni conclusiones de desempeño."
+  ],
+  "limitations": [
+    "raw es el estado final preservado, no todas las respuestas HTTP del proveedor.",
+    "CPU, RAM, GPU, costo facturado y duraciones por agente no se inventan si no existen.",
+    "Referencias BGL de reconstrucción/MITRE pueden ser no_aplica; se conservan igual.",
+    "Las procedencias hacia CSV UWF intermedios ausentes se conservan literalmente.",
+    "No se copiaron los Parquet completos: alcance limitado a los 12 casos y sus referencias."
+  ],
+  "repeticion": 2,
+  "arquitectura": "agente_unico",
+  "referencia_r1": "oficial-12casos-r1-20261028",
+  "resultados_incompletos": [],
+  "exporter_wrapper_sha256": "3041c08521b7a611c3f3a3f175602d8cf02607d4dc39adeaea3e4372ec7aa650",
+  "adaptaciones": [
+    "Predicciones leídas de experiments/single_agent/ (export_experimental_data.py fija experiments/nodex).",
+    "mitre/retrieval_observation.jsonl: candidatos recuperados SIEMPRE por el agente único, separados de las atribuciones.",
+    "run_status.jsonl agrega estado_ejecucion_salida y resultado_incompleto."
+  ]
+}

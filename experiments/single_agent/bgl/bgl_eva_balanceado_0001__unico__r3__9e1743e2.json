@@ -1,0 +1,77 @@
+{
+  "case_id": "bgl_eva_balanceado_0001",
+  "dataset": "bgl",
+  "arquitectura": "agente_unico",
+  "repeticion": 3,
+  "config_version": "agenteunico-12casos-r3-20261110",
+  "run_id": "bgl_eva_balanceado_0001__unico__r3__9e1743e2",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0001",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "authentication_failure",
+        "evidence_uids": [
+          "log_record_000014"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "authentication_failure",
+        "evidence_uids": [
+          "log_record_000019"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe registran dos fallos de autenticación aislados procedentes presumiblemente del entorno local (IP 172.16.96.116), sin evidencia suficiente de ataque coordinado o compromiso de seguridad.\n\n## Evaluación del auditor\n\nEl lote presenta una baja tasa de parsing estructural (0%) y carece de marcas de tiempo en los registros analizados. Se observan dos eventos de fallo de inicio de sesión (log_record_000014 y log_record_000019), pero el volumen no justifica la atribución de un ataque de fuerza bruta ni de técnicas de manipulación de registros propuestas por los candidatos RAG."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0001__unico__r3__9e1743e2",
+      "arquitectura": "agente_unico",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1685.001",
+          "name": "Disable or Modify Windows Event Log",
+          "similitud": null
+        },
+        {
+          "id": "T1685.004",
+          "name": "Disable or Modify Linux Audit System Log",
+          "similitud": null
+        },
+        {
+          "id": "T1654",
+          "name": "Log Enumeration",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "bgl_eva_balanceado_0001__unico__r3__9e1743e2.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-10T05:28:21+00:00",
+    "resultado_incompleto": null
+  }
+}

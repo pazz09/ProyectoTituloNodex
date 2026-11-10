@@ -1,0 +1,465 @@
+{
+  "comprobado_utc": "2026-11-10T04:46:24.025777+00:00",
+  "fuentes": {
+    "archivos_comparados": 129,
+    "por_modo": {
+      "bytes": 94,
+      "contenido_igual_a_copia_r1": 6,
+      "contenido_crlf": 23,
+      "contenido_lf": 6
+    },
+    "solo_saltos_de_linea": [
+      "src/agents/agente_auditor_final.py",
+      "src/agents/agente_ingeniero_mitigacion.py",
+      "src/agents/agente_planificador.py",
+      "src/graph/build_graph.py",
+      "src/graph/plan_tracking.py",
+      "src/graph/routers.py",
+      "src/output_contract.py",
+      "src/preprocessing/decoders/__init__.py",
+      "src/preprocessing/decoders/base.py",
+      "src/preprocessing/decoders/cef_decoder.py",
+      "src/preprocessing/decoders/csv_decoder.py",
+      "src/preprocessing/decoders/json_decoder.py",
+      "src/preprocessing/decoders/key_value_decoder.py",
+      "src/preprocessing/decoders/leef_decoder.py",
+      "src/preprocessing/decoders/syslog_decoder.py",
+      "src/preprocessing/decoders/text_decoder.py",
+      "src/preprocessing/enrichers/base.py",
+      "src/preprocessing/enrichers/bgl.py",
+      "src/preprocessing/enrichers/hdfs.py",
+      "src/preprocessing/enrichers/zeek.py",
+      "src/preprocessing/ground_truth.py",
+      "src/preprocessing/result.py",
+      "src/single_agent.py",
+      "src/state.py",
+      "src/tools/baseline_reglas.py",
+      "src/tools/cve.py",
+      "src/tools/eval_deteccion.py",
+      "src/tools/fase6.py",
+      "src/tools/log_runner.py",
+      "src/tools/preparar_labels_hdfs.py",
+      "src/tools/provenance.py",
+      "src/tools/tool_validar_comandos.py",
+      "src/tools/validation.py",
+      "tools/export_experimental_data.py",
+      "tools/run_official_experiment.py"
+    ],
+    "git_head": "3699f5be30f97fa372bfbcd6f70e917081904d17",
+    "git_rama": "main2.0",
+    "commit_r1": "46f6a5cbcac7fe0cb291e2a8dd20bd81f052dc67",
+    "cambios_src_desde_r1": [
+      "src/experimentation/knowledge/rag_enriquecido.py"
+    ],
+    "src_sin_cambios_locales": true,
+    "core_autocrlf": "true"
+  },
+  "entorno": {
+    "python_r1": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+    "python_actual": "3.13.5 (tags/v3.13.5:6cb20a2, Jun 11 2025, 16:15:46) [MSC v.1943 64 bit (AMD64)]",
+    "python_igual": false,
+    "ejecutable_actual": "C:\\Users\\antop\\Desktop\\NODEX\\.venv\\Scripts\\python.exe",
+    "plataforma_r1": "Windows-11-10.0.26200-SP0",
+    "plataforma_actual": "Windows-11-10.0.26300-SP0",
+    "paquetes_clave": [
+      {
+        "paquete": "google-genai",
+        "r1": "2.22.0",
+        "actual": "2.25.0",
+        "igual": false
+      },
+      {
+        "paquete": "chromadb",
+        "r1": "1.5.9",
+        "actual": "1.5.9",
+        "igual": true
+      },
+      {
+        "paquete": "sentence-transformers",
+        "r1": "6.0.1",
+        "actual": "6.1.0",
+        "igual": false
+      },
+      {
+        "paquete": "transformers",
+        "r1": "5.16.1",
+        "actual": "5.17.0",
+        "igual": false
+      },
+      {
+        "paquete": "torch",
+        "r1": "2.14.0",
+        "actual": "2.14.0",
+        "igual": true
+      },
+      {
+        "paquete": "tokenizers",
+        "r1": "0.23.2",
+        "actual": "0.23.2",
+        "igual": true
+      },
+      {
+        "paquete": "onnxruntime",
+        "r1": "1.29.0",
+        "actual": "1.30.0",
+        "igual": false
+      },
+      {
+        "paquete": "numpy",
+        "r1": "2.5.2",
+        "actual": "2.5.3",
+        "igual": false
+      },
+      {
+        "paquete": "langgraph",
+        "r1": "1.2.11",
+        "actual": "1.2.12",
+        "igual": false
+      },
+      {
+        "paquete": "langchain-core",
+        "r1": "1.6.1",
+        "actual": "1.6.4",
+        "igual": false
+      },
+      {
+        "paquete": "pydantic",
+        "r1": "2.14.1",
+        "actual": "2.13.5",
+        "igual": false
+      },
+      {
+        "paquete": "requests",
+        "r1": "2.34.2",
+        "actual": "2.34.2",
+        "igual": true
+      },
+      {
+        "paquete": "python-dotenv",
+        "r1": "1.2.3",
+        "actual": "1.2.3",
+        "igual": true
+      }
+    ],
+    "solo_en_r1": [
+      [
+        "artifact_tool_v2",
+        "2.8.106"
+      ],
+      [
+        "et_xmlfile",
+        "2.0.0"
+      ],
+      [
+        "lxml",
+        "6.1.1"
+      ],
+      [
+        "openpyxl",
+        "3.1.5"
+      ],
+      [
+        "pdf2image",
+        "1.17.0"
+      ],
+      [
+        "pdfminer.six",
+        "20260107"
+      ],
+      [
+        "pdfplumber",
+        "0.11.9"
+      ],
+      [
+        "pyhumps",
+        "3.8.0"
+      ],
+      [
+        "pymupdf",
+        "1.28.2"
+      ],
+      [
+        "pypdf",
+        "6.19.0"
+      ],
+      [
+        "pypdfium2",
+        "5.14.0"
+      ],
+      [
+        "python-docx",
+        "1.2.0"
+      ],
+      [
+        "python-pptx",
+        "1.0.2"
+      ],
+      [
+        "reportlab",
+        "5.0.1"
+      ],
+      [
+        "wheel",
+        "0.48.0"
+      ],
+      [
+        "xlsxwriter",
+        "3.2.9"
+      ]
+    ],
+    "solo_actual": [],
+    "version_distinta": [
+      [
+        "anyio",
+        "4.15.0",
+        "4.15.1"
+      ],
+      [
+        "build",
+        "1.6.0",
+        "1.6.1"
+      ],
+      [
+        "charset-normalizer",
+        "3.5.2",
+        "3.5.1"
+      ],
+      [
+        "contourpy",
+        "1.3.3",
+        "1.4.0"
+      ],
+      [
+        "cryptography",
+        "50.0.2",
+        "50.0.1"
+      ],
+      [
+        "filelock",
+        "3.32.5",
+        "4.0.1"
+      ],
+      [
+        "fonttools",
+        "4.64.0",
+        "4.65.0"
+      ],
+      [
+        "fsspec",
+        "2026.7.0",
+        "2026.9.0"
+      ],
+      [
+        "google-auth",
+        "2.57.1",
+        "2.58.0"
+      ],
+      [
+        "google-genai",
+        "2.22.0",
+        "2.25.0"
+      ],
+      [
+        "grpcio",
+        "1.83.1",
+        "1.84.0"
+      ],
+      [
+        "httpcore2",
+        "2.12.0",
+        "2.13.0"
+      ],
+      [
+        "httpx2",
+        "2.12.0",
+        "2.13.0"
+      ],
+      [
+        "huggingface_hub",
+        "1.30.0",
+        "1.32.0"
+      ],
+      [
+        "idna",
+        "3.19",
+        "3.20"
+      ],
+      [
+        "langchain-core",
+        "1.6.1",
+        "1.6.4"
+      ],
+      [
+        "langgraph",
+        "1.2.11",
+        "1.2.12"
+      ],
+      [
+        "langgraph-sdk",
+        "0.4.4",
+        "0.4.5"
+      ],
+      [
+        "langsmith",
+        "0.12.1",
+        "0.14.0"
+      ],
+      [
+        "matplotlib",
+        "3.11.1",
+        "3.11.2"
+      ],
+      [
+        "multidict",
+        "6.7.1",
+        "6.9.1"
+      ],
+      [
+        "narwhals",
+        "2.25.0",
+        "2.26.0"
+      ],
+      [
+        "networkx",
+        "3.6.1",
+        "3.7"
+      ],
+      [
+        "numpy",
+        "2.5.2",
+        "2.5.3"
+      ],
+      [
+        "onnxruntime",
+        "1.29.0",
+        "1.30.0"
+      ],
+      [
+        "pandas",
+        "3.0.5",
+        "3.0.6"
+      ],
+      [
+        "pip",
+        "26.2.2",
+        "26.2.1"
+      ],
+      [
+        "propcache",
+        "0.5.2",
+        "0.5.4"
+      ],
+      [
+        "protobuf",
+        "7.36.1",
+        "7.36.2"
+      ],
+      [
+        "pycparser",
+        "3.11",
+        "3.0"
+      ],
+      [
+        "pydantic",
+        "2.14.1",
+        "2.13.5"
+      ],
+      [
+        "pydantic_core",
+        "2.50.1",
+        "2.46.5"
+      ],
+      [
+        "pyparsing",
+        "3.3.2",
+        "3.3.3"
+      ],
+      [
+        "pyproject_hooks",
+        "1.2.0",
+        "1.3.3"
+      ],
+      [
+        "regex",
+        "2026.9.3",
+        "2026.9.10"
+      ],
+      [
+        "scikit-learn",
+        "1.9.0",
+        "1.9.1"
+      ],
+      [
+        "sentence-transformers",
+        "6.0.1",
+        "6.1.0"
+      ],
+      [
+        "setuptools",
+        "84.1.0",
+        "84.0.0"
+      ],
+      [
+        "threadpoolctl",
+        "3.6.0",
+        "3.7.0"
+      ],
+      [
+        "tqdm",
+        "4.70.0",
+        "4.70.1"
+      ],
+      [
+        "transformers",
+        "5.16.1",
+        "5.17.0"
+      ],
+      [
+        "tzdata",
+        "2026.5",
+        "2026.4"
+      ],
+      [
+        "urllib3",
+        "2.7.0",
+        "2.8.0"
+      ],
+      [
+        "uuid_utils",
+        "0.17.0",
+        "0.17.1"
+      ],
+      [
+        "uvicorn",
+        "0.52.4",
+        "0.53.0"
+      ],
+      [
+        "watchfiles",
+        "1.2.0",
+        "1.3.0"
+      ],
+      [
+        "yarl",
+        "1.24.5",
+        "1.25.1"
+      ]
+    ],
+    "decision": "Se usa el .venv local (Python 3.13.5) por decisión de la responsable del 10-nov-2026; las diferencias se registran y no se presenta el entorno como idéntico al de R1."
+  },
+  "entradas": {
+    "casos": 12,
+    "tamanos_y_sha256_iguales_a_r1": true,
+    "orden_igual_a_r1": true
+  },
+  "embeddings": {
+    "modelo": "all-MiniLM-L6-v2",
+    "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+    "archivos_iguales_al_inventario": 10
+  },
+  "archivos_borrados_por_rutas_largas": {
+    "n": 0,
+    "archivos": [],
+    "nota": "Marcados como borrados en el árbol de trabajo porque Windows no pudo crear rutas tan largas al actualizar main2.0. No se restauran ni se tocan; no participan en esta campaña."
+  }
+}

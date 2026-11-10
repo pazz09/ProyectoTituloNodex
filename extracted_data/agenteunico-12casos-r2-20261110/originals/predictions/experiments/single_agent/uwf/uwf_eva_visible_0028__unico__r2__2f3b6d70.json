@@ -1,0 +1,81 @@
+{
+  "case_id": "uwf_eva_visible_0028",
+  "dataset": "uwf",
+  "arquitectura": "agente_unico",
+  "repeticion": 2,
+  "config_version": "agenteunico-12casos-r2-20261110",
+  "run_id": "uwf_eva_visible_0028__unico__r2__2f3b6d70",
+  "salida": {
+    "case_id": "uwf_eva_visible_0028",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-17 18:58:56.939659",
+        "entities": [],
+        "event_type": "dns_resolution_success",
+        "evidence_uids": [
+          "CNp69N30MREIpWdOI"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-17 18:59:15.382531",
+        "entities": [],
+        "event_type": "dns_request_unanswered",
+        "evidence_uids": [
+          "Ceni8hHI43gmMFWul",
+          "Cl5NqurlbdYOxZDai"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nFalla operativa de conectividad DNS: el host 143.88.255.10 envía consultas DNS periódicas (cada ~30 segundos) hacia el servidor 10.0.10.1 sin recibir respuesta (estado S0), lo cual corresponde a reintentos de resolución de nombres hacia un servidor inaccesible o inactivo.\n\n## Evaluación del auditor\n\nSe observa un patrón reiterado de consultas DNS UDP hacia la IP 10.0.10.1 en intervalos constantes de aproximadamente 30 segundos, totalizando 261 intentos fallidos con estado S0 (sin respuesta). No se observa tráfico de exfiltración, explotación ni escaneo de puertos disperso; otros hosts en la red (143.88.1.51 y 143.88.1.53) resuelven DNS normalmente a través de 143.88.1.1 con estado SF. La evidencia apunta a un problema de enrutamiento o servicio DNS inactivo en 10.0.10.1.\n\n## Comandos de mitigación propuestos\n\n- ping -c 4 10.0.10.1\n- traceroute 10.0.10.1\n- cat /etc/resolv.conf\n- systemctl status systemd-resolved"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_visible_0028__unico__r2__2f3b6d70",
+      "arquitectura": "agente_unico",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_visible_0028__unico__r2__2f3b6d70.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-10T05:22:28+00:00",
+    "resultado_incompleto": null
+  }
+}

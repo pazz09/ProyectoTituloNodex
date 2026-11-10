@@ -1,0 +1,423 @@
+{
+  "case_id": "bgl_eva_natural_0016",
+  "dataset": "bgl",
+  "arquitectura": "agente_unico",
+  "repeticion": 1,
+  "config_version": "agenteunico-12casos-r1-20261110",
+  "run_id": "bgl_eva_natural_0016__unico__r1__27934c85",
+  "estado_crudo": {
+    "evidencia_logs": [
+      {
+        "uid": "log_record_000001",
+        "record_number": 1,
+        "line_start": 1,
+        "line_end": 1,
+        "timestamp": null,
+        "source_ip": "10.0.2.192"
+      },
+      {
+        "uid": "log_record_000002",
+        "record_number": 2,
+        "line_start": 2,
+        "line_end": 2,
+        "timestamp": null,
+        "source_ip": "10.0.1.155"
+      },
+      {
+        "uid": "log_record_000003",
+        "record_number": 3,
+        "line_start": 3,
+        "line_end": 3,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000004",
+        "record_number": 4,
+        "line_start": 4,
+        "line_end": 4,
+        "timestamp": null,
+        "source_ip": "10.2.2.80"
+      },
+      {
+        "uid": "log_record_000005",
+        "record_number": 5,
+        "line_start": 5,
+        "line_end": 5,
+        "timestamp": null,
+        "source_ip": "10.6.1.207"
+      },
+      {
+        "uid": "log_record_000006",
+        "record_number": 6,
+        "line_start": 6,
+        "line_end": 6,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000007",
+        "record_number": 7,
+        "line_start": 7,
+        "line_end": 7,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000008",
+        "record_number": 8,
+        "line_start": 8,
+        "line_end": 8,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000009",
+        "record_number": 9,
+        "line_start": 9,
+        "line_end": 9,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000010",
+        "record_number": 10,
+        "line_start": 10,
+        "line_end": 10,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000011",
+        "record_number": 11,
+        "line_start": 11,
+        "line_end": 11,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000012",
+        "record_number": 12,
+        "line_start": 12,
+        "line_end": 12,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000013",
+        "record_number": 13,
+        "line_start": 13,
+        "line_end": 13,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000014",
+        "record_number": 14,
+        "line_start": 14,
+        "line_end": 14,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000015",
+        "record_number": 15,
+        "line_start": 15,
+        "line_end": 15,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000016",
+        "record_number": 16,
+        "line_start": 16,
+        "line_end": 16,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000017",
+        "record_number": 17,
+        "line_start": 17,
+        "line_end": 17,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000018",
+        "record_number": 18,
+        "line_start": 18,
+        "line_end": 18,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000019",
+        "record_number": 19,
+        "line_start": 19,
+        "line_end": 19,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000020",
+        "record_number": 20,
+        "line_start": 20,
+        "line_end": 20,
+        "timestamp": null
+      }
+    ],
+    "evidencia_logs_omitidos": 0,
+    "eventos_reconstruidos": [],
+    "secuencia_temporal": [],
+    "tecnicas_atribuidas": [],
+    "invalid_evidence_uid_count": 0,
+    "d11_warnings": [],
+    "telemetry": {
+      "llm_call_count": 1,
+      "input_tokens": 2432,
+      "output_tokens": 188,
+      "total_tokens": 3267,
+      "execution_time": 10.260333,
+      "replan_count": 0,
+      "intentos_correccion": 0,
+      "invalid_evidence_uid_count": 0,
+      "d11_warning_count": 0,
+      "llm_calls": [
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 2432,
+          "output_tokens": 188,
+          "total_tokens": 3267,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 647,
+          "duration_s": 10.238,
+          "error": null
+        }
+      ]
+    },
+    "resumen_logs": {
+      "formato_detectado": "text",
+      "total_lineas": 20,
+      "servicios": {
+        "desconocido": 20
+      },
+      "eventos": {
+        "evento_normal": 20
+      },
+      "ventana_temporal": {
+        "inicio": null,
+        "fin": null
+      },
+      "n_ips_distintas": 4,
+      "ips_distintas": [
+        "10.0.2.192",
+        "10.0.1.155",
+        "10.2.2.80",
+        "10.6.1.207"
+      ],
+      "por_ip": {
+        "10.0.2.192": {
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [],
+          "n_eventos": 1,
+          "n_como_origen": 1,
+          "n_como_destino": 0
+        },
+        "10.0.1.155": {
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [],
+          "n_eventos": 1,
+          "n_como_origen": 1,
+          "n_como_destino": 0
+        },
+        "10.2.2.80": {
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [],
+          "n_eventos": 1,
+          "n_como_origen": 1,
+          "n_como_destino": 0
+        },
+        "10.6.1.207": {
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [],
+          "n_eventos": 1,
+          "n_como_origen": 1,
+          "n_como_destino": 0
+        }
+      },
+      "usuarios": {},
+      "n_usuarios_distintos": 0,
+      "codigos_respuesta": {},
+      "entidades": [
+        {
+          "ip": "10.0.2.192",
+          "n_eventos": 1,
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [],
+          "n_como_origen": 1,
+          "n_como_destino": 0
+        },
+        {
+          "ip": "10.0.1.155",
+          "n_eventos": 1,
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [],
+          "n_como_origen": 1,
+          "n_como_destino": 0
+        },
+        {
+          "ip": "10.2.2.80",
+          "n_eventos": 1,
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [],
+          "n_como_origen": 1,
+          "n_como_destino": 0
+        },
+        {
+          "ip": "10.6.1.207",
+          "n_eventos": 1,
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [],
+          "n_como_origen": 1,
+          "n_como_destino": 0
+        }
+      ],
+      "cronologia": [],
+      "cronologia_omitidos": 0,
+      "raw_procedencia": {
+        "sha256": "24e9da1ea8d1838a4cb885c694af5299fd8cdf5091dfac351a69a9361438baf6",
+        "lineas": 20,
+        "bytes": 3834
+      },
+      "reputacion_ips": {
+        "10.0.2.192": {
+          "fuente": "sin_reputacion",
+          "ip": "10.0.2.192",
+          "score": null,
+          "nota": "modo sin reputación externa: ninguna IP recibe puntaje",
+          "categoria": "desconocido"
+        },
+        "10.0.1.155": {
+          "fuente": "sin_reputacion",
+          "ip": "10.0.1.155",
+          "score": null,
+          "nota": "modo sin reputación externa: ninguna IP recibe puntaje",
+          "categoria": "desconocido"
+        },
+        "10.2.2.80": {
+          "fuente": "sin_reputacion",
+          "ip": "10.2.2.80",
+          "score": null,
+          "nota": "modo sin reputación externa: ninguna IP recibe puntaje",
+          "categoria": "desconocido"
+        },
+        "10.6.1.207": {
+          "fuente": "sin_reputacion",
+          "ip": "10.6.1.207",
+          "score": null,
+          "nota": "modo sin reputación externa: ninguna IP recibe puntaje",
+          "categoria": "desconocido"
+        }
+      }
+    },
+    "preprocessing_metadata": {
+      "schema_version": "2.0",
+      "total_lineas_fisicas": 20,
+      "total_eventos": 20,
+      "decoder_distribution": {
+        "text": 20
+      },
+      "product_distribution": {},
+      "vendor_distribution": {},
+      "version_distribution": {},
+      "protocol_distribution": {},
+      "profile_distribution": {},
+      "severity_distribution": {},
+      "event_categories": {},
+      "event_outcomes": {},
+      "entities": {
+        "ip": {
+          "10.0.1.155": 1,
+          "10.0.2.192": 1,
+          "10.2.2.80": 1,
+          "10.6.1.207": 1
+        }
+      },
+      "time_window": {
+        "inicio": null,
+        "fin": null
+      },
+      "parsing": {
+        "parsed_events": 0,
+        "fallback_events": 20,
+        "coverage": 0.0
+      },
+      "segments": [
+        {
+          "index": 0,
+          "decoder": "text",
+          "line_start": 1,
+          "line_end": 20,
+          "n_records": 20,
+          "confidence": 0.1,
+          "decoder_inicial": "text",
+          "confidence_inicial": 0.1,
+          "decoder_distribution": {
+            "text": 20
+          },
+          "context": {}
+        }
+      ],
+      "entities_resumen": {
+        "ip": 4
+      },
+      "config": {
+        "LOG_DETECTION_CHUNK_SIZE": 50,
+        "LOG_ENABLE_MULTILINE": true,
+        "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+        "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+        "LOG_MAX_EVENTS": 100000,
+        "LOG_MAX_FILE_BYTES": 52428800,
+        "LOG_MAX_RAW_SAMPLES": 20,
+        "LOG_MAX_UNMAPPED_FIELDS": 100,
+        "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+        "LOG_PARSING_MODE": "hybrid",
+        "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+        "LOG_PRESERVE_RAW": true
+      }
+    },
+    "parsing_warnings": [],
+    "raw_samples": [
+      {
+        "decoder": "text",
+        "texto": "1123195083 2005.08.04 UNKNOWN_LOCATION 2005-08-04-15.38.03.475517 UNKNOWN_LOCATION NULL DISCOVERY INFO Ido chip status changed: FF:F2:9F:16:EB:27:00:0D:60:E9:14:D8 ip=10.0.2.192 v=13 t=4 status=M Thu Aug 04 15:29:45 PDT 2005"
+      }
+    ],
+    "firma": "v2|lineas=20 ips=4 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+    "plan": {},
+    "plan_objetivo": "",
+    "paso_actual": 0,
+    "historial_ejecucion": [],
+    "desviaciones_plan": [],
+    "historial_planes": [],
+    "replan_count": 0,
+    "diagnostico": "Registros en texto plano no estructurados sin evidencia observable de actividad maliciosa ni fallos operativos.",
+    "necesita_rag": false,
+    "usar_cve": false,
+    "contexto_rag": [],
+    "tecnicas_mitre": [],
+    "cves_encontrados": [],
+    "comandos_mitigacion": [],
+    "comandos_validos": true,
+    "motivos_rechazo": [
+      "OK"
+    ],
+    "confianza": 0.3,
+    "hay_incidente": false,
+    "hay_anomalia": false,
+    "evaluacion_auditor": "El lote consta de 20 líneas en formato de texto plano con una cobertura de análisis del 0%, careciendo de marcas de tiempo y campos de servicio estructurados. Se identifican cuatro direcciones IP privadas sin métricas de fallos ni indicadores de compromiso. La baja confianza se debe a la ausencia de estructura en los registros y falta de contexto semántico.",
+    "intentos_correccion": 0,
+    "cobertura_auditor": null,
+    "cobertura_suficiente": null,
+    "motivo_replanificacion": "",
+    "requiere_replanificacion": false,
+    "_error_api": null,
+    "_firma": "v2|lineas=20 ips=4 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+    "requiere_revision_humana": true,
+    "output_contract_version": "d11-v1"
+  }
+}

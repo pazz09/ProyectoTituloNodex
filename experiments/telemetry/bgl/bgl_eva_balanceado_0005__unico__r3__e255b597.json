@@ -1,0 +1,58 @@
+{
+  "case_id": "bgl_eva_balanceado_0005",
+  "dataset": "bgl",
+  "arquitectura": "agente_unico",
+  "repeticion": 3,
+  "config_version": "agenteunico-12casos-r3-20261110",
+  "run_id": "bgl_eva_balanceado_0005__unico__r3__e255b597",
+  "telemetria": {
+    "llm_call_count": 1,
+    "input_tokens": 1995,
+    "output_tokens": 183,
+    "total_tokens": 2745,
+    "execution_time": 8.741396,
+    "replan_count": 0,
+    "intentos_correccion": 0,
+    "invalid_evidence_uid_count": 0,
+    "d11_warning_count": 0,
+    "llm_calls": [
+      {
+        "model": "gemini-3.8-flash",
+        "input_tokens": 1995,
+        "output_tokens": 183,
+        "total_tokens": 2745,
+        "model_version": "gemini-3.8-flash",
+        "reasoning_tokens": 567,
+        "duration_s": 8.715,
+        "error": null
+      }
+    ],
+    "n_llamadas_fallidas": 0,
+    "duracion_llamadas_s": 8.715,
+    "reasoning_tokens": 567,
+    "modelos_efectivos": [
+      "gemini-3.8-flash"
+    ],
+    "campos_parciales": {},
+    "tiempo_total_runner_s": 8.741674699995201,
+    "previa_a_d11": false,
+    "output_contract_version": "d11-v1",
+    "diagnostico_runner": {
+      "arquitectura": "agente_unico",
+      "thread_id": "exp__bgl_eva_balanceado_0005__unico__r3__e255b597",
+      "execution_time": 8.741674699995201,
+      "error": null,
+      "error_api_del_agente": null,
+      "resultado_incompleto": null,
+      "claves_ausentes_en_el_estado": [],
+      "replan_count": null,
+      "intentos_correccion": null,
+      "d11_presente_en_el_estado": true,
+      "n_candidatos_mitre": 0
+    },
+    "segundos_recuperacion_mitre": 0.080434,
+    "segundos_preprocesamiento_consulta_mitre": 0.030058,
+    "segundos_carga_memoria_rag": 12.252618,
+    "n_candidatos_mitre": 0
+  }
+}

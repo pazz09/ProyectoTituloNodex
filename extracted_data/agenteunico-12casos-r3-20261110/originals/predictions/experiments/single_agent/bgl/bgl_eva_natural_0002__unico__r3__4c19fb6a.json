@@ -1,0 +1,42 @@
+{
+  "case_id": "bgl_eva_natural_0002",
+  "dataset": "bgl",
+  "arquitectura": "agente_unico",
+  "repeticion": 3,
+  "config_version": "agenteunico-12casos-r3-20261110",
+  "run_id": "bgl_eva_natural_0002__unico__r3__4c19fb6a",
+  "salida": {
+    "case_id": "bgl_eva_natural_0002",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nRegistros no estructurados sin patrones anómalos ni indicios de compromiso detectables.\n\n## Evaluación del auditor\n\nEl lote contiene 20 líneas en texto libre sin marcas temporales ni servicios decodificados (cobertura de parsing del 0%). Se observa actividad asociada a la dirección IP privada 172.16.96.116 clasificada como normal y sin intentos fallidos de autenticación ni alertas asociadas. Debido a la falta de estructuración y ausencia de patrones sospechosos, no se identifican incidentes de seguridad."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0002__unico__r3__4c19fb6a",
+      "arquitectura": "agente_unico",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0002__unico__r3__4c19fb6a.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-10T05:27:57+00:00",
+    "resultado_incompleto": null
+  }
+}

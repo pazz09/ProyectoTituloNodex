@@ -1,0 +1,81 @@
+{
+  "case_id": "uwf_eva_sigiloso_0024",
+  "dataset": "uwf",
+  "arquitectura": "agente_unico",
+  "repeticion": 1,
+  "config_version": "agenteunico-12casos-r1-20261110",
+  "run_id": "uwf_eva_sigiloso_0024__unico__r1__ac934b95",
+  "salida": {
+    "case_id": "uwf_eva_sigiloso_0024",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-17 23:21:25.382073",
+        "entities": [],
+        "event_type": "dns_request_timeout",
+        "evidence_uids": [
+          "CNvd5j17kRKYOw9mi1",
+          "CzmuG52ac5O2sNzX5h"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-17 23:51:10.130569",
+        "entities": [],
+        "event_type": "dns_request_timeout",
+        "evidence_uids": [
+          "CxKHx5MMwv2yK4exh"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nFalla de conectividad o desconfiguración de resolución DNS operativa hacia un servidor no disponible (10.0.10.1)\n\n## Evaluación del auditor\n\nSe observa un volumen sostenido de solicitudes DNS salientes (puerto 53/UDP) desde el host 143.88.255.10 con destino a 10.0.10.1 en intervalos constantes de aproximadamente 30 segundos, finalizando todas en estado Zeek S0 (sin respuesta). No hay evidencia de exfiltración, túneles DNS establecidos ni actividad maliciosa confirmada en el contenido de los paquetes; el comportamiento corresponde característicamente a un cliente o servicio reintentando consultas contra un servidor DNS inalcanzable o fuera de servicio.\n\n## Comandos de mitigación propuestos\n\n- ping -c 4 10.0.10.1\n- dig @10.0.10.1 localhost\n- cat /etc/resolv.conf\n- journalctl -u systemd-resolved -n 50 --no-pager"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_sigiloso_0024__unico__r1__ac934b95",
+      "arquitectura": "agente_unico",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1568.002",
+          "name": "Domain Generation Algorithms",
+          "similitud": null
+        },
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_sigiloso_0024__unico__r1__ac934b95.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-10T05:04:39+00:00",
+    "resultado_incompleto": null
+  }
+}

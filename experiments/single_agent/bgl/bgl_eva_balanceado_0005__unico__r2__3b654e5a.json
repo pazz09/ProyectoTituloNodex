@@ -1,0 +1,42 @@
+{
+  "case_id": "bgl_eva_balanceado_0005",
+  "dataset": "bgl",
+  "arquitectura": "agente_unico",
+  "repeticion": 2,
+  "config_version": "agenteunico-12casos-r2-20261110",
+  "run_id": "bgl_eva_balanceado_0005__unico__r2__3b654e5a",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0005",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nRegistros en formato de texto no estructurado con nula cobertura de parsing. Se observa tráfico o actividad asociada a la IP privada 172.16.96.116 sin indicios concluyentes de actividad maliciosa ni fallas operativas evidentes.\n\n## Evaluación del auditor\n\nLa ausencia de datos estructurados y marcas de tiempo impide un análisis forense profundo. No se identifican patrones de ataque o anomalías de seguridad en la información disponible, manteniéndose un nivel bajo de confianza debido a la falta de cobertura en el análisis sintáctico."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0005__unico__r2__3b654e5a",
+      "arquitectura": "agente_unico",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0005__unico__r2__3b654e5a.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-10T05:18:31+00:00",
+    "resultado_incompleto": null
+  }
+}

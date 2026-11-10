@@ -1,0 +1,73 @@
+{
+  "case_id": "uwf_eva_visible_0028",
+  "dataset": "uwf",
+  "arquitectura": "agente_unico",
+  "repeticion": 3,
+  "config_version": "agenteunico-12casos-r3-20261110",
+  "run_id": "uwf_eva_visible_0028__unico__r3__f60b96bd",
+  "salida": {
+    "case_id": "uwf_eva_visible_0028",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-17 18:59:15.382531",
+        "entities": [],
+        "event_type": "dns_resolution_failure",
+        "evidence_uids": [
+          "Ceni8hHI43gmMFWul",
+          "Cl5NqurlbdYOxZDai",
+          "CohoM43q9rMCchrV5l",
+          "Cqvsv7pyM9qugmYd"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nFalla operativa de conectividad o resolución DNS hacia un servidor inalcanzable (10.0.10.1). El host 143.88.255.10 genera ráfagas de consultas DNS cada ~30 segundos que no reciben respuesta (estado S0), sumando 261 intentos fallidos sin indicios de actividad maliciosa.\n\n## Evaluación del auditor\n\nEl patrón observado corresponde a un host reintentando periódicamente resolver nombres contra un servidor DNS configurado (10.0.10.1) que no responde a nivel de red (estado S0). La baja frecuencia (~8 solicitudes por minuto) descarta ataques de denegación de servicio (DoS) o fuerza bruta, y no existe evidencia de exfiltración o C2 sobre DNS. El tráfico entre otros equipos (como 143.88.1.51 hacia 143.88.1.1) opera con normalidad con conexiones completadas (SF).\n\n## Comandos de mitigación propuestos\n\n- traceroute 10.0.10.1\n- dig @10.0.10.1 test.local\n- cat /etc/resolv.conf\n- tcpdump -nn -i any host 10.0.10.1 and port 53"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_visible_0028__unico__r3__f60b96bd",
+      "arquitectura": "agente_unico",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_visible_0028__unico__r3__f60b96bd.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-10T05:29:21+00:00",
+    "resultado_incompleto": null
+  }
+}

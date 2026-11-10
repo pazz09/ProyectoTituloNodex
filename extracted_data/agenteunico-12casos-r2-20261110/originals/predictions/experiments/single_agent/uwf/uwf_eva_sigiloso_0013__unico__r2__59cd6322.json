@@ -1,0 +1,93 @@
+{
+  "case_id": "uwf_eva_sigiloso_0013",
+  "dataset": "uwf",
+  "arquitectura": "agente_unico",
+  "repeticion": 2,
+  "config_version": "agenteunico-12casos-r2-20261110",
+  "run_id": "uwf_eva_sigiloso_0013__unico__r2__59cd6322",
+  "salida": {
+    "case_id": "uwf_eva_sigiloso_0013",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-19 09:05:39.133316",
+        "entities": [],
+        "event_type": "dns_query_timeout",
+        "evidence_uids": [
+          "CSLj4O3nkwboY2Mng",
+          "Cekthb1d6Fm5V8Fp2k"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-19 09:28:45.032989",
+        "entities": [],
+        "event_type": "dns_query_success",
+        "evidence_uids": [
+          "CUSUiwClAwfSaypOf",
+          "CAvSyG2l5tAVW1DVKf"
+        ]
+      },
+      {
+        "uid": "event_003",
+        "timestamp": "2021-12-19 09:34:23.381085",
+        "entities": [],
+        "event_type": "dns_query_timeout",
+        "evidence_uids": [
+          "C917Yh1jyoZtcdKZvd",
+          "CrX8CZ1xVkeqlDvEw8"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002",
+      "event_003"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nFallo de conectividad u operatividad hacia el servidor DNS upstream 10.0.10.1 desde el resolvedor 143.88.255.10, sin indicios de actividad maliciosa intencional.\n\n## Evaluación del auditor\n\nSe observa un alto volumen de intentos de conexión DNS UDP salientes desde 143.88.255.10 hacia 10.0.10.1:53 que no reciben respuesta (estado S0), repitiéndose en ráfagas regulares cada ~30 segundos. Al mismo tiempo, 143.88.255.10 responde exitosamente a consultas locales de clientes como 143.88.255.1. El comportamiento es consistente con una falla operativa de red, enrutamiento o caída del servidor DNS upstream configurado, descartando un compromiso de seguridad.\n\n## Comandos de mitigación propuestos\n\n- ping -c 4 10.0.10.1\n- nc -zvu 10.0.10.1 53\n- traceroute 10.0.10.1\n- dig @10.0.10.1 example.com +time=2"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_sigiloso_0013__unico__r2__59cd6322",
+      "arquitectura": "agente_unico",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_sigiloso_0013__unico__r2__59cd6322.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-10T05:23:09+00:00",
+    "resultado_incompleto": null
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "case_id": "uwf_eva_visible_0004",
+  "dataset": "uwf",
+  "arquitectura": "agente_unico",
+  "repeticion": 2,
+  "config_version": "agenteunico-12casos-r2-20261110",
+  "run_id": "uwf_eva_visible_0004__unico__r2__564d176d",
+  "salida": {
+    "case_id": "uwf_eva_visible_0004",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-17 16:20:26.630528",
+        "entities": [],
+        "event_type": "dns_request_unanswered",
+        "evidence_uids": [
+          "CZGAxQ2SmWBXBtj7ac",
+          "CnleWC32XXitJgLN72",
+          "CKkYwW3Y6vOmm77mF1"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-17 16:35:52.282",
+        "entities": [],
+        "event_type": "port_scan",
+        "evidence_uids": [
+          "CgLc2r16KKjawNK486",
+          "CW1rJU3i8X5NnW2IFc",
+          "Ct57b54aNqSpMF5g92",
+          "CLTC2c4FoX1FKSGv63",
+          "CvO8mBVfhDwYkcW7e"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": [
+        {
+          "id": "T1046",
+          "name": "Network Service Discovery",
+          "evidence_uids": [
+            "CgLc2r16KKjawNK486",
+            "CW1rJU3i8X5NnW2IFc",
+            "Ct57b54aNqSpMF5g92",
+            "CLTC2c4FoX1FKSGv63",
+            "CvO8mBVfhDwYkcW7e"
+          ]
+        }
+      ]
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe detectó un escaneo de puertos TCP activo desde 143.88.18.12 hacia 143.88.18.11 barriendo múltiples puertos de administración y servicios (SSH, Telnet, SMB, RDP, VNC, HTTP), complementado con ráfagas continuas de consultas DNS no respondidas (estado S0) desde 143.88.255.10 hacia 10.0.10.1.\n\n## Evaluación del auditor\n\nLa actividad de 143.88.18.12 corresponde a reconocimiento de red (escaneo de puertos SYN/half-open en ráfaga rápida contra un host interno). Paralelamente, 143.88.255.10 genera tráfico DNS anómalo no respondido hacia un servidor interno, lo que indica un intento fallido de resolución masiva o falla de enrutamiento/disponibilidad.\n\n## Comandos de mitigación propuestos\n\n- iptables -A INPUT -s 143.88.18.12 -j DROP\n- iptables -A FORWARD -s 143.88.18.12 -j DROP"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_visible_0004__unico__r2__564d176d",
+      "arquitectura": "agente_unico",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_visible_0004__unico__r2__564d176d.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-10T05:17:28+00:00",
+    "resultado_incompleto": null
+  }
+}

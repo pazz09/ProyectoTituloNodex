@@ -1,0 +1,69 @@
+{
+  "case_id": "bgl_eva_balanceado_0001",
+  "dataset": "bgl",
+  "arquitectura": "agente_unico",
+  "repeticion": 1,
+  "config_version": "agenteunico-12casos-r1-20261110",
+  "run_id": "bgl_eva_balanceado_0001__unico__r1__f707b239",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0001",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "authentication_failure",
+        "evidence_uids": [
+          "log_record_000014",
+          "log_record_000019"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe observan dos fallos de autenticación aislados asociados a la dirección IP privada 172.16.96.116 dentro de un registro con baja cobertura de parsing estructurado y sin marcas temporales.\n\n## Evaluación del auditor\n\nEl lote presenta 20 registros en texto libre con escasa estructuración y sin marcas de tiempo. Se identifican dos intentos fallidos de inicio de sesión (log_record_000014 y log_record_000019) y referencias a la dirección IP interna 172.16.96.116. El volumen de fallos no evidencia un ataque automatizado ni compromiso del sistema. Las técnicas candidatas recuperadas por RAG relativas a manipulación o enumeración de logs no cuentan con evidencia que las sustente."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0001__unico__r1__f707b239",
+      "arquitectura": "agente_unico",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1685.001",
+          "name": "Disable or Modify Windows Event Log",
+          "similitud": null
+        },
+        {
+          "id": "T1685.004",
+          "name": "Disable or Modify Linux Audit System Log",
+          "similitud": null
+        },
+        {
+          "id": "T1654",
+          "name": "Log Enumeration",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "bgl_eva_balanceado_0001__unico__r1__f707b239.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-10T05:04:11+00:00",
+    "resultado_incompleto": null
+  }
+}

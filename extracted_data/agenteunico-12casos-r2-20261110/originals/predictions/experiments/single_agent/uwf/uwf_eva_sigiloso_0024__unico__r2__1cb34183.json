@@ -1,0 +1,94 @@
+{
+  "case_id": "uwf_eva_sigiloso_0024",
+  "dataset": "uwf",
+  "arquitectura": "agente_unico",
+  "repeticion": 2,
+  "config_version": "agenteunico-12casos-r2-20261110",
+  "run_id": "uwf_eva_sigiloso_0024__unico__r2__1cb34183",
+  "salida": {
+    "case_id": "uwf_eva_sigiloso_0024",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-17 23:21:25.382073",
+        "entities": [],
+        "event_type": "dns_request_timeout",
+        "evidence_uids": [
+          "CNvd5j17kRKYOw9mi1",
+          "CzmuG52ac5O2sNzX5h"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-17 23:22:18.618953",
+        "entities": [],
+        "event_type": "dns_resolution_success",
+        "evidence_uids": [
+          "CHgUky4n8gCl8y6W58"
+        ]
+      },
+      {
+        "uid": "event_003",
+        "timestamp": "2021-12-17 23:51:10.130569",
+        "entities": [],
+        "event_type": "dns_request_timeout_persistent",
+        "evidence_uids": [
+          "CWj9PxY0ZNaKmNot6",
+          "CQzdgLj1lmCosJWXj",
+          "CVdNOy1TZxO0jjLRPc",
+          "CxKHx5MMwv2yK4exh"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002",
+      "event_003"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nFalla operativa de conectividad DNS hacia un servidor de nombres inaccesible o no responsivo\n\n## Evaluación del auditor\n\nSe observa un flujo persistente y periódico (aproximadamente cada 30 segundos) de peticiones DNS (puerto 53/UDP) originadas desde la dirección 143.88.255.10 hacia la IP privada 10.0.10.1. Todas las conexiones finalizan con estado 'S0' (sin respuesta del servidor), acumulando 264 intentos fallidos. Simultáneamente, otros equipos de la red resuelven DNS de forma exitosa contra 143.88.1.1 (estado 'SF'). No existen indicios de actividad maliciosa, C2 ni exfiltración; la evidencia apunta a una desconfiguración de red, fallo de enrutamiento o servicio DNS caído en 10.0.10.1.\n\n## Comandos de mitigación propuestos\n\n- ping -c 4 10.0.10.1\n- traceroute 10.0.10.1\n- dig @10.0.10.1 localhost +time=2\n- cat /etc/resolv.conf\n- systemctl status systemd-resolved"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_sigiloso_0024__unico__r2__1cb34183",
+      "arquitectura": "agente_unico",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1568.002",
+          "name": "Domain Generation Algorithms",
+          "similitud": null
+        },
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_sigiloso_0024__unico__r2__1cb34183.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-10T05:21:49+00:00",
+    "resultado_incompleto": null
+  }
+}

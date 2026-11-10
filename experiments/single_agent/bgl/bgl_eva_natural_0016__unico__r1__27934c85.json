@@ -1,0 +1,42 @@
+{
+  "case_id": "bgl_eva_natural_0016",
+  "dataset": "bgl",
+  "arquitectura": "agente_unico",
+  "repeticion": 1,
+  "config_version": "agenteunico-12casos-r1-20261110",
+  "run_id": "bgl_eva_natural_0016__unico__r1__27934c85",
+  "salida": {
+    "case_id": "bgl_eva_natural_0016",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nRegistros en texto plano no estructurados sin evidencia observable de actividad maliciosa ni fallos operativos.\n\n## Evaluación del auditor\n\nEl lote consta de 20 líneas en formato de texto plano con una cobertura de análisis del 0%, careciendo de marcas de tiempo y campos de servicio estructurados. Se identifican cuatro direcciones IP privadas sin métricas de fallos ni indicadores de compromiso. La baja confianza se debe a la ausencia de estructura en los registros y falta de contexto semántico."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0016__unico__r1__27934c85",
+      "arquitectura": "agente_unico",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0016__unico__r1__27934c85.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-10T05:01:59+00:00",
+    "resultado_incompleto": null
+  }
+}

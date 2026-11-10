@@ -1,0 +1,88 @@
+{
+  "case_id": "uwf_eva_sigiloso_0018",
+  "dataset": "uwf",
+  "arquitectura": "agente_unico",
+  "repeticion": 3,
+  "config_version": "agenteunico-12casos-r3-20261110",
+  "run_id": "uwf_eva_sigiloso_0018__unico__r3__c22d7012",
+  "registrado_utc": "2026-11-10T05:27:55.584541+00:00",
+  "consulta": "Lote de tipo zeek. Predominan eventos de evento_critico sobre el servicio dns (282 eventos). 282 eventos criticos del sistema registrados. Actividad de 19 IPs distintas.",
+  "consulta_sha256": "7c19c3cf511b58fecca32c6b53f2f619f86e49b5efc0ea32884515c711ba370b",
+  "consulta_interna_igual": [
+    true
+  ],
+  "candidatos": [
+    {
+      "technique_id": "T1584.002",
+      "name": "DNS Server",
+      "similitud": 0.469
+    },
+    {
+      "technique_id": "T1071.004",
+      "name": "DNS",
+      "similitud": 0.463
+    },
+    {
+      "technique_id": "T1583.002",
+      "name": "DNS Server",
+      "similitud": 0.43
+    }
+  ],
+  "n_candidatos": 3,
+  "candidatos_completos": [
+    {
+      "texto": "DNS Server. Adversaries may compromise third-party DNS servers that can be used during targeting. During post-compromise activity, adversaries may utilize DNS traffic for various tasks, including for Command and Control (ex: [Application Layer Protocol](https://attack.mitre.org/techniques/T1071)). Instead of setting up their own DNS servers, adversaries may compromise third-party DNS servers in support of operations.\n\nBy compromising DNS servers, adversaries can alter DNS records. Such control can allow for redirection of an organization's traffic, facilitating Collection and Credential Access efforts for the adversary.(Citation: Talos DNSpionage Nov 2018)(Citation: FireEye DNS Hijack 2019)  Additionally, adversaries may leverage such control in conjunction with [Digital Certificates](http",
+      "meta": {
+        "tactics": "resource-development",
+        "url": "https://attack.mitre.org/techniques/T1584/002",
+        "name": "DNS Server",
+        "is_subtechnique": true,
+        "technique_id": "T1584.002"
+      },
+      "similitud": 0.469
+    },
+    {
+      "texto": "DNS. Adversaries may communicate using the Domain Name System (DNS) application layer protocol to avoid detection/network filtering by blending in with existing traffic. Commands to the remote system, and often the results of those commands, will be embedded within the protocol traffic between the client and server. \n\nThe DNS protocol serves an administrative function in computer networking and thus may be very common in environments. DNS traffic may also be allowed even before network authentication is completed. DNS packets contain many fields and headers in which data can be concealed. Often known as DNS tunneling, adversaries may abuse DNS to communicate with systems under their control within a victim network while also mimicking normal, expected traffic.(Citation: PAN DNS Tunneling)(",
+      "meta": {
+        "technique_id": "T1071.004",
+        "url": "https://attack.mitre.org/techniques/T1071/004",
+        "is_subtechnique": true,
+        "name": "DNS",
+        "tactics": "command-and-control"
+      },
+      "similitud": 0.463
+    },
+    {
+      "texto": "DNS Server. Adversaries may set up their own Domain Name System (DNS) servers that can be used during targeting. During post-compromise activity, adversaries may utilize DNS traffic for various tasks, including for Command and Control (ex: [Application Layer Protocol](https://attack.mitre.org/techniques/T1071)). Instead of hijacking existing DNS servers, adversaries may opt to configure and run their own DNS servers in support of operations.\n\nBy running their own DNS servers, adversaries can have more control over how they administer server-side DNS C2 traffic ([DNS](https://attack.mitre.org/techniques/T1071/004)). With control over a DNS server, adversaries can configure DNS applications to provide conditional responses to malware and, generally, have more flexibility in the structure of ",
+      "meta": {
+        "technique_id": "T1583.002",
+        "url": "https://attack.mitre.org/techniques/T1583/002",
+        "is_subtechnique": true,
+        "name": "DNS Server",
+        "tactics": "resource-development"
+      },
+      "similitud": 0.43
+    }
+  ],
+  "llegada_al_prompt": [
+    {
+      "bloque_presente": true,
+      "lista_completa_en_bloque": true,
+      "ids_en_bloque": {
+        "T1584.002": true,
+        "T1071.004": true,
+        "T1583.002": true
+      }
+    }
+  ],
+  "segundos_recuperacion_mitre": 0.089984,
+  "segundos_preprocesamiento_consulta": 0.057178,
+  "segundos_carga_memoria": 12.264963,
+  "llm_json": {
+    "llamadas": 1,
+    "invalidas": 0
+  },
+  "solicitudes_llm_json": 1,
+  "prompt_chars": 103338,
+  "prompt_sha256": "f7c4c4ffba95f5fa1f231167a0d41f3c641215e7a8bae535962e4e724e62c1ac"
+}

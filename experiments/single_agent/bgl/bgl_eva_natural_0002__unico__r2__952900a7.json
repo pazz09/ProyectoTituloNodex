@@ -1,0 +1,42 @@
+{
+  "case_id": "bgl_eva_natural_0002",
+  "dataset": "bgl",
+  "arquitectura": "agente_unico",
+  "repeticion": 2,
+  "config_version": "agenteunico-12casos-r2-20261110",
+  "run_id": "bgl_eva_natural_0002__unico__r2__952900a7",
+  "salida": {
+    "case_id": "bgl_eva_natural_0002",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nRegistros en texto plano no estructurado correspondientes a tráfico de red o eventos genéricos asociados a la IP privada 172.16.96.116, sin patrones anómalos o de compromiso identificables.\n\n## Evaluación del auditor\n\nLa cobertura de parsing es del 0% y no existen marcas temporales ni detalle del contenido de los eventos. Con base en la información determinística provista no se identifican fallos operacionales ni actividad maliciosa, manteniéndose una baja certeza por la falta de estructura en los registros."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0002__unico__r2__952900a7",
+      "arquitectura": "agente_unico",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0002__unico__r2__952900a7.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-10T05:20:54+00:00",
+    "resultado_incompleto": null
+  }
+}

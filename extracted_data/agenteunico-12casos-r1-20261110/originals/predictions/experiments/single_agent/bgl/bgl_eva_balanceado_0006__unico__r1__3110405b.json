@@ -1,0 +1,42 @@
+{
+  "case_id": "bgl_eva_balanceado_0006",
+  "dataset": "bgl",
+  "arquitectura": "agente_unico",
+  "repeticion": 1,
+  "config_version": "agenteunico-12casos-r1-20261110",
+  "run_id": "bgl_eva_balanceado_0006__unico__r1__3110405b",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0006",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nRegistros de texto plano no estructurados sin timestamps ni indicadores de actividad maliciosa.\n\n## Evaluación del auditor\n\nEl lote contiene 20 líneas en formato texto libre con una cobertura de parsing del 0%, lo que impide una decodificación profunda de los campos. Se identifica únicamente la IP de red privada 10.1.1.164 en un único registro sin parámetros asociados a ataques, errores de autenticación o comportamientos anómalos. No se evidencia incidente de seguridad ni fallas operativas explícitas."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0006__unico__r1__3110405b",
+      "arquitectura": "agente_unico",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0006__unico__r1__3110405b.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-10T05:00:02+00:00",
+    "resultado_incompleto": null
+  }
+}

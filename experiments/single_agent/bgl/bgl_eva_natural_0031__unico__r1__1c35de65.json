@@ -1,0 +1,42 @@
+{
+  "case_id": "bgl_eva_natural_0031",
+  "dataset": "bgl",
+  "arquitectura": "agente_unico",
+  "repeticion": 1,
+  "config_version": "agenteunico-12casos-r1-20261110",
+  "run_id": "bgl_eva_natural_0031__unico__r1__1c35de65",
+  "salida": {
+    "case_id": "bgl_eva_natural_0031",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLote de registros en texto plano sin estructura reconocida ni marcas temporales identificables, sin evidencia observable de actividad maliciosa o fallos operativos.\n\n## Evaluación del auditor\n\nEl lote contiene 20 líneas en formato de texto no estructurado con una cobertura de análisis del 0%. No se extrajeron direcciones IP, identidades de usuario, códigos de estado ni marcas de tiempo. Debido a la ausencia total de datos estructurados e indicadores de compromiso en los registros analizados, no es posible confirmar actividad anómala o incidentes de seguridad, lo que reduce el nivel de certeza."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0031__unico__r1__1c35de65",
+      "arquitectura": "agente_unico",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0031__unico__r1__1c35de65.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-10T05:01:08+00:00",
+    "resultado_incompleto": null
+  }
+}

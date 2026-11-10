@@ -1,0 +1,95 @@
+{
+  "case_id": "uwf_eva_sigiloso_0018",
+  "dataset": "uwf",
+  "arquitectura": "agente_unico",
+  "repeticion": 3,
+  "config_version": "agenteunico-12casos-r3-20261110",
+  "run_id": "uwf_eva_sigiloso_0018__unico__r3__c22d7012",
+  "salida": {
+    "case_id": "uwf_eva_sigiloso_0018",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-26 09:41:45.380404",
+        "entities": [],
+        "event_type": "dns_request_timeout",
+        "evidence_uids": [
+          "CyiKiK2sfCk0YNgx1d",
+          "CGWAkv1zQAEnbE5Ew7",
+          "CbRwTg2wB5Imc3MHvf"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-26 09:43:04.555047",
+        "entities": [],
+        "event_type": "dns_query_successful",
+        "evidence_uids": [
+          "CCkKrQ3HuuHKVGMLJ8"
+        ]
+      },
+      {
+        "uid": "event_003",
+        "timestamp": "2021-12-26 10:12:30.631522",
+        "entities": [],
+        "event_type": "dns_request_timeout",
+        "evidence_uids": [
+          "CU8gjV1OkZBJMdxSQh",
+          "Cdr03RgU5qsBrI6Vb",
+          "CrCaG821coIjXeF9ig",
+          "CMxshC2PgGCBCv2Wjf"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002",
+      "event_003"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nFalla operativa de conectividad DNS: el host 143.88.255.10 genera ráfagas periódicas repetitivas de solicitudes DNS UDP/53 dirigidas a la IP privada 10.0.10.1 sin recibir respuesta alguna (estado Zeek S0). No hay evidencia suficiente de tráfico malicioso o tunelización confirmada.\n\n## Evaluación del auditor\n\nSe observa un patrón anómalo de tráfico de red en el que 143.88.255.10 envía de forma continua cada 30 segundos múltiples consultas DNS hacia 10.0.10.1 con resultado S0 (sin respuesta/timeout). En contraste, otros clientes de la red (p. ej. 143.88.1.51) resuelven correctamente consultas contra 143.88.1.1 (estado SF). El comportamiento se alinea con una mala configuración de resolución DNS o la caída/inalcanzabilidad del servidor DNS interno 10.0.10.1, sin que se confirme tunelización o compromiso de seguridad.\n\n## Comandos de mitigación propuestos\n\n- cat /etc/resolv.conf\n- resolvectl status\n- dig @10.0.10.1 healthcheck.internal\n- nc -zvu 10.0.10.1 53\n- tcpdump -nn -i any host 143.88.255.10 and port 53"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_sigiloso_0018__unico__r3__c22d7012",
+      "arquitectura": "agente_unico",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1583.002",
+          "name": "DNS Server",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_sigiloso_0018__unico__r3__c22d7012.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-10T05:27:19+00:00",
+    "resultado_incompleto": null
+  }
+}

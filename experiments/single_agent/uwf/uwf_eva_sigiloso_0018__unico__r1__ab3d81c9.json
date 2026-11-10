@@ -1,0 +1,92 @@
+{
+  "case_id": "uwf_eva_sigiloso_0018",
+  "dataset": "uwf",
+  "arquitectura": "agente_unico",
+  "repeticion": 1,
+  "config_version": "agenteunico-12casos-r1-20261110",
+  "run_id": "uwf_eva_sigiloso_0018__unico__r1__ab3d81c9",
+  "salida": {
+    "case_id": "uwf_eva_sigiloso_0018",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-26 09:41:45.380404",
+        "entities": [],
+        "event_type": "dns_request_unanswered",
+        "evidence_uids": [
+          "CyiKiK2sfCk0YNgx1d",
+          "CGWAkv1zQAEnbE5Ew7",
+          "CbRwTg2wB5Imc3MHvf"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-26 09:43:04.555047",
+        "entities": [],
+        "event_type": "dns_resolution_success",
+        "evidence_uids": [
+          "CCkKrQ3HuuHKVGMLJ8"
+        ]
+      },
+      {
+        "uid": "event_003",
+        "timestamp": "2021-12-26 10:12:30.632025",
+        "entities": [],
+        "event_type": "dns_request_unanswered",
+        "evidence_uids": [
+          "CMxshC2PgGCBCv2Wjf"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002",
+      "event_003"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe observa un alto volumen de tráfico DNS recurrente desde 143.88.255.10 hacia 10.0.10.1:53 en intervalos regulares de ~30 segundos con estado S0 (sin respuesta del servidor). Esto indica un fallo de conectividad o indisponibilidad del servidor DNS de destino, constituyendo una anomalía operativa sin indicios concluyentes de actividad maliciosa o compromiso de seguridad.\n\n## Evaluación del auditor\n\nEl 88.6% de los eventos del lote corresponden a intentos fallidos de resolución DNS (S0) dirigidos a 10.0.10.1. El resto de la red opera con normalidad, evidenciando resolución exitosa hacia otros servidores locales (como 143.88.1.1). La ausencia de payload observable o persistencia maliciosa descarta por el momento un incidente de C2 o exfiltración, apuntando a una degradación de servicio o error de configuración de red.\n\n## Comandos de mitigación propuestos\n\n- ping -c 4 10.0.10.1\n- dig @10.0.10.1 localhost\n- tcpdump -nn -i any host 10.0.10.1 and udp port 53 -c 20\n- systemctl status systemd-resolved"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_sigiloso_0018__unico__r1__ab3d81c9",
+      "arquitectura": "agente_unico",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1583.002",
+          "name": "DNS Server",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_sigiloso_0018__unico__r1__ab3d81c9.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-10T05:03:06+00:00",
+    "resultado_incompleto": null
+  }
+}

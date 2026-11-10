@@ -1,0 +1,487 @@
+{
+  "creado_utc": "2026-11-10T04:54:58.331497+00:00",
+  "config_version": "agenteunico-12casos-r1-20261110",
+  "llamadas_reales_al_modelo": 0,
+  "credencial_en_el_proceso_hijo": false,
+  "casos": [
+    {
+      "case_id": "bgl_eva_balanceado_0006",
+      "dataset": "bgl",
+      "candidatos": [],
+      "consulta": "Lote de tipo text. Predominan eventos de evento_normal sobre el servicio desconocido (20 eventos). Actividad de 1 IPs distintas.",
+      "consulta_sha256": "f43397aa639ac12d2989d28bd255c0ae646c57c1f0d07721e7045d7c07fcbbde",
+      "consulta_interna_igual": true,
+      "llegada_al_prompt": {
+        "bloque_presente": true,
+        "lista_completa_en_bloque": true,
+        "ids_en_bloque": {}
+      },
+      "prompt_chars": 3371,
+      "system_chars": 1996,
+      "candidatos_chars": 2,
+      "segundos_recuperacion_mitre": 0.09844,
+      "llamadas_reales_al_modelo": 0,
+      "orden": 1,
+      "nodex_r1": [],
+      "comparacion_nodex_r1": null
+    },
+    {
+      "case_id": "uwf_eva_visible_0004",
+      "dataset": "uwf",
+      "candidatos": [
+        {
+          "technique_id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": 0.435
+        },
+        {
+          "technique_id": "T1071.004",
+          "name": "DNS",
+          "similitud": 0.435
+        }
+      ],
+      "consulta": "Lote de tipo zeek. Predominan eventos de evento_critico sobre el servicio dns (279 eventos). 279 eventos criticos del sistema registrados. Actividad de 17 IPs distintas.",
+      "consulta_sha256": "2803ff1401f0036ab212ccb0f1b2d88efd9ca8d27da08613fb09b8517a2ad013",
+      "consulta_interna_igual": true,
+      "llegada_al_prompt": {
+        "bloque_presente": true,
+        "lista_completa_en_bloque": true,
+        "ids_en_bloque": {
+          "T1584.002": true,
+          "T1071.004": true
+        }
+      },
+      "prompt_chars": 100338,
+      "system_chars": 1996,
+      "candidatos_chars": 2020,
+      "segundos_recuperacion_mitre": 0.107019,
+      "llamadas_reales_al_modelo": 0,
+      "orden": 2,
+      "nodex_r1": [
+        {
+          "technique_id": "T1584.002",
+          "similitud": 0.435
+        },
+        {
+          "technique_id": "T1071.004",
+          "similitud": 0.435
+        }
+      ],
+      "comparacion_nodex_r1": {
+        "ids_iguales": true,
+        "diferencia_maxima_similitud": 0.0
+      }
+    },
+    {
+      "case_id": "bgl_eva_natural_0031",
+      "dataset": "bgl",
+      "candidatos": [],
+      "consulta": "Lote de tipo text. Predominan eventos de evento_normal sobre el servicio desconocido (20 eventos).",
+      "consulta_sha256": "e70e9f4e07b1d5066cba77a4ee479c49c683d940db574b4cc1859762cc7c97ed",
+      "consulta_interna_igual": true,
+      "llegada_al_prompt": {
+        "bloque_presente": true,
+        "lista_completa_en_bloque": true,
+        "ids_en_bloque": {}
+      },
+      "prompt_chars": 3024,
+      "system_chars": 1996,
+      "candidatos_chars": 2,
+      "segundos_recuperacion_mitre": 0.113234,
+      "llamadas_reales_al_modelo": 0,
+      "orden": 3,
+      "nodex_r1": [],
+      "comparacion_nodex_r1": null
+    },
+    {
+      "case_id": "bgl_eva_balanceado_0005",
+      "dataset": "bgl",
+      "candidatos": [],
+      "consulta": "Lote de tipo text. Predominan eventos de evento_normal sobre el servicio desconocido (20 eventos). Actividad de 1 IPs distintas.",
+      "consulta_sha256": "f43397aa639ac12d2989d28bd255c0ae646c57c1f0d07721e7045d7c07fcbbde",
+      "consulta_interna_igual": true,
+      "llegada_al_prompt": {
+        "bloque_presente": true,
+        "lista_completa_en_bloque": true,
+        "ids_en_bloque": {}
+      },
+      "prompt_chars": 3416,
+      "system_chars": 1996,
+      "candidatos_chars": 2,
+      "segundos_recuperacion_mitre": 0.094143,
+      "llamadas_reales_al_modelo": 0,
+      "orden": 4,
+      "nodex_r1": [],
+      "comparacion_nodex_r1": null
+    },
+    {
+      "case_id": "bgl_eva_natural_0016",
+      "dataset": "bgl",
+      "candidatos": [],
+      "consulta": "Lote de tipo text. Predominan eventos de evento_normal sobre el servicio desconocido (20 eventos). Actividad de 4 IPs distintas.",
+      "consulta_sha256": "0d41c89ef5d18099374956a5bd104ffce9ec0d97a1740d81dd8ce07100a155b5",
+      "consulta_interna_igual": true,
+      "llegada_al_prompt": {
+        "bloque_presente": true,
+        "lista_completa_en_bloque": true,
+        "ids_en_bloque": {}
+      },
+      "prompt_chars": 4425,
+      "system_chars": 1996,
+      "candidatos_chars": 2,
+      "segundos_recuperacion_mitre": 0.099465,
+      "llamadas_reales_al_modelo": 0,
+      "orden": 5,
+      "nodex_r1": [],
+      "comparacion_nodex_r1": null
+    },
+    {
+      "case_id": "uwf_eva_visible_0027",
+      "dataset": "uwf",
+      "candidatos": [
+        {
+          "technique_id": "T1071.004",
+          "name": "DNS",
+          "similitud": 0.45
+        },
+        {
+          "technique_id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": 0.44
+        },
+        {
+          "technique_id": "T1590.002",
+          "name": "DNS",
+          "similitud": 0.424
+        }
+      ],
+      "consulta": "Lote de tipo zeek. Predominan eventos de evento_critico sobre el servicio dns (272 eventos). 272 eventos criticos del sistema registrados. Actividad de 15 IPs distintas.",
+      "consulta_sha256": "227aed2198525dd0f5d5f609ee4812543889f7aa7a571c481065eb947236682f",
+      "consulta_interna_igual": true,
+      "llegada_al_prompt": {
+        "bloque_presente": true,
+        "lista_completa_en_bloque": true,
+        "ids_en_bloque": {
+          "T1071.004": true,
+          "T1584.002": true,
+          "T1590.002": true
+        }
+      },
+      "prompt_chars": 102021,
+      "system_chars": 1996,
+      "candidatos_chars": 3019,
+      "segundos_recuperacion_mitre": 0.102184,
+      "llamadas_reales_al_modelo": 0,
+      "orden": 6,
+      "nodex_r1": [
+        {
+          "technique_id": "T1071.004",
+          "similitud": 0.45
+        },
+        {
+          "technique_id": "T1584.002",
+          "similitud": 0.44
+        },
+        {
+          "technique_id": "T1590.002",
+          "similitud": 0.424
+        }
+      ],
+      "comparacion_nodex_r1": {
+        "ids_iguales": true,
+        "diferencia_maxima_similitud": 0.0
+      }
+    },
+    {
+      "case_id": "uwf_eva_sigiloso_0018",
+      "dataset": "uwf",
+      "candidatos": [
+        {
+          "technique_id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": 0.469
+        },
+        {
+          "technique_id": "T1071.004",
+          "name": "DNS",
+          "similitud": 0.463
+        },
+        {
+          "technique_id": "T1583.002",
+          "name": "DNS Server",
+          "similitud": 0.43
+        }
+      ],
+      "consulta": "Lote de tipo zeek. Predominan eventos de evento_critico sobre el servicio dns (282 eventos). 282 eventos criticos del sistema registrados. Actividad de 19 IPs distintas.",
+      "consulta_sha256": "7c19c3cf511b58fecca32c6b53f2f619f86e49b5efc0ea32884515c711ba370b",
+      "consulta_interna_igual": true,
+      "llegada_al_prompt": {
+        "bloque_presente": true,
+        "lista_completa_en_bloque": true,
+        "ids_en_bloque": {
+          "T1584.002": true,
+          "T1071.004": true,
+          "T1583.002": true
+        }
+      },
+      "prompt_chars": 103338,
+      "system_chars": 1996,
+      "candidatos_chars": 3033,
+      "segundos_recuperacion_mitre": 0.103951,
+      "llamadas_reales_al_modelo": 0,
+      "orden": 7,
+      "nodex_r1": [
+        {
+          "technique_id": "T1584.002",
+          "similitud": 0.469
+        },
+        {
+          "technique_id": "T1071.004",
+          "similitud": 0.463
+        },
+        {
+          "technique_id": "T1583.002",
+          "similitud": 0.43
+        }
+      ],
+      "comparacion_nodex_r1": {
+        "ids_iguales": true,
+        "diferencia_maxima_similitud": 0.0
+      }
+    },
+    {
+      "case_id": "bgl_eva_natural_0002",
+      "dataset": "bgl",
+      "candidatos": [],
+      "consulta": "Lote de tipo text. Predominan eventos de evento_normal sobre el servicio desconocido (20 eventos). Actividad de 1 IPs distintas.",
+      "consulta_sha256": "f43397aa639ac12d2989d28bd255c0ae646c57c1f0d07721e7045d7c07fcbbde",
+      "consulta_interna_igual": true,
+      "llegada_al_prompt": {
+        "bloque_presente": true,
+        "lista_completa_en_bloque": true,
+        "ids_en_bloque": {}
+      },
+      "prompt_chars": 3596,
+      "system_chars": 1996,
+      "candidatos_chars": 2,
+      "segundos_recuperacion_mitre": 0.095334,
+      "llamadas_reales_al_modelo": 0,
+      "orden": 8,
+      "nodex_r1": [],
+      "comparacion_nodex_r1": null
+    },
+    {
+      "case_id": "bgl_eva_balanceado_0001",
+      "dataset": "bgl",
+      "candidatos": [
+        {
+          "technique_id": "T1685.001",
+          "name": "Disable or Modify Windows Event Log",
+          "similitud": 0.527
+        },
+        {
+          "technique_id": "T1685.004",
+          "name": "Disable or Modify Linux Audit System Log",
+          "similitud": 0.49
+        },
+        {
+          "technique_id": "T1654",
+          "name": "Log Enumeration",
+          "similitud": 0.458
+        }
+      ],
+      "consulta": "Lote de tipo auth_log. Predominan eventos de evento_normal sobre el servicio desconocido (18 eventos). 2 intentos fallidos de autenticacion desde 1 IPs distintas.",
+      "consulta_sha256": "85fc28a7a897d09a0001a8dfe724d4b71d58b1eb0f209a1992438b3599eca537",
+      "consulta_interna_igual": true,
+      "llegada_al_prompt": {
+        "bloque_presente": true,
+        "lista_completa_en_bloque": true,
+        "ids_en_bloque": {
+          "T1685.001": true,
+          "T1685.004": true,
+          "T1654": true
+        }
+      },
+      "prompt_chars": 6795,
+      "system_chars": 1996,
+      "candidatos_chars": 3081,
+      "segundos_recuperacion_mitre": 0.112078,
+      "llamadas_reales_al_modelo": 0,
+      "orden": 9,
+      "nodex_r1": [],
+      "comparacion_nodex_r1": null
+    },
+    {
+      "case_id": "uwf_eva_sigiloso_0024",
+      "dataset": "uwf",
+      "candidatos": [
+        {
+          "technique_id": "T1071.004",
+          "name": "DNS",
+          "similitud": 0.434
+        },
+        {
+          "technique_id": "T1568.002",
+          "name": "Domain Generation Algorithms",
+          "similitud": 0.434
+        },
+        {
+          "technique_id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": 0.429
+        }
+      ],
+      "consulta": "Lote de tipo zeek. Predominan eventos de evento_critico sobre el servicio dns (276 eventos). 276 eventos criticos del sistema registrados. Actividad de 18 IPs distintas.",
+      "consulta_sha256": "ffaef207fa469421d2bfcacc501b5cd3355d8dfd00ea0431aa3dabce1cdb98d4",
+      "consulta_interna_igual": true,
+      "llegada_al_prompt": {
+        "bloque_presente": true,
+        "lista_completa_en_bloque": true,
+        "ids_en_bloque": {
+          "T1071.004": true,
+          "T1568.002": true,
+          "T1584.002": true
+        }
+      },
+      "prompt_chars": 102979,
+      "system_chars": 1996,
+      "candidatos_chars": 3051,
+      "segundos_recuperacion_mitre": 0.102514,
+      "llamadas_reales_al_modelo": 0,
+      "orden": 10,
+      "nodex_r1": [
+        {
+          "technique_id": "T1071.004",
+          "similitud": 0.434
+        },
+        {
+          "technique_id": "T1568.002",
+          "similitud": 0.434
+        },
+        {
+          "technique_id": "T1584.002",
+          "similitud": 0.429
+        }
+      ],
+      "comparacion_nodex_r1": {
+        "ids_iguales": true,
+        "diferencia_maxima_similitud": 0.0
+      }
+    },
+    {
+      "case_id": "uwf_eva_visible_0028",
+      "dataset": "uwf",
+      "candidatos": [
+        {
+          "technique_id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": 0.451
+        },
+        {
+          "technique_id": "T1071.004",
+          "name": "DNS",
+          "similitud": 0.449
+        },
+        {
+          "technique_id": "T1590.002",
+          "name": "DNS",
+          "similitud": 0.435
+        }
+      ],
+      "consulta": "Lote de tipo zeek. Predominan eventos de evento_critico sobre el servicio dns (270 eventos). 270 eventos criticos del sistema registrados. Actividad de 16 IPs distintas.",
+      "consulta_sha256": "cf77a41519f845f60fcd0dea4786073eeea454c5df10c0c0d02e6c32427f9a2e",
+      "consulta_interna_igual": true,
+      "llegada_al_prompt": {
+        "bloque_presente": true,
+        "lista_completa_en_bloque": true,
+        "ids_en_bloque": {
+          "T1584.002": true,
+          "T1071.004": true,
+          "T1590.002": true
+        }
+      },
+      "prompt_chars": 102328,
+      "system_chars": 1996,
+      "candidatos_chars": 3021,
+      "segundos_recuperacion_mitre": 0.101941,
+      "llamadas_reales_al_modelo": 0,
+      "orden": 11,
+      "nodex_r1": [
+        {
+          "technique_id": "T1584.002",
+          "similitud": 0.451
+        },
+        {
+          "technique_id": "T1071.004",
+          "similitud": 0.449
+        },
+        {
+          "technique_id": "T1590.002",
+          "similitud": 0.435
+        }
+      ],
+      "comparacion_nodex_r1": {
+        "ids_iguales": true,
+        "diferencia_maxima_similitud": 0.0
+      }
+    },
+    {
+      "case_id": "uwf_eva_sigiloso_0013",
+      "dataset": "uwf",
+      "candidatos": [
+        {
+          "technique_id": "T1071.004",
+          "name": "DNS",
+          "similitud": 0.474
+        },
+        {
+          "technique_id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": 0.452
+        },
+        {
+          "technique_id": "T1590.002",
+          "name": "DNS",
+          "similitud": 0.445
+        }
+      ],
+      "consulta": "Lote de tipo zeek. Predominan eventos de evento_critico sobre el servicio dns (251 eventos). 251 eventos criticos del sistema registrados. Actividad de 18 IPs distintas.",
+      "consulta_sha256": "325670f041c49e9131b494cc4670d582aaa2c2482254fc4ae0b34816de739545",
+      "consulta_interna_igual": true,
+      "llegada_al_prompt": {
+        "bloque_presente": true,
+        "lista_completa_en_bloque": true,
+        "ids_en_bloque": {
+          "T1071.004": true,
+          "T1584.002": true,
+          "T1590.002": true
+        }
+      },
+      "prompt_chars": 103075,
+      "system_chars": 1996,
+      "candidatos_chars": 3021,
+      "segundos_recuperacion_mitre": 0.102283,
+      "llamadas_reales_al_modelo": 0,
+      "orden": 12,
+      "nodex_r1": [
+        {
+          "technique_id": "T1071.004",
+          "similitud": 0.474
+        },
+        {
+          "technique_id": "T1584.002",
+          "similitud": 0.452
+        },
+        {
+          "technique_id": "T1590.002",
+          "similitud": 0.445
+        }
+      ],
+      "comparacion_nodex_r1": {
+        "ids_iguales": true,
+        "diferencia_maxima_similitud": 0.0
+      }
+    }
+  ],
+  "semilla_intacta": true
+}

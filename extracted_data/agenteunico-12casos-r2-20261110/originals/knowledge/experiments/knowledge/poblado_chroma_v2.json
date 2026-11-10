@@ -1,0 +1,71 @@
+{
+  "origen": "C:\\Users\\antop\\AppData\\Local\\Temp\\tmpxal8_o_w\\chroma_copia",
+  "destino": "C:\\Users\\antop\\Desktop\\ProyectoTituloNodex-pruebas\\experiments\\knowledge\\chroma_v2",
+  "colecciones_copiadas": {
+    "attack_techniques": {
+      "documentos_origen": 697,
+      "documentos_destino": 697,
+      "dimension": 384
+    }
+  },
+  "colecciones_omitidas": [],
+  "metodo": "copia de vectores ya calculados; no se recalcula ninguno",
+  "funcion_de_embeddings_de_la_coleccion": "SentenceTransformerEmbeddingFunction",
+  "modelo_de_embeddings": "all-MiniLM-L6-v2",
+  "original_sin_modificar": true,
+  "sha256_original_antes": "799afe23130225e6d54d4b773b751c66f1452ac4839d748306b954fb65291548",
+  "sha256_original_despues": "799afe23130225e6d54d4b773b751c66f1452ac4839d748306b954fb65291548",
+  "inventario_resultante": {
+    "existe": true,
+    "ruta": "C:\\Users\\antop\\Desktop\\ProyectoTituloNodex-pruebas\\experiments\\knowledge\\chroma_v2",
+    "bytes_sqlite": 7245824,
+    "sha256_sqlite": "216b85cfe551f3a34127fbc1598398748315bcf099e16f2c4d97534906ab999d",
+    "colecciones": [
+      {
+        "nombre": "attack_techniques",
+        "dimension": 384,
+        "n_embeddings": 697,
+        "rol": "conocimiento",
+        "claves_metadata": {
+          "url": 697,
+          "technique_id": 697,
+          "tactics": 697,
+          "name": 697,
+          "is_subtechnique": 697,
+          "chroma:document": 697
+        }
+      }
+    ],
+    "catalogo_mitre": {
+      "tecnicas_padre": 222,
+      "subtecnicas": 475,
+      "total": 697,
+      "nota": "el campo is_subtechnique está vacío en las 697 filas; el desglose se deriva del punto en technique_id"
+    }
+  },
+  "snapshot": {
+    "archivos": {
+      "chroma.sqlite3": {
+        "bytes": 7245824,
+        "sha256": "216b85cfe551f3a34127fbc1598398748315bcf099e16f2c4d97534906ab999d"
+      },
+      "f2ad1b3d-3943-469a-b2b4-7d603e870060/data_level0.bin": {
+        "bytes": 167600,
+        "sha256": "2f7b1f517ce75b89c544f0ad07c3cf699309fce60367751a243d683d9cdf8a31"
+      },
+      "f2ad1b3d-3943-469a-b2b4-7d603e870060/header.bin": {
+        "bytes": 100,
+        "sha256": "a0e81c3b22454233bc12d0762f06dcca48261a75231cf87c79b75e69a6c00150"
+      },
+      "f2ad1b3d-3943-469a-b2b4-7d603e870060/length.bin": {
+        "bytes": 400,
+        "sha256": "a981eecabe95f3734355298eb44874e0d6115dc281261d3700810e1a0a585ebc"
+      },
+      "f2ad1b3d-3943-469a-b2b4-7d603e870060/link_lists.bin": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "bytes_totales": 7413924
+  }
+}

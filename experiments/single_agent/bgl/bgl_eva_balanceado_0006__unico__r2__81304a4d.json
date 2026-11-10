@@ -1,0 +1,42 @@
+{
+  "case_id": "bgl_eva_balanceado_0006",
+  "dataset": "bgl",
+  "arquitectura": "agente_unico",
+  "repeticion": 2,
+  "config_version": "agenteunico-12casos-r2-20261110",
+  "run_id": "bgl_eva_balanceado_0006__unico__r2__81304a4d",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0006",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nRegistros en texto no estructurado sin indicadores de compromiso ni anomalías operativas identificables, condicionado por una baja cobertura de análisis estructurado.\n\n## Evaluación del auditor\n\nSe analizaron 20 registros clasificados como texto libre sin marcas temporales ni patrones estructurados de ataque. Se observa una única dirección IP privada (10.1.1.164) en el registro log_record_000014 sin indicios de actividad maliciosa. Dada la nula cobertura de parsing estructurado (0%), la confianza se reduce, recomendando normalizar la ingesta de logs."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0006__unico__r2__81304a4d",
+      "arquitectura": "agente_unico",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0006__unico__r2__81304a4d.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-10T05:17:00+00:00",
+    "resultado_incompleto": null
+  }
+}

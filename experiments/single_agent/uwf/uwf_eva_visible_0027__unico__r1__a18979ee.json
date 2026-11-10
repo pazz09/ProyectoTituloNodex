@@ -1,0 +1,90 @@
+{
+  "case_id": "uwf_eva_visible_0027",
+  "dataset": "uwf",
+  "arquitectura": "agente_unico",
+  "repeticion": 1,
+  "config_version": "agenteunico-12casos-r1-20261110",
+  "run_id": "uwf_eva_visible_0027__unico__r1__a18979ee",
+  "salida": {
+    "case_id": "uwf_eva_visible_0027",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2022-01-02 05:31:29.634125",
+        "entities": [],
+        "event_type": "dns_query_unanswered",
+        "evidence_uids": [
+          "Crufd24zmgnFaCFECf"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2022-01-02 05:31:38.138705",
+        "entities": [],
+        "event_type": "dns_resolution_normal",
+        "evidence_uids": [
+          "CaGdXA1WpWyiUYsvDk"
+        ]
+      },
+      {
+        "uid": "event_003",
+        "timestamp": "2022-01-02 06:02:14.881954",
+        "entities": [],
+        "event_type": "dns_query_unanswered",
+        "evidence_uids": [
+          "CdNzvz1pfJaSs9gyyg"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002",
+      "event_003"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nFalla operativa y anomalía de tráfico DNS no respondido hacia un resolver inalcanzable\n\n## Evaluación del auditor\n\nSe observa un patrón anómalo y repetitivo originado en el host 143.88.255.10, el cual envía ráfagas periódicas de consultas DNS (puerto UDP 53) cada 30 segundos aproximadamente hacia la dirección privada 10.0.10.1, acumulando 262 conexiones en estado S0 (sin respuesta del servidor). En contraste, otros clientes de la red (como 143.88.1.51 y 143.88.1.53) resuelven DNS de manera exitosa (estado SF) a través de 143.88.1.1. No se evidencia tráfico de comando y control exitoso ni exfiltración comprobable debido a la ausencia total de respuestas; la evidencia apunta principalmente a un problema de configuración de red, cliente apuntando a un servidor DNS fuera de servicio o una ruta inalcanzable.\n\n## Comandos de mitigación propuestos\n\n- cat /etc/resolv.conf\n- systemd-resolve --status\n- ping -c 4 10.0.10.1\n- traceroute 10.0.10.1\n- iptables -A OUTPUT -d 10.0.10.1 -p udp --dport 53 -j REJECT"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_visible_0027__unico__r1__a18979ee",
+      "arquitectura": "agente_unico",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_visible_0027__unico__r1__a18979ee.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-10T05:02:26+00:00",
+    "resultado_incompleto": null
+  }
+}

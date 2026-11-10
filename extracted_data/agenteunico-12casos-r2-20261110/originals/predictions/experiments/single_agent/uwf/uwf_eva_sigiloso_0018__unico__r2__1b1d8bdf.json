@@ -1,0 +1,95 @@
+{
+  "case_id": "uwf_eva_sigiloso_0018",
+  "dataset": "uwf",
+  "arquitectura": "agente_unico",
+  "repeticion": 2,
+  "config_version": "agenteunico-12casos-r2-20261110",
+  "run_id": "uwf_eva_sigiloso_0018__unico__r2__1b1d8bdf",
+  "salida": {
+    "case_id": "uwf_eva_sigiloso_0018",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-26 09:41:45.380404",
+        "entities": [],
+        "event_type": "dns_request_unanswered",
+        "evidence_uids": [
+          "CyiKiK2sfCk0YNgx1d",
+          "CGWAkv1zQAEnbE5Ew7",
+          "CbRwTg2wB5Imc3MHvf"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-26 09:43:04.555047",
+        "entities": [],
+        "event_type": "dns_request_successful",
+        "evidence_uids": [
+          "CCkKrQ3HuuHKVGMLJ8"
+        ]
+      },
+      {
+        "uid": "event_003",
+        "timestamp": "2021-12-26 10:12:30.631522",
+        "entities": [],
+        "event_type": "dns_request_unanswered",
+        "evidence_uids": [
+          "CU8gjV1OkZBJMdxSQh",
+          "Cdr03RgU5qsBrI6Vb",
+          "CrCaG821coIjXeF9ig",
+          "CMxshC2PgGCBCv2Wjf"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002",
+      "event_003"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nFalla de conectividad recurrente o mala configuración de resolución DNS en el host 143.88.255.10 intentando consultar repetidamente al servidor DNS inaccesible 10.0.10.1 sin obtener respuesta (estado S0).\n\n## Evaluación del auditor\n\nSe observa un patrón sistemático de consultas DNS en intervalos de aproximadamente 30 segundos originadas en la IP 143.88.255.10 dirigidas a 10.0.10.1:53 (UDP) con resultado S0 (sin respuesta). No se identifican dominios exfiltrados ni cargas útiles que confirmen C2 o túnel DNS malicioso en la evidencia disponible, coincidiendo más con un problema operativo de enrutamiento o servicio DNS inalcanzable. El resto de tráfico de la red muestra consultas DNS operando con normalidad (SF) hacia 143.88.1.1.\n\n## Comandos de mitigación propuestos\n\n- ping -c 4 10.0.10.1\n- ip route get 10.0.10.1\n- resolvectl status\n- cat /etc/resolv.conf"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_sigiloso_0018__unico__r2__1b1d8bdf",
+      "arquitectura": "agente_unico",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1583.002",
+          "name": "DNS Server",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_sigiloso_0018__unico__r2__1b1d8bdf.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-10T05:20:16+00:00",
+    "resultado_incompleto": null
+  }
+}

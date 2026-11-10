@@ -1,0 +1,101 @@
+{
+  "case_id": "uwf_eva_visible_0028",
+  "dataset": "uwf",
+  "arquitectura": "agente_unico",
+  "repeticion": 1,
+  "config_version": "agenteunico-12casos-r1-20261110",
+  "run_id": "uwf_eva_visible_0028__unico__r1__9f1b6766",
+  "salida": {
+    "case_id": "uwf_eva_visible_0028",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-17 18:58:56.939659",
+        "entities": [],
+        "event_type": "dns_query_success",
+        "evidence_uids": [
+          "CNp69N30MREIpWdOI"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-17 18:59:15.382531",
+        "entities": [],
+        "event_type": "dns_query_timeout",
+        "evidence_uids": [
+          "Ceni8hHI43gmMFWul",
+          "Cl5NqurlbdYOxZDai"
+        ]
+      },
+      {
+        "uid": "event_003",
+        "timestamp": "2021-12-17 19:08:17.714328",
+        "entities": [],
+        "event_type": "dns_query_timeout",
+        "evidence_uids": [
+          "ChLOCB1h15rMuzSGF9"
+        ]
+      },
+      {
+        "uid": "event_004",
+        "timestamp": "2021-12-17 19:30:29.189739",
+        "entities": [],
+        "event_type": "dns_query_success",
+        "evidence_uids": [
+          "CuHb1h3zzb0p0MN2B4"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002",
+      "event_003",
+      "event_004"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nFalla de conectividad o resolución DNS hacia un servidor local inalcanzable (10.0.10.1) que genera múltiples intentos fallidos sin respuesta (S0), sin evidencia confirmada de tráfico malicioso.\n\n## Evaluación del auditor\n\nEl análisis de tráfico Zeek evidencia un volumen predominante de consultas DNS (261 registros) originadas en 143.88.255.10 con destino a 10.0.10.1:53 con estado S0 (solicitudes enviadas sin recibir respuesta). Adicionalmente, el host 143.88.0.2 registra consultas sin respuesta hacia servidores raíz públicos. En contraste, las peticiones DNS de 143.88.1.51 y 143.88.1.53 hacia 143.88.1.1 operan con normalidad (SF). No se observan patrones determinantes de exfiltración, tunelado o beaconing malicioso con la evidencia disponible; el comportamiento es consistente con una mala configuración de resolución DNS o servidor inalcanzable.\n\n## Comandos de mitigación propuestos\n\n- resolvectl status\n- cat /etc/resolv.conf\n- nc -zvu 10.0.10.1 53\n- tcpdump -nn -i any host 10.0.10.1 and port 53"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_visible_0028__unico__r1__9f1b6766",
+      "arquitectura": "agente_unico",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_visible_0028__unico__r1__9f1b6766.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-10T05:05:15+00:00",
+    "resultado_incompleto": null
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "case_id": "bgl_eva_natural_0002",
+  "dataset": "bgl",
+  "arquitectura": "agente_unico",
+  "repeticion": 1,
+  "config_version": "agenteunico-12casos-r1-20261110",
+  "run_id": "bgl_eva_natural_0002__unico__r1__25090ab1",
+  "salida": {
+    "case_id": "bgl_eva_natural_0002",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nRegistros en formato de texto no estructurado con 0% de cobertura de decodificación y sin indicios observables de actividad maliciosa.\n\n## Evaluación del auditor\n\nSe procesaron 20 registros clasificados preliminarmente como normales sin marcas temporales ni datos estructurados suficientes. Se observa la presencia de la IP privada 172.16.96.116 en algunos registros, pero la falta de decodificación estructural impide confirmar anomalías u operaciones adversas."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0002__unico__r1__25090ab1",
+      "arquitectura": "agente_unico",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0002__unico__r1__25090ab1.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-10T05:03:46+00:00",
+    "resultado_incompleto": null
+  }
+}
