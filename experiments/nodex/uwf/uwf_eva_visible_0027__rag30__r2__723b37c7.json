@@ -1,0 +1,72 @@
+{
+  "case_id": "uwf_eva_visible_0027",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 2,
+  "config_version": "enriquecido-12casos-r2-20261104",
+  "run_id": "uwf_eva_visible_0027__rag30__r2__723b37c7",
+  "condicion_rag": "enriquecido",
+  "rag_version": "rag_enriquecido_30_v1",
+  "casos_historicos": 30,
+  "salida": {
+    "case_id": "uwf_eva_visible_0027",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2022-01-02 05:31:29.634125",
+        "entities": [],
+        "event_type": "network_connection",
+        "evidence_uids": [
+          "Crufd24zmgnFaCFECf"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl análisis del tráfico entre 143.88.255.10 y 10.0.10.1 muestra 262 eventos DNS registrados predominantemente con estado de conexión S0 (solicitudes UDP sin respuesta registrada por el sensor). La correlación con los casos históricos del dataset (uwf_hist_010, uwf_hist_012) con una similitud del 99.9% confirma que este patrón corresponde a tráfico de fondo normal (línea base) de la red y no a tunelado DNS, exfiltración ni denegación de servicio activa. Por tanto, se clasifica como un falso positivo y ninguna de las técnicas MITRE ATT&CK listadas aplica.\n\n## Evaluación del auditor\n\nEl diagnóstico es adecuado y certero. El tráfico DNS observado entre 143.88.255.10 y 10.0.10.1 con estado de conexión S0 y periodicidad regular corresponde a tráfico de línea base o de fondo de la red, compatible con los casos de referencia del entorno. No se detectan anomalías volumétricas, codificación de datos, frecuencias irregulares ni indicadores asociados a exfiltración, tunelado o compromiso de servidores DNS."
+    },
+    "_meta": {
+      "run_id": "uwf_eva_visible_0027__rag30__r2__723b37c7",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_visible_0027__rag30__r2__723b37c7.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-04T23:20:48+00:00"
+  }
+}

@@ -1,0 +1,82 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3388 salida=395 razonamiento=470 total=4253
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3655 salida=180 razonamiento=390 total=4225
+   → Solicitando RAG (Se detecta un patrón anómalo masivo de conexiones DNS (244 eventos con estado S0/fallidos) desde 143.88.255.10 hacia 10.0.10.1, pero el resumen de capa de transporte (conn.log) no detalla las consultas/respuestas DNS (RR, nombres de dominio, tipos de registro). Para categorizar con precisión la técnica MITRE ATT&CK (como T1071.004 DNS C2, T1048 Exfiltración sobre DNS o T1498 DoS) y establecer las medidas de contención adecuadas según casos previos, es necesario consultar la base de conocimiento histórico y técnicas MITRE ATT&CK.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1071.004, T1584.002, T1590.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=4350 salida=211 razonamiento=442 total=5003
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=329 salida=64 razonamiento=215 total=608
+   → usar_cve: False | Razón: El diagnóstico describe un comportamiento anómalo de tráfico de red (reconocimiento o tunelización DNS) y técnicas MITRE ATT&CK, pero no especifica ninguna versión de software, producto o servicio vulnerable específico para consultar CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=258 salida=203 razonamiento=1076 total=1537
+   → 7 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=48140 salida=674 razonamiento=2886 total=51700
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=False | Se observa un comportamiento anómalo consistente en ráfagas periódicas de consultas DNS UDP hacia la dirección interna 10.0.10.1 con estado S0 (sin respuesta), espaciadas en intervalos regulares de ~30 segundos. Sin embargo, no existe evidencia concluyente de un incidente de seguridad (como C2 o tunelización DNS) en el registro de conexiones; el patrón es compatible con una falla de conectividad, caída del servidor DNS destino o mala configuración de red. La aplicación inmediata de reglas DROP y aislamiento de la IP resulta prematura y potencialmente disruptiva para la operación.
+   🔀 Router Finalización → agente_planificador (replanifica: cobertura insuficiente)
+👉 Transición completada en: 'agente_auditor_final'
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=4689 salida=323 razonamiento=671 total=5683
+   → Plan v2: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3606 salida=292 razonamiento=801 total=4699
+   → No hace falta RAG (La cobertura de parsing es del 100% y los registros muestran claramente el estado de conexión S0 y ausencia de respuestas hacia el servidor DNS, permitiendo diagnosticar la hipótesis operativa directamente sin requerir contexto histórico, en conformidad con el plan de investigación.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=343 salida=59 razonamiento=188 total=590
+   → usar_cve: False | Razón: El diagnóstico concluye que se trata de un problema operativo de conectividad, caída de servicio o error de configuración de red, sin evidencia de explotación de vulnerabilidades ni mención de software o versiones específicas susceptibles a CVE.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=272 salida=199 razonamiento=828 total=1299
+   → 6 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=48173 salida=744 razonamiento=752 total=49669
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es preciso y está debidamente fundamentado. Se registran constantes solicitudes DNS desde 143.88.255.10 hacia 10.0.10.1 con estado de conexión Zeek 'S0' (sin respuesta), lo que denota una falla operativa de conectividad, caída del resolvedor o configuración errónea en el cliente. No se evidencia canal de mando y control (C2), túnel DNS funcional ni compromiso de seguridad.
+   🔀 Router Finalización → END (MAX_REPLANS=1 alcanzado)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

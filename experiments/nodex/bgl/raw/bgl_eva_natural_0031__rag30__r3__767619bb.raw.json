@@ -1,0 +1,454 @@
+{
+  "case_id": "bgl_eva_natural_0031",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 3,
+  "config_version": "enriquecido-12casos-r3-20261104",
+  "run_id": "bgl_eva_natural_0031__rag30__r3__767619bb",
+  "condicion_rag": "enriquecido",
+  "rag_version": "rag_enriquecido_30_v1",
+  "casos_historicos": 30,
+  "estado_crudo": {
+    "resumen_logs": {
+      "formato_detectado": "text",
+      "total_lineas": 20,
+      "servicios": {
+        "desconocido": 20
+      },
+      "eventos": {
+        "evento_normal": 20
+      },
+      "ventana_temporal": {
+        "inicio": null,
+        "fin": null
+      },
+      "n_ips_distintas": 0,
+      "ips_distintas": [],
+      "por_ip": {},
+      "usuarios": {},
+      "n_usuarios_distintos": 0,
+      "codigos_respuesta": {},
+      "entidades": [],
+      "cronologia": [],
+      "cronologia_omitidos": 0,
+      "raw_procedencia": {
+        "sha256": "19ef5b20838dfd609dddbfd55629244352d4a3503774e875cac01e74a46c2921",
+        "lineas": 20,
+        "bytes": 2863
+      },
+      "reputacion_ips": {}
+    },
+    "preprocessing_metadata": {
+      "schema_version": "2.0",
+      "total_lineas_fisicas": 20,
+      "total_eventos": 20,
+      "decoder_distribution": {
+        "text": 20
+      },
+      "product_distribution": {},
+      "vendor_distribution": {},
+      "version_distribution": {},
+      "protocol_distribution": {},
+      "profile_distribution": {},
+      "severity_distribution": {},
+      "event_categories": {},
+      "event_outcomes": {},
+      "entities": {},
+      "time_window": {
+        "inicio": null,
+        "fin": null
+      },
+      "parsing": {
+        "parsed_events": 0,
+        "fallback_events": 20,
+        "coverage": 0.0
+      },
+      "segments": [
+        {
+          "index": 0,
+          "decoder": "text",
+          "line_start": 1,
+          "line_end": 20,
+          "n_records": 20,
+          "confidence": 0.1,
+          "decoder_inicial": "text",
+          "confidence_inicial": 0.1,
+          "decoder_distribution": {
+            "text": 20
+          },
+          "context": {}
+        }
+      ],
+      "entities_resumen": {},
+      "config": {
+        "LOG_DETECTION_CHUNK_SIZE": 50,
+        "LOG_ENABLE_MULTILINE": true,
+        "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+        "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+        "LOG_MAX_EVENTS": 100000,
+        "LOG_MAX_FILE_BYTES": 52428800,
+        "LOG_MAX_RAW_SAMPLES": 20,
+        "LOG_MAX_UNMAPPED_FIELDS": 100,
+        "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+        "LOG_PARSING_MODE": "hybrid",
+        "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+        "LOG_PRESERVE_RAW": true
+      }
+    },
+    "parsing_warnings": [],
+    "raw_samples": [
+      {
+        "decoder": "text",
+        "texto": "1118771934 2005.06.14 R24-M0-ND-C:J02-U11 2005-06-14-10.58.54.996783 R24-M0-ND-C:J02-U11 RAS KERNEL FATAL program interrupt: fp cr field .............0"
+      }
+    ],
+    "evidencia_logs": [
+      {
+        "uid": "log_record_000001",
+        "record_number": 1,
+        "line_start": 1,
+        "line_end": 1,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000002",
+        "record_number": 2,
+        "line_start": 2,
+        "line_end": 2,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000003",
+        "record_number": 3,
+        "line_start": 3,
+        "line_end": 3,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000004",
+        "record_number": 4,
+        "line_start": 4,
+        "line_end": 4,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000005",
+        "record_number": 5,
+        "line_start": 5,
+        "line_end": 5,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000006",
+        "record_number": 6,
+        "line_start": 6,
+        "line_end": 6,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000007",
+        "record_number": 7,
+        "line_start": 7,
+        "line_end": 7,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000008",
+        "record_number": 8,
+        "line_start": 8,
+        "line_end": 8,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000009",
+        "record_number": 9,
+        "line_start": 9,
+        "line_end": 9,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000010",
+        "record_number": 10,
+        "line_start": 10,
+        "line_end": 10,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000011",
+        "record_number": 11,
+        "line_start": 11,
+        "line_end": 11,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000012",
+        "record_number": 12,
+        "line_start": 12,
+        "line_end": 12,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000013",
+        "record_number": 13,
+        "line_start": 13,
+        "line_end": 13,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000014",
+        "record_number": 14,
+        "line_start": 14,
+        "line_end": 14,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000015",
+        "record_number": 15,
+        "line_start": 15,
+        "line_end": 15,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000016",
+        "record_number": 16,
+        "line_start": 16,
+        "line_end": 16,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000017",
+        "record_number": 17,
+        "line_start": 17,
+        "line_end": 17,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000018",
+        "record_number": 18,
+        "line_start": 18,
+        "line_end": 18,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000019",
+        "record_number": 19,
+        "line_start": 19,
+        "line_end": 19,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000020",
+        "record_number": 20,
+        "line_start": 20,
+        "line_end": 20,
+        "timestamp": null
+      }
+    ],
+    "evidencia_logs_omitidos": 0,
+    "eventos_reconstruidos": [
+      {
+        "event_id": "event_001",
+        "evidence_uids": [
+          "log_record_000001",
+          "log_record_000002",
+          "log_record_000003",
+          "log_record_000004",
+          "log_record_000005",
+          "log_record_000006",
+          "log_record_000007",
+          "log_record_000008",
+          "log_record_000009",
+          "log_record_000010",
+          "log_record_000011",
+          "log_record_000012",
+          "log_record_000013",
+          "log_record_000014",
+          "log_record_000015",
+          "log_record_000016",
+          "log_record_000017",
+          "log_record_000018",
+          "log_record_000019",
+          "log_record_000020"
+        ],
+        "timestamp": null,
+        "event_type": "kernel_hardware_failure",
+        "description": "Registro de fallos críticos y excepciones fatales de kernel/hardware en nodos de cómputo.",
+        "confidence": null
+      }
+    ],
+    "secuencia_temporal": [],
+    "tecnicas_atribuidas": [],
+    "invalid_evidence_uid_count": 0,
+    "d11_warnings": [],
+    "telemetry": {
+      "llm_call_count": 5,
+      "input_tokens": 3767,
+      "output_tokens": 1183,
+      "total_tokens": 7344,
+      "execution_time": 35.465149,
+      "replan_count": 0,
+      "intentos_correccion": 1,
+      "invalid_evidence_uid_count": 0,
+      "d11_warning_count": 0,
+      "llm_calls": [
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 529,
+          "output_tokens": 161,
+          "total_tokens": 1578,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 888,
+          "duration_s": 9.406,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 646,
+          "output_tokens": 209,
+          "total_tokens": 1178,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 323,
+          "duration_s": 5.547,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 235,
+          "output_tokens": 56,
+          "total_tokens": 679,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 388,
+          "duration_s": 4.844,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 188,
+          "output_tokens": 195,
+          "total_tokens": 759,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 376,
+          "duration_s": 6.281,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 2169,
+          "output_tokens": 562,
+          "total_tokens": 3150,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 419,
+          "duration_s": 9.328,
+          "error": null
+        }
+      ]
+    },
+    "firma": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+    "plan": {
+      "plan_version": 1,
+      "objetivo": "Evaluar los registros no estructurados para detectar posibles amenazas y determinar medidas de mitigación pertinentes.",
+      "pasos": [
+        {
+          "id": 1,
+          "accion": "triage",
+          "objetivo": "Inspeccionar las 20 líneas de texto no estructurado para clasificar los eventos y detectar indicios de compromiso.",
+          "estado": "ejecutado"
+        },
+        {
+          "id": 2,
+          "accion": "mitigacion",
+          "objetivo": "Definir recomendaciones y acciones de contención según las anomalías identificadas durante el triage.",
+          "estado": "ejecutado"
+        }
+      ],
+      "criterios_finalizacion": [
+        "Diagnóstico de los eventos en texto plano completado.",
+        "Propuesta de contención y respuesta elaborada en función de los hallazgos."
+      ]
+    },
+    "plan_objetivo": "Evaluar los registros no estructurados para detectar posibles amenazas y determinar medidas de mitigación pertinentes.",
+    "paso_actual": 2,
+    "historial_ejecucion": [
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_planificador",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "plan v1, 2 pasos: ['triage', 'mitigacion']"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 1,
+        "nodo": "agente_analista_triage",
+        "accion": "triage",
+        "estado": "ejecutado",
+        "resumen": "diagnóstico producido"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_selector_herramientas",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "usar_cve=False"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 2,
+        "nodo": "agente_ingeniero_mitigacion",
+        "accion": "mitigacion",
+        "estado": "ejecutado",
+        "resumen": "5 comandos propuestos"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "tool_validar_comandos",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "comandos válidos"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_auditor_final",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "confianza=0.8 cobertura_suficiente=True"
+      }
+    ],
+    "desviaciones_plan": [],
+    "historial_planes": [],
+    "replan_count": 0,
+    "diagnostico": "Los registros corresponden a mensajes de diagnóstico y fallos de hardware/kernel del sistema de supercomputación BlueGene/L (logs RAS KERNEL FATAL, en este caso interrupciones de programa por errores de registro de punto flotante). No se observan indicadores de compromiso (IoCs), actividad maliciosa ni vectores de ataque asociados a técnicas MITRE ATT&CK. Se clasifica como un evento no malicioso (falla operativa/hardware). Como mitigación, se recomienda derivar los eventos al equipo de soporte de infraestructura y hardware para revisión de la integridad de los nodos de cómputo afectados.",
+    "necesita_rag": false,
+    "usar_cve": false,
+    "razon_seleccion": "El diagnóstico confirma que se trata de un fallo operativo y de hardware no malicioso en BlueGene/L, sin indicios de ataques ni vulnerabilidades explotables que requieran la consulta de CVEs.",
+    "contexto_rag": [],
+    "tecnicas_mitre": [],
+    "cves_encontrados": [],
+    "comandos_mitigacion": [
+      "dmesg -T --level=emerg,alert,crit,err > /var/log/kernel_fatal_hardware.log",
+      "journalctl -p 0..3 -xb > /var/log/journal_critical_errors.log",
+      "which ipmitool >/dev/null 2>&1 && ipmitool sel elist > /var/log/ipmi_hardware_sel.log || true",
+      "which edac-util >/dev/null 2>&1 && edac-util -v > /var/log/edac_memory_errors.log || true",
+      "which ras-mc-ctl >/dev/null 2>&1 && ras-mc-ctl --error-count > /var/log/ras_errors.log || true"
+    ],
+    "comandos_validos": true,
+    "motivos_rechazo": [],
+    "intentos_correccion": 1,
+    "confianza": 0.8,
+    "hay_incidente": false,
+    "hay_anomalia": true,
+    "evaluacion_auditor": "El diagnóstico es correcto al identificar los eventos como fallos operativos o de hardware de nivel kernel (BlueGene/L RAS KERNEL FATAL) y descartar compromiso o actividad maliciosa. Los comandos de recolección de métricas de hardware y registros de kernel son apropiados para el escalado a infraestructura.",
+    "cobertura_auditor": true,
+    "cobertura_suficiente": true,
+    "motivo_replanificacion": "",
+    "requiere_replanificacion": false,
+    "_firma": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+    "_error_api": null,
+    "requiere_revision_humana": false,
+    "output_contract_version": "d11-v1"
+  }
+}

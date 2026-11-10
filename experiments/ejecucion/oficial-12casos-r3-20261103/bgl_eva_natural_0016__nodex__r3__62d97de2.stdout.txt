@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1091 salida=246 razonamiento=460 total=1797
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=1269 salida=275 razonamiento=649 total=2193
+   → No hace falta RAG (A pesar de la baja cobertura del preprocesamiento, la muestra del registro en crudo expone claramente la naturaleza de los eventos como telemetría operacional e informativa de hardware de red/clúster, por lo que no se requiere contexto histórico adicional para determinar la benignidad de los registros.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=295 salida=50 razonamiento=106 total=451
+   → usar_cve: False | Razón: El diagnóstico confirma actividad operacional benigna y rutinaria de hardware sin indicios de ataque, vulnerabilidades explotadas ni servicios vulnerables identificados.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=248 salida=6 razonamiento=1857 total=2111
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2125 salida=288 razonamiento=267 total=2680
+   → Confianza final: 0.85 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros corresponden a eventos operacionales benignos de descubrimiento y monitoreo de hardware en infraestructura de clúster (BlueGene/L) con severidad informativa. No se observan anomalías de funcionamiento ni indicios de incidente o actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

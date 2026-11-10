@@ -1,0 +1,61 @@
+{
+  "case_id": "bgl_eva_natural_0002",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 3,
+  "config_version": "enriquecido-12casos-r3-20261104",
+  "run_id": "bgl_eva_natural_0002__rag30__r3__ee90ed58",
+  "condicion_rag": "enriquecido",
+  "rag_version": "rag_enriquecido_30_v1",
+  "casos_historicos": 30,
+  "salida": {
+    "case_id": "bgl_eva_natural_0002",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "connection_reset",
+        "evidence_uids": [
+          "log_record_000001",
+          "log_record_000003",
+          "log_record_000004",
+          "log_record_000005",
+          "log_record_000008",
+          "log_record_000010",
+          "log_record_000012",
+          "log_record_000015"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos eventos analizados corresponden a registros de fiabilidad, disponibilidad y servicio (RAS) del sistema Blue Gene/L (demonio ciod) que notifican fallos operacionales a nivel de infraestructura ('Connection reset by peer' en sockets CioStream con 172.16.96.116). No se identifican patrones de compromiso, intrusión ni actividad maliciosa; se trata de una caída o restablecimiento abrupto de comunicación a nivel de nodo/aplicación HPC. No se requieren acciones de contención de seguridad, sino diagnóstico operativo de estabilidad de red e infraestructura.\n\n## Evaluación del auditor\n\nEl diagnóstico es acertado al identificar las entradas como registros operacionales y de fiabilidad (RAS) del demonio ciod en Blue Gene/L, asociados a caídas de sockets de comunicación con la dirección 172.16.96.116. No se observan indicadores de compromiso ni patrones de ataque cibernético, por lo que se descarta un incidente de seguridad y los comandos recomendados se enfocan apropiadamente en la verificación de conectividad y estabilidad física/lógica de red.\n\n## Comandos de mitigación propuestos\n\n- ping -c 5 172.16.96.116\n- ip route get 172.16.96.116\n- tracepath 172.16.96.116\n- ss -tina 'dst 172.16.96.116'\n- ip -s link\n- tcpdump -nn -i any host 172.16.96.116 and 'tcp[tcpflags] & (tcp-rst) != 0' -c 50\n- dmesg -T | grep -iE 'eth|link|carrier|drop|reset'"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0002__rag30__r3__ee90ed58",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0002__rag30__r3__ee90ed58.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-04T23:42:44+00:00"
+  }
+}

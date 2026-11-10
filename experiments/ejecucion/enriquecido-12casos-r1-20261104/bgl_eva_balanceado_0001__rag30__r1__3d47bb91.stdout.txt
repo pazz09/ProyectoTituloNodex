@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=719 salida=266 razonamiento=2193 total=3178
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=865 salida=166 razonamiento=1287 total=2318
+   → No hace falta RAG (Aunque la cobertura de parsing fue del 0%, la muestra cruda permite identificar con certeza que se trata de logs de diagnóstico de kernel/hardware ajenos a eventos de autenticación, y el plan de investigación especifica no consultar memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=204 salida=51 razonamiento=73 total=328
+   → usar_cve: False | Razón: El diagnóstico confirma que se trata de un falso positivo debido a mensajes de hardware/kernel del sistema, sin actividad maliciosa ni servicios vulnerables que requieran búsqueda de CVE.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=150 salida=74 razonamiento=823 total=1047
+   → 3 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2145 salida=311 razonamiento=1190 total=3646
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | Se confirma que se trata de un falso positivo de seguridad. Los eventos corresponden a registros de hardware y kernel (mensajes RAS de arquitectura BlueGene/L reportando errores de memoria corregibles) erróneamente categorizados como fallos de autenticación, descartándose actividad maliciosa intencional.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

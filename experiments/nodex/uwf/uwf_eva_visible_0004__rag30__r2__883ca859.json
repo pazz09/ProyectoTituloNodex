@@ -1,0 +1,87 @@
+{
+  "case_id": "uwf_eva_visible_0004",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 2,
+  "config_version": "enriquecido-12casos-r2-20261104",
+  "run_id": "uwf_eva_visible_0004__rag30__r2__883ca859",
+  "condicion_rag": "enriquecido",
+  "rag_version": "rag_enriquecido_30_v1",
+  "casos_historicos": 30,
+  "salida": {
+    "case_id": "uwf_eva_visible_0004",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-17 16:35:52.282",
+        "entities": [],
+        "event_type": "port_scan",
+        "evidence_uids": [
+          "CgLc2r16KKjawNK486",
+          "CW1rJU3i8X5NnW2IFc",
+          "CK5ZC3bXIsD1Gwyh",
+          "CLTC2c4FoX1FKSGv63",
+          "CvO8mBVfhDwYkcW7e",
+          "CcVTU6wGhn4c1lxda",
+          "Cd4w7LEQsVEFsN5f"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": [
+        {
+          "id": "T1046",
+          "name": "Network Service Discovery",
+          "evidence_uids": [
+            "CgLc2r16KKjawNK486",
+            "CW1rJU3i8X5NnW2IFc",
+            "CK5ZC3bXIsD1Gwyh",
+            "CLTC2c4FoX1FKSGv63",
+            "CvO8mBVfhDwYkcW7e",
+            "CcVTU6wGhn4c1lxda",
+            "Cd4w7LEQsVEFsN5f"
+          ]
+        }
+      ]
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl análisis del lote de telemetría Zeek muestra 300 eventos de red dominados por consultas DNS y tráfico UDP, principalmente originados desde 143.88.255.10 hacia el resolver 10.0.10.1, junto con comunicaciones entre 143.88.18.12 y 143.88.18.11. La aparente concentración de 'eventos críticos' e 'intentos fallidos' deriva de la categorización de flujos con estado de conexión S0 (solicitudes UDP sin respuesta bidireccional registrada). El cotejo con el contexto histórico del dataset UWF presenta una coincidencia casi exacta (similitud > 0.996) con tráfico basal legítimo ('fondo_normal_original'). No se aprecian anomalías estructurales ni patrones de túneles DNS o compromiso de infraestructura, por lo que ninguna de las técnicas MITRE ATT&CK sugeridas (T1071.004, T1584.002) aplica al caso.\n\n## Evaluación del auditor\n\nEl diagnóstico es erróneo al descartar actividad anómala. Aunque la mayoría del tráfico corresponde a consultas DNS, ignora un escaneo de puertos TCP explícito y concentrado (registros 147 al 206) efectuado entre las 16:35:52 y 16:35:53 desde 143.88.18.12 hacia 143.88.18.11, abarcando decenas de puertos conocidos (21, 22, 23, 25, 80, 135, 139, 443, 445, 3389, 5900, etc.) con banderas SH (SYN enviado sin completar el handshake), representativo de reconocimiento de red activo."
+    },
+    "_meta": {
+      "run_id": "uwf_eva_visible_0004__rag30__r2__883ca859",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_visible_0004__rag30__r2__883ca859.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-04T23:13:13+00:00"
+  }
+}

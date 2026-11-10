@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=529 salida=202 razonamiento=661 total=1392
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=654 salida=232 razonamiento=516 total=1402
+   → No hace falta RAG (A pesar de la cobertura nula de parsing automático, la muestra cruda evidencia inequívocamente registros de sistema y fallos de hardware/kernel de supercomputador (BlueGene RAS), lo que descarta una amenaza de ciberseguridad sin requerir consulta a la base de conocimiento histórico.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=259 salida=57 razonamiento=94 total=410
+   → usar_cve: False | Razón: El evento corresponde a un fallo de hardware/operativo (excepción de punto flotante en kernel RAS) y no a un ataque o vulnerabilidad de seguridad explotable que requiera consulta de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=212 salida=100 razonamiento=649 total=961
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2117 salida=287 razonamiento=656 total=3060
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es preciso al clasificar el evento como un fallo operativo/hardware a nivel de kernel (interrupción de programa por excepción de punto flotante en arquitectura IBM BlueGene/L). No se observan indicios de actividad maliciosa ni compromiso de seguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

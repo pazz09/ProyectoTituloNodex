@@ -1,0 +1,97 @@
+{
+  "case_id": "uwf_eva_sigiloso_0018",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 3,
+  "config_version": "enriquecido-12casos-r3-20261104",
+  "run_id": "uwf_eva_sigiloso_0018__rag30__r3__e24c1e53",
+  "condicion_rag": "enriquecido",
+  "rag_version": "rag_enriquecido_30_v1",
+  "casos_historicos": 30,
+  "salida": {
+    "case_id": "uwf_eva_sigiloso_0018",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-26 09:41:45.380404",
+        "entities": [],
+        "event_type": "unanswered_dns_queries",
+        "evidence_uids": [
+          "CyiKiK2sfCk0YNgx1d",
+          "CGWAkv1zQAEnbE5Ew7",
+          "CbRwTg2wB5Imc3MHvf"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-26 09:43:04.555047",
+        "entities": [],
+        "event_type": "successful_dns_resolution",
+        "evidence_uids": [
+          "CCkKrQ3HuuHKVGMLJ8"
+        ]
+      },
+      {
+        "uid": "event_003",
+        "timestamp": "2021-12-26 10:12:30.631522",
+        "entities": [],
+        "event_type": "unanswered_dns_queries",
+        "evidence_uids": [
+          "CU8gjV1OkZBJMdxSQh",
+          "Cdr03RgU5qsBrI6Vb",
+          "CrCaG821coIjXeF9ig",
+          "CMxshC2PgGCBCv2Wjf"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002",
+      "event_003"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl análisis del tráfico revela 266 conexiones DNS (puerto 53 UDP) en estado S0 (solicitudes enviadas sin respuesta) desde la IP 143.88.255.10 hacia el resolver 10.0.10.1. Aunque el volumen concentrado de consultas fallidas podría sugerir a priori un intento de denegación de servicio o túnel DNS, la correlación con el contexto histórico del entorno (casos UWF de referencia) confirma una similitud prácticamente idéntica (99.8%) con patrones de tráfico de fondo normal (consultas DNS desatendidas o resolver inalcanzable/mal configurado en la red). Por tanto, se descarta una actividad maliciosa de exfiltración, túnel o denegación de servicio, clasificándose el evento como tráfico benigno habitual del entorno sin técnicas activas de ataque.\n\n## Evaluación del auditor\n\nEl diagnóstico es preciso y coincide plenamente con los datos observados. La ráfaga periódica de consultas DNS dirigidas al resolver 10.0.10.1 sin respuesta (estado S0) representa una anomalía puramente operativa de red (servidor DNS no disponible o desconfigurado en el cliente 143.88.255.10). No se aprecian patrones de exfiltración, túnel DNS o ataque deliberado, y el resto del tráfico local DNS (como 143.88.1.51 hacia 143.88.1.1) opera con normalidad."
+    },
+    "_meta": {
+      "run_id": "uwf_eva_sigiloso_0018__rag30__r3__e24c1e53",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1583.002",
+          "name": "DNS Server",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_sigiloso_0018__rag30__r3__e24c1e53.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-04T23:41:10+00:00"
+  }
+}

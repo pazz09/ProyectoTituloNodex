@@ -1,0 +1,60 @@
+{
+  "case_id": "uwf_eva_sigiloso_0024",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "enriquecido-12casos-r1-20261104",
+  "run_id": "uwf_eva_sigiloso_0024__rag30__r1__4b0a159f",
+  "condicion_rag": "enriquecido",
+  "rag_version": "rag_enriquecido_30_v1",
+  "casos_historicos": 30,
+  "salida": {
+    "case_id": "uwf_eva_sigiloso_0024",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl análisis de los 300 eventos de red revela un flujo concentrado de consultas DNS UDP (puerto 53) dirigidas desde la IP 143.88.255.10 hacia el servidor DNS interno 10.0.10.1 (264 eventos), con una alta proporción en estado de conexión S0 (solicitudes sin respuesta observada). Aunque los analizadores predeterminados etiquetaron 276 eventos como críticos debido a la aparente falta de respuesta o volumen unidireccional, el cotejo con el contexto histórico (casos uwf_hist_011, uwf_hist_014 y uwf_hist_013, con similitud del 99.7%) confirma que este patrón corresponde a tráfico de fondo normal (fondo_normal_original) típico de la infraestructura bajo observación. No se identifican indicadores de compromiso, exfiltración ni canales encubiertos, por lo que ninguna de las técnicas MITRE ATT&CK evaluadas (como T1071.004 o T1568.002) resulta aplicable. Se concluye que se trata de un falso positivo derivado del comportamiento operativo habitual de resolución de nombres.\n\n## Evaluación del auditor\n\nEl diagnóstico es completamente acertado. La totalidad de los registros analizados corresponde a tráfico de fondo operativo y normal de la red (fondo_normal_original), caracterizado por consultas DNS periódicas en intervalos regulares de ~30 segundos (con estado S0 atribuible a captura asimétrica o resolución interna habitual), además de tráfico benigno complementario (DHCPv6, NetBIOS, consultas DNS resueltas con SF). No se detecta actividad anómala de infraestructura ni indicadores de compromiso, descartándose correctamente las técnicas candidatas de C2 (T1071.004, T1568.002)."
+    },
+    "_meta": {
+      "run_id": "uwf_eva_sigiloso_0024__rag30__r1__4b0a159f",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1568.002",
+          "name": "Domain Generation Algorithms",
+          "similitud": null
+        },
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_sigiloso_0024__rag30__r1__4b0a159f.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-04T23:05:13+00:00"
+  }
+}

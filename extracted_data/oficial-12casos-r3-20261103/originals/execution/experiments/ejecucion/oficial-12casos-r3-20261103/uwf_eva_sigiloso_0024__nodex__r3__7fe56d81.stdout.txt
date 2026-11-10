@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3380 salida=388 razonamiento=430 total=4198
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3637 salida=144 razonamiento=578 total=4359
+   → Solicitando RAG (Se requiere consultar la base de conocimiento y técnicas de MITRE ATT&CK (como T1071.004 para DNS tunneling, T1048.003 para exfiltración sobre DNS y T1595/T1046 para reconocimiento) para correlacionar el patrón de 264 conexiones DNS incompletas/fallidas (estado S0) desde 143.88.255.10 hacia 10.0.10.1 con casos históricos y definir las medidas de contención apropiadas.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1071.004, T1568.002, T1584.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=4337 salida=212 razonamiento=417 total=4966
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=325 salida=60 razonamiento=215 total=600
+   → usar_cve: False | Razón: El diagnóstico señala técnicas de tunelización DNS o DGA (abuso de protocolo/tráfico de red) y no identifica ningún software o versión vulnerable específica susceptible de búsqueda de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=260 salida=215 razonamiento=886 total=1361
+   → 6 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=48167 salida=802 razonamiento=2247 total=51216
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | Se observa un comportamiento anómalo consistente en ráfagas periódicas de consultas DNS UDP (puerto 53) cada aproximadamente 30 segundos desde el host 143.88.255.10 hacia la IP 10.0.10.1, todas quedando en estado S0 (sin respuesta). Sin embargo, el diagnóstico propuesto de tunelización DNS (T1071.004) o DGA (T1568.002) no está respaldado: no se dispone del registro de nombres de dominio consultados ni de respuestas del servidor, y la cadencia estricta de reintentos cada 30 segundos hacia una IP no responsiva es característica de una falla operativa de red, servidor DNS caído o error de configuración de resolución de nombres, no de una intrusión o canal encubierto activo.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

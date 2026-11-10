@@ -1,0 +1,7 @@
+## Diagnóstico
+
+El análisis de los 300 registros Zeek correspondientes al tráfico DNS desde la IP 143.88.255.10 hacia el servidor 10.0.10.1 muestra un predominio de conexiones UDP con estado 'S0' (sin respuesta registrada), interpretadas inicialmente como intentos fallidos o eventos críticos. Sin embargo, la correlación con los registros históricos del entorno (similitud superior al 99.9% con perfiles de tráfico de referencia de UWF) confirma que se trata de ruido de fondo y telemetría de red normal propia del entorno, probablemente derivada de tráfico unidireccional capturado por el sensor o consultas DNS estándar no respondidas en la interfaz monitoreada. No se evidencian patrones de tunelización, comando y control ni reconocimiento activo, por lo que ninguna técnica de MITRE ATT&CK aplica y se determina que la actividad es un falso positivo que no requiere medidas de contención.
+
+## Evaluación del auditor
+
+El diagnóstico es correcto. La actividad observada corresponde a tráfico de red habitual y ruido de fondo de telemetría DNS con captura asimétrica o falta de respuesta (estado S0), coincidente con el perfil normal del entorno de red universitaria (UWF). No se observan indicadores de C2, tunelización DNS ni escaneo hostil.

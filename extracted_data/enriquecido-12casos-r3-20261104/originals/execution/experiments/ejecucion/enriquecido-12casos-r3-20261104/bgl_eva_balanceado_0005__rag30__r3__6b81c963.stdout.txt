@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=681 salida=235 razonamiento=958 total=1874
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=858 salida=191 razonamiento=669 total=1718
+   → No hace falta RAG (A pesar de la falta de cobertura en el preprocesamiento estructurado (formato texto libre), la muestra cruda revela inequívocamente eventos de telemetría de kernel y hardware benignos, no requiriendo consulta a memoria histórica ni técnicas MITRE ATT&CK para su resolución.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=219 salida=57 razonamiento=144 total=420
+   → usar_cve: False | Razón: Los eventos corresponden a registros operativos y de diagnóstico de hardware benignos (BlueGene/L) sin indicios de actividad maliciosa, vulnerabilidades específicas ni servicios comprometidos que requieran consulta de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=172 salida=10 razonamiento=815 total=997
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2022 salida=330 razonamiento=619 total=2971
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | Los registros corresponden a mensajes de diagnóstico y advertencia de hardware/red en arquitectura BlueGene/L (errores de retransmisión de red torus corregidos automáticamente). Constituyen una anomalía operativa a nivel de infraestructura/hardware, pero no presentan indicios de compromiso de seguridad, explotación o actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

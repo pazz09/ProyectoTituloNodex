@@ -1,0 +1,58 @@
+{
+  "case_id": "bgl_eva_natural_0002",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 3,
+  "config_version": "oficial-12casos-r3-20261103",
+  "run_id": "bgl_eva_natural_0002__nodex__r3__436f1311",
+  "salida": {
+    "case_id": "bgl_eva_natural_0002",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "network_socket_error",
+        "evidence_uids": [
+          "log_record_000001",
+          "log_record_000003",
+          "log_record_000004",
+          "log_record_000005",
+          "log_record_000008",
+          "log_record_000010",
+          "log_record_000012",
+          "log_record_000015"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos eventos corresponden a fallos operacionales de infraestructura y conectividad de red típicos de registros RAS de supercómputo (IBM BlueGene/L, proceso ciod). El error recurrente 'FATAL ciod: Error reading message prefix on CioStream socket to 172.16.96.116:52930, Connection reset by peer' indica la terminación abrupta o fallo de socket entre nodos y la IP privada 172.16.96.116. No se observan indicios de actividad maliciosa ni intrusión; se trata de un problema de comunicación de red o fallo de proceso a nivel de aplicación HPC. Medidas recomendadas: verificar la estabilidad del enlace de red, descartar sobrecarga/caída de servicios en el host 172.16.96.116 y monitorizar procesos ciod sin aplicar bloqueos de seguridad.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Los registros corresponden a errores de comunicación en sockets (Connection reset by peer) del proceso ciod en un entorno HPC (IBM BlueGene/L), afectando la interacción con la dirección 172.16.96.116. No existe evidencia de actividad maliciosa ni intrusión; se trata de una anomalía exclusivamente operativa y de infraestructura de red.\n\n## Comandos de mitigación propuestos\n\n- ping -c 5 172.16.96.116\n- ip route get 172.16.96.116\n- tracepath 172.16.96.116\n- ss -tina '( dst 172.16.96.116 or src 172.16.96.116 )'\n- ip -s link\n- pgrep -fa ciod\n- tcpdump -nn -i any host 172.16.96.116 -c 100 -w /tmp/ciod_traffic.pcap"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0002__nodex__r3__436f1311",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0002__nodex__r3__436f1311.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-03T04:23:31+00:00"
+  }
+}

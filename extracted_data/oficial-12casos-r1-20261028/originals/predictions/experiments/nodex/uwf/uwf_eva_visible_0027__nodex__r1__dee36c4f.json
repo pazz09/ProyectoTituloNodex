@@ -1,0 +1,90 @@
+{
+  "case_id": "uwf_eva_visible_0027",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "oficial-12casos-r1-20261028",
+  "run_id": "uwf_eva_visible_0027__nodex__r1__dee36c4f",
+  "salida": {
+    "case_id": "uwf_eva_visible_0027",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2022-01-02 05:31:29.634125",
+        "entities": [],
+        "event_type": "dns_query_timeout",
+        "evidence_uids": [
+          "Crufd24zmgnFaCFECf"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2022-01-02 05:31:59.881320",
+        "entities": [],
+        "event_type": "dns_retry_loop",
+        "evidence_uids": [
+          "CViZ3T1AFU9OvRrwel",
+          "ClhmWE1zs0eUSnUQbl"
+        ]
+      },
+      {
+        "uid": "event_003",
+        "timestamp": "2022-01-02 06:02:14.881954",
+        "entities": [],
+        "event_type": "dns_query_timeout",
+        "evidence_uids": [
+          "CdNzvz1pfJaSs9gyyg"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002",
+      "event_003"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl tráfico analizado corresponde a un fallo operacional derivado de la falta de respuesta del servidor DNS 10.0.10.1. El host 143.88.255.10 emitió 262 solicitudes DNS hacia 10.0.10.1 en un intervalo de ~30 minutos, registrando un estado de conexión Zeek 'S0' (sin respuesta del destino) y 0 bytes de respuesta recibidos. Este comportamiento representa un bucle de reintentos por timeout de resolución ante un servicio inalcanzable o mal configurado, descartando actividad maliciosa deliberada o exfiltración.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. La evidencia muestra un patrón de reintentos continuos de consultas DNS UDP hacia la dirección 10.0.10.1 que no son respondidas (estado Zeek S0). Al mismo tiempo, otras consultas en la red hacia 143.88.1.1 se resuelven normalmente (SF), lo que confirma una falla de conectividad o servicio inalcanzable/mal configurado en 10.0.10.1 y no un incidente de seguridad ni actividad maliciosa.\n\n## Comandos de mitigación propuestos\n\n- iptables -I INPUT -p udp -s 143.88.255.10 --dport 53 -m hashlimit --hashlimit-name DNS_RATE --hashlimit-above 5/sec --hashlimit-burst 10 --hashlimit-mode srcip -j DROP\n- iptables -A FORWARD -p udp -s 143.88.255.10 -d 10.0.10.1 --dport 53 -j REJECT --reject-with icmp-port-unreachable\n- iptables -A INPUT -p udp -d 10.0.10.1 --dport 53 -j REJECT --reject-with icmp-port-unreachable\n- systemctl status systemd-resolved\n- resolvectl status"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_visible_0027__nodex__r1__dee36c4f",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_visible_0027__nodex__r1__dee36c4f.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-28T05:00:10+00:00"
+  }
+}

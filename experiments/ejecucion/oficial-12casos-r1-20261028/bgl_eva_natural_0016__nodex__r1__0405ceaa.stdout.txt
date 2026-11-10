@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1091 salida=187 razonamiento=706 total=1984
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=1261 salida=246 razonamiento=602 total=2109
+   → No hace falta RAG (A pesar de la baja cobertura del parser inicial (0%), la muestra de texto crudo permite identificar claramente la naturaleza benigna e informativa de los registros ('DISCOVERY INFO', cambio de estado de hardware). No se observan anomalías de seguridad ni se requiere contexto MITRE ATT&CK adicional.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=267 salida=53 razonamiento=110 total=430
+   → usar_cve: False | Razón: El diagnóstico confirma actividad benigna de telemetría y monitoreo de hardware legítimo, sin evidencia de intrusión, ataque o vulnerabilidad específica que justifique la búsqueda de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=220 salida=6 razonamiento=538 total=764
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2097 salida=326 razonamiento=834 total=3257
+   → Confianza final: 0.85 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es adecuado. Los registros corresponden a eventos de telemetría y monitoreo de infraestructura de hardware (mensajes informativos de descubrimiento de chips/nodos en redes internas). No se evidencian anomalías de funcionamiento ni actividad maliciosa o incidentes de seguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

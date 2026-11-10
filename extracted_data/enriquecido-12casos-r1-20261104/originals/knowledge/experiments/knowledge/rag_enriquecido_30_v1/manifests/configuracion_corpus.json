@@ -1,0 +1,534 @@
+{
+  "version": "rag_enriquecido_30_v1",
+  "created_utc": "2026-11-04T06:32:50.869281+00:00",
+  "selection": "cobertura greedy ponderada: etiqueta/técnica=100, fuente/IP/protocolo/servicio/estado=20, mensaje/tamaño=1; desempate original_id",
+  "randomness": false,
+  "partition_seed": 20261003,
+  "quotas": {
+    "bgl/normal": 8,
+    "bgl/anomalo": 7,
+    "uwf/normal": 7,
+    "uwf/anomalo": 8
+  },
+  "uwf_anomalies": "episodios originales de desarrollo; timestamps originales; sin mezcla ni rebase",
+  "uwf_campaign_control": "excluir todas las semanas fuente de incidentes de los 12 oficiales",
+  "campaign_limitation": "UWF no proporciona campaign_id: semanas e IP son controles conservadores, no prueba de campañas reales distintas",
+  "original_split": {
+    "bgl_development_groups": [
+      "bgl_l00001-00020",
+      "bgl_l00221-00240",
+      "bgl_l00241-00260",
+      "bgl_l00261-00280",
+      "bgl_l00441-00460",
+      "bgl_l00501-00520",
+      "bgl_l00541-00560",
+      "bgl_l00701-00720",
+      "bgl_l00781-00800",
+      "bgl_l00821-00840",
+      "bgl_l00881-00900",
+      "bgl_l00901-00920",
+      "bgl_l00961-00980",
+      "bgl_l01321-01340",
+      "bgl_l01341-01360",
+      "bgl_l01441-01460",
+      "bgl_l01501-01520",
+      "bgl_l01561-01580",
+      "bgl_l01581-01600",
+      "bgl_l01601-01620",
+      "bgl_l01621-01640",
+      "bgl_l01681-01700",
+      "bgl_l01721-01740",
+      "bgl_l01741-01760",
+      "bgl_l01801-01820",
+      "bgl_l01821-01840",
+      "bgl_l01841-01860",
+      "bgl_l01901-01920",
+      "bgl_l01941-01960",
+      "bgl_l01981-02000"
+    ],
+    "uwf_development_incidents": [
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0005",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0006",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0010",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0014",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0021",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0022",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0024",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0027",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0030",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0046",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0054",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0058",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0064",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0065",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0066",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0068",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0076",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.3.11__0005",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.3.11__0007",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.3.11__0010",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.3.11__0012",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.3.11__0019",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.3.11__0020",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0004",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0005",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0017",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0022",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0032",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0034",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0036",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0037",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0039",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0044",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0046",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0047",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0052",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0064",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0065",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0070",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0072",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0075",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0080",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0084",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0088",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0089",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0090",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0094",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0095",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0096",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0098",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0100",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0102",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0106",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0109",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0112",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0114",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0121",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0131",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0132",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0136",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0137",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0138",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0139",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0140",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0141",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0143",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0146",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0149",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0151",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0152",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0155",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0157",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0159",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0166",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0171",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0172",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0173",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0177",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0180",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0182",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0185",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0188",
+      "2022-09-04_2022-09-11__Reconnaissance__143.88.3.11__0007",
+      "2022-09-04_2022-09-11__Reconnaissance__143.88.7.11__0001",
+      "2022-09-04_2022-09-11__Reconnaissance__143.88.7.11__0002",
+      "2022-09-04_2022-09-11__Reconnaissance__143.88.7.11__0016",
+      "2022-09-04_2022-09-11__Reconnaissance__143.88.7.11__0022",
+      "2022-09-04_2022-09-11__Reconnaissance__143.88.7.11__0023",
+      "2022-09-04_2022-09-11__Reconnaissance__143.88.7.11__0024",
+      "2022-09-04_2022-09-11__Reconnaissance__143.88.7.11__0026",
+      "2022-09-04_2022-09-11__Reconnaissance__143.88.7.11__0027",
+      "2022-09-04_2022-09-11__Reconnaissance__143.88.7.11__0032",
+      "2022-09-04_2022-09-11__Reconnaissance__143.88.7.11__0039",
+      "2022-09-04_2022-09-11__Reconnaissance__143.88.7.11__0042",
+      "2022-09-11_2022-09-18__Discovery__143.88.18.12__0004",
+      "2022-09-11_2022-09-18__Discovery__143.88.18.12__0005",
+      "2022-09-11_2022-09-18__Discovery__143.88.18.12__0007",
+      "2022-09-11_2022-09-18__Reconnaissance__143.88.5.11__0000",
+      "2022-09-18_2022-09-25__Reconnaissance__143.88.20.11__0001",
+      "2022-09-18_2022-09-25__Resource Development__143.88.5.11__0001",
+      "2022-09-18_2022-09-25__Resource Development__143.88.5.11__0003",
+      "2022-09-18_2022-09-25__Resource Development__143.88.5.11__0014",
+      "2022-09-25_2022-10-02__Reconnaissance__143.88.20.11__0000"
+    ],
+    "uwf_total_incidents": 349
+  },
+  "available_after_exclusions": {
+    "bgl/normal": 16,
+    "bgl/anomalo": 8,
+    "uwf/normal": 12,
+    "uwf/anomalo": 13
+  },
+  "rejected_candidates": [
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0005",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0006",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0010",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0014",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0021",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0022",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0024",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0027",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0030",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0046",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0054",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0058",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0064",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0065",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0066",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0068",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0076",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.3.11__0005",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.3.11__0007",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.3.11__0010",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.3.11__0012",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.3.11__0019",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.3.11__0020",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0004",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0005",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0017",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0022",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0032",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0034",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0036",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0037",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0039",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0044",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0046",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0047",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0052",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0064",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0065",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0070",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0072",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0075",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0080",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0084",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0088",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0089",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0090",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0094",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0095",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0096",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0098",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0100",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0102",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0106",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0109",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0112",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0114",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0121",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0131",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0132",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0136",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0137",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0138",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0139",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0140",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0141",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0143",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0146",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0149",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0151",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0152",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0155",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0157",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0159",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0166",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0171",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0172",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0173",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0177",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0180",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0182",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0185",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0188",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-09-11_2022-09-18__Discovery__143.88.18.12__0004",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-09-11_2022-09-18__Discovery__143.88.18.12__0005",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-09-11_2022-09-18__Discovery__143.88.18.12__0007",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-09-11_2022-09-18__Reconnaissance__143.88.5.11__0000",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-09-18_2022-09-25__Reconnaissance__143.88.20.11__0001",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-09-18_2022-09-25__Resource Development__143.88.5.11__0001",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-09-18_2022-09-25__Resource Development__143.88.5.11__0003",
+      "reason": "Semana de incidente oficial reutilizada"
+    },
+    {
+      "original_id": "2022-09-18_2022-09-25__Resource Development__143.88.5.11__0014",
+      "reason": "Semana de incidente oficial reutilizada"
+    }
+  ],
+  "uwf_valid_anomaly_sizes": {
+    "3": 1,
+    "4": 9,
+    "6": 3
+  },
+  "uwf_visible_limit": "No existen episodios de >=20 registros de desarrollo fuera de las semanas de incidentes oficiales; se prioriza independencia y se conservan episodios sigilosos completos de 3–6 registros.",
+  "functional_changes": [],
+  "llm_calls": 0,
+  "evaluation_runs": 0,
+  "metrics_D1_D4": false
+}

@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=529 salida=253 razonamiento=403 total=1185
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=656 salida=215 razonamiento=571 total=1442
+   → No hace falta RAG (A pesar de la cobertura nula del parser estructurado y el texto libre, el contenido de la muestra es suficiente para identificar que se trata de logs operativos y fallos de kernel propios de supercómputo (BGL), descartando un incidente de seguridad informática y haciendo innecesaria la consulta de memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=230 salida=55 razonamiento=319 total=604
+   → usar_cve: False | Razón: El diagnóstico indica que se trata de una falla de hardware/estabilidad (excepción de coma flotante en BlueGene/L) y no de un ataque o vulnerabilidad de software explotable.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=183 salida=66 razonamiento=661 total=910
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2054 salida=309 razonamiento=819 total=3182
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros reflejan interrupciones fatales a nivel de procesador/kernel (RAS KERNEL FATAL program interrupt: fp cr field) típicas de entornos de supercomputación BlueGene/L. Se trata de un fallo de hardware/estabilidad en operaciones de coma flotante y no de un compromiso o intrusión de seguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

@@ -1,0 +1,60 @@
+{
+  "case_id": "uwf_eva_sigiloso_0024",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 3,
+  "config_version": "enriquecido-12casos-r3-20261104",
+  "run_id": "uwf_eva_sigiloso_0024__rag30__r3__0886dab3",
+  "condicion_rag": "enriquecido",
+  "rag_version": "rag_enriquecido_30_v1",
+  "casos_historicos": 30,
+  "salida": {
+    "case_id": "uwf_eva_sigiloso_0024",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl análisis de los 300 eventos de Zeek muestra un predominio casi total de tráfico DNS vía UDP hacia el puerto 53 (293 eventos), concentrado principalmente entre el host 143.88.255.10 y el resolvedor 10.0.10.1 (264 eventos), con conexiones clasificadas como críticas debido a estados S0 (solicitudes sin respuesta registrada). Sin embargo, la comparación con el contexto histórico arroja una similitud superior al 99.7% con patrones basales de referencia (uwf_hist_011, uwf_hist_014, uwf_hist_013), etiquetados formalmente como tráfico de fondo normal. No existen evidencias de túneles C2 encubiertos, algoritmos DGA o denegación de servicio activa, por lo que las técnicas de C2 como T1071.004 no aplican operativamente a este comportamiento. Se concluye que se trata de actividad benigna habitual de resolución DNS de la red, no requiriendo medidas de contención.\n\n## Evaluación del auditor\n\nEl diagnóstico es adecuado y coherente. El análisis del conjunto de eventos DNS refleja un patrón rutinario y de fondo con una coincidencia superior al 99.7% respecto a los perfiles basales históricos de referencia. El estado S0 en conexiones UDP/53 responde a la naturaleza de la captura y tráfico normal de resolución sin observarse volumen anómalo, tunneling encubierto ni actividad DGA atribuible a una intrusión o fallo operativo."
+    },
+    "_meta": {
+      "run_id": "uwf_eva_sigiloso_0024__rag30__r3__0886dab3",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1568.002",
+          "name": "Domain Generation Algorithms",
+          "similitud": null
+        },
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_sigiloso_0024__rag30__r3__0886dab3.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-04T23:45:42+00:00"
+  }
+}

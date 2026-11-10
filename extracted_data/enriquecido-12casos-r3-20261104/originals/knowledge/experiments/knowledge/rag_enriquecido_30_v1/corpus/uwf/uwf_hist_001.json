@@ -1,0 +1,128 @@
+{
+  "dataset": "uwf",
+  "original_id": "2022-09-04_2022-09-11__Reconnaissance__143.88.3.11__0007",
+  "classification": "anomalo",
+  "partition": "desarrollo",
+  "fragment_sha256": "19468c035913f3e29ce15591689277315aa2b16e0f6adaf0188db4a8b43d1106",
+  "records": [
+    {
+      "source_path": "data/logs/UWF-ZeekDataFall22-parquet/2022-09-04%20-%202022-09-11/part-00000-ea53b0e8-d346-44e3-9a87-1f60ac35c610-c000.snappy.parquet",
+      "source_file_sha256": "c583e77ffad0980f44bb56ae76e508ea1890cb080a0c5d1c1172f66135ed6c24",
+      "source_line": 877,
+      "source_line_unit": "fila CSV deduplicado (cabecera=1), regenerable por hash",
+      "converted_events_sha256": "b0e4bda40b35fc6f2e82b544d16ee46a127908857d8034cc1576cb2c4c2bdd32",
+      "uid": "Civ7Yfs3Dr5MsAcG3",
+      "original_event_sha256": "d66b3622a0602a2d7212245bb5c54fd36bc0dd10aeb558272545356724471061",
+      "original_ts": 1662319635.49788,
+      "original_label": "True",
+      "original_tactics": [
+        "Reconnaissance"
+      ],
+      "original_techniques": [
+        "T1589"
+      ]
+    },
+    {
+      "source_path": "data/logs/UWF-ZeekDataFall22-parquet/2022-09-04%20-%202022-09-11/part-00000-ea53b0e8-d346-44e3-9a87-1f60ac35c610-c000.snappy.parquet",
+      "source_file_sha256": "c583e77ffad0980f44bb56ae76e508ea1890cb080a0c5d1c1172f66135ed6c24",
+      "source_line": 884,
+      "source_line_unit": "fila CSV deduplicado (cabecera=1), regenerable por hash",
+      "converted_events_sha256": "b0e4bda40b35fc6f2e82b544d16ee46a127908857d8034cc1576cb2c4c2bdd32",
+      "uid": "Cq4qYG19ssrhduLMga",
+      "original_event_sha256": "7328a73435bc47d6193a1adfbf831906f1e85009bc0cde11e7a04cb17b05917e",
+      "original_ts": 1662319649.893685,
+      "original_label": "True",
+      "original_tactics": [
+        "Reconnaissance"
+      ],
+      "original_techniques": [
+        "T1589"
+      ]
+    },
+    {
+      "source_path": "data/logs/UWF-ZeekDataFall22-parquet/2022-09-04%20-%202022-09-11/part-00000-ea53b0e8-d346-44e3-9a87-1f60ac35c610-c000.snappy.parquet",
+      "source_file_sha256": "c583e77ffad0980f44bb56ae76e508ea1890cb080a0c5d1c1172f66135ed6c24",
+      "source_line": 880,
+      "source_line_unit": "fila CSV deduplicado (cabecera=1), regenerable por hash",
+      "converted_events_sha256": "b0e4bda40b35fc6f2e82b544d16ee46a127908857d8034cc1576cb2c4c2bdd32",
+      "uid": "CZFsYI3IeEAJ1xlwTh",
+      "original_event_sha256": "7919cdafa3bbdc7ed07d40bde56faa9d080776a51ea6d21b3a42afcab8692b0c",
+      "original_ts": 1662319656.567608,
+      "original_label": "True",
+      "original_tactics": [
+        "Reconnaissance"
+      ],
+      "original_techniques": [
+        "T1589"
+      ]
+    }
+  ],
+  "time_window": [
+    1662319635.49788,
+    1662319656.567608
+  ],
+  "incident_id": "2022-09-04_2022-09-11__Reconnaissance__143.88.3.11__0007",
+  "incident_shard": "2022-09-04_2022-09-11",
+  "original_label": "True",
+  "condition": "sigiloso",
+  "source_case_path": "particionar_incidentes(construir_incidentes(_leer(CSV_originales)))",
+  "source_case_sha256": "a8a428c2330ff6c74da01de934db27dd750be1a6a67d7cd06a1ca2a392406491",
+  "selection_features": [
+    "shard:2022-09-04_2022-09-11",
+    "ip:143.88.3.11",
+    "size:3",
+    "technique:T1589"
+  ],
+  "mitre_references": [
+    {
+      "nivel": "tactica",
+      "id": "Reconnaissance"
+    },
+    {
+      "nivel": "tecnica",
+      "id": "T1589"
+    }
+  ],
+  "historical_case_id": "uwf_hist_001",
+  "signature": "v2|lineas=3 ips=2 servicios=[dns:3] eventos=[evento_normal:3] eventos_totales=3 decoders=[csv:3] productos=[Zeek:3] severidades=[] categorias=[network:3] cobertura=1.0",
+  "features": {
+    "total_eventos": 3,
+    "decoder_distribution": {
+      "csv": 3
+    },
+    "product_distribution": {
+      "Zeek": 3
+    },
+    "severity_distribution": {},
+    "event_categories": {
+      "network": 3
+    },
+    "parsing": {
+      "parsed_events": 3,
+      "fallback_events": 0,
+      "coverage": 1.0
+    }
+  },
+  "observed_patterns": {
+    "protocol_counts": {
+      "udp": 3
+    },
+    "service_counts": {
+      "dns": 3
+    },
+    "connection_state_counts": {
+      "SF": 3
+    },
+    "destination_ports_top5": [
+      [
+        "53",
+        3
+      ]
+    ],
+    "distinct_source_ips": 1,
+    "distinct_destination_ips": 1
+  },
+  "description": "UWF: 3 registros originales; referencia anomalo (True). Observado: {\"connection_state_counts\":{\"SF\":3},\"destination_ports_top5\":[[\"53\",3]],\"distinct_destination_ips\":1,\"distinct_source_ips\":1,\"protocol_counts\":{\"udp\":3},\"service_counts\":{\"dns\":3}}",
+  "vector_id": "rag_enriquecido_30_v1:uwf_hist_001",
+  "corpus_path": "corpus/uwf/uwf_hist_001.csv"
+}

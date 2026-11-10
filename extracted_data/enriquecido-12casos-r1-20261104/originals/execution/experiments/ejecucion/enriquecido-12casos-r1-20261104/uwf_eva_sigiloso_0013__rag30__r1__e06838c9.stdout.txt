@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3388 salida=384 razonamiento=923 total=4695
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3655 salida=126 razonamiento=335 total=4116
+   → Solicitando RAG (Se requiere consultar la base de conocimiento histórico y MITRE ATT&CK para correlacionar el patrón de conexiones UDP/DNS unidireccionales fallidas (S0) masivas desde 143.88.255.10 hacia 10.0.10.1 con técnicas específicas (como DNS Tunneling, DNS Amplification/DoS o escaneo de servicios) y fundamentar las recomendaciones de mitigación según el objetivo de investigación.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 3 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1071.004, T1584.002, T1590.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=7150 salida=255 razonamiento=988 total=8393
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=373 salida=50 razonamiento=136 total=559
+   → usar_cve: False | Razón: El diagnóstico concluye que el tráfico corresponde a un falso positivo y comportamiento basal normal del entorno, sin evidencia de explotación o vulnerabilidades específicas que requieran consulta de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=3023 salida=6 razonamiento=358 total=3387
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=48009 salida=284 razonamiento=1611 total=49904
+   → Confianza final: 0.95 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. El análisis del lote de 300 eventos confirma que el tráfico de consultas DNS salientes desde 143.88.255.10 hacia el resolver 10.0.10.1 con estado S0 corresponde al perfil de tráfico basal histórico del dataset UWF. No existen indicios de tunelado DNS (T1071.004), exfiltración ni compromiso de infraestructura (T1584.002, T1590.002), por lo que se descarta un incidente de seguridad y se confirma que la alerta inicial es un falso positivo.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

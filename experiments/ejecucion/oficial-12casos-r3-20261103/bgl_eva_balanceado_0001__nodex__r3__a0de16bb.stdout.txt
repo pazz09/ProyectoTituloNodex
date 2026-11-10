@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=719 salida=203 razonamiento=816 total=1738
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=870 salida=203 razonamiento=1201 total=2274
+   → No hace falta RAG (El plan de investigación establece expresamente no recurrir a la memoria histórica. Además, el análisis del registro crudo permite identificar claramente que se trata de telemetría de hardware/kernel (RAS) mal categorizada, bastando los datos provistos para cerrar el diagnóstico sin consultas externas.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=232 salida=56 razonamiento=342 total=630
+   → usar_cve: False | Razón: El diagnóstico determina que se trata de un falso positivo generado por mensajes de hardware mal clasificados, sin presencia de un ataque, servicio comprometido o vulnerabilidad específica que amerite la búsqueda de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=178 salida=133 razonamiento=962 total=1273
+   → 3 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2232 salida=435 razonamiento=1108 total=3775
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros corresponden a eventos de hardware o sistema operativo (mensajes RAS KERNEL INFO con errores de memoria CE) que fueron clasificados incorrectamente por el parser bajo el perfil auth_log, registrando de forma espuria intentos de autenticación fallidos y vinculando la IP 172.16.96.116 sin evidencia de actividad hostil.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=684 salida=293 razonamiento=329 total=1306
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=853 salida=280 razonamiento=646 total=1779
+   → No hace falta RAG (El registro crudo es claro y autoexplicativo (error de conectividad 'Connection reset by peer' en ciod/HPC), el plan descarta expresamente la consulta a memoria histórica y el evento no reviste naturaleza de ataque de seguridad.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=308 salida=64 razonamiento=93 total=465
+   → usar_cve: False | Razón: El diagnóstico concluye que los eventos corresponden a fallos operacionales y problemas de conectividad de red en un entorno HPC (IBM BlueGene/L), sin indicios de actividad maliciosa, intrusión o explotación de vulnerabilidades específicas.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=261 salida=157 razonamiento=734 total=1152
+   → 7 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2383 salida=438 razonamiento=358 total=3179
+   → Confianza final: 0.88 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros corresponden a errores de comunicación en sockets (Connection reset by peer) del proceso ciod en un entorno HPC (IBM BlueGene/L), afectando la interacción con la dirección 172.16.96.116. No existe evidencia de actividad maliciosa ni intrusión; se trata de una anomalía exclusivamente operativa y de infraestructura de red.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

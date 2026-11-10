@@ -1,0 +1,52 @@
+{
+  "case_id": "bgl_eva_balanceado_0005",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 2,
+  "config_version": "oficial-12casos-r2-20261103",
+  "run_id": "bgl_eva_balanceado_0005__nodex__r2__0c0863e4",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0005",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "hardware_telemetry",
+        "evidence_uids": [
+          "log_record_000018",
+          "log_record_000019"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nFalso positivo / Actividad operativa benigna. Los registros corresponden a eventos de telemetría y diagnósticos de hardware a nivel de kernel (específicamente mensajes RAS KERNEL INFO de arquitectura de supercomputación BlueGene/L) relacionados con errores corregidos de retransmisión en la red toroidal. No se observa ninguna actividad maliciosa, vectores de ataque ni indicios de compromiso de seguridad que requieran contención para la IP 172.16.96.116.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Los registros reflejan eventos de telemetría RAS a nivel de kernel correspondientes a la arquitectura BlueGene/L, con errores corregidos de retransmisión en la red toroidal. Esto constituye una anomalía operativa de hardware/red, pero no un incidente de seguridad o compromiso."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0005__nodex__r2__0c0863e4",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0005__nodex__r2__0c0863e4.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-03T03:52:09+00:00"
+  }
+}

@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=681 salida=244 razonamiento=690 total=1615
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=856 salida=178 razonamiento=861 total=1895
+   → No hace falta RAG (Aunque la cobertura de parsing automático es del 0%, la muestra cruda revela inequívocamente registros de sistema/hardware sin relación con ciberataques, haciendo innecesaria la consulta a la memoria histórica o técnicas MITRE ATT&CK.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=215 salida=56 razonamiento=115 total=386
+   → usar_cve: False | Razón: El diagnóstico concluye que se trata de un falso positivo correspondiente a telemetría benigna y errores de hardware corregidos, sin evidencia de actividad maliciosa ni vulnerabilidades de software específicas explotadas.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=168 salida=6 razonamiento=347 total=521
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2018 salida=334 razonamiento=1305 total=3657
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros reflejan eventos de telemetría RAS a nivel de kernel correspondientes a la arquitectura BlueGene/L, con errores corregidos de retransmisión en la red toroidal. Esto constituye una anomalía operativa de hardware/red, pero no un incidente de seguridad o compromiso.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3380 salida=391 razonamiento=416 total=4187
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3637 salida=125 razonamiento=556 total=4318
+   → Solicitando RAG (El plan de investigación requiere correlacionar el alto volumen de tráfico DNS y eventos críticos (264 solicitudes de 143.88.255.10 a 10.0.10.1 sin respuesta/fallidas) con técnicas MITRE ATT&CK (como DNS Tunneling, exfiltración o DoS/amplificación) y antecedentes de incidentes similares para determinar la naturaleza exacta del ataque y establecer contramedidas.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 3 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1071.004, T1568.002, T1584.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=7118 salida=282 razonamiento=1101 total=8501
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=394 salida=55 razonamiento=146 total=595
+   → usar_cve: False | Razón: El diagnóstico concluye que el tráfico analizado es un falso positivo correspondiente a tráfico de fondo normal de la red, sin evidencia de explotación de vulnerabilidades, servicios específicos comprometidos ni indicadores de compromiso.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=3040 salida=10 razonamiento=372 total=3422
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=48027 salida=234 razonamiento=1359 total=49620
+   → Confianza final: 0.98 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es completamente acertado. La totalidad de los registros analizados corresponde a tráfico de fondo operativo y normal de la red (fondo_normal_original), caracterizado por consultas DNS periódicas en intervalos regulares de ~30 segundos (con estado S0 atribuible a captura asimétrica o resolución interna habitual), además de tráfico benigno complementario (DHCPv6, NetBIOS, consultas DNS resueltas con SF). No se detecta actividad anómala de infraestructura ni indicadores de compromiso, descartándose correctamente las técnicas candidatas de C2 (T1071.004, T1568.002).
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

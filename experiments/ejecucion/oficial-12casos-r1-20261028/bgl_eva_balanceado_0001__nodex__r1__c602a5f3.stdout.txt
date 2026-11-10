@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=719 salida=275 razonamiento=635 total=1629
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=881 salida=199 razonamiento=631 total=1711
+   → No hace falta RAG (El plan de investigación descarta expresamente la consulta de memoria histórica y la inspección de la muestra de texto crudo permite determinar directamente que se trata de telemetría de kernel/hardware sin compromiso de seguridad.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=243 salida=52 razonamiento=213 total=508
+   → usar_cve: False | Razón: No se detectó actividad maliciosa ni vulnerabilidades de software explotadas; los eventos corresponden a falsos positivos generados por registros internos de hardware del sistema (BlueGene RAS).
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=189 salida=9 razonamiento=664 total=862
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2115 salida=361 razonamiento=963 total=3439
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es preciso. Los registros analizados corresponden a mensajes de diagnóstico de hardware BlueGene RAS KERNEL INFO sobre errores de memoria corregibles ('CE sym 27') que fueron erróneamente categorizados como fallos de autenticación por el analizador sintáctico. Se trata de una anomalía meramente operativa/hardware sin implicación de seguridad ni actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3238 salida=341 razonamiento=467 total=4046
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3462 salida=183 razonamiento=431 total=4076
+   → Solicitando RAG (Se observa un volumen elevado de intentos fallidos y eventos críticos en tráfico DNS (particularmente 213 conexiones unilaterales en estado S0 desde 143.88.255.10 hacia 10.0.10.1 y 60 eventos entre 143.88.18.12 y 143.88.18.11). Para caracterizar adecuadamente si el patrón responde a técnicas de escaneo/reconocimiento, denegación de servicio o intentos de túnel/exfiltración DNS según el marco MITRE ATT&CK e historial de incidentes, es necesario consultar la memoria de largo plazo antes de emitir un diagnóstico definitivo.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 3 patrones similares encontrados.
+   → 2 técnicas MITRE ATT&CK relacionadas: T1584.002, T1071.004
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=6679 salida=251 razonamiento=768 total=7698
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=363 salida=44 razonamiento=160 total=567
+   → usar_cve: False | Razón: El diagnóstico concluye que el tráfico corresponde a un comportamiento normal de línea base sin compromiso de infraestructura, ataques ni servicios vulnerables específicos identificados.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=3009 salida=10 razonamiento=280 total=3299
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=47180 salida=794 razonamiento=2150 total=50124
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=True | cobertura_suficiente=True | El diagnóstico es erróneo al descartar actividad anómala. Aunque la mayoría del tráfico corresponde a consultas DNS, ignora un escaneo de puertos TCP explícito y concentrado (registros 147 al 206) efectuado entre las 16:35:52 y 16:35:53 desde 143.88.18.12 hacia 143.88.18.11, abarcando decenas de puertos conocidos (21, 22, 23, 25, 80, 135, 139, 443, 445, 3389, 5900, etc.) con banderas SH (SYN enviado sin completar el handshake), representativo de reconocimiento de red activo.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

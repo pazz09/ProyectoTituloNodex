@@ -1,0 +1,55 @@
+{
+  "case_id": "bgl_eva_balanceado_0006",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 3,
+  "config_version": "enriquecido-12casos-r3-20261104",
+  "run_id": "bgl_eva_balanceado_0006__rag30__r3__156870d7",
+  "condicion_rag": "enriquecido",
+  "rag_version": "rag_enriquecido_30_v1",
+  "casos_historicos": 30,
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0006",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "telemetry_logging",
+        "evidence_uids": [
+          "log_record_000001",
+          "log_record_000014"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nActividad legítima y benigna del sistema. Los registros analizados corresponden a eventos de telemetría y diagnóstico de hardware/núcleo (RAS KERNEL INFO de arquitectura tipo Blue Gene/L) que registran métricas operativas normales sobre interrupciones del procesador (10722 interrupciones totales, 0 críticas). No se observan anomalías, intentos de autenticación fallidos, indicios de explotación ni comportamientos maliciosos relacionados con la IP 10.1.1.164, por lo que no se requieren medidas de contención.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Los registros reflejan eventos normales de telemetría y métricas operativas de procesador/núcleo (RAS) sin presencia de actividad maliciosa ni fallos críticos."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0006__rag30__r3__156870d7",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0006__rag30__r3__156870d7.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-04T23:32:42+00:00"
+  }
+}

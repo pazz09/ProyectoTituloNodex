@@ -1,0 +1,2234 @@
+{
+  "status": "passed_with_limitations",
+  "snapshot_bytes_verified": true,
+  "logical_documents_embeddings_metadata_identical": true,
+  "queries": 60,
+  "queries_with_changed_returned_ids": 39,
+  "changes_between_identical_signature_and_similarity_results": 39,
+  "note": "Los empates entre firmas id?nticas no tienen desempate estable garantizado por el RAG existente. No se cambi? la recuperaci?n. La copia de archivos y el contenido l?gico s? son id?nticos.",
+  "differences": [
+    {
+      "case": "bgl_hist_001",
+      "kind": "original",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_001",
+          "historical_case_id": "bgl_hist_001",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_004",
+          "historical_case_id": "bgl_hist_004",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_008",
+          "historical_case_id": "bgl_hist_008",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.998,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_001",
+          "historical_case_id": "bgl_hist_001",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_004",
+          "historical_case_id": "bgl_hist_004",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+          "historical_case_id": "bgl_hist_012",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.998,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_001",
+      "kind": "one_record_held_out",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_001",
+          "historical_case_id": "bgl_hist_001",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_004",
+          "historical_case_id": "bgl_hist_004",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_008",
+          "historical_case_id": "bgl_hist_008",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.987,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_001",
+          "historical_case_id": "bgl_hist_001",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_004",
+          "historical_case_id": "bgl_hist_004",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+          "historical_case_id": "bgl_hist_012",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.987,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_002",
+      "kind": "original",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+          "historical_case_id": "bgl_hist_006",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+          "historical_case_id": "bgl_hist_012",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_015",
+          "historical_case_id": "bgl_hist_015",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_002",
+          "historical_case_id": "bgl_hist_002",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_011",
+          "historical_case_id": "bgl_hist_011",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_002",
+      "kind": "one_record_held_out",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_005",
+          "historical_case_id": "bgl_hist_005",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+          "historical_case_id": "bgl_hist_006",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_003",
+          "historical_case_id": "bgl_hist_003",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+          "historical_case_id": "bgl_hist_012",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_003",
+      "kind": "original",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+          "historical_case_id": "bgl_hist_006",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+          "historical_case_id": "bgl_hist_012",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_015",
+          "historical_case_id": "bgl_hist_015",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_002",
+          "historical_case_id": "bgl_hist_002",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_011",
+          "historical_case_id": "bgl_hist_011",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_003",
+      "kind": "one_record_held_out",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_005",
+          "historical_case_id": "bgl_hist_005",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+          "historical_case_id": "bgl_hist_006",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_003",
+          "historical_case_id": "bgl_hist_003",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+          "historical_case_id": "bgl_hist_012",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_004",
+      "kind": "original",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_001",
+          "historical_case_id": "bgl_hist_001",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_004",
+          "historical_case_id": "bgl_hist_004",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_008",
+          "historical_case_id": "bgl_hist_008",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.998,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_001",
+          "historical_case_id": "bgl_hist_001",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_004",
+          "historical_case_id": "bgl_hist_004",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+          "historical_case_id": "bgl_hist_012",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.998,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_004",
+      "kind": "one_record_held_out",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_001",
+          "historical_case_id": "bgl_hist_001",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_004",
+          "historical_case_id": "bgl_hist_004",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_008",
+          "historical_case_id": "bgl_hist_008",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.987,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_001",
+          "historical_case_id": "bgl_hist_001",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_004",
+          "historical_case_id": "bgl_hist_004",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+          "historical_case_id": "bgl_hist_012",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.987,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_005",
+      "kind": "original",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+          "historical_case_id": "bgl_hist_006",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+          "historical_case_id": "bgl_hist_012",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_015",
+          "historical_case_id": "bgl_hist_015",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_002",
+          "historical_case_id": "bgl_hist_002",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_011",
+          "historical_case_id": "bgl_hist_011",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_005",
+      "kind": "one_record_held_out",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_005",
+          "historical_case_id": "bgl_hist_005",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+          "historical_case_id": "bgl_hist_006",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_003",
+          "historical_case_id": "bgl_hist_003",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+          "historical_case_id": "bgl_hist_012",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_006",
+      "kind": "original",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+          "historical_case_id": "bgl_hist_006",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+          "historical_case_id": "bgl_hist_012",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_015",
+          "historical_case_id": "bgl_hist_015",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_002",
+          "historical_case_id": "bgl_hist_002",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_011",
+          "historical_case_id": "bgl_hist_011",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_006",
+      "kind": "one_record_held_out",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_005",
+          "historical_case_id": "bgl_hist_005",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+          "historical_case_id": "bgl_hist_006",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_003",
+          "historical_case_id": "bgl_hist_003",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+          "historical_case_id": "bgl_hist_012",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_007",
+      "kind": "original",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_007",
+          "historical_case_id": "bgl_hist_007",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:1,evento_normal:19] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:1] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_013",
+          "historical_case_id": "bgl_hist_013",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.999,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:2,evento_normal:18] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:2] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.958,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_007",
+          "historical_case_id": "bgl_hist_007",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:1,evento_normal:19] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:1] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_013",
+          "historical_case_id": "bgl_hist_013",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.999,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:2,evento_normal:18] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:2] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_008",
+          "historical_case_id": "bgl_hist_008",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.958,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_007",
+      "kind": "one_record_held_out",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_007",
+          "historical_case_id": "bgl_hist_007",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.994,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:1,evento_normal:19] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:1] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_013",
+          "historical_case_id": "bgl_hist_013",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.993,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:2,evento_normal:18] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:2] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.95,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_007",
+          "historical_case_id": "bgl_hist_007",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.994,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:1,evento_normal:19] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:1] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_013",
+          "historical_case_id": "bgl_hist_013",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.993,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:2,evento_normal:18] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:2] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_008",
+          "historical_case_id": "bgl_hist_008",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.95,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_008",
+      "kind": "original",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+          "historical_case_id": "bgl_hist_006",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+          "historical_case_id": "bgl_hist_012",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_015",
+          "historical_case_id": "bgl_hist_015",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_002",
+          "historical_case_id": "bgl_hist_002",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_011",
+          "historical_case_id": "bgl_hist_011",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_008",
+      "kind": "one_record_held_out",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_005",
+          "historical_case_id": "bgl_hist_005",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+          "historical_case_id": "bgl_hist_006",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_003",
+          "historical_case_id": "bgl_hist_003",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+          "historical_case_id": "bgl_hist_012",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_009",
+      "kind": "original",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+          "historical_case_id": "bgl_hist_006",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+          "historical_case_id": "bgl_hist_012",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_015",
+          "historical_case_id": "bgl_hist_015",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_002",
+          "historical_case_id": "bgl_hist_002",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_011",
+          "historical_case_id": "bgl_hist_011",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_009",
+      "kind": "one_record_held_out",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_005",
+          "historical_case_id": "bgl_hist_005",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+          "historical_case_id": "bgl_hist_006",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_003",
+          "historical_case_id": "bgl_hist_003",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+          "historical_case_id": "bgl_hist_012",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_010",
+      "kind": "original",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+          "historical_case_id": "bgl_hist_006",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+          "historical_case_id": "bgl_hist_012",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_015",
+          "historical_case_id": "bgl_hist_015",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_002",
+          "historical_case_id": "bgl_hist_002",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_011",
+          "historical_case_id": "bgl_hist_011",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_010",
+      "kind": "one_record_held_out",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_005",
+          "historical_case_id": "bgl_hist_005",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+          "historical_case_id": "bgl_hist_006",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_003",
+          "historical_case_id": "bgl_hist_003",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+          "historical_case_id": "bgl_hist_012",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_011",
+      "kind": "original",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+          "historical_case_id": "bgl_hist_006",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+          "historical_case_id": "bgl_hist_012",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_015",
+          "historical_case_id": "bgl_hist_015",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_002",
+          "historical_case_id": "bgl_hist_002",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_011",
+          "historical_case_id": "bgl_hist_011",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_011",
+      "kind": "one_record_held_out",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_005",
+          "historical_case_id": "bgl_hist_005",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+          "historical_case_id": "bgl_hist_006",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_003",
+          "historical_case_id": "bgl_hist_003",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+          "historical_case_id": "bgl_hist_012",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_012",
+      "kind": "original",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+          "historical_case_id": "bgl_hist_006",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+          "historical_case_id": "bgl_hist_012",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_015",
+          "historical_case_id": "bgl_hist_015",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_002",
+          "historical_case_id": "bgl_hist_002",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_011",
+          "historical_case_id": "bgl_hist_011",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_012",
+      "kind": "one_record_held_out",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_005",
+          "historical_case_id": "bgl_hist_005",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+          "historical_case_id": "bgl_hist_006",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_003",
+          "historical_case_id": "bgl_hist_003",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+          "historical_case_id": "bgl_hist_012",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_013",
+      "kind": "original",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_013",
+          "historical_case_id": "bgl_hist_013",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:2,evento_normal:18] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:2] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_007",
+          "historical_case_id": "bgl_hist_007",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.999,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:1,evento_normal:19] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:1] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.955,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_013",
+          "historical_case_id": "bgl_hist_013",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:2,evento_normal:18] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:2] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_007",
+          "historical_case_id": "bgl_hist_007",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.999,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:1,evento_normal:19] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:1] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_008",
+          "historical_case_id": "bgl_hist_008",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.955,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_013",
+      "kind": "one_record_held_out",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_013",
+          "historical_case_id": "bgl_hist_013",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.993,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:2,evento_normal:18] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:2] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_007",
+          "historical_case_id": "bgl_hist_007",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.993,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:1,evento_normal:19] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:1] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.947,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_013",
+          "historical_case_id": "bgl_hist_013",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.993,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:2,evento_normal:18] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:2] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_007",
+          "historical_case_id": "bgl_hist_007",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.993,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:1,evento_normal:19] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:1] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_008",
+          "historical_case_id": "bgl_hist_008",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.947,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_014",
+      "kind": "original",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+          "historical_case_id": "bgl_hist_006",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+          "historical_case_id": "bgl_hist_012",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_015",
+          "historical_case_id": "bgl_hist_015",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_002",
+          "historical_case_id": "bgl_hist_002",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_011",
+          "historical_case_id": "bgl_hist_011",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_014",
+      "kind": "one_record_held_out",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_005",
+          "historical_case_id": "bgl_hist_005",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+          "historical_case_id": "bgl_hist_006",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_003",
+          "historical_case_id": "bgl_hist_003",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+          "historical_case_id": "bgl_hist_012",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_015",
+      "kind": "original",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+          "historical_case_id": "bgl_hist_006",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+          "historical_case_id": "bgl_hist_012",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_015",
+          "historical_case_id": "bgl_hist_015",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_002",
+          "historical_case_id": "bgl_hist_002",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_011",
+          "historical_case_id": "bgl_hist_011",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 1.0,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "bgl_hist_015",
+      "kind": "one_record_held_out",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_005",
+          "historical_case_id": "bgl_hist_005",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+          "historical_case_id": "bgl_hist_006",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_003",
+          "historical_case_id": "bgl_hist_003",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+          "historical_case_id": "bgl_hist_012",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+          "historical_case_id": "bgl_hist_014",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.989,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    },
+    {
+      "case": "uwf_hist_001",
+      "kind": "original",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_001",
+          "historical_case_id": "uwf_hist_001",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=3 ips=2 servicios=[dns:3] eventos=[evento_normal:3] eventos_totales=3 decoders=[csv:3] productos=[Zeek:3] severidades=[] categorias=[network:3] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_004",
+          "historical_case_id": "uwf_hist_004",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.971,
+          "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_005",
+          "historical_case_id": "uwf_hist_005",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.971,
+          "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_001",
+          "historical_case_id": "uwf_hist_001",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=3 ips=2 servicios=[dns:3] eventos=[evento_normal:3] eventos_totales=3 decoders=[csv:3] productos=[Zeek:3] severidades=[] categorias=[network:3] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_004",
+          "historical_case_id": "uwf_hist_004",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.971,
+          "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_007",
+          "historical_case_id": "uwf_hist_007",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.971,
+          "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+        }
+      ]
+    },
+    {
+      "case": "uwf_hist_001",
+      "kind": "one_record_held_out",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_001",
+          "historical_case_id": "uwf_hist_001",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.975,
+          "signature": "v2|lineas=3 ips=2 servicios=[dns:3] eventos=[evento_normal:3] eventos_totales=3 decoders=[csv:3] productos=[Zeek:3] severidades=[] categorias=[network:3] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_005",
+          "historical_case_id": "uwf_hist_005",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.972,
+          "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_007",
+          "historical_case_id": "uwf_hist_007",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.972,
+          "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_001",
+          "historical_case_id": "uwf_hist_001",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.975,
+          "signature": "v2|lineas=3 ips=2 servicios=[dns:3] eventos=[evento_normal:3] eventos_totales=3 decoders=[csv:3] productos=[Zeek:3] severidades=[] categorias=[network:3] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_002",
+          "historical_case_id": "uwf_hist_002",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.972,
+          "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_007",
+          "historical_case_id": "uwf_hist_007",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.972,
+          "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+        }
+      ]
+    },
+    {
+      "case": "uwf_hist_002",
+      "kind": "one_record_held_out",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_001",
+          "historical_case_id": "uwf_hist_001",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=3 ips=2 servicios=[dns:3] eventos=[evento_normal:3] eventos_totales=3 decoders=[csv:3] productos=[Zeek:3] severidades=[] categorias=[network:3] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_004",
+          "historical_case_id": "uwf_hist_004",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.971,
+          "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_005",
+          "historical_case_id": "uwf_hist_005",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.971,
+          "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_001",
+          "historical_case_id": "uwf_hist_001",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=3 ips=2 servicios=[dns:3] eventos=[evento_normal:3] eventos_totales=3 decoders=[csv:3] productos=[Zeek:3] severidades=[] categorias=[network:3] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_004",
+          "historical_case_id": "uwf_hist_004",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.971,
+          "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_007",
+          "historical_case_id": "uwf_hist_007",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.971,
+          "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+        }
+      ]
+    },
+    {
+      "case": "uwf_hist_003",
+      "kind": "one_record_held_out",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_003",
+          "historical_case_id": "uwf_hist_003",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.976,
+          "signature": "v2|lineas=6 ips=2 servicios=[dns:6] eventos=[evento_normal:6] eventos_totales=6 decoders=[csv:6] productos=[Zeek:6] severidades=[] categorias=[network:6] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_006",
+          "historical_case_id": "uwf_hist_006",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.976,
+          "signature": "v2|lineas=6 ips=2 servicios=[dns:6] eventos=[evento_normal:6] eventos_totales=6 decoders=[csv:6] productos=[Zeek:6] severidades=[] categorias=[network:6] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_007",
+          "historical_case_id": "uwf_hist_007",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.971,
+          "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_003",
+          "historical_case_id": "uwf_hist_003",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.976,
+          "signature": "v2|lineas=6 ips=2 servicios=[dns:6] eventos=[evento_normal:6] eventos_totales=6 decoders=[csv:6] productos=[Zeek:6] severidades=[] categorias=[network:6] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_006",
+          "historical_case_id": "uwf_hist_006",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.976,
+          "signature": "v2|lineas=6 ips=2 servicios=[dns:6] eventos=[evento_normal:6] eventos_totales=6 decoders=[csv:6] productos=[Zeek:6] severidades=[] categorias=[network:6] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_004",
+          "historical_case_id": "uwf_hist_004",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.971,
+          "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+        }
+      ]
+    },
+    {
+      "case": "uwf_hist_004",
+      "kind": "one_record_held_out",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_001",
+          "historical_case_id": "uwf_hist_001",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=3 ips=2 servicios=[dns:3] eventos=[evento_normal:3] eventos_totales=3 decoders=[csv:3] productos=[Zeek:3] severidades=[] categorias=[network:3] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_004",
+          "historical_case_id": "uwf_hist_004",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.971,
+          "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_005",
+          "historical_case_id": "uwf_hist_005",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.971,
+          "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_001",
+          "historical_case_id": "uwf_hist_001",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=3 ips=2 servicios=[dns:3] eventos=[evento_normal:3] eventos_totales=3 decoders=[csv:3] productos=[Zeek:3] severidades=[] categorias=[network:3] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_004",
+          "historical_case_id": "uwf_hist_004",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.971,
+          "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_007",
+          "historical_case_id": "uwf_hist_007",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.971,
+          "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+        }
+      ]
+    },
+    {
+      "case": "uwf_hist_005",
+      "kind": "one_record_held_out",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_001",
+          "historical_case_id": "uwf_hist_001",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=3 ips=2 servicios=[dns:3] eventos=[evento_normal:3] eventos_totales=3 decoders=[csv:3] productos=[Zeek:3] severidades=[] categorias=[network:3] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_004",
+          "historical_case_id": "uwf_hist_004",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.971,
+          "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_005",
+          "historical_case_id": "uwf_hist_005",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.971,
+          "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_001",
+          "historical_case_id": "uwf_hist_001",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=3 ips=2 servicios=[dns:3] eventos=[evento_normal:3] eventos_totales=3 decoders=[csv:3] productos=[Zeek:3] severidades=[] categorias=[network:3] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_004",
+          "historical_case_id": "uwf_hist_004",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.971,
+          "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_007",
+          "historical_case_id": "uwf_hist_007",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.971,
+          "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+        }
+      ]
+    },
+    {
+      "case": "uwf_hist_006",
+      "kind": "one_record_held_out",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_003",
+          "historical_case_id": "uwf_hist_003",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.976,
+          "signature": "v2|lineas=6 ips=2 servicios=[dns:6] eventos=[evento_normal:6] eventos_totales=6 decoders=[csv:6] productos=[Zeek:6] severidades=[] categorias=[network:6] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_006",
+          "historical_case_id": "uwf_hist_006",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.976,
+          "signature": "v2|lineas=6 ips=2 servicios=[dns:6] eventos=[evento_normal:6] eventos_totales=6 decoders=[csv:6] productos=[Zeek:6] severidades=[] categorias=[network:6] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_007",
+          "historical_case_id": "uwf_hist_007",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.971,
+          "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_003",
+          "historical_case_id": "uwf_hist_003",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.976,
+          "signature": "v2|lineas=6 ips=2 servicios=[dns:6] eventos=[evento_normal:6] eventos_totales=6 decoders=[csv:6] productos=[Zeek:6] severidades=[] categorias=[network:6] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_006",
+          "historical_case_id": "uwf_hist_006",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.976,
+          "signature": "v2|lineas=6 ips=2 servicios=[dns:6] eventos=[evento_normal:6] eventos_totales=6 decoders=[csv:6] productos=[Zeek:6] severidades=[] categorias=[network:6] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_004",
+          "historical_case_id": "uwf_hist_004",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.971,
+          "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+        }
+      ]
+    },
+    {
+      "case": "uwf_hist_007",
+      "kind": "one_record_held_out",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_001",
+          "historical_case_id": "uwf_hist_001",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=3 ips=2 servicios=[dns:3] eventos=[evento_normal:3] eventos_totales=3 decoders=[csv:3] productos=[Zeek:3] severidades=[] categorias=[network:3] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_004",
+          "historical_case_id": "uwf_hist_004",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.971,
+          "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_005",
+          "historical_case_id": "uwf_hist_005",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.971,
+          "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_001",
+          "historical_case_id": "uwf_hist_001",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 1.0,
+          "signature": "v2|lineas=3 ips=2 servicios=[dns:3] eventos=[evento_normal:3] eventos_totales=3 decoders=[csv:3] productos=[Zeek:3] severidades=[] categorias=[network:3] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_004",
+          "historical_case_id": "uwf_hist_004",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.971,
+          "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:uwf_hist_007",
+          "historical_case_id": "uwf_hist_007",
+          "dataset": "uwf",
+          "classification": "anomalo",
+          "similarity": 0.971,
+          "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+        }
+      ]
+    },
+    {
+      "case": "uwf_hist_008",
+      "kind": "one_record_held_out",
+      "only_identical_signature_ties": true,
+      "before": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_001",
+          "historical_case_id": "bgl_hist_001",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.963,
+          "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_004",
+          "historical_case_id": "bgl_hist_004",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.963,
+          "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_008",
+          "historical_case_id": "bgl_hist_008",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.961,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ],
+      "after": [
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_001",
+          "historical_case_id": "bgl_hist_001",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.963,
+          "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_004",
+          "historical_case_id": "bgl_hist_004",
+          "dataset": "bgl",
+          "classification": "anomalo",
+          "similarity": 0.963,
+          "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        },
+        {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+          "historical_case_id": "bgl_hist_012",
+          "dataset": "bgl",
+          "classification": "normal",
+          "similarity": 0.961,
+          "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+        }
+      ]
+    }
+  ]
+}

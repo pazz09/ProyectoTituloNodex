@@ -1,0 +1,82 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3388 salida=325 razonamiento=879 total=4592
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3642 salida=143 razonamiento=510 total=4295
+   → Solicitando RAG (Se observan 244 conexiones DNS unilaterales en estado S0 (sin respuesta) desde 143.88.255.10 hacia 10.0.10.1 en un lapso breve. Para discriminar si este comportamiento corresponde a una técnica de denegación de servicio (Network DoS), tunelización/C2 o exfiltración mediante DNS según los lineamientos del plan de investigación, es necesario consultar la base de conocimiento de MITRE ATT&CK y el historial de casos similares.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1071.004, T1584.002, T1590.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=4341 salida=197 razonamiento=612 total=5150
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=315 salida=59 razonamiento=271 total=645
+   → usar_cve: False | Razón: El diagnóstico describe una actividad de reconocimiento (barrido/enumeración) o intento de túnel DNS (C2), sin especificar una versión, software de servidor DNS o vulnerabilidad/CVE concreta que explotar.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=244 salida=204 razonamiento=1812 total=2260
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=48149 salida=621 razonamiento=2305 total=51075
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=False | Se observa un flujo regular y periódico cada 30 segundos de paquetes UDP al puerto 53 hacia 10.0.10.1 con estado S0 (sin respuesta), lo que representa una anomalía operativa típicamente asociada a reintentos de resolución DNS de un cliente hacia un servidor DNS inalcanzable o mal configurado. Atribuir este comportamiento a reconocimiento DNS o túnel de comando y control es una especulación que excede la evidencia, dado que los registros de conexión de nivel de transporte no contienen los dominios consultados ni el contenido de las peticiones.
+   🔀 Router Finalización → agente_planificador (replanifica: cobertura insuficiente)
+👉 Transición completada en: 'agente_auditor_final'
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=4669 salida=313 razonamiento=808 total=5790
+   → Plan v2: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3613 salida=293 razonamiento=1119 total=5025
+   → No hace falta RAG (La cobertura de parsing es del 100%, el patrón de fallo (S0/timeout repetitivo) es concluyente en la telemetría Zeek y el plan de investigación especifica explícitamente que no se contempla consultar memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=353 salida=47 razonamiento=125 total=525
+   → usar_cve: False | Razón: El evento corresponde a un problema de configuración de red y retransmisiones DNS fallidas, descartando actividad maliciosa o explotación de vulnerabilidades específicas.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=282 salida=252 razonamiento=1394 total=1928
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=48237 salida=578 razonamiento=818 total=49633
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. La evidencia muestra múltiples intentos de conexión UDP al puerto 53 con estado S0 (sin respuesta) hacia la IP 10.0.10.1, con intervalos periódicos consistentes con timeouts y retransmisiones de resolución DNS fallida por mala configuración. Se descarta actividad maliciosa, tunelado o C2 al no existir tráfico de retorno ni canales establecidos.
+   🔀 Router Finalización → END (MAX_REPLANS=1 alcanzado)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

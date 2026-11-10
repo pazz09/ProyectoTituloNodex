@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=719 salida=249 razonamiento=909 total=1877
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=889 salida=102 razonamiento=309 total=1300
+   → Solicitando RAG (La cobertura de parsing es del 0% con registros en texto libre no estructurados y se detectaron 2 eventos críticos asociados a la IP 172.16.96.116. Conforme al plan de investigación y las advertencias de parsing, es indispensable consultar la memoria histórica y técnicas MITRE ATT&CK para contextualizar las anomalías antes de diagnosticar.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 3 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1685.001, T1685.004, T1654
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=4014 salida=203 razonamiento=554 total=4771
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=298 salida=51 razonamiento=182 total=531
+   → usar_cve: False | Razón: El diagnóstico concluye que se trata de un falso positivo correspondiente a registros de hardware/kernel de Blue Gene/L y no a un ataque o vulnerabilidad de software explotable.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=2598 salida=6 razonamiento=260 total=2864
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2949 salida=337 razonamiento=787 total=4073
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros corresponden a eventos de diagnóstico de hardware y kernel de Blue Gene/L (BGL) relativos a errores de paridad de memoria, descartando actividad maliciosa o intentos de autenticación reales. Al tratarse de fallos o degradación de hardware, constituye una anomalía operativa pero no un incidente de seguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

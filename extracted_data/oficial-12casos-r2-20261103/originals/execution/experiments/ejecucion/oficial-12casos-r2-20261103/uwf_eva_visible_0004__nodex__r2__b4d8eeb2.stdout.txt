@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3238 salida=366 razonamiento=1767 total=5371
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3491 salida=164 razonamiento=399 total=4054
+   → Solicitando RAG (Se requiere consultar la base de conocimiento y MITRE ATT&CK para correlacionar los patrones de tráfico DNS anómalo y conexiones incompletas (estado S0 hacia 10.0.10.1:53 y ráfagas entre 143.88.18.12 y 143.88.18.11) con técnicas específicas de abuso de DNS (como DNS Tunneling T1071.004 / T1048.003 o ataques de Denegación de Servicio T1498) antes de emitir un diagnóstico concluyente.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 2 técnicas MITRE ATT&CK relacionadas: T1584.002, T1071.004
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=3933 salida=286 razonamiento=979 total=5198
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=398 salida=54 razonamiento=497 total=949
+   → usar_cve: False | Razón: El diagnóstico describe patrones de tráfico y comportamiento anómalo de red (tunelización DNS/C2 y escaneo) sin identificar software, versiones específicas ni vulnerabilidades concretas explotadas.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=333 salida=279 razonamiento=1127 total=1739
+   → 9 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=47489 salida=1073 razonamiento=1292 total=49854
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=True | cobertura_suficiente=True | Se confirma actividad anómala maliciosa consistente en un escaneo de puertos TCP (Network Service Discovery) originado desde 143.88.18.12 hacia 143.88.18.11 a través de múltiples servicios críticos (SSH, RDP, SMB, VNC, HTTP, Telnet, bases de datos) en estado SH (half-open). Paralelamente, se observan ráfagas persistentes de paquetes DNS dirigidos a 10.0.10.1 sin respuesta (S0) desde 143.88.255.10. El diagnóstico es acertado en identificar la naturaleza no autorizada del tráfico y las medidas de contención/aislamiento son procedentes.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

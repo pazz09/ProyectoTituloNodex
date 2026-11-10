@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=719 salida=317 razonamiento=934 total=1970
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=895 salida=117 razonamiento=480 total=1492
+   → Solicitando RAG (La cobertura de parsing es del 0% y los registros muestran mensajes de kernel/RAS no estructurados catalogados erróneamente como autenticación, sin usuarios ni servicios identificados. Es necesario consultar la base de conocimiento y técnicas MITRE ATT&CK para correlacionar este comportamiento anómalo desde 172.16.96.116 con patrones históricos antes de emitir un veredicto.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 3 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1685.001, T1685.004, T1654
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=4017 salida=142 razonamiento=594 total=4753
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=243 salida=51 razonamiento=188 total=482
+   → usar_cve: False | Razón: El diagnóstico confirma que los eventos son registros operativos normales de hardware y sistema sin actividad maliciosa ni servicios vulnerables comprometidos, por lo que no es necesario consultar CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=2536 salida=6 razonamiento=235 total=2777
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2894 salida=311 razonamiento=2580 total=5785
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto al identificar que los registros corresponden a telemetría de hardware/sistema (eventos RAS de supercomputadora BlueGene/L) y no a un incidente de seguridad ni a intrusiones reales. La anomalía observada es puramente operativa y de hardware, sin compromiso de seguridad, por lo que no corresponde aplicar contención ni atribuir técnicas MITRE.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

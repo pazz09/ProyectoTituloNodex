@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=668 salida=227 razonamiento=806 total=1701
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=831 salida=208 razonamiento=654 total=1693
+   → No hace falta RAG (El lote contiene únicamente mensajes informativos de diagnóstico del kernel con métricas normales y sin eventos de seguridad adversos; sumado a la directiva del plan de investigación que descarta memoria histórica, la información disponible es suficiente para determinar que se trata de ruido operativo benigno.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=233 salida=54 razonamiento=129 total=416
+   → usar_cve: False | Razón: El diagnóstico concluye que la actividad es legítima y benigna, correspondiente a telemetría de hardware normal, sin indicios de explotación ni mención de vulnerabilidades o servicios vulnerables específicos.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=186 salida=6 razonamiento=423 total=615
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2013 salida=276 razonamiento=713 total=3002
+   → Confianza final: 0.85 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros reflejan eventos normales de telemetría y métricas operativas de procesador/núcleo (RAS) sin presencia de actividad maliciosa ni fallos críticos.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

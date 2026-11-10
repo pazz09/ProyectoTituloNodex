@@ -1,0 +1,154 @@
+{
+  "dataset": "uwf",
+  "original_id": "2022-09-04_2022-09-11__Reconnaissance__143.88.7.11__0016",
+  "classification": "anomalo",
+  "partition": "desarrollo",
+  "fragment_sha256": "338ba909f8dd2435c6c8df708e4c81e11189f5a7bbdb143f2c85a90003ff2807",
+  "records": [
+    {
+      "source_path": "data/logs/UWF-ZeekDataFall22-parquet/2022-09-04%20-%202022-09-11/part-00000-ea53b0e8-d346-44e3-9a87-1f60ac35c610-c000.snappy.parquet",
+      "source_file_sha256": "c583e77ffad0980f44bb56ae76e508ea1890cb080a0c5d1c1172f66135ed6c24",
+      "source_line": 203,
+      "source_line_unit": "fila CSV deduplicado (cabecera=1), regenerable por hash",
+      "converted_events_sha256": "b0e4bda40b35fc6f2e82b544d16ee46a127908857d8034cc1576cb2c4c2bdd32",
+      "uid": "COVFS74k5FKvHUncO8",
+      "original_event_sha256": "3b705a690e2c3a92fd4aba4c5eb9fdc7c955e0a61cedbf9aabe65f82589b02bd",
+      "original_ts": 1662279787.88431,
+      "original_label": "True",
+      "original_tactics": [
+        "Reconnaissance"
+      ],
+      "original_techniques": [
+        "T1590",
+        "T1592"
+      ]
+    },
+    {
+      "source_path": "data/logs/UWF-ZeekDataFall22-parquet/2022-09-04%20-%202022-09-11/part-00000-ea53b0e8-d346-44e3-9a87-1f60ac35c610-c000.snappy.parquet",
+      "source_file_sha256": "c583e77ffad0980f44bb56ae76e508ea1890cb080a0c5d1c1172f66135ed6c24",
+      "source_line": 48,
+      "source_line_unit": "fila CSV deduplicado (cabecera=1), regenerable por hash",
+      "converted_events_sha256": "b0e4bda40b35fc6f2e82b544d16ee46a127908857d8034cc1576cb2c4c2bdd32",
+      "uid": "CScyzf1LGazPkK5tq5",
+      "original_event_sha256": "4f0fa002a365976fe1850e8cc8fa638d5fbe7665c1129bf47bd1a4bf343a1ab7",
+      "original_ts": 1662279787.887385,
+      "original_label": "True",
+      "original_tactics": [
+        "Reconnaissance"
+      ],
+      "original_techniques": [
+        "T1590",
+        "T1592"
+      ]
+    },
+    {
+      "source_path": "data/logs/UWF-ZeekDataFall22-parquet/2022-09-04%20-%202022-09-11/part-00000-ea53b0e8-d346-44e3-9a87-1f60ac35c610-c000.snappy.parquet",
+      "source_file_sha256": "c583e77ffad0980f44bb56ae76e508ea1890cb080a0c5d1c1172f66135ed6c24",
+      "source_line": 5,
+      "source_line_unit": "fila CSV deduplicado (cabecera=1), regenerable por hash",
+      "converted_events_sha256": "b0e4bda40b35fc6f2e82b544d16ee46a127908857d8034cc1576cb2c4c2bdd32",
+      "uid": "C76PDR3ZP0hWInGML4",
+      "original_event_sha256": "4073614479303df7c7128cfda4424c7831e036dca6198d738a8b33ddf1bc23c4",
+      "original_ts": 1662279787.889288,
+      "original_label": "True",
+      "original_tactics": [
+        "Reconnaissance"
+      ],
+      "original_techniques": [
+        "T1590",
+        "T1592"
+      ]
+    },
+    {
+      "source_path": "data/logs/UWF-ZeekDataFall22-parquet/2022-09-04%20-%202022-09-11/part-00000-ea53b0e8-d346-44e3-9a87-1f60ac35c610-c000.snappy.parquet",
+      "source_file_sha256": "c583e77ffad0980f44bb56ae76e508ea1890cb080a0c5d1c1172f66135ed6c24",
+      "source_line": 701,
+      "source_line_unit": "fila CSV deduplicado (cabecera=1), regenerable por hash",
+      "converted_events_sha256": "b0e4bda40b35fc6f2e82b544d16ee46a127908857d8034cc1576cb2c4c2bdd32",
+      "uid": "CTADYU1rD7eYjGguhc",
+      "original_event_sha256": "76d92a39e9ddb94ec4d8e8b7af03fa00400e0442f2077a90705e0e3244cfc1b8",
+      "original_ts": 1662279787.891771,
+      "original_label": "True",
+      "original_tactics": [
+        "Reconnaissance"
+      ],
+      "original_techniques": [
+        "T1590",
+        "T1592"
+      ]
+    }
+  ],
+  "time_window": [
+    1662279787.88431,
+    1662279787.891771
+  ],
+  "incident_id": "2022-09-04_2022-09-11__Reconnaissance__143.88.7.11__0016",
+  "incident_shard": "2022-09-04_2022-09-11",
+  "original_label": "True",
+  "condition": "sigiloso",
+  "source_case_path": "particionar_incidentes(construir_incidentes(_leer(CSV_originales)))",
+  "source_case_sha256": "a8a428c2330ff6c74da01de934db27dd750be1a6a67d7cd06a1ca2a392406491",
+  "selection_features": [
+    "shard:2022-09-04_2022-09-11",
+    "ip:143.88.7.11",
+    "size:4",
+    "technique:T1590",
+    "technique:T1592"
+  ],
+  "mitre_references": [
+    {
+      "nivel": "tactica",
+      "id": "Reconnaissance"
+    },
+    {
+      "nivel": "tecnica",
+      "id": "T1590"
+    },
+    {
+      "nivel": "tecnica",
+      "id": "T1592"
+    }
+  ],
+  "historical_case_id": "uwf_hist_004",
+  "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0",
+  "features": {
+    "total_eventos": 4,
+    "decoder_distribution": {
+      "csv": 4
+    },
+    "product_distribution": {
+      "Zeek": 4
+    },
+    "severity_distribution": {},
+    "event_categories": {
+      "network": 4
+    },
+    "parsing": {
+      "parsed_events": 4,
+      "fallback_events": 0,
+      "coverage": 1.0
+    }
+  },
+  "observed_patterns": {
+    "protocol_counts": {
+      "udp": 4
+    },
+    "service_counts": {
+      "dns": 4
+    },
+    "connection_state_counts": {
+      "SF": 4
+    },
+    "destination_ports_top5": [
+      [
+        "53",
+        4
+      ]
+    ],
+    "distinct_source_ips": 1,
+    "distinct_destination_ips": 1
+  },
+  "description": "UWF: 4 registros originales; referencia anomalo (True). Observado: {\"connection_state_counts\":{\"SF\":4},\"destination_ports_top5\":[[\"53\",4]],\"distinct_destination_ips\":1,\"distinct_source_ips\":1,\"protocol_counts\":{\"udp\":4},\"service_counts\":{\"dns\":4}}",
+  "vector_id": "rag_enriquecido_30_v1:uwf_hist_004",
+  "corpus_path": "corpus/uwf/uwf_hist_004.csv"
+}

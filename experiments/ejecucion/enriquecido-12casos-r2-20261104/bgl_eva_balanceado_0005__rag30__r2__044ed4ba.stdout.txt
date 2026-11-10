@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=681 salida=240 razonamiento=1029 total=1950
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=855 salida=203 razonamiento=611 total=1669
+   → No hace falta RAG (El registro crudo es característico de logs RAS de supercómputo/kernel sin indicadores de compromiso ni vectores de ataque de red, lo que permite un diagnóstico directo sin requerir consulta a la base de conocimiento histórico, en concordancia con el plan de investigación.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=236 salida=55 razonamiento=346 total=637
+   → usar_cve: False | Razón: El diagnóstico concluye que los eventos corresponden a telemetría de hardware y errores físicos de red corregidos, descartando actividad maliciosa y sin identificar vulnerabilidades o servicios de software específicos afectados.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=189 salida=113 razonamiento=589 total=891
+   → 4 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2148 salida=329 razonamiento=723 total=3200
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | Los registros corresponden a mensajes RAS de hardware e infraestructura que reportan errores de retransmisión en la red de interconexión toroidal. Aunque constituyen una anomalía operativa a nivel de hardware/red, no existe evidencia de actividad maliciosa, intrusión o compromiso de seguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

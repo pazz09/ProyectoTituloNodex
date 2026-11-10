@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3047 salida=402 razonamiento=560 total=4009
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3318 salida=146 razonamiento=301 total=3765
+   → Solicitando RAG (Se observa un patrón anómalo de 261 eventos DNS fallidos dirigidos desde 143.88.255.10 hacia 10.0.10.1. Para determinar con certeza si la actividad corresponde a DNS tunneling (T1071.004), técnicas de resolución de nombres dinámicas (T1568) o un intento de denegación de servicio/escaneo, y establecer las medidas de contención adecuadas según el plan, se requiere consultar la base de conocimiento y casos históricos.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 3 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1584.002, T1071.004, T1590.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=6796 salida=180 razonamiento=871 total=7847
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=292 salida=54 razonamiento=95 total=441
+   → usar_cve: False | Razón: El diagnóstico concluye que se trata de un falso positivo correspondiente a tráfico de fondo normal o problemas de configuración de red, sin evidencia de explotación activa ni software vulnerable específico.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=2938 salida=10 razonamiento=1071 total=4019
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=47941 salida=574 razonamiento=417 total=48932
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Se observa un volumen continuo de consultas DNS dirigidas desde 143.88.255.10 hacia la IP interna 10.0.10.1 con estado de conexión S0 (sin respuesta), mientras que otros clientes resuelven satisfactoriamente contra 143.88.1.1 (SF). Este comportamiento constituye una anomalía operativa atribuible a un servidor DNS inalcanzable o mal configurado en el cliente, sin observarse indicadores de tunelizado, exfiltración ni reconocimiento malicioso.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3238 salida=269 razonamiento=1299 total=4806
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3457 salida=161 razonamiento=864 total=4482
+   → Solicitando RAG (Se observa un volumen elevado y anómalo de tráfico dirigido al servicio DNS (principalmente desde 143.88.255.10 hacia 10.0.10.1 con estado S0 y alta tasa de fallos/eventos críticos). Conforme al plan de investigación, es necesario consultar la base de conocimiento histórico y técnicas MITRE ATT&CK (como T1071.004, T1572 o T1048) para caracterizar adecuadamente el patrón (túnel DNS, C2, escaneo o denegación de servicio) y establecer las medidas de contención precisas.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 2 técnicas MITRE ATT&CK relacionadas: T1584.002, T1071.004
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=3901 salida=301 razonamiento=749 total=4951
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=413 salida=60 razonamiento=323 total=796
+   → usar_cve: False | Razón: El diagnóstico describe un comportamiento anómalo de red y sospecha de canal encubierto o C2 (T1071.004) mediante el protocolo DNS, sin identificar una versión o software específico vulnerable.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=348 salida=294 razonamiento=1154 total=1796
+   → 7 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=47519 salida=1178 razonamiento=3274 total=51971
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=True | cobertura_suficiente=True | El diagnóstico es acertado al identificar dos anomalías críticas en el tráfico de red: un balizamiento o comunicación DNS repetitiva no respondida (estado S0) con cadencia fija de aproximadamente 30 segundos desde 143.88.255.10 hacia 10.0.10.1, y un escaneo evidente de puertos TCP (estado SH) dirigido por 143.88.18.12 contra 143.88.18.11 abarcando múltiples servicios críticos (SSH, RDP, Telnet, SMB, VNC, etc.). Las medidas de contención mediante iptables y la recolección de pcap son apropiadas y pertinentes.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

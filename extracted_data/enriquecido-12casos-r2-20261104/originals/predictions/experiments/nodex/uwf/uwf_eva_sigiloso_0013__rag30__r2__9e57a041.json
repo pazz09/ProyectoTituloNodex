@@ -1,0 +1,60 @@
+{
+  "case_id": "uwf_eva_sigiloso_0013",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 2,
+  "config_version": "enriquecido-12casos-r2-20261104",
+  "run_id": "uwf_eva_sigiloso_0013__rag30__r2__9e57a041",
+  "condicion_rag": "enriquecido",
+  "rag_version": "rag_enriquecido_30_v1",
+  "casos_historicos": 30,
+  "salida": {
+    "case_id": "uwf_eva_sigiloso_0013",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl análisis del lote revela 294 transacciones DNS, concentradas mayoritariamente desde la IP 143.88.255.10 hacia el servidor 10.0.10.1, presentando conexiones en estado no establecido (S0) que fueron catalogadas preliminarmente como críticas por volumen de fallos. Sin embargo, la correlación con el contexto histórico recuperado (similitud superior al 98% con perfiles de referencia normal del entorno UWF) demuestra que este patrón de tráfico UDP/DNS con estados S0 es característico del comportamiento habitual de la red y no evidencia actividad maliciosa. Ninguna de las técnicas de Command and Control o Reconocimiento evaluadas (como T1071.004 o T1590.002) aplica, concluyéndose que se trata de un falso positivo correspondiente a tráfico de fondo normal.\n\n## Evaluación del auditor\n\nEl diagnóstico propuesto es correcto. Las transacciones DNS con estado S0 entre 143.88.255.10 y 10.0.10.1 corresponden a patrones operativos habituales de fondo en el entorno analizado, con una correlación superior al 98% con el perfil de línea base. No se observan indicadores de técnicas como T1071.004 (DNS Tunneling) ni T1590.002 (Reconocimiento DNS), tratándose de un falso positivo."
+    },
+    "_meta": {
+      "run_id": "uwf_eva_sigiloso_0013__rag30__r2__9e57a041",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_sigiloso_0013__rag30__r2__9e57a041.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-04T23:30:51+00:00"
+  }
+}

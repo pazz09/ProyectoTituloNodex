@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3047 salida=382 razonamiento=504 total=3933
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3294 salida=180 razonamiento=633 total=4107
+   → Solicitando RAG (El lote muestra un volumen anómalo y concentrado de 261 intentos fallidos en tráfico DNS desde 143.88.255.10 hacia 10.0.10.1 en un lapso de 31 minutos. Para diferenciar con precisión si se trata de tunelización DNS (T1071.004 / T1572), exfiltración de datos (T1048.003) o escaneo/reconocimiento, y para definir las acciones de contención alineadas a las mejores prácticas institucionales, es necesario consultar las técnicas MITRE ATT&CK y el historial de casos similares en la memoria de largo plazo.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 3 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1584.002, T1071.004, T1590.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=6788 salida=185 razonamiento=757 total=7730
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=297 salida=63 razonamiento=177 total=537
+   → usar_cve: False | Razón: El diagnóstico concluye que el tráfico analizado corresponde a ruido operacional benigno y tráfico de red habitual, descartando actividad maliciosa, por lo que no hay vulnerabilidades o ataques que consultar en la base de datos de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=2943 salida=6 razonamiento=636 total=3585
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=47946 salida=240 razonamiento=3256 total=51442
+   → Confianza final: 0.95 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. El patrón de consultas DNS hacia 10.0.10.1 con estado S0 y periodicidad de 30 segundos, así como las resoluciones exitosas hacia 143.88.1.1, coincide plenamente con el tráfico de fondo y ruido operacional habitual de la red (correlación >99% con línea base benigna). No se evidencian patrones de tunelización DNS, exfiltración ni escaneo malicioso.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

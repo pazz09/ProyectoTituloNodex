@@ -1,0 +1,54 @@
+{
+  "case_id": "bgl_eva_natural_0016",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 3,
+  "config_version": "oficial-12casos-r3-20261103",
+  "run_id": "bgl_eva_natural_0016__nodex__r3__62d97de2",
+  "salida": {
+    "case_id": "bgl_eva_natural_0016",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "hardware_monitoring_event",
+        "evidence_uids": [
+          "log_record_000001",
+          "log_record_000002",
+          "log_record_000004",
+          "log_record_000005"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nActividad operacional benigna correspondiente a eventos de descubrimiento y monitoreo de hardware (logs de infraestructura tipo clúster HPC / BlueGene/L). Los mensajes indican cambios rutinarios de estado de chips ('Ido chip status changed') a nivel de subsistema DISCOVERY con severidad INFO en direcciones IP privadas de gestión interna (10.0.2.192, 10.0.1.155, 10.2.2.80, 10.6.1.207). No se evidencia actividad maliciosa, fallos de autenticación, escaneos ni tráfico anómalo. Se recomienda desarrollar e implementar reglas de parseo específicas (grok/regex) para esta fuente de datos en el SIEM con el fin de normalizar campos como dirección MAC, estado y componente, evitando que se procesen como texto no estructurado.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Los registros corresponden a eventos operacionales benignos de descubrimiento y monitoreo de hardware en infraestructura de clúster (BlueGene/L) con severidad informativa. No se observan anomalías de funcionamiento ni indicios de incidente o actividad maliciosa."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0016__nodex__r3__62d97de2",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0016__nodex__r3__62d97de2.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-03T04:17:36+00:00"
+  }
+}

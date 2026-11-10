@@ -1,0 +1,82 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1091 salida=225 razonamiento=417 total=1733
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=1261 salida=171 razonamiento=313 total=1745
+   → No hace falta RAG (La muestra cruda evidencia claramente registros de sistema operativo/hardware de nivel informativo (DISCOVERY INFO) sobre cambios de estado en chips internos. A pesar de la baja cobertura de parsing estructurado, el contenido de texto libre no exhibe patrones de ataque ni indicadores de compromiso, por lo que no se requiere consulta histórica adicional.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=186 salida=53 razonamiento=312 total=551
+   → usar_cve: False | Razón: El diagnóstico describe eventos exclusivamente operacionales e informativos de hardware sin indicios de actividad maliciosa, intrusiones o servicios vulnerables específicos que ameriten la búsqueda de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=139 salida=47 razonamiento=691 total=877
+   → 3 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2058 salida=252 razonamiento=1144 total=3454
+   → Confianza final: 0.65 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=False | El diagnóstico señala que los registros corresponden a mensajes operacionales e informativos de hardware (cambios de estado de componentes Ido chip típicos de BlueGene/L) dentro de direccionamiento RFC 1918, sin indicios de actividad maliciosa ni fallos críticos. No obstante, el 100% de las líneas carece de parsing estructurado y timestamps, por lo que la confirmación depende del análisis del texto sin procesar.
+   🔀 Router Finalización → agente_planificador (replanifica: cobertura insuficiente)
+👉 Transición completada en: 'agente_auditor_final'
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1985 salida=377 razonamiento=596 total=2958
+   → Plan v2: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=1302 salida=85 razonamiento=243 total=1630
+   → Solicitando RAG (La cobertura de parsing es del 0% al tratarse de texto libre de telemetría BlueGene/L y el plan de investigación requiere contrastar con la base histórica y patrones previos de supercomputación para validar la normalidad operativa de los cambios de estado de hardware.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 0 técnicas MITRE ATT&CK relacionadas (colección vacía o sin similitud suficiente).
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=1277 salida=107 razonamiento=369 total=1753
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=201 salida=46 razonamiento=194 total=441
+   → usar_cve: False | Razón: El diagnóstico confirma que los eventos corresponden a actividad operativa legítima y de diagnóstico de hardware sin indicios de anomalías de seguridad ni explotación de vulnerabilidades.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=154 salida=53 razonamiento=791 total=998
+   → 2 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2079 salida=183 razonamiento=1020 total=3282
+   → Confianza final: 0.85 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros corresponden a mensajes operativos legítimos de hardware y servicio de descubrimiento (DISCOVERY INFO) típicos de sistemas IBM BlueGene/L dentro de direccionamiento IP privado interno. No se observan anomalías de funcionamiento ni incidentes de seguridad.
+   🔀 Router Finalización → END (MAX_REPLANS=1 alcanzado)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

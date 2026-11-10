@@ -1,0 +1,500 @@
+{
+  "case_id": "bgl_eva_balanceado_0001",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "enriquecido-12casos-r1-20261104",
+  "run_id": "bgl_eva_balanceado_0001__rag30__r1__3d47bb91",
+  "condicion_rag": "enriquecido",
+  "rag_version": "rag_enriquecido_30_v1",
+  "casos_historicos": 30,
+  "estado_crudo": {
+    "resumen_logs": {
+      "formato_detectado": "auth_log",
+      "total_lineas": 20,
+      "servicios": {
+        "desconocido": 20
+      },
+      "eventos": {
+        "evento_critico": 2,
+        "evento_normal": 18
+      },
+      "ventana_temporal": {
+        "inicio": null,
+        "fin": null
+      },
+      "n_ips_distintas": 1,
+      "ips_distintas": [
+        "172.16.96.116"
+      ],
+      "por_ip": {
+        "172.16.96.116": {
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [],
+          "n_eventos": 2,
+          "n_como_origen": 2,
+          "n_como_destino": 0
+        }
+      },
+      "usuarios": {},
+      "n_usuarios_distintos": 0,
+      "codigos_respuesta": {},
+      "entidades": [
+        {
+          "ip": "172.16.96.116",
+          "n_eventos": 2,
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [],
+          "n_como_origen": 2,
+          "n_como_destino": 0
+        }
+      ],
+      "cronologia": [
+        {
+          "n": 14,
+          "timestamp": null,
+          "servicio": null,
+          "evento": "evento_critico",
+          "mensaje": "1128170317 2005.10.01 R73-M0-N4-I:J18-U11 2005-10-01-05.38.37.246285 R73-M0-N4-I:J18-U11 RAS APP FATAL ciod: Error loading /home/spelce1/HPCC_IBM/Urgent/Gunnels/VNM64/vnm.rts: inva…"
+        },
+        {
+          "n": 19,
+          "timestamp": null,
+          "servicio": null,
+          "evento": "evento_critico",
+          "mensaje": "1128510395 2005.10.05 R62-M1-N8-I:J18-U01 2005-10-05-04.06.35.463665 R62-M1-N8-I:J18-U01 RAS APP FATAL ciod: Error loading /home/spelce1/HPCC_IBM/Urgent/VNM/64K/vnm.rts: invalid or…"
+        }
+      ],
+      "cronologia_omitidos": 0,
+      "raw_procedencia": {
+        "sha256": "34a644978a317ae3df1d35409a4650b03c571f0acdb1ba47663fdea295a25531",
+        "lineas": 20,
+        "bytes": 3357
+      },
+      "reputacion_ips": {
+        "172.16.96.116": {
+          "fuente": "sin_reputacion",
+          "ip": "172.16.96.116",
+          "score": null,
+          "nota": "modo sin reputación externa: ninguna IP recibe puntaje",
+          "categoria": "desconocido"
+        }
+      }
+    },
+    "preprocessing_metadata": {
+      "schema_version": "2.0",
+      "total_lineas_fisicas": 20,
+      "total_eventos": 20,
+      "decoder_distribution": {
+        "text": 20
+      },
+      "product_distribution": {},
+      "vendor_distribution": {},
+      "version_distribution": {},
+      "protocol_distribution": {},
+      "profile_distribution": {
+        "auth_log": 2
+      },
+      "severity_distribution": {},
+      "event_categories": {
+        "authentication": 2
+      },
+      "event_outcomes": {
+        "failure": 2
+      },
+      "entities": {
+        "ip": {
+          "172.16.96.116": 2
+        }
+      },
+      "time_window": {
+        "inicio": null,
+        "fin": null
+      },
+      "parsing": {
+        "parsed_events": 0,
+        "fallback_events": 20,
+        "coverage": 0.0
+      },
+      "segments": [
+        {
+          "index": 0,
+          "decoder": "text",
+          "line_start": 1,
+          "line_end": 20,
+          "n_records": 20,
+          "confidence": 0.1,
+          "decoder_inicial": "text",
+          "confidence_inicial": 0.1,
+          "decoder_distribution": {
+            "text": 20
+          },
+          "context": {}
+        }
+      ],
+      "entities_resumen": {
+        "ip": 1
+      },
+      "config": {
+        "LOG_DETECTION_CHUNK_SIZE": 50,
+        "LOG_ENABLE_MULTILINE": true,
+        "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+        "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+        "LOG_MAX_EVENTS": 100000,
+        "LOG_MAX_FILE_BYTES": 52428800,
+        "LOG_MAX_RAW_SAMPLES": 20,
+        "LOG_MAX_UNMAPPED_FIELDS": 100,
+        "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+        "LOG_PARSING_MODE": "hybrid",
+        "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+        "LOG_PRESERVE_RAW": true
+      }
+    },
+    "parsing_warnings": [],
+    "raw_samples": [
+      {
+        "decoder": "text",
+        "texto": "1127515927 2005.09.23 R07-M0-ND-C:J16-U01 2005-09-23-15.52.07.594229 R07-M0-ND-C:J16-U01 RAS KERNEL INFO CE sym 27, at 0x166a9f20, mask 0x02"
+      }
+    ],
+    "evidencia_logs": [
+      {
+        "uid": "log_record_000001",
+        "record_number": 1,
+        "line_start": 1,
+        "line_end": 1,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000002",
+        "record_number": 2,
+        "line_start": 2,
+        "line_end": 2,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000003",
+        "record_number": 3,
+        "line_start": 3,
+        "line_end": 3,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000004",
+        "record_number": 4,
+        "line_start": 4,
+        "line_end": 4,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000005",
+        "record_number": 5,
+        "line_start": 5,
+        "line_end": 5,
+        "timestamp": null,
+        "source_ip": "172.16.96.116"
+      },
+      {
+        "uid": "log_record_000006",
+        "record_number": 6,
+        "line_start": 6,
+        "line_end": 6,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000007",
+        "record_number": 7,
+        "line_start": 7,
+        "line_end": 7,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000008",
+        "record_number": 8,
+        "line_start": 8,
+        "line_end": 8,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000009",
+        "record_number": 9,
+        "line_start": 9,
+        "line_end": 9,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000010",
+        "record_number": 10,
+        "line_start": 10,
+        "line_end": 10,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000011",
+        "record_number": 11,
+        "line_start": 11,
+        "line_end": 11,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000012",
+        "record_number": 12,
+        "line_start": 12,
+        "line_end": 12,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000013",
+        "record_number": 13,
+        "line_start": 13,
+        "line_end": 13,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000014",
+        "record_number": 14,
+        "line_start": 14,
+        "line_end": 14,
+        "timestamp": null,
+        "event_category": "authentication",
+        "event_action": "login",
+        "event_outcome": "failure"
+      },
+      {
+        "uid": "log_record_000015",
+        "record_number": 15,
+        "line_start": 15,
+        "line_end": 15,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000016",
+        "record_number": 16,
+        "line_start": 16,
+        "line_end": 16,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000017",
+        "record_number": 17,
+        "line_start": 17,
+        "line_end": 17,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000018",
+        "record_number": 18,
+        "line_start": 18,
+        "line_end": 18,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000019",
+        "record_number": 19,
+        "line_start": 19,
+        "line_end": 19,
+        "timestamp": null,
+        "event_category": "authentication",
+        "event_action": "login",
+        "event_outcome": "failure"
+      },
+      {
+        "uid": "log_record_000020",
+        "record_number": 20,
+        "line_start": 20,
+        "line_end": 20,
+        "timestamp": null,
+        "source_ip": "172.16.96.116"
+      }
+    ],
+    "evidencia_logs_omitidos": 0,
+    "eventos_reconstruidos": [
+      {
+        "event_id": "event_001",
+        "evidence_uids": [
+          "log_record_000014",
+          "log_record_000019"
+        ],
+        "timestamp": null,
+        "event_type": "authentication_failure",
+        "description": "Registros catalogados erróneamente como fallos de inicio de sesión correspondientes a mensajes de kernel/hardware.",
+        "confidence": null
+      }
+    ],
+    "secuencia_temporal": [],
+    "tecnicas_atribuidas": [],
+    "invalid_evidence_uid_count": 0,
+    "d11_warnings": [],
+    "telemetry": {
+      "llm_call_count": 5,
+      "input_tokens": 4083,
+      "output_tokens": 868,
+      "total_tokens": 10517,
+      "execution_time": 59.843322,
+      "replan_count": 0,
+      "intentos_correccion": 1,
+      "invalid_evidence_uid_count": 0,
+      "d11_warning_count": 0,
+      "llm_calls": [
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 719,
+          "output_tokens": 266,
+          "total_tokens": 3178,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 2193,
+          "duration_s": 21.719,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 865,
+          "output_tokens": 166,
+          "total_tokens": 2318,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 1287,
+          "duration_s": 13.312,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 204,
+          "output_tokens": 51,
+          "total_tokens": 328,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 73,
+          "duration_s": 3.641,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 150,
+          "output_tokens": 74,
+          "total_tokens": 1047,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 823,
+          "duration_s": 7.828,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 2145,
+          "output_tokens": 311,
+          "total_tokens": 3646,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 1190,
+          "duration_s": 13.266,
+          "error": null
+        }
+      ]
+    },
+    "firma": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_critico:2,evento_normal:18] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:2] cobertura=0.0",
+    "plan": {
+      "plan_version": 1,
+      "objetivo": "Investigar y contener los eventos críticos de autenticación no estructurados originados desde la IP 172.16.96.116.",
+      "pasos": [
+        {
+          "id": 1,
+          "accion": "triage",
+          "objetivo": "Examinar el texto libre de los registros para diagnosticar el origen y la severidad de los 2 eventos críticos de autenticación.",
+          "estado": "ejecutado"
+        },
+        {
+          "id": 2,
+          "accion": "mitigacion",
+          "objetivo": "Proponer acciones de contención y remediación para la IP 172.16.96.116 y los servicios impactados.",
+          "estado": "ejecutado"
+        }
+      ],
+      "criterios_finalizacion": [
+        "Causa raíz de los 2 eventos críticos determinada a partir del texto sin parsear.",
+        "Impacto de la actividad de la IP 172.16.96.116 evaluado.",
+        "Plan de mitigación y medidas de contención establecidas."
+      ]
+    },
+    "plan_objetivo": "Investigar y contener los eventos críticos de autenticación no estructurados originados desde la IP 172.16.96.116.",
+    "paso_actual": 2,
+    "historial_ejecucion": [
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_planificador",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "plan v1, 2 pasos: ['triage', 'mitigacion']"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 1,
+        "nodo": "agente_analista_triage",
+        "accion": "triage",
+        "estado": "ejecutado",
+        "resumen": "diagnóstico producido"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_selector_herramientas",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "usar_cve=False"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 2,
+        "nodo": "agente_ingeniero_mitigacion",
+        "accion": "mitigacion",
+        "estado": "ejecutado",
+        "resumen": "3 comandos propuestos"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "tool_validar_comandos",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "comandos válidos"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_auditor_final",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "confianza=0.85 cobertura_suficiente=True"
+      }
+    ],
+    "desviaciones_plan": [],
+    "historial_planes": [],
+    "replan_count": 0,
+    "diagnostico": "Falso positivo. Los registros no corresponden a actividad maliciosa ni a eventos de autenticación, sino a mensajes de hardware/kernel del sistema (RAS KERNEL INFO de arquitectura BlueGene/L indicando un error corregible 'CE' de memoria) clasificados erróneamente como auth_log. La IP 172.16.96.116 no muestra actividad maliciosa real.",
+    "necesita_rag": false,
+    "usar_cve": false,
+    "razon_seleccion": "El diagnóstico confirma que se trata de un falso positivo debido a mensajes de hardware/kernel del sistema, sin actividad maliciosa ni servicios vulnerables que requieran búsqueda de CVE.",
+    "contexto_rag": [],
+    "tecnicas_mitre": [],
+    "cves_encontrados": [],
+    "comandos_mitigacion": [
+      "fail2ban-client unban 172.16.96.116",
+      "iptables -L INPUT -v -n | grep 172.16.96.116",
+      "dmesg -T | grep -iE 'RAS|CE|memory error'"
+    ],
+    "comandos_validos": true,
+    "motivos_rechazo": [],
+    "intentos_correccion": 1,
+    "confianza": 0.85,
+    "hay_incidente": false,
+    "hay_anomalia": true,
+    "evaluacion_auditor": "Se confirma que se trata de un falso positivo de seguridad. Los eventos corresponden a registros de hardware y kernel (mensajes RAS de arquitectura BlueGene/L reportando errores de memoria corregibles) erróneamente categorizados como fallos de autenticación, descartándose actividad maliciosa intencional.",
+    "cobertura_auditor": true,
+    "cobertura_suficiente": true,
+    "motivo_replanificacion": "",
+    "requiere_replanificacion": false,
+    "_firma": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_critico:2,evento_normal:18] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:2] cobertura=0.0",
+    "_error_api": null,
+    "requiere_revision_humana": false,
+    "output_contract_version": "d11-v1"
+  }
+}

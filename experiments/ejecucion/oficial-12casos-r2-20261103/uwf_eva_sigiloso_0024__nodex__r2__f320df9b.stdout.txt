@@ -1,0 +1,82 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3380 salida=314 razonamiento=610 total=4304
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3640 salida=156 razonamiento=464 total=4260
+   → Solicitando RAG (Se requiere consultar la base de conocimiento y técnicas MITRE ATT&CK (como T1071.004 DNS, T1048.003 Exfiltración sobre DNS y T1498/T1499 DoS) así como casos históricos para caracterizar adecuadamente la naturaleza del tráfico anómalo detectado (264 intentos unilaterales en estado S0 hacia el servicio DNS 10.0.10.1:53) y discernir entre un intento de denegación de servicio, escaneo o canal encubierto fallido.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1071.004, T1568.002, T1584.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=4347 salida=237 razonamiento=1274 total=5858
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=349 salida=81 razonamiento=214 total=644
+   → usar_cve: False | Razón: El diagnóstico describe un comportamiento anómalo de red asociado a técnicas de C2, tunelado DNS o DGA (T1071.004, T1568.002) y no identifica un software, servicio específico con versión ni vulnerabilidad de explotación concreta para buscar en CVE.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=284 salida=222 razonamiento=928 total=1434
+   → 6 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=48198 salida=831 razonamiento=1830 total=50859
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=False | Se observa un patrón anómalo y periódico de consultas DNS salientes (UDP/53) desde 143.88.255.10 hacia 10.0.10.1 que quedan sin respuesta (estado S0) cada 30 segundos aproximadamente. Sin embargo, no se cuenta con los registros de capa de aplicación DNS (dns.log o PCAP) para inspeccionar los dominios consultados, entropía o cargas útiles. Esta conducta puede corresponder perfectamente a un fallo operacional o de enrutamiento/configuración de red hacia un resolver inalcanzable, por lo que calificarlo prematuramente como C2 (T1071.004) o DGA (T1568.002) es especulativo.
+   🔀 Router Finalización → agente_planificador (replanifica: cobertura insuficiente)
+👉 Transición completada en: 'agente_auditor_final'
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=4755 salida=305 razonamiento=890 total=5950
+   → Plan v2: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3612 salida=286 razonamiento=411 total=4309
+   → No hace falta RAG (El lote cuenta con un 100% de cobertura en el parsing de logs de Zeek y el plan de investigación especifica no requerir memoria histórica; los datos de flujos y estados S0 son suficientes para caracterizar el problema como conectividad/configuración DNS fallida.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=325 salida=60 razonamiento=171 total=556
+   → usar_cve: False | Razón: El diagnóstico concluye que el evento corresponde a un error de configuración de red o fallo de infraestructura (servidor DNS no alcanzable o ruta inexistente), sin identificar software vulnerable específico ni indicios de explotación de vulnerabilidades.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=260 salida=209 razonamiento=1878 total=2347
+   → 4 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=48162 salida=775 razonamiento=1151 total=50088
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. La evidencia muestra un patrón continuo y periódico de solicitudes DNS dirigidas desde 143.88.255.10 a una IP privada inalcanzable (10.0.10.1:53) que resultan invariablemente en estado S0 (sin respuesta SYN-ACK / unidireccional UDP). Al mismo tiempo, otros hosts del entorno resuelven DNS normalmente (SF) con el servidor interno 143.88.1.1. No se aprecia carga útil maliciosa, canales encubiertos ni balizamiento C2 confirmado, tratándose de una anomalía estrictamente operativa o de configuración de red.
+   🔀 Router Finalización → END (MAX_REPLANS=1 alcanzado)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

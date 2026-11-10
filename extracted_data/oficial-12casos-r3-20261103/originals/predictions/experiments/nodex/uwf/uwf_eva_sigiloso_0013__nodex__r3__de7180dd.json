@@ -1,0 +1,81 @@
+{
+  "case_id": "uwf_eva_sigiloso_0013",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 3,
+  "config_version": "oficial-12casos-r3-20261103",
+  "run_id": "uwf_eva_sigiloso_0013__nodex__r3__de7180dd",
+  "salida": {
+    "case_id": "uwf_eva_sigiloso_0013",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-19 09:05:39.133316",
+        "entities": [],
+        "event_type": "dns_query_failure",
+        "evidence_uids": [
+          "CSLj4O3nkwboY2Mng",
+          "Cekthb1d6Fm5V8Fp2k"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-19 09:28:45.032989",
+        "entities": [],
+        "event_type": "dns_query_success",
+        "evidence_uids": [
+          "CUSUiwClAwfSaypOf",
+          "CAvSyG2l5tAVW1DVKf"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl tráfico analizado desde 143.88.255.10 hacia 10.0.10.1 (puerto 53 UDP) corresponde a un problema de configuración de red y no a actividad maliciosa. Los 244 intentos fallidos presentan estado de conexión S0 y 0 bytes de respuesta, lo cual es característico de retransmisiones automáticas por timeout tras consultar a un resolutor DNS inalcanzable, apagado o mal enrutado. Se descarta exfiltración por túnel DNS o C2 debido a la ausencia total de tráfico bidireccional y la naturaleza repetitiva hacia una IP privada no funcional. Acción recomendada: actualizar la configuración del resolver DNS en el host 143.88.255.10 apuntando a los servidores activos (como 143.88.255.1 o 143.88.1.1) y descartar medidas punitivas o de aislamiento hostil.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. La evidencia muestra múltiples intentos de conexión UDP al puerto 53 con estado S0 (sin respuesta) hacia la IP 10.0.10.1, con intervalos periódicos consistentes con timeouts y retransmisiones de resolución DNS fallida por mala configuración. Se descarta actividad maliciosa, tunelado o C2 al no existir tráfico de retorno ni canales establecidos.\n\n## Comandos de mitigación propuestos\n\n- sudo cp /etc/resolv.conf /etc/resolv.conf.bak\n- sudo bash -c 'printf \"nameserver 143.88.255.1\\nnameserver 143.88.1.1\\n\" > /etc/resolv.conf'\n- command -v resolvectl >/dev/null 2>&1 && sudo resolvectl dns $(ip route show default | awk '{print $5; exit}') 143.88.255.1 143.88.1.1\n- sudo iptables -t nat -A PREROUTING -s 143.88.255.10 -d 10.0.10.1 -p udp --dport 53 -j DNAT --to-destination 143.88.255.1:53\n- dig @143.88.255.1 +timeout=2 +tries=2 || nslookup -timeout=2 localhost 143.88.255.1"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_sigiloso_0013__nodex__r3__de7180dd",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_sigiloso_0013__nodex__r3__de7180dd.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-03T04:30:42+00:00"
+  }
+}

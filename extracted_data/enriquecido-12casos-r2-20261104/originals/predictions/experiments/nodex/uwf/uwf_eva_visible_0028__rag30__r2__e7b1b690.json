@@ -1,0 +1,83 @@
+{
+  "case_id": "uwf_eva_visible_0028",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 2,
+  "config_version": "enriquecido-12casos-r2-20261104",
+  "run_id": "uwf_eva_visible_0028__rag30__r2__e7b1b690",
+  "condicion_rag": "enriquecido",
+  "rag_version": "rag_enriquecido_30_v1",
+  "casos_historicos": 30,
+  "salida": {
+    "case_id": "uwf_eva_visible_0028",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-17 18:59:15.382531",
+        "entities": [],
+        "event_type": "dns_query_failed",
+        "evidence_uids": [
+          "Ceni8hHI43gmMFWul",
+          "Cl5NqurlbdYOxZDai"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-17 19:30:08.306719",
+        "entities": [],
+        "event_type": "dns_query_success",
+        "evidence_uids": [
+          "CzhT5a2vppzktvDhZk"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl análisis del tráfico DNS entre 143.88.255.10 y 10.0.10.1 muestra 261 consultas no respondidas registradas como eventos críticos. Sin embargo, la correlación con el contexto histórico presenta una coincidencia superior al 99.6% con perfiles de tráfico de fondo normal (datasets de referencia UWF con predominio de estados de conexión S0 y SF). No se aprecian patrones consistentes con tunelizado DNS (T1071.004), reconocimiento (T1590.002) ni ataques de denegación de servicio, tratándose de un falso positivo derivado de un resolver DNS no disponible o desconfiguración de red habitual en la línea base.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Se observa un volumen continuo de consultas DNS dirigidas desde 143.88.255.10 hacia la IP interna 10.0.10.1 con estado de conexión S0 (sin respuesta), mientras que otros clientes resuelven satisfactoriamente contra 143.88.1.1 (SF). Este comportamiento constituye una anomalía operativa atribuible a un servidor DNS inalcanzable o mal configurado en el cliente, sin observarse indicadores de tunelizado, exfiltración ni reconocimiento malicioso."
+    },
+    "_meta": {
+      "run_id": "uwf_eva_visible_0028__rag30__r2__e7b1b690",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_visible_0028__rag30__r2__e7b1b690.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-04T23:29:21+00:00"
+  }
+}

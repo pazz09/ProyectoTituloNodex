@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1091 salida=212 razonamiento=796 total=2099
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=1261 salida=221 razonamiento=386 total=1868
+   → No hace falta RAG (El plan de investigación no contempla consultar memoria histórica y la muestra del texto sin procesar revela con claridad que se trata de mensajes rutinarios de cambio de estado de hardware/chips a nivel informativo, permitiendo emitir un diagnóstico concluyente sin necesidad de contexto adicional.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=248 salida=45 razonamiento=220 total=513
+   → usar_cve: False | Razón: El diagnóstico confirma que los eventos corresponden a telemetría operativa benigna y no se identifica ninguna vulnerabilidad, servicio vulnerable ni actividad maliciosa.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=201 salida=6 razonamiento=357 total=564
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2078 salida=278 razonamiento=680 total=3036
+   → Confianza final: 0.85 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros analizados corresponden a mensajes rutinarios de telemetría de hardware de Blue Gene/L (descubrimiento y cambio de estado de chips IDO), sin indicios de actividad maliciosa, intrusión ni fallos anómalos de infraestructura.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

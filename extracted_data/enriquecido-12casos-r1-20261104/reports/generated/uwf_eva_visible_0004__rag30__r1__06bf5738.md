@@ -1,0 +1,7 @@
+## Diagnóstico
+
+El análisis del lote revela una alta concentración de solicitudes UDP/DNS no respondidas (estado de conexión S0) dirigidas principalmente desde 143.88.255.10 hacia 10.0.10.1, así como tráfico entre 143.88.18.12 y 143.88.18.11. La correlación con el contexto histórico muestra una similitud superior al 99% con patrones de tráfico de fondo normal (benigno) del entorno UWF, correspondientes a consultas DNS habituales sin respuesta o artefactos de captura unidireccional. No se observan indicadores de compromiso, túneles DNS ni exfiltración, por lo que ninguna de las técnicas MITRE ATT&CK evaluadas aplica a este comportamiento.
+
+## Evaluación del auditor
+
+El diagnóstico es incorrecto al calificar la totalidad del tráfico como benigno y normal. Entre las 16:35:52 y 16:35:53, la dirección IP 143.88.18.12 realiza un escaneo de puertos TCP sistemático y concentrado contra 143.88.18.11, probando decenas de servicios críticos y de administración (puertos 21, 22, 23, 25, 80, 110, 135, 139, 143, 443, 445, 3306, 3389, 5900, 8080, entre otros) en un lapso inferior a dos segundos con estado SH. Esto constituye una actividad maliciosa de reconocimiento de red (Port Scanning / Network Service Discovery, MITRE T1046).

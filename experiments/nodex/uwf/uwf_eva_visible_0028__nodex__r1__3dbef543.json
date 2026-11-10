@@ -1,0 +1,70 @@
+{
+  "case_id": "uwf_eva_visible_0028",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "oficial-12casos-r1-20261028",
+  "run_id": "uwf_eva_visible_0028__nodex__r1__3dbef543",
+  "salida": {
+    "case_id": "uwf_eva_visible_0028",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-17 18:59:15.382531",
+        "entities": [],
+        "event_type": "dns_request_timeout",
+        "evidence_uids": [
+          "Ceni8hHI43gmMFWul",
+          "Cl5NqurlbdYOxZDai"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl tráfico observado entre 143.88.255.10 y 10.0.10.1 (261 eventos DNS, todos registrados como intentos fallidos con estado S0/sin respuesta) es consistente con un fallo operativo por reintentos continuos hacia un servidor DNS inalcanzable, fuera de servicio o mal configurado, descartando actividad maliciosa activa. Medidas recomendadas: 1) Verificación no disruptiva: inspeccionar la configuración de red y resolutores DNS en el host 143.88.255.10 (resolv.conf o configuración de interfaz), verificar la conectividad de capa 3 hacia 10.0.10.1 mediante ping/traceroute pasivo, y capturar queries locales para identificar qué servicio o proceso genera las peticiones. 2) Contención y remediación no disruptiva: reconfigurar el cliente para utilizar un servidor DNS operativo y validado en la red (como 143.88.1.1, que muestra actividad normal en el lote) o corregir la ruta de red hacia 10.0.10.1, evitando bloqueos por firewall que puedan degradar servicios legítimos en el host.\n\n## Evaluación del auditor\n\nEl diagnóstico es preciso. Se observan múltiples consultas DNS continuas hacia la dirección 10.0.10.1 que no reciben respuesta (estado S0), mientras que otros clientes resuelven satisfactoriamente contra 143.88.1.1. Esto corresponde a un fallo operativo de configuración o conectividad de red hacia el servidor DNS especificado, y no a una intrusión o ataque activo.\n\n## Comandos de mitigación propuestos\n\n- cat /etc/resolv.conf\n- resolvectl status 2>/dev/null || nmcli dev show | grep DNS\n- ping -c 4 -W 2 10.0.10.1\n- traceroute -n -m 15 10.0.10.1 || tracepath -n 10.0.10.1\n- ss -tupan | grep ':53 '\n- tcpdump -nn -i any host 10.0.10.1 and port 53 -c 10\n- cp /etc/resolv.conf /etc/resolv.conf.bak\n- sed -i 's/nameserver 10.0.10.1/nameserver 143.88.1.1/' /etc/resolv.conf\n- dig @143.88.1.1 localhost +short"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_visible_0028__nodex__r1__3dbef543",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_visible_0028__nodex__r1__3dbef543.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-28T05:10:55+00:00"
+  }
+}

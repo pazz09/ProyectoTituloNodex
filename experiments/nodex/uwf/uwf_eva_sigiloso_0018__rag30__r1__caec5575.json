@@ -1,0 +1,74 @@
+{
+  "case_id": "uwf_eva_sigiloso_0018",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "enriquecido-12casos-r1-20261104",
+  "run_id": "uwf_eva_sigiloso_0018__rag30__r1__caec5575",
+  "condicion_rag": "enriquecido",
+  "rag_version": "rag_enriquecido_30_v1",
+  "casos_historicos": 30,
+  "salida": {
+    "case_id": "uwf_eva_sigiloso_0018",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-26 09:41:45.380404",
+        "entities": [],
+        "event_type": "dns_query",
+        "evidence_uids": [
+          "CyiKiK2sfCk0YNgx1d",
+          "CGWAkv1zQAEnbE5Ew7",
+          "CbRwTg2wB5Imc3MHvf"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl análisis del tráfico DNS muestra 266 solicitudes UDP desde la IP 143.88.255.10 hacia el servidor DNS interno 10.0.10.1 con estado de conexión 'S0' (consultas sin respuesta registrada o capturada), lo cual motivó su clasificación inicial como eventos críticos o intentos fallidos. Sin embargo, la comparación con el contexto histórico de referencia (similitud superior al 99.7%) revela que este patrón coincide exactamente con el tráfico de fondo y comportamiento normal de la red en este entorno. No se detectan indicadores de túneles DNS, comando y control ni exfiltración, por lo que ninguna de las técnicas MITRE ATT&CK evaluadas (como T1071.004) aplica; el evento se diagnostica como un falso positivo derivado de consultas DNS benignas no respondidas.\n\n## Evaluación del auditor\n\nEl diagnóstico es preciso. El patrón de consultas DNS UDP periódicas hacia 10.0.10.1 con estado de conexión S0 coincide estrechamente con el comportamiento de fondo habitual de la red (similitud histórica >99.7%). No existen evidencias de tunelado DNS, comando y control ni exfiltración, por lo que se confirma como un falso positivo y actividad benigna esperada."
+    },
+    "_meta": {
+      "run_id": "uwf_eva_sigiloso_0018__rag30__r1__caec5575",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1583.002",
+          "name": "DNS Server",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_sigiloso_0018__rag30__r1__caec5575.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-04T22:59:41+00:00"
+  }
+}

@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=529 salida=185 razonamiento=674 total=1388
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=655 salida=240 razonamiento=558 total=1453
+   → No hace falta RAG (La nomenclatura de nodos ('Rxx-Mx-ND-C:Jxx-Uxx') y el formato de mensaje RAS del kernel de IBM BlueGene/L permiten identificar con certeza el origen y naturaleza del registro sin requerir consulta a memoria externa.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=268 salida=63 razonamiento=319 total=650
+   → usar_cve: False | Razón: El diagnóstico concluye que el evento corresponde a un fallo de hardware o del kernel en una supercomputadora histórica y no a un incidente de ciberseguridad o vulnerabilidad explotada, por lo que no es necesario consultar CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=221 salida=6 razonamiento=611 total=838
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2031 salida=327 razonamiento=359 total=2717
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros corresponden a telemetría de fiabilidad, disponibilidad y servicio (RAS) del supercomputador IBM BlueGene/L (2005), reportando un fallo crítico de hardware/kernel (interrupción de programa por campo de registro de punto flotante). Representa una anomalía de hardware/operativa sin indicios de ciberataque ni actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

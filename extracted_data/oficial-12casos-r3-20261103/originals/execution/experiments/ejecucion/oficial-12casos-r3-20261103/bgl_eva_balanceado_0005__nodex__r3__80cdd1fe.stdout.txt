@@ -1,0 +1,82 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=681 salida=272 razonamiento=410 total=1363
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=854 salida=147 razonamiento=263 total=1264
+   → No hace falta RAG (Los registros crudos evidencian eventos benignos de infraestructura/hardware (RAS KERNEL INFO) y el plan de investigación especifica explícitamente no consultar memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=190 salida=54 razonamiento=124 total=368
+   → usar_cve: False | Razón: El diagnóstico confirma que se trata de mensajes operativos y de diagnóstico de hardware sin indicios de actividad maliciosa, vulnerabilidades o servicios atacados que justifiquen la búsqueda de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=143 salida=10 razonamiento=243 total=396
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=1993 salida=357 razonamiento=1055 total=3405
+   → Confianza final: 0.75 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=False | El diagnóstico identifica correctamente la presencia de fallos operativos y de hardware (errores de retransmisión en red torus de BlueGene/L RAS), lo cual constituye una anomalía operativa pero no un incidente de seguridad malicioso. Se descarta intrusión o actividad maliciosa sobre la IP 172.16.96.116.
+   🔀 Router Finalización → agente_planificador (replanifica: cobertura insuficiente)
+👉 Transición completada en: 'agente_auditor_final'
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1589 salida=322 razonamiento=1259 total=3170
+   → Plan v2: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=893 salida=107 razonamiento=277 total=1277
+   → Solicitando RAG (La cobertura de parsing es del 0% con registros no estructurados de hardware/kernel (RAS KERNEL INFO). Conforme al plan de investigación, es necesario consultar la memoria histórica y MITRE ATT&CK para contextualizar los errores de retransmisión de torus y confirmar si se trata puramente de ruido operacional de infraestructura o si existen vectores anómalos asociados.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 0 técnicas MITRE ATT&CK relacionadas (colección vacía o sin similitud suficiente).
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=863 salida=121 razonamiento=169 total=1153
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=215 salida=46 razonamiento=235 total=496
+   → usar_cve: False | Razón: El diagnóstico confirma que la actividad es benigna y de carácter operativo/hardware, sin presencia de ataques ni servicios vulnerables identificados para consultar CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=168 salida=6 razonamiento=945 total=1119
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2018 salida=327 razonamiento=690 total=3035
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | Los registros reportan eventos de diagnóstico y corrección de errores de hardware/kernel (RAS) por retransmisiones en arquitectura Torus. Aunque constituyen una anomalía operativa a nivel de infraestructura física/red, no corresponden a actividad maliciosa ni a un incidente de seguridad.
+   🔀 Router Finalización → END (MAX_REPLANS=1 alcanzado)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

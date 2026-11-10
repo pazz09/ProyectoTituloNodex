@@ -1,0 +1,60 @@
+{
+  "case_id": "uwf_eva_sigiloso_0013",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "enriquecido-12casos-r1-20261104",
+  "run_id": "uwf_eva_sigiloso_0013__rag30__r1__e06838c9",
+  "condicion_rag": "enriquecido",
+  "rag_version": "rag_enriquecido_30_v1",
+  "casos_historicos": 30,
+  "salida": {
+    "case_id": "uwf_eva_sigiloso_0013",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl análisis del lote de 300 eventos de Zeek muestra un predominio casi total de tráfico DNS (294 eventos), destacando 244 solicitudes salientes desde 143.88.255.10 hacia el resolver 10.0.10.1 marcadas en estado S0 (solicitudes UDP no respondidas). Aunque inicialmente catalogadas como críticas por volumen de fallos, la correlación con el contexto histórico (similitud del 98.7% con registros normales del dataset UWF) confirma que este patrón de consultas unidireccionales o no respondidas corresponde al comportamiento basal normal del entorno y no a un incidente de seguridad. No se identifican patrones de exfiltración, tunelado DNS ni compromiso activo, por lo que ninguna de las técnicas MITRE ATT&CK evaluadas (como T1071.004, T1584.002 o T1590.002) resulta aplicable. Se concluye que se trata de un falso positivo atribuible a la heurística de severidad sobre tráfico de red estándar.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. El análisis del lote de 300 eventos confirma que el tráfico de consultas DNS salientes desde 143.88.255.10 hacia el resolver 10.0.10.1 con estado S0 corresponde al perfil de tráfico basal histórico del dataset UWF. No existen indicios de tunelado DNS (T1071.004), exfiltración ni compromiso de infraestructura (T1584.002, T1590.002), por lo que se descarta un incidente de seguridad y se confirma que la alerta inicial es un falso positivo."
+    },
+    "_meta": {
+      "run_id": "uwf_eva_sigiloso_0013__rag30__r1__e06838c9",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_sigiloso_0013__rag30__r1__e06838c9.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-04T23:09:37+00:00"
+  }
+}

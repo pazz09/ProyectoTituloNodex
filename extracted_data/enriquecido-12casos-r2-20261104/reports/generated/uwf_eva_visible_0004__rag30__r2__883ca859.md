@@ -1,0 +1,7 @@
+## Diagnóstico
+
+El análisis del lote de telemetría Zeek muestra 300 eventos de red dominados por consultas DNS y tráfico UDP, principalmente originados desde 143.88.255.10 hacia el resolver 10.0.10.1, junto con comunicaciones entre 143.88.18.12 y 143.88.18.11. La aparente concentración de 'eventos críticos' e 'intentos fallidos' deriva de la categorización de flujos con estado de conexión S0 (solicitudes UDP sin respuesta bidireccional registrada). El cotejo con el contexto histórico del dataset UWF presenta una coincidencia casi exacta (similitud > 0.996) con tráfico basal legítimo ('fondo_normal_original'). No se aprecian anomalías estructurales ni patrones de túneles DNS o compromiso de infraestructura, por lo que ninguna de las técnicas MITRE ATT&CK sugeridas (T1071.004, T1584.002) aplica al caso.
+
+## Evaluación del auditor
+
+El diagnóstico es erróneo al descartar actividad anómala. Aunque la mayoría del tráfico corresponde a consultas DNS, ignora un escaneo de puertos TCP explícito y concentrado (registros 147 al 206) efectuado entre las 16:35:52 y 16:35:53 desde 143.88.18.12 hacia 143.88.18.11, abarcando decenas de puertos conocidos (21, 22, 23, 25, 80, 135, 139, 443, 445, 3389, 5900, etc.) con banderas SH (SYN enviado sin completar el handshake), representativo de reconocimiento de red activo.

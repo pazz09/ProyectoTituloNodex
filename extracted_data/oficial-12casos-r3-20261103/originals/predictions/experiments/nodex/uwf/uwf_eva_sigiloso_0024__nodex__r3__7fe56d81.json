@@ -1,0 +1,91 @@
+{
+  "case_id": "uwf_eva_sigiloso_0024",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 3,
+  "config_version": "oficial-12casos-r3-20261103",
+  "run_id": "uwf_eva_sigiloso_0024__nodex__r3__7fe56d81",
+  "salida": {
+    "case_id": "uwf_eva_sigiloso_0024",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-17 23:21:25.382073",
+        "entities": [],
+        "event_type": "dns_request_timeout",
+        "evidence_uids": [
+          "CNvd5j17kRKYOw9mi1",
+          "CzmuG52ac5O2sNzX5h"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-17 23:21:55.630866",
+        "entities": [],
+        "event_type": "dns_request_timeout",
+        "evidence_uids": [
+          "CAhNHj1gcSZuTKBLR6",
+          "Cl8oFAR9uaV4jsPZ3"
+        ]
+      },
+      {
+        "uid": "event_003",
+        "timestamp": "2021-12-17 23:51:10.130569",
+        "entities": [],
+        "event_type": "dns_request_timeout",
+        "evidence_uids": [
+          "CxKHx5MMwv2yK4exh"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002",
+      "event_003"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe identifica un patrón altamente anómalo con 264 solicitudes DNS fallidas (conexiones en estado S0 sin respuesta) originadas desde el host 143.88.255.10 hacia el servidor DNS interno 10.0.10.1 en una ventana de 30 minutos. Este comportamiento es consistente con intentos de tunelización DNS o canal encubierto para comando y control bajo la técnica T1071.004, o bien el uso de algoritmos de generación de dominios (DGA, T1568.002) que generan consultas a dominios inexistentes o no enrutables. Se recomienda aislar preventivamente la IP 143.88.255.10, inspeccionar el payload de las consultas DNS para verificar cadenas aleatorias/subdominios de exfiltración y auditar procesos activos en el equipo de origen.\n\n## Evaluación del auditor\n\nSe observa un comportamiento anómalo consistente en ráfagas periódicas de consultas DNS UDP (puerto 53) cada aproximadamente 30 segundos desde el host 143.88.255.10 hacia la IP 10.0.10.1, todas quedando en estado S0 (sin respuesta). Sin embargo, el diagnóstico propuesto de tunelización DNS (T1071.004) o DGA (T1568.002) no está respaldado: no se dispone del registro de nombres de dominio consultados ni de respuestas del servidor, y la cadencia estricta de reintentos cada 30 segundos hacia una IP no responsiva es característica de una falla operativa de red, servidor DNS caído o error de configuración de resolución de nombres, no de una intrusión o canal encubierto activo.\n\n## Comandos de mitigación propuestos\n\n- iptables -I INPUT 1 -s 143.88.255.10 -j LOG --log-prefix \"[ALERTA-DNS-BLOCKED]: \" --log-level 4\n- iptables -I INPUT 2 -s 143.88.255.10 -j DROP\n- iptables -I FORWARD 1 -s 143.88.255.10 -j DROP\n- ufw insert 1 deny from 143.88.255.10 to any\n- conntrack -D -s 143.88.255.10\n- tcpdump -nn -i any -s 0 -c 500 host 143.88.255.10 and port 53 -w /var/log/dns_exfiltration_evidence.pcap &"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_sigiloso_0024__nodex__r3__7fe56d81",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1568.002",
+          "name": "Domain Generation Algorithms",
+          "similitud": null
+        },
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_sigiloso_0024__nodex__r3__7fe56d81.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-03T04:26:14+00:00"
+  }
+}

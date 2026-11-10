@@ -1,0 +1,92 @@
+{
+  "case_id": "uwf_eva_sigiloso_0013",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 2,
+  "config_version": "oficial-12casos-r2-20261103",
+  "run_id": "uwf_eva_sigiloso_0013__nodex__r2__52b432c7",
+  "salida": {
+    "case_id": "uwf_eva_sigiloso_0013",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-19 09:05:39.133316",
+        "entities": [],
+        "event_type": "dns_request_timeout",
+        "evidence_uids": [
+          "CSLj4O3nkwboY2Mng",
+          "Cekthb1d6Fm5V8Fp2k"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-19 09:28:45.032989",
+        "entities": [],
+        "event_type": "dns_resolution_success",
+        "evidence_uids": [
+          "CUSUiwClAwfSaypOf",
+          "CAvSyG2l5tAVW1DVKf"
+        ]
+      },
+      {
+        "uid": "event_003",
+        "timestamp": "2021-12-19 09:34:23.381085",
+        "entities": [],
+        "event_type": "dns_request_timeout",
+        "evidence_uids": [
+          "C917Yh1jyoZtcdKZvd",
+          "CrX8CZ1xVkeqlDvEw8"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002",
+      "event_003"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe observan 244 consultas DNS emitidas por el host 143.88.255.10 hacia el servidor 10.0.10.1:53 en un lapso de ~29 minutos, todas registradas con estado de conexión Zeek 'S0' (sin respuesta del servidor y 0 bytes de retorno). Esta conducta es consistente con una falla operativa de conectividad, caída o inalcanzabilidad del servidor DNS 10.0.10.1, o un error de configuración en el cliente que genera reintentos repetidos, descartando indicios de canal C2 activo o exfiltración exitosa. Como contramedida de observabilidad no disruptiva, se recomienda verificar el estado operativo y enrutamiento hacia 10.0.10.1, monitorizar métricas de disponibilidad del servicio DNS y extraer muestras de los nombres de dominio consultados mediante captura pasiva para validar si corresponden a servicios internos legítimos.\n\n## Evaluación del auditor\n\nEl diagnóstico es preciso y está debidamente fundamentado. Se registran constantes solicitudes DNS desde 143.88.255.10 hacia 10.0.10.1 con estado de conexión Zeek 'S0' (sin respuesta), lo que denota una falla operativa de conectividad, caída del resolvedor o configuración errónea en el cliente. No se evidencia canal de mando y control (C2), túnel DNS funcional ni compromiso de seguridad.\n\n## Comandos de mitigación propuestos\n\n- ip route get 10.0.10.1\n- ping -c 4 10.0.10.1\n- nc -zvu -w 3 10.0.10.1 53\n- dig @10.0.10.1 healthcheck.local +time=2 +tries=1\n- tcpdump -nn -i any -c 30 'src host 143.88.255.10 and dst host 10.0.10.1 and port 53'\n- tcpdump -nn -i any -s 0 -c 100 'host 143.88.255.10 and port 53' -w /tmp/dns_diag_143.88.255.10.pcap"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_sigiloso_0013__nodex__r2__52b432c7",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_sigiloso_0013__nodex__r2__52b432c7.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-03T04:08:33+00:00"
+  }
+}

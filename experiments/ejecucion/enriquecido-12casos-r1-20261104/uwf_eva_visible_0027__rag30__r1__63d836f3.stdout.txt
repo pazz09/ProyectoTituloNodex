@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=2938 salida=410 razonamiento=456 total=3804
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3196 salida=146 razonamiento=500 total=3842
+   → Solicitando RAG (El plan de investigación requiere contrastar el patrón anómalo de tráfico DNS (262 intentos fallidos y eventos críticos entre 143.88.255.10 y 10.0.10.1) con técnicas MITRE ATT&CK (como T1071.004, T1048 y T1498) e incidentes históricos de tunelado, denegación de servicio o exfiltración para clasificar adecuadamente la amenaza y fundamentar las medidas de contención.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 3 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1071.004, T1584.002, T1590.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=6744 salida=219 razonamiento=596 total=7559
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=338 salida=50 razonamiento=239 total=627
+   → usar_cve: False | Razón: El diagnóstico concluye que la actividad observada es un falso positivo y corresponde a ruido de fondo normal de la red, sin identificar vulnerabilidades específicas ni explotación activa de servicios.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=3040 salida=10 razonamiento=291 total=3341
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=47875 salida=507 razonamiento=1029 total=49411
+   → Confianza final: 0.95 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. La actividad observada corresponde a tráfico de red habitual y ruido de fondo de telemetría DNS con captura asimétrica o falta de respuesta (estado S0), coincidente con el perfil normal del entorno de red universitaria (UWF). No se observan indicadores de C2, tunelización DNS ni escaneo hostil.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

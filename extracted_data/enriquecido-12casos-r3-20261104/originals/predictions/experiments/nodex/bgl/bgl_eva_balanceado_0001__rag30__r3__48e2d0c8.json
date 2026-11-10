@@ -1,0 +1,71 @@
+{
+  "case_id": "bgl_eva_balanceado_0001",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 3,
+  "config_version": "enriquecido-12casos-r3-20261104",
+  "run_id": "bgl_eva_balanceado_0001__rag30__r3__48e2d0c8",
+  "condicion_rag": "enriquecido",
+  "rag_version": "rag_enriquecido_30_v1",
+  "casos_historicos": 30,
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0001",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "hardware_diagnostic_error",
+        "evidence_uids": [
+          "log_record_000014",
+          "log_record_000019"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl lote analizado no corresponde a un ataque de seguridad ni a eventos legítimos de autenticación. Aunque el preprocesamiento clasificó heurísticamente dos registros bajo la categoría de autenticación y vinculó la IP privada 172.16.96.116, la muestra cruda y el contexto histórico de alta similitud (dataset BGL) confirman que se trata de registros de diagnóstico de hardware y kernel de supercomputación Blue Gene/L (mensajes RAS KERNEL INFO relativos a errores corregidos de paridad/memoria). Ninguna de las técnicas MITRE ATT&CK proporcionadas aplica a este comportamiento, al tratarse de un falso positivo de detección generado por la falta de cobertura en el parsing (0%) sobre logs no estructurados de sistema. No se requiere contención operativa contra la IP ni respuesta a incidentes de intrusión.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Los registros corresponden a eventos de diagnóstico de hardware y kernel de Blue Gene/L (BGL) relativos a errores de paridad de memoria, descartando actividad maliciosa o intentos de autenticación reales. Al tratarse de fallos o degradación de hardware, constituye una anomalía operativa pero no un incidente de seguridad."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0001__rag30__r3__48e2d0c8",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1685.001",
+          "name": "Disable or Modify Windows Event Log",
+          "similitud": null
+        },
+        {
+          "id": "T1685.004",
+          "name": "Disable or Modify Linux Audit System Log",
+          "similitud": null
+        },
+        {
+          "id": "T1654",
+          "name": "Log Enumeration",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "bgl_eva_balanceado_0001__rag30__r3__48e2d0c8.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-04T23:44:05+00:00"
+  }
+}

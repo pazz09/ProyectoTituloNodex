@@ -1,0 +1,54 @@
+{
+  "case_id": "bgl_eva_balanceado_0001",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "oficial-12casos-r1-20261028",
+  "run_id": "bgl_eva_balanceado_0001__nodex__r1__c602a5f3",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0001",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "hardware_diagnostic_log",
+        "evidence_uids": [
+          "log_record_000005",
+          "log_record_000014",
+          "log_record_000019",
+          "log_record_000020"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nNo se observan indicios de accesos no autorizados ni actividad maliciosa asociada a la IP 172.16.96.116. El análisis del registro crudo revela que los eventos corresponden a mensajes internos de hardware y sistema (logs de tipo BlueGene RAS KERNEL INFO reportando eventos de memoria corregibles 'CE sym 27') clasificados erróneamente como autenticaciones, con 0 intentos fallidos y sin usuarios involucrados. No se requieren medidas de contención sobre la IP 172.16.96.116.\n\n## Evaluación del auditor\n\nEl diagnóstico es preciso. Los registros analizados corresponden a mensajes de diagnóstico de hardware BlueGene RAS KERNEL INFO sobre errores de memoria corregibles ('CE sym 27') que fueron erróneamente categorizados como fallos de autenticación por el analizador sintáctico. Se trata de una anomalía meramente operativa/hardware sin implicación de seguridad ni actividad maliciosa."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0001__nodex__r1__c602a5f3",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0001__nodex__r1__c602a5f3.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-28T05:06:29+00:00"
+  }
+}

@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3552 salida=381 razonamiento=381 total=4314
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3784 salida=150 razonamiento=489 total=4423
+   → Solicitando RAG (Se observan 266 intentos fallidos unidireccionales (estado S0 sin respuesta) desde la IP 143.88.255.10 hacia el servidor DNS 10.0.10.1 en un breve periodo. Conforme al plan de investigación, es necesario consultar la memoria histórica y la base de conocimiento MITRE ATT&CK sobre técnicas de abuso de protocolo DNS (tunelado, exfiltración o denegación de servicio/escaneo) para clasificar con precisión la amenaza y definir las acciones de contención pertinentes.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1584.002, T1071.004, T1583.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=4484 salida=192 razonamiento=523 total=5199
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=304 salida=75 razonamiento=184 total=563
+   → usar_cve: False | Razón: El diagnóstico describe un ataque de denegación de servicio (DNS flood), sondeo o posible tunelado DNS basado en comportamiento anómalo de red (T1071.004), sin identificar software, versión específica ni vulnerabilidad particular que requiera consulta de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=239 salida=279 razonamiento=946 total=1464
+   → 7 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=48188 salida=763 razonamiento=2696 total=51647
+   → Confianza final: 0.90 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | Se observa un patrón anómalo de tráfico de red consistente en intentos periódicos de conexión DNS UDP hacia la dirección IP 10.0.10.1 en el puerto 53 que finalizan sin respuesta (estado S0). Sin embargo, el volumen total de peticiones (aproximadamente 266 en más de 30 minutos, con intervalos regulares de 30 segundos) corresponde al comportamiento estándar de reintentos y tiempo de espera de un resolver o cliente DNS cuando su servidor configurado no responde o es inalcanzable. Descartar un ataque de denegación de servicio (DNS flood) es claro debido a la bajísima tasa de paquetes (~8 paquetes por minuto). Tampoco existe evidencia de tunelado DNS ni compromiso, ya que no hay registros de carga útil o consultas completadas exitosamente. El diagnóstico original sobrestima la gravedad sugiriendo DoS y aislamiento forense ante lo que evidencia ser un problema operativo de resolución o enrutamiento.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

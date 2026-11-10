@@ -1,0 +1,44 @@
+{
+  "case_id": "bgl_eva_balanceado_0006",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "enriquecido-12casos-r1-20261104",
+  "run_id": "bgl_eva_balanceado_0006__rag30__r1__41118d86",
+  "condicion_rag": "enriquecido",
+  "rag_version": "rag_enriquecido_30_v1",
+  "casos_historicos": 30,
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0006",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nNo se detecta actividad maliciosa ni anómala vinculada a la IP 10.1.1.164. Los registros evaluados corresponden a telemetría estándar de infraestructura de supercómputo (mensajes de diagnóstico 'RAS KERNEL INFO' sobre interrupciones de hardware y kernel), catalogados como eventos normales del sistema operativo. Al tratarse de operaciones legítimas de bajo nivel sin indicios de intrusión, escaneo o compromiso, no se requieren medidas de contención.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Los registros corresponden a eventos de telemetría e información operativa de bajo nivel (RAS KERNEL INFO) típicos de plataformas de supercómputo. No se aprecian anomalías funcionales ni indicadores de actividad maliciosa o compromiso de seguridad asociados a la dirección 10.1.1.164 ni al resto de los registros evaluados."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0006__rag30__r1__41118d86",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0006__rag30__r1__41118d86.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-04T22:50:31+00:00"
+  }
+}

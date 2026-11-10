@@ -1,0 +1,54 @@
+{
+  "case_id": "bgl_eva_natural_0031",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 2,
+  "config_version": "enriquecido-12casos-r2-20261104",
+  "run_id": "bgl_eva_natural_0031__rag30__r2__bdcd8327",
+  "condicion_rag": "enriquecido",
+  "rag_version": "rag_enriquecido_30_v1",
+  "casos_historicos": 30,
+  "salida": {
+    "case_id": "bgl_eva_natural_0031",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "kernel_hardware_failure",
+        "evidence_uids": [
+          "log_record_000001"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos eventos analizados pertenecen al dataset histórico de logs de supercomputadora IBM BlueGene/L (logs RAS/BGL de 2005). La línea de muestra ('R24-M0-ND-C:J02-U11 RAS KERNEL FATAL program interrupt: fp cr field') describe un fallo crítico de punto flotante a nivel de kernel/hardware en un nodo de cómputo de arquitectura HPC, no un incidente de ciberseguridad o compromiso malicioso. No se identifican indicadores de compromiso (IoC) ni actividad adversaria. Recomendación: categorizar como telemetría de fallos de hardware/sistema operativo ajena a incidentes de seguridad y descartar de la cola de alertas activas del SOC.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Los registros corresponden a telemetría de fiabilidad, disponibilidad y servicio (RAS) del supercomputador IBM BlueGene/L (2005), reportando un fallo crítico de hardware/kernel (interrupción de programa por campo de registro de punto flotante). Representa una anomalía de hardware/operativa sin indicios de ciberataque ni actividad maliciosa."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0031__rag30__r2__bdcd8327",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0031__rag30__r2__bdcd8327.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-04T23:15:40+00:00"
+  }
+}

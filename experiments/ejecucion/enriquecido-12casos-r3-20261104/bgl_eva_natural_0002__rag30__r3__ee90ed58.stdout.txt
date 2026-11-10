@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=684 salida=293 razonamiento=475 total=1452
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=854 salida=217 razonamiento=598 total=1669
+   → No hace falta RAG (A pesar de la baja cobertura del parsing estructurado, el registro crudo es característico de logs RAS de supercomputación (BlueGene ciod) y evidencia claramente un error operativo de conexión socket entre nodos, permitiendo descartar un incidente de ciberseguridad sin requerir consulta a la base de conocimiento histórico.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=232 salida=59 razonamiento=151 total=442
+   → usar_cve: False | Razón: El diagnóstico confirma que los eventos corresponden a fallos operacionales y de comunicación de red en la infraestructura HPC (Blue Gene/L), descartando intrusiones, actividad maliciosa o vulnerabilidades de seguridad explotables.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=185 salida=159 razonamiento=736 total=1080
+   → 7 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2309 salida=464 razonamiento=948 total=3721
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es acertado al identificar las entradas como registros operacionales y de fiabilidad (RAS) del demonio ciod en Blue Gene/L, asociados a caídas de sockets de comunicación con la dirección 172.16.96.116. No se observan indicadores de compromiso ni patrones de ataque cibernético, por lo que se descarta un incidente de seguridad y los comandos recomendados se enfocan apropiadamente en la verificación de conectividad y estabilidad física/lógica de red.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

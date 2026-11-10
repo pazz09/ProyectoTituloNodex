@@ -1,0 +1,57 @@
+{
+  "case_id": "bgl_eva_natural_0016",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 3,
+  "config_version": "enriquecido-12casos-r3-20261104",
+  "run_id": "bgl_eva_natural_0016__rag30__r3__c3056fc5",
+  "condicion_rag": "enriquecido",
+  "rag_version": "rag_enriquecido_30_v1",
+  "casos_historicos": 30,
+  "salida": {
+    "case_id": "bgl_eva_natural_0016",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "hardware_status_monitoring",
+        "evidence_uids": [
+          "log_record_000001",
+          "log_record_000002",
+          "log_record_000004",
+          "log_record_000005"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nActividad legítima de descubrimiento y estado de hardware/red interna. Los registros corresponden a eventos informativos ('DISCOVERY INFO Ido chip status changed') de monitorización interna en infraestructura tecnológica, involucrando direcciones IP privadas (rango 10.0.0.0/8). No se observan anomalías, intentos de autenticación fallidos, conexiones externas sospechosas ni patrones asociados a técnicas ofensivas de MITRE ATT&CK.\n\n## Evaluación del auditor\n\nEl diagnóstico es adecuado. Los registros corresponden a actividad habitual de monitorización y descubrimiento interno de hardware ('Ido chip status changed') entre segmentos de red privada (10.0.0.0/8). No se aprecian anomalías operativas ni patrones de intrusión. Los comandos propuestos son pasivos y orientados a la auditoría.\n\n## Comandos de mitigación propuestos\n\n- logger -t SEC_OPS 'Diagnóstico: Tráfico legítimo de monitorización interna (10.0.0.0/8). No se aplican bloqueos.'\n- iptables -n -L -v --line-numbers | head -n 20"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0016__rag30__r3__c3056fc5",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0016__rag30__r3__c3056fc5.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-04T23:38:10+00:00"
+  }
+}

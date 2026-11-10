@@ -1,0 +1,55 @@
+{
+  "case_id": "bgl_eva_balanceado_0005",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 2,
+  "config_version": "enriquecido-12casos-r2-20261104",
+  "run_id": "bgl_eva_balanceado_0005__rag30__r2__044ed4ba",
+  "condicion_rag": "enriquecido",
+  "rag_version": "rag_enriquecido_30_v1",
+  "casos_historicos": 30,
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0005",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "hardware_telemetry",
+        "evidence_uids": [
+          "log_record_000018",
+          "log_record_000019"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos eventos corresponden a registros de confiabilidad y hardware del sistema (logs RAS de arquitectura tipo BlueGene/L a nivel de kernel) que reportan errores de retransmisión corregidos en la red de interconexión toroidal ('torus sender z- retransmission error(s)'). No se evidencia actividad maliciosa, intrusión, ni patrones de ataque asociados a técnicas de ciberseguridad para la IP 172.16.96.116. Se clasifica como telemetría de hardware/infraestructura, recomendando monitoreo preventivo de hardware y descartando compromiso de seguridad.\n\n## Evaluación del auditor\n\nLos registros corresponden a mensajes RAS de hardware e infraestructura que reportan errores de retransmisión en la red de interconexión toroidal. Aunque constituyen una anomalía operativa a nivel de hardware/red, no existe evidencia de actividad maliciosa, intrusión o compromiso de seguridad.\n\n## Comandos de mitigación propuestos\n\n- dmesg -T --level=err,warn | grep -iE 'torus|retransmission'\n- journalctl -k -p err..warning -g 'torus' -n 50 --no-pager\n- ip -s link show\n- iptables -L -n -v | grep '172.16.96.116' || echo 'No existen bloqueos activos para la IP 172.16.96.116'"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0005__rag30__r2__044ed4ba",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0005__rag30__r2__044ed4ba.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-04T23:17:20+00:00"
+  }
+}

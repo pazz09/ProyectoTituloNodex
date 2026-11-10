@@ -1,0 +1,41 @@
+{
+  "case_id": "bgl_eva_balanceado_0006",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 3,
+  "config_version": "oficial-12casos-r3-20261103",
+  "run_id": "bgl_eva_balanceado_0006__nodex__r3__03a4013d",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0006",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos eventos corresponden a registros operacionales benignos de telemetría interna y estado de kernel/hardware (mensajes informativos de arquitectura RAS KERNEL INFO reportando conteo normal de interrupciones sin incidentes críticos). No se detecta ninguna actividad maliciosa, vectores de ataque ni compromiso de seguridad atribuibles a la IP 10.1.1.164. La actividad se clasifica como benigna/operacional y no requiere medidas defensivas ni de contención.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Los registros corresponden a telemetría operacional y mensajes informativos del kernel (RAS) sobre conteo normal de interrupciones, sin indicios de actividad maliciosa ni impacto adverso en la seguridad del sistema."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0006__nodex__r3__03a4013d",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0006__nodex__r3__03a4013d.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-03T04:11:21+00:00"
+  }
+}

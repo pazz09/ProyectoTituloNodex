@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=668 salida=219 razonamiento=935 total=1822
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=829 salida=187 razonamiento=833 total=1849
+   → No hace falta RAG (A pesar de la baja cobertura de parsing debida al formato no estructurado, el contenido de los registros corresponde inequívocamente a logs estándar de diagnóstico de sistema sin indicios de amenaza, permitiendo emitir un diagnóstico concluyente sin requerir consulta a la memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=211 salida=44 razonamiento=184 total=439
+   → usar_cve: False | Razón: El diagnóstico confirma que los eventos son benignos y de telemetría interna operacional, sin ataques, vulnerabilidades ni servicios comprometidos identificados.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=164 salida=6 razonamiento=391 total=561
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=1991 salida=179 razonamiento=921 total=3091
+   → Confianza final: 0.80 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros corresponden a telemetría operacional y mensajes informativos del kernel (RAS) sobre conteo normal de interrupciones, sin indicios de actividad maliciosa ni impacto adverso en la seguridad del sistema.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

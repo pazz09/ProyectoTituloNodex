@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3552 salida=463 razonamiento=1258 total=5273
+   → Plan v1: ['triage', 'rag', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3797 salida=128 razonamiento=419 total=4344
+   → Solicitando RAG (Siguiendo el plan de investigación, se requiere consultar la base de conocimiento y el marco MITRE ATT&CK para identificar técnicas asociadas al alto volumen de tráfico DNS fallido/sin respuesta (estado S0) desde 143.88.255.10 hacia 10.0.10.1, evaluando posibles escenarios de tunelado DNS (T1071.004), reconocimiento o denegación de servicio.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 3 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1584.002, T1071.004, T1583.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=7282 salida=203 razonamiento=784 total=8269
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=315 salida=45 razonamiento=280 total=640
+   → usar_cve: False | Razón: El diagnóstico concluye que se trata de un falso positivo correspondiente a tráfico benigno de fondo, sin presencia de ataques ni explotación de vulnerabilidades específicas.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=2961 salida=6 razonamiento=445 total=3412
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=47925 salida=418 razonamiento=3027 total=51370
+   → Confianza final: 0.95 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es preciso. El patrón de consultas DNS UDP periódicas hacia 10.0.10.1 con estado de conexión S0 coincide estrechamente con el comportamiento de fondo habitual de la red (similitud histórica >99.7%). No existen evidencias de tunelado DNS, comando y control ni exfiltración, por lo que se confirma como un falso positivo y actividad benigna esperada.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

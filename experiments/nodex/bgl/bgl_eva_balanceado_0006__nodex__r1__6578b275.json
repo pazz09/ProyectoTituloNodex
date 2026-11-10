@@ -1,0 +1,51 @@
+{
+  "case_id": "bgl_eva_balanceado_0006",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "oficial-12casos-r1-20261028",
+  "run_id": "bgl_eva_balanceado_0006__nodex__r1__6578b275",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0006",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "kernel_telemetry",
+        "evidence_uids": [
+          "log_record_000014"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nActividad operacional benigna. Los registros corresponden a eventos de telemetría y diagnóstico del kernel (RAS KERNEL INFO) típicos de sistemas de computación de alto rendimiento (HPC / Blue Gene), reportando contadores normales de interrupciones de hardware. No se observan anomalías, intentos de acceso no autorizado ni indicadores de compromiso asociados a la IP 10.1.1.164.\n\n## Evaluación del auditor\n\nEl diagnóstico es adecuado al clasificar los registros como telemetría operacional de kernel en entornos HPC. No se identifican anomalías operacionales ni incidentes de seguridad en los registros provistos."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0006__nodex__r1__6578b275",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0006__nodex__r1__6578b275.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-28T04:52:04+00:00"
+  }
+}

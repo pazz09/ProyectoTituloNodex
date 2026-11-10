@@ -1,0 +1,52 @@
+{
+  "case_id": "bgl_eva_balanceado_0005",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "oficial-12casos-r1-20261028",
+  "run_id": "bgl_eva_balanceado_0005__nodex__r1__e61162b6",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0005",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "network_hardware_error_corrected",
+        "evidence_uids": [
+          "log_record_000018",
+          "log_record_000019"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos registros corresponden a mensajes informativos de confiabilidad y servicio (RAS KERNEL INFO) propios de la arquitectura de supercomputación Blue Gene/L. El evento reporta errores de retransmisión en la red torus que fueron detectados y corregidos automáticamente a nivel de hardware/kernel ('torus sender z- retransmission error(s) detected and corrected'). No existe evidencia de actividad maliciosa, compromiso de seguridad ni anomalías de red atribuibles a un atacante en relación con la IP 172.16.96.116. No se requieren medidas de contención.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Los registros reflejan eventos de hardware y confiabilidad (RAS KERNEL) de una arquitectura Blue Gene/L, correspondientes a errores de retransmisión en la red torus que fueron detectados y corregidos a nivel de sistema. Aunque constituye una anomalía operativa a nivel de infraestructura/enlace, no corresponde a un incidente de seguridad ni a actividad maliciosa."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0005__nodex__r1__e61162b6",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0005__nodex__r1__e61162b6.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-28T04:56:46+00:00"
+  }
+}

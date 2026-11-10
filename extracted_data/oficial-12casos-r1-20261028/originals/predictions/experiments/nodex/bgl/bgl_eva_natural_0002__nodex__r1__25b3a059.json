@@ -1,0 +1,58 @@
+{
+  "case_id": "bgl_eva_natural_0002",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "oficial-12casos-r1-20261028",
+  "run_id": "bgl_eva_natural_0002__nodex__r1__25b3a059",
+  "salida": {
+    "case_id": "bgl_eva_natural_0002",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "socket_connection_reset",
+        "evidence_uids": [
+          "log_record_000001",
+          "log_record_000003",
+          "log_record_000004",
+          "log_record_000005",
+          "log_record_000008",
+          "log_record_000010",
+          "log_record_000012",
+          "log_record_000015"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos eventos analizados corresponden a registros de infraestructura de supercómputo (mensajes RAS del demonio ciod en IBM Blue Gene/L). El mensaje 'Error reading message prefix on CioStream socket to 172.16.96.116:52930, Connection reset by peer' describe una interrupción o cierre abrupto de socket de comunicación entre procesos internos de cómputo y nodos de I/O. No se observan vectores de ataque, intentos de intrusión, autenticación anómala ni patrones maliciosos; se trata de un fallo operativo/de red a nivel de sistema. No se requieren medidas de contención de ciberseguridad.\n\n## Evaluación del auditor\n\nEl diagnóstico es acertado. Los mensajes corresponden a errores operativos de comunicación ('Connection reset by peer') en sockets de CioStream vinculados a procesos internos del sistema Blue Gene/L. Se trata de una falla de red/proceso operativa sin indicadores de intrusión o actividad maliciosa."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0002__nodex__r1__25b3a059",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0002__nodex__r1__25b3a059.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-28T05:05:05+00:00"
+  }
+}

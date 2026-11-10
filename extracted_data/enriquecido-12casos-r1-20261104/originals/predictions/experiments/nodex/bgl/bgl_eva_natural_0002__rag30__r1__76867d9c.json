@@ -1,0 +1,61 @@
+{
+  "case_id": "bgl_eva_natural_0002",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "enriquecido-12casos-r1-20261104",
+  "run_id": "bgl_eva_natural_0002__rag30__r1__76867d9c",
+  "condicion_rag": "enriquecido",
+  "rag_version": "rag_enriquecido_30_v1",
+  "casos_historicos": 30,
+  "salida": {
+    "case_id": "bgl_eva_natural_0002",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "network_connection_reset",
+        "evidence_uids": [
+          "log_record_000001",
+          "log_record_000003",
+          "log_record_000004",
+          "log_record_000005",
+          "log_record_000008",
+          "log_record_000010",
+          "log_record_000012",
+          "log_record_000015"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLa actividad registrada corresponde a eventos de sistema de alto rendimiento (logs RAS de BlueGene/L vinculados al daemon 'ciod') donde se reporta un fallo de socket 'Connection reset by peer' hacia la IP privada 172.16.96.116. No se identifican patrones de intrusión, escaneo malicioso ni actividad adversarial; se trata de una desconexión o falla operacional a nivel de transporte entre procesos internos. Se descarta amenaza de ciberseguridad y se recomienda canalizar el incidente al equipo de soporte de infraestructura/HPC para revisar la estabilidad del enlace de red y la aplicación cliente.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Los registros corresponden a fallos de socket ('Connection reset by peer') del servicio ciod en una plataforma BlueGene/L comunicando con la IP 172.16.96.116. Se trata de un problema operativo de red o terminación de proceso en un entorno de computación de alto rendimiento, sin indicios de actividad adversarial ni incidente de ciberseguridad.\n\n## Comandos de mitigación propuestos\n\n- ip route get 172.16.96.116\n- ping -c 4 172.16.96.116\n- ss -tie dst 172.16.96.116\n- tcpdump -nn -i any host 172.16.96.116 -c 50 -w /tmp/ciod_socket_debug.pcap"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0002__rag30__r1__76867d9c",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0002__rag30__r1__76867d9c.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-04T23:02:05+00:00"
+  }
+}

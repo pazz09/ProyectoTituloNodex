@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=668 salida=215 razonamiento=651 total=1534
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=840 salida=158 razonamiento=573 total=1571
+   → No hace falta RAG (A pesar de la baja cobertura del parsing estructurado, el contenido de los registros crudos es legible y muestra claramente métricas de interrupciones operativas normales a nivel de kernel, descartando cualquier vector de ataque o necesidad de correlación externa.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=196 salida=51 razonamiento=197 total=444
+   → usar_cve: False | Razón: El diagnóstico concluye que se trata de actividad operacional benigna de telemetría del sistema, sin indicios de ataque, vulnerabilidades explotadas ni servicios vulnerables identificados.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=149 salida=6 razonamiento=1130 total=1285
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=1976 salida=229 razonamiento=859 total=3064
+   → Confianza final: 0.75 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es adecuado al clasificar los registros como telemetría operacional de kernel en entornos HPC. No se identifican anomalías operacionales ni incidentes de seguridad en los registros provistos.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

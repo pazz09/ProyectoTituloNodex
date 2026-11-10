@@ -1,0 +1,7 @@
+## Diagnóstico
+
+El análisis del lote de 300 eventos de Zeek muestra un predominio casi total de tráfico DNS (294 eventos), destacando 244 solicitudes salientes desde 143.88.255.10 hacia el resolver 10.0.10.1 marcadas en estado S0 (solicitudes UDP no respondidas). Aunque inicialmente catalogadas como críticas por volumen de fallos, la correlación con el contexto histórico (similitud del 98.7% con registros normales del dataset UWF) confirma que este patrón de consultas unidireccionales o no respondidas corresponde al comportamiento basal normal del entorno y no a un incidente de seguridad. No se identifican patrones de exfiltración, tunelado DNS ni compromiso activo, por lo que ninguna de las técnicas MITRE ATT&CK evaluadas (como T1071.004, T1584.002 o T1590.002) resulta aplicable. Se concluye que se trata de un falso positivo atribuible a la heurística de severidad sobre tráfico de red estándar.
+
+## Evaluación del auditor
+
+El diagnóstico es correcto. El análisis del lote de 300 eventos confirma que el tráfico de consultas DNS salientes desde 143.88.255.10 hacia el resolver 10.0.10.1 con estado S0 corresponde al perfil de tráfico basal histórico del dataset UWF. No existen indicios de tunelado DNS (T1071.004), exfiltración ni compromiso de infraestructura (T1584.002, T1590.002), por lo que se descarta un incidente de seguridad y se confirma que la alerta inicial es un falso positivo.

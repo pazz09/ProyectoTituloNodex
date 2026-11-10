@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=681 salida=264 razonamiento=464 total=1409
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=853 salida=206 razonamiento=769 total=1828
+   → No hace falta RAG (A pesar de la baja cobertura del parsing automático, el contenido del registro crudo es explícito y corresponde a telemetría operativa de hardware/sistema benigna, por lo que es posible emitir un diagnóstico concluyente sin necesidad de consultar memoria histórica o técnicas MITRE ATT&CK.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=236 salida=52 razonamiento=188 total=476
+   → usar_cve: False | Razón: El diagnóstico indica que se trata de eventos operativos y de hardware normales (mensajes RAS de Blue Gene/L) sin evidencia de actividad maliciosa ni explotación de vulnerabilidades específicas.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=189 salida=10 razonamiento=359 total=558
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2039 salida=328 razonamiento=770 total=3137
+   → Confianza final: 0.90 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros reflejan eventos de hardware y confiabilidad (RAS KERNEL) de una arquitectura Blue Gene/L, correspondientes a errores de retransmisión en la red torus que fueron detectados y corregidos a nivel de sistema. Aunque constituye una anomalía operativa a nivel de infraestructura/enlace, no corresponde a un incidente de seguridad ni a actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

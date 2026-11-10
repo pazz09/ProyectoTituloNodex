@@ -1,0 +1,41 @@
+{
+  "case_id": "bgl_eva_balanceado_0006",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 2,
+  "config_version": "oficial-12casos-r2-20261103",
+  "run_id": "bgl_eva_balanceado_0006__nodex__r2__8f61b327",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0006",
+    "classification": "BENIGN",
+    "reconstructed_events": [],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLa actividad registrada corresponde a mensajes informativos de nivel operacional de sistema (logs de tipo RAS KERNEL INFO de arquitectura BlueGene) que reportan métricas normales de interrupciones de hardware. No se evidencia tráfico malicioso, intentos de acceso no autorizado ni indicadores de compromiso vinculados a la IP 10.1.1.164. La actividad se clasifica como benigna y no se requieren medidas de contención.\n\n## Evaluación del auditor\n\nEl diagnóstico es adecuado. Los registros analizados corresponden a mensajes informativos de nivel operacional del kernel (RAS KERNEL INFO de BlueGene) que reportan métricas normales de interrupciones de hardware. No se identifican patrones anómalos, tráfico malicioso ni indicadores de compromiso asociados a la dirección 10.1.1.164."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0006__nodex__r2__8f61b327",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0006__nodex__r2__8f61b327.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-03T03:46:42+00:00"
+  }
+}

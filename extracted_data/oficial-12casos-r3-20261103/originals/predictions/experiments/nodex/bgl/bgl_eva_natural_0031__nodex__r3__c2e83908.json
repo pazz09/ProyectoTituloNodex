@@ -1,0 +1,51 @@
+{
+  "case_id": "bgl_eva_natural_0031",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 3,
+  "config_version": "oficial-12casos-r3-20261103",
+  "run_id": "bgl_eva_natural_0031__nodex__r3__c2e83908",
+  "salida": {
+    "case_id": "bgl_eva_natural_0031",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "kernel_hardware_failure",
+        "evidence_uids": [
+          "log_record_000001"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos registros analizados corresponden a mensajes RAS (Reliability, Availability and Serviceability) del kernel de una arquitectura de supercomputación IBM BlueGene/L (dataset público BGL). El evento registrado ('RAS KERNEL FATAL program interrupt: fp cr field') corresponde a una interrupción de programa fatal por excepción de punto flotante en la tarjeta/nodo R24-M0-ND-C:J02-U11. No se identifican indicadores de compromiso (IoCs), vectores de ataque ni actividad maliciosa de red; se trata de un fallo operativo/hardware a nivel de kernel y procesador. Recomendación: aislar y validar el componente de cómputo afectado mediante diagnósticos de hardware.\n\n## Evaluación del auditor\n\nEl diagnóstico es preciso al clasificar el evento como un fallo operativo/hardware a nivel de kernel (interrupción de programa por excepción de punto flotante en arquitectura IBM BlueGene/L). No se observan indicios de actividad maliciosa ni compromiso de seguridad.\n\n## Comandos de mitigación propuestos\n\n- scontrol update NodeName=R24-M0-ND-C:J02-U11 State=DRAIN Reason='Fallo de hardware RAS: kernel fatal program interrupt'\n- dmesg -T -k -l emerg,alert,crit,err\n- journalctl -k -p 0..3 --no-pager -n 100\n- edac-util -v\n- rasdaemon --record"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0031__nodex__r3__c2e83908",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0031__nodex__r3__c2e83908.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-03T04:14:26+00:00"
+  }
+}

@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=529 salida=233 razonamiento=756 total=1518
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=656 salida=209 razonamiento=375 total=1240
+   → No hace falta RAG (A pesar de la baja cobertura del parser automático por tratarse de texto libre, la muestra es inequívocamente un log operativo/hardware RAS de Blue Gene/L y el plan descarta expresamente la consulta de memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=242 salida=61 razonamiento=114 total=417
+   → usar_cve: False | Razón: El evento corresponde a un fallo crítico a nivel de hardware/arquitectura (interrupción de punto flotante en IBM Blue Gene/L) y no a una vulnerabilidad de software ni a un ataque cibernético explotable.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=195 salida=117 razonamiento=703 total=1015
+   → 3 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2117 salida=268 razonamiento=521 total=2906
+   → Confianza final: 0.90 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | Los registros corresponden a mensajes de diagnóstico RAS del kernel asociados a una interrupción crítica del procesador por operaciones de punto flotante. Se trata de una falla de hardware o nivel arquitectónico y no de un compromiso o intrusión de seguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

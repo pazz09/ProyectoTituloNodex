@@ -1,0 +1,82 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=2938 salida=282 razonamiento=579 total=3799
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3181 salida=164 razonamiento=526 total=3871
+   → Solicitando RAG (Se requiere consultar la base de conocimiento y precedentes de MITRE ATT&CK (técnicas asociadas a abuso de DNS como T1071.004, T1572 y T1498) para correlacionar el patrón de conexiones UDP unidireccionales (estado Zeek S0 con 262 intentos sin respuesta de 143.88.255.10 hacia 10.0.10.1) y diferenciar si corresponde a un intento de denegación de servicio / saturación DNS, escaneo/reconocimiento o fallos derivados de tunneling DNS.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1071.004, T1584.002, T1590.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=3890 salida=209 razonamiento=724 total=4823
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=328 salida=61 razonamiento=190 total=579
+   → usar_cve: False | Razón: El diagnóstico describe actividad de reconocimiento, enumeración y posible denegación de servicio a nivel de red (DNS UDP/53), pero no especifica el software del servidor DNS ni versiones vulnerables específicas para buscar CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=256 salida=233 razonamiento=1085 total=1574
+   → 6 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=48092 salida=722 razonamiento=2151 total=50965
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=False | Se observa un patrón anómalo de tráfico DNS UDP dirigido a 10.0.10.1 desde la IP 143.88.255.10 con resultado S0 (sin respuesta). Sin embargo, la periodicidad constante de ráfagas cada 30 segundos es un comportamiento típico de reintentos por timeout de resolución hacia un servidor DNS inalcanzable o mal configurado, más que una intrusión o ataque malicioso confirmado.
+   🔀 Router Finalización → agente_planificador (replanifica: cobertura insuficiente)
+👉 Transición completada en: 'agente_auditor_final'
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=4183 salida=319 razonamiento=512 total=5014
+   → Plan v2: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3169 salida=224 razonamiento=595 total=3988
+   → No hace falta RAG (El plan descarta explícitamente el uso de memoria histórica y la telemetría Zeek parseada al 100% proporciona evidencia concluyente (estado S0 persistente, tráfico unidireccional y tasa uniforme de reintentos) para confirmar un problema operacional de conectividad DNS.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=275 salida=61 razonamiento=151 total=487
+   → usar_cve: False | Razón: El diagnóstico concluye que se trata de un problema operacional de conectividad/configuración (servidor DNS no responde y bucle de reintentos), descartando actividad maliciosa o explotación de vulnerabilidades de software específicas.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=203 salida=208 razonamiento=888 total=1299
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=47996 salida=694 razonamiento=1388 total=50078
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. La evidencia muestra un patrón de reintentos continuos de consultas DNS UDP hacia la dirección 10.0.10.1 que no son respondidas (estado Zeek S0). Al mismo tiempo, otras consultas en la red hacia 143.88.1.1 se resuelven normalmente (SF), lo que confirma una falla de conectividad o servicio inalcanzable/mal configurado en 10.0.10.1 y no un incidente de seguridad ni actividad maliciosa.
+   🔀 Router Finalización → END (MAX_REPLANS=1 alcanzado)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

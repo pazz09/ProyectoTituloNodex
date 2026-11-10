@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=668 salida=229 razonamiento=415 total=1312
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=838 salida=190 razonamiento=620 total=1648
+   → No hace falta RAG (A pesar de la baja cobertura del parser automatizado, la muestra de registro crudo identifica con claridad eventos informativos de interrupciones del kernel sin relevancia de seguridad ni alertas operativas, permitiendo descartar un incidente sin necesidad de consultar memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=219 salida=42 razonamiento=131 total=392
+   → usar_cve: False | Razón: El diagnóstico confirma que los eventos son telemetría operativa benigna y no se identifica ningún ataque, servicio vulnerable o intento de explotación.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=172 salida=6 razonamiento=260 total=438
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=1999 salida=145 razonamiento=1302 total=3446
+   → Confianza final: 0.85 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es consistente y adecuado. La telemetría observada corresponde a registros operativos rutinarios de kernel e interrupciones de hardware (IBM BlueGene/L RAS), sin evidencia de compromiso, actividad maliciosa o anomalías de seguridad asociadas a la IP 10.1.1.164.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=529 salida=161 razonamiento=888 total=1578
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=646 salida=209 razonamiento=323 total=1178
+   → No hace falta RAG (El plan de investigación explícitamente no contempla consultar memoria histórica y la muestra cruda permite identificar claramente el origen de los logs como fallas de sistema/hardware en infraestructura HPC (BlueGene/L RAS), descartando amenazas de seguridad sin requerir contexto adicional.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=235 salida=56 razonamiento=388 total=679
+   → usar_cve: False | Razón: El diagnóstico confirma que se trata de un fallo operativo y de hardware no malicioso en BlueGene/L, sin indicios de ataques ni vulnerabilidades explotables que requieran la consulta de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=188 salida=195 razonamiento=376 total=759
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2169 salida=562 razonamiento=419 total=3150
+   → Confianza final: 0.80 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto al identificar los eventos como fallos operativos o de hardware de nivel kernel (BlueGene/L RAS KERNEL FATAL) y descartar compromiso o actividad maliciosa. Los comandos de recolección de métricas de hardware y registros de kernel son apropiados para el escalado a infraestructura.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

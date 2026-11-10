@@ -1,0 +1,85 @@
+{
+  "case_id": "uwf_eva_visible_0004",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "enriquecido-12casos-r1-20261104",
+  "run_id": "uwf_eva_visible_0004__rag30__r1__06bf5738",
+  "condicion_rag": "enriquecido",
+  "rag_version": "rag_enriquecido_30_v1",
+  "casos_historicos": 30,
+  "salida": {
+    "case_id": "uwf_eva_visible_0004",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-17 16:35:52.282",
+        "entities": [],
+        "event_type": "port_scan",
+        "evidence_uids": [
+          "CgLc2r16KKjawNK486",
+          "CW1rJU3i8X5NnW2IFc",
+          "CLTC2c4FoX1FKSGv63",
+          "CvO8mBVfhDwYkcW7e",
+          "Cd4w7LEQsVEFsN5f",
+          "CP9GUf3gRGVv6QAO9b"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": [
+        {
+          "id": "T1046",
+          "name": "Network Service Discovery",
+          "evidence_uids": [
+            "CgLc2r16KKjawNK486",
+            "CW1rJU3i8X5NnW2IFc",
+            "CLTC2c4FoX1FKSGv63",
+            "CvO8mBVfhDwYkcW7e",
+            "Cd4w7LEQsVEFsN5f",
+            "CP9GUf3gRGVv6QAO9b"
+          ]
+        }
+      ]
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl análisis del lote revela una alta concentración de solicitudes UDP/DNS no respondidas (estado de conexión S0) dirigidas principalmente desde 143.88.255.10 hacia 10.0.10.1, así como tráfico entre 143.88.18.12 y 143.88.18.11. La correlación con el contexto histórico muestra una similitud superior al 99% con patrones de tráfico de fondo normal (benigno) del entorno UWF, correspondientes a consultas DNS habituales sin respuesta o artefactos de captura unidireccional. No se observan indicadores de compromiso, túneles DNS ni exfiltración, por lo que ninguna de las técnicas MITRE ATT&CK evaluadas aplica a este comportamiento.\n\n## Evaluación del auditor\n\nEl diagnóstico es incorrecto al calificar la totalidad del tráfico como benigno y normal. Entre las 16:35:52 y 16:35:53, la dirección IP 143.88.18.12 realiza un escaneo de puertos TCP sistemático y concentrado contra 143.88.18.11, probando decenas de servicios críticos y de administración (puertos 21, 22, 23, 25, 80, 110, 135, 139, 143, 443, 445, 3306, 3389, 5900, 8080, entre otros) en un lapso inferior a dos segundos con estado SH. Esto constituye una actividad maliciosa de reconocimiento de red (Port Scanning / Network Service Discovery, MITRE T1046)."
+    },
+    "_meta": {
+      "run_id": "uwf_eva_visible_0004__rag30__r1__06bf5738",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_visible_0004__rag30__r1__06bf5738.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-04T22:51:47+00:00"
+  }
+}

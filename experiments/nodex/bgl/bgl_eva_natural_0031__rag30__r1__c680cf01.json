@@ -1,0 +1,54 @@
+{
+  "case_id": "bgl_eva_natural_0031",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "enriquecido-12casos-r1-20261104",
+  "run_id": "bgl_eva_natural_0031__rag30__r1__c680cf01",
+  "condicion_rag": "enriquecido",
+  "rag_version": "rag_enriquecido_30_v1",
+  "casos_historicos": 30,
+  "salida": {
+    "case_id": "bgl_eva_natural_0031",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "kernel_fatal_error",
+        "evidence_uids": [
+          "log_record_000001"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos registros corresponden a trazas de confiabilidad, disponibilidad y servicio (RAS) del kernel de un supercomputador (formato Blue Gene/L de IBM), que registran un fallo crítico del sistema ('RAS KERNEL FATAL program interrupt: fp cr field'). No se observan indicadores de compromiso (IoC), técnicas adversarias ni indicios de intrusión cibernética; se trata de una anomalía o fallo a nivel de hardware/arquitectura en operaciones de punto flotante. No se requieren medidas de contención de seguridad, sino derivación al equipo de ingeniería de hardware/sistemas para diagnóstico de la tarjeta o nodo reportado.\n\n## Evaluación del auditor\n\nLos registros corresponden a mensajes de diagnóstico RAS del kernel asociados a una interrupción crítica del procesador por operaciones de punto flotante. Se trata de una falla de hardware o nivel arquitectónico y no de un compromiso o intrusión de seguridad.\n\n## Comandos de mitigación propuestos\n\n- dmesg -T --level=emerg,alert,crit,err > /var/log/ras_kernel_fatal_$(date +%F_%T).log\n- journalctl -k -b -p 0..3 --no-pager >> /var/log/ras_kernel_fatal_$(date +%F_%T).log\n- scontrol update NodeName=$(hostname -s) State=DRAIN Reason='Hardware_RAS_Fatal_FP_Error' 2>/dev/null || true"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0031__rag30__r1__c680cf01",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0031__rag30__r1__c680cf01.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-04T22:53:29+00:00"
+  }
+}

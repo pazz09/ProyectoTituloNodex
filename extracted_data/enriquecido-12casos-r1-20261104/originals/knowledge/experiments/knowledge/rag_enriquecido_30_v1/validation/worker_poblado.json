@@ -1,0 +1,2654 @@
+{
+  "status": "passed",
+  "documents_before": {
+    "error_memory": 0,
+    "host_history": 0,
+    "attack_patterns": 0,
+    "attack_techniques": 697
+  },
+  "documents_after": {
+    "error_memory": 0,
+    "host_history": 0,
+    "attack_patterns": 30,
+    "attack_techniques": 697
+  },
+  "embeddings_after": {
+    "error_memory": 0,
+    "host_history": 0,
+    "attack_patterns": 30,
+    "attack_techniques": 697
+  },
+  "embedding_dimension": 384,
+  "embedding_model": "all-MiniLM-L6-v2",
+  "packages": {
+    "chromadb": "1.5.9",
+    "sentence-transformers": "6.0.1",
+    "torch": "2.14.0",
+    "transformers": "5.16.1"
+  },
+  "embedding_dependency_versions_match_R1": true,
+  "mitre_before": {
+    "count": 697,
+    "content_sha256": "b7b5c45c28c5d5e976dd2af18be9b19eb0a8001dc0b0e04356a7daa2a4ca7a8e",
+    "metadata": {
+      "hnsw:space": "cosine"
+    },
+    "configuration": {
+      "hnsw": {
+        "space": "cosine",
+        "ef_construction": 100,
+        "ef_search": 100,
+        "max_neighbors": 16,
+        "resize_factor": 1.2,
+        "sync_threshold": 1000
+      },
+      "spann": null,
+      "embedding_function": {
+        "type": "known",
+        "name": "sentence_transformer",
+        "config": {
+          "device": "cpu",
+          "kwargs": {},
+          "model_name": "all-MiniLM-L6-v2",
+          "normalize_embeddings": false
+        }
+      }
+    }
+  },
+  "mitre_after": {
+    "count": 697,
+    "content_sha256": "b7b5c45c28c5d5e976dd2af18be9b19eb0a8001dc0b0e04356a7daa2a4ca7a8e",
+    "metadata": {
+      "hnsw:space": "cosine"
+    },
+    "configuration": {
+      "hnsw": {
+        "space": "cosine",
+        "ef_construction": 100,
+        "ef_search": 100,
+        "max_neighbors": 16,
+        "resize_factor": 1.2,
+        "sync_threshold": 1000
+      },
+      "spann": null,
+      "embedding_function": {
+        "type": "known",
+        "name": "sentence_transformer",
+        "config": {
+          "device": "cpu",
+          "kwargs": {},
+          "model_name": "all-MiniLM-L6-v2",
+          "normalize_embeddings": false
+        }
+      }
+    }
+  },
+  "patterns": {
+    "count": 30,
+    "content_sha256": "74cd7a52c387c8eda9cd15c77862ff17505cf5e675b0d9c1882ff9ce7a40dcb9",
+    "metadata": {
+      "hnsw:space": "cosine"
+    },
+    "configuration": {
+      "hnsw": {
+        "space": "cosine",
+        "ef_construction": 100,
+        "ef_search": 100,
+        "max_neighbors": 16,
+        "resize_factor": 1.2,
+        "sync_threshold": 1000
+      },
+      "spann": null,
+      "embedding_function": {
+        "type": "known",
+        "name": "sentence_transformer",
+        "config": {
+          "device": "cpu",
+          "kwargs": {},
+          "model_name": "all-MiniLM-L6-v2",
+          "normalize_embeddings": false
+        }
+      }
+    }
+  },
+  "idempotent": true,
+  "all_ids_retrievable": true,
+  "embeddings_recomputed_and_verified": 30,
+  "max_embedding_absolute_difference": 1.4901161193847656e-08,
+  "retrieval": {
+    "status": "passed",
+    "tool": "src.tools.tool_consultar_rag.tool_consultar_rag",
+    "memory_function": "LongTermMemory.retrieve_examples",
+    "llm_calls": 0,
+    "threshold": 0.55,
+    "attack_threshold": 0.42,
+    "top_k": 3,
+    "query_count": 60,
+    "nonidentical_related_queries": 25,
+    "strata_retrieved": [
+      "bgl/anomalo",
+      "bgl/normal",
+      "uwf/anomalo",
+      "uwf/normal"
+    ],
+    "note": "La firma agregada puede coincidir entre casos: no garantiza recuperar el propio ID ni distinguir clases con la misma firma. No se mide desempeño del LLM.",
+    "queries": [
+      {
+        "historical_case_id": "bgl_hist_001",
+        "dataset": "bgl",
+        "classification": "anomalo",
+        "kind": "original",
+        "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "bgl_hist_001",
+          "bgl_hist_004"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_001",
+            "historical_case_id": "bgl_hist_001",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_004",
+            "historical_case_id": "bgl_hist_004",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_008",
+            "historical_case_id": "bgl_hist_008",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 0.998,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "bgl_hist_001",
+        "dataset": "bgl",
+        "classification": "anomalo",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=19 ips=1 servicios=[desconocido:19] eventos=[evento_normal:19] eventos_totales=19 decoders=[text:19] productos=[] severidades=[] categorias=[] cobertura=0.0",
+        "query_is_stored_signature": false,
+        "related_same_dataset_class": [
+          "bgl_hist_001",
+          "bgl_hist_004"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_001",
+            "historical_case_id": "bgl_hist_001",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_004",
+            "historical_case_id": "bgl_hist_004",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_008",
+            "historical_case_id": "bgl_hist_008",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 0.987,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "bgl_hist_002",
+        "dataset": "bgl",
+        "classification": "anomalo",
+        "kind": "original",
+        "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "bgl_hist_006"
+        ],
+        "self_id_in_top_k": false,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+            "historical_case_id": "bgl_hist_006",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+            "historical_case_id": "bgl_hist_012",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_015",
+            "historical_case_id": "bgl_hist_015",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "bgl_hist_002",
+        "dataset": "bgl",
+        "classification": "anomalo",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=19 ips=0 servicios=[desconocido:19] eventos=[evento_normal:19] eventos_totales=19 decoders=[text:19] productos=[] severidades=[] categorias=[] cobertura=0.0",
+        "query_is_stored_signature": false,
+        "related_same_dataset_class": [
+          "bgl_hist_005",
+          "bgl_hist_006"
+        ],
+        "self_id_in_top_k": false,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_005",
+            "historical_case_id": "bgl_hist_005",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+            "historical_case_id": "bgl_hist_006",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+            "historical_case_id": "bgl_hist_014",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "bgl_hist_003",
+        "dataset": "bgl",
+        "classification": "anomalo",
+        "kind": "original",
+        "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "bgl_hist_006"
+        ],
+        "self_id_in_top_k": false,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+            "historical_case_id": "bgl_hist_006",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+            "historical_case_id": "bgl_hist_012",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_015",
+            "historical_case_id": "bgl_hist_015",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "bgl_hist_003",
+        "dataset": "bgl",
+        "classification": "anomalo",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=19 ips=0 servicios=[desconocido:19] eventos=[evento_normal:19] eventos_totales=19 decoders=[text:19] productos=[] severidades=[] categorias=[] cobertura=0.0",
+        "query_is_stored_signature": false,
+        "related_same_dataset_class": [
+          "bgl_hist_005",
+          "bgl_hist_006"
+        ],
+        "self_id_in_top_k": false,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_005",
+            "historical_case_id": "bgl_hist_005",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+            "historical_case_id": "bgl_hist_006",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+            "historical_case_id": "bgl_hist_014",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "bgl_hist_004",
+        "dataset": "bgl",
+        "classification": "anomalo",
+        "kind": "original",
+        "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "bgl_hist_001",
+          "bgl_hist_004"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_001",
+            "historical_case_id": "bgl_hist_001",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_004",
+            "historical_case_id": "bgl_hist_004",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_008",
+            "historical_case_id": "bgl_hist_008",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 0.998,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "bgl_hist_004",
+        "dataset": "bgl",
+        "classification": "anomalo",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=19 ips=1 servicios=[desconocido:19] eventos=[evento_normal:19] eventos_totales=19 decoders=[text:19] productos=[] severidades=[] categorias=[] cobertura=0.0",
+        "query_is_stored_signature": false,
+        "related_same_dataset_class": [
+          "bgl_hist_001",
+          "bgl_hist_004"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_001",
+            "historical_case_id": "bgl_hist_001",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_004",
+            "historical_case_id": "bgl_hist_004",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_008",
+            "historical_case_id": "bgl_hist_008",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 0.987,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "bgl_hist_005",
+        "dataset": "bgl",
+        "classification": "anomalo",
+        "kind": "original",
+        "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "bgl_hist_006"
+        ],
+        "self_id_in_top_k": false,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+            "historical_case_id": "bgl_hist_006",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+            "historical_case_id": "bgl_hist_012",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_015",
+            "historical_case_id": "bgl_hist_015",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "bgl_hist_005",
+        "dataset": "bgl",
+        "classification": "anomalo",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=19 ips=0 servicios=[desconocido:19] eventos=[evento_normal:19] eventos_totales=19 decoders=[text:19] productos=[] severidades=[] categorias=[] cobertura=0.0",
+        "query_is_stored_signature": false,
+        "related_same_dataset_class": [
+          "bgl_hist_005",
+          "bgl_hist_006"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_005",
+            "historical_case_id": "bgl_hist_005",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+            "historical_case_id": "bgl_hist_006",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+            "historical_case_id": "bgl_hist_014",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "bgl_hist_006",
+        "dataset": "bgl",
+        "classification": "anomalo",
+        "kind": "original",
+        "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "bgl_hist_006"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+            "historical_case_id": "bgl_hist_006",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+            "historical_case_id": "bgl_hist_012",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_015",
+            "historical_case_id": "bgl_hist_015",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "bgl_hist_006",
+        "dataset": "bgl",
+        "classification": "anomalo",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=19 ips=0 servicios=[desconocido:19] eventos=[evento_normal:19] eventos_totales=19 decoders=[text:19] productos=[] severidades=[] categorias=[] cobertura=0.0",
+        "query_is_stored_signature": false,
+        "related_same_dataset_class": [
+          "bgl_hist_005",
+          "bgl_hist_006"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_005",
+            "historical_case_id": "bgl_hist_005",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+            "historical_case_id": "bgl_hist_006",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+            "historical_case_id": "bgl_hist_014",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "bgl_hist_007",
+        "dataset": "bgl",
+        "classification": "anomalo",
+        "kind": "original",
+        "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:1,evento_normal:19] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:1] cobertura=0.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "bgl_hist_007"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_007",
+            "historical_case_id": "bgl_hist_007",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:1,evento_normal:19] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:1] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_013",
+            "historical_case_id": "bgl_hist_013",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 0.999,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:2,evento_normal:18] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:2] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+            "historical_case_id": "bgl_hist_014",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 0.958,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1685.001",
+          "T1685.004",
+          "T1654"
+        ]
+      },
+      {
+        "historical_case_id": "bgl_hist_007",
+        "dataset": "bgl",
+        "classification": "anomalo",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=19 ips=0 servicios=[desconocido:19] eventos=[evento_critico:1,evento_normal:18] eventos_totales=19 decoders=[text:19] productos=[] severidades=[] categorias=[authentication:1] cobertura=0.0",
+        "query_is_stored_signature": false,
+        "related_same_dataset_class": [
+          "bgl_hist_007"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_007",
+            "historical_case_id": "bgl_hist_007",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.994,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:1,evento_normal:19] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:1] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_013",
+            "historical_case_id": "bgl_hist_013",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 0.993,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:2,evento_normal:18] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:2] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+            "historical_case_id": "bgl_hist_014",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 0.95,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1685.001",
+          "T1685.004",
+          "T1654"
+        ]
+      },
+      {
+        "historical_case_id": "bgl_hist_008",
+        "dataset": "bgl",
+        "classification": "normal",
+        "kind": "original",
+        "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "bgl_hist_012",
+          "bgl_hist_015"
+        ],
+        "self_id_in_top_k": false,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+            "historical_case_id": "bgl_hist_006",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+            "historical_case_id": "bgl_hist_012",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_015",
+            "historical_case_id": "bgl_hist_015",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "bgl_hist_008",
+        "dataset": "bgl",
+        "classification": "normal",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=19 ips=0 servicios=[desconocido:19] eventos=[evento_normal:19] eventos_totales=19 decoders=[text:19] productos=[] severidades=[] categorias=[] cobertura=0.0",
+        "query_is_stored_signature": false,
+        "related_same_dataset_class": [
+          "bgl_hist_014"
+        ],
+        "self_id_in_top_k": false,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_005",
+            "historical_case_id": "bgl_hist_005",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+            "historical_case_id": "bgl_hist_006",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+            "historical_case_id": "bgl_hist_014",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "bgl_hist_009",
+        "dataset": "bgl",
+        "classification": "normal",
+        "kind": "original",
+        "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "bgl_hist_012",
+          "bgl_hist_015"
+        ],
+        "self_id_in_top_k": false,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+            "historical_case_id": "bgl_hist_006",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+            "historical_case_id": "bgl_hist_012",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_015",
+            "historical_case_id": "bgl_hist_015",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "bgl_hist_009",
+        "dataset": "bgl",
+        "classification": "normal",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=19 ips=0 servicios=[desconocido:19] eventos=[evento_normal:19] eventos_totales=19 decoders=[text:19] productos=[] severidades=[] categorias=[] cobertura=0.0",
+        "query_is_stored_signature": false,
+        "related_same_dataset_class": [
+          "bgl_hist_014"
+        ],
+        "self_id_in_top_k": false,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_005",
+            "historical_case_id": "bgl_hist_005",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+            "historical_case_id": "bgl_hist_006",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+            "historical_case_id": "bgl_hist_014",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "bgl_hist_010",
+        "dataset": "bgl",
+        "classification": "normal",
+        "kind": "original",
+        "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "bgl_hist_012",
+          "bgl_hist_015"
+        ],
+        "self_id_in_top_k": false,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+            "historical_case_id": "bgl_hist_006",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+            "historical_case_id": "bgl_hist_012",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_015",
+            "historical_case_id": "bgl_hist_015",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "bgl_hist_010",
+        "dataset": "bgl",
+        "classification": "normal",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=19 ips=0 servicios=[desconocido:19] eventos=[evento_normal:19] eventos_totales=19 decoders=[text:19] productos=[] severidades=[] categorias=[] cobertura=0.0",
+        "query_is_stored_signature": false,
+        "related_same_dataset_class": [
+          "bgl_hist_014"
+        ],
+        "self_id_in_top_k": false,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_005",
+            "historical_case_id": "bgl_hist_005",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+            "historical_case_id": "bgl_hist_006",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+            "historical_case_id": "bgl_hist_014",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "bgl_hist_011",
+        "dataset": "bgl",
+        "classification": "normal",
+        "kind": "original",
+        "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "bgl_hist_012",
+          "bgl_hist_015"
+        ],
+        "self_id_in_top_k": false,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+            "historical_case_id": "bgl_hist_006",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+            "historical_case_id": "bgl_hist_012",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_015",
+            "historical_case_id": "bgl_hist_015",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "bgl_hist_011",
+        "dataset": "bgl",
+        "classification": "normal",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=19 ips=0 servicios=[desconocido:19] eventos=[evento_normal:19] eventos_totales=19 decoders=[text:19] productos=[] severidades=[] categorias=[] cobertura=0.0",
+        "query_is_stored_signature": false,
+        "related_same_dataset_class": [
+          "bgl_hist_014"
+        ],
+        "self_id_in_top_k": false,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_005",
+            "historical_case_id": "bgl_hist_005",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+            "historical_case_id": "bgl_hist_006",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+            "historical_case_id": "bgl_hist_014",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "bgl_hist_012",
+        "dataset": "bgl",
+        "classification": "normal",
+        "kind": "original",
+        "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "bgl_hist_012",
+          "bgl_hist_015"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+            "historical_case_id": "bgl_hist_006",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+            "historical_case_id": "bgl_hist_012",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_015",
+            "historical_case_id": "bgl_hist_015",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "bgl_hist_012",
+        "dataset": "bgl",
+        "classification": "normal",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=19 ips=0 servicios=[desconocido:19] eventos=[evento_normal:19] eventos_totales=19 decoders=[text:19] productos=[] severidades=[] categorias=[] cobertura=0.0",
+        "query_is_stored_signature": false,
+        "related_same_dataset_class": [
+          "bgl_hist_014"
+        ],
+        "self_id_in_top_k": false,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_005",
+            "historical_case_id": "bgl_hist_005",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+            "historical_case_id": "bgl_hist_006",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+            "historical_case_id": "bgl_hist_014",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "bgl_hist_013",
+        "dataset": "bgl",
+        "classification": "normal",
+        "kind": "original",
+        "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:2,evento_normal:18] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:2] cobertura=0.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "bgl_hist_013",
+          "bgl_hist_014"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_013",
+            "historical_case_id": "bgl_hist_013",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:2,evento_normal:18] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:2] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_007",
+            "historical_case_id": "bgl_hist_007",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.999,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:1,evento_normal:19] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:1] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+            "historical_case_id": "bgl_hist_014",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 0.955,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1685.001",
+          "T1685.004",
+          "T1654"
+        ]
+      },
+      {
+        "historical_case_id": "bgl_hist_013",
+        "dataset": "bgl",
+        "classification": "normal",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=19 ips=0 servicios=[desconocido:19] eventos=[evento_critico:2,evento_normal:17] eventos_totales=19 decoders=[text:19] productos=[] severidades=[] categorias=[authentication:2] cobertura=0.0",
+        "query_is_stored_signature": false,
+        "related_same_dataset_class": [
+          "bgl_hist_013",
+          "bgl_hist_014"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_013",
+            "historical_case_id": "bgl_hist_013",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 0.993,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:2,evento_normal:18] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:2] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_007",
+            "historical_case_id": "bgl_hist_007",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.993,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:1,evento_normal:19] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:1] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+            "historical_case_id": "bgl_hist_014",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 0.947,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1685.001",
+          "T1685.004",
+          "T1037.002"
+        ]
+      },
+      {
+        "historical_case_id": "bgl_hist_014",
+        "dataset": "bgl",
+        "classification": "normal",
+        "kind": "original",
+        "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "bgl_hist_012",
+          "bgl_hist_015"
+        ],
+        "self_id_in_top_k": false,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+            "historical_case_id": "bgl_hist_006",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+            "historical_case_id": "bgl_hist_012",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_015",
+            "historical_case_id": "bgl_hist_015",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "bgl_hist_014",
+        "dataset": "bgl",
+        "classification": "normal",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=19 ips=0 servicios=[desconocido:19] eventos=[evento_normal:19] eventos_totales=19 decoders=[text:19] productos=[] severidades=[] categorias=[] cobertura=0.0",
+        "query_is_stored_signature": false,
+        "related_same_dataset_class": [
+          "bgl_hist_014"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_005",
+            "historical_case_id": "bgl_hist_005",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+            "historical_case_id": "bgl_hist_006",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+            "historical_case_id": "bgl_hist_014",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "bgl_hist_015",
+        "dataset": "bgl",
+        "classification": "normal",
+        "kind": "original",
+        "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "bgl_hist_012",
+          "bgl_hist_015"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+            "historical_case_id": "bgl_hist_006",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_012",
+            "historical_case_id": "bgl_hist_012",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_015",
+            "historical_case_id": "bgl_hist_015",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "bgl_hist_015",
+        "dataset": "bgl",
+        "classification": "normal",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=19 ips=0 servicios=[desconocido:19] eventos=[evento_normal:19] eventos_totales=19 decoders=[text:19] productos=[] severidades=[] categorias=[] cobertura=0.0",
+        "query_is_stored_signature": false,
+        "related_same_dataset_class": [
+          "bgl_hist_014"
+        ],
+        "self_id_in_top_k": false,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_005",
+            "historical_case_id": "bgl_hist_005",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_006",
+            "historical_case_id": "bgl_hist_006",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_014",
+            "historical_case_id": "bgl_hist_014",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 0.989,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "uwf_hist_001",
+        "dataset": "uwf",
+        "classification": "anomalo",
+        "kind": "original",
+        "signature": "v2|lineas=3 ips=2 servicios=[dns:3] eventos=[evento_normal:3] eventos_totales=3 decoders=[csv:3] productos=[Zeek:3] severidades=[] categorias=[network:3] cobertura=1.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "uwf_hist_001",
+          "uwf_hist_004",
+          "uwf_hist_005"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_001",
+            "historical_case_id": "uwf_hist_001",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=3 ips=2 servicios=[dns:3] eventos=[evento_normal:3] eventos_totales=3 decoders=[csv:3] productos=[Zeek:3] severidades=[] categorias=[network:3] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_004",
+            "historical_case_id": "uwf_hist_004",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 0.971,
+            "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_005",
+            "historical_case_id": "uwf_hist_005",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 0.971,
+            "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1071.004",
+          "T1584.002"
+        ]
+      },
+      {
+        "historical_case_id": "uwf_hist_001",
+        "dataset": "uwf",
+        "classification": "anomalo",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=2 ips=2 servicios=[dns:2] eventos=[evento_normal:2] eventos_totales=2 decoders=[csv:2] productos=[Zeek:2] severidades=[] categorias=[network:2] cobertura=1.0",
+        "query_is_stored_signature": false,
+        "related_same_dataset_class": [
+          "uwf_hist_001",
+          "uwf_hist_005",
+          "uwf_hist_007"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_001",
+            "historical_case_id": "uwf_hist_001",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 0.975,
+            "signature": "v2|lineas=3 ips=2 servicios=[dns:3] eventos=[evento_normal:3] eventos_totales=3 decoders=[csv:3] productos=[Zeek:3] severidades=[] categorias=[network:3] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_005",
+            "historical_case_id": "uwf_hist_005",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 0.972,
+            "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_007",
+            "historical_case_id": "uwf_hist_007",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 0.972,
+            "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1071.004",
+          "T1584.002"
+        ]
+      },
+      {
+        "historical_case_id": "uwf_hist_002",
+        "dataset": "uwf",
+        "classification": "anomalo",
+        "kind": "original",
+        "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "uwf_hist_002",
+          "uwf_hist_005",
+          "uwf_hist_007"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_002",
+            "historical_case_id": "uwf_hist_002",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_005",
+            "historical_case_id": "uwf_hist_005",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_007",
+            "historical_case_id": "uwf_hist_007",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1071.004",
+          "T1584.002"
+        ]
+      },
+      {
+        "historical_case_id": "uwf_hist_002",
+        "dataset": "uwf",
+        "classification": "anomalo",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=3 ips=2 servicios=[dns:3] eventos=[evento_normal:3] eventos_totales=3 decoders=[csv:3] productos=[Zeek:3] severidades=[] categorias=[network:3] cobertura=1.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "uwf_hist_001",
+          "uwf_hist_004",
+          "uwf_hist_005"
+        ],
+        "self_id_in_top_k": false,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_001",
+            "historical_case_id": "uwf_hist_001",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=3 ips=2 servicios=[dns:3] eventos=[evento_normal:3] eventos_totales=3 decoders=[csv:3] productos=[Zeek:3] severidades=[] categorias=[network:3] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_004",
+            "historical_case_id": "uwf_hist_004",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 0.971,
+            "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_005",
+            "historical_case_id": "uwf_hist_005",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 0.971,
+            "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1071.004",
+          "T1584.002"
+        ]
+      },
+      {
+        "historical_case_id": "uwf_hist_003",
+        "dataset": "uwf",
+        "classification": "anomalo",
+        "kind": "original",
+        "signature": "v2|lineas=6 ips=2 servicios=[dns:6] eventos=[evento_normal:6] eventos_totales=6 decoders=[csv:6] productos=[Zeek:6] severidades=[] categorias=[network:6] cobertura=1.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "uwf_hist_003",
+          "uwf_hist_006",
+          "uwf_hist_001"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_003",
+            "historical_case_id": "uwf_hist_003",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=6 ips=2 servicios=[dns:6] eventos=[evento_normal:6] eventos_totales=6 decoders=[csv:6] productos=[Zeek:6] severidades=[] categorias=[network:6] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_006",
+            "historical_case_id": "uwf_hist_006",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=6 ips=2 servicios=[dns:6] eventos=[evento_normal:6] eventos_totales=6 decoders=[csv:6] productos=[Zeek:6] severidades=[] categorias=[network:6] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_001",
+            "historical_case_id": "uwf_hist_001",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 0.966,
+            "signature": "v2|lineas=3 ips=2 servicios=[dns:3] eventos=[evento_normal:3] eventos_totales=3 decoders=[csv:3] productos=[Zeek:3] severidades=[] categorias=[network:3] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1071.004",
+          "T1584.002"
+        ]
+      },
+      {
+        "historical_case_id": "uwf_hist_003",
+        "dataset": "uwf",
+        "classification": "anomalo",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=5 ips=2 servicios=[dns:5] eventos=[evento_normal:5] eventos_totales=5 decoders=[csv:5] productos=[Zeek:5] severidades=[] categorias=[network:5] cobertura=1.0",
+        "query_is_stored_signature": false,
+        "related_same_dataset_class": [
+          "uwf_hist_003",
+          "uwf_hist_006",
+          "uwf_hist_007"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_003",
+            "historical_case_id": "uwf_hist_003",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 0.976,
+            "signature": "v2|lineas=6 ips=2 servicios=[dns:6] eventos=[evento_normal:6] eventos_totales=6 decoders=[csv:6] productos=[Zeek:6] severidades=[] categorias=[network:6] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_006",
+            "historical_case_id": "uwf_hist_006",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 0.976,
+            "signature": "v2|lineas=6 ips=2 servicios=[dns:6] eventos=[evento_normal:6] eventos_totales=6 decoders=[csv:6] productos=[Zeek:6] severidades=[] categorias=[network:6] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_007",
+            "historical_case_id": "uwf_hist_007",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 0.971,
+            "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1071.004",
+          "T1584.002"
+        ]
+      },
+      {
+        "historical_case_id": "uwf_hist_004",
+        "dataset": "uwf",
+        "classification": "anomalo",
+        "kind": "original",
+        "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "uwf_hist_002",
+          "uwf_hist_005",
+          "uwf_hist_007"
+        ],
+        "self_id_in_top_k": false,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_002",
+            "historical_case_id": "uwf_hist_002",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_005",
+            "historical_case_id": "uwf_hist_005",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_007",
+            "historical_case_id": "uwf_hist_007",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1071.004",
+          "T1584.002"
+        ]
+      },
+      {
+        "historical_case_id": "uwf_hist_004",
+        "dataset": "uwf",
+        "classification": "anomalo",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=3 ips=2 servicios=[dns:3] eventos=[evento_normal:3] eventos_totales=3 decoders=[csv:3] productos=[Zeek:3] severidades=[] categorias=[network:3] cobertura=1.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "uwf_hist_001",
+          "uwf_hist_004",
+          "uwf_hist_005"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_001",
+            "historical_case_id": "uwf_hist_001",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=3 ips=2 servicios=[dns:3] eventos=[evento_normal:3] eventos_totales=3 decoders=[csv:3] productos=[Zeek:3] severidades=[] categorias=[network:3] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_004",
+            "historical_case_id": "uwf_hist_004",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 0.971,
+            "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_005",
+            "historical_case_id": "uwf_hist_005",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 0.971,
+            "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1071.004",
+          "T1584.002"
+        ]
+      },
+      {
+        "historical_case_id": "uwf_hist_005",
+        "dataset": "uwf",
+        "classification": "anomalo",
+        "kind": "original",
+        "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "uwf_hist_002",
+          "uwf_hist_005",
+          "uwf_hist_007"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_002",
+            "historical_case_id": "uwf_hist_002",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_005",
+            "historical_case_id": "uwf_hist_005",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_007",
+            "historical_case_id": "uwf_hist_007",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1071.004",
+          "T1584.002"
+        ]
+      },
+      {
+        "historical_case_id": "uwf_hist_005",
+        "dataset": "uwf",
+        "classification": "anomalo",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=3 ips=2 servicios=[dns:3] eventos=[evento_normal:3] eventos_totales=3 decoders=[csv:3] productos=[Zeek:3] severidades=[] categorias=[network:3] cobertura=1.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "uwf_hist_001",
+          "uwf_hist_004",
+          "uwf_hist_005"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_001",
+            "historical_case_id": "uwf_hist_001",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=3 ips=2 servicios=[dns:3] eventos=[evento_normal:3] eventos_totales=3 decoders=[csv:3] productos=[Zeek:3] severidades=[] categorias=[network:3] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_004",
+            "historical_case_id": "uwf_hist_004",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 0.971,
+            "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_005",
+            "historical_case_id": "uwf_hist_005",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 0.971,
+            "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1071.004",
+          "T1584.002"
+        ]
+      },
+      {
+        "historical_case_id": "uwf_hist_006",
+        "dataset": "uwf",
+        "classification": "anomalo",
+        "kind": "original",
+        "signature": "v2|lineas=6 ips=2 servicios=[dns:6] eventos=[evento_normal:6] eventos_totales=6 decoders=[csv:6] productos=[Zeek:6] severidades=[] categorias=[network:6] cobertura=1.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "uwf_hist_003",
+          "uwf_hist_006",
+          "uwf_hist_001"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_003",
+            "historical_case_id": "uwf_hist_003",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=6 ips=2 servicios=[dns:6] eventos=[evento_normal:6] eventos_totales=6 decoders=[csv:6] productos=[Zeek:6] severidades=[] categorias=[network:6] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_006",
+            "historical_case_id": "uwf_hist_006",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=6 ips=2 servicios=[dns:6] eventos=[evento_normal:6] eventos_totales=6 decoders=[csv:6] productos=[Zeek:6] severidades=[] categorias=[network:6] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_001",
+            "historical_case_id": "uwf_hist_001",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 0.966,
+            "signature": "v2|lineas=3 ips=2 servicios=[dns:3] eventos=[evento_normal:3] eventos_totales=3 decoders=[csv:3] productos=[Zeek:3] severidades=[] categorias=[network:3] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1071.004",
+          "T1584.002"
+        ]
+      },
+      {
+        "historical_case_id": "uwf_hist_006",
+        "dataset": "uwf",
+        "classification": "anomalo",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=5 ips=2 servicios=[dns:5] eventos=[evento_normal:5] eventos_totales=5 decoders=[csv:5] productos=[Zeek:5] severidades=[] categorias=[network:5] cobertura=1.0",
+        "query_is_stored_signature": false,
+        "related_same_dataset_class": [
+          "uwf_hist_003",
+          "uwf_hist_006",
+          "uwf_hist_007"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_003",
+            "historical_case_id": "uwf_hist_003",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 0.976,
+            "signature": "v2|lineas=6 ips=2 servicios=[dns:6] eventos=[evento_normal:6] eventos_totales=6 decoders=[csv:6] productos=[Zeek:6] severidades=[] categorias=[network:6] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_006",
+            "historical_case_id": "uwf_hist_006",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 0.976,
+            "signature": "v2|lineas=6 ips=2 servicios=[dns:6] eventos=[evento_normal:6] eventos_totales=6 decoders=[csv:6] productos=[Zeek:6] severidades=[] categorias=[network:6] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_007",
+            "historical_case_id": "uwf_hist_007",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 0.971,
+            "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1071.004",
+          "T1584.002"
+        ]
+      },
+      {
+        "historical_case_id": "uwf_hist_007",
+        "dataset": "uwf",
+        "classification": "anomalo",
+        "kind": "original",
+        "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "uwf_hist_002",
+          "uwf_hist_005",
+          "uwf_hist_007"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_002",
+            "historical_case_id": "uwf_hist_002",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_005",
+            "historical_case_id": "uwf_hist_005",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_007",
+            "historical_case_id": "uwf_hist_007",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1071.004",
+          "T1584.002"
+        ]
+      },
+      {
+        "historical_case_id": "uwf_hist_007",
+        "dataset": "uwf",
+        "classification": "anomalo",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=3 ips=2 servicios=[dns:3] eventos=[evento_normal:3] eventos_totales=3 decoders=[csv:3] productos=[Zeek:3] severidades=[] categorias=[network:3] cobertura=1.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "uwf_hist_001",
+          "uwf_hist_004",
+          "uwf_hist_005"
+        ],
+        "self_id_in_top_k": false,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_001",
+            "historical_case_id": "uwf_hist_001",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=3 ips=2 servicios=[dns:3] eventos=[evento_normal:3] eventos_totales=3 decoders=[csv:3] productos=[Zeek:3] severidades=[] categorias=[network:3] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_004",
+            "historical_case_id": "uwf_hist_004",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 0.971,
+            "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_005",
+            "historical_case_id": "uwf_hist_005",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 0.971,
+            "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1071.004",
+          "T1584.002"
+        ]
+      },
+      {
+        "historical_case_id": "uwf_hist_008",
+        "dataset": "uwf",
+        "classification": "anomalo",
+        "kind": "original",
+        "signature": "v2|lineas=4 ips=2 servicios=[gssapi:1] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:1,text:3] productos=[Zeek:1] severidades=[] categorias=[network:1] cobertura=0.25",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "uwf_hist_008",
+          "uwf_hist_005",
+          "uwf_hist_007"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_008",
+            "historical_case_id": "uwf_hist_008",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 1.0,
+            "signature": "v2|lineas=4 ips=2 servicios=[gssapi:1] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:1,text:3] productos=[Zeek:1] severidades=[] categorias=[network:1] cobertura=0.25"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_005",
+            "historical_case_id": "uwf_hist_005",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 0.939,
+            "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_007",
+            "historical_case_id": "uwf_hist_007",
+            "dataset": "uwf",
+            "classification": "anomalo",
+            "similarity": 0.939,
+            "signature": "v2|lineas=4 ips=2 servicios=[dns:4] eventos=[evento_normal:4] eventos_totales=4 decoders=[csv:4] productos=[Zeek:4] severidades=[] categorias=[network:4] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "uwf_hist_008",
+        "dataset": "uwf",
+        "classification": "anomalo",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=3 ips=1 servicios=[desconocido:3] eventos=[evento_normal:3] eventos_totales=3 decoders=[text:3] productos=[] severidades=[] categorias=[] cobertura=0.0",
+        "query_is_stored_signature": false,
+        "related_same_dataset_class": [],
+        "self_id_in_top_k": false,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_001",
+            "historical_case_id": "bgl_hist_001",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.963,
+            "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_004",
+            "historical_case_id": "bgl_hist_004",
+            "dataset": "bgl",
+            "classification": "anomalo",
+            "similarity": 0.963,
+            "signature": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:bgl_hist_008",
+            "historical_case_id": "bgl_hist_008",
+            "dataset": "bgl",
+            "classification": "normal",
+            "similarity": 0.961,
+            "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "uwf_hist_009",
+        "dataset": "uwf",
+        "classification": "normal",
+        "kind": "original",
+        "signature": "v2|lineas=300 ips=20 servicios=[dns:296] eventos=[evento_critico:268,evento_normal:32] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "uwf_hist_009",
+          "uwf_hist_013",
+          "uwf_hist_014"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_009",
+            "historical_case_id": "uwf_hist_009",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=300 ips=20 servicios=[dns:296] eventos=[evento_critico:268,evento_normal:32] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_013",
+            "historical_case_id": "uwf_hist_013",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.995,
+            "signature": "v2|lineas=300 ips=14 servicios=[dns:297] eventos=[evento_critico:274,evento_normal:26] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_014",
+            "historical_case_id": "uwf_hist_014",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.995,
+            "signature": "v2|lineas=300 ips=19 servicios=[dns:297] eventos=[evento_critico:275,evento_normal:25] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1071.004",
+          "T1584.002",
+          "T1568.002"
+        ]
+      },
+      {
+        "historical_case_id": "uwf_hist_009",
+        "dataset": "uwf",
+        "classification": "normal",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=299 ips=20 servicios=[dns:295] eventos=[evento_critico:267,evento_normal:32] eventos_totales=299 decoders=[csv:299] productos=[Zeek:299] severidades=[] categorias=[network:299] cobertura=1.0",
+        "query_is_stored_signature": false,
+        "related_same_dataset_class": [
+          "uwf_hist_009",
+          "uwf_hist_011",
+          "uwf_hist_014"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_009",
+            "historical_case_id": "uwf_hist_009",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.99,
+            "signature": "v2|lineas=300 ips=20 servicios=[dns:296] eventos=[evento_critico:268,evento_normal:32] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_011",
+            "historical_case_id": "uwf_hist_011",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.989,
+            "signature": "v2|lineas=300 ips=19 servicios=[dns:293] eventos=[evento_critico:273,evento_normal:27] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_014",
+            "historical_case_id": "uwf_hist_014",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.988,
+            "signature": "v2|lineas=300 ips=19 servicios=[dns:297] eventos=[evento_critico:275,evento_normal:25] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1071.004",
+          "T1584.002"
+        ]
+      },
+      {
+        "historical_case_id": "uwf_hist_010",
+        "dataset": "uwf",
+        "classification": "normal",
+        "kind": "original",
+        "signature": "v2|lineas=300 ips=16 servicios=[dns:295,dhcp:1] eventos=[evento_critico:271,evento_normal:29] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "uwf_hist_010",
+          "uwf_hist_015",
+          "uwf_hist_012"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_010",
+            "historical_case_id": "uwf_hist_010",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=300 ips=16 servicios=[dns:295,dhcp:1] eventos=[evento_critico:271,evento_normal:29] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_015",
+            "historical_case_id": "uwf_hist_015",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.997,
+            "signature": "v2|lineas=300 ips=22 servicios=[dns:293,dhcp:1] eventos=[evento_critico:261,evento_normal:39] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_012",
+            "historical_case_id": "uwf_hist_012",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.996,
+            "signature": "v2|lineas=300 ips=18 servicios=[dns:294,dhcp:1] eventos=[evento_critico:278,evento_normal:22] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1071.004",
+          "T1584.002",
+          "T1568.002"
+        ]
+      },
+      {
+        "historical_case_id": "uwf_hist_010",
+        "dataset": "uwf",
+        "classification": "normal",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=299 ips=16 servicios=[dns:294,dhcp:1] eventos=[evento_critico:270,evento_normal:29] eventos_totales=299 decoders=[csv:299] productos=[Zeek:299] severidades=[] categorias=[network:299] cobertura=1.0",
+        "query_is_stored_signature": false,
+        "related_same_dataset_class": [
+          "uwf_hist_015",
+          "uwf_hist_010",
+          "uwf_hist_012"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_015",
+            "historical_case_id": "uwf_hist_015",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.99,
+            "signature": "v2|lineas=300 ips=22 servicios=[dns:293,dhcp:1] eventos=[evento_critico:261,evento_normal:39] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_010",
+            "historical_case_id": "uwf_hist_010",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.99,
+            "signature": "v2|lineas=300 ips=16 servicios=[dns:295,dhcp:1] eventos=[evento_critico:271,evento_normal:29] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_012",
+            "historical_case_id": "uwf_hist_012",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.989,
+            "signature": "v2|lineas=300 ips=18 servicios=[dns:294,dhcp:1] eventos=[evento_critico:278,evento_normal:22] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1584.002",
+          "T1071.004",
+          "T1590.002"
+        ]
+      },
+      {
+        "historical_case_id": "uwf_hist_011",
+        "dataset": "uwf",
+        "classification": "normal",
+        "kind": "original",
+        "signature": "v2|lineas=300 ips=19 servicios=[dns:293] eventos=[evento_critico:273,evento_normal:27] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "uwf_hist_011",
+          "uwf_hist_014",
+          "uwf_hist_013"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_011",
+            "historical_case_id": "uwf_hist_011",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=300 ips=19 servicios=[dns:293] eventos=[evento_critico:273,evento_normal:27] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_014",
+            "historical_case_id": "uwf_hist_014",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.996,
+            "signature": "v2|lineas=300 ips=19 servicios=[dns:297] eventos=[evento_critico:275,evento_normal:25] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_013",
+            "historical_case_id": "uwf_hist_013",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.996,
+            "signature": "v2|lineas=300 ips=14 servicios=[dns:297] eventos=[evento_critico:274,evento_normal:26] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1071.004",
+          "T1584.002"
+        ]
+      },
+      {
+        "historical_case_id": "uwf_hist_011",
+        "dataset": "uwf",
+        "classification": "normal",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=299 ips=19 servicios=[dns:292] eventos=[evento_critico:272,evento_normal:27] eventos_totales=299 decoders=[csv:299] productos=[Zeek:299] severidades=[] categorias=[network:299] cobertura=1.0",
+        "query_is_stored_signature": false,
+        "related_same_dataset_class": [
+          "uwf_hist_011",
+          "uwf_hist_009",
+          "uwf_hist_013"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_011",
+            "historical_case_id": "uwf_hist_011",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.989,
+            "signature": "v2|lineas=300 ips=19 servicios=[dns:293] eventos=[evento_critico:273,evento_normal:27] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_009",
+            "historical_case_id": "uwf_hist_009",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.986,
+            "signature": "v2|lineas=300 ips=20 servicios=[dns:296] eventos=[evento_critico:268,evento_normal:32] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_013",
+            "historical_case_id": "uwf_hist_013",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.986,
+            "signature": "v2|lineas=300 ips=14 servicios=[dns:297] eventos=[evento_critico:274,evento_normal:26] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1071.004",
+          "T1584.002",
+          "T1590.002"
+        ]
+      },
+      {
+        "historical_case_id": "uwf_hist_012",
+        "dataset": "uwf",
+        "classification": "normal",
+        "kind": "original",
+        "signature": "v2|lineas=300 ips=18 servicios=[dns:294,dhcp:1] eventos=[evento_critico:278,evento_normal:22] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "uwf_hist_012",
+          "uwf_hist_015",
+          "uwf_hist_010"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_012",
+            "historical_case_id": "uwf_hist_012",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=300 ips=18 servicios=[dns:294,dhcp:1] eventos=[evento_critico:278,evento_normal:22] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_015",
+            "historical_case_id": "uwf_hist_015",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.996,
+            "signature": "v2|lineas=300 ips=22 servicios=[dns:293,dhcp:1] eventos=[evento_critico:261,evento_normal:39] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_010",
+            "historical_case_id": "uwf_hist_010",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.996,
+            "signature": "v2|lineas=300 ips=16 servicios=[dns:295,dhcp:1] eventos=[evento_critico:271,evento_normal:29] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": []
+      },
+      {
+        "historical_case_id": "uwf_hist_012",
+        "dataset": "uwf",
+        "classification": "normal",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=299 ips=18 servicios=[dns:293,dhcp:1] eventos=[evento_critico:277,evento_normal:22] eventos_totales=299 decoders=[csv:299] productos=[Zeek:299] severidades=[] categorias=[network:299] cobertura=1.0",
+        "query_is_stored_signature": false,
+        "related_same_dataset_class": [
+          "uwf_hist_015",
+          "uwf_hist_012",
+          "uwf_hist_010"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_015",
+            "historical_case_id": "uwf_hist_015",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.988,
+            "signature": "v2|lineas=300 ips=22 servicios=[dns:293,dhcp:1] eventos=[evento_critico:261,evento_normal:39] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_012",
+            "historical_case_id": "uwf_hist_012",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.985,
+            "signature": "v2|lineas=300 ips=18 servicios=[dns:294,dhcp:1] eventos=[evento_critico:278,evento_normal:22] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_010",
+            "historical_case_id": "uwf_hist_010",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.983,
+            "signature": "v2|lineas=300 ips=16 servicios=[dns:295,dhcp:1] eventos=[evento_critico:271,evento_normal:29] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1071.004",
+          "T1584.002",
+          "T1568.002"
+        ]
+      },
+      {
+        "historical_case_id": "uwf_hist_013",
+        "dataset": "uwf",
+        "classification": "normal",
+        "kind": "original",
+        "signature": "v2|lineas=300 ips=14 servicios=[dns:297] eventos=[evento_critico:274,evento_normal:26] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "uwf_hist_013",
+          "uwf_hist_014",
+          "uwf_hist_011"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_013",
+            "historical_case_id": "uwf_hist_013",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=300 ips=14 servicios=[dns:297] eventos=[evento_critico:274,evento_normal:26] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_014",
+            "historical_case_id": "uwf_hist_014",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.998,
+            "signature": "v2|lineas=300 ips=19 servicios=[dns:297] eventos=[evento_critico:275,evento_normal:25] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_011",
+            "historical_case_id": "uwf_hist_011",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.996,
+            "signature": "v2|lineas=300 ips=19 servicios=[dns:293] eventos=[evento_critico:273,evento_normal:27] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1584.002",
+          "T1071.004"
+        ]
+      },
+      {
+        "historical_case_id": "uwf_hist_013",
+        "dataset": "uwf",
+        "classification": "normal",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=299 ips=14 servicios=[dns:296] eventos=[evento_critico:273,evento_normal:26] eventos_totales=299 decoders=[csv:299] productos=[Zeek:299] severidades=[] categorias=[network:299] cobertura=1.0",
+        "query_is_stored_signature": false,
+        "related_same_dataset_class": [
+          "uwf_hist_011",
+          "uwf_hist_009",
+          "uwf_hist_013"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_011",
+            "historical_case_id": "uwf_hist_011",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.987,
+            "signature": "v2|lineas=300 ips=19 servicios=[dns:293] eventos=[evento_critico:273,evento_normal:27] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_009",
+            "historical_case_id": "uwf_hist_009",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.984,
+            "signature": "v2|lineas=300 ips=20 servicios=[dns:296] eventos=[evento_critico:268,evento_normal:32] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_013",
+            "historical_case_id": "uwf_hist_013",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.983,
+            "signature": "v2|lineas=300 ips=14 servicios=[dns:297] eventos=[evento_critico:274,evento_normal:26] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1071.004"
+        ]
+      },
+      {
+        "historical_case_id": "uwf_hist_014",
+        "dataset": "uwf",
+        "classification": "normal",
+        "kind": "original",
+        "signature": "v2|lineas=300 ips=19 servicios=[dns:297] eventos=[evento_critico:275,evento_normal:25] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "uwf_hist_014",
+          "uwf_hist_013",
+          "uwf_hist_011"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_014",
+            "historical_case_id": "uwf_hist_014",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=300 ips=19 servicios=[dns:297] eventos=[evento_critico:275,evento_normal:25] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_013",
+            "historical_case_id": "uwf_hist_013",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.998,
+            "signature": "v2|lineas=300 ips=14 servicios=[dns:297] eventos=[evento_critico:274,evento_normal:26] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_011",
+            "historical_case_id": "uwf_hist_011",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.996,
+            "signature": "v2|lineas=300 ips=19 servicios=[dns:293] eventos=[evento_critico:273,evento_normal:27] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1071.004",
+          "T1584.002"
+        ]
+      },
+      {
+        "historical_case_id": "uwf_hist_014",
+        "dataset": "uwf",
+        "classification": "normal",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=299 ips=19 servicios=[dns:296] eventos=[evento_critico:274,evento_normal:25] eventos_totales=299 decoders=[csv:299] productos=[Zeek:299] severidades=[] categorias=[network:299] cobertura=1.0",
+        "query_is_stored_signature": false,
+        "related_same_dataset_class": [
+          "uwf_hist_009",
+          "uwf_hist_011",
+          "uwf_hist_013"
+        ],
+        "self_id_in_top_k": false,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_009",
+            "historical_case_id": "uwf_hist_009",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.989,
+            "signature": "v2|lineas=300 ips=20 servicios=[dns:296] eventos=[evento_critico:268,evento_normal:32] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_011",
+            "historical_case_id": "uwf_hist_011",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.988,
+            "signature": "v2|lineas=300 ips=19 servicios=[dns:293] eventos=[evento_critico:273,evento_normal:27] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_013",
+            "historical_case_id": "uwf_hist_013",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.986,
+            "signature": "v2|lineas=300 ips=14 servicios=[dns:297] eventos=[evento_critico:274,evento_normal:26] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1584.002",
+          "T1071.004",
+          "T1568.002"
+        ]
+      },
+      {
+        "historical_case_id": "uwf_hist_015",
+        "dataset": "uwf",
+        "classification": "normal",
+        "kind": "original",
+        "signature": "v2|lineas=300 ips=22 servicios=[dns:293,dhcp:1] eventos=[evento_critico:261,evento_normal:39] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0",
+        "query_is_stored_signature": true,
+        "related_same_dataset_class": [
+          "uwf_hist_015",
+          "uwf_hist_010",
+          "uwf_hist_012"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_015",
+            "historical_case_id": "uwf_hist_015",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 1.0,
+            "signature": "v2|lineas=300 ips=22 servicios=[dns:293,dhcp:1] eventos=[evento_critico:261,evento_normal:39] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_010",
+            "historical_case_id": "uwf_hist_010",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.997,
+            "signature": "v2|lineas=300 ips=16 servicios=[dns:295,dhcp:1] eventos=[evento_critico:271,evento_normal:29] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_012",
+            "historical_case_id": "uwf_hist_012",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.996,
+            "signature": "v2|lineas=300 ips=18 servicios=[dns:294,dhcp:1] eventos=[evento_critico:278,evento_normal:22] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1071.004",
+          "T1584.002"
+        ]
+      },
+      {
+        "historical_case_id": "uwf_hist_015",
+        "dataset": "uwf",
+        "classification": "normal",
+        "kind": "one_record_held_out",
+        "signature": "v2|lineas=299 ips=22 servicios=[dns:292,dhcp:1] eventos=[evento_critico:260,evento_normal:39] eventos_totales=299 decoders=[csv:299] productos=[Zeek:299] severidades=[] categorias=[network:299] cobertura=1.0",
+        "query_is_stored_signature": false,
+        "related_same_dataset_class": [
+          "uwf_hist_015",
+          "uwf_hist_012",
+          "uwf_hist_010"
+        ],
+        "self_id_in_top_k": true,
+        "historical_results": [
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_015",
+            "historical_case_id": "uwf_hist_015",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.989,
+            "signature": "v2|lineas=300 ips=22 servicios=[dns:293,dhcp:1] eventos=[evento_critico:261,evento_normal:39] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_012",
+            "historical_case_id": "uwf_hist_012",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.985,
+            "signature": "v2|lineas=300 ips=18 servicios=[dns:294,dhcp:1] eventos=[evento_critico:278,evento_normal:22] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          },
+          {
+            "vector_id": "rag_enriquecido_30_v1:uwf_hist_010",
+            "historical_case_id": "uwf_hist_010",
+            "dataset": "uwf",
+            "classification": "normal",
+            "similarity": 0.985,
+            "signature": "v2|lineas=300 ips=16 servicios=[dns:295,dhcp:1] eventos=[evento_critico:271,evento_normal:29] eventos_totales=300 decoders=[csv:300] productos=[Zeek:300] severidades=[] categorias=[network:300] cobertura=1.0"
+          }
+        ],
+        "mitre_result_ids": [
+          "T1071.004",
+          "T1584.002",
+          "T1568.002"
+        ]
+      }
+    ]
+  }
+}

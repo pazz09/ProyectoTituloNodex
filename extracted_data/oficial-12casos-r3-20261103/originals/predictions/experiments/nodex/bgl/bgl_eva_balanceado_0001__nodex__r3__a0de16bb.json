@@ -1,0 +1,62 @@
+{
+  "case_id": "bgl_eva_balanceado_0001",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 3,
+  "config_version": "oficial-12casos-r3-20261103",
+  "run_id": "bgl_eva_balanceado_0001__nodex__r3__a0de16bb",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0001",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "authentication_failure",
+        "evidence_uids": [
+          "log_record_000014",
+          "log_record_000019"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "system_log_entry",
+        "evidence_uids": [
+          "log_record_000005",
+          "log_record_000020"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nFalso positivo de seguridad. Los registros analizados no corresponden a tráfico ni eventos de autenticación, sino a mensajes de hardware/sistema operativo (BlueGene RAS KERNEL INFO sobre errores corregibles 'CE' de memoria) clasificados erróneamente con perfil auth_log. No se detecta actividad hostil ni compromiso originado por la IP 172.16.96.116. No se requieren acciones de contención de red; se recomienda revisar y corregir las reglas de ingesta/parsing del recolector de logs.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Los registros corresponden a eventos de hardware o sistema operativo (mensajes RAS KERNEL INFO con errores de memoria CE) que fueron clasificados incorrectamente por el parser bajo el perfil auth_log, registrando de forma espuria intentos de autenticación fallidos y vinculando la IP 172.16.96.116 sin evidencia de actividad hostil.\n\n## Comandos de mitigación propuestos\n\n- logger -t SecOps \"Falso positivo confirmado para 172.16.96.116: no se requieren bloqueos de red\"\n- iptables -C INPUT -s 172.16.96.116 -j DROP 2>/dev/null && iptables -D INPUT -s 172.16.96.116 -j DROP || true\n- dmesg -T --level=info,warn,err | grep -E -i \"RAS|CE|memory\" | tail -n 20"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0001__nodex__r3__a0de16bb",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0001__nodex__r3__a0de16bb.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-03T04:24:45+00:00"
+  }
+}

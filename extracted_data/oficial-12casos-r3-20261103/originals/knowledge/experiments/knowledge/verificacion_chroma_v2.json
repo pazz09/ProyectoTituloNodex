@@ -1,0 +1,584 @@
+{
+  "se_abre_con_el_codigo_de_memory_py": true,
+  "colecciones_vistas_por_memory_py": [
+    "attack_patterns",
+    "attack_techniques",
+    "error_memory",
+    "host_history"
+  ],
+  "n_attack_techniques": 697,
+  "colecciones_en_la_base_nueva": [
+    "attack_techniques"
+  ],
+  "configuracion_de_la_coleccion_nueva": "{'hnsw': {'space': 'cosine', 'ef_construction': 100, 'ef_search': 100, 'max_neighbors': 16, 'resize_factor': 1.2, 'sync_threshold': 1000}, 'spann': None, 'embedding_function': <chromadb.utils.embedding_functions.sentence_transformer_embedding_function.SentenceTransformerEmbeddingFunction object at 0x000001F7354B7D90>}",
+  "comparacion_de_consultas": {
+    "n_consultas": 12,
+    "con_mismos_ids_y_orden": 12,
+    "con_mismo_resultado_para_nodex": 12,
+    "diferencia_maxima_de_distancia": 5.960464477539063e-08,
+    "consultas_con_diferencias": [],
+    "detalle": [
+      {
+        "consulta": "brute force of remote login passwords with many failed attempts",
+        "ids_viejo": [
+          "attack-T1110",
+          "attack-T1110.003",
+          "attack-T1201",
+          "attack-T1110.001",
+          "attack-T1110.002"
+        ],
+        "ids_nuevo": [
+          "attack-T1110",
+          "attack-T1110.003",
+          "attack-T1201",
+          "attack-T1110.001",
+          "attack-T1110.002"
+        ],
+        "mismos_ids_y_orden": true,
+        "mismo_conjunto_de_ids": true,
+        "diferencia_maxima_de_distancia": 0.0,
+        "nodex_viejo": [
+          [
+            "T1110",
+            0.596
+          ],
+          [
+            "T1110.003",
+            0.502
+          ],
+          [
+            "T1201",
+            0.48
+          ]
+        ],
+        "nodex_nuevo": [
+          [
+            "T1110",
+            0.596
+          ],
+          [
+            "T1110.003",
+            0.502
+          ],
+          [
+            "T1201",
+            0.48
+          ]
+        ],
+        "mismo_resultado_para_nodex": true
+      },
+      {
+        "consulta": "dumping credentials from operating system memory",
+        "ids_viejo": [
+          "attack-T1003",
+          "attack-T1003.002",
+          "attack-T1003.001",
+          "attack-T1555.005",
+          "attack-T1003.004"
+        ],
+        "ids_nuevo": [
+          "attack-T1003",
+          "attack-T1003.002",
+          "attack-T1003.001",
+          "attack-T1555.005",
+          "attack-T1003.004"
+        ],
+        "mismos_ids_y_orden": true,
+        "mismo_conjunto_de_ids": true,
+        "diferencia_maxima_de_distancia": 0.0,
+        "nodex_viejo": [
+          [
+            "T1003",
+            0.734
+          ],
+          [
+            "T1003.002",
+            0.657
+          ],
+          [
+            "T1003.001",
+            0.649
+          ]
+        ],
+        "nodex_nuevo": [
+          [
+            "T1003",
+            0.734
+          ],
+          [
+            "T1003.002",
+            0.657
+          ],
+          [
+            "T1003.001",
+            0.649
+          ]
+        ],
+        "mismo_resultado_para_nodex": true
+      },
+      {
+        "consulta": "persistence through a scheduled task that runs at startup",
+        "ids_viejo": [
+          "attack-T1053",
+          "attack-T1547",
+          "attack-T1037.001",
+          "attack-T1547.001",
+          "attack-T1037"
+        ],
+        "ids_nuevo": [
+          "attack-T1053",
+          "attack-T1547",
+          "attack-T1037.001",
+          "attack-T1547.001",
+          "attack-T1037"
+        ],
+        "mismos_ids_y_orden": true,
+        "mismo_conjunto_de_ids": true,
+        "diferencia_maxima_de_distancia": 0.0,
+        "nodex_viejo": [
+          [
+            "T1053",
+            0.491
+          ],
+          [
+            "T1547",
+            0.489
+          ],
+          [
+            "T1037.001",
+            0.485
+          ]
+        ],
+        "nodex_nuevo": [
+          [
+            "T1053",
+            0.491
+          ],
+          [
+            "T1547",
+            0.489
+          ],
+          [
+            "T1037.001",
+            0.485
+          ]
+        ],
+        "mismo_resultado_para_nodex": true
+      },
+      {
+        "consulta": "scanning a network to discover open ports and running services",
+        "ids_viejo": [
+          "attack-T1046",
+          "attack-T1016",
+          "attack-T1205.002",
+          "attack-T1016.001",
+          "attack-T1596.005"
+        ],
+        "ids_nuevo": [
+          "attack-T1046",
+          "attack-T1016",
+          "attack-T1205.002",
+          "attack-T1016.001",
+          "attack-T1596.005"
+        ],
+        "mismos_ids_y_orden": true,
+        "mismo_conjunto_de_ids": true,
+        "diferencia_maxima_de_distancia": 5.960464477539063e-08,
+        "nodex_viejo": [
+          [
+            "T1046",
+            0.544
+          ],
+          [
+            "T1016",
+            0.449
+          ],
+          [
+            "T1205.002",
+            0.43
+          ]
+        ],
+        "nodex_nuevo": [
+          [
+            "T1046",
+            0.544
+          ],
+          [
+            "T1016",
+            0.449
+          ],
+          [
+            "T1205.002",
+            0.43
+          ]
+        ],
+        "mismo_resultado_para_nodex": true
+      },
+      {
+        "consulta": "phishing email with a malicious attachment that executes a macro",
+        "ids_viejo": [
+          "attack-T1566.001",
+          "attack-T1566",
+          "attack-T1566.002",
+          "attack-T1684.001",
+          "attack-T1598"
+        ],
+        "ids_nuevo": [
+          "attack-T1566.001",
+          "attack-T1566",
+          "attack-T1566.002",
+          "attack-T1684.001",
+          "attack-T1598"
+        ],
+        "mismos_ids_y_orden": true,
+        "mismo_conjunto_de_ids": true,
+        "diferencia_maxima_de_distancia": 0.0,
+        "nodex_viejo": [
+          [
+            "T1566.001",
+            0.507
+          ],
+          [
+            "T1566",
+            0.485
+          ],
+          [
+            "T1566.002",
+            0.462
+          ]
+        ],
+        "nodex_nuevo": [
+          [
+            "T1566.001",
+            0.507
+          ],
+          [
+            "T1566",
+            0.485
+          ],
+          [
+            "T1566.002",
+            0.462
+          ]
+        ],
+        "mismo_resultado_para_nodex": true
+      },
+      {
+        "consulta": "encrypting files on disk and demanding payment to restore them",
+        "ids_viejo": [
+          "attack-T1486",
+          "attack-T1560.003",
+          "attack-T1560",
+          "attack-T1556.005",
+          "attack-T1560.001"
+        ],
+        "ids_nuevo": [
+          "attack-T1486",
+          "attack-T1560.003",
+          "attack-T1560",
+          "attack-T1556.005",
+          "attack-T1560.001"
+        ],
+        "mismos_ids_y_orden": true,
+        "mismo_conjunto_de_ids": true,
+        "diferencia_maxima_de_distancia": 0.0,
+        "nodex_viejo": [
+          [
+            "T1486",
+            0.474
+          ]
+        ],
+        "nodex_nuevo": [
+          [
+            "T1486",
+            0.474
+          ]
+        ],
+        "mismo_resultado_para_nodex": true
+      },
+      {
+        "consulta": "using remote desktop to move laterally between hosts",
+        "ids_viejo": [
+          "attack-T1219.002",
+          "attack-T1219",
+          "attack-T1021.005",
+          "attack-T1021.001",
+          "attack-T1563.002"
+        ],
+        "ids_nuevo": [
+          "attack-T1219.002",
+          "attack-T1219",
+          "attack-T1021.005",
+          "attack-T1021.001",
+          "attack-T1563.002"
+        ],
+        "mismos_ids_y_orden": true,
+        "mismo_conjunto_de_ids": true,
+        "diferencia_maxima_de_distancia": 0.0,
+        "nodex_viejo": [
+          [
+            "T1219.002",
+            0.423
+          ]
+        ],
+        "nodex_nuevo": [
+          [
+            "T1219.002",
+            0.423
+          ]
+        ],
+        "mismo_resultado_para_nodex": true
+      },
+      {
+        "consulta": "disabling security tools and clearing logs to avoid detection",
+        "ids_viejo": [
+          "attack-T1685.005",
+          "attack-T1685.006",
+          "attack-T1685.001",
+          "attack-T1685.004",
+          "attack-T1685.002"
+        ],
+        "ids_nuevo": [
+          "attack-T1685.005",
+          "attack-T1685.006",
+          "attack-T1685.001",
+          "attack-T1685.004",
+          "attack-T1685.002"
+        ],
+        "mismos_ids_y_orden": true,
+        "mismo_conjunto_de_ids": true,
+        "diferencia_maxima_de_distancia": 5.960464477539063e-08,
+        "nodex_viejo": [
+          [
+            "T1685.005",
+            0.68
+          ],
+          [
+            "T1685.006",
+            0.649
+          ],
+          [
+            "T1685.001",
+            0.627
+          ]
+        ],
+        "nodex_nuevo": [
+          [
+            "T1685.005",
+            0.68
+          ],
+          [
+            "T1685.006",
+            0.649
+          ],
+          [
+            "T1685.001",
+            0.627
+          ]
+        ],
+        "mismo_resultado_para_nodex": true
+      },
+      {
+        "consulta": "web shell installed on a public-facing server",
+        "ids_viejo": [
+          "attack-T1505.003",
+          "attack-T1021.004",
+          "attack-T1546.004",
+          "attack-T1059.004",
+          "attack-T1563.001"
+        ],
+        "ids_nuevo": [
+          "attack-T1505.003",
+          "attack-T1021.004",
+          "attack-T1546.004",
+          "attack-T1059.004",
+          "attack-T1563.001"
+        ],
+        "mismos_ids_y_orden": true,
+        "mismo_conjunto_de_ids": true,
+        "diferencia_maxima_de_distancia": 0.0,
+        "nodex_viejo": [
+          [
+            "T1505.003",
+            0.681
+          ]
+        ],
+        "nodex_nuevo": [
+          [
+            "T1505.003",
+            0.681
+          ]
+        ],
+        "mismo_resultado_para_nodex": true
+      },
+      {
+        "consulta": "exfiltrating data to an external server over an encrypted channel",
+        "ids_viejo": [
+          "attack-T1560",
+          "attack-T1048.002",
+          "attack-T1048.001",
+          "attack-T1567.002",
+          "attack-T1567"
+        ],
+        "ids_nuevo": [
+          "attack-T1560",
+          "attack-T1048.002",
+          "attack-T1048.001",
+          "attack-T1567.002",
+          "attack-T1567"
+        ],
+        "mismos_ids_y_orden": true,
+        "mismo_conjunto_de_ids": true,
+        "diferencia_maxima_de_distancia": 0.0,
+        "nodex_viejo": [
+          [
+            "T1560",
+            0.507
+          ],
+          [
+            "T1048.002",
+            0.478
+          ],
+          [
+            "T1048.001",
+            0.475
+          ]
+        ],
+        "nodex_nuevo": [
+          [
+            "T1560",
+            0.507
+          ],
+          [
+            "T1048.002",
+            0.478
+          ],
+          [
+            "T1048.001",
+            0.475
+          ]
+        ],
+        "mismo_resultado_para_nodex": true
+      },
+      {
+        "consulta": "injecting code into the address space of a running process",
+        "ids_viejo": [
+          "attack-T1055",
+          "attack-T1055.002",
+          "attack-T1055.008",
+          "attack-T1055.009",
+          "attack-T1055.012"
+        ],
+        "ids_nuevo": [
+          "attack-T1055",
+          "attack-T1055.002",
+          "attack-T1055.008",
+          "attack-T1055.009",
+          "attack-T1055.012"
+        ],
+        "mismos_ids_y_orden": true,
+        "mismo_conjunto_de_ids": true,
+        "diferencia_maxima_de_distancia": 0.0,
+        "nodex_viejo": [
+          [
+            "T1055",
+            0.66
+          ],
+          [
+            "T1055.002",
+            0.635
+          ],
+          [
+            "T1055.008",
+            0.588
+          ]
+        ],
+        "nodex_nuevo": [
+          [
+            "T1055",
+            0.66
+          ],
+          [
+            "T1055.002",
+            0.635
+          ],
+          [
+            "T1055.008",
+            0.588
+          ]
+        ],
+        "mismo_resultado_para_nodex": true
+      },
+      {
+        "consulta": "running commands through a PowerShell script",
+        "ids_viejo": [
+          "attack-T1059.001",
+          "attack-T1059",
+          "attack-T1546.013",
+          "attack-T1202",
+          "attack-T1059.002"
+        ],
+        "ids_nuevo": [
+          "attack-T1059.001",
+          "attack-T1059",
+          "attack-T1546.013",
+          "attack-T1202",
+          "attack-T1059.002"
+        ],
+        "mismos_ids_y_orden": true,
+        "mismo_conjunto_de_ids": true,
+        "diferencia_maxima_de_distancia": 0.0,
+        "nodex_viejo": [
+          [
+            "T1059.001",
+            0.582
+          ]
+        ],
+        "nodex_nuevo": [
+          [
+            "T1059.001",
+            0.582
+          ]
+        ],
+        "mismo_resultado_para_nodex": true
+      }
+    ]
+  },
+  "contenido": {
+    "n_viejo": 697,
+    "n_nuevo": 697,
+    "mismos_ids_y_orden": true,
+    "mismos_documentos": true,
+    "mismos_metadatos": true,
+    "claves_de_metadatos": [
+      "is_subtechnique",
+      "name",
+      "tactics",
+      "technique_id",
+      "url"
+    ],
+    "claves_de_metadatos_inesperadas": [],
+    "case_ids_encontrados_en_el_contenido": []
+  },
+  "contenido_limpio": true,
+  "diferencia_maxima_entre_vectores": 1.4901161193847656e-08,
+  "vectores_vs_modelo": {
+    "n_muestra": 40,
+    "coseno_minimo": 0.9999999999999167,
+    "coseno_medio": 0.999999999999947
+  },
+  "consultas_fijas": [
+    "brute force of remote login passwords with many failed attempts",
+    "dumping credentials from operating system memory",
+    "persistence through a scheduled task that runs at startup",
+    "scanning a network to discover open ports and running services",
+    "phishing email with a malicious attachment that executes a macro",
+    "encrypting files on disk and demanding payment to restore them",
+    "using remote desktop to move laterally between hosts",
+    "disabling security tools and clearing logs to avoid detection",
+    "web shell installed on a public-facing server",
+    "exfiltrating data to an external server over an encrypted channel",
+    "injecting code into the address space of a running process",
+    "running commands through a PowerShell script"
+  ]
+}

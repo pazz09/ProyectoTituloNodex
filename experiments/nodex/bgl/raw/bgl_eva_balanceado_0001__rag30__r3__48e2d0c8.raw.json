@@ -1,0 +1,644 @@
+{
+  "case_id": "bgl_eva_balanceado_0001",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 3,
+  "config_version": "enriquecido-12casos-r3-20261104",
+  "run_id": "bgl_eva_balanceado_0001__rag30__r3__48e2d0c8",
+  "condicion_rag": "enriquecido",
+  "rag_version": "rag_enriquecido_30_v1",
+  "casos_historicos": 30,
+  "estado_crudo": {
+    "resumen_logs": {
+      "formato_detectado": "auth_log",
+      "total_lineas": 20,
+      "servicios": {
+        "desconocido": 20
+      },
+      "eventos": {
+        "evento_critico": 2,
+        "evento_normal": 18
+      },
+      "ventana_temporal": {
+        "inicio": null,
+        "fin": null
+      },
+      "n_ips_distintas": 1,
+      "ips_distintas": [
+        "172.16.96.116"
+      ],
+      "por_ip": {
+        "172.16.96.116": {
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [],
+          "n_eventos": 2,
+          "n_como_origen": 2,
+          "n_como_destino": 0
+        }
+      },
+      "usuarios": {},
+      "n_usuarios_distintos": 0,
+      "codigos_respuesta": {},
+      "entidades": [
+        {
+          "ip": "172.16.96.116",
+          "n_eventos": 2,
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [],
+          "n_como_origen": 2,
+          "n_como_destino": 0
+        }
+      ],
+      "cronologia": [
+        {
+          "n": 14,
+          "timestamp": null,
+          "servicio": null,
+          "evento": "evento_critico",
+          "mensaje": "1128170317 2005.10.01 R73-M0-N4-I:J18-U11 2005-10-01-05.38.37.246285 R73-M0-N4-I:J18-U11 RAS APP FATAL ciod: Error loading /home/spelce1/HPCC_IBM/Urgent/Gunnels/VNM64/vnm.rts: inva…"
+        },
+        {
+          "n": 19,
+          "timestamp": null,
+          "servicio": null,
+          "evento": "evento_critico",
+          "mensaje": "1128510395 2005.10.05 R62-M1-N8-I:J18-U01 2005-10-05-04.06.35.463665 R62-M1-N8-I:J18-U01 RAS APP FATAL ciod: Error loading /home/spelce1/HPCC_IBM/Urgent/VNM/64K/vnm.rts: invalid or…"
+        }
+      ],
+      "cronologia_omitidos": 0,
+      "raw_procedencia": {
+        "sha256": "34a644978a317ae3df1d35409a4650b03c571f0acdb1ba47663fdea295a25531",
+        "lineas": 20,
+        "bytes": 3357
+      },
+      "reputacion_ips": {
+        "172.16.96.116": {
+          "fuente": "sin_reputacion",
+          "ip": "172.16.96.116",
+          "score": null,
+          "nota": "modo sin reputación externa: ninguna IP recibe puntaje",
+          "categoria": "desconocido"
+        }
+      }
+    },
+    "preprocessing_metadata": {
+      "schema_version": "2.0",
+      "total_lineas_fisicas": 20,
+      "total_eventos": 20,
+      "decoder_distribution": {
+        "text": 20
+      },
+      "product_distribution": {},
+      "vendor_distribution": {},
+      "version_distribution": {},
+      "protocol_distribution": {},
+      "profile_distribution": {
+        "auth_log": 2
+      },
+      "severity_distribution": {},
+      "event_categories": {
+        "authentication": 2
+      },
+      "event_outcomes": {
+        "failure": 2
+      },
+      "entities": {
+        "ip": {
+          "172.16.96.116": 2
+        }
+      },
+      "time_window": {
+        "inicio": null,
+        "fin": null
+      },
+      "parsing": {
+        "parsed_events": 0,
+        "fallback_events": 20,
+        "coverage": 0.0
+      },
+      "segments": [
+        {
+          "index": 0,
+          "decoder": "text",
+          "line_start": 1,
+          "line_end": 20,
+          "n_records": 20,
+          "confidence": 0.1,
+          "decoder_inicial": "text",
+          "confidence_inicial": 0.1,
+          "decoder_distribution": {
+            "text": 20
+          },
+          "context": {}
+        }
+      ],
+      "entities_resumen": {
+        "ip": 1
+      },
+      "config": {
+        "LOG_DETECTION_CHUNK_SIZE": 50,
+        "LOG_ENABLE_MULTILINE": true,
+        "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+        "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+        "LOG_MAX_EVENTS": 100000,
+        "LOG_MAX_FILE_BYTES": 52428800,
+        "LOG_MAX_RAW_SAMPLES": 20,
+        "LOG_MAX_UNMAPPED_FIELDS": 100,
+        "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+        "LOG_PARSING_MODE": "hybrid",
+        "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+        "LOG_PRESERVE_RAW": true
+      }
+    },
+    "parsing_warnings": [],
+    "raw_samples": [
+      {
+        "decoder": "text",
+        "texto": "1127515927 2005.09.23 R07-M0-ND-C:J16-U01 2005-09-23-15.52.07.594229 R07-M0-ND-C:J16-U01 RAS KERNEL INFO CE sym 27, at 0x166a9f20, mask 0x02"
+      }
+    ],
+    "evidencia_logs": [
+      {
+        "uid": "log_record_000001",
+        "record_number": 1,
+        "line_start": 1,
+        "line_end": 1,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000002",
+        "record_number": 2,
+        "line_start": 2,
+        "line_end": 2,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000003",
+        "record_number": 3,
+        "line_start": 3,
+        "line_end": 3,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000004",
+        "record_number": 4,
+        "line_start": 4,
+        "line_end": 4,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000005",
+        "record_number": 5,
+        "line_start": 5,
+        "line_end": 5,
+        "timestamp": null,
+        "source_ip": "172.16.96.116"
+      },
+      {
+        "uid": "log_record_000006",
+        "record_number": 6,
+        "line_start": 6,
+        "line_end": 6,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000007",
+        "record_number": 7,
+        "line_start": 7,
+        "line_end": 7,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000008",
+        "record_number": 8,
+        "line_start": 8,
+        "line_end": 8,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000009",
+        "record_number": 9,
+        "line_start": 9,
+        "line_end": 9,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000010",
+        "record_number": 10,
+        "line_start": 10,
+        "line_end": 10,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000011",
+        "record_number": 11,
+        "line_start": 11,
+        "line_end": 11,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000012",
+        "record_number": 12,
+        "line_start": 12,
+        "line_end": 12,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000013",
+        "record_number": 13,
+        "line_start": 13,
+        "line_end": 13,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000014",
+        "record_number": 14,
+        "line_start": 14,
+        "line_end": 14,
+        "timestamp": null,
+        "event_category": "authentication",
+        "event_action": "login",
+        "event_outcome": "failure"
+      },
+      {
+        "uid": "log_record_000015",
+        "record_number": 15,
+        "line_start": 15,
+        "line_end": 15,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000016",
+        "record_number": 16,
+        "line_start": 16,
+        "line_end": 16,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000017",
+        "record_number": 17,
+        "line_start": 17,
+        "line_end": 17,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000018",
+        "record_number": 18,
+        "line_start": 18,
+        "line_end": 18,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000019",
+        "record_number": 19,
+        "line_start": 19,
+        "line_end": 19,
+        "timestamp": null,
+        "event_category": "authentication",
+        "event_action": "login",
+        "event_outcome": "failure"
+      },
+      {
+        "uid": "log_record_000020",
+        "record_number": 20,
+        "line_start": 20,
+        "line_end": 20,
+        "timestamp": null,
+        "source_ip": "172.16.96.116"
+      }
+    ],
+    "evidencia_logs_omitidos": 0,
+    "eventos_reconstruidos": [
+      {
+        "event_id": "event_001",
+        "evidence_uids": [
+          "log_record_000014",
+          "log_record_000019"
+        ],
+        "timestamp": null,
+        "event_type": "hardware_diagnostic_error",
+        "description": "Mensajes RAS de kernel reportando errores corregidos de paridad o memoria en arquitectura BGL clasificados erróneamente por heurística de autenticación.",
+        "confidence": null
+      }
+    ],
+    "secuencia_temporal": [],
+    "tecnicas_atribuidas": [],
+    "invalid_evidence_uid_count": 0,
+    "d11_warnings": [],
+    "telemetry": {
+      "llm_call_count": 6,
+      "input_tokens": 11467,
+      "output_tokens": 948,
+      "total_tokens": 15416,
+      "execution_time": 56.078833,
+      "replan_count": 0,
+      "intentos_correccion": 1,
+      "invalid_evidence_uid_count": 0,
+      "d11_warning_count": 0,
+      "llm_calls": [
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 719,
+          "output_tokens": 249,
+          "total_tokens": 1877,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 909,
+          "duration_s": 26.109,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 889,
+          "output_tokens": 102,
+          "total_tokens": 1300,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 309,
+          "duration_s": 4.391,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 4014,
+          "output_tokens": 203,
+          "total_tokens": 4771,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 554,
+          "duration_s": 8.094,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 298,
+          "output_tokens": 51,
+          "total_tokens": 531,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 182,
+          "duration_s": 3.64,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 2598,
+          "output_tokens": 6,
+          "total_tokens": 2864,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 260,
+          "duration_s": 3.766,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 2949,
+          "output_tokens": 337,
+          "total_tokens": 4073,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 787,
+          "duration_s": 9.781,
+          "error": null
+        }
+      ]
+    },
+    "firma": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_critico:2,evento_normal:18] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:2] cobertura=0.0",
+    "plan": {
+      "plan_version": 1,
+      "objetivo": "Investigar los eventos críticos de autenticación no estructurados asociados a la IP 172.16.96.116 y determinar acciones de respuesta pertinentes.",
+      "pasos": [
+        {
+          "id": 1,
+          "accion": "triage",
+          "objetivo": "Inspeccionar los 2 eventos críticos y las líneas de texto libre para identificar el tipo de actividad y usuarios afectados.",
+          "estado": "ejecutado"
+        },
+        {
+          "id": 2,
+          "accion": "rag",
+          "objetivo": "Consultar técnicas MITRE ATT&CK y memoria histórica para correlacionar patrones de anomalías en logs de autenticación.",
+          "estado": "ejecutado"
+        },
+        {
+          "id": 3,
+          "accion": "mitigacion",
+          "objetivo": "Establecer medidas de contención para la IP interna 172.16.96.116 y reforzar la seguridad en el acceso al servicio.",
+          "estado": "ejecutado"
+        }
+      ],
+      "criterios_finalizacion": [
+        "Naturaleza de los eventos críticos de autenticación determinada.",
+        "Tácticas asociadas mapeadas con la base de conocimiento.",
+        "Plan de contención y remediación formulado."
+      ]
+    },
+    "plan_objetivo": "Investigar los eventos críticos de autenticación no estructurados asociados a la IP 172.16.96.116 y determinar acciones de respuesta pertinentes.",
+    "paso_actual": 3,
+    "historial_ejecucion": [
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_planificador",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "plan v1, 3 pasos: ['triage', 'rag', 'mitigacion']"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 1,
+        "nodo": "agente_analista_triage",
+        "accion": "triage",
+        "estado": "ejecutado",
+        "resumen": "solicitó contexto histórico (RAG)"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 2,
+        "nodo": "tool_consultar_rag",
+        "accion": "rag",
+        "estado": "ejecutado",
+        "resumen": "3 patrones, 3 técnicas MITRE"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 1,
+        "nodo": "agente_analista_triage",
+        "accion": "triage",
+        "estado": "ejecutado",
+        "resumen": "diagnóstico producido"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_selector_herramientas",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "usar_cve=False"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 3,
+        "nodo": "agente_ingeniero_mitigacion",
+        "accion": "mitigacion",
+        "estado": "ejecutado",
+        "resumen": "0 comandos propuestos"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "tool_validar_comandos",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "comandos válidos"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_auditor_final",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "confianza=0.85 cobertura_suficiente=True"
+      }
+    ],
+    "desviaciones_plan": [],
+    "historial_planes": [],
+    "replan_count": 0,
+    "diagnostico": "El lote analizado no corresponde a un ataque de seguridad ni a eventos legítimos de autenticación. Aunque el preprocesamiento clasificó heurísticamente dos registros bajo la categoría de autenticación y vinculó la IP privada 172.16.96.116, la muestra cruda y el contexto histórico de alta similitud (dataset BGL) confirman que se trata de registros de diagnóstico de hardware y kernel de supercomputación Blue Gene/L (mensajes RAS KERNEL INFO relativos a errores corregidos de paridad/memoria). Ninguna de las técnicas MITRE ATT&CK proporcionadas aplica a este comportamiento, al tratarse de un falso positivo de detección generado por la falta de cobertura en el parsing (0%) sobre logs no estructurados de sistema. No se requiere contención operativa contra la IP ni respuesta a incidentes de intrusión.",
+    "necesita_rag": false,
+    "usar_cve": false,
+    "razon_seleccion": "El diagnóstico concluye que se trata de un falso positivo correspondiente a registros de hardware/kernel de Blue Gene/L y no a un ataque o vulnerabilidad de software explotable.",
+    "contexto_rag": [
+      {
+        "texto": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:2,evento_normal:18] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:2] cobertura=0.0",
+        "meta": {
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_013",
+          "partition": "desarrollo",
+          "mitre_references": "[]",
+          "clasificacion": "normal",
+          "mitigacion": "No aplica: comportamiento normal según etiquetas originales.",
+          "records_count": 20,
+          "fragment_sha256": "445b643897b3c0f3b1f1e88b5c8486ab73531034775feb5b7a1664ca9bb3027e",
+          "dataset": "bgl",
+          "original_id": "bgl_des_natural_0011",
+          "corpus_version": "rag_enriquecido_30_v1",
+          "historical_case_id": "bgl_hist_013",
+          "provenance_ref": "corpus/bgl/bgl_hist_013.json",
+          "observed_patterns": "{\"message_samples\":[{\"count\":2,\"message\":\"instruction cache parity error corrected\"},{\"count\":2,\"message\":\"ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r1: invalid or missing program image, Permission denied\"},{\"count\":1,\"message\":\"iar 00106570 dear 0245a5ec\"}],\"original_label_counts\":{\"-\":20},\"raw_severity_counts\":{\"FATAL\":2,\"INFO\":18}}",
+          "features": "{\"decoder_distribution\":{\"text\":20},\"event_categories\":{\"authentication\":2},\"parsing\":{\"coverage\":0.0,\"fallback_events\":20,\"parsed_events\":0},\"product_distribution\":{},\"severity_distribution\":{},\"total_eventos\":20}",
+          "condition": "ventana_original_20",
+          "descripcion": "BGL: 20 registros originales; referencia normal (-). Observado: 2 × instruction cache parity error corrected; 2 × ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r1: invalid or missing program image, Permission denied; 1 × iar 00106570 dear 0245a5ec",
+          "source_hashes": "[\"2a819ea540909db682005c9cf948387a40729b5c2e9f19d430e29ce704825496\"]",
+          "original_label": "-",
+          "record_identifiers_sha256": "02f99f6a15e57166d0d44fbc1cbb49514b2405475ea5234905d9a127e24aa3d9",
+          "knowledge_origin": "historical_development",
+          "source_paths": "[\"data/logs/BGL_2k.log\"]"
+        },
+        "similitud": 0.998
+      },
+      {
+        "texto": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_critico:1,evento_normal:19] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:1] cobertura=0.0",
+        "meta": {
+          "descripcion": "BGL: 20 registros originales; referencia anomalo (KERNTERM). Observado: 2 × rts: kernel terminated for reason 1004; 2 × ciod: generated 64 core files for program /bgl/apps/followup/hellow/a.out.1111; 1 × iar 00106274 dear 0246da8c",
+          "clasificacion": "anomalo",
+          "historical_case_id": "bgl_hist_007",
+          "record_identifiers_sha256": "96a18faed78a3e4ed52f3cecd1fa0aa2df0397dcff3dc3982e4226c15175a975",
+          "fragment_sha256": "83411ee419950487165a6fe13986662663b5e8c339b199119bd8e6b6fda7c79b",
+          "knowledge_origin": "historical_development",
+          "source_hashes": "[\"2a819ea540909db682005c9cf948387a40729b5c2e9f19d430e29ce704825496\"]",
+          "partition": "desarrollo",
+          "mitre_references": "[]",
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_007",
+          "corpus_version": "rag_enriquecido_30_v1",
+          "mitigacion": "El dataset no proporciona una mitigación de referencia.",
+          "dataset": "bgl",
+          "observed_patterns": "{\"message_samples\":[{\"count\":2,\"message\":\"rts: kernel terminated for reason 1004\"},{\"count\":2,\"message\":\"ciod: generated 64 core files for program /bgl/apps/followup/hellow/a.out.1111\"},{\"count\":1,\"message\":\"iar 00106274 dear 0246da8c\"}],\"original_label_counts\":{\"-\":15,\"KERNREC\":3,\"KERNTERM\":2},\"raw_severity_counts\":{\"FATAL\":6,\"INFO\":14}}",
+          "source_paths": "[\"data/logs/BGL_2k.log\"]",
+          "features": "{\"decoder_distribution\":{\"text\":20},\"event_categories\":{\"authentication\":1},\"parsing\":{\"coverage\":0.0,\"fallback_events\":20,\"parsed_events\":0},\"product_distribution\":{},\"severity_distribution\":{},\"total_eventos\":20}",
+          "original_id": "bgl_des_natural_0005",
+          "condition": "ventana_original_20",
+          "records_count": 20,
+          "original_label": "KERNTERM",
+          "provenance_ref": "corpus/bgl/bgl_hist_007.json"
+        },
+        "similitud": 0.998
+      },
+      {
+        "texto": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+        "meta": {
+          "mitigacion": "El dataset no proporciona una mitigación de referencia.",
+          "fragment_sha256": "397017500700110b84aabfeb1724121a57afdfc25c110de254488ed0997de79f",
+          "original_label": "KERNTERM",
+          "source_paths": "[\"data/logs/BGL_2k.log\"]",
+          "vector_id": "rag_enriquecido_30_v1:bgl_hist_003",
+          "provenance_ref": "corpus/bgl/bgl_hist_003.json",
+          "corpus_version": "rag_enriquecido_30_v1",
+          "record_identifiers_sha256": "6f860e84530b9dae6cae1a839ffa908aa33d4c464e0500a6ef9065411c88e176",
+          "features": "{\"decoder_distribution\":{\"text\":20},\"event_categories\":{},\"parsing\":{\"coverage\":0.0,\"fallback_events\":20,\"parsed_events\":0},\"product_distribution\":{},\"severity_distribution\":{},\"total_eventos\":20}",
+          "descripcion": "BGL: 20 registros originales; referencia anomalo (KERNTERM). Observado: 2 × iar 00113898 dear 0fee9c4c; 1 × iar 00106ba0 dear 0246de3c; 1 × iar 00106b98 dear 0246dd9c",
+          "partition": "desarrollo",
+          "original_id": "bgl_des_natural_0000",
+          "clasificacion": "anomalo",
+          "knowledge_origin": "historical_development",
+          "condition": "ventana_original_20",
+          "observed_patterns": "{\"message_samples\":[{\"count\":2,\"message\":\"iar 00113898 dear 0fee9c4c\"},{\"count\":1,\"message\":\"iar 00106ba0 dear 0246de3c\"},{\"count\":1,\"message\":\"iar 00106b98 dear 0246dd9c\"}],\"original_label_counts\":{\"-\":19,\"KERNTERM\":1},\"raw_severity_counts\":{\"FATAL\":1,\"INFO\":19}}",
+          "dataset": "bgl",
+          "source_hashes": "[\"2a819ea540909db682005c9cf948387a40729b5c2e9f19d430e29ce704825496\"]",
+          "historical_case_id": "bgl_hist_003",
+          "mitre_references": "[]",
+          "records_count": 20
+        },
+        "similitud": 0.958
+      }
+    ],
+    "tecnicas_mitre": [
+      {
+        "texto": "Disable or Modify Windows Event Log. Adversaries may disable or modify the Windows Event Log to limit data that can be leveraged for detections and audits. Windows Event Log records user and system activity such as login attempts and process creation.(Citation: EventLog_Core_Technologies) This data is used by security tools and analysts to generate detections. \n\nThe EventLog service maintains event logs from various system components and applications. By default, the service automatically starts when a system powers on. An audit policy, maintained by the Local Security Policy (secpol.msc), defines which system events the EventLog service logs. Security audit policy settings can be changed by running secpol.msc, then navigating to `Security Settings\\Local Policies\\Audit Policy` for basic au",
+        "meta": {
+          "is_subtechnique": true,
+          "name": "Disable or Modify Windows Event Log",
+          "technique_id": "T1685.001",
+          "tactics": "defense-impairment",
+          "url": "https://attack.mitre.org/techniques/T1685/001"
+        },
+        "similitud": 0.527
+      },
+      {
+        "texto": "Disable or Modify Linux Audit System Log. Adversaries may disable or modify the Linux Audit system to hide malicious activity and avoid detection. Linux admins use the Linux Audit system to track security-relevant information on a system. The Linux Audit system operates at the kernel-level and maintains event logs on application and system activity such as process, network, file, and login events based on pre-configured rules. \n\nOften referred to as `auditd`, this is the name of the daemon used to write events to disk and is governed by the parameters set in the `audit.conf` configuration file. Two primary ways to configure the log generation rules are through the command line `auditctl` utility and the file `/etc/audit/audit.rules`, containing a sequence of `auditctl` commands loaded at b",
+        "meta": {
+          "technique_id": "T1685.004",
+          "url": "https://attack.mitre.org/techniques/T1685/004",
+          "name": "Disable or Modify Linux Audit System Log",
+          "is_subtechnique": true,
+          "tactics": "defense-impairment"
+        },
+        "similitud": 0.49
+      },
+      {
+        "texto": "Log Enumeration. Adversaries may enumerate system and service logs to find useful data. These logs may highlight various types of valuable insights for an adversary, such as user authentication records ([Account Discovery](https://attack.mitre.org/techniques/T1087)), security or vulnerable software ([Software Discovery](https://attack.mitre.org/techniques/T1518)), or hosts within a compromised network ([Remote System Discovery](https://attack.mitre.org/techniques/T1018)).\n\nHost binaries may be leveraged to collect system logs. Examples include using `wevtutil.exe` or [PowerShell](https://attack.mitre.org/techniques/T1059/001) on Windows to access and/or export security event information.(Citation: WithSecure Lazarus-NoPineapple Threat Intel Report 2023)(Citation: Cadet Blizzard emerges as ",
+        "meta": {
+          "name": "Log Enumeration",
+          "is_subtechnique": false,
+          "tactics": "discovery",
+          "url": "https://attack.mitre.org/techniques/T1654",
+          "technique_id": "T1654"
+        },
+        "similitud": 0.458
+      }
+    ],
+    "cves_encontrados": [],
+    "comandos_mitigacion": [],
+    "comandos_validos": true,
+    "motivos_rechazo": [],
+    "intentos_correccion": 1,
+    "confianza": 0.85,
+    "hay_incidente": false,
+    "hay_anomalia": true,
+    "evaluacion_auditor": "El diagnóstico es correcto. Los registros corresponden a eventos de diagnóstico de hardware y kernel de Blue Gene/L (BGL) relativos a errores de paridad de memoria, descartando actividad maliciosa o intentos de autenticación reales. Al tratarse de fallos o degradación de hardware, constituye una anomalía operativa pero no un incidente de seguridad.",
+    "cobertura_auditor": true,
+    "cobertura_suficiente": true,
+    "motivo_replanificacion": "",
+    "requiere_replanificacion": false,
+    "_firma": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_critico:2,evento_normal:18] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[authentication:2] cobertura=0.0",
+    "_error_api": null,
+    "requiere_revision_humana": false,
+    "output_contract_version": "d11-v1"
+  }
+}

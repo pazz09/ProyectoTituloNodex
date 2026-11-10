@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=681 salida=289 razonamiento=410 total=1380
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=853 salida=194 razonamiento=882 total=1929
+   → No hace falta RAG (A pesar de la baja cobertura del parsing estructurado, la muestra cruda revela inequívocamente registros de depuración/kernel de supercómputo benignos y sin relevancia de seguridad ofensiva, permitiendo un diagnóstico concluyente sin necesidad de recurrir a la memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=224 salida=43 razonamiento=181 total=448
+   → usar_cve: False | Razón: El diagnóstico confirma que los eventos corresponden a telemetría de hardware y kernel sin actividad maliciosa ni servicios específicos vulnerables identificados.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=177 salida=38 razonamiento=637 total=852
+   → 3 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2060 salida=334 razonamiento=1189 total=3583
+   → Confianza final: 0.75 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | Los registros corresponden a mensajes de telemetría y diagnósticos de hardware/kernel (Blue Gene/L RAS) que reportan errores de retransmisión de red física corregidos a nivel de capa física. Aunque constituye una anomalía a nivel de infraestructura/hardware, no existen evidencias de intrusión, compromiso o actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

@@ -1,0 +1,76 @@
+{
+  "status": "passed_with_limitations",
+  "production_signature_function": "src.tools.aggregation.firma_lote",
+  "signature_matches_production_v2_contract": true,
+  "cases": 30,
+  "unique_signatures": 15,
+  "cases_with_zero_parsing_coverage": [
+    "bgl_hist_001",
+    "bgl_hist_002",
+    "bgl_hist_003",
+    "bgl_hist_004",
+    "bgl_hist_005",
+    "bgl_hist_006",
+    "bgl_hist_007",
+    "bgl_hist_008",
+    "bgl_hist_009",
+    "bgl_hist_010",
+    "bgl_hist_011",
+    "bgl_hist_012",
+    "bgl_hist_013",
+    "bgl_hist_014",
+    "bgl_hist_015"
+  ],
+  "cross_class_signature_collisions": [
+    {
+      "signature": "v2|lineas=20 ips=0 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+      "cases": [
+        {
+          "historical_case_id": "bgl_hist_002",
+          "classification": "anomalo"
+        },
+        {
+          "historical_case_id": "bgl_hist_003",
+          "classification": "anomalo"
+        },
+        {
+          "historical_case_id": "bgl_hist_005",
+          "classification": "anomalo"
+        },
+        {
+          "historical_case_id": "bgl_hist_006",
+          "classification": "anomalo"
+        },
+        {
+          "historical_case_id": "bgl_hist_008",
+          "classification": "normal"
+        },
+        {
+          "historical_case_id": "bgl_hist_009",
+          "classification": "normal"
+        },
+        {
+          "historical_case_id": "bgl_hist_010",
+          "classification": "normal"
+        },
+        {
+          "historical_case_id": "bgl_hist_011",
+          "classification": "normal"
+        },
+        {
+          "historical_case_id": "bgl_hist_012",
+          "classification": "normal"
+        },
+        {
+          "historical_case_id": "bgl_hist_014",
+          "classification": "normal"
+        },
+        {
+          "historical_case_id": "bgl_hist_015",
+          "classification": "normal"
+        }
+      ]
+    }
+  ],
+  "limitation": "La firma productiva puede ser genérica para BGL saneado. No se garantiza separación de clases ni recuperación del propio ID dentro de top_k=3; la clasificación original y los mensajes observados permanecen en los metadatos. No se cambia el decoder ni el RAG."
+}

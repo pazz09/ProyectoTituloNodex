@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3380 salida=314 razonamiento=1771 total=5465
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3636 salida=155 razonamiento=436 total=4227
+   → Solicitando RAG (Se observan 264 conexiones UDP/DNS fallidas en estado S0 desde 143.88.255.10 hacia el servidor 10.0.10.1. Para determinar si este comportamiento corresponde a una técnica de tunelizado DNS (T1071.004), exfiltración (T1048.003), escaneo o denegación de servicio (DoS), y establecer contramedidas precisas según el plan de investigación, es necesario consultar la base de conocimiento y patrones históricos de MITRE ATT&CK.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 3 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1071.004, T1568.002, T1584.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=7122 salida=197 razonamiento=894 total=8213
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=309 salida=61 razonamiento=165 total=535
+   → usar_cve: False | Razón: El diagnóstico concluye que la actividad observada corresponde a tráfico basal legítimo y se trata de un falso positivo derivado de la interpretación de conexiones UDP asimétricas en Zeek, descartando ataques o explotación de vulnerabilidades.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=2955 salida=6 razonamiento=408 total=3369
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=47942 salida=339 razonamiento=3605 total=51886
+   → Confianza final: 0.95 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Las solicitudes DNS sobre UDP con estado S0 registradas entre 143.88.255.10 y 10.0.10.1 corresponden a tráfico asimétrico basal normal del entorno, coincidente en más de un 99% con la referencia histórica. No se evidencia actividad maliciosa ni abuso de DNS para comando y control (T1071.004 o T1568.002), confirmándose como falso positivo.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=529 salida=209 razonamiento=729 total=1467
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=657 salida=200 razonamiento=653 total=1510
+   → No hace falta RAG (A pesar de la baja cobertura del parsing (0%), la muestra de texto crudo identifica inequívocamente registros de telemetría de supercomputación (RAS de BlueGene) de naturaleza no maliciosa, y el plan de investigación excluye expresamente la consulta de memoria histórica, siendo suficiente el análisis directo.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=215 salida=57 razonamiento=132 total=404
+   → usar_cve: False | Razón: El diagnóstico indica que se trata de fallos de hardware y estabilidad operativa (RAS KERNEL FATAL) sin indicios de ataques, vulnerabilidades explotables ni compromiso de seguridad.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=168 salida=141 razonamiento=631 total=940
+   → 4 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2114 salida=562 razonamiento=569 total=3245
+   → Confianza final: 0.90 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es preciso: los eventos corresponden a fallos críticos de hardware/núcleo (RAS KERNEL FATAL) característicos de supercomputadores IBM BlueGene/L. Se trata de una anomalía operativa de estabilidad de hardware y no de un incidente de ciberseguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

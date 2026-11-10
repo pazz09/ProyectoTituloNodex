@@ -1,0 +1,82 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3047 salida=311 razonamiento=436 total=3794
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3307 salida=196 razonamiento=538 total=4041
+   → Solicitando RAG (El lote evidencia 261 solicitudes DNS anómalas/fallidas de 143.88.255.10 hacia 10.0.10.1 en un intervalo de 30 minutos, pero el resumen agregado carece de detalles de carga útil (nombres de dominio consultados, longitud de subdominios, tipos de registro RR). Conforme al plan de investigación, es necesario consultar en memoria histórica las técnicas MITRE ATT&CK (como T1071.004, T1048.003 y T1498) y precedentes sobre abuso de DNS para diferenciar entre tunelización/C2, escaneo y denegación de servicio antes de emitir un diagnóstico definitivo y medidas de contención.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1584.002, T1071.004, T1590.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=4011 salida=205 razonamiento=381 total=4597
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=317 salida=57 razonamiento=194 total=568
+   → usar_cve: False | Razón: El diagnóstico describe actividades de reconocimiento (fuerza bruta de subdominios) o tunelización DNS, sin especificar un software DNS con versión vulnerable ni un vector de explotación de vulnerabilidad concreta (CVE).
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=252 salida=233 razonamiento=1376 total=1861
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=48193 salida=675 razonamiento=2894 total=51762
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=False | Existe una anomalía de red evidente en la que el host 143.88.255.10 emite ráfagas periódicas de solicitudes DNS (puerto 53/UDP) hacia 10.0.10.1 sin recibir respuesta alguna (estado S0). Sin embargo, el diagnóstico concluye apresuradamente que se trata de reconocimiento (T1590.002) o tunelización DNS (T1071.004) basándose únicamente en registros de conexión a nivel de transporte (conn.log). Este patrón es altamente compatible con una desconfiguración de red o un servidor DNS local inaccesible/apagado. Bloquear el tráfico de inmediato con iptables/ufw puede resultar disruptivo sin antes verificar el contenido de las peticiones.
+   🔀 Router Finalización → agente_planificador (replanifica: cobertura insuficiente)
+👉 Transición completada en: 'agente_auditor_final'
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=4375 salida=359 razonamiento=1162 total=5896
+   → Plan v2: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3280 salida=422 razonamiento=879 total=4581
+   → No hace falta RAG (El lote cuenta con un 100% de cobertura de parsing y datos concluyentes sobre volumen y tasas de falla que permiten caracterizar la anomalía sin requerir memoria externa; además, el plan de investigación indica explícitamente no consultar memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=468 salida=66 razonamiento=199 total=733
+   → usar_cve: False | Razón: El diagnóstico no menciona ningún software específico, versión vulnerable o servicio de servidor identificable, sino una anomalía de tráfico DNS y problemas de conectividad o posible tunelización, lo que no requiere consulta de CVEs específicos.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=403 salida=352 razonamiento=1373 total=2128
+   → 8 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=48464 salida=609 razonamiento=1200 total=50273
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es acertado. Se observa un patrón repetitivo de intentos de conexión DNS (UDP/53) desde 143.88.255.10 hacia la IP privada 10.0.10.1 que finalizan sistemáticamente en estado S0 (sin respuesta). Este comportamiento corresponde típicamente a un resolutor local inalcanzable o un servicio en bucle de reintento tras fallos de conectividad. No hay indicios ni evidencia de tráfico malicioso bidireccional, compromiso del host ni exfiltración en los registros observados, catalogándose adecuadamente como una anomalía operativa de red.
+   🔀 Router Finalización → END (MAX_REPLANS=1 alcanzado)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

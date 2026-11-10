@@ -1,0 +1,7 @@
+## Diagnóstico
+
+El análisis de los 300 eventos de Zeek muestra un predominio casi total de tráfico DNS vía UDP hacia el puerto 53 (293 eventos), concentrado principalmente entre el host 143.88.255.10 y el resolvedor 10.0.10.1 (264 eventos), con conexiones clasificadas como críticas debido a estados S0 (solicitudes sin respuesta registrada). Sin embargo, la comparación con el contexto histórico arroja una similitud superior al 99.7% con patrones basales de referencia (uwf_hist_011, uwf_hist_014, uwf_hist_013), etiquetados formalmente como tráfico de fondo normal. No existen evidencias de túneles C2 encubiertos, algoritmos DGA o denegación de servicio activa, por lo que las técnicas de C2 como T1071.004 no aplican operativamente a este comportamiento. Se concluye que se trata de actividad benigna habitual de resolución DNS de la red, no requiriendo medidas de contención.
+
+## Evaluación del auditor
+
+El diagnóstico es adecuado y coherente. El análisis del conjunto de eventos DNS refleja un patrón rutinario y de fondo con una coincidencia superior al 99.7% respecto a los perfiles basales históricos de referencia. El estado S0 en conexiones UDP/53 responde a la naturaleza de la captura y tráfico normal de resolución sin observarse volumen anómalo, tunneling encubierto ni actividad DGA atribuible a una intrusión o fallo operativo.

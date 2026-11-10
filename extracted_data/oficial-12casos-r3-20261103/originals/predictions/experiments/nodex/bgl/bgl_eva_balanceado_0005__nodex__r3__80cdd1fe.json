@@ -1,0 +1,52 @@
+{
+  "case_id": "bgl_eva_balanceado_0005",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 3,
+  "config_version": "oficial-12casos-r3-20261103",
+  "run_id": "bgl_eva_balanceado_0005__nodex__r3__80cdd1fe",
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0005",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "hardware_diagnostic_error",
+        "evidence_uids": [
+          "log_record_000018",
+          "log_record_000019"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos registros analizados corresponden a mensajes operativos y de diagnóstico del sistema (específicamente eventos de hardware/kernel RAS que reportan corrección de errores de retransmisión en arquitectura Torus), sin indicios de actividad maliciosa ni patrones de ataque. La actividad asociada a la IP interna 172.16.96.116 y los componentes del clúster se clasifica como benigna y puramente operativa. No aplican técnicas de MITRE ATT&CK para este comportamiento.\n\n## Evaluación del auditor\n\nLos registros reportan eventos de diagnóstico y corrección de errores de hardware/kernel (RAS) por retransmisiones en arquitectura Torus. Aunque constituyen una anomalía operativa a nivel de infraestructura física/red, no corresponden a actividad maliciosa ni a un incidente de seguridad."
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0005__nodex__r3__80cdd1fe",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0005__nodex__r3__80cdd1fe.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-03T04:15:40+00:00"
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "case_id": "bgl_eva_balanceado_0001",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "enriquecido-12casos-r1-20261104",
+  "run_id": "bgl_eva_balanceado_0001__rag30__r1__3d47bb91",
+  "condicion_rag": "enriquecido",
+  "rag_version": "rag_enriquecido_30_v1",
+  "casos_historicos": 30,
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0001",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "authentication_failure",
+        "evidence_uids": [
+          "log_record_000014",
+          "log_record_000019"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nFalso positivo. Los registros no corresponden a actividad maliciosa ni a eventos de autenticación, sino a mensajes de hardware/kernel del sistema (RAS KERNEL INFO de arquitectura BlueGene/L indicando un error corregible 'CE' de memoria) clasificados erróneamente como auth_log. La IP 172.16.96.116 no muestra actividad maliciosa real.\n\n## Evaluación del auditor\n\nSe confirma que se trata de un falso positivo de seguridad. Los eventos corresponden a registros de hardware y kernel (mensajes RAS de arquitectura BlueGene/L reportando errores de memoria corregibles) erróneamente categorizados como fallos de autenticación, descartándose actividad maliciosa intencional.\n\n## Comandos de mitigación propuestos\n\n- fail2ban-client unban 172.16.96.116\n- iptables -L INPUT -v -n | grep 172.16.96.116\n- dmesg -T | grep -iE 'RAS|CE|memory error'"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0001__rag30__r1__3d47bb91",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0001__rag30__r1__3d47bb91.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-04T23:03:28+00:00"
+  }
+}

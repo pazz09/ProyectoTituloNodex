@@ -1,0 +1,90 @@
+{
+  "case_id": "uwf_eva_sigiloso_0024",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 2,
+  "config_version": "oficial-12casos-r2-20261103",
+  "run_id": "uwf_eva_sigiloso_0024__nodex__r2__f320df9b",
+  "salida": {
+    "case_id": "uwf_eva_sigiloso_0024",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-17 23:21:25.382073",
+        "entities": [],
+        "event_type": "dns_request_unanswered",
+        "evidence_uids": [
+          "CNvd5j17kRKYOw9mi1",
+          "CzmuG52ac5O2sNzX5h"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-17 23:22:18.618953",
+        "entities": [],
+        "event_type": "dns_request_resolved",
+        "evidence_uids": [
+          "CHgUky4n8gCl8y6W58"
+        ]
+      },
+      {
+        "uid": "event_003",
+        "timestamp": "2021-12-17 23:51:10.130569",
+        "entities": [],
+        "event_type": "dns_request_unanswered",
+        "evidence_uids": [
+          "CxKHx5MMwv2yK4exh"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002",
+      "event_003"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe observa un patrón recurrente de tráfico DNS UDP dirigido desde el host 143.88.255.10 hacia la dirección 10.0.10.1 (puerto 53) con estado de conexión 'S0' constante (264 eventos unidireccionales sin respuesta del destino durante un lapso de 30 minutos). Dado que otros clientes en el mismo segmento (como 143.88.1.51) resuelven DNS normalmente a través de servidores internos (143.88.1.1) y consultas raíz, el comportamiento corresponde principalmente a un fallo de infraestructura o error de configuración de red (servidor DNS no alcanzable, ruta inexistente hacia 10.0.10.1 o servicio inactivo/bloqueado por firewall perimetral), sin evidencia directa de exfiltración o balizamiento C2 complejo en esta capa.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. La evidencia muestra un patrón continuo y periódico de solicitudes DNS dirigidas desde 143.88.255.10 a una IP privada inalcanzable (10.0.10.1:53) que resultan invariablemente en estado S0 (sin respuesta SYN-ACK / unidireccional UDP). Al mismo tiempo, otros hosts del entorno resuelven DNS normalmente (SF) con el servidor interno 143.88.1.1. No se aprecia carga útil maliciosa, canales encubiertos ni balizamiento C2 confirmado, tratándose de una anomalía estrictamente operativa o de configuración de red.\n\n## Comandos de mitigación propuestos\n\n- iptables -I FORWARD -s 143.88.255.10 -d 10.0.10.1 -p udp --dport 53 -m limit --limit 5/min -j LOG --log-prefix '[DNS_MISCONFIG]: '\n- iptables -I FORWARD 2 -s 143.88.255.10 -d 10.0.10.1 -p udp --dport 53 -j REJECT --reject-with icmp-port-unreachable\n- iptables -I INPUT -s 143.88.255.10 -d 10.0.10.1 -p udp --dport 53 -j REJECT --reject-with icmp-port-unreachable\n- ip route add unreachable 10.0.10.1/32"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_sigiloso_0024__nodex__r2__f320df9b",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1568.002",
+          "name": "Domain Generation Algorithms",
+          "similitud": null
+        },
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_sigiloso_0024__nodex__r2__f320df9b.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-03T04:03:09+00:00"
+  }
+}

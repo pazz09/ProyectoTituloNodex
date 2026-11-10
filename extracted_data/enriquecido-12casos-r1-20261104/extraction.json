@@ -1,0 +1,32 @@
+{
+  "config_version": "enriquecido-12casos-r1-20261104",
+  "created_utc": "2026-11-04T23:10:43.735612+00:00",
+  "extractor_sha256": "f15422a37aaa5c4a58321a3b9e1fc58bd70f6b1549ddece303b2cf08cadeda48",
+  "arguments": [
+    "tools/run_enriched_campaign.py",
+    "--execute"
+  ],
+  "cases": 12,
+  "required_missing": [],
+  "completed": 12,
+  "rules": [
+    "Copias byte a byte verificadas con SHA-256.",
+    "JSONL UTF-8: present=false significa campo ausente; value=null es null original.",
+    "Listas vacías, cadenas vacías, orden y duplicados se conservan.",
+    "source_json_pointer y array_index vinculan las proyecciones al archivo original.",
+    "Sin matching, métricas, evaluadores ni conclusiones de desempeño."
+  ],
+  "limitations": [
+    "raw es el estado final preservado, no todas las respuestas HTTP del proveedor.",
+    "CPU, RAM, GPU, costo facturado y duraciones por agente no se inventan si no existen.",
+    "Referencias BGL de reconstrucción/MITRE pueden ser no_aplica; se conservan igual.",
+    "Las procedencias hacia CSV UWF intermedios ausentes se conservan literalmente.",
+    "No se copiaron los Parquet completos: alcance limitado a los 12 casos y sus referencias."
+  ],
+  "condicion_rag": "enriquecido",
+  "rag_version": "rag_enriquecido_30_v1",
+  "casos_historicos": 30,
+  "repeticion": 1,
+  "snapshot_sha256": "f8f1ce20d47021aef6e4fa0f621e7a2aff1337c46f7e6e225f6e1ec072b9a63c",
+  "wrapper_sha256": "86754daba55ab53f54e24e6ee3518922d36138c04d2ef24e2f3a0e589148e5c2"
+}

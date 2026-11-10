@@ -1,0 +1,126 @@
+{
+  "run_id": "bgl_eva_natural_0016__nodex__r2__ee1ccff8",
+  "case_id": "bgl_eva_natural_0016",
+  "repeticion": 2,
+  "config_version": "oficial-12casos-r2-20261103",
+  "checked_utc": "2026-11-03T03:53:32.580986+00:00",
+  "chroma_path": "C:\\Users\\felip\\AppData\\Local\\Temp\\tmpdkwzg4u_\\chroma",
+  "cache_path": "C:\\Users\\felip\\AppData\\Local\\Temp\\tmpdkwzg4u_\\ip.json",
+  "cache_absent_before_inference": true,
+  "initial_chroma": {
+    "collections": [
+      {
+        "name": "attack_techniques",
+        "dimension": 384,
+        "document_count": 697,
+        "config_json": "{}",
+        "schema_json": "{\"defaults\":{\"string\":{\"fts_index\":{\"enabled\":false,\"config\":{}},\"string_inverted_index\":{\"enabled\":true,\"config\":{}}},\"float_list\":{\"vector_index\":{\"enabled\":false,\"config\":{\"space\":\"cosine\",\"embedding_function\":{\"type\":\"known\",\"name\":\"sentence_transformer\",\"config\":{\"device\":\"cpu\",\"kwargs\":{},\"model_name\":\"all-MiniLM-L6-v2\",\"normalize_embeddings\":false}},\"hnsw\":{\"ef_construction\":100,\"max_neighbors\":16,\"ef_search\":100,\"num_threads\":8,\"batch_size\":100,\"sync_threshold\":1000,\"resize_factor\":1.2}}}},\"sparse_vector\":{\"sparse_vector_index\":{\"enabled\":false,\"config\":{\"embedding_function\":{\"type\":\"unknown\"},\"bm25\":false}}},\"int\":{\"int_inverted_index\":{\"enabled\":true,\"config\":{}}},\"float\":{\"float_inverted_index\":{\"enabled\":true,\"config\":{}}},\"bool\":{\"bool_inverted_index\":{\"enabled\":true,\"config\":{}}}},\"keys\":{\"#embedding\":{\"float_list\":{\"vector_index\":{\"enabled\":true,\"config\":{\"space\":\"cosine\",\"embedding_function\":{\"type\":\"known\",\"name\":\"sentence_transformer\",\"config\":{\"device\":\"cpu\",\"kwargs\":{},\"model_name\":\"all-MiniLM-L6-v2\",\"normalize_embeddings\":false}},\"source_key\":\"#document\",\"hnsw\":{\"ef_construction\":100,\"max_neighbors\":16,\"ef_search\":100,\"num_threads\":8,\"batch_size\":100,\"sync_threshold\":1000,\"resize_factor\":1.2}}}}},\"is_subtechnique\":{\"bool\":{\"bool_inverted_index\":{\"enabled\":true,\"config\":{}}}},\"technique_id\":{\"string\":{\"fts_index\":{\"enabled\":false,\"config\":{}},\"string_inverted_index\":{\"enabled\":true,\"config\":{}}}},\"tactics\":{\"string\":{\"fts_index\":{\"enabled\":false,\"config\":{}},\"string_inverted_index\":{\"enabled\":true,\"config\":{}}}},\"#document\":{\"string\":{\"fts_index\":{\"enabled\":true,\"config\":{}},\"string_inverted_index\":{\"enabled\":false,\"config\":{}}}},\"name\":{\"string\":{\"fts_index\":{\"enabled\":false,\"config\":{}},\"string_inverted_index\":{\"enabled\":true,\"config\":{}}}},\"url\":{\"string\":{\"fts_index\":{\"enabled\":false,\"config\":{}},\"string_inverted_index\":{\"enabled\":true,\"config\":{}}}}}}"
+      }
+    ],
+    "dynamic_counts": {
+      "attack_patterns": 0,
+      "error_memory": 0,
+      "host_history": 0
+    },
+    "dynamic_empty": true,
+    "files": {
+      "chroma.sqlite3": {
+        "size_bytes": 7245824,
+        "sha256": "216b85cfe551f3a34127fbc1598398748315bcf099e16f2c4d97534906ab999d"
+      },
+      "f2ad1b3d-3943-469a-b2b4-7d603e870060/data_level0.bin": {
+        "size_bytes": 167600,
+        "sha256": "2f7b1f517ce75b89c544f0ad07c3cf699309fce60367751a243d683d9cdf8a31"
+      },
+      "f2ad1b3d-3943-469a-b2b4-7d603e870060/header.bin": {
+        "size_bytes": 100,
+        "sha256": "a0e81c3b22454233bc12d0762f06dcca48261a75231cf87c79b75e69a6c00150"
+      },
+      "f2ad1b3d-3943-469a-b2b4-7d603e870060/length.bin": {
+        "size_bytes": 400,
+        "sha256": "a981eecabe95f3734355298eb44874e0d6115dc281261d3700810e1a0a585ebc"
+      },
+      "f2ad1b3d-3943-469a-b2b4-7d603e870060/link_lists.bin": {
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  },
+  "independent_working_copy": true,
+  "subprocess_command": [
+    "C:\\Users\\felip\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+    "-m",
+    "src.experimentation.campana",
+    "--trabajar",
+    "bgl",
+    "bgl_eva_natural_0016",
+    "nodex_multiagente",
+    "2",
+    "oficial-12casos-r2-20261103",
+    "evaluacion",
+    "C:\\Users\\felip\\AppData\\Local\\Temp\\tmpdkwzg4u_\\resultado.json"
+  ],
+  "expected_model": "gemini-3.8-flash",
+  "final_chroma": {
+    "collections": [
+      {
+        "name": "attack_patterns",
+        "dimension": null,
+        "document_count": 0,
+        "config_json": "{}",
+        "schema_json": "{\"defaults\":{\"string\":{\"fts_index\":{\"enabled\":false,\"config\":{}},\"string_inverted_index\":{\"enabled\":true,\"config\":{}}},\"float_list\":{\"vector_index\":{\"enabled\":false,\"config\":{\"space\":\"cosine\",\"embedding_function\":{\"type\":\"known\",\"name\":\"sentence_transformer\",\"config\":{\"device\":\"cpu\",\"kwargs\":{},\"model_name\":\"all-MiniLM-L6-v2\",\"normalize_embeddings\":false}},\"hnsw\":{\"ef_construction\":100,\"max_neighbors\":16,\"ef_search\":100,\"num_threads\":8,\"batch_size\":100,\"sync_threshold\":1000,\"resize_factor\":1.2}}}},\"sparse_vector\":{\"sparse_vector_index\":{\"enabled\":false,\"config\":{\"embedding_function\":{\"type\":\"unknown\"},\"bm25\":false}}},\"int\":{\"int_inverted_index\":{\"enabled\":true,\"config\":{}}},\"float\":{\"float_inverted_index\":{\"enabled\":true,\"config\":{}}},\"bool\":{\"bool_inverted_index\":{\"enabled\":true,\"config\":{}}}},\"keys\":{\"#embedding\":{\"float_list\":{\"vector_index\":{\"enabled\":true,\"config\":{\"space\":\"cosine\",\"embedding_function\":{\"type\":\"known\",\"name\":\"sentence_transformer\",\"config\":{\"device\":\"cpu\",\"kwargs\":{},\"model_name\":\"all-MiniLM-L6-v2\",\"normalize_embeddings\":false}},\"source_key\":\"#document\",\"hnsw\":{\"ef_construction\":100,\"max_neighbors\":16,\"ef_search\":100,\"num_threads\":8,\"batch_size\":100,\"sync_threshold\":1000,\"resize_factor\":1.2}}}}},\"#document\":{\"string\":{\"fts_index\":{\"enabled\":true,\"config\":{}},\"string_inverted_index\":{\"enabled\":false,\"config\":{}}}}}}"
+      },
+      {
+        "name": "attack_techniques",
+        "dimension": 384,
+        "document_count": 697,
+        "config_json": "{}",
+        "schema_json": "{\"defaults\":{\"string\":{\"fts_index\":{\"enabled\":false,\"config\":{}},\"string_inverted_index\":{\"enabled\":true,\"config\":{}}},\"float_list\":{\"vector_index\":{\"enabled\":false,\"config\":{\"space\":\"cosine\",\"embedding_function\":{\"type\":\"known\",\"name\":\"sentence_transformer\",\"config\":{\"device\":\"cpu\",\"kwargs\":{},\"model_name\":\"all-MiniLM-L6-v2\",\"normalize_embeddings\":false}},\"hnsw\":{\"ef_construction\":100,\"max_neighbors\":16,\"ef_search\":100,\"num_threads\":8,\"batch_size\":100,\"sync_threshold\":1000,\"resize_factor\":1.2}}}},\"sparse_vector\":{\"sparse_vector_index\":{\"enabled\":false,\"config\":{\"embedding_function\":{\"type\":\"unknown\"},\"bm25\":false}}},\"int\":{\"int_inverted_index\":{\"enabled\":true,\"config\":{}}},\"float\":{\"float_inverted_index\":{\"enabled\":true,\"config\":{}}},\"bool\":{\"bool_inverted_index\":{\"enabled\":true,\"config\":{}}}},\"keys\":{\"#embedding\":{\"float_list\":{\"vector_index\":{\"enabled\":true,\"config\":{\"space\":\"cosine\",\"embedding_function\":{\"type\":\"known\",\"name\":\"sentence_transformer\",\"config\":{\"device\":\"cpu\",\"kwargs\":{},\"model_name\":\"all-MiniLM-L6-v2\",\"normalize_embeddings\":false}},\"source_key\":\"#document\",\"hnsw\":{\"ef_construction\":100,\"max_neighbors\":16,\"ef_search\":100,\"num_threads\":8,\"batch_size\":100,\"sync_threshold\":1000,\"resize_factor\":1.2}}}}},\"is_subtechnique\":{\"bool\":{\"bool_inverted_index\":{\"enabled\":true,\"config\":{}}}},\"technique_id\":{\"string\":{\"fts_index\":{\"enabled\":false,\"config\":{}},\"string_inverted_index\":{\"enabled\":true,\"config\":{}}}},\"tactics\":{\"string\":{\"fts_index\":{\"enabled\":false,\"config\":{}},\"string_inverted_index\":{\"enabled\":true,\"config\":{}}}},\"#document\":{\"string\":{\"fts_index\":{\"enabled\":true,\"config\":{}},\"string_inverted_index\":{\"enabled\":false,\"config\":{}}}},\"name\":{\"string\":{\"fts_index\":{\"enabled\":false,\"config\":{}},\"string_inverted_index\":{\"enabled\":true,\"config\":{}}}},\"url\":{\"string\":{\"fts_index\":{\"enabled\":false,\"config\":{}},\"string_inverted_index\":{\"enabled\":true,\"config\":{}}}}}}"
+      },
+      {
+        "name": "error_memory",
+        "dimension": null,
+        "document_count": 0,
+        "config_json": "{}",
+        "schema_json": "{\"defaults\":{\"string\":{\"fts_index\":{\"enabled\":false,\"config\":{}},\"string_inverted_index\":{\"enabled\":true,\"config\":{}}},\"float_list\":{\"vector_index\":{\"enabled\":false,\"config\":{\"space\":\"cosine\",\"embedding_function\":{\"type\":\"known\",\"name\":\"sentence_transformer\",\"config\":{\"device\":\"cpu\",\"kwargs\":{},\"model_name\":\"all-MiniLM-L6-v2\",\"normalize_embeddings\":false}},\"hnsw\":{\"ef_construction\":100,\"max_neighbors\":16,\"ef_search\":100,\"num_threads\":8,\"batch_size\":100,\"sync_threshold\":1000,\"resize_factor\":1.2}}}},\"sparse_vector\":{\"sparse_vector_index\":{\"enabled\":false,\"config\":{\"embedding_function\":{\"type\":\"unknown\"},\"bm25\":false}}},\"int\":{\"int_inverted_index\":{\"enabled\":true,\"config\":{}}},\"float\":{\"float_inverted_index\":{\"enabled\":true,\"config\":{}}},\"bool\":{\"bool_inverted_index\":{\"enabled\":true,\"config\":{}}}},\"keys\":{\"#document\":{\"string\":{\"fts_index\":{\"enabled\":true,\"config\":{}},\"string_inverted_index\":{\"enabled\":false,\"config\":{}}}},\"#embedding\":{\"float_list\":{\"vector_index\":{\"enabled\":true,\"config\":{\"space\":\"cosine\",\"embedding_function\":{\"type\":\"known\",\"name\":\"sentence_transformer\",\"config\":{\"device\":\"cpu\",\"kwargs\":{},\"model_name\":\"all-MiniLM-L6-v2\",\"normalize_embeddings\":false}},\"source_key\":\"#document\",\"hnsw\":{\"ef_construction\":100,\"max_neighbors\":16,\"ef_search\":100,\"num_threads\":8,\"batch_size\":100,\"sync_threshold\":1000,\"resize_factor\":1.2}}}}}}}"
+      },
+      {
+        "name": "host_history",
+        "dimension": null,
+        "document_count": 0,
+        "config_json": "{}",
+        "schema_json": "{\"defaults\":{\"string\":{\"fts_index\":{\"enabled\":false,\"config\":{}},\"string_inverted_index\":{\"enabled\":true,\"config\":{}}},\"float_list\":{\"vector_index\":{\"enabled\":false,\"config\":{\"space\":\"cosine\",\"embedding_function\":{\"type\":\"known\",\"name\":\"sentence_transformer\",\"config\":{\"device\":\"cpu\",\"kwargs\":{},\"model_name\":\"all-MiniLM-L6-v2\",\"normalize_embeddings\":false}},\"hnsw\":{\"ef_construction\":100,\"max_neighbors\":16,\"ef_search\":100,\"num_threads\":8,\"batch_size\":100,\"sync_threshold\":1000,\"resize_factor\":1.2}}}},\"sparse_vector\":{\"sparse_vector_index\":{\"enabled\":false,\"config\":{\"embedding_function\":{\"type\":\"unknown\"},\"bm25\":false}}},\"int\":{\"int_inverted_index\":{\"enabled\":true,\"config\":{}}},\"float\":{\"float_inverted_index\":{\"enabled\":true,\"config\":{}}},\"bool\":{\"bool_inverted_index\":{\"enabled\":true,\"config\":{}}}},\"keys\":{\"#embedding\":{\"float_list\":{\"vector_index\":{\"enabled\":true,\"config\":{\"space\":\"cosine\",\"embedding_function\":{\"type\":\"known\",\"name\":\"sentence_transformer\",\"config\":{\"device\":\"cpu\",\"kwargs\":{},\"model_name\":\"all-MiniLM-L6-v2\",\"normalize_embeddings\":false}},\"source_key\":\"#document\",\"hnsw\":{\"ef_construction\":100,\"max_neighbors\":16,\"ef_search\":100,\"num_threads\":8,\"batch_size\":100,\"sync_threshold\":1000,\"resize_factor\":1.2}}}}},\"#document\":{\"string\":{\"fts_index\":{\"enabled\":true,\"config\":{}},\"string_inverted_index\":{\"enabled\":false,\"config\":{}}}}}}"
+      }
+    ],
+    "dynamic_counts": {
+      "attack_patterns": 0,
+      "error_memory": 0,
+      "host_history": 0
+    },
+    "dynamic_empty": true,
+    "files": {
+      "chroma.sqlite3": {
+        "size_bytes": 7245824,
+        "sha256": "28f61f9b9468f53dbae8c94542c8a74fb599f7f03138907516199e3e64477709"
+      },
+      "f2ad1b3d-3943-469a-b2b4-7d603e870060/data_level0.bin": {
+        "size_bytes": 167600,
+        "sha256": "c1295558310909c24215f91d68828591155ab6328acd7f3e83ae8393b91b1157"
+      },
+      "f2ad1b3d-3943-469a-b2b4-7d603e870060/header.bin": {
+        "size_bytes": 100,
+        "sha256": "a0e81c3b22454233bc12d0762f06dcca48261a75231cf87c79b75e69a6c00150"
+      },
+      "f2ad1b3d-3943-469a-b2b4-7d603e870060/length.bin": {
+        "size_bytes": 400,
+        "sha256": "68fe1597893487c1761c0de902d807dddbf96adf00bd359202b4b62bbbacf196"
+      },
+      "f2ad1b3d-3943-469a-b2b4-7d603e870060/link_lists.bin": {
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  },
+  "seed_unchanged_after_case": true,
+  "working_copy_discarded": true
+}

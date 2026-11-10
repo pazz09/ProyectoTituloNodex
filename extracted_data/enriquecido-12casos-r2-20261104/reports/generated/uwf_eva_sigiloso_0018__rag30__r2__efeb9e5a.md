@@ -1,0 +1,7 @@
+## Diagnóstico
+
+Tras analizar los 300 eventos de Zeek, se observan 266 intentos de conexión UDP al puerto 53 desde la IP 143.88.255.10 hacia el servidor DNS 10.0.10.1 registrados con estado de conexión S0 (solicitudes sin respuesta del servidor). Al contrastar el comportamiento con el contexto histórico recuperado (casos uwf_hist_014, uwf_hist_013 y uwf_hist_011, con similitud superior a 0.997), se comprueba que este patrón de ráfagas DNS no contestadas es característico del tráfico de fondo normal de la red (clasificado como benigno/falso positivo), originado comúnmente por asimetría de captura, caídas temporales del resolvedor o reintentos de clientes legítimos. No se identifican indicadores de compromiso ni actividad de comando y control o tunelización; por lo tanto, ninguna de las técnicas MITRE ATT&CK sugeridas aplica a este lote.
+
+## Evaluación del auditor
+
+El diagnóstico es acertado. Las ráfagas periódicas de solicitudes DNS dirigidas a 10.0.10.1 con estado S0 coinciden estrechamente con el comportamiento de fondo habitual observado en los registros históricos comparables, atribuible a asimetría de monitorización o reintentos periódicos estándar. No existe evidencia de actividad maliciosa, tunelización DNS ni compromiso de seguridad.

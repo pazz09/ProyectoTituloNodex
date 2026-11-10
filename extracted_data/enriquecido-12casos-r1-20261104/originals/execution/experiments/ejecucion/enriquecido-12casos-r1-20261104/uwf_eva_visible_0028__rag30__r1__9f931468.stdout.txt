@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3047 salida=390 razonamiento=453 total=3890
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3307 salida=164 razonamiento=581 total=4052
+   → Solicitando RAG (Se detecta un volumen anómalo y concentrado de 261 fallos DNS desde 143.88.255.10 hacia 10.0.10.1 en un lapso de 30 minutos. Para determinar con precisión si el patrón corresponde a reconocimiento de subdominios, túneles DNS encubiertos con fallos de resolución (NXDOMAIN) o un intento de denegación de servicio, se requiere consultar la memoria histórica de casos similares y las técnicas de MITRE ATT&CK pertinentes (como T1071.004, T1572 o T1590.002).)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 3 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1584.002, T1071.004, T1590.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=6789 salida=227 razonamiento=1170 total=8186
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=339 salida=54 razonamiento=252 total=645
+   → usar_cve: False | Razón: El diagnóstico concluye que la actividad corresponde a tráfico benigno de red sin evidencia de explotación, ataque activo ni mención de vulnerabilidades o versiones de software específicas que requieran consulta de CVE.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=2985 salida=6 razonamiento=344 total=3335
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=47988 salida=539 razonamiento=2344 total=50871
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es acertado al descartar un incidente de seguridad, exfiltración o tunelización C2, alineándose con el contexto histórico de tráfico benigno. No obstante, la persistencia de solicitudes DNS sin respuesta (estado S0) hacia 10.0.10.1 constituye una anomalía operativa por indisponibilidad del servicio DNS o problemas de enrutamiento interno.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

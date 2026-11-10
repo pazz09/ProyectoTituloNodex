@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1091 salida=261 razonamiento=759 total=2111
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=1261 salida=164 razonamiento=429 total=1854
+   → No hace falta RAG (A pesar de la baja cobertura de parsing estructurado, el contenido del registro en texto libre es explícito y revela eventos informativos de cambio de estado de hardware sin connotaciones maliciosas, permitiendo un diagnóstico concluyente sin necesidad de recurrir a memoria externa.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=190 salida=44 razonamiento=115 total=349
+   → usar_cve: False | Razón: El diagnóstico confirma que se trata de telemetría y eventos operacionales legítimos sin indicios de vectores de ataque o vulnerabilidades explotadas.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=143 salida=10 razonamiento=1178 total=1331
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2020 salida=254 razonamiento=671 total=2945
+   → Confianza final: 0.85 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los eventos corresponden a telemetría operacional habitual de monitorización de hardware en arquitecturas de computación de alto rendimiento (HPC/BlueGene), sin evidencia de compromiso ni actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=719 salida=213 razonamiento=976 total=1908
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=880 salida=293 razonamiento=1235 total=2408
+   → No hace falta RAG (El plan de investigación explícitamente no contempla consultar memoria histórica para este caso y la muestra del registro crudo es suficiente para identificar unívocamente que se trata de telemetría de kernel/hardware (RAS CE) y no de un ataque de autenticación real.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=324 salida=62 razonamiento=152 total=538
+   → usar_cve: False | Razón: El diagnóstico concluye que los eventos corresponden a un falso positivo por errores de telemetría de hardware y un problema de análisis de logs, sin actividad maliciosa ni servicios vulnerables que justifiquen la búsqueda de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=270 salida=137 razonamiento=812 total=1219
+   → 3 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2327 salida=385 razonamiento=1097 total=3809
+   → Confianza final: 0.90 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros corresponden a trazas de telemetría de hardware (mensajes RAS KERNEL con errores corregibles propios de arquitecturas como BlueGene/L) erróneamente clasificados como eventos de autenticación por una falla del analizador (0% de cobertura de parsing). Constituye una anomalía de hardware/infraestructura, pero no un incidente de seguridad ni actividad maliciosa. Las medidas de no bloqueo y remediación de reglas de parser son adecuadas.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

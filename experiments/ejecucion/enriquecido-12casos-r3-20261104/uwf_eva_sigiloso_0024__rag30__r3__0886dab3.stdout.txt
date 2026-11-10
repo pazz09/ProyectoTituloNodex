@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3380 salida=412 razonamiento=558 total=4350
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3644 salida=160 razonamiento=479 total=4283
+   → Solicitando RAG (Se requiere consultar el historial y las técnicas de MITRE ATT&CK relacionadas con abuso de protocolo DNS (como T1071.004 para C2, T1048.003 para exfiltración o T1498/T1499 para denegación de servicio) para categorizar con precisión el comportamiento anómalo de 143.88.255.10 hacia 10.0.10.1 (264 conexiones con estado S0/fallidas) y definir las medidas de mitigación correspondientes conforme al plan de investigación.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 3 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1071.004, T1568.002, T1584.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=7133 salida=255 razonamiento=1035 total=8423
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=367 salida=49 razonamiento=187 total=603
+   → usar_cve: False | Razón: El diagnóstico concluye que el tráfico observado corresponde a actividad benigna y patrones basales habituales de la red, sin evidencia de ataque o explotación de vulnerabilidades específicas.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=3013 salida=10 razonamiento=228 total=3251
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=48000 salida=193 razonamiento=1978 total=50171
+   → Confianza final: 0.98 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es adecuado y coherente. El análisis del conjunto de eventos DNS refleja un patrón rutinario y de fondo con una coincidencia superior al 99.7% respecto a los perfiles basales históricos de referencia. El estado S0 en conexiones UDP/53 responde a la naturaleza de la captura y tráfico normal de resolución sin observarse volumen anómalo, tunneling encubierto ni actividad DGA atribuible a una intrusión o fallo operativo.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

@@ -1,0 +1,110 @@
+{
+  "case_id": "uwf_eva_visible_0004",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "oficial-12casos-r1-20261028",
+  "run_id": "uwf_eva_visible_0004__nodex__r1__5ec1efe0",
+  "salida": {
+    "case_id": "uwf_eva_visible_0004",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-17 16:20:26.630528",
+        "entities": [],
+        "event_type": "network_dns_query_unanswered",
+        "evidence_uids": [
+          "CZGAxQ2SmWBXBtj7ac"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-17 16:20:56.881518",
+        "entities": [],
+        "event_type": "network_dns_beaconing",
+        "evidence_uids": [
+          "CgGpDF4EUHTYNbaLgg"
+        ]
+      },
+      {
+        "uid": "event_003",
+        "timestamp": "2021-12-17 16:35:52.282",
+        "entities": [],
+        "event_type": "network_scan_initiated",
+        "evidence_uids": [
+          "CgLc2r16KKjawNK486",
+          "CW1rJU3i8X5NnW2IFc"
+        ]
+      },
+      {
+        "uid": "event_004",
+        "timestamp": "2021-12-17 16:35:53.383",
+        "entities": [],
+        "event_type": "network_port_scan",
+        "evidence_uids": [
+          "CK5ZC3bXIsD1Gwyh",
+          "Ct57b54aNqSpMF5g92",
+          "CLTC2c4FoX1FKSGv63",
+          "CvO8mBVfhDwYkcW7e"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002",
+      "event_003",
+      "event_004"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": [
+        {
+          "id": "T1046",
+          "name": "Network Service Discovery",
+          "evidence_uids": [
+            "CgLc2r16KKjawNK486",
+            "CW1rJU3i8X5NnW2IFc",
+            "CK5ZC3bXIsD1Gwyh",
+            "CLTC2c4FoX1FKSGv63",
+            "CvO8mBVfhDwYkcW7e"
+          ]
+        }
+      ]
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe ha detectado un volumen anómalo y repetitivo de tráfico DNS (238 eventos, de los cuales 279 del total del lote fueron catalogados como críticos) concentrado principalmente desde la dirección IP 143.88.255.10 hacia el servidor DNS interno 10.0.10.1:53/udp con 213 peticiones fallidas o sin respuesta (estado de conexión Zeek S0). Este comportamiento sugiere un intento de comunicación anómala mediante el protocolo DNS, posiblemente vinculado a técnicas de canal encubierto, tunelización o balizamiento C2 descritas en T1071.004, o bien un ataque de denegación de servicio/escaneo hacia la infraestructura de resolución. Adicionalmente, se identificó actividad anómala entre 143.88.18.12 y 143.88.18.11 con 60 intentos fallidos. Se recomienda aislar o restringir temporalmente el tráfico saliente/DNS desde el host 143.88.255.10, inspeccionar las consultas DNS específicas enviadas para descartar dominios maliciosos o exfiltración, y auditar el host 143.88.18.12.\n\n## Evaluación del auditor\n\nEl diagnóstico es acertado al identificar dos anomalías críticas en el tráfico de red: un balizamiento o comunicación DNS repetitiva no respondida (estado S0) con cadencia fija de aproximadamente 30 segundos desde 143.88.255.10 hacia 10.0.10.1, y un escaneo evidente de puertos TCP (estado SH) dirigido por 143.88.18.12 contra 143.88.18.11 abarcando múltiples servicios críticos (SSH, RDP, Telnet, SMB, VNC, etc.). Las medidas de contención mediante iptables y la recolección de pcap son apropiadas y pertinentes.\n\n## Comandos de mitigación propuestos\n\n- iptables -I INPUT -s 143.88.255.10 -p udp --dport 53 -j DROP\n- iptables -I INPUT -s 143.88.255.10 -p tcp --dport 53 -j DROP\n- iptables -I FORWARD -s 143.88.255.10 -d 10.0.10.1 -p udp --dport 53 -j DROP\n- iptables -I FORWARD -s 143.88.255.10 -d 10.0.10.1 -p tcp --dport 53 -j DROP\n- iptables -I FORWARD -s 143.88.18.12 -d 143.88.18.11 -j DROP\n- conntrack -D -s 143.88.255.10\n- tcpdump -nn -i any host 143.88.255.10 and port 53 -w /var/log/dns_investigation_143.88.255.10.pcap -c 200 &"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_visible_0004__nodex__r1__5ec1efe0",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_visible_0004__nodex__r1__5ec1efe0.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-10-28T04:53:29+00:00"
+  }
+}

@@ -1,5 +1,7 @@
 # NODEX — Inventario y procedimiento de extracción de datos experimentales
 
+> **Actualización del 28 de octubre de 2026:** se autorizó una prueba oficial de NODEX con doce casos específicos, una ejecución por caso, y la extracción para los cinco escenarios: detección, reconstrucción, técnicas, reporte y rendimiento. El procedimiento vigente para ese alcance está en [prueba_oficial_12casos_20261028.md](prueba_oficial_12casos_20261028.md). Las restricciones y el estado «pendiente» que siguen corresponden al inventario histórico del 21 de octubre; no describen la autorización actual. El estado efectivo de las corridas se registra en sus artefactos.
+
 **Fecha de exportación:** 21 de octubre de 2026.  
 **Estado:** inventario y procedimiento propuesto; scripts y exportaciones de datos aún no implementados.  
 **Origen:** revisión del repositorio y conversación con la persona responsable del proyecto. Las disponibilidades indicadas corresponden a esa revisión previa; exportar este documento no implica una nueva auditoría de los datos.

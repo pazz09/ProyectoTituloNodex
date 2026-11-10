@@ -1,0 +1,84 @@
+{
+  "case_id": "uwf_eva_sigiloso_0013",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 3,
+  "config_version": "enriquecido-12casos-r3-20261104",
+  "run_id": "uwf_eva_sigiloso_0013__rag30__r3__f79dcd82",
+  "condicion_rag": "enriquecido",
+  "rag_version": "rag_enriquecido_30_v1",
+  "casos_historicos": 30,
+  "salida": {
+    "case_id": "uwf_eva_sigiloso_0013",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-19 09:05:39.133316",
+        "entities": [],
+        "event_type": "dns_request_timeout",
+        "evidence_uids": [
+          "CSLj4O3nkwboY2Mng",
+          "Cekthb1d6Fm5V8Fp2k"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-19 09:34:23.381085",
+        "entities": [],
+        "event_type": "dns_request_timeout",
+        "evidence_uids": [
+          "C917Yh1jyoZtcdKZvd",
+          "CrX8CZ1xVkeqlDvEw8"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nEl análisis del tráfico muestra un volumen de 244 solicitudes DNS dirigidas desde la IP 143.88.255.10 hacia el servidor DNS interno 10.0.10.1 en estado S0 (sin respuesta), catalogadas preliminarmente como eventos críticos debido a la falta de respuesta en UDP. Sin embargo, al cotejar con el contexto histórico del entorno (casos uwf_hist_013, uwf_hist_009 y uwf_hist_014 con una similitud superior al 98%), se determina que este patrón corresponde a tráfico benigno de fondo habitual del dataset UWF, consistente en timeouts o consultas no respondidas sin indicios de exfiltración ni abuso del protocolo. Por tanto, se clasifica como un falso positivo y no aplica ninguna de las técnicas MITRE ATT&CK evaluadas.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto. Se observa un flujo continuo de consultas DNS UDP hacia la dirección 10.0.10.1 con estado S0 (sin respuesta), lo que representa una anomalía operativa por inalcanzabilidad o mala configuración de resolución DNS, pero sin patrones de abuso, exfiltración ni tunelización. Por tanto, constituye tráfico benigno/ruido de fondo y un falso positivo de seguridad."
+    },
+    "_meta": {
+      "run_id": "uwf_eva_sigiloso_0013__rag30__r3__f79dcd82",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_sigiloso_0013__rag30__r3__f79dcd82.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-04T23:49:24+00:00"
+  }
+}

@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=684 salida=251 razonamiento=775 total=1710
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=855 salida=187 razonamiento=624 total=1666
+   → No hace falta RAG (El registro crudo es suficientemente explícito sobre la naturaleza operativa del fallo (ciod socket reset) y el plan de investigación no contempla el uso de memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=242 salida=41 razonamiento=208 total=491
+   → usar_cve: False | Razón: El evento corresponde a un fallo operacional interno de red y no a un ataque o vulnerabilidad de ciberseguridad identificable.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=195 salida=107 razonamiento=849 total=1151
+   → 4 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2267 salida=424 razonamiento=482 total=3173
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros corresponden a fallos de socket ('Connection reset by peer') del servicio ciod en una plataforma BlueGene/L comunicando con la IP 172.16.96.116. Se trata de un problema operativo de red o terminación de proceso en un entorno de computación de alto rendimiento, sin indicios de actividad adversarial ni incidente de ciberseguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

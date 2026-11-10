@@ -1,0 +1,7 @@
+## Diagnóstico
+
+El análisis del lote de 300 eventos Zeek evidencia un predominio de consultas DNS (UDP/53) emitidas principalmente desde 143.88.255.10 hacia 10.0.10.1 que finalizan en estado 'S0' (solicitudes sin respuesta registrada). La comparación con el contexto histórico del entorno (casos UWF uwf_hist_014 y uwf_hist_013 con similitud del 99.7%) confirma que este perfil de tráfico de resolución DNS unidireccional y estados S0 es característico del fondo operacional normal del entorno universitario y no representa actividad hostil. Por consiguiente, no se evidencia la presencia de técnicas adversarias como T1071.004 ni T1584.002, catalogándose el evento como tráfico benigno habitual.
+
+## Evaluación del auditor
+
+El diagnóstico es erróneo y deficiente. Aunque una parte del lote contiene tráfico de consultas DNS de fondo, ignora por completo una ráfaga evidente de escaneo de puertos TCP entre las 16:35:52 y las 16:35:53 originada en 143.88.18.12 hacia 143.88.18.11 sobre decenas de puertos de servicios conocidos (21, 22, 23, 25, 80, 110, 135, 139, 143, 443, 445, 3306, 3389, 5900, entre otros) con estado SH, lo cual constituye una actividad de reconocimiento/escaneo de red (T1046) y no tráfico benigno rutinario.

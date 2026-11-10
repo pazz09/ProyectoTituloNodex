@@ -1,0 +1,55 @@
+{
+  "case_id": "bgl_eva_balanceado_0005",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 1,
+  "config_version": "enriquecido-12casos-r1-20261104",
+  "run_id": "bgl_eva_balanceado_0005__rag30__r1__d757296a",
+  "condicion_rag": "enriquecido",
+  "rag_version": "rag_enriquecido_30_v1",
+  "casos_historicos": 30,
+  "salida": {
+    "case_id": "bgl_eva_balanceado_0005",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "network_telemetry",
+        "evidence_uids": [
+          "log_record_000018",
+          "log_record_000019"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos registros analizados corresponden a mensajes de telemetría y diagnósticos de hardware/kernel (específicamente logs tipo Blue Gene/L RAS KERNEL INFO) que detallan errores de retransmisión de red física corregidos a nivel de hardware. No existen indicios de comportamiento anómalo, intrusión, ni actividad maliciosa vinculada a la IP privada 172.16.96.116. No se requieren acciones de mitigación de ciberseguridad, únicamente monitoreo operativo rutinario de la infraestructura.\n\n## Evaluación del auditor\n\nLos registros corresponden a mensajes de telemetría y diagnósticos de hardware/kernel (Blue Gene/L RAS) que reportan errores de retransmisión de red física corregidos a nivel de capa física. Aunque constituye una anomalía a nivel de infraestructura/hardware, no existen evidencias de intrusión, compromiso o actividad maliciosa.\n\n## Comandos de mitigación propuestos\n\n- dmesg -T --level=err,warn\n- ip -s link\n- journalctl -k --no-pager -n 50"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_balanceado_0005__rag30__r1__d757296a",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_balanceado_0005__rag30__r1__d757296a.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-04T22:55:22+00:00"
+  }
+}

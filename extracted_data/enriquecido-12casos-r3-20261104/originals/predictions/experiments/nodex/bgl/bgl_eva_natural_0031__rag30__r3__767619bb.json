@@ -1,0 +1,73 @@
+{
+  "case_id": "bgl_eva_natural_0031",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 3,
+  "config_version": "enriquecido-12casos-r3-20261104",
+  "run_id": "bgl_eva_natural_0031__rag30__r3__767619bb",
+  "condicion_rag": "enriquecido",
+  "rag_version": "rag_enriquecido_30_v1",
+  "casos_historicos": 30,
+  "salida": {
+    "case_id": "bgl_eva_natural_0031",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": null,
+        "entities": [],
+        "event_type": "kernel_hardware_failure",
+        "evidence_uids": [
+          "log_record_000001",
+          "log_record_000002",
+          "log_record_000003",
+          "log_record_000004",
+          "log_record_000005",
+          "log_record_000006",
+          "log_record_000007",
+          "log_record_000008",
+          "log_record_000009",
+          "log_record_000010",
+          "log_record_000011",
+          "log_record_000012",
+          "log_record_000013",
+          "log_record_000014",
+          "log_record_000015",
+          "log_record_000016",
+          "log_record_000017",
+          "log_record_000018",
+          "log_record_000019",
+          "log_record_000020"
+        ]
+      }
+    ],
+    "temporal_sequence": [],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nLos registros corresponden a mensajes de diagnóstico y fallos de hardware/kernel del sistema de supercomputación BlueGene/L (logs RAS KERNEL FATAL, en este caso interrupciones de programa por errores de registro de punto flotante). No se observan indicadores de compromiso (IoCs), actividad maliciosa ni vectores de ataque asociados a técnicas MITRE ATT&CK. Se clasifica como un evento no malicioso (falla operativa/hardware). Como mitigación, se recomienda derivar los eventos al equipo de soporte de infraestructura y hardware para revisión de la integridad de los nodos de cómputo afectados.\n\n## Evaluación del auditor\n\nEl diagnóstico es correcto al identificar los eventos como fallos operativos o de hardware de nivel kernel (BlueGene/L RAS KERNEL FATAL) y descartar compromiso o actividad maliciosa. Los comandos de recolección de métricas de hardware y registros de kernel son apropiados para el escalado a infraestructura.\n\n## Comandos de mitigación propuestos\n\n- dmesg -T --level=emerg,alert,crit,err > /var/log/kernel_fatal_hardware.log\n- journalctl -p 0..3 -xb > /var/log/journal_critical_errors.log\n- which ipmitool >/dev/null 2>&1 && ipmitool sel elist > /var/log/ipmi_hardware_sel.log || true\n- which edac-util >/dev/null 2>&1 && edac-util -v > /var/log/edac_memory_errors.log || true\n- which ras-mc-ctl >/dev/null 2>&1 && ras-mc-ctl --error-count > /var/log/ras_errors.log || true"
+    },
+    "_meta": {
+      "run_id": "bgl_eva_natural_0031__rag30__r3__767619bb",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [],
+      "raw_output_ref": "bgl_eva_natural_0031__rag30__r3__767619bb.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "no_aplica",
+      "mitre": "no_aplica",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-04T23:35:34+00:00"
+  }
+}

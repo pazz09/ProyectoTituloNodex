@@ -1,0 +1,650 @@
+{
+  "case_id": "bgl_eva_balanceado_0005",
+  "dataset": "bgl",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 3,
+  "config_version": "oficial-12casos-r3-20261103",
+  "run_id": "bgl_eva_balanceado_0005__nodex__r3__80cdd1fe",
+  "estado_crudo": {
+    "resumen_logs": {
+      "formato_detectado": "text",
+      "total_lineas": 20,
+      "servicios": {
+        "desconocido": 20
+      },
+      "eventos": {
+        "evento_normal": 20
+      },
+      "ventana_temporal": {
+        "inicio": null,
+        "fin": null
+      },
+      "n_ips_distintas": 1,
+      "ips_distintas": [
+        "172.16.96.116"
+      ],
+      "por_ip": {
+        "172.16.96.116": {
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [],
+          "n_eventos": 2,
+          "n_como_origen": 2,
+          "n_como_destino": 0
+        }
+      },
+      "usuarios": {},
+      "n_usuarios_distintos": 0,
+      "codigos_respuesta": {},
+      "entidades": [
+        {
+          "ip": "172.16.96.116",
+          "n_eventos": 2,
+          "intentos_fallidos": 0,
+          "usuarios_objetivo": [],
+          "servicios": [],
+          "n_como_origen": 2,
+          "n_como_destino": 0
+        }
+      ],
+      "cronologia": [],
+      "cronologia_omitidos": 0,
+      "raw_procedencia": {
+        "sha256": "f6d1dcd01f822998a4279c86eb983cd17b96deab1b7564cb2897d01fb8437920",
+        "lineas": 20,
+        "bytes": 3541
+      },
+      "reputacion_ips": {
+        "172.16.96.116": {
+          "fuente": "sin_reputacion",
+          "ip": "172.16.96.116",
+          "score": null,
+          "nota": "modo sin reputación externa: ninguna IP recibe puntaje",
+          "categoria": "desconocido"
+        }
+      }
+    },
+    "preprocessing_metadata": {
+      "schema_version": "2.0",
+      "total_lineas_fisicas": 20,
+      "total_eventos": 20,
+      "decoder_distribution": {
+        "text": 20
+      },
+      "product_distribution": {},
+      "vendor_distribution": {},
+      "version_distribution": {},
+      "protocol_distribution": {},
+      "profile_distribution": {},
+      "severity_distribution": {},
+      "event_categories": {},
+      "event_outcomes": {},
+      "entities": {
+        "ip": {
+          "172.16.96.116": 2
+        }
+      },
+      "time_window": {
+        "inicio": null,
+        "fin": null
+      },
+      "parsing": {
+        "parsed_events": 0,
+        "fallback_events": 20,
+        "coverage": 0.0
+      },
+      "segments": [
+        {
+          "index": 0,
+          "decoder": "text",
+          "line_start": 1,
+          "line_end": 20,
+          "n_records": 20,
+          "confidence": 0.1,
+          "decoder_inicial": "text",
+          "confidence_inicial": 0.105,
+          "decoder_distribution": {
+            "text": 20
+          },
+          "context": {}
+        }
+      ],
+      "entities_resumen": {
+        "ip": 1
+      },
+      "config": {
+        "LOG_DETECTION_CHUNK_SIZE": 50,
+        "LOG_ENABLE_MULTILINE": true,
+        "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+        "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+        "LOG_MAX_EVENTS": 100000,
+        "LOG_MAX_FILE_BYTES": 52428800,
+        "LOG_MAX_RAW_SAMPLES": 20,
+        "LOG_MAX_UNMAPPED_FIELDS": 100,
+        "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+        "LOG_PARSING_MODE": "hybrid",
+        "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+        "LOG_PRESERVE_RAW": true
+      }
+    },
+    "parsing_warnings": [],
+    "raw_samples": [
+      {
+        "decoder": "text",
+        "texto": "1132236972 2005.11.17 R72-M1-N6-C:J04-U01 2005-11-17-06.16.12.504899 R72-M1-N6-C:J04-U01 RAS KERNEL INFO 26741629 torus sender z- retransmission error(s) (dcr 0x02f9) detected and corrected over 268 seconds"
+      }
+    ],
+    "evidencia_logs": [
+      {
+        "uid": "log_record_000001",
+        "record_number": 1,
+        "line_start": 1,
+        "line_end": 1,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000002",
+        "record_number": 2,
+        "line_start": 2,
+        "line_end": 2,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000003",
+        "record_number": 3,
+        "line_start": 3,
+        "line_end": 3,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000004",
+        "record_number": 4,
+        "line_start": 4,
+        "line_end": 4,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000005",
+        "record_number": 5,
+        "line_start": 5,
+        "line_end": 5,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000006",
+        "record_number": 6,
+        "line_start": 6,
+        "line_end": 6,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000007",
+        "record_number": 7,
+        "line_start": 7,
+        "line_end": 7,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000008",
+        "record_number": 8,
+        "line_start": 8,
+        "line_end": 8,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000009",
+        "record_number": 9,
+        "line_start": 9,
+        "line_end": 9,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000010",
+        "record_number": 10,
+        "line_start": 10,
+        "line_end": 10,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000011",
+        "record_number": 11,
+        "line_start": 11,
+        "line_end": 11,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000012",
+        "record_number": 12,
+        "line_start": 12,
+        "line_end": 12,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000013",
+        "record_number": 13,
+        "line_start": 13,
+        "line_end": 13,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000014",
+        "record_number": 14,
+        "line_start": 14,
+        "line_end": 14,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000015",
+        "record_number": 15,
+        "line_start": 15,
+        "line_end": 15,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000016",
+        "record_number": 16,
+        "line_start": 16,
+        "line_end": 16,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000017",
+        "record_number": 17,
+        "line_start": 17,
+        "line_end": 17,
+        "timestamp": null
+      },
+      {
+        "uid": "log_record_000018",
+        "record_number": 18,
+        "line_start": 18,
+        "line_end": 18,
+        "timestamp": null,
+        "source_ip": "172.16.96.116"
+      },
+      {
+        "uid": "log_record_000019",
+        "record_number": 19,
+        "line_start": 19,
+        "line_end": 19,
+        "timestamp": null,
+        "source_ip": "172.16.96.116"
+      },
+      {
+        "uid": "log_record_000020",
+        "record_number": 20,
+        "line_start": 20,
+        "line_end": 20,
+        "timestamp": null
+      }
+    ],
+    "evidencia_logs_omitidos": 0,
+    "eventos_reconstruidos": [
+      {
+        "event_id": "event_001",
+        "evidence_uids": [
+          "log_record_000018",
+          "log_record_000019"
+        ],
+        "timestamp": null,
+        "event_type": "hardware_diagnostic_error",
+        "description": "Reporte de diagnóstico RAS sobre corrección de errores de retransmisión en arquitectura Torus con origen en la IP interna 172.16.96.116",
+        "confidence": null
+      }
+    ],
+    "secuencia_temporal": [],
+    "tecnicas_atribuidas": [],
+    "invalid_evidence_uid_count": 0,
+    "d11_warnings": [],
+    "telemetry": {
+      "llm_call_count": 11,
+      "input_tokens": 9607,
+      "output_tokens": 1769,
+      "total_tokens": 17046,
+      "execution_time": 78.033252,
+      "replan_count": 1,
+      "intentos_correccion": 2,
+      "invalid_evidence_uid_count": 0,
+      "d11_warning_count": 0,
+      "llm_calls": [
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 681,
+          "output_tokens": 272,
+          "total_tokens": 1363,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 410,
+          "duration_s": 7.579,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 854,
+          "output_tokens": 147,
+          "total_tokens": 1264,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 263,
+          "duration_s": 4.671,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 190,
+          "output_tokens": 54,
+          "total_tokens": 368,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 124,
+          "duration_s": 3.859,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 143,
+          "output_tokens": 10,
+          "total_tokens": 396,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 243,
+          "duration_s": 4.188,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 1993,
+          "output_tokens": 357,
+          "total_tokens": 3405,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 1055,
+          "duration_s": 12.062,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 1589,
+          "output_tokens": 322,
+          "total_tokens": 3170,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 1259,
+          "duration_s": 12.813,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 893,
+          "output_tokens": 107,
+          "total_tokens": 1277,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 277,
+          "duration_s": 4.734,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 863,
+          "output_tokens": 121,
+          "total_tokens": 1153,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 169,
+          "duration_s": 4.547,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 215,
+          "output_tokens": 46,
+          "total_tokens": 496,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 235,
+          "duration_s": 4.046,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 168,
+          "output_tokens": 6,
+          "total_tokens": 1119,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 945,
+          "duration_s": 9.563,
+          "error": null
+        },
+        {
+          "model": "gemini-3.8-flash",
+          "input_tokens": 2018,
+          "output_tokens": 327,
+          "total_tokens": 3035,
+          "model_version": "gemini-3.8-flash",
+          "reasoning_tokens": 690,
+          "duration_s": 9.781,
+          "error": null
+        }
+      ]
+    },
+    "firma": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+    "plan": {
+      "plan_version": 2,
+      "objetivo": "Profundizar en el análisis contextual de los registros no estructurados asociados a la IP 172.16.96.116, contrastando con el histórico para confirmar la naturaleza operativa de los eventos y definir pautas de gestión.",
+      "pasos": [
+        {
+          "id": 1,
+          "accion": "triage",
+          "objetivo": "Reexaminar exhaustivamente el contenido textual libre vinculado a la IP 172.16.96.116 para confirmar la naturaleza de los registros de hardware BlueGene/L RAS y descartar anomalías de tráfico malicioso.",
+          "estado": "ejecutado"
+        },
+        {
+          "id": 2,
+          "accion": "rag",
+          "objetivo": "Consultar la base histórica y técnicas MITRE ATT&CK para contextualizar eventos de error a nivel de kernel/hardware y descartar técnicas de evasión o ruido operacional.",
+          "estado": "ejecutado"
+        },
+        {
+          "id": 3,
+          "accion": "mitigacion",
+          "objetivo": "Establecer pautas de monitoreo operativo y reglas de filtrado o supervisión adecuadas para la IP y los eventos diagnosticados.",
+          "estado": "ejecutado"
+        }
+      ],
+      "criterios_finalizacion": [
+        "Correlación exhaustiva del contenido no estructurado con casos previos completada.",
+        "Descarte formal y fundamentado de actividad maliciosa en la IP 172.16.96.116.",
+        "Plan de mitigación o monitoreo operacional definido y adaptado a los hallazgos."
+      ]
+    },
+    "plan_objetivo": "Profundizar en el análisis contextual de los registros no estructurados asociados a la IP 172.16.96.116, contrastando con el histórico para confirmar la naturaleza operativa de los eventos y definir pautas de gestión.",
+    "paso_actual": 3,
+    "historial_ejecucion": [
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_planificador",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "plan v1, 2 pasos: ['triage', 'mitigacion']"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 1,
+        "nodo": "agente_analista_triage",
+        "accion": "triage",
+        "estado": "ejecutado",
+        "resumen": "diagnóstico producido"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_selector_herramientas",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "usar_cve=False"
+      },
+      {
+        "plan_version": 1,
+        "step_id": 2,
+        "nodo": "agente_ingeniero_mitigacion",
+        "accion": "mitigacion",
+        "estado": "ejecutado",
+        "resumen": "0 comandos propuestos"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "tool_validar_comandos",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "comandos válidos"
+      },
+      {
+        "plan_version": 1,
+        "step_id": null,
+        "nodo": "agente_auditor_final",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "confianza=0.75 cobertura_suficiente=False"
+      },
+      {
+        "plan_version": 2,
+        "step_id": null,
+        "nodo": "agente_planificador",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "plan v2, 3 pasos: ['triage', 'rag', 'mitigacion']"
+      },
+      {
+        "plan_version": 2,
+        "step_id": 1,
+        "nodo": "agente_analista_triage",
+        "accion": "triage",
+        "estado": "ejecutado",
+        "resumen": "solicitó contexto histórico (RAG)"
+      },
+      {
+        "plan_version": 2,
+        "step_id": 2,
+        "nodo": "tool_consultar_rag",
+        "accion": "rag",
+        "estado": "ejecutado",
+        "resumen": "0 patrones, 0 técnicas MITRE"
+      },
+      {
+        "plan_version": 2,
+        "step_id": 1,
+        "nodo": "agente_analista_triage",
+        "accion": "triage",
+        "estado": "ejecutado",
+        "resumen": "diagnóstico producido"
+      },
+      {
+        "plan_version": 2,
+        "step_id": null,
+        "nodo": "agente_selector_herramientas",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "usar_cve=False"
+      },
+      {
+        "plan_version": 2,
+        "step_id": 3,
+        "nodo": "agente_ingeniero_mitigacion",
+        "accion": "mitigacion",
+        "estado": "ejecutado",
+        "resumen": "0 comandos propuestos"
+      },
+      {
+        "plan_version": 2,
+        "step_id": null,
+        "nodo": "tool_validar_comandos",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "comandos válidos"
+      },
+      {
+        "plan_version": 2,
+        "step_id": null,
+        "nodo": "agente_auditor_final",
+        "accion": null,
+        "estado": "ejecutado",
+        "resumen": "confianza=0.85 cobertura_suficiente=True"
+      }
+    ],
+    "desviaciones_plan": [],
+    "historial_planes": [
+      {
+        "version": 1,
+        "plan": {
+          "plan_version": 1,
+          "objetivo": "Analizar los eventos en texto libre no estructurado para identificar la naturaleza de la actividad asociada a la IP 172.16.96.116 y definir acciones de contención si aplica.",
+          "pasos": [
+            {
+              "id": 1,
+              "accion": "triage",
+              "objetivo": "Evaluar las líneas de texto libre para clasificar el tipo de evento, identificar patrones sospechosos y determinar el impacto potencial a pesar de la baja cobertura de parsing.",
+              "estado": "ejecutado"
+            },
+            {
+              "id": 2,
+              "accion": "mitigacion",
+              "objetivo": "Formular recomendaciones de contención, monitoreo o reglas de filtrado según los hallazgos del diagnóstico inicial.",
+              "estado": "ejecutado"
+            }
+          ],
+          "criterios_finalizacion": [
+            "Clasificación inicial completada de las líneas no estructuradas.",
+            "Determinación del nivel de riesgo asociado a la IP 172.16.96.116.",
+            "Propuesta de medidas preventivas o correctivas documentada."
+          ]
+        },
+        "motivo_reemplazo": "La tasa de decodificación estructural es del 0% al encontrarse todos los registros en texto libre y sin marcas temporales; se requiere examinar el contenido textual específico de los registros asociados a 172.16.96.116 para validar de forma concluyente la naturaleza del tráfico.",
+        "resultados_asociados": {
+          "eventos_reconstruidos": [
+            {
+              "event_id": "event_001",
+              "evidence_uids": [
+                "log_record_000018",
+                "log_record_000019"
+              ],
+              "timestamp": null,
+              "event_type": "hardware_diagnostic_log",
+              "description": "Mensajes de diagnóstico y retransmisión registrados con referencia a la IP 172.16.96.116.",
+              "confidence": null
+            }
+          ],
+          "secuencia_temporal": [],
+          "tecnicas_atribuidas": [],
+          "intentos_correccion": 1,
+          "diagnostico": "La actividad registrada corresponde a mensajes operativos y de diagnóstico de hardware a nivel de kernel (BlueGene/L RAS logs con errores de retransmisión corregidos en la red torus), sin evidencia de actividad maliciosa, intrusión ni intentos de autenticación fallidos asociados a la IP 172.16.96.116. No se requieren acciones de contención.",
+          "evaluacion_auditor": "El diagnóstico identifica correctamente la presencia de fallos operativos y de hardware (errores de retransmisión en red torus de BlueGene/L RAS), lo cual constituye una anomalía operativa pero no un incidente de seguridad malicioso. Se descarta intrusión o actividad maliciosa sobre la IP 172.16.96.116.",
+          "hay_anomalia": true,
+          "hay_incidente": false,
+          "confianza": 0.75,
+          "cobertura_auditor": false,
+          "cobertura_suficiente": false,
+          "n_pasos_ejecutados": 2,
+          "n_pasos_fallidos": 0
+        }
+      }
+    ],
+    "replan_count": 1,
+    "diagnostico": "Los registros analizados corresponden a mensajes operativos y de diagnóstico del sistema (específicamente eventos de hardware/kernel RAS que reportan corrección de errores de retransmisión en arquitectura Torus), sin indicios de actividad maliciosa ni patrones de ataque. La actividad asociada a la IP interna 172.16.96.116 y los componentes del clúster se clasifica como benigna y puramente operativa. No aplican técnicas de MITRE ATT&CK para este comportamiento.",
+    "necesita_rag": false,
+    "usar_cve": false,
+    "razon_seleccion": "El diagnóstico confirma que la actividad es benigna y de carácter operativo/hardware, sin presencia de ataques ni servicios vulnerables identificados para consultar CVEs.",
+    "contexto_rag": [],
+    "tecnicas_mitre": [],
+    "cves_encontrados": [],
+    "comandos_mitigacion": [],
+    "comandos_validos": true,
+    "motivos_rechazo": [],
+    "intentos_correccion": 1,
+    "confianza": 0.85,
+    "hay_incidente": false,
+    "hay_anomalia": true,
+    "evaluacion_auditor": "Los registros reportan eventos de diagnóstico y corrección de errores de hardware/kernel (RAS) por retransmisiones en arquitectura Torus. Aunque constituyen una anomalía operativa a nivel de infraestructura física/red, no corresponden a actividad maliciosa ni a un incidente de seguridad.",
+    "cobertura_auditor": true,
+    "cobertura_suficiente": true,
+    "motivo_replanificacion": "",
+    "requiere_replanificacion": false,
+    "_firma": "v2|lineas=20 ips=1 servicios=[desconocido:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[] severidades=[] categorias=[] cobertura=0.0",
+    "_error_api": null,
+    "requiere_revision_humana": false,
+    "output_contract_version": "d11-v1"
+  }
+}

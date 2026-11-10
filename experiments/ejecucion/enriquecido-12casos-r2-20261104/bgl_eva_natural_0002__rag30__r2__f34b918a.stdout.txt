@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=684 salida=230 razonamiento=969 total=1883
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=851 salida=219 razonamiento=446 total=1516
+   → No hace falta RAG (A pesar de la baja cobertura del parser automático, la muestra del registro en texto libre identifica unívocamente registros de arquitectura BlueGene/L (ciod CioStream socket reset), descartando una amenaza de ciberseguridad y permitiendo un diagnóstico operacional directo sin requerir consulta histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=240 salida=51 razonamiento=197 total=488
+   → usar_cve: False | Razón: El diagnóstico concluye que se trata de un falso positivo y un fallo operacional de red en infraestructura HPC, sin evidencia de actividad maliciosa ni vulnerabilidades de software explotadas.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=193 salida=179 razonamiento=1373 total=1745
+   → 6 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2337 salida=342 razonamiento=757 total=3436
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es adecuado. Los registros reflejan una falla operacional de comunicación de red/socket en el entorno HPC (BlueGene/L RAS) hacia la IP 172.16.96.116, sin indicios de compromiso o ataque a la seguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

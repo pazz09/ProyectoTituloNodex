@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1091 salida=201 razonamiento=734 total=2026
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=1263 salida=188 razonamiento=361 total=1812
+   → No hace falta RAG (A pesar de la baja cobertura del parsing estructurado, la muestra de texto crudo y las métricas del lote muestran con claridad que se trata de registros benignos de telemetría/descubrimiento de chips/nodos internos sin indicios de compromiso de seguridad, y el plan descarta la necesidad de consultar memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=201 salida=40 razonamiento=328 total=569
+   → usar_cve: False | Razón: El diagnóstico confirma que se trata de actividad legítima de monitorización interna sin vulnerabilidades, ataques ni servicios específicos comprometidos.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=154 salida=64 razonamiento=621 total=839
+   → 2 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=2090 salida=346 razonamiento=610 total=3046
+   → Confianza final: 0.80 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es adecuado. Los registros corresponden a actividad habitual de monitorización y descubrimiento interno de hardware ('Ido chip status changed') entre segmentos de red privada (10.0.0.0/8). No se aprecian anomalías operativas ni patrones de intrusión. Los comandos propuestos son pasivos y orientados a la auditoría.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

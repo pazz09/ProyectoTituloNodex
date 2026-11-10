@@ -1,0 +1,95 @@
+{
+  "case_id": "uwf_eva_visible_0004",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 3,
+  "config_version": "oficial-12casos-r3-20261103",
+  "run_id": "uwf_eva_visible_0004__nodex__r3__381d5ca8",
+  "salida": {
+    "case_id": "uwf_eva_visible_0004",
+    "classification": "MALICIOUS",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-17 16:20:26.630528",
+        "entities": [],
+        "event_type": "dns_beaconing_unanswered",
+        "evidence_uids": [
+          "CZGAxQ2SmWBXBtj7ac",
+          "CnleWC32XXitJgLN72",
+          "CgGpDF4EUHTYNbaLgg",
+          "CnHw7x2l3mZD2pj4tj"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-17 16:35:52.282",
+        "entities": [],
+        "event_type": "network_port_scan",
+        "evidence_uids": [
+          "CgLc2r16KKjawNK486",
+          "CW1rJU3i8X5NnW2IFc",
+          "CLTC2c4FoX1FKSGv63",
+          "CvO8mBVfhDwYkcW7e",
+          "Cd4w7LEQsVEFsN5f",
+          "CzClOpabvJEv689O5"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": [
+        {
+          "id": "T1046",
+          "name": "Network Service Discovery",
+          "evidence_uids": [
+            "CgLc2r16KKjawNK486",
+            "CW1rJU3i8X5NnW2IFc",
+            "CLTC2c4FoX1FKSGv63",
+            "CvO8mBVfhDwYkcW7e",
+            "Cd4w7LEQsVEFsN5f",
+            "CzClOpabvJEv689O5"
+          ]
+        }
+      ]
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe identifica un patrón anómalo de tráfico de red DNS de alta intensidad concentrado principalmente en la IP de origen 143.88.255.10 enviando 213 solicitudes UDP/53 hacia 10.0.10.1 que no reciben respuesta adecuada (estado de conexión S0/intentos fallidos), además de un flujo no resuelto de 60 eventos entre 143.88.18.12 y 143.88.18.11. Este comportamiento recurrente y unidireccional sobre el protocolo DNS es compatible con técnicas de Command and Control o exfiltración mediante DNS (T1071.004), o bien con un intento de denegación de servicio/escaneo de resolución DNS interna. Se recomienda aislar la IP 143.88.255.10 e inspeccionar la carga útil de las consultas para descartar tunelización DNS.\n\n## Evaluación del auditor\n\nEl diagnóstico acierta al señalar las consultas repetitivas DNS de 143.88.255.10 hacia 10.0.10.1 con estado S0 cada ~30 segundos. Sin embargo, comete un error crítico al interpretar el tráfico de 143.88.18.12 hacia 143.88.18.11 como DNS; en realidad se trata de un escaneo de puertos TCP sistemático sobre servicios conocidos (21, 22, 23, 80, 143, 443, 445, 3389, 5900, etc.) con flags SH (SYN-half/scans). Debido a esto, la mitigación propuesta para 143.88.18.12 (bloqueo exclusivo de udp/53) resulta completamente ineficaz para contener el escaneo.\n\n## Comandos de mitigación propuestos\n\n- iptables -I INPUT 1 -s 143.88.255.10 -j DROP\n- iptables -I FORWARD 1 -s 143.88.255.10 -j DROP\n- ufw insert 1 deny from 143.88.255.10 to any\n- iptables -I INPUT 2 -s 143.88.18.12 -p udp --dport 53 -j DROP\n- iptables -I INPUT 3 -p udp --dport 53 -m hashlimit --hashlimit-name dns_rate_limit --hashlimit-above 20/sec --hashlimit-burst 40 --hashlimit-mode srcip -j DROP\n- nohup tcpdump -i any -nn -s 0 -vvv 'port 53 and (host 143.88.255.10 or host 143.88.18.12)' -w /var/log/dns_suspicious_payload.pcap -c 1000 >/dev/null 2>&1 &\n- netfilter-persistent save"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_visible_0004__nodex__r3__381d5ca8",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_visible_0004__nodex__r3__381d5ca8.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-03T04:12:43+00:00"
+  }
+}

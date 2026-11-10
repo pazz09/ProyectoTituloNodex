@@ -1,0 +1,81 @@
+{
+  "case_id": "uwf_eva_visible_0028",
+  "dataset": "uwf",
+  "arquitectura": "nodex_multiagente",
+  "repeticion": 3,
+  "config_version": "oficial-12casos-r3-20261103",
+  "run_id": "uwf_eva_visible_0028__nodex__r3__5b62460b",
+  "salida": {
+    "case_id": "uwf_eva_visible_0028",
+    "classification": "BENIGN",
+    "reconstructed_events": [
+      {
+        "uid": "event_001",
+        "timestamp": "2021-12-17 18:59:15.382531",
+        "entities": [],
+        "event_type": "dns_request_unanswered",
+        "evidence_uids": [
+          "Ceni8hHI43gmMFWul",
+          "Cl5NqurlbdYOxZDai"
+        ]
+      },
+      {
+        "uid": "event_002",
+        "timestamp": "2021-12-17 19:30:00.630218",
+        "entities": [],
+        "event_type": "dns_request_unanswered",
+        "evidence_uids": [
+          "CgHZY84kQh9nygm504",
+          "CFphRgy1h1AzE6tWc"
+        ]
+      }
+    ],
+    "temporal_sequence": [
+      "event_001",
+      "event_002"
+    ],
+    "mitre": {
+      "tactics": [],
+      "techniques": []
+    },
+    "report": {
+      "summary": "## Diagnóstico\n\nSe observa un patrón persistente y anómalo de 261 consultas DNS originadas desde 143.88.255.10 hacia la IP privada 10.0.10.1, registrando un 100% de intentos fallidos/sin respuesta exitosa en una ventana de ~31 minutos. Este comportamiento es característico de una desconfiguración operativa (resolutor DNS inalcanzable, fuera de servicio o error de enrutamiento interno) o un servicio/demonio en bucle de reintento. Aunque el riesgo inmediato de compromiso es bajo debido a la falta de comunicación bidireccional, no se descarta completamente un intento de tunelización o balizamiento fallido. Acciones recomendadas: 1) Inspección de capa de aplicación (L7) mediante captura de paquetes (PCAP) o registro Zeek dns.log para analizar los nombres de dominio consultados (QNAME), tipos de registro (RRType) y longitud de payload, descartando técnicas de tunneling (T1071.004) o DGA; 2) Verificación de alcanzabilidad de 10.0.10.1 a nivel de red y validación de la configuración de resolutores DNS en el host 143.88.255.10; 3) Mitigación progresiva no disruptiva mediante rate-limiting temporal en el firewall perimetral/interno para el tráfico UDP/TCP 53 hacia dicho destino y reasignación del servidor DNS primario/secundario en el host afectado.\n\n## Evaluación del auditor\n\nEl diagnóstico es acertado. Se observa un patrón repetitivo de intentos de conexión DNS (UDP/53) desde 143.88.255.10 hacia la IP privada 10.0.10.1 que finalizan sistemáticamente en estado S0 (sin respuesta). Este comportamiento corresponde típicamente a un resolutor local inalcanzable o un servicio en bucle de reintento tras fallos de conectividad. No hay indicios ni evidencia de tráfico malicioso bidireccional, compromiso del host ni exfiltración en los registros observados, catalogándose adecuadamente como una anomalía operativa de red.\n\n## Comandos de mitigación propuestos\n\n- tcpdump -ni any host 143.88.255.10 and host 10.0.10.1 and port 53 -vvv -c 500 -w /var/log/dns_investigation_143.88.255.10.pcap\n- nc -zvw3 -u 10.0.10.1 53\n- iptables -N DNS_RATE_LIMIT\n- iptables -I FORWARD -s 143.88.255.10 -d 10.0.10.1 -p udp --dport 53 -j DNS_RATE_LIMIT\n- iptables -I FORWARD -s 143.88.255.10 -d 10.0.10.1 -p tcp --dport 53 -j DNS_RATE_LIMIT\n- iptables -A DNS_RATE_LIMIT -m hashlimit --hashlimit-name dns_throttle --hashlimit-above 5/sec --hashlimit-burst 15 --hashlimit-mode srcip -m limit --limit 2/min -j LOG --log-prefix '[IPTABLES-DNS-FLOOD]: '\n- iptables -A DNS_RATE_LIMIT -m hashlimit --hashlimit-name dns_throttle --hashlimit-above 5/sec --hashlimit-burst 15 --hashlimit-mode srcip -j DROP\n- iptables -A DNS_RATE_LIMIT -j ACCEPT"
+    },
+    "_meta": {
+      "run_id": "uwf_eva_visible_0028__nodex__r3__5b62460b",
+      "arquitectura": "nodex_multiagente",
+      "contrato_version": "1.0",
+      "veredicto_booleano_presente": true,
+      "motivo_no_evaluable": null,
+      "mitre_candidates": [
+        {
+          "id": "T1584.002",
+          "name": "DNS Server",
+          "similitud": null
+        },
+        {
+          "id": "T1071.004",
+          "name": "DNS",
+          "similitud": null
+        },
+        {
+          "id": "T1590.002",
+          "name": "DNS",
+          "similitud": null
+        }
+      ],
+      "raw_output_ref": "uwf_eva_visible_0028__nodex__r3__5b62460b.raw.json"
+    }
+  },
+  "ejecucion": {
+    "estado": "completa",
+    "estados_por_dimension": {
+      "deteccion": "evaluable",
+      "reconstruccion": "evaluable",
+      "mitre": "no_evaluable",
+      "reporte": "evaluable",
+      "consumo": "evaluable"
+    },
+    "iniciado_utc": "2026-11-03T04:27:56+00:00"
+  }
+}

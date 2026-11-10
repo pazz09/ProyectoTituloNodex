@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=668 salida=222 razonamiento=350 total=1240
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=834 salida=172 razonamiento=327 total=1333
+   → No hace falta RAG (El plan de investigación excluye expresamente la consulta de memoria histórica y la muestra analizada evidencia registros de rendimiento y diagnóstico de hardware benignos (RAS KERNEL INFO) sin vectores de ataque ni alertas de seguridad.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=216 salida=49 razonamiento=139 total=404
+   → usar_cve: False | Razón: El diagnóstico no detecta actividad maliciosa ni identifica servicios vulnerables específicos; se trata de telemetría legítima del kernel y hardware sin indicios de explotación.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=169 salida=6 razonamiento=539 total=714
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=1996 salida=223 razonamiento=666 total=2885
+   → Confianza final: 0.85 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros corresponden a eventos de telemetría e información operativa de bajo nivel (RAS KERNEL INFO) típicos de plataformas de supercómputo. No se aprecian anomalías funcionales ni indicadores de actividad maliciosa o compromiso de seguridad asociados a la dirección 10.1.1.164 ni al resto de los registros evaluados.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

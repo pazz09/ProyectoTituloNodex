@@ -1,0 +1,82 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3380 salida=440 razonamiento=542 total=4362
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3668 salida=164 razonamiento=375 total=4207
+   → Solicitando RAG (Se observan 264 eventos críticos y fallidos dirigidos desde 143.88.255.10 hacia el servidor DNS 10.0.10.1 con conexiones sin respuesta (S0/UDP). Conforme al plan de investigación, es necesario consultar la memoria histórica y la base de conocimiento MITRE ATT&CK (técnicas T1071.004, T1048, y vectores de amplificación/DoS) para correlacionar patrones específicos de túneles DNS frente a escaneo o denegación de servicio antes de emitir un veredicto definitivo.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1071.004, T1568.002, T1584.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=4352 salida=197 razonamiento=444 total=4993
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=309 salida=79 razonamiento=211 total=599
+   → usar_cve: False | Razón: El diagnóstico describe un comportamiento anómalo de tráfico de red correspondiente a técnicas de C2, DGA o exfiltración por DNS (T1071.004, T1568.002) y no la explotación de una vulnerabilidad específica o software/versión identificable.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=244 salida=232 razonamiento=1417 total=1893
+   → 6 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=48148 salida=825 razonamiento=2348 total=51321
+   → Confianza final: 0.85 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=False | Se observa un patrón anómalo y constante de tráfico DNS (UDP 53) desde la IP 143.88.255.10 hacia la IP privada 10.0.10.1 con estado de conexión 'S0' (sin respuesta), repitiéndose en ráfagas regulares cada ~30 segundos. Sin embargo, no hay evidencia suficiente en los metadatos de red disponibles para clasificarlo concluyentemente como un incidente de C2 (T1071.004) o DGA (T1568.002), ya que podría tratarse de una falla operativa o mala configuración de resolución apuntando a un servidor DNS inaccesible o fuera de línea.
+   🔀 Router Finalización → agente_planificador (replanifica: cobertura insuficiente)
+👉 Transición completada en: 'agente_auditor_final'
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=4748 salida=287 razonamiento=653 total=5688
+   → Plan v2: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3611 salida=318 razonamiento=577 total=4506
+   → No hace falta RAG (El plan de investigación excluye explícitamente la memoria histórica y la telemetría cuenta con 100% de cobertura de parsing, permitiendo caracterizar con certeza el estado de conexión (S0), el volumen de reintentos y el destino RFC 1918.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=356 salida=51 razonamiento=176 total=583
+   → usar_cve: False | Razón: El diagnóstico apunta a una desconfiguración operativa y problemas de conectividad con un resolver DNS interno, sin identificar explotación de vulnerabilidades ni software o versiones específicas susceptibles a CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=291 salida=180 razonamiento=1231 total=1702
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=48164 salida=561 razonamiento=858 total=49583
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Se observa un volumen continuo y periódico de consultas DNS salientes (UDP/53) desde 143.88.255.10 hacia la IP privada 10.0.10.1 que no obtienen respuesta (estado S0). El comportamiento responde a una anomalía puramente operativa producto de un resolutor DNS inaccesible o mal configurado en el cliente, descartándose actividad maliciosa, C2 o exfiltración.
+   🔀 Router Finalización → END (MAX_REPLANS=1 alcanzado)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

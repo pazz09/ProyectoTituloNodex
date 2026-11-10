@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=668 salida=258 razonamiento=424 total=1350
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=831 salida=151 razonamiento=644 total=1626
+   → No hace falta RAG (Los registros corresponden claramente a telemetría estándar de kernel/sistema sin indicios de anomalías de seguridad o patrones maliciosos, permitiendo un diagnóstico concluyente sin necesidad de consultar el historial.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=199 salida=46 razonamiento=118 total=363
+   → usar_cve: False | Razón: El diagnóstico concluye que la actividad es benigna y corresponde a operaciones normales del sistema, sin evidencia de explotación, vulnerabilidades específicas ni tráfico malicioso.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=152 salida=10 razonamiento=409 total=571
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=1979 salida=154 razonamiento=745 total=2878
+   → Confianza final: 0.85 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es adecuado. Los registros analizados corresponden a mensajes informativos de nivel operacional del kernel (RAS KERNEL INFO de BlueGene) que reportan métricas normales de interrupciones de hardware. No se identifican patrones anómalos, tráfico malicioso ni indicadores de compromiso asociados a la dirección 10.1.1.164.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.
