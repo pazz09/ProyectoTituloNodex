@@ -31,6 +31,16 @@ def _reglas_mitigacion() -> str:
     )
 
 
+def _criterio_organizacion() -> str:
+    """Las mismas definiciones del veredicto que reciben el triage y el auditor de NODEX (B4)."""
+    from src.config import HISTORICO_ACTIVO
+    if not HISTORICO_ACTIVO:
+        return ""
+    from src.tools.memoria_historica import CRITERIO_ORGANIZACION
+    return ("hay_anomalia es true si hay una anomalía operativa o un incidente según estas definiciones; "
+            "hay_incidente, si es un incidente de seguridad. " + CRITERIO_ORGANIZACION)
+
+
 def analizar_lote_agente_unico(raw_logs: str, thread_id: str | None = None,
                               tecnicas_mitre: list | None = None) -> dict:
     """Misma tarea y contrato, arquitectura de una sola llamada (más retries)."""
@@ -47,6 +57,7 @@ def analizar_lote_agente_unico(raw_logs: str, thread_id: str | None = None,
             '"hay_incidente":true/false, "confianza":0.0, "evaluacion":"...", '
             '"comandos_mitigacion":[]}. '
             + _reglas_mitigacion()
+            + _criterio_organizacion()
             + PROMPT_D11
         )
         prompt = "RESUMEN DEL LOTE:\n" + json.dumps(
@@ -56,6 +67,13 @@ def analizar_lote_agente_unico(raw_logs: str, thread_id: str | None = None,
         contenido = contexto_contenido_lote(state.get("contenido_lote"))
         if contenido:
             prompt += "\n" + contenido
+        # B4 (Fase B): los mismos casos históricos que NODEX (misma consulta y exclusión,
+        # calculados en `_preparar_estado_inicial`). La memoria de la organización es
+        # conocimiento, no arquitectura.
+        from src.tools.memoria_historica import contexto_historico
+        historicos = contexto_historico(state.get("casos_historicos"))
+        if historicos:
+            prompt += "\n" + historicos
         prompt += contexto_d11(state)
         try:
             respuesta = llm_json(prompt, system=system)

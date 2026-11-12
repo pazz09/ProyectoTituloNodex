@@ -54,6 +54,19 @@ class LogGuardState(TypedDict):
     justificacion_veredicto_preliminar: str
     invalid_evidence_group_count: int  # M6: grupos citados que no existen
     comandos_rechazados: Annotated[list, acumular]  # M7: comandos rechazados por el validador, con motivo
+    # --- NODEX final, Fase B (nov-2026) ---
+    casos_historicos: list           # B4: k casos históricos más parecidos (pipeline)
+    historico_consulta: dict         # B4: representación consultada y patrones excluidos por solapamiento
+    hallazgos_cazador: list          # B1: hallazgos por grupo del agente cazador
+    cazador_ejecutado: bool          # B1: el cazador corrió (False si el router lo omitió)
+    veredicto_consolidado: str       # B1: triage o hallazgo alto del cazador (determinístico)
+    consulta_mitre: str              # B3: texto de la hipótesis usado para consultar técnicas
+    rag_omitido: str                 # B3: motivo si no se consultaron técnicas (sin hipótesis)
+    revision_hallazgos: list         # B1: el auditor confirma o descarta cada hallazgo alto
+    diagnostico_inicial: str         # B2: diagnóstico antes de la corrección del auditor
+    diagnostico_corregido: str       # B2: diagnóstico tras la corrección (evaluación del auditor)
+    correcciones_auditor: int        # B2: correcciones aplicadas tras el auditor
+    historial_correcciones: Annotated[list, acumular]  # B2: clase anterior y nueva por corrección
     eventos_reconstruidos: list[EventoReconstruido]
     secuencia_temporal: list[str]
     tecnicas_atribuidas: list[TecnicaAtribuida]

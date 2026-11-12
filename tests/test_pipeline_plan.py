@@ -128,3 +128,10 @@ def test_replanificacion_se_dispara_y_respeta_max_replans(monkeypatch):
     assert "falta confirmar" in reporte["historial_planes"][0]["motivo_reemplazo"]
     # el plan vigente al final es el de la ÚLTIMA versión, no el primero
     assert reporte["plan"]["plan_version"] == MAX_REPLANS + 1
+
+
+import pytest  # noqa: E402
+
+# NODEX final, Fase B: estas pruebas verifican el flujo de la Fase A (sigue disponible con los
+# interruptores de la Fase B apagados). El flujo nuevo lo cubre tests/test_nodex_final_fase_b.py.
+pytestmark = pytest.mark.usefixtures("modo_fase_a")

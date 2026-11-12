@@ -58,3 +58,10 @@ def test_los_tres_routers_preexistentes_siguen_intactos():
     # router_validacion
     assert ("tool_validar_comandos", "agente_ingeniero_mitigacion") in aristas
     assert ("tool_validar_comandos", "agente_auditor_final") in aristas
+
+
+import pytest  # noqa: E402
+
+# NODEX final, Fase B: estas pruebas verifican el flujo de la Fase A (sigue disponible con los
+# interruptores de la Fase B apagados). El flujo nuevo lo cubre tests/test_nodex_final_fase_b.py.
+pytestmark = pytest.mark.usefixtures("modo_fase_a")

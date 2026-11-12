@@ -68,6 +68,63 @@ def _con_traza(nombre: str, fn):
 
 
 def build_graph():
+    """Grafo de NODEX. Con `RAG_POR_HIPOTESIS` (NODEX final, Fase B) el orden es:
+
+        planificador -> triage -> router_caza -> [agente_cazador] -> tool_consultar_rag
+          -> selector -> [cve] -> mitigación -> validación (ciclo) -> auditor
+          -> router_coherencia -> [tool_corregir_diagnostico -> mitigación ...] | router_finalizacion
+
+    Apagado, el grafo es el de la Fase A (triage <-> RAG). Los interruptores se
+    leen al construir el grafo (`src/config.py`).
+    """
+    import src.config as config
+    if config.RAG_POR_HIPOTESIS:
+        return _grafo_fase_b(config)
+    return _grafo_fase_a()
+
+
+def _grafo_fase_b(config):
+    from src.agents.agente_cazador import agente_cazador
+    from src.graph.routers import router_caza, router_coherencia
+    from src.tools.tool_corregir_diagnostico import tool_corregir_diagnostico
+
+    workflow = StateGraph(LogGuardState)
+    workflow.add_node("agente_planificador", agente_planificador)
+    for nombre, fn in (("agente_analista_triage", agente_analista_triage),
+                       ("agente_cazador", agente_cazador),
+                       ("tool_consultar_rag", tool_consultar_rag),
+                       ("agente_selector_herramientas", agente_selector_herramientas),
+                       ("tool_consultar_cve", tool_consultar_cve),
+                       ("agente_ingeniero_mitigacion", agente_ingeniero_mitigacion),
+                       ("tool_validar_comandos", tool_validar_comandos),
+                       ("agente_auditor_final", agente_auditor_final),
+                       ("tool_corregir_diagnostico", tool_corregir_diagnostico)):
+        workflow.add_node(nombre, _con_traza(nombre, fn))
+
+    workflow.add_edge(START, "agente_planificador")
+    workflow.add_edge("agente_planificador", "agente_analista_triage")
+    workflow.add_conditional_edges("agente_analista_triage", router_caza,
+                                   {"agente_cazador": "agente_cazador",
+                                    "tool_consultar_rag": "tool_consultar_rag"})
+    workflow.add_edge("agente_cazador", "tool_consultar_rag")
+    workflow.add_edge("tool_consultar_rag", "agente_selector_herramientas")
+    workflow.add_conditional_edges("agente_selector_herramientas", router_selector,
+                                   {"tool_consultar_cve": "tool_consultar_cve",
+                                    "agente_ingeniero_mitigacion": "agente_ingeniero_mitigacion"})
+    workflow.add_edge("tool_consultar_cve", "agente_ingeniero_mitigacion")
+    workflow.add_edge("agente_ingeniero_mitigacion", "tool_validar_comandos")
+    workflow.add_conditional_edges("tool_validar_comandos", router_validacion,
+                                   {"agente_ingeniero_mitigacion": "agente_ingeniero_mitigacion",
+                                    "agente_auditor_final": "agente_auditor_final"})
+    workflow.add_conditional_edges("agente_auditor_final", router_coherencia,
+                                   {"tool_corregir_diagnostico": "tool_corregir_diagnostico",
+                                    "agente_planificador": "agente_planificador",
+                                    END: END})
+    workflow.add_edge("tool_corregir_diagnostico", "agente_ingeniero_mitigacion")
+    return workflow.compile(checkpointer=MemorySaver())
+
+
+def _grafo_fase_a():
     workflow = StateGraph(LogGuardState)
 
     # Registrar los 8 nodos (5 LLM + 3 Tool). agente_planificador sin

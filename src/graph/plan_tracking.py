@@ -36,6 +36,9 @@ NODO_A_ACCION = {
     "tool_validar_comandos": None,
     "agente_auditor_final": None,
     "agente_planificador": None,
+    # NODEX final, Fase B: mecanismos internos (no son pasos planificables).
+    "agente_cazador": None,
+    "tool_corregir_diagnostico": None,
 }
 
 
@@ -56,6 +59,16 @@ def _resumen(nodo: str, delta: dict) -> str | None:
         if delta.get("diagnostico"):
             return "diagnóstico producido"
         return "solicitó contexto histórico (RAG)"
+    if nodo == "tool_consultar_rag" and delta.get("rag_omitido"):
+        return f"técnicas MITRE no consultadas ({delta['rag_omitido']})"
+    if nodo == "agente_cazador":
+        hallazgos = delta.get("hallazgos_cazador") or []
+        return (f"{len(hallazgos)} hallazgos "
+                f"({sum(1 for h in hallazgos if h.get('nivel_sospecha') == 'alto')} alto)")
+    if nodo == "tool_corregir_diagnostico":
+        return (f"corrección {delta.get('correcciones_auditor')}: veredicto "
+                f"{(delta.get('historial_correcciones') or [{}])[0].get('clase_anterior')} -> "
+                f"{delta.get('veredicto_consolidado')}")
     if nodo == "tool_consultar_rag":
         return (f"{len(delta.get('contexto_rag') or [])} patrones, "
                 f"{len(delta.get('tecnicas_mitre') or [])} técnicas MITRE")
@@ -104,13 +117,23 @@ def actualizar_plan(state: dict, nodo: str, delta: dict) -> dict:
             marcado = _marcar("triage", "ejecutado")
             step_id = marcado if marcado is not None else step_id
             paso_actual = step_id if step_id is not None else paso_actual
-            if delta.get("necesita_rag") is False:
+            from src.config import RAG_POR_HIPOTESIS
+            # Con el RAG por hipótesis (Fase B) el RAG lo decide su propio nodo,
+            # después del cazador: el triage ya no lo omite.
+            if delta.get("necesita_rag") is False and not RAG_POR_HIPOTESIS:
                 _marcar("rag", "omitido",
                         motivo="el triage determinó que no hacía falta contexto histórico")
         else:
             pendiente = _paso_pendiente(plan, "triage")
             step_id = pendiente["id"] if pendiente else None
             paso_actual = step_id if step_id is not None else paso_actual
+
+    elif nodo == "tool_consultar_rag" and delta.get("rag_omitido"):
+        # Fase B: sin hipótesis de seguridad no se consultan técnicas MITRE.
+        accion_evento = "rag"
+        estado_evento = "omitido"
+        step_id = _marcar("rag", "omitido", motivo=delta["rag_omitido"])
+        paso_actual = step_id if step_id is not None else paso_actual
 
     elif nodo == "tool_consultar_rag":
         accion_evento = "rag"
@@ -170,6 +193,18 @@ def actualizar_plan(state: dict, nodo: str, delta: dict) -> dict:
     # agente_auditor_final y agente_planificador: mecanismos internos que
     # no marcan pasos propios -- igual quedan registrados en historial_ejecucion.
 
+    entradas_previas = []
+    if nodo == "tool_consultar_rag":
+        historial = state.get("historial_ejecucion") or []
+        if historial and historial[-1].get("nodo") == "agente_analista_triage":
+            from src.config import RAG_POR_HIPOTESIS
+            if RAG_POR_HIPOTESIS:
+                # El router de caza omitió al cazador en esta pasada (no había
+                # grupos con señal): queda registrado (Fase B, B1).
+                entradas_previas.append({"plan_version": plan_version, "step_id": None,
+                                         "nodo": "agente_cazador", "accion": None, "estado": "omitido",
+                                         "resumen": "sin grupos con señal que examinar"})
+
     entrada = {
         "plan_version": plan_version,
         "step_id": step_id,
@@ -181,6 +216,6 @@ def actualizar_plan(state: dict, nodo: str, delta: dict) -> dict:
     return {
         "plan": plan,
         "paso_actual": paso_actual,
-        "historial_ejecucion": [entrada],
+        "historial_ejecucion": entradas_previas + [entrada],
         "desviaciones_plan": desviaciones,
     }

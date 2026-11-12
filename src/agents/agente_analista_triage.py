@@ -89,8 +89,44 @@ def _contenido(state: LogGuardState) -> str:
     return contexto_contenido_lote(state.get("contenido_lote"))
 
 
+def _triage_una_pasada(state: LogGuardState) -> dict:
+    """NODEX final (B3 y B4): diagnóstico en una sola pasada.
+
+    Con el RAG por hipótesis, el RAG corre DESPUÉS del triage (y del cazador), así
+    que el triage ya no pide contexto ni vuelve del RAG. Recibe la memoria
+    histórica de la organización (B4, consulta siempre activa) y las definiciones
+    generales del veredicto.
+    """
+    from src.tools.memoria_historica import CRITERIO_ORGANIZACION, contexto_historico
+    sys_instruction = (
+        "Eres un analista SOC experto. Diagnostica el lote de logs a partir de su resumen, su perfil, su "
+        "contenido y los casos históricos de la organización. "
+        + CRITERIO_ORGANIZACION
+        + (_INSTRUCCION_VEREDICTO if _pide_veredicto() else "")
+        + ' Responde SOLO en JSON: {"diagnostico": "..."' + _campos_json_veredicto() + "}"
+    )
+    resumen_para_llm = acotar_resumen_para_prompt(state["resumen_logs"])
+    contexto_pre = _contexto_pre(state)
+    contenido = _contenido(state)
+    historicos = contexto_historico(state.get("casos_historicos"))
+    plan_objetivo = state.get("plan_objetivo")
+    user_content = (
+        (f"OBJETIVO DEL PLAN DE INVESTIGACIÓN: {plan_objetivo}\n\n" if plan_objetivo else "")
+        + (f"{contexto_pre}\n\n" if contexto_pre else "")
+        + f"RESUMEN DEL LOTE:\n{json.dumps(resumen_para_llm, ensure_ascii=False)}"
+        + (f"\n\n{contenido}" if contenido else "")
+        + (f"\n\n{historicos}" if historicos else "")
+    )
+    respuesta = llm_json(user_content, system=sys_instruction)
+    return {"diagnostico": respuesta.get("diagnostico") or "Diagnóstico indeterminado",
+            "necesita_rag": False, **_veredicto(respuesta)}
+
+
 def agente_analista_triage(state: LogGuardState) -> dict:
     print("\n🧠 [Agente Triage] Analizando el incidente...")
+    from src.config import RAG_POR_HIPOTESIS
+    if RAG_POR_HIPOTESIS:
+        return _triage_una_pasada(state)
 
     # necesita_rag empieza en None (ver pipeline.py). La primera vez que
     # este nodo corre, `contexto_rag` está vacío Y `necesita_rag` es None

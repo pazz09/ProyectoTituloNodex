@@ -29,6 +29,8 @@ export type NombreNodo =
   | 'agente_ingeniero_mitigacion'
   | 'tool_validar_comandos'
   | 'agente_auditor_final'
+  | 'agente_cazador'
+  | 'tool_corregir_diagnostico'
 
 export type Nodo = {
   nombre: NombreNodo
@@ -51,6 +53,13 @@ export const NODOS: Nodo[] = [
     titulo: 'Análisis inicial',
     descripcion:
       'Leyendo el archivo y buscando señales de comportamiento anómalo...',
+  },
+  {
+    nombre: 'agente_cazador',
+    titulo: 'Cazador de eventos minoritarios',
+    descripcion:
+      'Examinando uno por uno los eventos poco frecuentes del lote, comparándolos con el comportamiento dominante...',
+    opcional: true,
   },
   {
     nombre: 'agente_selector_herramientas',
@@ -89,5 +98,12 @@ export const NODOS: Nodo[] = [
     titulo: 'Auditoría final',
     descripcion:
       'Revisando todo el análisis para emitir el veredicto final...',
+  },
+  {
+    nombre: 'tool_corregir_diagnostico',
+    titulo: 'Corrección del diagnóstico',
+    descripcion:
+      'El auditor cambió el veredicto: corrigiendo el diagnóstico y rediseñando la mitigación...',
+    opcional: true,
   },
 ]

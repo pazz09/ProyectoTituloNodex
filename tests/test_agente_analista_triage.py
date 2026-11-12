@@ -74,3 +74,10 @@ def test_segunda_pasada_con_contexto_sigue_diagnosticando_como_antes(monkeypatch
         _estado_base(contexto_rag=[{"texto": "caso previo"}], necesita_rag=True))
     assert resultado["diagnostico"] == "fuerza bruta SSH"
     assert resultado["necesita_rag"] is False
+
+
+import pytest  # noqa: E402
+
+# NODEX final, Fase B: estas pruebas verifican el flujo de la Fase A (sigue disponible con los
+# interruptores de la Fase B apagados). El flujo nuevo lo cubre tests/test_nodex_final_fase_b.py.
+pytestmark = pytest.mark.usefixtures("modo_fase_a")

@@ -99,6 +99,19 @@ export type ReporteFinal = {
     similitud: number | null
   }[]
   n_precedentes?: number
+  /** NODEX final, Fase B: diagnóstico anterior a la corrección del auditor (B2). */
+  diagnostico_inicial?: string
+  correcciones_auditor?: number
+  historial_correcciones?: { correccion: number; clase_anterior: string | null; clase_nueva: string | null }[]
+  /** Hallazgos del agente cazador de eventos minoritarios (B1). */
+  hallazgos_cazador?: {
+    group_id: string
+    nivel_sospecha: string
+    justificacion?: string
+    tecnica_candidata?: string | null
+  }[]
+  veredicto_consolidado?: string | null
+  classification_detallada?: string | null
 }
 
 /** Fila del historial: el shape que consume la vista de informe. */

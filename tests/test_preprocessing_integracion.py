@@ -8,6 +8,7 @@ Criterios de aceptación de la Fase 9:
 4. El streaming informa correctamente el preprocesamiento.
 """
 
+import pytest
 import src.pipeline as pipeline_mod
 from src.preprocessing.pipeline import preprocesar
 from src.tools.aggregation import aggregate_logs, firma_lote
@@ -143,6 +144,7 @@ def test_dos_lotes_iguales_producen_la_misma_firma():
 
 # --- criterio 1: el grafo conserva sus nodos (7 + agente_planificador, 11-sep-2026) ---
 
+@pytest.mark.usefixtures("modo_fase_a")  # flujo de la Fase A (ver tests/conftest.py)
 def test_el_grafo_sigue_teniendo_ocho_nodos():
     """Guardia de regresión original (Fase 9): que el motor de
     preprocesamiento heterogéneo no alterara accidentalmente la topología

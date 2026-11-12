@@ -140,6 +140,7 @@ def test_la_firma_no_cambia():
     assert "Lote de tipo" not in firma_lote(AUTH)
 
 
+@pytest.mark.usefixtures("modo_fase_a")  # flujo de la Fase A (ver tests/conftest.py)
 def test_el_nodo_rag_consulta_attack_con_la_prosa(monkeypatch):
     """Regresión del bug de fondo: consultar ATT&CK con la firma devolvía []
     para cualquier lote, incluido un ataque real."""

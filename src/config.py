@@ -518,6 +518,47 @@ VEREDICTOS = ("incidente_seguridad", "anomalia_operativa", "normal")
 UWF_REBASE_FORMATO_FONDO = _env_bool("UWF_REBASE_FORMATO_FONDO", True)
 
 
+# =============================================================================
+# NODEX final, Fase B (nov-2026): arquitectura. Un interruptor por mejora; los
+# valores por omisión son los del sistema final. Ver docs/arquitectura_nodex_final.md.
+# =============================================================================
+
+# --- B3: RAG por hipótesis ------------------------------------------------------
+# Nuevo orden del grafo: triage -> [router de caza -> cazador] -> RAG -> selector.
+# La consulta de técnicas MITRE usa el texto de la hipótesis (diagnóstico más
+# hallazgos alto/medio del cazador), no la firma del lote; sin hipótesis de
+# seguridad no se consultan técnicas. El triage diagnostica en una sola pasada
+# (ya no vuelve del RAG). Apagado, el grafo es el de la Fase A.
+RAG_POR_HIPOTESIS = _env_bool("RAG_POR_HIPOTESIS", True)
+
+# --- B1: agente cazador de eventos minoritarios ---------------------------------
+# Requiere RAG_POR_HIPOTESIS (vive en el nuevo orden del grafo).
+CAZADOR_ACTIVO = _env_bool("CAZADOR_ACTIVO", True)
+# Topes de lo que examina el cazador: grupos y filas totales. 15 grupos y 200
+# filas cubren las señales de un lote típico (en desarrollo, 3-5 grupos con
+# señal) sin que un lote anómalo muy grande dispare el costo.
+CAZADOR_MAX_GRUPOS = _env_int("CAZADOR_MAX_GRUPOS", 15)
+CAZADOR_MAX_FILAS = _env_int("CAZADOR_MAX_FILAS", 200)
+NIVELES_SOSPECHA = ("alto", "medio", "bajo")
+
+# --- B2: ciclo de corrección tras el auditor -------------------------------------
+CORRECCION_AUDITOR = _env_bool("CORRECCION_AUDITOR", True)
+MAX_CORRECCIONES_AUDITOR = _env_int("MAX_CORRECCIONES_AUDITOR", 1)
+
+# --- B4: memoria histórica de la organización -------------------------------------
+# Consulta histórica siempre activa (si la colección de patrones existe y no está
+# vacía): el triage y el auditor reciben los k casos más parecidos, con su
+# etiqueta y una descripción de por qué la tienen. Representación del lote con
+# los grupos con señal y su composición (B3), y exclusión de cualquier patrón
+# que comparta registros fuente con el lote analizado.
+HISTORICO_ACTIVO = _env_bool("HISTORICO_ACTIVO", True)
+HISTORICO_K = _env_int("HISTORICO_K", 3)
+
+# --- B5: eventos reconstruidos por categoría --------------------------------------
+EVENTOS_POR_CATEGORIA = _env_bool("EVENTOS_POR_CATEGORIA", True)
+CATEGORIAS_EVENTO = ("incidente", "anomalia_operativa", "contexto")
+
+
 def validate_config() -> None:
     """Lanza un error claro si falta alguna key obligatoria antes de correr el grafo."""
     if not GEMINI_API_KEY:

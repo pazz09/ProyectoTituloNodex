@@ -65,6 +65,8 @@ ya demostraron que vale la pena mantener separada en vez de colapsarla en
 un único booleano.
 """
 
+import json
+
 from src.llm import llm_json
 from src.output_contract import PROMPT_D11, contexto_d11, normalizar_d11
 from src.preprocessing.prompt_context import contexto_preprocesamiento
@@ -100,6 +102,29 @@ def agente_auditor_final(state: LogGuardState) -> dict:
         '"hay_incidente": true/false, "evaluacion": "...", '
         '"cobertura_auditor": true/false, "motivo_cobertura": "..."}'
     )
+    from src.config import HISTORICO_ACTIVO, RAG_POR_HIPOTESIS
+    from src.tools.memoria_historica import CRITERIO_ORGANIZACION, contexto_historico
+    altos = [h for h in state.get("hallazgos_cazador") or [] if h.get("nivel_sospecha") == "alto"]
+    if HISTORICO_ACTIVO:
+        # B4 (NODEX final): la definición anterior de hay_anomalia contaba como
+        # anomalía cualquier falla de hardware o infraestructura, lo que
+        # contradice el criterio de la organización. Se reemplaza por las
+        # definiciones generales compartidas.
+        sys_instruction = sys_instruction.replace(
+            "(1) hay_anomalia: ¿el sistema se está comportando de forma anómala o "
+            "irregular, sea o no un problema de seguridad? (p. ej. una falla de "
+            "hardware, un error de infraestructura o un fallo de replicación "
+            "también cuentan como anomalía, aunque no sean un ataque). ",
+            "(1) hay_anomalia: ¿hay una anomalía operativa o un incidente de seguridad según "
+            "las definiciones de abajo? ")
+        sys_instruction += " " + CRITERIO_ORGANIZACION
+    if RAG_POR_HIPOTESIS:
+        sys_instruction += (
+            " Recibes el veredicto consolidado y los hallazgos del agente cazador (que examinó los grupos "
+            "minoritarios). Tú decides el veredicto final. Por cada hallazgo de nivel alto debes "
+            "pronunciarte explícitamente: confírmalo o descártalo con evidencia concreta, en "
+            'revision_hallazgos: [{"group_id": "G01", "decision": "confirmado|descartado", '
+            '"evidencia": "..."}].')
     sys_instruction += PROMPT_D11
     # La calidad de la evidencia depende de cuánto del lote se entendió: un
     # diagnóstico sobre un lote con 30 % de cobertura no merece la misma
@@ -116,6 +141,15 @@ def agente_auditor_final(state: LogGuardState) -> dict:
         f"CONTEXTO RAG: {'Sí' if state.get('contexto_rag') else 'No'}"
         + (f"\n\n{contexto_pre}" if contexto_pre else "")
     )
+    if RAG_POR_HIPOTESIS:
+        user_content += (f"\nVEREDICTO CONSOLIDADO: {state.get('veredicto_consolidado') or 'sin veredicto'}"
+                         + "\nHALLAZGOS DEL CAZADOR: "
+                         + (json.dumps(state.get("hallazgos_cazador"), ensure_ascii=False)
+                            if state.get("hallazgos_cazador") else "ninguno (el cazador no se ejecutó o no "
+                                                                    "encontró nada que examinar)"))
+    historicos = contexto_historico(state.get("casos_historicos"))
+    if historicos:
+        user_content += "\n" + historicos
 
     user_content += contexto_d11(state)
     respuesta = llm_json(user_content, system=sys_instruction)
@@ -172,6 +206,12 @@ def agente_auditor_final(state: LogGuardState) -> dict:
     motivo_llm = respuesta.get("motivo_cobertura") if not cobertura_auditor else None
     motivo_replanificacion = " | ".join(filter(None, [motivo_llm, *notas_deterministicas]))
 
+    # B1: revisión explícita de cada hallazgo alto del cazador.
+    revision = _revisar_hallazgos(respuesta.get("revision_hallazgos"), altos)
+    faltantes = [h["group_id"] for h in altos if h["group_id"] not in {r["group_id"] for r in revision}]
+    if faltantes:
+        d11["d11_warnings"] = d11["d11_warnings"] + [f"hallazgo_alto_sin_revision:{g}" for g in faltantes]
+
     print(f"   → Confianza final: {confianza:.2f} | hay_anomalia={hay_anomalia} | "
           f"hay_incidente={hay_incidente} | cobertura_suficiente={cobertura_suficiente} | {evaluacion}")
     return {
@@ -184,4 +224,21 @@ def agente_auditor_final(state: LogGuardState) -> dict:
         "cobertura_suficiente": cobertura_suficiente,
         "motivo_replanificacion": motivo_replanificacion,
         "requiere_replanificacion": not cobertura_suficiente,
+        "revision_hallazgos": revision,
     }
+
+
+def _revisar_hallazgos(valor, altos: list[dict]) -> list[dict]:
+    """Revisiones válidas de hallazgos alto: grupo existente, decisión cerrada y evidencia."""
+    ids = {h["group_id"] for h in altos}
+    salida, vistos = [], set()
+    for item in valor if isinstance(valor, list) else []:
+        if not isinstance(item, dict):
+            continue
+        gid = str(item.get("group_id") or "").strip()
+        decision = str(item.get("decision") or "").strip().lower()
+        if gid in ids and gid not in vistos and decision in ("confirmado", "descartado"):
+            vistos.add(gid)
+            salida.append({"group_id": gid, "decision": decision,
+                           "evidencia": str(item.get("evidencia") or "")[:600]})
+    return salida

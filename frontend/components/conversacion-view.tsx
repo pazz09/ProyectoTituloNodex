@@ -11,7 +11,9 @@ import {
   Layers,
   ListChecks,
   Loader2,
+  RefreshCw,
   RotateCcw,
+  Search,
   ScanSearch,
   ShieldAlert,
   ShieldCheck,
@@ -44,6 +46,8 @@ const ICONOS: Record<NombreNodo, typeof Sparkles> = {
   agente_ingeniero_mitigacion: Terminal,
   tool_validar_comandos: CheckCircle2,
   agente_auditor_final: Gauge,
+  agente_cazador: Search,
+  tool_corregir_diagnostico: RefreshCw,
 }
 
 /** Barras proporcionales al máximo de la serie, como en la referencia. */
@@ -127,6 +131,52 @@ function CuerpoNodo({ nodo, detalle, visita }: { nodo: NombreNodo; detalle: Reco
     )
   }
 
+  if (nodo === 'agente_cazador') {
+    // NODEX final, Fase B (B1): un hallazgo por grupo minoritario examinado.
+    const hallazgos = lista(detalle.hallazgos_cazador) as {
+      group_id: string
+      nivel_sospecha: string
+      justificacion?: string
+      tecnica_candidata?: string | null
+    }[]
+    const altos = hallazgos.filter((h) => h.nivel_sospecha === 'alto').length
+    return (
+      <>
+        <p>
+          {hallazgos.length === 0
+            ? 'Examiné los eventos minoritarios y no encontré nada que justifique sospecha.'
+            : `Examiné ${hallazgos.length} grupo(s) de eventos minoritarios: ${altos} con sospecha alta.`}
+        </p>
+        {hallazgos
+          .filter((h) => h.nivel_sospecha !== 'bajo')
+          .map((h) => (
+            <p key={h.group_id} className="faint">
+              <span className={h.nivel_sospecha === 'alto' ? 'chip crit mono' : 'chip warn mono'}>
+                {h.group_id} · {h.nivel_sospecha}
+                {h.tecnica_candidata ? ` · ${h.tecnica_candidata}` : ''}
+              </span>{' '}
+              {h.justificacion}
+            </p>
+          ))}
+      </>
+    )
+  }
+
+  if (nodo === 'tool_corregir_diagnostico') {
+    // NODEX final, Fase B (B2): el auditor contradijo el veredicto consolidado.
+    const cambios = lista(detalle.historial_correcciones) as { clase_anterior?: string; clase_nueva?: string }[]
+    const c = cambios[cambios.length - 1] ?? {}
+    return (
+      <>
+        <p>
+          El auditor cambió el veredicto ({c.clase_anterior ?? 'sin veredicto'} → {c.clase_nueva ?? 'sin veredicto'}).
+          Corregí el diagnóstico y voy a rediseñar la mitigación.
+        </p>
+        <p className="faint">{String(detalle.diagnostico_corregido ?? '')}</p>
+      </>
+    )
+  }
+
   if (nodo === 'tool_consultar_rag') {
     const precedentes = lista(detalle.contexto_rag)
     const tecnicas = lista(detalle.tecnicas_mitre) as { meta: { technique_id: string; name: string } }[]
@@ -137,7 +187,9 @@ function CuerpoNodo({ nodo, detalle, visita }: { nodo: NombreNodo; detalle: Reco
             ? 'No hay casos anteriores parecidos en la memoria.'
             : `Encontré ${precedentes.length} caso(s) anterior(es) con una firma parecida.`}
           {' '}
-          {tecnicas.length === 0
+          {detalle.rag_omitido
+            ? 'No consulté técnicas de ATT&CK: no hay una hipótesis de seguridad que verificar.'
+            : tecnicas.length === 0
             ? 'Ninguna técnica de ATT&CK superó el umbral de similitud.'
             : `Recuperé ${tecnicas.length} técnica(s) de MITRE ATT&CK relacionadas.`}
         </p>

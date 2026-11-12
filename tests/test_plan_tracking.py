@@ -145,3 +145,10 @@ def test_paso_actual_no_se_mueve_en_mecanismos_internos():
     estado["paso_actual"] = plan["pasos"][0]["id"]
     delta = actualizar_plan(estado, "agente_selector_herramientas", {"usar_cve": True, "razon_seleccion": "..."})
     assert delta["paso_actual"] == plan["pasos"][0]["id"]  # sigue en triage, selector no lo mueve
+
+
+import pytest  # noqa: E402
+
+# NODEX final, Fase B: estas pruebas verifican el flujo de la Fase A (sigue disponible con los
+# interruptores de la Fase B apagados). El flujo nuevo lo cubre tests/test_nodex_final_fase_b.py.
+pytestmark = pytest.mark.usefixtures("modo_fase_a")

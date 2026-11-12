@@ -261,6 +261,7 @@ def test_prompt_d11_pide_toda_la_evidencia_por_grupos():
     assert "SOLO eventos relevantes" not in PROMPT_D11 and "no inventes UIDs" in PROMPT_D11
 
 
+@pytest.mark.usefixtures("modo_fase_a")  # flujo de la Fase A (ver tests/conftest.py)
 def test_normalizar_expande_grupos_y_cuenta_los_inexistentes():
     evidencia = [{"uid": u, "timestamp": None} for u in ("A", "B", "C", "D")]
     grupos = [{"group_id": "G01", "uids": ["A", "B"]}, {"group_id": "G02", "uids": ["C", "X"]}]

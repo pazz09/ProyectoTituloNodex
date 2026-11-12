@@ -306,3 +306,10 @@ def test_replanificacion_borra_conclusiones_y_conserva_validacion():
     assert new["invalid_evidence_uid_count"] == 3
     assert archive["resultados_asociados"]["eventos_reconstruidos"] == state["eventos_reconstruidos"]
     assert archive["resultados_asociados"]["intentos_correccion"] == 2
+
+
+import pytest  # noqa: E402
+
+# NODEX final, Fase B: estas pruebas verifican el flujo de la Fase A (sigue disponible con los
+# interruptores de la Fase B apagados). El flujo nuevo lo cubre tests/test_nodex_final_fase_b.py.
+pytestmark = pytest.mark.usefixtures("modo_fase_a")

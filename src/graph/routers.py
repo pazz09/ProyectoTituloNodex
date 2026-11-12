@@ -45,6 +45,40 @@ def router_validacion(state: LogGuardState) -> Literal["agente_ingeniero_mitigac
     return "agente_auditor_final"
 
 
+def router_caza(state: LogGuardState) -> Literal["agente_cazador", "tool_consultar_rag"]:
+    """Router de caza (NODEX final, B1): ¿hay grupos minoritarios que examinar?
+
+    Omite al cazador si no hay grupos con señal (o si `CAZADOR_ACTIVO` está
+    apagado). La omisión queda en `historial_ejecucion` (la registra la traza del
+    nodo siguiente, ver `plan_tracking.actualizar_plan`).
+    """
+    from src.agents.agente_cazador import grupos_para_cazador
+    from src.config import CAZADOR_ACTIVO
+    if CAZADOR_ACTIVO and grupos_para_cazador(state):
+        print("   🔀 Router Caza → agente_cazador")
+        return "agente_cazador"
+    print("   🔀 Router Caza → tool_consultar_rag (sin grupos con señal: cazador omitido)")
+    return "tool_consultar_rag"
+
+
+def router_coherencia(state: LogGuardState):
+    """Router de coherencia (NODEX final, B2), después del auditor.
+
+    Si la clase del veredicto final del auditor difiere del veredicto consolidado
+    y quedan correcciones (`MAX_CORRECCIONES_AUDITOR`), vuelve a diseñar la
+    mitigación sobre el diagnóstico corregido. Si coinciden (o se alcanzó el
+    máximo), sigue al router de finalización existente.
+    """
+    from src.config import CORRECCION_AUDITOR, MAX_CORRECCIONES_AUDITOR
+    from src.graph.veredicto import clase_final
+    final, consolidado = clase_final(state), state.get("veredicto_consolidado")
+    if (CORRECCION_AUDITOR and final and consolidado and final != consolidado
+            and (state.get("correcciones_auditor") or 0) < MAX_CORRECCIONES_AUDITOR):
+        print(f"   🔀 Router Coherencia → tool_corregir_diagnostico ({consolidado} ≠ {final})")
+        return "tool_corregir_diagnostico"
+    return router_finalizacion(state)
+
+
 def router_finalizacion(state: LogGuardState):
     """Router 4: ¿el ciclo termina, o replanifica?
 

@@ -92,8 +92,27 @@ interno. Añade al objeto JSON estos campos:
 """
 
 
+# NODEX final, Fase B (B5). Al pedir "toda la evidencia", el auditor mezclaba el
+# incidente con el ruido de fondo en la misma reconstrucción. Cada evento lleva
+# ahora una categoría, y las técnicas solo se atribuyen con evidencia de eventos
+# `incidente`.
+PROMPT_D11_CATEGORIAS = PROMPT_D11_GRUPOS.replace(
+    "Usa confidence=null en eventos y técnicas;",
+    "Clasifica cada evento con categoria: \"incidente\" (los registros que constituyen la actividad "
+    "maliciosa o la falla que determina el veredicto), \"anomalia_operativa\" (fallas operativas presentes "
+    "en el lote) o \"contexto\" (tráfico o eventos de fondo que se describen pero no forman parte del "
+    "hallazgo). Cita toda la evidencia DE CADA EVENTO; no mezcles en un mismo evento registros de "
+    "categorías distintas. Atribuye técnicas solo con evidencia de eventos \"incidente\".\n"
+    "Usa confidence=null en eventos y técnicas;").replace(
+    '"evidence_uids":["UID"], "timestamp":null, "event_type":"authentication_failure",',
+    '"evidence_uids":["UID"], "categoria":"incidente", "timestamp":null, '
+    '"event_type":"authentication_failure",')
+
+
 def _prompt_d11():
-    from src.config import EVIDENCIA_POR_GRUPOS
+    from src.config import EVENTOS_POR_CATEGORIA, EVIDENCIA_POR_GRUPOS
+    if EVIDENCIA_POR_GRUPOS and EVENTOS_POR_CATEGORIA:
+        return PROMPT_D11_CATEGORIAS
     return PROMPT_D11_GRUPOS if EVIDENCIA_POR_GRUPOS else PROMPT_D11_ORIGINAL
 
 
@@ -224,7 +243,14 @@ def normalizar_d11(respuesta, evidencia, grupos=None):
     inexistente se descarta y cuenta como inválido, igual que un uid
     inexistente (`invalid_evidence_uid_count`), y además se informa aparte
     (`invalid_evidence_group_count`).
+
+    `EVENTOS_POR_CATEGORIA` (B5, Fase B): cada evento lleva `categoria` en
+    {incidente, anomalia_operativa, contexto}; una categoría ausente o inválida
+    queda en `None` y se informa. Las técnicas conservan solo la evidencia que
+    pertenece a eventos `incidente`; sin ella, la técnica se descarta.
     """
+    from src.config import CATEGORIAS_EVENTO, EVENTOS_POR_CATEGORIA
+    por_categoria = EVENTOS_POR_CATEGORIA
     problemas = []
     invalidos = 0
     grupos_invalidos = 0
@@ -323,6 +349,13 @@ def normalizar_d11(respuesta, evidencia, grupos=None):
         if grupos_evento:
             # Aditivo: qué grupos citó el modelo (sus uids ya están expandidos arriba).
             evento_normalizado["evidence_groups"] = grupos_evento
+        if por_categoria:
+            categoria = item.get("categoria")
+            categoria = categoria.strip().lower() if isinstance(categoria, str) else None
+            if categoria not in CATEGORIAS_EVENTO:
+                problemas.append("categoria_invalida_o_ausente")
+                categoria = None
+            evento_normalizado["categoria"] = categoria
         eventos.append(evento_normalizado)
 
     secuencia = lista("secuencia_temporal")
@@ -341,6 +374,7 @@ def normalizar_d11(respuesta, evidencia, grupos=None):
             fechados, key=lambda e: _fecha(e["timestamp"]).replace(tzinfo=timezone.utc)
             if not _fecha(e["timestamp"]).tzinfo else _fecha(e["timestamp"]))]
 
+    uids_de_incidente = {u for e in eventos if e.get("categoria") == "incidente" for u in e["evidence_uids"]}
     tecnicas = {}
     for item in lista("tecnicas_atribuidas"):
         if not isinstance(item, dict):
@@ -356,6 +390,12 @@ def normalizar_d11(respuesta, evidencia, grupos=None):
         if not refs or not isinstance(justification, str) or not justification.strip():
             problemas.append("tecnica_sin_evidencia_o_justificacion")
             continue
+        if por_categoria:
+            # B5: una técnica solo se sostiene con evidencia de eventos `incidente`.
+            refs = [u for u in refs if u in uids_de_incidente]
+            if not refs:
+                problemas.append("tecnica_sin_evidencia_de_incidente")
+                continue
         if technique_id in tecnicas:
             previo = tecnicas[technique_id]
             previo["evidence_uids"] = list(dict.fromkeys(previo["evidence_uids"] + refs))
@@ -422,7 +462,17 @@ def campos_d11(state):
             "justificacion_veredicto_preliminar": state.get("justificacion_veredicto_preliminar"),
             "invalid_evidence_group_count": state.get("invalid_evidence_group_count", 0),
             "grupos_evidencia": copy.deepcopy(state.get("grupos_evidencia") or []),
-            "comandos_rechazados": copy.deepcopy(state.get("comandos_rechazados") or [])}
+            "comandos_rechazados": copy.deepcopy(state.get("comandos_rechazados") or []),
+            # NODEX final, Fase B (aditivos).
+            "casos_historicos": copy.deepcopy(state.get("casos_historicos") or []),
+            "hallazgos_cazador": copy.deepcopy(state.get("hallazgos_cazador") or []),
+            "cazador_ejecutado": bool(state.get("cazador_ejecutado")),
+            "veredicto_consolidado": state.get("veredicto_consolidado"),
+            "revision_hallazgos": copy.deepcopy(state.get("revision_hallazgos") or []),
+            "consulta_mitre": state.get("consulta_mitre") or "",
+            "diagnostico_inicial": state.get("diagnostico_inicial") or "",
+            "correcciones_auditor": state.get("correcciones_auditor") or 0,
+            "historial_correcciones": copy.deepcopy(state.get("historial_correcciones") or [])}
 
 
 def normalizar_salida_experimental(state):

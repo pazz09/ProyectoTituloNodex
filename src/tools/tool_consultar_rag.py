@@ -21,7 +21,33 @@ from src.tools.aggregation import describir_lote_en_prosa
 ltm = LongTermMemory()
 
 
+def _rag_por_hipotesis(state: LogGuardState) -> dict:
+    """B3 (NODEX final). Corre después del triage y del cazador.
+
+    - Técnicas MITRE: se consultan con el texto de la HIPÓTESIS (diagnóstico más
+      hallazgos alto/medio del cazador). Sin hipótesis de seguridad no se consultan.
+    - Patrones históricos: ya están en el estado (`casos_historicos`, consulta
+      siempre activa de B4, con la representación por grupos y la exclusión por
+      solapamiento); aquí solo se exponen como `contexto_rag` por compatibilidad.
+    - Fija el `veredicto_consolidado` (B1), determinístico, antes de la mitigación.
+    """
+    from src.graph.veredicto import texto_hipotesis, veredicto_consolidado
+    print("   🔍 [Tool RAG] Consulta por hipótesis...")
+    hipotesis = texto_hipotesis(state)
+    tecnicas = ltm.retrieve_attack_techniques(hipotesis) if hipotesis else []
+    if hipotesis:
+        print(f"   → {len(tecnicas)} técnicas MITRE para la hipótesis de seguridad.")
+    else:
+        print("   → Sin hipótesis de seguridad: no se consultan técnicas MITRE.")
+    return {"contexto_rag": list(state.get("casos_historicos") or []), "tecnicas_mitre": tecnicas,
+            "consulta_mitre": hipotesis or "", "veredicto_consolidado": veredicto_consolidado(state),
+            "rag_omitido": None if hipotesis else "sin hipótesis de seguridad: no se consultan técnicas"}
+
+
 def tool_consultar_rag(state: LogGuardState) -> dict:
+    from src.config import RAG_POR_HIPOTESIS
+    if RAG_POR_HIPOTESIS:
+        return _rag_por_hipotesis(state)
     print("   🔍 [Tool RAG] Buscando en ChromaDB...")
     patrones = ltm.retrieve_examples(state["firma"])
     print(f"   → {len(patrones)} patrones similares encontrados.")

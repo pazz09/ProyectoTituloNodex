@@ -93,6 +93,30 @@ def _metadatos_desde_v2(resultado, v2: dict) -> tuple[dict, list, list]:
     return metadatos, v2["warnings"], muestras_lista
 
 
+def _consultar_memoria_historica(resultado, analisis: dict) -> dict:
+    """B4 (NODEX final): los k casos históricos más parecidos, sin solapamiento.
+
+    Siempre activa si `HISTORICO_ACTIVO` y la colección de patrones tiene casos.
+    La consulta es la misma para NODEX y para el agente único (los dos pasan por
+    `_preparar_estado_inicial`). Devuelve también la representación consultada y
+    los patrones excluidos por compartir registros con el lote.
+    """
+    from src.config import HISTORICO_ACTIVO, HISTORICO_K
+    from src.tools.memoria_historica import consultar_historicos, huellas_registros, representacion_lote
+    vacio = {"casos": [], "excluidos_por_solapamiento": [], "consultados": 0, "representacion": ""}
+    if not HISTORICO_ACTIVO:
+        return vacio
+    representacion = representacion_lote(analisis["perfil_lote"], analisis["grupos_evidencia"],
+                                         analisis["contenido_lote"])
+    try:
+        resultado_consulta = consultar_historicos(ltm.patterns, representacion,
+                                                  huellas_registros(resultado.events), HISTORICO_K)
+    except Exception as e:  # noqa: BLE001 - la memoria es contexto: su falla no detiene el análisis
+        print(f"   ⚠️ No se pudo consultar la memoria histórica: {e}")
+        return dict(vacio, representacion=representacion, error=str(e))
+    return dict(resultado_consulta, representacion=representacion)
+
+
 def _preparar_estado_inicial(raw_logs: str, thread_id: str | None = None):
     """Agregación determinística + corroboración de IPs, común a
     `analizar_lote` (CLI/informe) y `analizar_lote_stream` (interfaz web,
@@ -125,6 +149,7 @@ def _preparar_estado_inicial(raw_logs: str, thread_id: str | None = None):
     evidencia, omitidos = construir_evidencia(
         _resultado, grupo_de=analisis["group_id_por_registro"] if EVIDENCIA_POR_GRUPOS else None)
     firma = firma_lote(resumen, metadatos)
+    historico = _consultar_memoria_historica(_resultado, analisis)
 
     input_inicial = {
         "evidencia_logs": evidencia,
@@ -136,6 +161,18 @@ def _preparar_estado_inicial(raw_logs: str, thread_id: str | None = None):
         "justificacion_veredicto_preliminar": "",
         "invalid_evidence_group_count": 0,
         "comandos_rechazados": [],
+        # --- NODEX final, Fase B ---
+        "casos_historicos": historico["casos"],
+        "historico_consulta": {k: v for k, v in historico.items() if k != "casos"},
+        "hallazgos_cazador": [],
+        "cazador_ejecutado": False,
+        "veredicto_consolidado": None,
+        "consulta_mitre": "",
+        "revision_hallazgos": [],
+        "diagnostico_inicial": "",
+        "diagnostico_corregido": "",
+        "correcciones_auditor": 0,
+        "historial_correcciones": [],
         "eventos_reconstruidos": [],
         "secuencia_temporal": [],
         "tecnicas_atribuidas": [],

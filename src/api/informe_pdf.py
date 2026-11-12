@@ -410,6 +410,28 @@ def generar_informe_pdf(corrida: dict, comprimir: bool = True) -> bytes:
     else:
         _parrafo(pdf, corrida.get("diagnostico") or
                  "El sistema no registró un diagnóstico para esta ejecución.")
+        # NODEX final, Fase B (B2): si el auditor corrigió el veredicto, el diagnóstico de
+        # arriba es el vigente y el original queda como antecedente, con la corrección.
+        if reporte.get("diagnostico_inicial"):
+            _subtitulo(pdf, "Diagnóstico inicial (corregido por el auditor)")
+            cambios = "; ".join(f"{c.get('clase_anterior')} -> {c.get('clase_nueva')}"
+                                for c in reporte.get("historial_correcciones") or [])
+            if cambios:
+                _parrafo(pdf, f"El auditor cambió el veredicto ({cambios}) y la mitigación se rediseñó "
+                              "sobre el diagnóstico corregido.", gris=True)
+            _parrafo(pdf, reporte["diagnostico_inicial"], gris=True)
+        # B1: hallazgos del agente cazador de nivel alto o medio, con la revisión del auditor.
+        hallazgos = [h for h in reporte.get("hallazgos_cazador") or []
+                     if h.get("nivel_sospecha") in ("alto", "medio")]
+        if hallazgos:
+            revision = {r.get("group_id"): r for r in reporte.get("revision_hallazgos") or []}
+            _subtitulo(pdf, "Eventos minoritarios examinados por el agente cazador")
+            for h in hallazgos:
+                r = revision.get(h.get("group_id"))
+                _parrafo(pdf, f"{h.get('group_id')} (sospecha {h.get('nivel_sospecha')}"
+                              + (f", {h.get('tecnica_candidata')}" if h.get("tecnica_candidata") else "")
+                              + f"): {h.get('justificacion') or ''}"
+                              + (f" Auditor: {r.get('decision')}. {r.get('evidencia') or ''}" if r else ""))
 
     _subtitulo(pdf, "Veredicto")
     confianza = corrida.get("confianza")
