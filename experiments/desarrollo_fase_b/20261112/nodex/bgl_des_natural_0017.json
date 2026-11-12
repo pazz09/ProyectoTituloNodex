@@ -1,0 +1,1414 @@
+{
+ "case_id": "bgl_des_natural_0017",
+ "dataset": "bgl",
+ "arquitectura": "nodex",
+ "segundos_pared_hijo": 81.74761660000149,
+ "estado": {
+  "resumen_logs": {
+   "formato_detectado": "bgl",
+   "total_lineas": 20,
+   "servicios": {
+    "bgl.kernel": 20
+   },
+   "eventos": {
+    "evento_critico": 20
+   },
+   "ventana_temporal": {
+    "inicio": "2005-06-14-10.44.45.851799",
+    "fin": "2005-06-14-10.58.48.336960"
+   },
+   "n_ips_distintas": 0,
+   "ips_distintas": [],
+   "por_ip": {},
+   "usuarios": {},
+   "n_usuarios_distintos": 0,
+   "codigos_respuesta": {},
+   "entidades": [],
+   "cronologia": [
+    {
+     "n": 1,
+     "timestamp": "2005-06-14-10.44.45.851799",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118771085 2005.06.14 R27-M1-ND-C:J09-U01 2005-06-14-10.44.45.851799 R27-M1-ND-C:J09-U01 RAS KERNEL FATAL machine check enable..............0"
+    },
+    {
+     "n": 2,
+     "timestamp": "2005-06-14-10.44.58.632865",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118771098 2005.06.14 R26-M1-N4-C:J13-U11 2005-06-14-10.44.58.632865 R26-M1-N4-C:J13-U11 RAS KERNEL FATAL machine check enable..............0"
+    },
+    {
+     "n": 3,
+     "timestamp": "2005-06-14-10.45.15.849740",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118771115 2005.06.14 R26-M0-N5-C:J11-U11 2005-06-14-10.45.15.849740 R26-M0-N5-C:J11-U11 RAS KERNEL FATAL floating pt ex mode 0 enable......0"
+    },
+    {
+     "n": 4,
+     "timestamp": "2005-06-14-10.47.39.811377",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118771259 2005.06.14 R24-M0-NA-C:J16-U11 2005-06-14-10.47.39.811377 R24-M0-NA-C:J16-U11 RAS KERNEL FATAL program interrupt: unimplemented operation..0"
+    },
+    {
+     "n": 5,
+     "timestamp": "2005-06-14-10.48.22.614188",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118771302 2005.06.14 R27-M1-N8-C:J09-U11 2005-06-14-10.48.22.614188 R27-M1-N8-C:J09-U11 RAS KERNEL FATAL debug interrupt enable............0"
+    },
+    {
+     "n": 6,
+     "timestamp": "2005-06-14-10.48.50.649332",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118771330 2005.06.14 R26-M1-N6-C:J05-U01 2005-06-14-10.48.50.649332 R26-M1-N6-C:J05-U01 RAS KERNEL FATAL floating pt ex mode 1 enable......0"
+    },
+    {
+     "n": 7,
+     "timestamp": "2005-06-14-10.49.44.238733",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118771384 2005.06.14 R21-M1-N6-C:J13-U11 2005-06-14-10.49.44.238733 R21-M1-N6-C:J13-U11 RAS KERNEL FATAL byte ordering exception.....................0"
+    },
+    {
+     "n": 8,
+     "timestamp": "2005-06-14-10.50.09.563848",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118771409 2005.06.14 R20-M1-N8-C:J15-U11 2005-06-14-10.50.09.563848 R20-M1-N8-C:J15-U11 RAS KERNEL FATAL byte ordering exception.....................0"
+    },
+    {
+     "n": 9,
+     "timestamp": "2005-06-14-10.51.09.848118",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118771469 2005.06.14 R27-M1-N9-C:J03-U01 2005-06-14-10.51.09.848118 R27-M1-N9-C:J03-U01 RAS KERNEL FATAL data address space................0"
+    },
+    {
+     "n": 10,
+     "timestamp": "2005-06-14-10.51.15.744393",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118771475 2005.06.14 R26-M1-NA-C:J06-U01 2005-06-14-10.51.15.744393 R26-M1-NA-C:J06-U01 RAS KERNEL FATAL data address space................0"
+    },
+    {
+     "n": 11,
+     "timestamp": "2005-06-14-10.51.56.234430",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118771516 2005.06.14 R25-M0-N6-C:J14-U11 2005-06-14-10.51.56.234430 R25-M0-N6-C:J14-U11 RAS KERNEL FATAL program interrupt: imprecise exception......0"
+    },
+    {
+     "n": 12,
+     "timestamp": "2005-06-14-10.52.08.434393",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118771528 2005.06.14 R26-M0-NF-C:J15-U01 2005-06-14-10.52.08.434393 R26-M0-NF-C:J15-U01 RAS KERNEL FATAL core configuration register: 0x00002000"
+    },
+    {
+     "n": 13,
+     "timestamp": "2005-06-14-10.52.48.343774",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118771568 2005.06.14 R25-M1-N0-C:J07-U11 2005-06-14-10.52.48.343774 R25-M1-N0-C:J07-U11 RAS KERNEL FATAL program interrupt: imprecise exception......0"
+    },
+    {
+     "n": 14,
+     "timestamp": "2005-06-14-10.54.39.063056",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118771679 2005.06.14 R21-M1-N5-C:J05-U11 2005-06-14-10.54.39.063056 R21-M1-N5-C:J05-U11 RAS KERNEL FATAL program interrupt: fp cr update.............0"
+    },
+    {
+     "n": 15,
+     "timestamp": "2005-06-14-10.57.03.800229",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118771823 2005.06.14 R26-M1-ND-C:J05-U11 2005-06-14-10.57.03.800229 R26-M1-ND-C:J05-U11 RAS KERNEL FATAL guaranteed instruction cache block touch.0"
+    },
+    {
+     "n": 16,
+     "timestamp": "2005-06-14-10.57.27.640707",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118771847 2005.06.14 R26-M0-N8-C:J03-U01 2005-06-14-10.57.27.640707 R26-M0-N8-C:J03-U01 RAS KERNEL FATAL guaranteed instruction cache block touch.0"
+    },
+    {
+     "n": 17,
+     "timestamp": "2005-06-14-10.57.55.166387",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118771875 2005.06.14 R20-M1-NB-C:J11-U11 2005-06-14-10.57.55.166387 R20-M1-NB-C:J11-U11 RAS KERNEL FATAL program interrupt: fp cr field .............0"
+    },
+    {
+     "n": 18,
+     "timestamp": "2005-06-14-10.58.29.332156",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118771909 2005.06.14 R24-M1-N5-C:J09-U01 2005-06-14-10.58.29.332156 R24-M1-N5-C:J09-U01 RAS KERNEL FATAL program interrupt: fp cr field .............0"
+    },
+    {
+     "n": 19,
+     "timestamp": "2005-06-14-10.58.37.145331",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118771917 2005.06.14 R24-M0-N2-C:J04-U01 2005-06-14-10.58.37.145331 R24-M0-N2-C:J04-U01 RAS KERNEL FATAL program interrupt: fp cr field .............0"
+    },
+    {
+     "n": 20,
+     "timestamp": "2005-06-14-10.58.48.336960",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118771928 2005.06.14 R27-M1-N4-C:J05-U11 2005-06-14-10.58.48.336960 R27-M1-N4-C:J05-U11 RAS KERNEL FATAL guaranteed data cache block touch........1"
+    }
+   ],
+   "cronologia_omitidos": 0,
+   "raw_procedencia": {
+    "sha256": "b627b2b3886d1d9dac06ef6808576276c86e02f6eb3992e29347149d1b25366f",
+    "lineas": 20,
+    "bytes": 2955
+   },
+   "reputacion_ips": {},
+   "perfil_lote": {
+    "tipo": "texto",
+    "filas": 20,
+    "con_formato_reconocido": 20,
+    "severidades": {
+     "FATAL": 20
+    },
+    "componentes": {
+     "bgl.kernel": 20
+    },
+    "nodos": {
+     "R27-M1-ND-C:J09-U01": 1,
+     "R26-M1-N4-C:J13-U11": 1,
+     "R26-M0-N5-C:J11-U11": 1,
+     "R24-M0-NA-C:J16-U11": 1,
+     "R27-M1-N8-C:J09-U11": 1,
+     "R26-M1-N6-C:J05-U01": 1,
+     "R21-M1-N6-C:J13-U11": 1,
+     "R20-M1-N8-C:J15-U11": 1,
+     "R27-M1-N9-C:J03-U01": 1,
+     "R26-M1-NA-C:J06-U01": 1
+    },
+    "nodos_distintos": 20,
+    "lineas_severidad_alta": {
+     "total": 20,
+     "omitidas": 0,
+     "lineas": [
+      {
+       "uid": "log_record_000001",
+       "severidad": "FATAL",
+       "group_id": "G01"
+      },
+      {
+       "uid": "log_record_000002",
+       "severidad": "FATAL",
+       "group_id": "G01"
+      },
+      {
+       "uid": "log_record_000003",
+       "severidad": "FATAL",
+       "group_id": "G02"
+      },
+      {
+       "uid": "log_record_000004",
+       "severidad": "FATAL",
+       "group_id": "G03"
+      },
+      {
+       "uid": "log_record_000005",
+       "severidad": "FATAL",
+       "group_id": "G04"
+      },
+      {
+       "uid": "log_record_000006",
+       "severidad": "FATAL",
+       "group_id": "G02"
+      },
+      {
+       "uid": "log_record_000007",
+       "severidad": "FATAL",
+       "group_id": "G05"
+      },
+      {
+       "uid": "log_record_000008",
+       "severidad": "FATAL",
+       "group_id": "G05"
+      },
+      {
+       "uid": "log_record_000009",
+       "severidad": "FATAL",
+       "group_id": "G06"
+      },
+      {
+       "uid": "log_record_000010",
+       "severidad": "FATAL",
+       "group_id": "G06"
+      },
+      {
+       "uid": "log_record_000011",
+       "severidad": "FATAL",
+       "group_id": "G07"
+      },
+      {
+       "uid": "log_record_000012",
+       "severidad": "FATAL",
+       "group_id": "G08"
+      },
+      {
+       "uid": "log_record_000013",
+       "severidad": "FATAL",
+       "group_id": "G07"
+      },
+      {
+       "uid": "log_record_000014",
+       "severidad": "FATAL",
+       "group_id": "G09"
+      },
+      {
+       "uid": "log_record_000015",
+       "severidad": "FATAL",
+       "group_id": "G10"
+      },
+      {
+       "uid": "log_record_000016",
+       "severidad": "FATAL",
+       "group_id": "G10"
+      },
+      {
+       "uid": "log_record_000017",
+       "severidad": "FATAL",
+       "group_id": "G11"
+      },
+      {
+       "uid": "log_record_000018",
+       "severidad": "FATAL",
+       "group_id": "G11"
+      },
+      {
+       "uid": "log_record_000019",
+       "severidad": "FATAL",
+       "group_id": "G11"
+      },
+      {
+       "uid": "log_record_000020",
+       "severidad": "FATAL",
+       "group_id": "G12"
+      }
+     ]
+    },
+    "grupos": 12
+   }
+  },
+  "preprocessing_metadata": {
+   "schema_version": "2.0",
+   "total_lineas_fisicas": 20,
+   "total_eventos": 20,
+   "decoder_distribution": {
+    "text": 20
+   },
+   "product_distribution": {
+    "BlueGene/L": 20
+   },
+   "vendor_distribution": {
+    "IBM": 20
+   },
+   "version_distribution": {},
+   "protocol_distribution": {},
+   "profile_distribution": {
+    "bgl": 20
+   },
+   "severity_distribution": {
+    "FATAL": 20
+   },
+   "event_categories": {},
+   "event_outcomes": {},
+   "entities": {
+    "host": {
+     "R20-M1-N8-C:J15-U11": 1,
+     "R20-M1-NB-C:J11-U11": 1,
+     "R21-M1-N5-C:J05-U11": 1,
+     "R21-M1-N6-C:J13-U11": 1,
+     "R24-M0-N2-C:J04-U01": 1,
+     "R24-M0-NA-C:J16-U11": 1,
+     "R24-M1-N5-C:J09-U01": 1,
+     "R25-M0-N6-C:J14-U11": 1,
+     "R25-M1-N0-C:J07-U11": 1,
+     "R26-M0-N5-C:J11-U11": 1,
+     "R26-M0-N8-C:J03-U01": 1,
+     "R26-M0-NF-C:J15-U01": 1,
+     "R26-M1-N4-C:J13-U11": 1,
+     "R26-M1-N6-C:J05-U01": 1,
+     "R26-M1-NA-C:J06-U01": 1,
+     "R26-M1-ND-C:J05-U11": 1,
+     "R27-M1-N4-C:J05-U11": 1,
+     "R27-M1-N8-C:J09-U11": 1,
+     "R27-M1-N9-C:J03-U01": 1,
+     "R27-M1-ND-C:J09-U01": 1
+    },
+    "servicio": {
+     "bgl.kernel": 20
+    },
+    "producto": {
+     "BlueGene/L": 20
+    }
+   },
+   "time_window": {
+    "inicio": "2005-06-14-10.44.45.851799",
+    "fin": "2005-06-14-10.58.48.336960"
+   },
+   "parsing": {
+    "parsed_events": 20,
+    "fallback_events": 0,
+    "coverage": 1.0
+   },
+   "segments": [
+    {
+     "index": 0,
+     "decoder": "text",
+     "line_start": 1,
+     "line_end": 20,
+     "n_records": 20,
+     "confidence": 0.1,
+     "decoder_inicial": "text",
+     "confidence_inicial": 0.1,
+     "decoder_distribution": {
+      "text": 20
+     },
+     "context": {}
+    }
+   ],
+   "entities_resumen": {
+    "host": 20,
+    "servicio": 1,
+    "producto": 1
+   },
+   "config": {
+    "LOG_DETECTION_CHUNK_SIZE": 50,
+    "LOG_ENABLE_MULTILINE": true,
+    "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+    "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+    "LOG_MAX_EVENTS": 100000,
+    "LOG_MAX_FILE_BYTES": 52428800,
+    "LOG_MAX_RAW_SAMPLES": 20,
+    "LOG_MAX_UNMAPPED_FIELDS": 100,
+    "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+    "LOG_PARSING_MODE": "hybrid",
+    "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+    "LOG_PRESERVE_RAW": true
+   }
+  },
+  "parsing_warnings": [],
+  "evidencia_logs": [
+   {
+    "uid": "log_record_000001",
+    "record_number": 1,
+    "line_start": 1,
+    "line_end": 1,
+    "timestamp": "2005-06-14-10.44.45.851799",
+    "group_id": "G01",
+    "source_host": "R27-M1-ND-C:J09-U01",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "machine check enable..............0"
+   },
+   {
+    "uid": "log_record_000002",
+    "record_number": 2,
+    "line_start": 2,
+    "line_end": 2,
+    "timestamp": "2005-06-14-10.44.58.632865",
+    "group_id": "G01",
+    "source_host": "R26-M1-N4-C:J13-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "machine check enable..............0"
+   },
+   {
+    "uid": "log_record_000003",
+    "record_number": 3,
+    "line_start": 3,
+    "line_end": 3,
+    "timestamp": "2005-06-14-10.45.15.849740",
+    "group_id": "G02",
+    "source_host": "R26-M0-N5-C:J11-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "floating pt ex mode 0 enable......0"
+   },
+   {
+    "uid": "log_record_000004",
+    "record_number": 4,
+    "line_start": 4,
+    "line_end": 4,
+    "timestamp": "2005-06-14-10.47.39.811377",
+    "group_id": "G03",
+    "source_host": "R24-M0-NA-C:J16-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "program interrupt: unimplemented operation..0"
+   },
+   {
+    "uid": "log_record_000005",
+    "record_number": 5,
+    "line_start": 5,
+    "line_end": 5,
+    "timestamp": "2005-06-14-10.48.22.614188",
+    "group_id": "G04",
+    "source_host": "R27-M1-N8-C:J09-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "debug interrupt enable............0"
+   },
+   {
+    "uid": "log_record_000006",
+    "record_number": 6,
+    "line_start": 6,
+    "line_end": 6,
+    "timestamp": "2005-06-14-10.48.50.649332",
+    "group_id": "G02",
+    "source_host": "R26-M1-N6-C:J05-U01",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "floating pt ex mode 1 enable......0"
+   },
+   {
+    "uid": "log_record_000007",
+    "record_number": 7,
+    "line_start": 7,
+    "line_end": 7,
+    "timestamp": "2005-06-14-10.49.44.238733",
+    "group_id": "G05",
+    "source_host": "R21-M1-N6-C:J13-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "byte ordering exception.....................0"
+   },
+   {
+    "uid": "log_record_000008",
+    "record_number": 8,
+    "line_start": 8,
+    "line_end": 8,
+    "timestamp": "2005-06-14-10.50.09.563848",
+    "group_id": "G05",
+    "source_host": "R20-M1-N8-C:J15-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "byte ordering exception.....................0"
+   },
+   {
+    "uid": "log_record_000009",
+    "record_number": 9,
+    "line_start": 9,
+    "line_end": 9,
+    "timestamp": "2005-06-14-10.51.09.848118",
+    "group_id": "G06",
+    "source_host": "R27-M1-N9-C:J03-U01",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "data address space................0"
+   },
+   {
+    "uid": "log_record_000010",
+    "record_number": 10,
+    "line_start": 10,
+    "line_end": 10,
+    "timestamp": "2005-06-14-10.51.15.744393",
+    "group_id": "G06",
+    "source_host": "R26-M1-NA-C:J06-U01",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "data address space................0"
+   },
+   {
+    "uid": "log_record_000011",
+    "record_number": 11,
+    "line_start": 11,
+    "line_end": 11,
+    "timestamp": "2005-06-14-10.51.56.234430",
+    "group_id": "G07",
+    "source_host": "R25-M0-N6-C:J14-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "program interrupt: imprecise exception......0"
+   },
+   {
+    "uid": "log_record_000012",
+    "record_number": 12,
+    "line_start": 12,
+    "line_end": 12,
+    "timestamp": "2005-06-14-10.52.08.434393",
+    "group_id": "G08",
+    "source_host": "R26-M0-NF-C:J15-U01",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "core configuration register: 0x00002000"
+   },
+   {
+    "uid": "log_record_000013",
+    "record_number": 13,
+    "line_start": 13,
+    "line_end": 13,
+    "timestamp": "2005-06-14-10.52.48.343774",
+    "group_id": "G07",
+    "source_host": "R25-M1-N0-C:J07-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "program interrupt: imprecise exception......0"
+   },
+   {
+    "uid": "log_record_000014",
+    "record_number": 14,
+    "line_start": 14,
+    "line_end": 14,
+    "timestamp": "2005-06-14-10.54.39.063056",
+    "group_id": "G09",
+    "source_host": "R21-M1-N5-C:J05-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "program interrupt: fp cr update.............0"
+   },
+   {
+    "uid": "log_record_000015",
+    "record_number": 15,
+    "line_start": 15,
+    "line_end": 15,
+    "timestamp": "2005-06-14-10.57.03.800229",
+    "group_id": "G10",
+    "source_host": "R26-M1-ND-C:J05-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "guaranteed instruction cache block touch.0"
+   },
+   {
+    "uid": "log_record_000016",
+    "record_number": 16,
+    "line_start": 16,
+    "line_end": 16,
+    "timestamp": "2005-06-14-10.57.27.640707",
+    "group_id": "G10",
+    "source_host": "R26-M0-N8-C:J03-U01",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "guaranteed instruction cache block touch.0"
+   },
+   {
+    "uid": "log_record_000017",
+    "record_number": 17,
+    "line_start": 17,
+    "line_end": 17,
+    "timestamp": "2005-06-14-10.57.55.166387",
+    "group_id": "G11",
+    "source_host": "R20-M1-NB-C:J11-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "program interrupt: fp cr field .............0"
+   },
+   {
+    "uid": "log_record_000018",
+    "record_number": 18,
+    "line_start": 18,
+    "line_end": 18,
+    "timestamp": "2005-06-14-10.58.29.332156",
+    "group_id": "G11",
+    "source_host": "R24-M1-N5-C:J09-U01",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "program interrupt: fp cr field .............0"
+   },
+   {
+    "uid": "log_record_000019",
+    "record_number": 19,
+    "line_start": 19,
+    "line_end": 19,
+    "timestamp": "2005-06-14-10.58.37.145331",
+    "group_id": "G11",
+    "source_host": "R24-M0-N2-C:J04-U01",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "program interrupt: fp cr field .............0"
+   },
+   {
+    "uid": "log_record_000020",
+    "record_number": 20,
+    "line_start": 20,
+    "line_end": 20,
+    "timestamp": "2005-06-14-10.58.48.336960",
+    "group_id": "G12",
+    "source_host": "R27-M1-N4-C:J05-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "guaranteed data cache block touch........1"
+   }
+  ],
+  "evidencia_logs_omitidos": 0,
+  "grupos_evidencia": [
+   {
+    "group_id": "G01",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "machine check enable..............<n>"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000001",
+     "log_record_000002"
+    ],
+    "nodos": [
+     "R27-M1-ND-C:J09-U01",
+     "R26-M1-N4-C:J13-U11"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G02",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "floating pt ex mode <n> enable......<n>"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000003",
+     "log_record_000006"
+    ],
+    "nodos": [
+     "R26-M0-N5-C:J11-U11",
+     "R26-M1-N6-C:J05-U01"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G03",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "program interrupt: unimplemented operation..<n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000004"
+    ],
+    "nodos": [
+     "R24-M0-NA-C:J16-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G04",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "debug interrupt enable............<n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000005"
+    ],
+    "nodos": [
+     "R27-M1-N8-C:J09-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G05",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "byte ordering exception.....................<n>"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000007",
+     "log_record_000008"
+    ],
+    "nodos": [
+     "R21-M1-N6-C:J13-U11",
+     "R20-M1-N8-C:J15-U11"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G06",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "data address space................<n>"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000009",
+     "log_record_000010"
+    ],
+    "nodos": [
+     "R27-M1-N9-C:J03-U01",
+     "R26-M1-NA-C:J06-U01"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G07",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "program interrupt: imprecise exception......<n>"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000011",
+     "log_record_000013"
+    ],
+    "nodos": [
+     "R25-M0-N6-C:J14-U11",
+     "R25-M1-N0-C:J07-U11"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G08",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "core configuration register: <hex>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000012"
+    ],
+    "nodos": [
+     "R26-M0-NF-C:J15-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G09",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "program interrupt: fp cr update.............<n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000014"
+    ],
+    "nodos": [
+     "R21-M1-N5-C:J05-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G10",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "guaranteed instruction cache block touch.<n>"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000015",
+     "log_record_000016"
+    ],
+    "nodos": [
+     "R26-M1-ND-C:J05-U11",
+     "R26-M0-N8-C:J03-U01"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G11",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "program interrupt: fp cr field .............<n>"
+    },
+    "conteo": 3,
+    "uids": [
+     "log_record_000017",
+     "log_record_000018",
+     "log_record_000019"
+    ],
+    "nodos": [
+     "R20-M1-NB-C:J11-U11",
+     "R24-M1-N5-C:J09-U01",
+     "R24-M0-N2-C:J04-U01"
+    ],
+    "n_nodos": 3
+   },
+   {
+    "group_id": "G12",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "guaranteed data cache block touch........<n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000020"
+    ],
+    "nodos": [
+     "R27-M1-N4-C:J05-U11"
+    ],
+    "n_nodos": 1
+   }
+  ],
+  "contenido_lote": {
+   "tipo": "texto",
+   "lineas": [
+    "[log_record_000001] 1118771085 2005.06.14 R27-M1-ND-C:J09-U01 2005-06-14-10.44.45.851799 R27-M1-ND-C:J09-U01 RAS KERNEL FATAL machine check enable..............0",
+    "[log_record_000002] 1118771098 2005.06.14 R26-M1-N4-C:J13-U11 2005-06-14-10.44.58.632865 R26-M1-N4-C:J13-U11 RAS KERNEL FATAL machine check enable..............0",
+    "[log_record_000003] 1118771115 2005.06.14 R26-M0-N5-C:J11-U11 2005-06-14-10.45.15.849740 R26-M0-N5-C:J11-U11 RAS KERNEL FATAL floating pt ex mode 0 enable......0",
+    "[log_record_000004] 1118771259 2005.06.14 R24-M0-NA-C:J16-U11 2005-06-14-10.47.39.811377 R24-M0-NA-C:J16-U11 RAS KERNEL FATAL program interrupt: unimplemented operation..0",
+    "[log_record_000005] 1118771302 2005.06.14 R27-M1-N8-C:J09-U11 2005-06-14-10.48.22.614188 R27-M1-N8-C:J09-U11 RAS KERNEL FATAL debug interrupt enable............0",
+    "[log_record_000006] 1118771330 2005.06.14 R26-M1-N6-C:J05-U01 2005-06-14-10.48.50.649332 R26-M1-N6-C:J05-U01 RAS KERNEL FATAL floating pt ex mode 1 enable......0",
+    "[log_record_000007] 1118771384 2005.06.14 R21-M1-N6-C:J13-U11 2005-06-14-10.49.44.238733 R21-M1-N6-C:J13-U11 RAS KERNEL FATAL byte ordering exception.....................0",
+    "[log_record_000008] 1118771409 2005.06.14 R20-M1-N8-C:J15-U11 2005-06-14-10.50.09.563848 R20-M1-N8-C:J15-U11 RAS KERNEL FATAL byte ordering exception.....................0",
+    "[log_record_000009] 1118771469 2005.06.14 R27-M1-N9-C:J03-U01 2005-06-14-10.51.09.848118 R27-M1-N9-C:J03-U01 RAS KERNEL FATAL data address space................0",
+    "[log_record_000010] 1118771475 2005.06.14 R26-M1-NA-C:J06-U01 2005-06-14-10.51.15.744393 R26-M1-NA-C:J06-U01 RAS KERNEL FATAL data address space................0",
+    "[log_record_000011] 1118771516 2005.06.14 R25-M0-N6-C:J14-U11 2005-06-14-10.51.56.234430 R25-M0-N6-C:J14-U11 RAS KERNEL FATAL program interrupt: imprecise exception......0",
+    "[log_record_000012] 1118771528 2005.06.14 R26-M0-NF-C:J15-U01 2005-06-14-10.52.08.434393 R26-M0-NF-C:J15-U01 RAS KERNEL FATAL core configuration register: 0x00002000",
+    "[log_record_000013] 1118771568 2005.06.14 R25-M1-N0-C:J07-U11 2005-06-14-10.52.48.343774 R25-M1-N0-C:J07-U11 RAS KERNEL FATAL program interrupt: imprecise exception......0",
+    "[log_record_000014] 1118771679 2005.06.14 R21-M1-N5-C:J05-U11 2005-06-14-10.54.39.063056 R21-M1-N5-C:J05-U11 RAS KERNEL FATAL program interrupt: fp cr update.............0",
+    "[log_record_000015] 1118771823 2005.06.14 R26-M1-ND-C:J05-U11 2005-06-14-10.57.03.800229 R26-M1-ND-C:J05-U11 RAS KERNEL FATAL guaranteed instruction cache block touch.0",
+    "[log_record_000016] 1118771847 2005.06.14 R26-M0-N8-C:J03-U01 2005-06-14-10.57.27.640707 R26-M0-N8-C:J03-U01 RAS KERNEL FATAL guaranteed instruction cache block touch.0",
+    "[log_record_000017] 1118771875 2005.06.14 R20-M1-NB-C:J11-U11 2005-06-14-10.57.55.166387 R20-M1-NB-C:J11-U11 RAS KERNEL FATAL program interrupt: fp cr field .............0",
+    "[log_record_000018] 1118771909 2005.06.14 R24-M1-N5-C:J09-U01 2005-06-14-10.58.29.332156 R24-M1-N5-C:J09-U01 RAS KERNEL FATAL program interrupt: fp cr field .............0",
+    "[log_record_000019] 1118771917 2005.06.14 R24-M0-N2-C:J04-U01 2005-06-14-10.58.37.145331 R24-M0-N2-C:J04-U01 RAS KERNEL FATAL program interrupt: fp cr field .............0",
+    "[log_record_000020] 1118771928 2005.06.14 R27-M1-N4-C:J05-U11 2005-06-14-10.58.48.336960 R27-M1-N4-C:J05-U11 RAS KERNEL FATAL guaranteed data cache block touch........1"
+   ],
+   "total_lineas": 20,
+   "lineas_entregadas": 20,
+   "recortado": false,
+   "topes": {
+    "lineas": 200,
+    "caracteres": 20000
+   }
+  },
+  "veredicto_preliminar": "normal",
+  "justificacion_veredicto_preliminar": "Los eventos corresponden a volcados de estado de registros de CPU sin presencia de las fallas críticas (data storage interrupt o fallos ciod) que marcan anomalías según los criterios históricos.",
+  "invalid_evidence_group_count": 0,
+  "comandos_rechazados": [],
+  "casos_historicos": [
+   {
+    "id": "bgl_des_natural_0014",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Contiene eventos de severidad alta que no se consideraron alerta: 3 × [FATAL bgl.kernel] data store interrupt caused by icbi.........<n>; 3 × [FATAL bgl.kernel] floating point instr. enabled.....<n>; 2 × [FATAL bgl.kernel] data store interrupt caused by dcbf.........<n>; 2 × [FATAL bgl.kernel] program interrupt: illegal instruction......<n>. Composición: 20 eventos, severidades FATAL 20.",
+    "similitud": 0.934
+   },
+   {
+    "id": "bgl_des_natural_0004",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 5 × [FATAL bgl.kernel] data storage interrupt. Composición: 20 eventos, severidades FATAL 20.",
+    "similitud": 0.857
+   },
+   {
+    "id": "bgl_des_natural_0003",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 2 × [FATAL bgl.app] ciod: Error reading message prefix on CioStream socket to <n>.<n>.<n>.<n>:<n>, Link has be. Composición: 20 eventos, severidades INFO 15, FATAL 5.",
+    "similitud": 0.738
+   }
+  ],
+  "historico_consulta": {
+   "excluidos_por_solapamiento": [
+    "rag_enriquecido_v2:bgl_des_natural_0017"
+   ],
+   "consultados": 56,
+   "excluidos_mismo_incidente": [],
+   "exclusion_por_incidente_activa": true,
+   "representacion": "Eventos destacados: [FATAL bgl.kernel] machine check enable..............<n> x2 en 2 nodos; [FATAL bgl.kernel] floating pt ex mode <n> enable......<n> x2 en 2 nodos; [FATAL bgl.kernel] program interrupt: unimplemented operation..<n> x1 en 1 nodos; [FATAL bgl.kernel] debug interrupt enable............<n> x1 en 1 nodos; [FATAL bgl.kernel] byte ordering exception.....................<n> x2 en 2 nodos; [FATAL bgl.kernel] data address space................<n> x2 en 2 nodos; [FATAL bgl.kernel] program interrupt: imprecise exception......<n> x2 en 2 nodos; [FATAL bgl.kernel] core configuration register: <hex> x1 en 1 nodos; [FATAL bgl.kernel] program interrupt: fp cr update.............<n> x1 en 1 nodos; [FATAL bgl.kernel] guaranteed instruction cache block touch.<n> x2 en 2 nodos; [FATAL bgl.kernel] program interrupt: fp cr field .............<n> x3 en 3 nodos; [FATAL bgl.kernel] guaranteed data cache block touch........<n> x1 en 1 nodos\nLog de texto, 20 eventos. Severidades: FATAL 20. Componentes: bgl.kernel 20. Nodos distintos: 20."
+  },
+  "hallazgos_cazador": [
+   {
+    "group_id": "G01",
+    "nivel_sospecha": "bajo",
+    "explicacion_benigna": "Volcado de diagnóstico del registro de estado de la máquina (MSR - Machine Check Enable) generado por el kernel durante el manejo de un fallo o parada en el nodo.",
+    "explicacion_alternativa": "Fallo crítico de hardware o inestabilidad operativa que fuerza la captura de registros del procesador.",
+    "justificacion": "Corresponde a una línea estándar de depuración de registros PowerPC ('machine check enable') emitida por bgl.kernel con severidad FATAL durante un volcado de fallo.",
+    "tecnica_candidata": null
+   },
+   {
+    "group_id": "G02",
+    "nivel_sospecha": "bajo",
+    "explicacion_benigna": "Salida de diagnóstico de registros del procesador indicando el estado de habilitación de excepciones de punto flotante tras un fallo del sistema.",
+    "explicacion_alternativa": "Error de ejecución de coma flotante no controlado que provoca el bloqueo del kernel del nodo.",
+    "justificacion": "Formato típico de reporte de estado del MSR (bits FE0/FE1) emitido por el kernel en nodos de cómputo BlueGene/L.",
+    "tecnica_candidata": null
+   },
+   {
+    "group_id": "G03",
+    "nivel_sospecha": "bajo",
+    "explicacion_benigna": "Interrupción de programa generada por la invocación de una instrucción de CPU no soportada o código binario corrupto en una tarea científica legítima.",
+    "explicacion_alternativa": "Ejecución de shellcode no válido o binario malicioso incompatible con la arquitectura PowerPC.",
+    "justificacion": "Mensaje de interrupción de programa por operación no implementada ('unimplemented operation'), común en errores de compilación o incompatibilidad de instrucciones en HPC.",
+    "tecnica_candidata": null
+   },
+   {
+    "group_id": "G04",
+    "nivel_sospecha": "bajo",
+    "explicacion_benigna": "Impresión de estado de depuración del registro MSR (Debug Interrupt Enable) como parte del volcado de pánico del nodo.",
+    "explicacion_alternativa": "Fallo operativo del procesador que requiere la emisión del estado de interrupciones de depuración.",
+    "justificacion": "Línea de volcado rutinaria del estado de control del procesador (debug interrupt enable: 0) durante un volcado FATAL de bgl.kernel.",
+    "tecnica_candidata": null
+   },
+   {
+    "group_id": "G05",
+    "nivel_sospecha": "bajo",
+    "explicacion_benigna": "Registro del estado de excepción por ordenación de bytes (Endianness) reportado en el volcado de contexto del procesador.",
+    "explicacion_alternativa": "Excepción producida por acceso a memoria desalineado o datos corruptos.",
+    "justificacion": "Traza estándar de diagnóstico de PowerPC ('byte ordering exception') emitida en varios nodos como parte del informe post-mortem del kernel.",
+    "tecnica_candidata": null
+   },
+   {
+    "group_id": "G06",
+    "nivel_sospecha": "bajo",
+    "explicacion_benigna": "Volcado del estado del registro de traducción o espacio de direccionamiento de datos (DS) del procesador durante una parada del nodo.",
+    "explicacion_alternativa": "Infracción de segmentación o violación de límites de memoria en el espacio de direccionamiento.",
+    "justificacion": "Entrada de registro de hardware (data address space: 0) documentada en las rutinas de depuración de BlueGene/L.",
+    "tecnica_candidata": null
+   },
+   {
+    "group_id": "G07",
+    "nivel_sospecha": "bajo",
+    "explicacion_benigna": "Interrupción de programa debido a una excepción imprecisa de hardware o cálculo numérico en el nodo de cómputo.",
+    "explicacion_alternativa": "Inestabilidad de bus o sincronización asíncrona de excepciones por error de hardware.",
+    "justificacion": "Indica un bit de interrupción ('imprecise exception') en el registro de causa de interrupción del procesador dentro del volcado de pánico.",
+    "tecnica_candidata": null
+   },
+   {
+    "group_id": "G08",
+    "nivel_sospecha": "bajo",
+    "explicacion_benigna": "Volcado del valor hexadecimal del registro de configuración del núcleo (CCR0) del procesador para análisis de diagnóstico.",
+    "explicacion_alternativa": "Fallo crítico que obligó al guardado del registro de configuración del procesador.",
+    "justificacion": "Registro diagnóstico estándar 'core configuration register: 0x00002000' correspondiente al hardware PowerPC 440.",
+    "tecnica_candidata": null
+   },
+   {
+    "group_id": "G09",
+    "nivel_sospecha": "bajo",
+    "explicacion_benigna": "Reporte del bit de actualización del registro de condición de punto flotante en la estructura de la interrupción del kernel.",
+    "explicacion_alternativa": "Fallo en operaciones aritméticas de coma flotante de un proceso en ejecución.",
+    "justificacion": "Línea específica del volcado de estado de la FPU/MSR dentro de bgl.kernel clasificada de forma estándar con severidad FATAL.",
+    "tecnica_candidata": null
+   },
+   {
+    "group_id": "G10",
+    "nivel_sospecha": "bajo",
+    "explicacion_benigna": "Volcado de flags de configuración de caché (icbt) del núcleo PowerPC durante la captura del estado del procesador.",
+    "explicacion_alternativa": "Anomalía en la memoria caché de instrucciones del procesador durante la ejecución.",
+    "justificacion": "Mensaje típico de configuración de microarquitectura ('guaranteed instruction cache block touch') presente en volcados del CCR.",
+    "tecnica_candidata": null
+   },
+   {
+    "group_id": "G11",
+    "nivel_sospecha": "bajo",
+    "explicacion_benigna": "Volcado de campos de registro de condición de punto flotante dentro del informe de pánico del procesador.",
+    "explicacion_alternativa": "Comportamiento anómalo en cálculo numérico intensivo que desborda las condiciones esperadas del procesador.",
+    "justificacion": "Registro de depuración recurrente en el lote ('program interrupt: fp cr field') consistente con volcados de fallo del sistema operativo.",
+    "tecnica_candidata": null
+   },
+   {
+    "group_id": "G12",
+    "nivel_sospecha": "bajo",
+    "explicacion_benigna": "Volcado de flags de configuración del registro de control de caché de datos (dcbt) emitido en el volcado de parada.",
+    "explicacion_alternativa": "Fallo operativo o desajuste en el acceso a caché de datos a nivel de procesador.",
+    "justificacion": "Línea complementaria de la arquitectura PowerPC ('guaranteed data cache block touch') observada tras un colapso en el nodo R27-M1-N4-C:J05-U11.",
+    "tecnica_candidata": null
+   }
+  ],
+  "cazador_ejecutado": true,
+  "veredicto_consolidado": "normal",
+  "consulta_mitre": "",
+  "rag_omitido": "sin hipótesis de seguridad: no se consultan técnicas",
+  "revision_hallazgos": [],
+  "diagnostico_inicial": "",
+  "diagnostico_corregido": "",
+  "correcciones_auditor": 0,
+  "historial_correcciones": [],
+  "eventos_reconstruidos": [
+   {
+    "event_id": "event_001",
+    "evidence_uids": [
+     "log_record_000001",
+     "log_record_000002",
+     "log_record_000003",
+     "log_record_000006",
+     "log_record_000004",
+     "log_record_000005",
+     "log_record_000007",
+     "log_record_000008",
+     "log_record_000009",
+     "log_record_000010",
+     "log_record_000011",
+     "log_record_000013",
+     "log_record_000012",
+     "log_record_000014",
+     "log_record_000015",
+     "log_record_000016",
+     "log_record_000017",
+     "log_record_000018",
+     "log_record_000019",
+     "log_record_000020"
+    ],
+    "timestamp": "2005-06-14-10.44.45.851799",
+    "event_type": "processor_register_dump",
+    "description": "Volcado de depuración rutinario de registros y banderas de estado del procesador PowerPC en el kernel de BlueGene/L sin indicadores de compromiso ni fallas críticas activas.",
+    "confidence": null,
+    "evidence_groups": [
+     "G01",
+     "G02",
+     "G03",
+     "G04",
+     "G05",
+     "G06",
+     "G07",
+     "G08",
+     "G09",
+     "G10",
+     "G11",
+     "G12"
+    ],
+    "categoria": "contexto"
+   }
+  ],
+  "secuencia_temporal": [
+   "event_001"
+  ],
+  "tecnicas_atribuidas": [],
+  "invalid_evidence_uid_count": 0,
+  "d11_warnings": [],
+  "telemetry": {
+   "llm_call_count": 6,
+   "input_tokens": 20574,
+   "output_tokens": 2773,
+   "total_tokens": 27576,
+   "execution_time": 67.053199,
+   "replan_count": 0,
+   "intentos_correccion": 1,
+   "invalid_evidence_uid_count": 0,
+   "d11_warning_count": 0,
+   "llm_calls": [
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 1608,
+     "output_tokens": 299,
+     "total_tokens": 2710,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 803,
+     "duration_s": 11.719,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 4479,
+     "output_tokens": 196,
+     "total_tokens": 6124,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 1449,
+     "duration_s": 14.942,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 3867,
+     "output_tokens": 1785,
+     "total_tokens": 6514,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 862,
+     "duration_s": 21.397,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 252,
+     "output_tokens": 57,
+     "total_tokens": 456,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 147,
+     "duration_s": 3.338,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 2916,
+     "output_tokens": 6,
+     "total_tokens": 3005,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 83,
+     "duration_s": 3.934,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 7452,
+     "output_tokens": 430,
+     "total_tokens": 8767,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 885,
+     "duration_s": 11.555,
+     "error": null
+    }
+   ]
+  },
+  "firma": "v2|lineas=20 ips=0 servicios=[bgl.kernel:20] eventos=[evento_critico:20] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[FATAL:20] categorias=[] cobertura=1.0",
+  "plan": {
+   "plan_version": 1,
+   "objetivo": "Investigar y mitigar la causa de los 20 eventos de severidad FATAL registrados en el kernel de los nodos del sistema BlueGene/L.",
+   "pasos": [
+    {
+     "id": 1,
+     "accion": "triage",
+     "objetivo": "Analizar la naturaleza e impacto de los errores fatales en los distintos nodos para identificar patrones de fallo común.",
+     "estado": "ejecutado"
+    },
+    {
+     "id": 2,
+     "accion": "cve",
+     "objetivo": "Consultar vulnerabilidades y fallos conocidos asociados al producto BlueGene/L y sus componentes de kernel.",
+     "estado": "omitido",
+     "motivo": "El diagnóstico indica volcados rutinarios de registros y estado de procesador del kernel de BlueGene/L sin evidencia de fallas operativas ni vulnerabilidades de seguridad asociadas a un ataque o software vulnerable."
+    },
+    {
+     "id": 3,
+     "accion": "mitigacion",
+     "objetivo": "Definir acciones de contención, aislamiento de nodos afectados y recuperación de la estabilidad del sistema.",
+     "estado": "ejecutado"
+    }
+   ],
+   "criterios_finalizacion": [
+    "Diagnóstico completado sobre el origen de los fallos FATAL en el kernel.",
+    "Búsqueda de vulnerabilidades para BlueGene/L finalizada.",
+    "Plan de mitigación y medidas operativas formuladas para los nodos afectados."
+   ]
+  },
+  "plan_objetivo": "Investigar y mitigar la causa de los 20 eventos de severidad FATAL registrados en el kernel de los nodos del sistema BlueGene/L.",
+  "paso_actual": 3,
+  "historial_ejecucion": [
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_planificador",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "plan v1, 3 pasos: ['triage', 'cve', 'mitigacion']"
+   },
+   {
+    "plan_version": 1,
+    "step_id": 1,
+    "nodo": "agente_analista_triage",
+    "accion": "triage",
+    "estado": "ejecutado",
+    "resumen": "diagnóstico producido"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_cazador",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "12 hallazgos (0 alto)"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "tool_consultar_rag",
+    "accion": "rag",
+    "estado": "omitido",
+    "resumen": "técnicas MITRE no consultadas (sin hipótesis de seguridad: no se consultan técnicas)"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_selector_herramientas",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "usar_cve=False"
+   },
+   {
+    "plan_version": 1,
+    "step_id": 3,
+    "nodo": "agente_ingeniero_mitigacion",
+    "accion": "mitigacion",
+    "estado": "ejecutado",
+    "resumen": "0 comandos propuestos"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "tool_validar_comandos",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "comandos válidos"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_auditor_final",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "confianza=0.95 cobertura_suficiente=True"
+   }
+  ],
+  "desviaciones_plan": [],
+  "historial_planes": [],
+  "replan_count": 0,
+  "diagnostico": "Los 20 eventos registrados con severidad FATAL corresponden a volcados de registros y banderas de estado del procesador (MSR/CCR) en el kernel de BlueGene/L (como machine check enable, floating pt ex mode, byte ordering exception y cache block touch). Aunque el subsistema RAS etiqueta estos volcados como FATAL, no se evidencian los patrones de falla operativa que motivan intervención en los casos históricos (tales como 'data storage interrupt' o errores de sockets en 'ciod'), alineándose con el caso histórico normal de volcados rutinarios de registro.",
+  "necesita_rag": false,
+  "usar_cve": false,
+  "razon_seleccion": "El diagnóstico indica volcados rutinarios de registros y estado de procesador del kernel de BlueGene/L sin evidencia de fallas operativas ni vulnerabilidades de seguridad asociadas a un ataque o software vulnerable.",
+  "contexto_rag": [
+   {
+    "id": "bgl_des_natural_0014",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Contiene eventos de severidad alta que no se consideraron alerta: 3 × [FATAL bgl.kernel] data store interrupt caused by icbi.........<n>; 3 × [FATAL bgl.kernel] floating point instr. enabled.....<n>; 2 × [FATAL bgl.kernel] data store interrupt caused by dcbf.........<n>; 2 × [FATAL bgl.kernel] program interrupt: illegal instruction......<n>. Composición: 20 eventos, severidades FATAL 20.",
+    "similitud": 0.934
+   },
+   {
+    "id": "bgl_des_natural_0004",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 5 × [FATAL bgl.kernel] data storage interrupt. Composición: 20 eventos, severidades FATAL 20.",
+    "similitud": 0.857
+   },
+   {
+    "id": "bgl_des_natural_0003",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 2 × [FATAL bgl.app] ciod: Error reading message prefix on CioStream socket to <n>.<n>.<n>.<n>:<n>, Link has be. Composición: 20 eventos, severidades INFO 15, FATAL 5.",
+    "similitud": 0.738
+   }
+  ],
+  "tecnicas_mitre": [],
+  "cves_encontrados": [],
+  "comandos_mitigacion": [],
+  "comandos_validos": true,
+  "motivos_rechazo": [],
+  "intentos_correccion": 1,
+  "confianza": 0.95,
+  "hay_incidente": false,
+  "hay_anomalia": false,
+  "evaluacion_auditor": "Los 20 eventos analizados corresponden a líneas de diagnóstico y volcado de registros de estado del procesador PowerPC (MSR/CCR) emitidas por el kernel de BlueGene/L. A pesar de portar la etiqueta de severidad FATAL por diseño del subsistema RAS, no exhiben los patrones determinantes de intervención operativa observados en los casos históricos anómalos (como 'data storage interrupt' o caídas de enlaces en 'ciod'). Se alinean con el patrón histórico catalogado como normal por la organización.",
+  "cobertura_auditor": true,
+  "cobertura_suficiente": true,
+  "motivo_replanificacion": "",
+  "requiere_replanificacion": false,
+  "_firma": "v2|lineas=20 ips=0 servicios=[bgl.kernel:20] eventos=[evento_critico:20] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[FATAL:20] categorias=[] cobertura=1.0",
+  "_error_api": null,
+  "requiere_revision_humana": false,
+  "output_contract_version": "d11-v1",
+  "classification_detallada": "normal"
+ },
+ "observaciones": [
+  {
+   "nodo": "planificador",
+   "llamadas": [
+    0
+   ],
+   "prompt_chars": 2795,
+   "system_chars": 869,
+   "tokens": [
+    {
+     "input_tokens": 1608,
+     "output_tokens": 299,
+     "reasoning_tokens": 803,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "triage",
+   "llamadas": [
+    1
+   ],
+   "prompt_chars": 7647,
+   "system_chars": 1394,
+   "tokens": [
+    {
+     "input_tokens": 4479,
+     "output_tokens": 196,
+     "reasoning_tokens": 1449,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "cazador",
+   "llamadas": [
+    2
+   ],
+   "prompt_chars": 8188,
+   "system_chars": 1355,
+   "tokens": [
+    {
+     "input_tokens": 3867,
+     "output_tokens": 1785,
+     "reasoning_tokens": 862,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "selector",
+   "llamadas": [
+    3
+   ],
+   "prompt_chars": 679,
+   "system_chars": 344,
+   "tokens": [
+    {
+     "input_tokens": 252,
+     "output_tokens": 57,
+     "reasoning_tokens": 147,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "mitigacion",
+   "llamadas": [
+    4
+   ],
+   "prompt_chars": 5620,
+   "system_chars": 854,
+   "tokens": [
+    {
+     "input_tokens": 2916,
+     "output_tokens": 6,
+     "reasoning_tokens": 83,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "auditor",
+   "llamadas": [
+    5
+   ],
+   "prompt_chars": 16861,
+   "system_chars": 4831,
+   "tokens": [
+    {
+     "input_tokens": 7452,
+     "output_tokens": 430,
+     "reasoning_tokens": 885,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  }
+ ],
+ "consultas_externas": []
+}

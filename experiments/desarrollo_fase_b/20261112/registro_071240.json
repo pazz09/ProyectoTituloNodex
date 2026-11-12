@@ -1,0 +1,1298 @@
+{
+  "inicio_utc": "2026-11-12T05:42:00.961738+00:00",
+  "commit": "8e584650e094444457b8437e7e75fd527b6e0702",
+  "rama": "nodex-final",
+  "src_sin_cambios": true,
+  "tope_usd": 15.0,
+  "memoria": "experiments/knowledge/rag_enriquecido_v2",
+  "memoria_manifiesto_sha256": "55c32dfe24ab803e06aba5ce6a7cd6712ea12d2db5031e6a8c62f15236a4b756",
+  "exclusion_por_solapamiento": "del sistema (siempre)",
+  "exclusion_por_incidente": true,
+  "criterio_exclusion_por_incidente": "mismo IP de origen atacante y al menos una táctica en común (GT de desarrollo)",
+  "parametros": {
+    "LLM_MODEL_PRIMARY": "gemini-3.8-flash",
+    "LLM_MODEL_FALLBACK": "gemini-3.8-flash",
+    "LLM_SIN_RESPALDO": true,
+    "REPUTACION_SIN_ENRIQUECIMIENTO": true,
+    "TEMPERATURE": 0.0,
+    "EMBEDDING_MODEL": "all-MiniLM-L6-v2",
+    "TOP_K_FEWSHOT": 3,
+    "TOP_K_ERRORS": 3,
+    "TOP_K_ATTACK": 3,
+    "ATTACK_MAX_CHARS_EMBED": 800,
+    "MAX_RAW_CHARS_EMBED": 2000,
+    "CONTEXTO_PREPROCESAMIENTO_MAX_CHARS": 2000,
+    "LOG_MAX_FILE_BYTES": 52428800,
+    "LOG_MAX_EVENTS": 100000,
+    "LOG_MAX_RAW_SAMPLES": 20,
+    "LOG_PRESERVE_RAW": true
+  },
+  "arquitecturas": [
+    "nodex",
+    "agente_unico"
+  ],
+  "casos": [
+    {
+      "arquitectura": "nodex",
+      "case_id": "bgl_des_balanceado_0000",
+      "codigo": 0,
+      "segundos_pared": 89.0,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.04452,
+      "llamadas": 7,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "bgl_des_balanceado_0001",
+      "codigo": 0,
+      "segundos_pared": 88.3,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.03995,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "bgl_des_balanceado_0002",
+      "codigo": 0,
+      "segundos_pared": 66.0,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.02859,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "bgl_des_balanceado_0003",
+      "codigo": 0,
+      "segundos_pared": 58.7,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.02205,
+      "llamadas": 5,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "bgl_des_natural_0000",
+      "codigo": 0,
+      "segundos_pared": 78.6,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.03429,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "bgl_des_natural_0001",
+      "codigo": 0,
+      "segundos_pared": 75.4,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.03378,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "bgl_des_natural_0002",
+      "codigo": 0,
+      "segundos_pared": 89.9,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.04696,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "bgl_des_natural_0003",
+      "codigo": 0,
+      "segundos_pared": 89.1,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.04521,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "bgl_des_natural_0004",
+      "codigo": 0,
+      "segundos_pared": 80.2,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.03829,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "bgl_des_natural_0005",
+      "codigo": 0,
+      "segundos_pared": 70.5,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.0348,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "bgl_des_natural_0006",
+      "codigo": 0,
+      "segundos_pared": 45.5,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.01557,
+      "llamadas": 5,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "bgl_des_natural_0007",
+      "codigo": 0,
+      "segundos_pared": 50.8,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.0187,
+      "llamadas": 5,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "bgl_des_natural_0008",
+      "codigo": 0,
+      "segundos_pared": 48.8,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.01847,
+      "llamadas": 5,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "bgl_des_natural_0009",
+      "codigo": 0,
+      "segundos_pared": 48.0,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.01856,
+      "llamadas": 5,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "bgl_des_natural_0010",
+      "codigo": 0,
+      "segundos_pared": 52.6,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.0203,
+      "llamadas": 5,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "bgl_des_natural_0011",
+      "codigo": 0,
+      "segundos_pared": 71.5,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.02979,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "bgl_des_natural_0012",
+      "codigo": 0,
+      "segundos_pared": 94.9,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.04973,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "bgl_des_natural_0013",
+      "codigo": 0,
+      "segundos_pared": 48.5,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.02025,
+      "llamadas": 5,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "bgl_des_natural_0014",
+      "codigo": 0,
+      "segundos_pared": 99.7,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.0512,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "bgl_des_natural_0015",
+      "codigo": 0,
+      "segundos_pared": 54.0,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.02015,
+      "llamadas": 5,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "bgl_des_natural_0016",
+      "codigo": 0,
+      "segundos_pared": 50.9,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.02,
+      "llamadas": 5,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "bgl_des_natural_0017",
+      "codigo": 0,
+      "segundos_pared": 83.3,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.04169,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "bgl_des_natural_0018",
+      "codigo": 0,
+      "segundos_pared": 46.8,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.01722,
+      "llamadas": 5,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "bgl_des_natural_0019",
+      "codigo": 0,
+      "segundos_pared": 65.5,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.02876,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_sigiloso_0000",
+      "codigo": 0,
+      "segundos_pared": 82.8,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0002",
+        "uwf_des_visible_0001"
+      ],
+      "usd": 0.09162,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_sigiloso_0001",
+      "codigo": 0,
+      "segundos_pared": 69.3,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0003",
+        "uwf_des_sigiloso_0004",
+        "uwf_des_sigiloso_0005",
+        "uwf_des_visible_0002",
+        "uwf_des_visible_0004"
+      ],
+      "usd": 0.08405,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_sigiloso_0002",
+      "codigo": 0,
+      "segundos_pared": 78.4,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0000",
+        "uwf_des_visible_0001"
+      ],
+      "usd": 0.08678,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_sigiloso_0003",
+      "codigo": 0,
+      "segundos_pared": 82.2,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0001",
+        "uwf_des_sigiloso_0004",
+        "uwf_des_sigiloso_0005",
+        "uwf_des_visible_0002",
+        "uwf_des_visible_0004"
+      ],
+      "usd": 0.09208,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_sigiloso_0004",
+      "codigo": 0,
+      "segundos_pared": 80.2,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0001",
+        "uwf_des_sigiloso_0003",
+        "uwf_des_sigiloso_0005",
+        "uwf_des_visible_0002",
+        "uwf_des_visible_0004"
+      ],
+      "usd": 0.08935,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_sigiloso_0005",
+      "codigo": 0,
+      "segundos_pared": 81.2,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0001",
+        "uwf_des_sigiloso_0003",
+        "uwf_des_sigiloso_0004",
+        "uwf_des_visible_0002",
+        "uwf_des_visible_0004"
+      ],
+      "usd": 0.09261,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_sigiloso_0006",
+      "codigo": 0,
+      "segundos_pared": 66.9,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.08036,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_sigiloso_0007",
+      "codigo": 0,
+      "segundos_pared": 76.8,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.08446,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_sigiloso_0008",
+      "codigo": 0,
+      "segundos_pared": 74.8,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.08585,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_sigiloso_0009",
+      "codigo": 0,
+      "segundos_pared": 67.3,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.0807,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_sigiloso_0010",
+      "codigo": 0,
+      "segundos_pared": 72.1,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.07959,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_sigiloso_0011",
+      "codigo": 0,
+      "segundos_pared": 79.1,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.08273,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_visible_0000",
+      "codigo": 0,
+      "segundos_pared": 84.3,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_visible_0003",
+        "uwf_des_visible_0005"
+      ],
+      "usd": 0.10181,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_visible_0001",
+      "codigo": 0,
+      "segundos_pared": 85.3,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0000",
+        "uwf_des_sigiloso_0002"
+      ],
+      "usd": 0.1029,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_visible_0002",
+      "codigo": 0,
+      "segundos_pared": 91.9,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0001",
+        "uwf_des_sigiloso_0003",
+        "uwf_des_sigiloso_0004",
+        "uwf_des_sigiloso_0005",
+        "uwf_des_visible_0004"
+      ],
+      "usd": 0.11085,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_visible_0003",
+      "codigo": 0,
+      "segundos_pared": 86.5,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_visible_0000",
+        "uwf_des_visible_0005"
+      ],
+      "usd": 0.10461,
+      "llamadas": 7,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_visible_0004",
+      "codigo": 0,
+      "segundos_pared": 84.2,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0001",
+        "uwf_des_sigiloso_0003",
+        "uwf_des_sigiloso_0004",
+        "uwf_des_sigiloso_0005",
+        "uwf_des_visible_0002"
+      ],
+      "usd": 0.09702,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_visible_0005",
+      "codigo": 0,
+      "segundos_pared": 67.6,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_visible_0000",
+        "uwf_des_visible_0003"
+      ],
+      "usd": 0.08707,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_visible_0006",
+      "codigo": 0,
+      "segundos_pared": 86.4,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.09094,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_visible_0007",
+      "codigo": 0,
+      "segundos_pared": 159.1,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.19159,
+      "llamadas": 9,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_visible_0008",
+      "codigo": 0,
+      "segundos_pared": 77.5,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.08479,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_visible_0009",
+      "codigo": 0,
+      "segundos_pared": 80.1,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.08543,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_visible_0010",
+      "codigo": 0,
+      "segundos_pared": 90.7,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.09607,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_visible_0011",
+      "codigo": 0,
+      "segundos_pared": 73.1,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.08168,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_balanceado_0000",
+      "codigo": 0,
+      "segundos_pared": 81.1,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.0379,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_balanceado_0001",
+      "codigo": 0,
+      "segundos_pared": 39.3,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.01724,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_balanceado_0002",
+      "codigo": 0,
+      "segundos_pared": 30.7,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.01255,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_balanceado_0003",
+      "codigo": 0,
+      "segundos_pared": 32.0,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.01196,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0000",
+      "codigo": 0,
+      "segundos_pared": 32.5,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.0131,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0001",
+      "codigo": 0,
+      "segundos_pared": 33.6,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.01383,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0002",
+      "codigo": 0,
+      "segundos_pared": 31.6,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.01695,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0003",
+      "codigo": 0,
+      "segundos_pared": 51.9,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.02625,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0004",
+      "codigo": 0,
+      "segundos_pared": 39.3,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.01752,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0005",
+      "codigo": 0,
+      "segundos_pared": 49.6,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.02669,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0006",
+      "codigo": 0,
+      "segundos_pared": 26.9,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.00956,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0007",
+      "codigo": 0,
+      "segundos_pared": 24.1,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.00841,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0008",
+      "codigo": 0,
+      "segundos_pared": 26.0,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.00985,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0009",
+      "codigo": 0,
+      "segundos_pared": 28.0,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.01133,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0010",
+      "codigo": 0,
+      "segundos_pared": 29.7,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.01122,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0011",
+      "codigo": 0,
+      "segundos_pared": 54.8,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.02803,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0012",
+      "codigo": 0,
+      "segundos_pared": 36.1,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.01788,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0013",
+      "codigo": 0,
+      "segundos_pared": 25.5,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.01047,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0014",
+      "codigo": 0,
+      "segundos_pared": 31.1,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.01356,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0015",
+      "codigo": 0,
+      "segundos_pared": 24.3,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.00819,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0016",
+      "codigo": 0,
+      "segundos_pared": 25.3,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.00963,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0017",
+      "codigo": 0,
+      "segundos_pared": 26.6,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.01079,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0018",
+      "codigo": 0,
+      "segundos_pared": 25.1,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.00904,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0019",
+      "codigo": 0,
+      "segundos_pared": 41.2,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.0198,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0000",
+      "codigo": 0,
+      "segundos_pared": 101.6,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0002",
+        "uwf_des_visible_0001"
+      ],
+      "usd": 0.10136,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0001",
+      "codigo": 0,
+      "segundos_pared": 34.3,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0003",
+        "uwf_des_sigiloso_0004",
+        "uwf_des_sigiloso_0005",
+        "uwf_des_visible_0002",
+        "uwf_des_visible_0004"
+      ],
+      "usd": 0.06386,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0002",
+      "codigo": 0,
+      "segundos_pared": 39.2,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0000",
+        "uwf_des_visible_0001"
+      ],
+      "usd": 0.06665,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0003",
+      "codigo": 0,
+      "segundos_pared": 31.4,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0001",
+        "uwf_des_sigiloso_0004",
+        "uwf_des_sigiloso_0005",
+        "uwf_des_visible_0002",
+        "uwf_des_visible_0004"
+      ],
+      "usd": 0.06253,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0004",
+      "codigo": 0,
+      "segundos_pared": 34.3,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0001",
+        "uwf_des_sigiloso_0003",
+        "uwf_des_sigiloso_0005",
+        "uwf_des_visible_0002",
+        "uwf_des_visible_0004"
+      ],
+      "usd": 0.06413,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0005",
+      "codigo": 0,
+      "segundos_pared": 28.7,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0001",
+        "uwf_des_sigiloso_0003",
+        "uwf_des_sigiloso_0004",
+        "uwf_des_visible_0002",
+        "uwf_des_visible_0004"
+      ],
+      "usd": 0.06239,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0006",
+      "codigo": 0,
+      "segundos_pared": 36.3,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.06267,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0007",
+      "codigo": 0,
+      "segundos_pared": 35.6,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.06249,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0008",
+      "codigo": 0,
+      "segundos_pared": 36.9,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.06537,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0009",
+      "codigo": 0,
+      "segundos_pared": 34.3,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.06283,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0010",
+      "codigo": 0,
+      "segundos_pared": 39.5,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.0637,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0011",
+      "codigo": 0,
+      "segundos_pared": 34.6,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.06351,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0000",
+      "codigo": 0,
+      "segundos_pared": 38.5,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_visible_0003",
+        "uwf_des_visible_0005"
+      ],
+      "usd": 0.06967,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0001",
+      "codigo": 0,
+      "segundos_pared": 38.5,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0000",
+        "uwf_des_sigiloso_0002"
+      ],
+      "usd": 0.07006,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0002",
+      "codigo": 0,
+      "segundos_pared": 46.3,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0001",
+        "uwf_des_sigiloso_0003",
+        "uwf_des_sigiloso_0004",
+        "uwf_des_sigiloso_0005",
+        "uwf_des_visible_0004"
+      ],
+      "usd": 0.07708,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0003",
+      "codigo": 0,
+      "segundos_pared": 43.9,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_visible_0000",
+        "uwf_des_visible_0005"
+      ],
+      "usd": 0.07259,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0004",
+      "codigo": 0,
+      "segundos_pared": 32.5,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0001",
+        "uwf_des_sigiloso_0003",
+        "uwf_des_sigiloso_0004",
+        "uwf_des_sigiloso_0005",
+        "uwf_des_visible_0002"
+      ],
+      "usd": 0.0659,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0005",
+      "codigo": 0,
+      "segundos_pared": 35.2,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_visible_0000",
+        "uwf_des_visible_0003"
+      ],
+      "usd": 0.06495,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0006",
+      "codigo": 0,
+      "segundos_pared": 35.6,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.06242,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0007",
+      "codigo": 0,
+      "segundos_pared": 46.4,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.07354,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0008",
+      "codigo": 0,
+      "segundos_pared": 34.3,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.06279,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0009",
+      "codigo": 0,
+      "segundos_pared": 32.6,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.06181,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0010",
+      "codigo": 0,
+      "segundos_pared": 62.3,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.07862,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0011",
+      "codigo": 0,
+      "segundos_pared": 33.4,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.06096,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    }
+  ],
+  "fin_utc": "2026-11-12T07:12:40.801512+00:00",
+  "gasto_usd": 4.9974
+}

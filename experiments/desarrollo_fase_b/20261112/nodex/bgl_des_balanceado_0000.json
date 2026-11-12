@@ -1,0 +1,1409 @@
+{
+ "case_id": "bgl_des_balanceado_0000",
+ "dataset": "bgl",
+ "arquitectura": "nodex",
+ "segundos_pared_hijo": 87.51588700000138,
+ "estado": {
+  "resumen_logs": {
+   "formato_detectado": "bgl",
+   "total_lineas": 20,
+   "servicios": {
+    "bgl.kernel": 16,
+    "bgl.app": 4
+   },
+   "eventos": {
+    "evento_critico": 5,
+    "evento_normal": 15
+   },
+   "ventana_temporal": {
+    "inicio": "2005-10-16-03.01.52.266920",
+    "fin": "2005-10-28-12.59.40.203147"
+   },
+   "n_ips_distintas": 1,
+   "ips_distintas": [
+    "172.16.96.116"
+   ],
+   "por_ip": {
+    "172.16.96.116": {
+     "intentos_fallidos": 0,
+     "usuarios_objetivo": [],
+     "servicios": [
+      "bgl.app"
+     ],
+     "n_eventos": 1,
+     "n_como_origen": 1,
+     "n_como_destino": 0
+    }
+   },
+   "usuarios": {},
+   "n_usuarios_distintos": 0,
+   "codigos_respuesta": {},
+   "entidades": [
+    {
+     "ip": "172.16.96.116",
+     "n_eventos": 1,
+     "intentos_fallidos": 0,
+     "usuarios_objetivo": [],
+     "servicios": [
+      "bgl.app"
+     ],
+     "n_como_origen": 1,
+     "n_como_destino": 0
+    }
+   ],
+   "cronologia": [
+    {
+     "n": 2,
+     "timestamp": "2005-10-16-15.24.36.889002",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1129501476 2005.10.16 R71-M1-N0-I:J18-U01 2005-10-16-15.24.36.889002 R71-M1-N0-I:J18-U01 RAS APP FATAL ciod: Error reading message prefix after LOAD_MESSAGE on CioStream socket to…",
+     "ip": "172.16.96.116"
+    },
+    {
+     "n": 12,
+     "timestamp": "2005-10-20-08.03.09.612112",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1129820589 2005.10.20 R62-M0-N8-I:J18-U01 2005-10-20-08.03.09.612112 R62-M0-N8-I:J18-U01 RAS APP FATAL ciod: Error loading /bgl/apps/followup/RAPTOR/new.raptor.trace: invalid or mi…"
+    },
+    {
+     "n": 13,
+     "timestamp": "2005-10-20-08.03.31.975086",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1129820611 2005.10.20 R01-M1-NC-I:J18-U01 2005-10-20-08.03.31.975086 R01-M1-NC-I:J18-U01 RAS APP FATAL ciod: Error loading /bgl/apps/followup/RAPTOR/new.raptor.trace: invalid or mi…"
+    },
+    {
+     "n": 17,
+     "timestamp": "2005-10-25-07.45.36.124897",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1130251536 2005.10.25 R46-M0-NC-I:J18-U11 2005-10-25-07.45.36.124897 R46-M0-NC-I:J18-U11 RAS APP FATAL ciod: Error loading allreduce_int_V1R1.rts: invalid or missing program image,…"
+    },
+    {
+     "n": 20,
+     "timestamp": "2005-10-28-12.59.40.203147",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1130529580 2005.10.28 R63-M1-NF-C:J15-U11 2005-10-28-12.59.40.203147 R63-M1-NF-C:J15-U11 RAS KERNEL FATAL rts: kernel terminated for reason 1004"
+    }
+   ],
+   "cronologia_omitidos": 0,
+   "raw_procedencia": {
+    "sha256": "3dc27fd49507fc94ad719273814ddbae57e9058044b185f0dc84513aebde530a",
+    "lineas": 20,
+    "bytes": 3479
+   },
+   "reputacion_ips": {
+    "172.16.96.116": {
+     "fuente": "sin_reputacion",
+     "ip": "172.16.96.116",
+     "score": null,
+     "nota": "modo sin reputación externa: ninguna IP recibe puntaje",
+     "categoria": "desconocido"
+    }
+   },
+   "perfil_lote": {
+    "tipo": "texto",
+    "filas": 20,
+    "con_formato_reconocido": 20,
+    "severidades": {
+     "INFO": 15,
+     "FATAL": 5
+    },
+    "componentes": {
+     "bgl.kernel": 16,
+     "bgl.app": 4
+    },
+    "nodos": {
+     "R02-M0-N4-C:J04-U11": 6,
+     "R24-M0-N4-I:J18-U01": 1,
+     "R71-M1-N0-I:J18-U01": 1,
+     "R21-M1-N4-C:J10-U01": 1,
+     "R13-M1-N8-C:J02-U11": 1,
+     "R17-M0-N0-I:J18-U01": 1,
+     "R62-M0-N8-I:J18-U01": 1,
+     "R01-M1-NC-I:J18-U01": 1,
+     "R04-M0-NC-I:J18-U11": 1,
+     "R07-M1-N0-C:J17-U01": 1
+    },
+    "nodos_distintos": 15,
+    "lineas_severidad_alta": {
+     "total": 5,
+     "omitidas": 0,
+     "lineas": [
+      {
+       "uid": "log_record_000002",
+       "severidad": "FATAL",
+       "group_id": "G02"
+      },
+      {
+       "uid": "log_record_000012",
+       "severidad": "FATAL",
+       "group_id": "G06"
+      },
+      {
+       "uid": "log_record_000013",
+       "severidad": "FATAL",
+       "group_id": "G06"
+      },
+      {
+       "uid": "log_record_000017",
+       "severidad": "FATAL",
+       "group_id": "G10"
+      },
+      {
+       "uid": "log_record_000020",
+       "severidad": "FATAL",
+       "group_id": "G13"
+      }
+     ]
+    },
+    "grupos": 13
+   }
+  },
+  "preprocessing_metadata": {
+   "schema_version": "2.0",
+   "total_lineas_fisicas": 20,
+   "total_eventos": 20,
+   "decoder_distribution": {
+    "text": 20
+   },
+   "product_distribution": {
+    "BlueGene/L": 20
+   },
+   "vendor_distribution": {
+    "IBM": 20
+   },
+   "version_distribution": {},
+   "protocol_distribution": {},
+   "profile_distribution": {
+    "bgl": 20
+   },
+   "severity_distribution": {
+    "INFO": 15,
+    "FATAL": 5
+   },
+   "event_categories": {},
+   "event_outcomes": {},
+   "entities": {
+    "ip": {
+     "172.16.96.116": 1
+    },
+    "host": {
+     "R02-M0-N4-C:J04-U11": 6,
+     "R01-M1-NC-I:J18-U01": 1,
+     "R04-M0-NC-I:J18-U11": 1,
+     "R07-M1-N0-C:J17-U01": 1,
+     "R11-M1-N2-C:J09-U11": 1,
+     "R13-M1-N8-C:J02-U11": 1,
+     "R17-M0-N0-I:J18-U01": 1,
+     "R21-M1-N0-C:J10-U11": 1,
+     "R21-M1-N4-C:J10-U01": 1,
+     "R24-M0-N4-I:J18-U01": 1,
+     "R46-M0-NC-I:J18-U11": 1,
+     "R55-M0-N9-C:J06-U11": 1,
+     "R62-M0-N8-I:J18-U01": 1,
+     "R63-M1-NF-C:J15-U11": 1,
+     "R71-M1-N0-I:J18-U01": 1
+    },
+    "servicio": {
+     "bgl.kernel": 16,
+     "bgl.app": 4
+    },
+    "producto": {
+     "BlueGene/L": 20
+    }
+   },
+   "time_window": {
+    "inicio": "2005-10-16-03.01.52.266920",
+    "fin": "2005-10-28-12.59.40.203147"
+   },
+   "parsing": {
+    "parsed_events": 20,
+    "fallback_events": 0,
+    "coverage": 1.0
+   },
+   "segments": [
+    {
+     "index": 0,
+     "decoder": "text",
+     "line_start": 1,
+     "line_end": 20,
+     "n_records": 20,
+     "confidence": 0.1,
+     "decoder_inicial": "text",
+     "confidence_inicial": 0.1,
+     "decoder_distribution": {
+      "text": 20
+     },
+     "context": {}
+    }
+   ],
+   "entities_resumen": {
+    "ip": 1,
+    "host": 15,
+    "servicio": 2,
+    "producto": 1
+   },
+   "config": {
+    "LOG_DETECTION_CHUNK_SIZE": 50,
+    "LOG_ENABLE_MULTILINE": true,
+    "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+    "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+    "LOG_MAX_EVENTS": 100000,
+    "LOG_MAX_FILE_BYTES": 52428800,
+    "LOG_MAX_RAW_SAMPLES": 20,
+    "LOG_MAX_UNMAPPED_FIELDS": 100,
+    "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+    "LOG_PARSING_MODE": "hybrid",
+    "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+    "LOG_PRESERVE_RAW": true
+   }
+  },
+  "parsing_warnings": [],
+  "evidencia_logs": [
+   {
+    "uid": "log_record_000001",
+    "record_number": 1,
+    "line_start": 1,
+    "line_end": 1,
+    "timestamp": "2005-10-16-03.01.52.266920",
+    "group_id": "G01",
+    "source_host": "R24-M0-N4-I:J18-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "ciod: generated 58 core files for program /home/spelce1/HPCC_IBM/Urgent/COP/64K/opt_co_dc.rts"
+   },
+   {
+    "uid": "log_record_000002",
+    "record_number": 2,
+    "line_start": 2,
+    "line_end": 2,
+    "timestamp": "2005-10-16-15.24.36.889002",
+    "group_id": "G02",
+    "source_ip": "172.16.96.116",
+    "source_host": "R71-M1-N0-I:J18-U01",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: Error reading message prefix after LOAD_MESSAGE on CioStream socket to 172.16.96.116:47696: Link has been severed"
+   },
+   {
+    "uid": "log_record_000003",
+    "record_number": 3,
+    "line_start": 3,
+    "line_end": 3,
+    "timestamp": "2005-10-17-05.02.27.161242",
+    "group_id": "G03",
+    "source_host": "R02-M0-N4-C:J04-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "data cache search parity error detected. attempting to correct"
+   },
+   {
+    "uid": "log_record_000004",
+    "record_number": 4,
+    "line_start": 4,
+    "line_end": 4,
+    "timestamp": "2005-10-17-05.03.49.800918",
+    "group_id": "G03",
+    "source_host": "R02-M0-N4-C:J04-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "data cache search parity error detected. attempting to correct"
+   },
+   {
+    "uid": "log_record_000005",
+    "record_number": 5,
+    "line_start": 5,
+    "line_end": 5,
+    "timestamp": "2005-10-17-05.19.09.715915",
+    "group_id": "G03",
+    "source_host": "R02-M0-N4-C:J04-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "data cache search parity error detected. attempting to correct"
+   },
+   {
+    "uid": "log_record_000006",
+    "record_number": 6,
+    "line_start": 6,
+    "line_end": 6,
+    "timestamp": "2005-10-17-05.22.11.645917",
+    "group_id": "G03",
+    "source_host": "R02-M0-N4-C:J04-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "data cache search parity error detected. attempting to correct"
+   },
+   {
+    "uid": "log_record_000007",
+    "record_number": 7,
+    "line_start": 7,
+    "line_end": 7,
+    "timestamp": "2005-10-17-05.31.45.435674",
+    "group_id": "G03",
+    "source_host": "R02-M0-N4-C:J04-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "data cache search parity error detected. attempting to correct"
+   },
+   {
+    "uid": "log_record_000008",
+    "record_number": 8,
+    "line_start": 8,
+    "line_end": 8,
+    "timestamp": "2005-10-17-05.35.12.825443",
+    "group_id": "G03",
+    "source_host": "R02-M0-N4-C:J04-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "data cache search parity error detected. attempting to correct"
+   },
+   {
+    "uid": "log_record_000009",
+    "record_number": 9,
+    "line_start": 9,
+    "line_end": 9,
+    "timestamp": "2005-10-19-05.13.22.183386",
+    "group_id": "G04",
+    "source_host": "R21-M1-N4-C:J10-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "CE sym 12, at 0x18e33e80, mask 0x04"
+   },
+   {
+    "uid": "log_record_000010",
+    "record_number": 10,
+    "line_start": 10,
+    "line_end": 10,
+    "timestamp": "2005-10-19-05.13.24.054893",
+    "group_id": "G04",
+    "source_host": "R13-M1-N8-C:J02-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "CE sym 13, at 0x00f254e0, mask 0x20"
+   },
+   {
+    "uid": "log_record_000011",
+    "record_number": 11,
+    "line_start": 11,
+    "line_end": 11,
+    "timestamp": "2005-10-19-08.08.40.058960",
+    "group_id": "G05",
+    "source_host": "R17-M0-N0-I:J18-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "shutdown complete"
+   },
+   {
+    "uid": "log_record_000012",
+    "record_number": 12,
+    "line_start": 12,
+    "line_end": 12,
+    "timestamp": "2005-10-20-08.03.09.612112",
+    "group_id": "G06",
+    "source_host": "R62-M0-N8-I:J18-U01",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: Error loading /bgl/apps/followup/RAPTOR/new.raptor.trace: invalid or missing program image, Exec format error"
+   },
+   {
+    "uid": "log_record_000013",
+    "record_number": 13,
+    "line_start": 13,
+    "line_end": 13,
+    "timestamp": "2005-10-20-08.03.31.975086",
+    "group_id": "G06",
+    "source_host": "R01-M1-NC-I:J18-U01",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: Error loading /bgl/apps/followup/RAPTOR/new.raptor.trace: invalid or missing program image, Exec format error"
+   },
+   {
+    "uid": "log_record_000014",
+    "record_number": 14,
+    "line_start": 14,
+    "line_end": 14,
+    "timestamp": "2005-10-20-20.19.58.037602",
+    "group_id": "G07",
+    "source_host": "R04-M0-NC-I:J18-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "ciod: generated 64 core files for program /home/rfisher/sodscaling/flash2"
+   },
+   {
+    "uid": "log_record_000015",
+    "record_number": 15,
+    "line_start": 15,
+    "line_end": 15,
+    "timestamp": "2005-10-21-05.19.37.093437",
+    "group_id": "G08",
+    "source_host": "R07-M1-N0-C:J17-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "total of 1 ddr error(s) detected and corrected"
+   },
+   {
+    "uid": "log_record_000016",
+    "record_number": 16,
+    "line_start": 16,
+    "line_end": 16,
+    "timestamp": "2005-10-23-20.05.01.813190",
+    "group_id": "G09",
+    "source_host": "R21-M1-N0-C:J10-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "1 ddr errors(s) detected and corrected on rank 0, symbol 17, bit 7"
+   },
+   {
+    "uid": "log_record_000017",
+    "record_number": 17,
+    "line_start": 17,
+    "line_end": 17,
+    "timestamp": "2005-10-25-07.45.36.124897",
+    "group_id": "G10",
+    "source_host": "R46-M0-NC-I:J18-U11",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: Error loading allreduce_int_V1R1.rts: invalid or missing program image, No such file or directory"
+   },
+   {
+    "uid": "log_record_000018",
+    "record_number": 18,
+    "line_start": 18,
+    "line_end": 18,
+    "timestamp": "2005-10-25-08.55.40.146416",
+    "group_id": "G11",
+    "source_host": "R11-M1-N2-C:J09-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "critical input interrupt (unit=0x0b bit=0x0b): warning for torus z- wire"
+   },
+   {
+    "uid": "log_record_000019",
+    "record_number": 19,
+    "line_start": 19,
+    "line_end": 19,
+    "timestamp": "2005-10-27-23.01.50.720520",
+    "group_id": "G12",
+    "source_host": "R55-M0-N9-C:J06-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "16 tree receiver 2 in re-synch state event(s) (dcr 0x019a) detected"
+   },
+   {
+    "uid": "log_record_000020",
+    "record_number": 20,
+    "line_start": 20,
+    "line_end": 20,
+    "timestamp": "2005-10-28-12.59.40.203147",
+    "group_id": "G13",
+    "source_host": "R63-M1-NF-C:J15-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "rts: kernel terminated for reason 1004"
+   }
+  ],
+  "evidencia_logs_omitidos": 0,
+  "grupos_evidencia": [
+   {
+    "group_id": "G01",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "ciod: generated <n> core files for program /home/spelce<n>/HPCC_IBM/Urgent/COP/<n>K/opt_co_dc.rts"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000001"
+    ],
+    "nodos": [
+     "R24-M0-N4-I:J18-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G02",
+    "clave": {
+     "componente": "bgl.app",
+     "severidad": "FATAL",
+     "plantilla": "ciod: Error reading message prefix after LOAD_MESSAGE on CioStream socket to <n>.<n>.<n>.<n>:<n>: Link has been severed"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000002"
+    ],
+    "nodos": [
+     "R71-M1-N0-I:J18-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G03",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "data cache search parity error detected. attempting to correct"
+    },
+    "conteo": 6,
+    "uids": [
+     "log_record_000003",
+     "log_record_000004",
+     "log_record_000005",
+     "log_record_000006",
+     "log_record_000007",
+     "log_record_000008"
+    ],
+    "nodos": [
+     "R02-M0-N4-C:J04-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G04",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "CE sym <n>, at <hex>, mask <hex>"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000009",
+     "log_record_000010"
+    ],
+    "nodos": [
+     "R21-M1-N4-C:J10-U01",
+     "R13-M1-N8-C:J02-U11"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G05",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "shutdown complete"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000011"
+    ],
+    "nodos": [
+     "R17-M0-N0-I:J18-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G06",
+    "clave": {
+     "componente": "bgl.app",
+     "severidad": "FATAL",
+     "plantilla": "ciod: Error loading /bgl/apps/followup/RAPTOR/new.raptor.trace: invalid or missing program image, Exec format error"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000012",
+     "log_record_000013"
+    ],
+    "nodos": [
+     "R62-M0-N8-I:J18-U01",
+     "R01-M1-NC-I:J18-U01"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G07",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "ciod: generated <n> core files for program /home/rfisher/sodscaling/flash<n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000014"
+    ],
+    "nodos": [
+     "R04-M0-NC-I:J18-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G08",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "total of <n> ddr error(s) detected and corrected"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000015"
+    ],
+    "nodos": [
+     "R07-M1-N0-C:J17-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G09",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "<n> ddr errors(s) detected and corrected on rank <n>, symbol <n>, bit <n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000016"
+    ],
+    "nodos": [
+     "R21-M1-N0-C:J10-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G10",
+    "clave": {
+     "componente": "bgl.app",
+     "severidad": "FATAL",
+     "plantilla": "ciod: Error loading allreduce_int_V<n>R<n>.rts: invalid or missing program image, No such file or directory"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000017"
+    ],
+    "nodos": [
+     "R46-M0-NC-I:J18-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G11",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "critical input interrupt (unit=<hex> bit=<hex>): warning for torus z- wire"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000018"
+    ],
+    "nodos": [
+     "R11-M1-N2-C:J09-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G12",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "<n> tree receiver <n> in re-synch state event(s) (dcr <hex>) detected"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000019"
+    ],
+    "nodos": [
+     "R55-M0-N9-C:J06-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G13",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "rts: kernel terminated for reason <n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000020"
+    ],
+    "nodos": [
+     "R63-M1-NF-C:J15-U11"
+    ],
+    "n_nodos": 1
+   }
+  ],
+  "contenido_lote": {
+   "tipo": "texto",
+   "lineas": [
+    "[log_record_000001] 1129456912 2005.10.16 R24-M0-N4-I:J18-U01 2005-10-16-03.01.52.266920 R24-M0-N4-I:J18-U01 RAS KERNEL INFO ciod: generated 58 core files for program /home/spelce1/HPCC_IBM/Urgent/COP/64K/opt_co_dc.rts",
+    "[log_record_000002] 1129501476 2005.10.16 R71-M1-N0-I:J18-U01 2005-10-16-15.24.36.889002 R71-M1-N0-I:J18-U01 RAS APP FATAL ciod: Error reading message prefix after LOAD_MESSAGE on CioStream socket to 172.16.96.116:47696: Link has been severed",
+    "[log_record_000003] 1129550547 2005.10.17 R02-M0-N4-C:J04-U11 2005-10-17-05.02.27.161242 R02-M0-N4-C:J04-U11 RAS KERNEL INFO data cache search parity error detected. attempting to correct",
+    "[log_record_000004] 1129550629 2005.10.17 R02-M0-N4-C:J04-U11 2005-10-17-05.03.49.800918 R02-M0-N4-C:J04-U11 RAS KERNEL INFO data cache search parity error detected. attempting to correct",
+    "[log_record_000005] 1129551549 2005.10.17 R02-M0-N4-C:J04-U11 2005-10-17-05.19.09.715915 R02-M0-N4-C:J04-U11 RAS KERNEL INFO data cache search parity error detected. attempting to correct",
+    "[log_record_000006] 1129551731 2005.10.17 R02-M0-N4-C:J04-U11 2005-10-17-05.22.11.645917 R02-M0-N4-C:J04-U11 RAS KERNEL INFO data cache search parity error detected. attempting to correct",
+    "[log_record_000007] 1129552305 2005.10.17 R02-M0-N4-C:J04-U11 2005-10-17-05.31.45.435674 R02-M0-N4-C:J04-U11 RAS KERNEL INFO data cache search parity error detected. attempting to correct",
+    "[log_record_000008] 1129552512 2005.10.17 R02-M0-N4-C:J04-U11 2005-10-17-05.35.12.825443 R02-M0-N4-C:J04-U11 RAS KERNEL INFO data cache search parity error detected. attempting to correct",
+    "[log_record_000009] 1129724002 2005.10.19 R21-M1-N4-C:J10-U01 2005-10-19-05.13.22.183386 R21-M1-N4-C:J10-U01 RAS KERNEL INFO CE sym 12, at 0x18e33e80, mask 0x04",
+    "[log_record_000010] 1129724004 2005.10.19 R13-M1-N8-C:J02-U11 2005-10-19-05.13.24.054893 R13-M1-N8-C:J02-U11 RAS KERNEL INFO CE sym 13, at 0x00f254e0, mask 0x20",
+    "[log_record_000011] 1129734520 2005.10.19 R17-M0-N0-I:J18-U01 2005-10-19-08.08.40.058960 R17-M0-N0-I:J18-U01 RAS KERNEL INFO shutdown complete",
+    "[log_record_000012] 1129820589 2005.10.20 R62-M0-N8-I:J18-U01 2005-10-20-08.03.09.612112 R62-M0-N8-I:J18-U01 RAS APP FATAL ciod: Error loading /bgl/apps/followup/RAPTOR/new.raptor.trace: invalid or missing program image, Exec format error",
+    "[log_record_000013] 1129820611 2005.10.20 R01-M1-NC-I:J18-U01 2005-10-20-08.03.31.975086 R01-M1-NC-I:J18-U01 RAS APP FATAL ciod: Error loading /bgl/apps/followup/RAPTOR/new.raptor.trace: invalid or missing program image, Exec format error",
+    "[log_record_000014] 1129864798 2005.10.20 R04-M0-NC-I:J18-U11 2005-10-20-20.19.58.037602 R04-M0-NC-I:J18-U11 RAS KERNEL INFO ciod: generated 64 core files for program /home/rfisher/sodscaling/flash2",
+    "[log_record_000015] 1129897177 2005.10.21 R07-M1-N0-C:J17-U01 2005-10-21-05.19.37.093437 R07-M1-N0-C:J17-U01 RAS KERNEL INFO total of 1 ddr error(s) detected and corrected",
+    "[log_record_000016] 1130123101 2005.10.23 R21-M1-N0-C:J10-U11 2005-10-23-20.05.01.813190 R21-M1-N0-C:J10-U11 RAS KERNEL INFO 1 ddr errors(s) detected and corrected on rank 0, symbol 17, bit 7",
+    "[log_record_000017] 1130251536 2005.10.25 R46-M0-NC-I:J18-U11 2005-10-25-07.45.36.124897 R46-M0-NC-I:J18-U11 RAS APP FATAL ciod: Error loading allreduce_int_V1R1.rts: invalid or missing program image, No such file or directory",
+    "[log_record_000018] 1130255740 2005.10.25 R11-M1-N2-C:J09-U11 2005-10-25-08.55.40.146416 R11-M1-N2-C:J09-U11 RAS KERNEL INFO critical input interrupt (unit=0x0b bit=0x0b): warning for torus z- wire",
+    "[log_record_000019] 1130479310 2005.10.27 R55-M0-N9-C:J06-U11 2005-10-27-23.01.50.720520 R55-M0-N9-C:J06-U11 RAS KERNEL INFO 16 tree receiver 2 in re-synch state event(s) (dcr 0x019a) detected",
+    "[log_record_000020] 1130529580 2005.10.28 R63-M1-NF-C:J15-U11 2005-10-28-12.59.40.203147 R63-M1-NF-C:J15-U11 RAS KERNEL FATAL rts: kernel terminated for reason 1004"
+   ],
+   "total_lineas": 20,
+   "lineas_entregadas": 20,
+   "recortado": false,
+   "topes": {
+    "lineas": 200,
+    "caracteres": 20000
+   }
+  },
+  "veredicto_preliminar": "anomalia_operativa",
+  "justificacion_veredicto_preliminar": "Presencia de caídas de conexión en el socket ciod (Link has been severed), terminación abrupta del kernel rts por motivo 1004 y generación recurrente de archivos core sin signos de intrusión.",
+  "invalid_evidence_group_count": 0,
+  "comandos_rechazados": [
+   {
+    "comando": "nc -zv -w 3 172.16.96.116 47696",
+    "motivos": [
+     "BINARIO_NO_RECONOCIDO: 'nc'"
+    ],
+    "intento": 1
+   }
+  ],
+  "casos_historicos": [
+   {
+    "id": "bgl_des_balanceado_0001",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 2 × [FATAL bgl.kernel] rts panic! - stopping execution. Composición: 20 eventos, severidades INFO 17, FATAL 3.",
+    "similitud": 0.877
+   },
+   {
+    "id": "bgl_des_natural_0003",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 2 × [FATAL bgl.app] ciod: Error reading message prefix on CioStream socket to <n>.<n>.<n>.<n>:<n>, Link has be. Composición: 20 eventos, severidades INFO 15, FATAL 5.",
+    "similitud": 0.852
+   },
+   {
+    "id": "bgl_des_natural_0011",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Contiene eventos de severidad alta que no se consideraron alerta: 2 × [FATAL bgl.app] ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r<n>: invalid or mi. Composición: 20 eventos, severidades INFO 18, FATAL 2.",
+    "similitud": 0.846
+   }
+  ],
+  "historico_consulta": {
+   "excluidos_por_solapamiento": [
+    "rag_enriquecido_v2:bgl_des_balanceado_0000"
+   ],
+   "consultados": 56,
+   "excluidos_mismo_incidente": [],
+   "exclusion_por_incidente_activa": true,
+   "representacion": "Eventos destacados: [FATAL bgl.app] ciod: Error reading message prefix after LOAD_MESSAGE on CioStream socket to <n>.<n>.<n>.<n>:<n>: Link has been severed x1 en 1 nodos; [FATAL bgl.app] ciod: Error loading /bgl/apps/followup/RAPTOR/new.raptor.trace: invalid or missing program image, Exec format error x2 en 2 nodos; [FATAL bgl.app] ciod: Error loading allreduce_int_V<n>R<n>.rts: invalid or missing program image, No such file or directory x1 en 1 nodos; [FATAL bgl.kernel] rts: kernel terminated for reason <n> x1 en 1 nodos\nLog de texto, 20 eventos. Severidades: INFO 15, FATAL 5. Componentes: bgl.kernel 16, bgl.app 4. Nodos distintos: 15."
+  },
+  "hallazgos_cazador": [
+   {
+    "group_id": "G02",
+    "nivel_sospecha": "bajo",
+    "explicacion_benigna": "Pérdida de conectividad de red o caída abrupta del proceso remoto en el nodo de cómputo durante la fase de carga de un mensaje de control (LOAD_MESSAGE).",
+    "explicacion_alternativa": "Interrupción intencionada de la conexión de control o fallo en la interfaz de red del nodo de E/S.",
+    "justificacion": "El mensaje indica 'Link has been severed' en un socket CioStream TCP efímero (puerto 47696 hacia 172.16.96.116), un comportamiento operacional común cuando un nodo colapsa o finaliza prematuramente en BlueGene/L.",
+    "tecnica_candidata": null
+   },
+   {
+    "group_id": "G06",
+    "nivel_sospecha": "bajo",
+    "explicacion_benigna": "Un usuario o script de trabajo intentó ejecutar un archivo de traza o un binario incompatible con la arquitectura de los procesadores del supercomputador, generando un error de formato ejecutable.",
+    "explicacion_alternativa": "Intento de ejecución de un archivo o payload malicioso que no corresponde con el formato ELF válido para la plataforma.",
+    "justificacion": "El error 'Exec format error' al cargar '/bgl/apps/followup/RAPTOR/new.raptor.trace' refleja un problema de incompatibilidad de formato de archivo o error del usuario al referenciar una traza en lugar de un ejecutable compilado.",
+    "tecnica_candidata": null
+   },
+   {
+    "group_id": "G10",
+    "nivel_sospecha": "bajo",
+    "explicacion_benigna": "Error en la ruta de ejecución de un benchmark MPI (allreduce), donde el archivo especificado no existe en el sistema de archivos compartido o local.",
+    "explicacion_alternativa": "Fallo en la ejecución de scripts o herramientas debido a rutas no configuradas.",
+    "justificacion": "Se trata de un fallo operativo estándar 'No such file or directory' durante la invocación del ejecutable de prueba 'allreduce_int_V1R1.rts'.",
+    "tecnica_candidata": null
+   },
+   {
+    "group_id": "G13",
+    "nivel_sospecha": "bajo",
+    "explicacion_benigna": "Terminación anormal del microkernel de cómputo (RTS) debido a un error de ejecución del programa, aborto del trabajo o excepción interna del sistema.",
+    "explicacion_alternativa": "Fallo crítico inducido por inestabilidad de hardware o corrupción de memoria en el nodo de cómputo.",
+    "justificacion": "El mensaje 'kernel terminated for reason 1004' es un código de salida fatal estándar del runtime de BlueGene/L asociado comúnmente a abortos de tareas en el bloque de cómputo sin indicios de manipulación maliciosa.",
+    "tecnica_candidata": null
+   }
+  ],
+  "cazador_ejecutado": true,
+  "veredicto_consolidado": "anomalia_operativa",
+  "consulta_mitre": "",
+  "rag_omitido": "sin hipótesis de seguridad: no se consultan técnicas",
+  "revision_hallazgos": [],
+  "diagnostico_inicial": "",
+  "diagnostico_corregido": "",
+  "correcciones_auditor": 0,
+  "historial_correcciones": [],
+  "eventos_reconstruidos": [
+   {
+    "event_id": "event_001",
+    "evidence_uids": [
+     "log_record_000001"
+    ],
+    "timestamp": "2005-10-16-03.01.52.266920",
+    "event_type": "core_dump_generation",
+    "description": "Generación de 58 core files tras fallo en programa opt_co_dc.rts.",
+    "confidence": null,
+    "evidence_groups": [
+     "G01"
+    ],
+    "categoria": "anomalia_operativa"
+   },
+   {
+    "event_id": "event_002",
+    "evidence_uids": [
+     "log_record_000002"
+    ],
+    "timestamp": "2005-10-16-15.24.36.889002",
+    "event_type": "socket_connection_lost",
+    "description": "Fallo fatal en ciod por desconexión en socket CioStream hacia 172.16.96.116:47696.",
+    "confidence": null,
+    "evidence_groups": [
+     "G02"
+    ],
+    "categoria": "anomalia_operativa"
+   },
+   {
+    "event_id": "event_003",
+    "evidence_uids": [
+     "log_record_000003",
+     "log_record_000004",
+     "log_record_000005",
+     "log_record_000006",
+     "log_record_000007",
+     "log_record_000008"
+    ],
+    "timestamp": "2005-10-17-05.02.27.161242",
+    "event_type": "cache_parity_errors",
+    "description": "Múltiples errores de paridad en data cache corregidos por hardware.",
+    "confidence": null,
+    "evidence_groups": [
+     "G03"
+    ],
+    "categoria": "anomalia_operativa"
+   },
+   {
+    "event_id": "event_004",
+    "evidence_uids": [
+     "log_record_000009",
+     "log_record_000010",
+     "log_record_000015",
+     "log_record_000016"
+    ],
+    "timestamp": "2005-10-19-05.13.22.183386",
+    "event_type": "memory_errors_corrected",
+    "description": "Errores corregibles (CE) y de DDR detectados en módulos de memoria.",
+    "confidence": null,
+    "evidence_groups": [
+     "G04",
+     "G08",
+     "G09"
+    ],
+    "categoria": "anomalia_operativa"
+   },
+   {
+    "event_id": "event_005",
+    "evidence_uids": [
+     "log_record_000011"
+    ],
+    "timestamp": "2005-10-19-08.08.40.058960",
+    "event_type": "shutdown_complete",
+    "description": "Notificación de apagado completo en nodo de I/O.",
+    "confidence": null,
+    "evidence_groups": [
+     "G05"
+    ],
+    "categoria": "contexto"
+   },
+   {
+    "event_id": "event_006",
+    "evidence_uids": [
+     "log_record_000012",
+     "log_record_000013"
+    ],
+    "timestamp": "2005-10-20-08.03.09.612112",
+    "event_type": "binary_load_format_error",
+    "description": "Fallo fatal al cargar new.raptor.trace por formato de archivo ejecutable no válido.",
+    "confidence": null,
+    "evidence_groups": [
+     "G06"
+    ],
+    "categoria": "anomalia_operativa"
+   },
+   {
+    "event_id": "event_007",
+    "evidence_uids": [
+     "log_record_000014"
+    ],
+    "timestamp": "2005-10-20-20.19.58.037602",
+    "event_type": "core_dump_generation",
+    "description": "Generación de 64 core files para programa flash2.",
+    "confidence": null,
+    "evidence_groups": [
+     "G07"
+    ],
+    "categoria": "anomalia_operativa"
+   },
+   {
+    "event_id": "event_008",
+    "evidence_uids": [
+     "log_record_000017"
+    ],
+    "timestamp": "2005-10-25-07.45.36.124897",
+    "event_type": "missing_binary_error",
+    "description": "Fallo al cargar binario inexistente allreduce_int_V1R1.rts.",
+    "confidence": null,
+    "evidence_groups": [
+     "G10"
+    ],
+    "categoria": "anomalia_operativa"
+   },
+   {
+    "event_id": "event_009",
+    "evidence_uids": [
+     "log_record_000018",
+     "log_record_000019"
+    ],
+    "timestamp": "2005-10-25-08.55.40.146416",
+    "event_type": "network_hardware_warnings",
+    "description": "Advertencia en hilo de red torus y eventos de resincronización en tree receiver.",
+    "confidence": null,
+    "evidence_groups": [
+     "G11",
+     "G12"
+    ],
+    "categoria": "anomalia_operativa"
+   },
+   {
+    "event_id": "event_010",
+    "evidence_uids": [
+     "log_record_000020"
+    ],
+    "timestamp": "2005-10-28-12.59.40.203147",
+    "event_type": "kernel_abnormal_termination",
+    "description": "Terminación fatal del microkernel RTS con código 1004.",
+    "confidence": null,
+    "evidence_groups": [
+     "G13"
+    ],
+    "categoria": "anomalia_operativa"
+   }
+  ],
+  "secuencia_temporal": [
+   "event_001",
+   "event_002",
+   "event_003",
+   "event_004",
+   "event_005",
+   "event_006",
+   "event_007",
+   "event_008",
+   "event_009",
+   "event_010"
+  ],
+  "tecnicas_atribuidas": [],
+  "invalid_evidence_uid_count": 0,
+  "d11_warnings": [],
+  "telemetry": {
+   "llm_call_count": 7,
+   "input_tokens": 18189,
+   "output_tokens": 3524,
+   "total_tokens": 26422,
+   "execution_time": 71.882307,
+   "replan_count": 0,
+   "intentos_correccion": 2,
+   "invalid_evidence_uid_count": 0,
+   "d11_warning_count": 0,
+   "llm_calls": [
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 1301,
+     "output_tokens": 350,
+     "total_tokens": 2166,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 515,
+     "duration_s": 9.821,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 4446,
+     "output_tokens": 213,
+     "total_tokens": 5332,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 673,
+     "duration_s": 8.176,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 1756,
+     "output_tokens": 735,
+     "total_tokens": 3392,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 901,
+     "duration_s": 14.648,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 280,
+     "output_tokens": 53,
+     "total_tokens": 629,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 296,
+     "duration_s": 4.167,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 1659,
+     "output_tokens": 136,
+     "total_tokens": 2357,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 562,
+     "duration_s": 6.503,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 1729,
+     "output_tokens": 121,
+     "total_tokens": 2405,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 555,
+     "duration_s": 6.851,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 7018,
+     "output_tokens": 1916,
+     "total_tokens": 10141,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 1207,
+     "duration_s": 21.534,
+     "error": null
+    }
+   ]
+  },
+  "firma": "v2|lineas=20 ips=1 servicios=[bgl.kernel:16,bgl.app:4] eventos=[evento_critico:5,evento_normal:15] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[INFO:15,FATAL:5] categorias=[] cobertura=1.0",
+  "plan": {
+   "plan_version": 1,
+   "objetivo": "Evaluar la naturaleza e impacto de los eventos con severidad FATAL registrados en el supercomputador BlueGene/L para determinar si corresponden a fallas de hardware, problemas del kernel o actividad anómala, y definir acciones de mitigación.",
+   "pasos": [
+    {
+     "id": 1,
+     "accion": "triage",
+     "objetivo": "Analizar los 5 eventos FATAL y los nodos afectados (ej. bgl.kernel y bgl.app) para correlacionar los fallos y clasificar la severidad del incidente.",
+     "estado": "ejecutado"
+    },
+    {
+     "id": 2,
+     "accion": "cve",
+     "objetivo": "Consultar vulnerabilidades conocidas asociadas a la plataforma IBM BlueGene/L y sus componentes de kernel/aplicación.",
+     "estado": "omitido",
+     "motivo": "El diagnóstico confirma que los eventos corresponden a fallos operativos, de hardware y estabilidad del clúster, sin indicios de actividad maliciosa ni vulnerabilidades de seguridad específicas a consultar."
+    },
+    {
+     "id": 3,
+     "accion": "mitigacion",
+     "objetivo": "Proponer medidas de contención, aislamiento de nodos críticos degradados y recomendaciones para la estabilidad del clúster.",
+     "estado": "ejecutado"
+    }
+   ],
+   "criterios_finalizacion": [
+    "Causa raíz de los 5 eventos FATAL identificada o categorizada como falla de hardware/sistema operativo.",
+    "Verificación completada sobre posibles vulnerabilidades explotables en el entorno BlueGene/L.",
+    "Plan de mitigación y procedimientos de mantenimiento y aislamiento formulados."
+   ]
+  },
+  "plan_objetivo": "Evaluar la naturaleza e impacto de los eventos con severidad FATAL registrados en el supercomputador BlueGene/L para determinar si corresponden a fallas de hardware, problemas del kernel o actividad anómala, y definir acciones de mitigación.",
+  "paso_actual": 3,
+  "historial_ejecucion": [
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_planificador",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "plan v1, 3 pasos: ['triage', 'cve', 'mitigacion']"
+   },
+   {
+    "plan_version": 1,
+    "step_id": 1,
+    "nodo": "agente_analista_triage",
+    "accion": "triage",
+    "estado": "ejecutado",
+    "resumen": "diagnóstico producido"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_cazador",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "4 hallazgos (0 alto)"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "tool_consultar_rag",
+    "accion": "rag",
+    "estado": "omitido",
+    "resumen": "técnicas MITRE no consultadas (sin hipótesis de seguridad: no se consultan técnicas)"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_selector_herramientas",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "usar_cve=False"
+   },
+   {
+    "plan_version": 1,
+    "step_id": 3,
+    "nodo": "agente_ingeniero_mitigacion",
+    "accion": "mitigacion",
+    "estado": "ejecutado",
+    "resumen": "6 comandos propuestos"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "tool_validar_comandos",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "comandos rechazados"
+   },
+   {
+    "plan_version": 1,
+    "step_id": 3,
+    "nodo": "agente_ingeniero_mitigacion",
+    "accion": "mitigacion",
+    "estado": "ejecutado",
+    "resumen": "5 comandos propuestos"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "tool_validar_comandos",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "comandos válidos"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_auditor_final",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "confianza=0.95 cobertura_suficiente=True"
+   }
+  ],
+  "desviaciones_plan": [],
+  "historial_planes": [],
+  "replan_count": 0,
+  "diagnostico": "El lote presenta múltiples anomalías operativas y fallas de ejecución en el clúster BlueGene/L. Destacan eventos de severidad FATAL asociados a la desconexión del socket del demonio de E/S (ciod: Error reading message prefix... Link has been severed), terminación anómala del kernel (rts: kernel terminated for reason 1004), fallos en la carga de binarios y generación masiva de volcados de memoria (core files), junto con advertencias de hardware en la red torus. No existen indicios de actividad maliciosa, tratándose de problemas operativos y de estabilidad del sistema.",
+  "necesita_rag": false,
+  "usar_cve": false,
+  "razon_seleccion": "El diagnóstico confirma que los eventos corresponden a fallos operativos, de hardware y estabilidad del clúster, sin indicios de actividad maliciosa ni vulnerabilidades de seguridad específicas a consultar.",
+  "contexto_rag": [
+   {
+    "id": "bgl_des_balanceado_0001",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 2 × [FATAL bgl.kernel] rts panic! - stopping execution. Composición: 20 eventos, severidades INFO 17, FATAL 3.",
+    "similitud": 0.877
+   },
+   {
+    "id": "bgl_des_natural_0003",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 2 × [FATAL bgl.app] ciod: Error reading message prefix on CioStream socket to <n>.<n>.<n>.<n>:<n>, Link has be. Composición: 20 eventos, severidades INFO 15, FATAL 5.",
+    "similitud": 0.852
+   },
+   {
+    "id": "bgl_des_natural_0011",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Contiene eventos de severidad alta que no se consideraron alerta: 2 × [FATAL bgl.app] ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r<n>: invalid or mi. Composición: 20 eventos, severidades INFO 18, FATAL 2.",
+    "similitud": 0.846
+   }
+  ],
+  "tecnicas_mitre": [],
+  "cves_encontrados": [],
+  "comandos_mitigacion": [
+   "ping -c 3 172.16.96.116",
+   "ip route get 172.16.96.116",
+   "ls -la /bgl/apps/followup/RAPTOR/new.raptor.trace",
+   "file /bgl/apps/followup/RAPTOR/new.raptor.trace",
+   "dmesg -T | tail -n 50"
+  ],
+  "comandos_validos": true,
+  "motivos_rechazo": [],
+  "intentos_correccion": 2,
+  "confianza": 0.95,
+  "hay_incidente": false,
+  "hay_anomalia": true,
+  "evaluacion_auditor": "Se confirma una anomalía estrictamente operativa en el clúster BlueGene/L. El lote evidencia fallas de ejecución de aplicaciones (generación masiva de core files, errores de formato ejecutable e imágenes no encontradas), pérdida de conectividad en el demonio de control de E/S (CioStream Link has been severed), degradación y advertencias de hardware en la red torus y memoria, finalizando con la terminación anómala del microkernel (reason 1004). No se identifican patrones de intrusión, abuso o actividad maliciosa.",
+  "cobertura_auditor": true,
+  "cobertura_suficiente": true,
+  "motivo_replanificacion": "",
+  "requiere_replanificacion": false,
+  "_firma": "v2|lineas=20 ips=1 servicios=[bgl.kernel:16,bgl.app:4] eventos=[evento_critico:5,evento_normal:15] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[INFO:15,FATAL:5] categorias=[] cobertura=1.0",
+  "_error_api": null,
+  "requiere_revision_humana": false,
+  "output_contract_version": "d11-v1",
+  "classification_detallada": "anomalia_operativa"
+ },
+ "observaciones": [
+  {
+   "nodo": "planificador",
+   "llamadas": [
+    0
+   ],
+   "prompt_chars": 2137,
+   "system_chars": 869,
+   "tokens": [
+    {
+     "input_tokens": 1301,
+     "output_tokens": 350,
+     "reasoning_tokens": 515,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "triage",
+   "llamadas": [
+    1
+   ],
+   "prompt_chars": 7542,
+   "system_chars": 1394,
+   "tokens": [
+    {
+     "input_tokens": 4446,
+     "output_tokens": 213,
+     "reasoning_tokens": 673,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "cazador",
+   "llamadas": [
+    2
+   ],
+   "prompt_chars": 3420,
+   "system_chars": 1355,
+   "tokens": [
+    {
+     "input_tokens": 1756,
+     "output_tokens": 735,
+     "reasoning_tokens": 901,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "selector",
+   "llamadas": [
+    3
+   ],
+   "prompt_chars": 720,
+   "system_chars": 344,
+   "tokens": [
+    {
+     "input_tokens": 280,
+     "output_tokens": 53,
+     "reasoning_tokens": 296,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "mitigacion",
+   "llamadas": [
+    4
+   ],
+   "prompt_chars": 3514,
+   "system_chars": 854,
+   "tokens": [
+    {
+     "input_tokens": 1659,
+     "output_tokens": 136,
+     "reasoning_tokens": 562,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "mitigacion",
+   "llamadas": [
+    5
+   ],
+   "prompt_chars": 3668,
+   "system_chars": 854,
+   "tokens": [
+    {
+     "input_tokens": 1729,
+     "output_tokens": 121,
+     "reasoning_tokens": 555,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "auditor",
+   "llamadas": [
+    6
+   ],
+   "prompt_chars": 14334,
+   "system_chars": 4831,
+   "tokens": [
+    {
+     "input_tokens": 7018,
+     "output_tokens": 1916,
+     "reasoning_tokens": 1207,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  }
+ ],
+ "consultas_externas": [
+  {
+   "orden": 1,
+   "herramienta": "abuseipdb",
+   "parametros": {
+    "ip": "172.16.96.116"
+   },
+   "intento_externo": false,
+   "bloqueado": false,
+   "n_intentos_bloqueados": 0,
+   "hosts": [],
+   "sin_reputacion": true,
+   "respaldo_respondio": false,
+   "fuente_respuesta": "sin_reputacion"
+  }
+ ]
+}

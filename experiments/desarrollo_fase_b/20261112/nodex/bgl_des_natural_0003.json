@@ -1,0 +1,1313 @@
+{
+ "case_id": "bgl_des_natural_0003",
+ "dataset": "bgl",
+ "arquitectura": "nodex",
+ "segundos_pared_hijo": 87.56982079999943,
+ "estado": {
+  "resumen_logs": {
+   "formato_detectado": "bgl",
+   "total_lineas": 20,
+   "servicios": {
+    "bgl.kernel": 17,
+    "bgl.app": 3
+   },
+   "eventos": {
+    "evento_critico": 5,
+    "evento_normal": 15
+   },
+   "ventana_temporal": {
+    "inicio": "2005-12-14-23.16.21.740107",
+    "fin": "2006-01-03-07.13.09.127918"
+   },
+   "n_ips_distintas": 1,
+   "ips_distintas": [
+    "172.16.96.116"
+   ],
+   "por_ip": {
+    "172.16.96.116": {
+     "intentos_fallidos": 0,
+     "usuarios_objetivo": [],
+     "servicios": [
+      "bgl.app"
+     ],
+     "n_eventos": 2,
+     "n_como_origen": 2,
+     "n_como_destino": 0
+    }
+   },
+   "usuarios": {},
+   "n_usuarios_distintos": 0,
+   "codigos_respuesta": {},
+   "entidades": [
+    {
+     "ip": "172.16.96.116",
+     "n_eventos": 2,
+     "intentos_fallidos": 0,
+     "usuarios_objetivo": [],
+     "servicios": [
+      "bgl.app"
+     ],
+     "n_como_origen": 2,
+     "n_como_destino": 0
+    }
+   ],
+   "cronologia": [
+    {
+     "n": 1,
+     "timestamp": "2005-12-14-23.16.21.740107",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1134630981 2005.12.14 R37-M1-N8-I:J18-U11 2005-12-14-23.16.21.740107 R37-M1-N8-I:J18-U11 RAS APP FATAL ciod: Error reading message prefix on CioStream socket to 172.16.96.116:49934…",
+     "ip": "172.16.96.116"
+    },
+    {
+     "n": 2,
+     "timestamp": "2005-12-14-23.16.59.947676",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1134631019 2005.12.14 R32-M0-NC-I:J18-U01 2005-12-14-23.16.59.947676 R32-M0-NC-I:J18-U01 RAS APP FATAL ciod: Error reading message prefix on CioStream socket to 172.16.96.116:50288…",
+     "ip": "172.16.96.116"
+    },
+    {
+     "n": 9,
+     "timestamp": "2005-12-21-07.27.17.749308",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1135178837 2005.12.21 R62-M0-N4-I:J18-U01 2005-12-21-07.27.17.749308 R62-M0-N4-I:J18-U01 RAS APP FATAL ciod: Error loading /g/g24/buber/Yunsic/BlueGene/partad.develf/taddriver.32.e…"
+    },
+    {
+     "n": 10,
+     "timestamp": "2005-12-25-22.47.15.963417",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1135579635 2005.12.25 R62-M1-NA-C:J04-U01 2005-12-25-22.47.15.963417 R62-M1-NA-C:J04-U01 RAS KERNEL FATAL fpr29=0xffffffff ffffffff ffffffff ffffffff"
+    },
+    {
+     "n": 11,
+     "timestamp": "2005-12-26-05.13.59.265193",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1135602839 2005.12.26 R61-M0-N3-C:J11-U11 2005-12-26-05.13.59.265193 R61-M0-N3-C:J11-U11 RAS KERNEL FATAL Machine State Register: 0x0002f900"
+    }
+   ],
+   "cronologia_omitidos": 0,
+   "raw_procedencia": {
+    "sha256": "2fa1dfb321020ec144adfa944b82e258196d9501e12859e48f59c08441d74086",
+    "lineas": 20,
+    "bytes": 3313
+   },
+   "reputacion_ips": {
+    "172.16.96.116": {
+     "fuente": "sin_reputacion",
+     "ip": "172.16.96.116",
+     "score": null,
+     "nota": "modo sin reputación externa: ninguna IP recibe puntaje",
+     "categoria": "desconocido"
+    }
+   },
+   "perfil_lote": {
+    "tipo": "texto",
+    "filas": 20,
+    "con_formato_reconocido": 20,
+    "severidades": {
+     "INFO": 15,
+     "FATAL": 5
+    },
+    "componentes": {
+     "bgl.kernel": 17,
+     "bgl.app": 3
+    },
+    "nodos": {
+     "R37-M1-NC-C:J02-U11": 8,
+     "R37-M1-N8-I:J18-U11": 1,
+     "R32-M0-NC-I:J18-U01": 1,
+     "R60-M1-N7-C:J17-U01": 1,
+     "R66-M0-N8-I:J18-U01": 1,
+     "R30-M1-N3-C:J13-U01": 1,
+     "R13-M1-N1-C:J03-U01": 1,
+     "R77-M1-NC-I:J18-U01": 1,
+     "R45-M0-N4-I:J18-U01": 1,
+     "R62-M0-N4-I:J18-U01": 1
+    },
+    "nodos_distintos": 13,
+    "lineas_severidad_alta": {
+     "total": 5,
+     "omitidas": 0,
+     "lineas": [
+      {
+       "uid": "log_record_000001",
+       "severidad": "FATAL",
+       "group_id": "G01"
+      },
+      {
+       "uid": "log_record_000002",
+       "severidad": "FATAL",
+       "group_id": "G01"
+      },
+      {
+       "uid": "log_record_000009",
+       "severidad": "FATAL",
+       "group_id": "G06"
+      },
+      {
+       "uid": "log_record_000010",
+       "severidad": "FATAL",
+       "group_id": "G07"
+      },
+      {
+       "uid": "log_record_000011",
+       "severidad": "FATAL",
+       "group_id": "G08"
+      }
+     ]
+    },
+    "grupos": 10
+   }
+  },
+  "preprocessing_metadata": {
+   "schema_version": "2.0",
+   "total_lineas_fisicas": 20,
+   "total_eventos": 20,
+   "decoder_distribution": {
+    "text": 20
+   },
+   "product_distribution": {
+    "BlueGene/L": 20
+   },
+   "vendor_distribution": {
+    "IBM": 20
+   },
+   "version_distribution": {},
+   "protocol_distribution": {},
+   "profile_distribution": {
+    "bgl": 20
+   },
+   "severity_distribution": {
+    "INFO": 15,
+    "FATAL": 5
+   },
+   "event_categories": {},
+   "event_outcomes": {},
+   "entities": {
+    "ip": {
+     "172.16.96.116": 2
+    },
+    "host": {
+     "R37-M1-NC-C:J02-U11": 8,
+     "R07-M0-N0-I:J18-U11": 1,
+     "R13-M1-N1-C:J03-U01": 1,
+     "R30-M1-N3-C:J13-U01": 1,
+     "R32-M0-NC-I:J18-U01": 1,
+     "R37-M1-N8-I:J18-U11": 1,
+     "R45-M0-N4-I:J18-U01": 1,
+     "R60-M1-N7-C:J17-U01": 1,
+     "R61-M0-N3-C:J11-U11": 1,
+     "R62-M0-N4-I:J18-U01": 1,
+     "R62-M1-NA-C:J04-U01": 1,
+     "R66-M0-N8-I:J18-U01": 1,
+     "R77-M1-NC-I:J18-U01": 1
+    },
+    "servicio": {
+     "bgl.kernel": 17,
+     "bgl.app": 3
+    },
+    "producto": {
+     "BlueGene/L": 20
+    }
+   },
+   "time_window": {
+    "inicio": "2005-12-14-23.16.21.740107",
+    "fin": "2006-01-03-07.13.09.127918"
+   },
+   "parsing": {
+    "parsed_events": 20,
+    "fallback_events": 0,
+    "coverage": 1.0
+   },
+   "segments": [
+    {
+     "index": 0,
+     "decoder": "text",
+     "line_start": 1,
+     "line_end": 20,
+     "n_records": 20,
+     "confidence": 0.1,
+     "decoder_inicial": "text",
+     "confidence_inicial": 0.1,
+     "decoder_distribution": {
+      "text": 20
+     },
+     "context": {}
+    }
+   ],
+   "entities_resumen": {
+    "ip": 1,
+    "host": 13,
+    "servicio": 2,
+    "producto": 1
+   },
+   "config": {
+    "LOG_DETECTION_CHUNK_SIZE": 50,
+    "LOG_ENABLE_MULTILINE": true,
+    "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+    "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+    "LOG_MAX_EVENTS": 100000,
+    "LOG_MAX_FILE_BYTES": 52428800,
+    "LOG_MAX_RAW_SAMPLES": 20,
+    "LOG_MAX_UNMAPPED_FIELDS": 100,
+    "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+    "LOG_PARSING_MODE": "hybrid",
+    "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+    "LOG_PRESERVE_RAW": true
+   }
+  },
+  "parsing_warnings": [],
+  "evidencia_logs": [
+   {
+    "uid": "log_record_000001",
+    "record_number": 1,
+    "line_start": 1,
+    "line_end": 1,
+    "timestamp": "2005-12-14-23.16.21.740107",
+    "group_id": "G01",
+    "source_ip": "172.16.96.116",
+    "source_host": "R37-M1-N8-I:J18-U11",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: Error reading message prefix on CioStream socket to 172.16.96.116:49934, Link has been severed"
+   },
+   {
+    "uid": "log_record_000002",
+    "record_number": 2,
+    "line_start": 2,
+    "line_end": 2,
+    "timestamp": "2005-12-14-23.16.59.947676",
+    "group_id": "G01",
+    "source_ip": "172.16.96.116",
+    "source_host": "R32-M0-NC-I:J18-U01",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: Error reading message prefix on CioStream socket to 172.16.96.116:50288, Link has been severed"
+   },
+   {
+    "uid": "log_record_000003",
+    "record_number": 3,
+    "line_start": 3,
+    "line_end": 3,
+    "timestamp": "2005-12-16-07.54.43.245870",
+    "group_id": "G02",
+    "source_host": "R60-M1-N7-C:J17-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "total of 20 ddr error(s) detected and corrected over 22070 seconds"
+   },
+   {
+    "uid": "log_record_000004",
+    "record_number": 4,
+    "line_start": 4,
+    "line_end": 4,
+    "timestamp": "2005-12-16-17.58.00.577715",
+    "group_id": "G03",
+    "source_host": "R66-M0-N8-I:J18-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "ciod: pollControlDescriptors: Detected the debugger died."
+   },
+   {
+    "uid": "log_record_000005",
+    "record_number": 5,
+    "line_start": 5,
+    "line_end": 5,
+    "timestamp": "2005-12-18-10.10.56.366499",
+    "group_id": "G04",
+    "source_host": "R30-M1-N3-C:J13-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "2 L3 EDRAM error(s) (dcr 0x0157) detected and corrected over 282 seconds"
+   },
+   {
+    "uid": "log_record_000006",
+    "record_number": 6,
+    "line_start": 6,
+    "line_end": 6,
+    "timestamp": "2005-12-18-17.15.03.147145",
+    "group_id": "G02",
+    "source_host": "R13-M1-N1-C:J03-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "total of 3 ddr error(s) detected and corrected over 8732 seconds"
+   },
+   {
+    "uid": "log_record_000007",
+    "record_number": 7,
+    "line_start": 7,
+    "line_end": 7,
+    "timestamp": "2005-12-19-19.51.38.151363",
+    "group_id": "G03",
+    "source_host": "R77-M1-NC-I:J18-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "ciod: pollControlDescriptors: Detected the debugger died."
+   },
+   {
+    "uid": "log_record_000008",
+    "record_number": 8,
+    "line_start": 8,
+    "line_end": 8,
+    "timestamp": "2005-12-20-08.15.20.957109",
+    "group_id": "G05",
+    "source_host": "R45-M0-N4-I:J18-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "ciod: generated 128 core files for program /g/g24/germann2/SPaSM_static/SPaSM_mpi"
+   },
+   {
+    "uid": "log_record_000009",
+    "record_number": 9,
+    "line_start": 9,
+    "line_end": 9,
+    "timestamp": "2005-12-21-07.27.17.749308",
+    "group_id": "G06",
+    "source_host": "R62-M0-N4-I:J18-U01",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: Error loading /g/g24/buber/Yunsic/BlueGene/partad.develf/taddriver.32.exe: program image too big, 361544528 > 266076160"
+   },
+   {
+    "uid": "log_record_000010",
+    "record_number": 10,
+    "line_start": 10,
+    "line_end": 10,
+    "timestamp": "2005-12-25-22.47.15.963417",
+    "group_id": "G07",
+    "source_host": "R62-M1-NA-C:J04-U01",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "fpr29=0xffffffff ffffffff ffffffff ffffffff"
+   },
+   {
+    "uid": "log_record_000011",
+    "record_number": 11,
+    "line_start": 11,
+    "line_end": 11,
+    "timestamp": "2005-12-26-05.13.59.265193",
+    "group_id": "G08",
+    "source_host": "R61-M0-N3-C:J11-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "Machine State Register: 0x0002f900"
+   },
+   {
+    "uid": "log_record_000012",
+    "record_number": 12,
+    "line_start": 12,
+    "line_end": 12,
+    "timestamp": "2005-12-26-16.28.08.716176",
+    "group_id": "G09",
+    "source_host": "R37-M1-NC-C:J02-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "instruction cache parity error corrected"
+   },
+   {
+    "uid": "log_record_000013",
+    "record_number": 13,
+    "line_start": 13,
+    "line_end": 13,
+    "timestamp": "2005-12-26-18.50.11.312622",
+    "group_id": "G09",
+    "source_host": "R37-M1-NC-C:J02-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "instruction cache parity error corrected"
+   },
+   {
+    "uid": "log_record_000014",
+    "record_number": 14,
+    "line_start": 14,
+    "line_end": 14,
+    "timestamp": "2005-12-26-19.17.22.803508",
+    "group_id": "G09",
+    "source_host": "R37-M1-NC-C:J02-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "instruction cache parity error corrected"
+   },
+   {
+    "uid": "log_record_000015",
+    "record_number": 15,
+    "line_start": 15,
+    "line_end": 15,
+    "timestamp": "2005-12-26-21.28.48.643483",
+    "group_id": "G09",
+    "source_host": "R37-M1-NC-C:J02-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "instruction cache parity error corrected"
+   },
+   {
+    "uid": "log_record_000016",
+    "record_number": 16,
+    "line_start": 16,
+    "line_end": 16,
+    "timestamp": "2005-12-26-22.37.56.529871",
+    "group_id": "G09",
+    "source_host": "R37-M1-NC-C:J02-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "instruction cache parity error corrected"
+   },
+   {
+    "uid": "log_record_000017",
+    "record_number": 17,
+    "line_start": 17,
+    "line_end": 17,
+    "timestamp": "2005-12-26-23.43.50.733716",
+    "group_id": "G09",
+    "source_host": "R37-M1-NC-C:J02-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "instruction cache parity error corrected"
+   },
+   {
+    "uid": "log_record_000018",
+    "record_number": 18,
+    "line_start": 18,
+    "line_end": 18,
+    "timestamp": "2005-12-26-23.45.17.825965",
+    "group_id": "G09",
+    "source_host": "R37-M1-NC-C:J02-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "instruction cache parity error corrected"
+   },
+   {
+    "uid": "log_record_000019",
+    "record_number": 19,
+    "line_start": 19,
+    "line_end": 19,
+    "timestamp": "2005-12-27-01.24.58.711345",
+    "group_id": "G09",
+    "source_host": "R37-M1-NC-C:J02-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "instruction cache parity error corrected"
+   },
+   {
+    "uid": "log_record_000020",
+    "record_number": 20,
+    "line_start": 20,
+    "line_end": 20,
+    "timestamp": "2006-01-03-07.13.09.127918",
+    "group_id": "G10",
+    "source_host": "R07-M0-N0-I:J18-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "ciod: generated 128 core files for program /g/g24/germann2/SPaSM_mini/MEAM/r13"
+   }
+  ],
+  "evidencia_logs_omitidos": 0,
+  "grupos_evidencia": [
+   {
+    "group_id": "G01",
+    "clave": {
+     "componente": "bgl.app",
+     "severidad": "FATAL",
+     "plantilla": "ciod: Error reading message prefix on CioStream socket to <n>.<n>.<n>.<n>:<n>, Link has been severed"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000001",
+     "log_record_000002"
+    ],
+    "nodos": [
+     "R37-M1-N8-I:J18-U11",
+     "R32-M0-NC-I:J18-U01"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G02",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "total of <n> ddr error(s) detected and corrected over <n> seconds"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000003",
+     "log_record_000006"
+    ],
+    "nodos": [
+     "R60-M1-N7-C:J17-U01",
+     "R13-M1-N1-C:J03-U01"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G03",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "ciod: pollControlDescriptors: Detected the debugger died."
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000004",
+     "log_record_000007"
+    ],
+    "nodos": [
+     "R66-M0-N8-I:J18-U01",
+     "R77-M1-NC-I:J18-U01"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G04",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "<n> L<n> EDRAM error(s) (dcr <hex>) detected and corrected over <n> seconds"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000005"
+    ],
+    "nodos": [
+     "R30-M1-N3-C:J13-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G05",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "ciod: generated <n> core files for program /g/g<n>/germann<n>/SPaSM_static/SPaSM_mpi"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000008"
+    ],
+    "nodos": [
+     "R45-M0-N4-I:J18-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G06",
+    "clave": {
+     "componente": "bgl.app",
+     "severidad": "FATAL",
+     "plantilla": "ciod: Error loading /g/g<n>/buber/Yunsic/BlueGene/partad.develf/taddriver.<n>.exe: program image too big, <n> > <n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000009"
+    ],
+    "nodos": [
+     "R62-M0-N4-I:J18-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G07",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "fpr<n>=<hex> ffffffff ffffffff ffffffff"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000010"
+    ],
+    "nodos": [
+     "R62-M1-NA-C:J04-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G08",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "Machine State Register: <hex>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000011"
+    ],
+    "nodos": [
+     "R61-M0-N3-C:J11-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G09",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "instruction cache parity error corrected"
+    },
+    "conteo": 8,
+    "uids": [
+     "log_record_000012",
+     "log_record_000013",
+     "log_record_000014",
+     "log_record_000015",
+     "log_record_000016",
+     "log_record_000017",
+     "log_record_000018",
+     "log_record_000019"
+    ],
+    "nodos": [
+     "R37-M1-NC-C:J02-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G10",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "ciod: generated <n> core files for program /g/g<n>/germann<n>/SPaSM_mini/MEAM/r<n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000020"
+    ],
+    "nodos": [
+     "R07-M0-N0-I:J18-U11"
+    ],
+    "n_nodos": 1
+   }
+  ],
+  "contenido_lote": {
+   "tipo": "texto",
+   "lineas": [
+    "[log_record_000001] 1134630981 2005.12.14 R37-M1-N8-I:J18-U11 2005-12-14-23.16.21.740107 R37-M1-N8-I:J18-U11 RAS APP FATAL ciod: Error reading message prefix on CioStream socket to 172.16.96.116:49934, Link has been severed",
+    "[log_record_000002] 1134631019 2005.12.14 R32-M0-NC-I:J18-U01 2005-12-14-23.16.59.947676 R32-M0-NC-I:J18-U01 RAS APP FATAL ciod: Error reading message prefix on CioStream socket to 172.16.96.116:50288, Link has been severed",
+    "[log_record_000003] 1134748483 2005.12.16 R60-M1-N7-C:J17-U01 2005-12-16-07.54.43.245870 R60-M1-N7-C:J17-U01 RAS KERNEL INFO total of 20 ddr error(s) detected and corrected over 22070 seconds",
+    "[log_record_000004] 1134784680 2005.12.16 R66-M0-N8-I:J18-U01 2005-12-16-17.58.00.577715 R66-M0-N8-I:J18-U01 RAS KERNEL INFO ciod: pollControlDescriptors: Detected the debugger died.",
+    "[log_record_000005] 1134929456 2005.12.18 R30-M1-N3-C:J13-U01 2005-12-18-10.10.56.366499 R30-M1-N3-C:J13-U01 RAS KERNEL INFO 2 L3 EDRAM error(s) (dcr 0x0157) detected and corrected over 282 seconds",
+    "[log_record_000006] 1134954903 2005.12.18 R13-M1-N1-C:J03-U01 2005-12-18-17.15.03.147145 R13-M1-N1-C:J03-U01 RAS KERNEL INFO total of 3 ddr error(s) detected and corrected over 8732 seconds",
+    "[log_record_000007] 1135050698 2005.12.19 R77-M1-NC-I:J18-U01 2005-12-19-19.51.38.151363 R77-M1-NC-I:J18-U01 RAS KERNEL INFO ciod: pollControlDescriptors: Detected the debugger died.",
+    "[log_record_000008] 1135095320 2005.12.20 R45-M0-N4-I:J18-U01 2005-12-20-08.15.20.957109 R45-M0-N4-I:J18-U01 RAS KERNEL INFO ciod: generated 128 core files for program /g/g24/germann2/SPaSM_static/SPaSM_mpi",
+    "[log_record_000009] 1135178837 2005.12.21 R62-M0-N4-I:J18-U01 2005-12-21-07.27.17.749308 R62-M0-N4-I:J18-U01 RAS APP FATAL ciod: Error loading /g/g24/buber/Yunsic/BlueGene/partad.develf/taddriver.32.exe: program image too big, 361544528 > 266076160",
+    "[log_record_000010] 1135579635 2005.12.25 R62-M1-NA-C:J04-U01 2005-12-25-22.47.15.963417 R62-M1-NA-C:J04-U01 RAS KERNEL FATAL fpr29=0xffffffff ffffffff ffffffff ffffffff",
+    "[log_record_000011] 1135602839 2005.12.26 R61-M0-N3-C:J11-U11 2005-12-26-05.13.59.265193 R61-M0-N3-C:J11-U11 RAS KERNEL FATAL Machine State Register: 0x0002f900",
+    "[log_record_000012] 1135643288 2005.12.26 R37-M1-NC-C:J02-U11 2005-12-26-16.28.08.716176 R37-M1-NC-C:J02-U11 RAS KERNEL INFO instruction cache parity error corrected",
+    "[log_record_000013] 1135651811 2005.12.26 R37-M1-NC-C:J02-U11 2005-12-26-18.50.11.312622 R37-M1-NC-C:J02-U11 RAS KERNEL INFO instruction cache parity error corrected",
+    "[log_record_000014] 1135653442 2005.12.26 R37-M1-NC-C:J02-U11 2005-12-26-19.17.22.803508 R37-M1-NC-C:J02-U11 RAS KERNEL INFO instruction cache parity error corrected",
+    "[log_record_000015] 1135661328 2005.12.26 R37-M1-NC-C:J02-U11 2005-12-26-21.28.48.643483 R37-M1-NC-C:J02-U11 RAS KERNEL INFO instruction cache parity error corrected",
+    "[log_record_000016] 1135665476 2005.12.26 R37-M1-NC-C:J02-U11 2005-12-26-22.37.56.529871 R37-M1-NC-C:J02-U11 RAS KERNEL INFO instruction cache parity error corrected",
+    "[log_record_000017] 1135669430 2005.12.26 R37-M1-NC-C:J02-U11 2005-12-26-23.43.50.733716 R37-M1-NC-C:J02-U11 RAS KERNEL INFO instruction cache parity error corrected",
+    "[log_record_000018] 1135669517 2005.12.26 R37-M1-NC-C:J02-U11 2005-12-26-23.45.17.825965 R37-M1-NC-C:J02-U11 RAS KERNEL INFO instruction cache parity error corrected",
+    "[log_record_000019] 1135675498 2005.12.27 R37-M1-NC-C:J02-U11 2005-12-27-01.24.58.711345 R37-M1-NC-C:J02-U11 RAS KERNEL INFO instruction cache parity error corrected",
+    "[log_record_000020] 1136301189 2006.01.03 R07-M0-N0-I:J18-U11 2006-01-03-07.13.09.127918 R07-M0-N0-I:J18-U11 RAS KERNEL INFO ciod: generated 128 core files for program /g/g24/germann2/SPaSM_mini/MEAM/r13"
+   ],
+   "total_lineas": 20,
+   "lineas_entregadas": 20,
+   "recortado": false,
+   "topes": {
+    "lineas": 200,
+    "caracteres": 20000
+   }
+  },
+  "veredicto_preliminar": "anomalia_operativa",
+  "justificacion_veredicto_preliminar": "Presencia de errores FATAL por pérdida de enlace en ciod, fallos de ejecución por límites de memoria y volcados de registros del kernel compatibles con fallas operativas y de hardware.",
+  "invalid_evidence_group_count": 0,
+  "comandos_rechazados": [],
+  "casos_historicos": [
+   {
+    "id": "bgl_des_balanceado_0000",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 1 × [FATAL bgl.app] ciod: Error reading message prefix after LOAD_MESSAGE on CioStream socket to <n>.<n>.<n>.<; 1 × [FATAL bgl.kernel] rts: kernel terminated for reason <n>. Composición: 20 eventos, severidades INFO 15, FATAL 5.",
+    "similitud": 0.852
+   },
+   {
+    "id": "bgl_des_natural_0004",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 5 × [FATAL bgl.kernel] data storage interrupt. Composición: 20 eventos, severidades FATAL 20.",
+    "similitud": 0.817
+   },
+   {
+    "id": "bgl_des_natural_0001",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 2 × [FATAL bgl.app] ciod: failed to read message prefix on control stream (CioStream socket to <n>.<n>.<n>.<n>. Composición: 20 eventos, severidades INFO 18, FATAL 2.",
+    "similitud": 0.81
+   }
+  ],
+  "historico_consulta": {
+   "excluidos_por_solapamiento": [
+    "rag_enriquecido_v2:bgl_des_natural_0003"
+   ],
+   "consultados": 56,
+   "excluidos_mismo_incidente": [],
+   "exclusion_por_incidente_activa": true,
+   "representacion": "Eventos destacados: [FATAL bgl.app] ciod: Error reading message prefix on CioStream socket to <n>.<n>.<n>.<n>:<n>, Link has been severed x2 en 2 nodos; [FATAL bgl.app] ciod: Error loading /g/g<n>/buber/Yunsic/BlueGene/partad.develf/taddriver.<n>.exe: program image too big, <n> > <n> x1 en 1 nodos; [FATAL bgl.kernel] fpr<n>=<hex> ffffffff ffffffff ffffffff x1 en 1 nodos; [FATAL bgl.kernel] Machine State Register: <hex> x1 en 1 nodos\nLog de texto, 20 eventos. Severidades: INFO 15, FATAL 5. Componentes: bgl.kernel 17, bgl.app 3. Nodos distintos: 13."
+  },
+  "hallazgos_cazador": [
+   {
+    "group_id": "G01",
+    "nivel_sospecha": "bajo",
+    "explicacion_benigna": "Pérdida de conectividad de red o terminación prematura de la aplicación cliente que cerró abruptamente el socket TCP del demonio de control y E/S (ciod).",
+    "explicacion_alternativa": "Interrupción intencionada de la conexión de control o falla forzada en el enlace de comunicación con el host 172.16.96.116.",
+    "justificacion": "El mensaje 'Link has been severed' en puertos efímeros de ciod (49934, 50288) es un fallo operacional habitual en entornos BlueGene/L cuando un proceso o nodo de I/O finaliza abruptamente.",
+    "tecnica_candidata": null
+   },
+   {
+    "group_id": "G06",
+    "nivel_sospecha": "bajo",
+    "explicacion_benigna": "Error de ejecución por parte de un usuario al compilar o lanzar un binario cuyo tamaño en memoria (361 MB) supera el límite físico o configurado en los nodos de cómputo (266 MB).",
+    "explicacion_alternativa": "Intento de cargar un artefacto o binario anómalo que excede intencionalmente las cuotas de memoria para causar denegación de servicio.",
+    "justificacion": "La traza detalla explícitamente una ruta de usuario (/g/g24/buber/...) y una discrepancia de tamaño ('program image too big, 361544528 > 266076160'), tratándose de un error de configuración de la carga de trabajo.",
+    "tecnica_candidata": null
+   },
+   {
+    "group_id": "G07",
+    "nivel_sospecha": "bajo",
+    "explicacion_benigna": "Volcado de depuración del registro de coma flotante (fpr29) generado por el kernel durante un volcado de fallo (crash dump) del procesador PowerPC.",
+    "explicacion_alternativa": "Caída del sistema provocada por corrupción de memoria inducida o explotación a nivel de kernel/aplicación.",
+    "justificacion": "La salida muestra el volcado directo de registros de hardware (fpr29=0xffffffff...) típico de un pánico del kernel BlueGene/L, coherente con las fallas de paridad o DDR observadas en el sistema.",
+    "tecnica_candidata": null
+   },
+   {
+    "group_id": "G08",
+    "nivel_sospecha": "bajo",
+    "explicacion_benigna": "Registro del Machine State Register (MSR) de la arquitectura PowerPC impreso durante la rutina de diagnóstico tras una trampa o fallo no recuperable del kernel.",
+    "explicacion_alternativa": "Inestabilidad crítica generada por manipulación o fallo de hardware en el nodo R61-M0-N3-C:J11-U11.",
+    "justificacion": "El volcado del MSR (0x0002f900) forma parte habitual de los registros de auditoría y post-mortem de la arquitectura del procesador ante una condición de excepción fatal.",
+    "tecnica_candidata": null
+   }
+  ],
+  "cazador_ejecutado": true,
+  "veredicto_consolidado": "anomalia_operativa",
+  "consulta_mitre": "",
+  "rag_omitido": "sin hipótesis de seguridad: no se consultan técnicas",
+  "revision_hallazgos": [],
+  "diagnostico_inicial": "",
+  "diagnostico_corregido": "",
+  "correcciones_auditor": 0,
+  "historial_correcciones": [],
+  "eventos_reconstruidos": [
+   {
+    "event_id": "event_001",
+    "evidence_uids": [
+     "log_record_000001",
+     "log_record_000002"
+    ],
+    "timestamp": "2005-12-14-23.16.21.740107",
+    "event_type": "ciod_socket_severed",
+    "description": "Desconexión abrupta de sockets de control de E/S ciod hacia el host 172.16.96.116.",
+    "confidence": null,
+    "evidence_groups": [
+     "G01"
+    ],
+    "categoria": "anomalia_operativa"
+   },
+   {
+    "event_id": "event_002",
+    "evidence_uids": [
+     "log_record_000003",
+     "log_record_000006"
+    ],
+    "timestamp": "2005-12-16-07.54.43.245870",
+    "event_type": "ddr_parity_corrected",
+    "description": "Detección y corrección de errores de memoria DDR en nodos de cómputo.",
+    "confidence": null,
+    "evidence_groups": [
+     "G02"
+    ],
+    "categoria": "anomalia_operativa"
+   },
+   {
+    "event_id": "event_003",
+    "evidence_uids": [
+     "log_record_000004",
+     "log_record_000007"
+    ],
+    "timestamp": "2005-12-16-17.58.00.577715",
+    "event_type": "debugger_termination",
+    "description": "Terminación no esperada del proceso depurador en ciod.",
+    "confidence": null,
+    "evidence_groups": [
+     "G03"
+    ],
+    "categoria": "anomalia_operativa"
+   },
+   {
+    "event_id": "event_004",
+    "evidence_uids": [
+     "log_record_000005"
+    ],
+    "timestamp": "2005-12-18-10.10.56.366499",
+    "event_type": "edram_error_corrected",
+    "description": "Detección y corrección de errores de EDRAM L3 en el nodo de cómputo.",
+    "confidence": null,
+    "evidence_groups": [
+     "G04"
+    ],
+    "categoria": "anomalia_operativa"
+   },
+   {
+    "event_id": "event_005",
+    "evidence_uids": [
+     "log_record_000008"
+    ],
+    "timestamp": "2005-12-20-08.15.20.957109",
+    "event_type": "core_dump_generated",
+    "description": "Generación de 128 core files para el programa SPaSM_mpi tras aborto de ejecución.",
+    "confidence": null,
+    "evidence_groups": [
+     "G05"
+    ],
+    "categoria": "anomalia_operativa"
+   },
+   {
+    "event_id": "event_006",
+    "evidence_uids": [
+     "log_record_000009"
+    ],
+    "timestamp": "2005-12-21-07.27.17.749308",
+    "event_type": "executable_size_exceeded",
+    "description": "Fallo fatal al cargar ejecutable por exceder el límite de memoria asignado.",
+    "confidence": null,
+    "evidence_groups": [
+     "G06"
+    ],
+    "categoria": "anomalia_operativa"
+   },
+   {
+    "event_id": "event_007",
+    "evidence_uids": [
+     "log_record_000010"
+    ],
+    "timestamp": "2005-12-25-22.47.15.963417",
+    "event_type": "fpr_register_dump",
+    "description": "Volcado de registro de coma flotante por excepción fatal en el kernel.",
+    "confidence": null,
+    "evidence_groups": [
+     "G07"
+    ],
+    "categoria": "anomalia_operativa"
+   },
+   {
+    "event_id": "event_008",
+    "evidence_uids": [
+     "log_record_000011"
+    ],
+    "timestamp": "2005-12-26-05.13.59.265193",
+    "event_type": "msr_register_dump",
+    "description": "Volcado del Machine State Register del procesador ante fallo fatal de sistema.",
+    "confidence": null,
+    "evidence_groups": [
+     "G08"
+    ],
+    "categoria": "anomalia_operativa"
+   },
+   {
+    "event_id": "event_009",
+    "evidence_uids": [
+     "log_record_000012",
+     "log_record_000013",
+     "log_record_000014",
+     "log_record_000015",
+     "log_record_000016",
+     "log_record_000017",
+     "log_record_000018",
+     "log_record_000019"
+    ],
+    "timestamp": "2005-12-26-16.28.08.716176",
+    "event_type": "icache_parity_corrected",
+    "description": "Múltiples correcciones de paridad en la caché de instrucciones del nodo R37-M1-NC-C:J02-U11.",
+    "confidence": null,
+    "evidence_groups": [
+     "G09"
+    ],
+    "categoria": "anomalia_operativa"
+   },
+   {
+    "event_id": "event_010",
+    "evidence_uids": [
+     "log_record_000020"
+    ],
+    "timestamp": "2006-01-03-07.13.09.127918",
+    "event_type": "core_dump_generated",
+    "description": "Generación de 128 core files para el programa SPaSM_mini tras aborto de ejecución.",
+    "confidence": null,
+    "evidence_groups": [
+     "G10"
+    ],
+    "categoria": "anomalia_operativa"
+   }
+  ],
+  "secuencia_temporal": [
+   "event_001",
+   "event_002",
+   "event_003",
+   "event_004",
+   "event_005",
+   "event_006",
+   "event_007",
+   "event_008",
+   "event_009",
+   "event_010"
+  ],
+  "tecnicas_atribuidas": [],
+  "invalid_evidence_uid_count": 0,
+  "d11_warnings": [],
+  "telemetry": {
+   "llm_call_count": 6,
+   "input_tokens": 16337,
+   "output_tokens": 3488,
+   "total_tokens": 25125,
+   "execution_time": 72.272367,
+   "replan_count": 0,
+   "intentos_correccion": 1,
+   "invalid_evidence_uid_count": 0,
+   "d11_warning_count": 0,
+   "llm_calls": [
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 1305,
+     "output_tokens": 348,
+     "total_tokens": 2282,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 629,
+     "duration_s": 10.468,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 4392,
+     "output_tokens": 239,
+     "total_tokens": 5138,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 507,
+     "duration_s": 7.605,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 1786,
+     "output_tokens": 796,
+     "total_tokens": 3800,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 1218,
+     "duration_s": 17.412,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 305,
+     "output_tokens": 67,
+     "total_tokens": 722,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 350,
+     "duration_s": 4.759,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 1701,
+     "output_tokens": 131,
+     "total_tokens": 2303,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 471,
+     "duration_s": 6.127,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 6848,
+     "output_tokens": 1907,
+     "total_tokens": 10880,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 2125,
+     "duration_s": 25.706,
+     "error": null
+    }
+   ]
+  },
+  "firma": "v2|lineas=20 ips=1 servicios=[bgl.kernel:17,bgl.app:3] eventos=[evento_critico:5,evento_normal:15] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[INFO:15,FATAL:5] categorias=[] cobertura=1.0",
+  "plan": {
+   "plan_version": 1,
+   "objetivo": "Investigar los 5 eventos de severidad FATAL detectados en el clúster BlueGene/L para determinar si corresponden a fallas de hardware, problemas del kernel o actividad anómala/vulnerabilidades explotadas.",
+   "pasos": [
+    {
+     "id": 1,
+     "accion": "triage",
+     "objetivo": "Analizar la naturaleza de los 5 eventos FATAL en los componentes bgl.kernel y bgl.app distribuidos en los 13 nodos para caracterizar el alcance y posible impacto de seguridad.",
+     "estado": "ejecutado"
+    },
+    {
+     "id": 2,
+     "accion": "cve",
+     "objetivo": "Consultar vulnerabilidades conocidas asociadas a los componentes de BlueGene/L y servicios kernel identificados.",
+     "estado": "omitido",
+     "motivo": "El diagnóstico concluye explícitamente que no existe evidencia de actividad maliciosa ni compromiso de seguridad, tratándose de fallos de hardware, problemas de memoria y errores en software de soporte HPC, por lo que no aplica la búsqueda de CVEs."
+    },
+    {
+     "id": 3,
+     "accion": "mitigacion",
+     "objetivo": "Definir medidas de contención y remediación para mitigar los fallos críticos y aislar nodos o tráfico sospechoso si corresponde.",
+     "estado": "ejecutado"
+    }
+   ],
+   "criterios_finalizacion": [
+    "Causa raíz de los eventos FATAL determinada como fallo de infraestructura/hardware o incidente de seguridad",
+    "Evaluación de vulnerabilidades conocidas para el entorno BlueGene/L completada",
+    "Recomendaciones y plan de mitigación formulados para los nodos afectados"
+   ]
+  },
+  "plan_objetivo": "Investigar los 5 eventos de severidad FATAL detectados en el clúster BlueGene/L para determinar si corresponden a fallas de hardware, problemas del kernel o actividad anómala/vulnerabilidades explotadas.",
+  "paso_actual": 3,
+  "historial_ejecucion": [
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_planificador",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "plan v1, 3 pasos: ['triage', 'cve', 'mitigacion']"
+   },
+   {
+    "plan_version": 1,
+    "step_id": 1,
+    "nodo": "agente_analista_triage",
+    "accion": "triage",
+    "estado": "ejecutado",
+    "resumen": "diagnóstico producido"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_cazador",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "4 hallazgos (0 alto)"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "tool_consultar_rag",
+    "accion": "rag",
+    "estado": "omitido",
+    "resumen": "técnicas MITRE no consultadas (sin hipótesis de seguridad: no se consultan técnicas)"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_selector_herramientas",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "usar_cve=False"
+   },
+   {
+    "plan_version": 1,
+    "step_id": 3,
+    "nodo": "agente_ingeniero_mitigacion",
+    "accion": "mitigacion",
+    "estado": "ejecutado",
+    "resumen": "7 comandos propuestos"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "tool_validar_comandos",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "comandos válidos"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_auditor_final",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "confianza=0.95 cobertura_suficiente=True"
+   }
+  ],
+  "desviaciones_plan": [],
+  "historial_planes": [],
+  "replan_count": 0,
+  "diagnostico": "Se observan múltiples eventos de severidad FATAL e INFO en el clúster BlueGene/L distribuidos en varios nodos y componentes. Entre ellos destacan desconexiones abruptas de sockets I/O de control (ciod: Link has been severed), un intento fallido de carga de binario por exceder el tamaño máximo permitido, volcados de registros críticos del kernel (Machine State Register y registros de coma flotante) indicativos de fallos a nivel de procesador/kernel, además de múltiples correcciones de paridad de caché de instrucciones y generación de core files. No existe evidencia de actividad maliciosa ni compromiso de seguridad; el comportamiento corresponde a fallas de hardware, problemas de memoria/ejecución y errores en la capa de software de soporte HPC.",
+  "necesita_rag": false,
+  "usar_cve": false,
+  "razon_seleccion": "El diagnóstico concluye explícitamente que no existe evidencia de actividad maliciosa ni compromiso de seguridad, tratándose de fallos de hardware, problemas de memoria y errores en software de soporte HPC, por lo que no aplica la búsqueda de CVEs.",
+  "contexto_rag": [
+   {
+    "id": "bgl_des_balanceado_0000",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 1 × [FATAL bgl.app] ciod: Error reading message prefix after LOAD_MESSAGE on CioStream socket to <n>.<n>.<n>.<; 1 × [FATAL bgl.kernel] rts: kernel terminated for reason <n>. Composición: 20 eventos, severidades INFO 15, FATAL 5.",
+    "similitud": 0.852
+   },
+   {
+    "id": "bgl_des_natural_0004",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 5 × [FATAL bgl.kernel] data storage interrupt. Composición: 20 eventos, severidades FATAL 20.",
+    "similitud": 0.817
+   },
+   {
+    "id": "bgl_des_natural_0001",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 2 × [FATAL bgl.app] ciod: failed to read message prefix on control stream (CioStream socket to <n>.<n>.<n>.<n>. Composición: 20 eventos, severidades INFO 18, FATAL 2.",
+    "similitud": 0.81
+   }
+  ],
+  "tecnicas_mitre": [],
+  "cves_encontrados": [],
+  "comandos_mitigacion": [
+   "ping -c 4 172.16.96.116",
+   "ip route get 172.16.96.116",
+   "ss -tan '( dst 172.16.96.116 or dport = :49934 or dport = :50288 )'",
+   "dmesg -T | tail -n 100",
+   "journalctl -p 3 -n 50 --no-pager",
+   "free -h",
+   "cat /proc/meminfo"
+  ],
+  "comandos_validos": true,
+  "motivos_rechazo": [],
+  "intentos_correccion": 1,
+  "confianza": 0.95,
+  "hay_incidente": false,
+  "hay_anomalia": true,
+  "evaluacion_auditor": "El diagnóstico es correcto. Los eventos corresponden íntegramente a fallas de hardware (errores corregidos de paridad de caché, DDR y EDRAM L3), fallos de software y configuración de cargas de trabajo HPC (desconexión de sockets de control ciod, abortos de depuración, desbordamiento del límite de tamaño de ejecutable e interrupciones fatales del kernel con volcado de registros). No existe indicio alguno de actividad maliciosa o compromiso de seguridad.",
+  "cobertura_auditor": true,
+  "cobertura_suficiente": true,
+  "motivo_replanificacion": "",
+  "requiere_replanificacion": false,
+  "_firma": "v2|lineas=20 ips=1 servicios=[bgl.kernel:17,bgl.app:3] eventos=[evento_critico:5,evento_normal:15] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[INFO:15,FATAL:5] categorias=[] cobertura=1.0",
+  "_error_api": null,
+  "requiere_revision_humana": false,
+  "output_contract_version": "d11-v1",
+  "classification_detallada": "anomalia_operativa"
+ },
+ "observaciones": [
+  {
+   "nodo": "planificador",
+   "llamadas": [
+    0
+   ],
+   "prompt_chars": 2137,
+   "system_chars": 869,
+   "tokens": [
+    {
+     "input_tokens": 1305,
+     "output_tokens": 348,
+     "reasoning_tokens": 629,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "triage",
+   "llamadas": [
+    1
+   ],
+   "prompt_chars": 7354,
+   "system_chars": 1394,
+   "tokens": [
+    {
+     "input_tokens": 4392,
+     "output_tokens": 239,
+     "reasoning_tokens": 507,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "cazador",
+   "llamadas": [
+    2
+   ],
+   "prompt_chars": 3267,
+   "system_chars": 1355,
+   "tokens": [
+    {
+     "input_tokens": 1786,
+     "output_tokens": 796,
+     "reasoning_tokens": 1218,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "selector",
+   "llamadas": [
+    3
+   ],
+   "prompt_chars": 900,
+   "system_chars": 344,
+   "tokens": [
+    {
+     "input_tokens": 305,
+     "output_tokens": 67,
+     "reasoning_tokens": 350,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "mitigacion",
+   "llamadas": [
+    4
+   ],
+   "prompt_chars": 3613,
+   "system_chars": 854,
+   "tokens": [
+    {
+     "input_tokens": 1701,
+     "output_tokens": 131,
+     "reasoning_tokens": 471,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "auditor",
+   "llamadas": [
+    5
+   ],
+   "prompt_chars": 13764,
+   "system_chars": 4831,
+   "tokens": [
+    {
+     "input_tokens": 6848,
+     "output_tokens": 1907,
+     "reasoning_tokens": 2125,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  }
+ ],
+ "consultas_externas": [
+  {
+   "orden": 1,
+   "herramienta": "abuseipdb",
+   "parametros": {
+    "ip": "172.16.96.116"
+   },
+   "intento_externo": false,
+   "bloqueado": false,
+   "n_intentos_bloqueados": 0,
+   "hosts": [],
+   "sin_reputacion": true,
+   "respaldo_respondio": false,
+   "fuente_respuesta": "sin_reputacion"
+  }
+ ]
+}

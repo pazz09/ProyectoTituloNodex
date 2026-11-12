@@ -1,0 +1,949 @@
+{
+ "case_id": "bgl_des_natural_0002",
+ "dataset": "bgl",
+ "arquitectura": "agente_unico",
+ "segundos_pared_hijo": 30.097960400002194,
+ "estado": {
+  "evidencia_logs": [
+   {
+    "uid": "log_record_000001",
+    "record_number": 1,
+    "line_start": 1,
+    "line_end": 1,
+    "timestamp": "2005-12-04-06.45.49.687761",
+    "group_id": "G01",
+    "source_host": "R60-M0-ND-C:J07-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "CE sym 11, at 0x06366640, mask 0x04"
+   },
+   {
+    "uid": "log_record_000002",
+    "record_number": 2,
+    "line_start": 2,
+    "line_end": 2,
+    "timestamp": "2005-12-04-07.26.04.629795",
+    "group_id": "G01",
+    "source_host": "R35-M1-N9-C:J14-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "CE sym 19, at 0x057c7e00, mask 0x20"
+   },
+   {
+    "uid": "log_record_000003",
+    "record_number": 3,
+    "line_start": 3,
+    "line_end": 3,
+    "timestamp": "2005-12-04-09.00.41.190112",
+    "group_id": "G02",
+    "source_host": "R23-M0-NC-C:J05-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "159 ddr error(s) detected and corrected on rank 0, symbol 29 over 2486 seconds"
+   },
+   {
+    "uid": "log_record_000004",
+    "record_number": 4,
+    "line_start": 4,
+    "line_end": 4,
+    "timestamp": "2005-12-04-09.00.41.990496",
+    "group_id": "G01",
+    "source_host": "R23-M0-NC-C:J05-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "CE sym 29, at 0x0ea9fd60, mask 0x40"
+   },
+   {
+    "uid": "log_record_000005",
+    "record_number": 5,
+    "line_start": 5,
+    "line_end": 5,
+    "timestamp": "2005-12-04-09.04.28.582086",
+    "group_id": "G03",
+    "source_host": "R06-M1-N6-C:J08-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "total of 1 ddr error(s) detected and corrected over 2487 seconds"
+   },
+   {
+    "uid": "log_record_000006",
+    "record_number": 6,
+    "line_start": 6,
+    "line_end": 6,
+    "timestamp": "2005-12-04-10.31.27.742650",
+    "group_id": "G04",
+    "source_host": "R71-M0-N4-C:J14-U01",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "minus normalized number..................0"
+   },
+   {
+    "uid": "log_record_000007",
+    "record_number": 7,
+    "line_start": 7,
+    "line_end": 7,
+    "timestamp": "2005-12-04-12.05.37.993474",
+    "group_id": "G05",
+    "source_host": "R46-M0-N8-I:J18-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "Lustre mount FAILED : bglio617 : block_id : location"
+   },
+   {
+    "uid": "log_record_000008",
+    "record_number": 8,
+    "line_start": 8,
+    "line_end": 8,
+    "timestamp": "2005-12-05-18.10.41.610617",
+    "group_id": "G06",
+    "source_host": "R52-M1-NA-C:J03-U01",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "fraction rounded.........................0"
+   },
+   {
+    "uid": "log_record_000009",
+    "record_number": 9,
+    "line_start": 9,
+    "line_end": 9,
+    "timestamp": "2005-12-06-10.05.04.300635",
+    "group_id": "G07",
+    "source_host": "R12-M0-NC",
+    "service_name": "bgl.discovery",
+    "severity": "WARNING",
+    "message": "Node card is not fully functional"
+   },
+   {
+    "uid": "log_record_000010",
+    "record_number": 10,
+    "line_start": 10,
+    "line_end": 10,
+    "timestamp": "2005-12-06-16.04.30.188673",
+    "group_id": "G08",
+    "source_host": "R01-M0-N0-C:J04-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "critical input interrupt (unit=0x0b bit=0x17): warning for tree C1 wire, suppressing further interrupts of same type"
+   },
+   {
+    "uid": "log_record_000011",
+    "record_number": 11,
+    "line_start": 11,
+    "line_end": 11,
+    "timestamp": "2005-12-06-17.42.27.383145",
+    "group_id": "G09",
+    "source_host": "R03-M0-N7-C:J07-U01",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "size of scratchpad portion of L3.........0 (0M)"
+   },
+   {
+    "uid": "log_record_000012",
+    "record_number": 12,
+    "line_start": 12,
+    "line_end": 12,
+    "timestamp": "2005-12-06-19.24.05.504553",
+    "group_id": "G10",
+    "source_host": "R36-M0-N2-C:J05-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "Kernel detected 3830884 integer alignment exceptions (3830877) iar 0x00544ea8, dear 0x01fc1ba0 (3830878) iar 0x00544eb8, dear 0x01fc1bc0 (3830879) iar 0x00544ea8, dear 0x01fc1be0 (3830880) iar 0x00544eb8, dear 0x01fc1c00 (3830881) iar 0x00544ee0, dear 0x01fc1c20 (3830882) iar 0x00544ef0, dear 0x01fc"
+   },
+   {
+    "uid": "log_record_000013",
+    "record_number": 13,
+    "line_start": 13,
+    "line_end": 13,
+    "timestamp": "2005-12-06-19.34.38.822749",
+    "group_id": "G10",
+    "source_host": "R27-M0-NB-C:J08-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "Kernel detected 3853444 integer alignment exceptions (3853437) iar 0x00544ea8, dear 0x01ef5e20 (3853438) iar 0x00544eb8, dear 0x01ef5e40 (3853439) iar 0x00544ea8, dear 0x01ef5e60 (3853440) iar 0x00544eb8, dear 0x01ef5e80 (3853441) iar 0x00544ee0, dear 0x01ef5ea0 (3853442) iar 0x00544ef0, dear 0x01ef"
+   },
+   {
+    "uid": "log_record_000014",
+    "record_number": 14,
+    "line_start": 14,
+    "line_end": 14,
+    "timestamp": "2005-12-06-19.38.52.768522",
+    "group_id": "G10",
+    "source_host": "R27-M1-NF-C:J17-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "Kernel detected 3747792 integer alignment exceptions (3747785) iar 0x00544ea8, dear 0x01fc9220 (3747786) iar 0x00544eb8, dear 0x01fc9240 (3747787) iar 0x00544ea8, dear 0x01fc9260 (3747788) iar 0x00544eb8, dear 0x01fc9280 (3747789) iar 0x00544ee0, dear 0x01fc92a0 (3747790) iar 0x00544ef0, dear 0x01fc"
+   },
+   {
+    "uid": "log_record_000015",
+    "record_number": 15,
+    "line_start": 15,
+    "line_end": 15,
+    "timestamp": "2005-12-06-20.02.05.596871",
+    "group_id": "G10",
+    "source_host": "R36-M0-N7-C:J09-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "Kernel detected 3946290 integer alignment exceptions (3946283) iar 0x00544ea8, dear 0x01ef6080 (3946284) iar 0x00544eb8, dear 0x01ef60a0 (3946285) iar 0x00544ea8, dear 0x01ef60c0 (3946286) iar 0x00544eb8, dear 0x01ef60e0 (3946287) iar 0x00544ee0, dear 0x01ef6100 (3946288) iar 0x00544ef0, dear 0x01ef"
+   },
+   {
+    "uid": "log_record_000016",
+    "record_number": 16,
+    "line_start": 16,
+    "line_end": 16,
+    "timestamp": "2005-12-06-20.04.38.539848",
+    "group_id": "G10",
+    "source_host": "R26-M0-N9-C:J11-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "Kernel detected 4909176 integer alignment exceptions (4909169) iar 0x00544ea8, dear 0x01fc8a40 (4909170) iar 0x00544eb8, dear 0x01fc8a60 (4909171) iar 0x00544ea8, dear 0x01fc8a80 (4909172) iar 0x00544eb8, dear 0x01fc8aa0 (4909173) iar 0x00544ee0, dear 0x01fc8ac0 (4909174) iar 0x00544ef0, dear 0x01fc"
+   },
+   {
+    "uid": "log_record_000017",
+    "record_number": 17,
+    "line_start": 17,
+    "line_end": 17,
+    "timestamp": "2005-12-06-20.05.23.094186",
+    "group_id": "G10",
+    "source_host": "R31-M0-NF-C:J07-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "Kernel detected 4898338 integer alignment exceptions (4898331) iar 0x00544ea8, dear 0x049e75e0 (4898332) iar 0x00544eb8, dear 0x049e7600 (4898333) iar 0x00544ea8, dear 0x049e7620 (4898334) iar 0x00544eb8, dear 0x049e7640 (4898335) iar 0x00544ee0, dear 0x049e7660 (4898336) iar 0x00544ef0, dear 0x049e"
+   },
+   {
+    "uid": "log_record_000018",
+    "record_number": 18,
+    "line_start": 18,
+    "line_end": 18,
+    "timestamp": "2005-12-06-20.07.27.653573",
+    "group_id": "G10",
+    "source_host": "R37-M1-N1-C:J02-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "Kernel detected 3945740 integer alignment exceptions (3945733) iar 0x00544ea8, dear 0x01ef7960 (3945734) iar 0x00544eb8, dear 0x01ef7980 (3945735) iar 0x00544ea8, dear 0x01ef79a0 (3945736) iar 0x00544eb8, dear 0x01ef79c0 (3945737) iar 0x00544ee0, dear 0x01ef79e0 (3945738) iar 0x00544ef0, dear 0x01ef"
+   },
+   {
+    "uid": "log_record_000019",
+    "record_number": 19,
+    "line_start": 19,
+    "line_end": 19,
+    "timestamp": "2005-12-06-20.12.23.534341",
+    "group_id": "G10",
+    "source_host": "R36-M0-NE-C:J13-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "Kernel detected 3486044 integer alignment exceptions (3486037) iar 0x00544ea8, dear 0x01ef7c60 (3486038) iar 0x00544eb8, dear 0x01ef7c80 (3486039) iar 0x00544ea8, dear 0x01ef7ca0 (3486040) iar 0x00544eb8, dear 0x01ef7cc0 (3486041) iar 0x00544ee0, dear 0x01ef7ce0 (3486042) iar 0x00544ef0, dear 0x01ef"
+   },
+   {
+    "uid": "log_record_000020",
+    "record_number": 20,
+    "line_start": 20,
+    "line_end": 20,
+    "timestamp": "2005-12-08-22.17.36.597185",
+    "group_id": "G11",
+    "source_host": "R64-M1-NC-I:J18-U01",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: Error loading /g/g90/glosli/src/ddcMD/ddcMD1.1.17/bin/ddcMDbglV: invalid or missing program image, No such file or directory"
+   }
+  ],
+  "evidencia_logs_omitidos": 0,
+  "grupos_evidencia": [
+   {
+    "group_id": "G01",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "CE sym <n>, at <hex>, mask <hex>"
+    },
+    "conteo": 3,
+    "uids": [
+     "log_record_000001",
+     "log_record_000002",
+     "log_record_000004"
+    ],
+    "nodos": [
+     "R60-M0-ND-C:J07-U11",
+     "R35-M1-N9-C:J14-U01",
+     "R23-M0-NC-C:J05-U01"
+    ],
+    "n_nodos": 3
+   },
+   {
+    "group_id": "G02",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "<n> ddr error(s) detected and corrected on rank <n>, symbol <n> over <n> seconds"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000003"
+    ],
+    "nodos": [
+     "R23-M0-NC-C:J05-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G03",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "total of <n> ddr error(s) detected and corrected over <n> seconds"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000005"
+    ],
+    "nodos": [
+     "R06-M1-N6-C:J08-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G04",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "minus normalized number..................<n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000006"
+    ],
+    "nodos": [
+     "R71-M0-N4-C:J14-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G05",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "Lustre mount FAILED : bglio<n> : block_id : location"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000007"
+    ],
+    "nodos": [
+     "R46-M0-N8-I:J18-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G06",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "fraction rounded.........................<n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000008"
+    ],
+    "nodos": [
+     "R52-M1-NA-C:J03-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G07",
+    "clave": {
+     "componente": "bgl.discovery",
+     "severidad": "WARNING",
+     "plantilla": "Node card is not fully functional"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000009"
+    ],
+    "nodos": [
+     "R12-M0-NC"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G08",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "critical input interrupt (unit=<hex> bit=<hex>): warning for tree C<n> wire, suppressing further interrupts of same type"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000010"
+    ],
+    "nodos": [
+     "R01-M0-N0-C:J04-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G09",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "size of scratchpad portion of L<n>.........<n> (<n>M)"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000011"
+    ],
+    "nodos": [
+     "R03-M0-N7-C:J07-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G10",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "Kernel detected <n> integer alignment exceptions (<n>) iar <hex>, dear <hex> (<n>) iar <hex>, dear <hex> (<n>) iar <hex>"
+    },
+    "conteo": 8,
+    "uids": [
+     "log_record_000012",
+     "log_record_000013",
+     "log_record_000014",
+     "log_record_000015",
+     "log_record_000016",
+     "log_record_000017",
+     "log_record_000018",
+     "log_record_000019"
+    ],
+    "nodos": [
+     "R36-M0-N2-C:J05-U01",
+     "R27-M0-NB-C:J08-U01",
+     "R27-M1-NF-C:J17-U01",
+     "R36-M0-N7-C:J09-U11",
+     "R26-M0-N9-C:J11-U01",
+     "R31-M0-NF-C:J07-U11",
+     "R37-M1-N1-C:J02-U01",
+     "R36-M0-NE-C:J13-U01"
+    ],
+    "n_nodos": 8
+   },
+   {
+    "group_id": "G11",
+    "clave": {
+     "componente": "bgl.app",
+     "severidad": "FATAL",
+     "plantilla": "ciod: Error loading /g/g<n>/glosli/src/ddcMD/ddcMD<n>.<n>.<n>/bin/ddcMDbglV: invalid or missing program image, No such f"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000020"
+    ],
+    "nodos": [
+     "R64-M1-NC-I:J18-U01"
+    ],
+    "n_nodos": 1
+   }
+  ],
+  "contenido_lote": {
+   "tipo": "texto",
+   "lineas": [
+    "[log_record_000001] 1133707549 2005.12.04 R60-M0-ND-C:J07-U11 2005-12-04-06.45.49.687761 R60-M0-ND-C:J07-U11 RAS KERNEL INFO CE sym 11, at 0x06366640, mask 0x04",
+    "[log_record_000002] 1133709964 2005.12.04 R35-M1-N9-C:J14-U01 2005-12-04-07.26.04.629795 R35-M1-N9-C:J14-U01 RAS KERNEL INFO CE sym 19, at 0x057c7e00, mask 0x20",
+    "[log_record_000003] 1133715641 2005.12.04 R23-M0-NC-C:J05-U01 2005-12-04-09.00.41.190112 R23-M0-NC-C:J05-U01 RAS KERNEL INFO 159 ddr error(s) detected and corrected on rank 0, symbol 29 over 2486 seconds",
+    "[log_record_000004] 1133715641 2005.12.04 R23-M0-NC-C:J05-U01 2005-12-04-09.00.41.990496 R23-M0-NC-C:J05-U01 RAS KERNEL INFO CE sym 29, at 0x0ea9fd60, mask 0x40",
+    "[log_record_000005] 1133715868 2005.12.04 R06-M1-N6-C:J08-U01 2005-12-04-09.04.28.582086 R06-M1-N6-C:J08-U01 RAS KERNEL INFO total of 1 ddr error(s) detected and corrected over 2487 seconds",
+    "[log_record_000006] 1133721087 2005.12.04 R71-M0-N4-C:J14-U01 2005-12-04-10.31.27.742650 R71-M0-N4-C:J14-U01 RAS KERNEL FATAL minus normalized number..................0",
+    "[log_record_000007] 1133726737 2005.12.04 R46-M0-N8-I:J18-U11 2005-12-04-12.05.37.993474 R46-M0-N8-I:J18-U11 RAS KERNEL FATAL Lustre mount FAILED : bglio617 : block_id : location",
+    "[log_record_000008] 1133835041 2005.12.05 R52-M1-NA-C:J03-U01 2005-12-05-18.10.41.610617 R52-M1-NA-C:J03-U01 RAS KERNEL FATAL fraction rounded.........................0",
+    "[log_record_000009] 1133892304 2005.12.06 R12-M0-NC 2005-12-06-10.05.04.300635 R12-M0-NC NULL DISCOVERY WARNING Node card is not fully functional",
+    "[log_record_000010] 1133913870 2005.12.06 R01-M0-N0-C:J04-U01 2005-12-06-16.04.30.188673 R01-M0-N0-C:J04-U01 RAS KERNEL INFO critical input interrupt (unit=0x0b bit=0x17): warning for tree C1 wire, suppressing further interrupts of same type",
+    "[log_record_000011] 1133919747 2005.12.06 R03-M0-N7-C:J07-U01 2005-12-06-17.42.27.383145 R03-M0-N7-C:J07-U01 RAS KERNEL FATAL size of scratchpad portion of L3.........0 (0M)",
+    "[log_record_000012] 1133925845 2005.12.06 R36-M0-N2-C:J05-U01 2005-12-06-19.24.05.504553 R36-M0-N2-C:J05-U01 RAS KERNEL INFO Kernel detected 3830884 integer alignment exceptions (3830877) iar 0x00544ea8, dear 0x01fc1ba0 (3830878) iar 0x00544eb8, dear 0x01fc1bc0 (3830879) iar 0x00544ea8, dear 0x01fc1be0 (3830880) iar 0x00544eb8, dear 0x01fc1c00 (3830881) iar 0x00544ee0, dear 0x01fc1c20 (3830882) iar 0x00544ef0, dear 0x01fc1c40 (3830883) iar 0x00544ee0, dear 0x01fc1c60 (3830884) iar 0x00544ef0, dear 0x01fc1c80",
+    "[log_record_000013] 1133926478 2005.12.06 R27-M0-NB-C:J08-U01 2005-12-06-19.34.38.822749 R27-M0-NB-C:J08-U01 RAS KERNEL INFO Kernel detected 3853444 integer alignment exceptions (3853437) iar 0x00544ea8, dear 0x01ef5e20 (3853438) iar 0x00544eb8, dear 0x01ef5e40 (3853439) iar 0x00544ea8, dear 0x01ef5e60 (3853440) iar 0x00544eb8, dear 0x01ef5e80 (3853441) iar 0x00544ee0, dear 0x01ef5ea0 (3853442) iar 0x00544ef0, dear 0x01ef5ec0 (3853443) iar 0x00544ee0, dear 0x01ef5ee0 (3853444) iar 0x00544ef0, dear 0x01ef5f00",
+    "[log_record_000014] 1133926732 2005.12.06 R27-M1-NF-C:J17-U01 2005-12-06-19.38.52.768522 R27-M1-NF-C:J17-U01 RAS KERNEL INFO Kernel detected 3747792 integer alignment exceptions (3747785) iar 0x00544ea8, dear 0x01fc9220 (3747786) iar 0x00544eb8, dear 0x01fc9240 (3747787) iar 0x00544ea8, dear 0x01fc9260 (3747788) iar 0x00544eb8, dear 0x01fc9280 (3747789) iar 0x00544ee0, dear 0x01fc92a0 (3747790) iar 0x00544ef0, dear 0x01fc92c0 (3747791) iar 0x00544ee0, dear 0x01fc92e0 (3747792) iar 0x00544ef0, dear 0x01fc9300",
+    "[log_record_000015] 1133928125 2005.12.06 R36-M0-N7-C:J09-U11 2005-12-06-20.02.05.596871 R36-M0-N7-C:J09-U11 RAS KERNEL INFO Kernel detected 3946290 integer alignment exceptions (3946283) iar 0x00544ea8, dear 0x01ef6080 (3946284) iar 0x00544eb8, dear 0x01ef60a0 (3946285) iar 0x00544ea8, dear 0x01ef60c0 (3946286) iar 0x00544eb8, dear 0x01ef60e0 (3946287) iar 0x00544ee0, dear 0x01ef6100 (3946288) iar 0x00544ef0, dear 0x01ef6120 (3946289) iar 0x00544ee0, dear 0x01ef6140 (3946290) iar 0x00544ef0, dear 0x01ef6160",
+    "[log_record_000016] 1133928278 2005.12.06 R26-M0-N9-C:J11-U01 2005-12-06-20.04.38.539848 R26-M0-N9-C:J11-U01 RAS KERNEL INFO Kernel detected 4909176 integer alignment exceptions (4909169) iar 0x00544ea8, dear 0x01fc8a40 (4909170) iar 0x00544eb8, dear 0x01fc8a60 (4909171) iar 0x00544ea8, dear 0x01fc8a80 (4909172) iar 0x00544eb8, dear 0x01fc8aa0 (4909173) iar 0x00544ee0, dear 0x01fc8ac0 (4909174) iar 0x00544ef0, dear 0x01fc8ae0 (4909175) iar 0x00544ee0, dear 0x01fc8b00 (4909176) iar 0x00544ef0, dear 0x01fc8b20",
+    "[log_record_000017] 1133928323 2005.12.06 R31-M0-NF-C:J07-U11 2005-12-06-20.05.23.094186 R31-M0-NF-C:J07-U11 RAS KERNEL INFO Kernel detected 4898338 integer alignment exceptions (4898331) iar 0x00544ea8, dear 0x049e75e0 (4898332) iar 0x00544eb8, dear 0x049e7600 (4898333) iar 0x00544ea8, dear 0x049e7620 (4898334) iar 0x00544eb8, dear 0x049e7640 (4898335) iar 0x00544ee0, dear 0x049e7660 (4898336) iar 0x00544ef0, dear 0x049e7680 (4898337) iar 0x00544ee0, dear 0x049e76a0 (4898338) iar 0x00544ef0, dear 0x049e76c0",
+    "[log_record_000018] 1133928447 2005.12.06 R37-M1-N1-C:J02-U01 2005-12-06-20.07.27.653573 R37-M1-N1-C:J02-U01 RAS KERNEL INFO Kernel detected 3945740 integer alignment exceptions (3945733) iar 0x00544ea8, dear 0x01ef7960 (3945734) iar 0x00544eb8, dear 0x01ef7980 (3945735) iar 0x00544ea8, dear 0x01ef79a0 (3945736) iar 0x00544eb8, dear 0x01ef79c0 (3945737) iar 0x00544ee0, dear 0x01ef79e0 (3945738) iar 0x00544ef0, dear 0x01ef7a00 (3945739) iar 0x00544ee0, dear 0x01ef7a20 (3945740) iar 0x00544ef0, dear 0x01ef7a40",
+    "[log_record_000019] 1133928743 2005.12.06 R36-M0-NE-C:J13-U01 2005-12-06-20.12.23.534341 R36-M0-NE-C:J13-U01 RAS KERNEL INFO Kernel detected 3486044 integer alignment exceptions (3486037) iar 0x00544ea8, dear 0x01ef7c60 (3486038) iar 0x00544eb8, dear 0x01ef7c80 (3486039) iar 0x00544ea8, dear 0x01ef7ca0 (3486040) iar 0x00544eb8, dear 0x01ef7cc0 (3486041) iar 0x00544ee0, dear 0x01ef7ce0 (3486042) iar 0x00544ef0, dear 0x01ef7d00 (3486043) iar 0x00544ee0, dear 0x01ef7d20 (3486044) iar 0x00544ef0, dear 0x01ef7d40",
+    "[log_record_000020] 1134109056 2005.12.08 R64-M1-NC-I:J18-U01 2005-12-08-22.17.36.597185 R64-M1-NC-I:J18-U01 RAS APP FATAL ciod: Error loading /g/g90/glosli/src/ddcMD/ddcMD1.1.17/bin/ddcMDbglV: invalid or missing program image, No such file or directory"
+   ],
+   "total_lineas": 20,
+   "lineas_entregadas": 20,
+   "recortado": false,
+   "topes": {
+    "lineas": 200,
+    "caracteres": 20000
+   }
+  },
+  "veredicto_preliminar": null,
+  "justificacion_veredicto_preliminar": "",
+  "invalid_evidence_group_count": 0,
+  "comandos_rechazados": [
+   {
+    "comando": "lctl ping bglio617",
+    "motivos": [
+     "BINARIO_NO_RECONOCIDO: 'lctl'"
+    ],
+    "intento": 1
+   }
+  ],
+  "casos_historicos": [
+   {
+    "id": "bgl_des_natural_0003",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 2 × [FATAL bgl.app] ciod: Error reading message prefix on CioStream socket to <n>.<n>.<n>.<n>:<n>, Link has be. Composición: 20 eventos, severidades INFO 15, FATAL 5.",
+    "similitud": 0.807
+   },
+   {
+    "id": "bgl_des_natural_0004",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 5 × [FATAL bgl.kernel] data storage interrupt. Composición: 20 eventos, severidades FATAL 20.",
+    "similitud": 0.762
+   },
+   {
+    "id": "bgl_des_natural_0005",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 3 × [FATAL bgl.kernel] Error receiving packet on tree network, expecting type <n> instead of type <n> (softheader; 2 × [FATAL bgl.kernel] rts: kernel terminated for reason <n>. Composición: 20 eventos, severidades INFO 14, FATAL 6.",
+    "similitud": 0.762
+   }
+  ],
+  "historico_consulta": {
+   "excluidos_por_solapamiento": [
+    "rag_enriquecido_v2:bgl_des_natural_0002"
+   ],
+   "consultados": 56,
+   "excluidos_mismo_incidente": [],
+   "exclusion_por_incidente_activa": true,
+   "representacion": "Eventos destacados: [FATAL bgl.kernel] minus normalized number..................<n> x1 en 1 nodos; [FATAL bgl.kernel] Lustre mount FAILED : bglio<n> : block_id : location x1 en 1 nodos; [FATAL bgl.kernel] fraction rounded.........................<n> x1 en 1 nodos; [WARNING bgl.discovery] Node card is not fully functional x1 en 1 nodos; [FATAL bgl.kernel] size of scratchpad portion of L<n>.........<n> (<n>M) x1 en 1 nodos; [FATAL bgl.app] ciod: Error loading /g/g<n>/glosli/src/ddcMD/ddcMD<n>.<n>.<n>/bin/ddcMDbglV: invalid or missing program image, No such f x1 en 1 nodos\nLog de texto, 20 eventos. Severidades: INFO 14, FATAL 5, WARNING 1. Componentes: bgl.kernel 18, bgl.discovery 1, bgl.app 1. Nodos distintos: 19."
+  },
+  "hallazgos_cazador": [],
+  "cazador_ejecutado": false,
+  "veredicto_consolidado": null,
+  "consulta_mitre": "",
+  "revision_hallazgos": [],
+  "diagnostico_inicial": "",
+  "diagnostico_corregido": "",
+  "correcciones_auditor": 0,
+  "historial_correcciones": [],
+  "eventos_reconstruidos": [
+   {
+    "event_id": "event_001",
+    "evidence_uids": [
+     "log_record_000001",
+     "log_record_000002",
+     "log_record_000004",
+     "log_record_000003",
+     "log_record_000005"
+    ],
+    "timestamp": "2005-12-04-06.45.49.687761",
+    "event_type": "memory_corrected_errors",
+    "description": "Detección y corrección continua de errores de paridad DDR (CE) a través de la memoria de los nodos de cómputo.",
+    "confidence": null,
+    "evidence_groups": [
+     "G01",
+     "G02",
+     "G03"
+    ],
+    "categoria": "contexto"
+   },
+   {
+    "event_id": "event_002",
+    "evidence_uids": [
+     "log_record_000007"
+    ],
+    "timestamp": "2005-12-04-12.05.37.993474",
+    "event_type": "storage_mount_failure",
+    "description": "Fallo fatal en el montaje del sistema de archivos distribuido Lustre en el nodo R46-M0-N8-I:J18-U11.",
+    "confidence": null,
+    "evidence_groups": [
+     "G05"
+    ],
+    "categoria": "anomalia_operativa"
+   },
+   {
+    "event_id": "event_003",
+    "evidence_uids": [
+     "log_record_000009"
+    ],
+    "timestamp": "2005-12-06-10.05.04.300635",
+    "event_type": "node_card_degraded",
+    "description": "El servicio de descubrimiento marca la tarjeta del nodo R12-M0-NC como no completamente funcional.",
+    "confidence": null,
+    "evidence_groups": [
+     "G07"
+    ],
+    "categoria": "anomalia_operativa"
+   },
+   {
+    "event_id": "event_004",
+    "evidence_uids": [
+     "log_record_000012",
+     "log_record_000013",
+     "log_record_000014",
+     "log_record_000015",
+     "log_record_000016",
+     "log_record_000017",
+     "log_record_000018",
+     "log_record_000019"
+    ],
+    "timestamp": "2005-12-06-19.24.05.504553",
+    "event_type": "integer_alignment_exceptions",
+    "description": "Excepciones masivas de alineación de enteros registradas por el kernel en múltiples nodos.",
+    "confidence": null,
+    "evidence_groups": [
+     "G10"
+    ],
+    "categoria": "contexto"
+   },
+   {
+    "event_id": "event_005",
+    "evidence_uids": [
+     "log_record_000020"
+    ],
+    "timestamp": "2005-12-08-22.17.36.597185",
+    "event_type": "application_load_failure",
+    "description": "Fallo crítico al cargar la imagen del programa por no existir la ruta o archivo especificado.",
+    "confidence": null,
+    "evidence_groups": [
+     "G11"
+    ],
+    "categoria": "anomalia_operativa"
+   }
+  ],
+  "secuencia_temporal": [
+   "event_001",
+   "event_002",
+   "event_003",
+   "event_004",
+   "event_005"
+  ],
+  "tecnicas_atribuidas": [],
+  "invalid_evidence_uid_count": 0,
+  "d11_warnings": [],
+  "telemetry": {
+   "llm_call_count": 1,
+   "input_tokens": 12581,
+   "output_tokens": 1081,
+   "total_tokens": 14585,
+   "execution_time": 15.321039,
+   "replan_count": 0,
+   "intentos_correccion": 0,
+   "invalid_evidence_uid_count": 0,
+   "d11_warning_count": 0,
+   "llm_calls": [
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 12581,
+     "output_tokens": 1081,
+     "total_tokens": 14585,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 923,
+     "duration_s": 15.201,
+     "error": null
+    }
+   ]
+  },
+  "resumen_logs": {
+   "formato_detectado": "bgl",
+   "total_lineas": 20,
+   "servicios": {
+    "bgl.kernel": 18,
+    "bgl.app": 1,
+    "bgl.discovery": 1
+   },
+   "eventos": {
+    "evento_critico": 6,
+    "evento_normal": 14
+   },
+   "ventana_temporal": {
+    "inicio": "2005-12-04-06.45.49.687761",
+    "fin": "2005-12-08-22.17.36.597185"
+   },
+   "n_ips_distintas": 0,
+   "ips_distintas": [],
+   "por_ip": {},
+   "usuarios": {},
+   "n_usuarios_distintos": 0,
+   "codigos_respuesta": {},
+   "entidades": [],
+   "cronologia": [
+    {
+     "n": 6,
+     "timestamp": "2005-12-04-10.31.27.742650",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1133721087 2005.12.04 R71-M0-N4-C:J14-U01 2005-12-04-10.31.27.742650 R71-M0-N4-C:J14-U01 RAS KERNEL FATAL minus normalized number..................0"
+    },
+    {
+     "n": 7,
+     "timestamp": "2005-12-04-12.05.37.993474",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1133726737 2005.12.04 R46-M0-N8-I:J18-U11 2005-12-04-12.05.37.993474 R46-M0-N8-I:J18-U11 RAS KERNEL FATAL Lustre mount FAILED : bglio617 : block_id : location"
+    },
+    {
+     "n": 8,
+     "timestamp": "2005-12-05-18.10.41.610617",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1133835041 2005.12.05 R52-M1-NA-C:J03-U01 2005-12-05-18.10.41.610617 R52-M1-NA-C:J03-U01 RAS KERNEL FATAL fraction rounded.........................0"
+    },
+    {
+     "n": 9,
+     "timestamp": "2005-12-06-10.05.04.300635",
+     "servicio": "bgl.discovery",
+     "evento": "evento_critico",
+     "mensaje": "1133892304 2005.12.06 R12-M0-NC 2005-12-06-10.05.04.300635 R12-M0-NC NULL DISCOVERY WARNING Node card is not fully functional"
+    },
+    {
+     "n": 11,
+     "timestamp": "2005-12-06-17.42.27.383145",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1133919747 2005.12.06 R03-M0-N7-C:J07-U01 2005-12-06-17.42.27.383145 R03-M0-N7-C:J07-U01 RAS KERNEL FATAL size of scratchpad portion of L3.........0 (0M)"
+    },
+    {
+     "n": 20,
+     "timestamp": "2005-12-08-22.17.36.597185",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1134109056 2005.12.08 R64-M1-NC-I:J18-U01 2005-12-08-22.17.36.597185 R64-M1-NC-I:J18-U01 RAS APP FATAL ciod: Error loading /g/g90/glosli/src/ddcMD/ddcMD1.1.17/bin/ddcMDbglV: invali…"
+    }
+   ],
+   "cronologia_omitidos": 0,
+   "raw_procedencia": {
+    "sha256": "889b10eceb8e4c12bdd166a303c61b1fdee9e54d45ad3e0d902b0e475add95db",
+    "lineas": 20,
+    "bytes": 5922
+   },
+   "reputacion_ips": {},
+   "perfil_lote": {
+    "tipo": "texto",
+    "filas": 20,
+    "con_formato_reconocido": 20,
+    "severidades": {
+     "INFO": 14,
+     "FATAL": 5,
+     "WARNING": 1
+    },
+    "componentes": {
+     "bgl.kernel": 18,
+     "bgl.discovery": 1,
+     "bgl.app": 1
+    },
+    "nodos": {
+     "R23-M0-NC-C:J05-U01": 2,
+     "R60-M0-ND-C:J07-U11": 1,
+     "R35-M1-N9-C:J14-U01": 1,
+     "R06-M1-N6-C:J08-U01": 1,
+     "R71-M0-N4-C:J14-U01": 1,
+     "R46-M0-N8-I:J18-U11": 1,
+     "R52-M1-NA-C:J03-U01": 1,
+     "R12-M0-NC": 1,
+     "R01-M0-N0-C:J04-U01": 1,
+     "R03-M0-N7-C:J07-U01": 1
+    },
+    "nodos_distintos": 19,
+    "lineas_severidad_alta": {
+     "total": 6,
+     "omitidas": 0,
+     "lineas": [
+      {
+       "uid": "log_record_000006",
+       "severidad": "FATAL",
+       "group_id": "G04"
+      },
+      {
+       "uid": "log_record_000007",
+       "severidad": "FATAL",
+       "group_id": "G05"
+      },
+      {
+       "uid": "log_record_000008",
+       "severidad": "FATAL",
+       "group_id": "G06"
+      },
+      {
+       "uid": "log_record_000009",
+       "severidad": "WARNING",
+       "group_id": "G07"
+      },
+      {
+       "uid": "log_record_000011",
+       "severidad": "FATAL",
+       "group_id": "G09"
+      },
+      {
+       "uid": "log_record_000020",
+       "severidad": "FATAL",
+       "group_id": "G11"
+      }
+     ]
+    },
+    "grupos": 11
+   }
+  },
+  "preprocessing_metadata": {
+   "schema_version": "2.0",
+   "total_lineas_fisicas": 20,
+   "total_eventos": 20,
+   "decoder_distribution": {
+    "text": 20
+   },
+   "product_distribution": {
+    "BlueGene/L": 20
+   },
+   "vendor_distribution": {
+    "IBM": 20
+   },
+   "version_distribution": {},
+   "protocol_distribution": {},
+   "profile_distribution": {
+    "bgl": 20
+   },
+   "severity_distribution": {
+    "INFO": 14,
+    "FATAL": 5,
+    "WARNING": 1
+   },
+   "event_categories": {},
+   "event_outcomes": {},
+   "entities": {
+    "host": {
+     "R23-M0-NC-C:J05-U01": 2,
+     "R01-M0-N0-C:J04-U01": 1,
+     "R03-M0-N7-C:J07-U01": 1,
+     "R06-M1-N6-C:J08-U01": 1,
+     "R12-M0-NC": 1,
+     "R26-M0-N9-C:J11-U01": 1,
+     "R27-M0-NB-C:J08-U01": 1,
+     "R27-M1-NF-C:J17-U01": 1,
+     "R31-M0-NF-C:J07-U11": 1,
+     "R35-M1-N9-C:J14-U01": 1,
+     "R36-M0-N2-C:J05-U01": 1,
+     "R36-M0-N7-C:J09-U11": 1,
+     "R36-M0-NE-C:J13-U01": 1,
+     "R37-M1-N1-C:J02-U01": 1,
+     "R46-M0-N8-I:J18-U11": 1,
+     "R52-M1-NA-C:J03-U01": 1,
+     "R60-M0-ND-C:J07-U11": 1,
+     "R64-M1-NC-I:J18-U01": 1,
+     "R71-M0-N4-C:J14-U01": 1
+    },
+    "servicio": {
+     "bgl.kernel": 18,
+     "bgl.app": 1,
+     "bgl.discovery": 1
+    },
+    "producto": {
+     "BlueGene/L": 20
+    }
+   },
+   "time_window": {
+    "inicio": "2005-12-04-06.45.49.687761",
+    "fin": "2005-12-08-22.17.36.597185"
+   },
+   "parsing": {
+    "parsed_events": 20,
+    "fallback_events": 0,
+    "coverage": 1.0
+   },
+   "segments": [
+    {
+     "index": 0,
+     "decoder": "text",
+     "line_start": 1,
+     "line_end": 20,
+     "n_records": 20,
+     "confidence": 0.1,
+     "decoder_inicial": "text",
+     "confidence_inicial": 0.1,
+     "decoder_distribution": {
+      "text": 20
+     },
+     "context": {}
+    }
+   ],
+   "entities_resumen": {
+    "host": 19,
+    "servicio": 3,
+    "producto": 1
+   },
+   "config": {
+    "LOG_DETECTION_CHUNK_SIZE": 50,
+    "LOG_ENABLE_MULTILINE": true,
+    "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+    "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+    "LOG_MAX_EVENTS": 100000,
+    "LOG_MAX_FILE_BYTES": 52428800,
+    "LOG_MAX_RAW_SAMPLES": 20,
+    "LOG_MAX_UNMAPPED_FIELDS": 100,
+    "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+    "LOG_PARSING_MODE": "hybrid",
+    "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+    "LOG_PRESERVE_RAW": true
+   }
+  },
+  "parsing_warnings": [],
+  "firma": "v2|lineas=20 ips=0 servicios=[bgl.kernel:18,bgl.app:1,bgl.discovery:1] eventos=[evento_critico:6,evento_normal:14] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[INFO:14,FATAL:5,WARNING:1] categorias=[] cobertura=1.0",
+  "plan": {},
+  "plan_objetivo": "",
+  "paso_actual": 0,
+  "historial_ejecucion": [],
+  "desviaciones_plan": [],
+  "historial_planes": [],
+  "replan_count": 0,
+  "diagnostico": "Se observan múltiples anomalías operativas de hardware y software en la infraestructura BlueGene/L sin indicios de actividad maliciosa. Los eventos destacados incluyen un fallo crítico en el montaje del sistema de archivos distribuido Lustre (nodo R46-M0-N8-I:J18-U11), una degradación física informada por el subsistema de descubrimiento ('Node card is not fully functional' en R12-M0-NC) y un error de ejecución en tiempo de carga de aplicación debido a un binario faltante o inexistente ('No such file or directory').",
+  "necesita_rag": false,
+  "usar_cve": false,
+  "contexto_rag": [],
+  "tecnicas_mitre": [],
+  "cves_encontrados": [],
+  "comandos_mitigacion": [
+   "lctl ping bglio617",
+   "cat /proc/fs/lustre/health_check",
+   "ls -la /g/g90/glosli/src/ddcMD/ddcMD1.1.17/bin/ddcMDbglV"
+  ],
+  "comandos_validos": false,
+  "motivos_rechazo": [
+   "BINARIO_NO_RECONOCIDO: 'lctl' en 'lctl ping bglio617'"
+  ],
+  "confianza": 0.95,
+  "hay_incidente": false,
+  "hay_anomalia": true,
+  "evaluacion_auditor": "Anomalía operativa pura correspondiente a fallos de hardware, problemas de almacenamiento Lustre y rutas inválidas de ejecución de tareas HPC. No se detectan patrones de intrusión ni vulneraciones de seguridad.",
+  "intentos_correccion": 0,
+  "cobertura_auditor": null,
+  "cobertura_suficiente": null,
+  "motivo_replanificacion": "",
+  "requiere_replanificacion": false,
+  "_error_api": null,
+  "_firma": "v2|lineas=20 ips=0 servicios=[bgl.kernel:18,bgl.app:1,bgl.discovery:1] eventos=[evento_critico:6,evento_normal:14] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[INFO:14,FATAL:5,WARNING:1] categorias=[] cobertura=1.0",
+  "requiere_revision_humana": false,
+  "output_contract_version": "d11-v1",
+  "classification_detallada": "anomalia_operativa"
+ },
+ "observaciones": [
+  {
+   "nodo": "agente_unico",
+   "llamadas": [
+    0
+   ],
+   "prompt_chars": 20351,
+   "system_chars": 4219,
+   "tokens": [
+    {
+     "input_tokens": 12581,
+     "output_tokens": 1081,
+     "reasoning_tokens": 923,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  }
+ ],
+ "consultas_externas": []
+}

@@ -1,0 +1,1375 @@
+{
+ "case_id": "bgl_des_natural_0012",
+ "dataset": "bgl",
+ "arquitectura": "nodex",
+ "segundos_pared_hijo": 93.38202159999855,
+ "estado": {
+  "resumen_logs": {
+   "formato_detectado": "bgl",
+   "total_lineas": 20,
+   "servicios": {
+    "bgl.app": 12,
+    "bgl.kernel": 6,
+    "bgl.mmcs": 2
+   },
+   "eventos": {
+    "evento_critico": 15,
+    "evento_normal": 5
+   },
+   "ventana_temporal": {
+    "inicio": "2005-09-20-13.41.08.107703",
+    "fin": "2005-09-23-01.43.18.801088"
+   },
+   "n_ips_distintas": 0,
+   "ips_distintas": [],
+   "por_ip": {},
+   "usuarios": {},
+   "n_usuarios_distintos": 0,
+   "codigos_respuesta": {},
+   "entidades": [],
+   "cronologia": [
+    {
+     "n": 1,
+     "timestamp": "2005-09-20-13.41.08.107703",
+     "servicio": "bgl.mmcs",
+     "evento": "evento_critico",
+     "mensaje": "1127248868 2005.09.20 NULL 2005-09-20-13.41.08.107703 NULL RAS MMCS ERROR idoproxydb hit ASSERT condition: ASSERT expression=0 Source file=idotransportmgr.cpp Source line=1043 Func…"
+    },
+    {
+     "n": 2,
+     "timestamp": "2005-09-20-13.41.10.218619",
+     "servicio": "bgl.mmcs",
+     "evento": "evento_critico",
+     "mensaje": "1127248870 2005.09.20 NULL 2005-09-20-13.41.10.218619 NULL RAS MMCS ERROR idoproxydb hit ASSERT condition: ASSERT expression=0 Source file=idotransportmgr.cpp Source line=1043 Func…"
+    },
+    {
+     "n": 3,
+     "timestamp": "2005-09-20-17.55.22.058829",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1127264122 2005.09.20 R27-M0-N8-I:J18-U11 2005-09-20-17.55.22.058829 R27-M0-N8-I:J18-U11 RAS APP FATAL ciod: Error loading /home/yates//bandwidth.rts: invalid or missing program im…"
+    },
+    {
+     "n": 4,
+     "timestamp": "2005-09-20-17.58.53.385609",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1127264333 2005.09.20 R45-M0-N0-I:J18-U01 2005-09-20-17.58.53.385609 R45-M0-N0-I:J18-U01 RAS APP FATAL ciod: Error loading /home/yates//torus-latency.rts: invalid or missing progra…"
+    },
+    {
+     "n": 5,
+     "timestamp": "2005-09-20-17.59.07.131519",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1127264347 2005.09.20 R72-M0-N8-I:J18-U01 2005-09-20-17.59.07.131519 R72-M0-N8-I:J18-U01 RAS APP FATAL ciod: Error loading /home/yates//torus-latency.rts: invalid or missing progra…"
+    },
+    {
+     "n": 6,
+     "timestamp": "2005-09-20-17.59.57.105133",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1127264397 2005.09.20 R34-M1-N8-I:J18-U01 2005-09-20-17.59.57.105133 R34-M1-N8-I:J18-U01 RAS APP FATAL ciod: Error loading /home/yates//torus-latency.rts: invalid or missing progra…"
+    },
+    {
+     "n": 7,
+     "timestamp": "2005-09-20-18.01.15.836848",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1127264475 2005.09.20 R44-M1-NC-I:J18-U01 2005-09-20-18.01.15.836848 R44-M1-NC-I:J18-U01 RAS APP FATAL ciod: Error loading /home/yates//broadcast.rts: invalid or missing program im…"
+    },
+    {
+     "n": 8,
+     "timestamp": "2005-09-20-18.01.56.398119",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1127264516 2005.09.20 R05-M0-N1-C:J06-U11 2005-09-20-18.01.56.398119 R05-M0-N1-C:J06-U11 RAS KERNEL FATAL rts: bad message header: expecting type 57 instead of type 3 (softheader=0…"
+    },
+    {
+     "n": 9,
+     "timestamp": "2005-09-20-18.07.46.603480",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1127264866 2005.09.20 R73-M1-NC-I:J18-U11 2005-09-20-18.07.46.603480 R73-M1-NC-I:J18-U11 RAS APP FATAL ciod: Error loading /bgl/apps/SWL/performance/MINIBEN//bandwidth.rts: invalid…"
+    },
+    {
+     "n": 10,
+     "timestamp": "2005-09-20-18.10.34.811726",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1127265034 2005.09.20 R26-M1-N8-I:J18-U01 2005-09-20-18.10.34.811726 R26-M1-N8-I:J18-U01 RAS APP FATAL ciod: Error loading /bgl/apps/SWL/performance/MINIBEN//torus-latency.rts: inv…"
+    },
+    {
+     "n": 11,
+     "timestamp": "2005-09-20-18.15.14.037829",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1127265314 2005.09.20 R27-M1-N4-I:J18-U01 2005-09-20-18.15.14.037829 R27-M1-N4-I:J18-U01 RAS APP FATAL ciod: LOGIN chdir(/bgl/apps/SWL/performance/MINIBEN///2005.09.20-18.06.05) fa…"
+    },
+    {
+     "n": 12,
+     "timestamp": "2005-09-20-18.18.55.570301",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1127265535 2005.09.20 R23-M1-N8-I:J18-U11 2005-09-20-18.18.55.570301 R23-M1-N8-I:J18-U11 RAS APP FATAL ciod: LOGIN chdir(/bgl/apps/SWL/performance/MINIBEN///2005.09.20-18.06.05) fa…"
+    },
+    {
+     "n": 13,
+     "timestamp": "2005-09-20-18.21.06.263282",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1127265666 2005.09.20 R54-M1-N4-I:J18-U11 2005-09-20-18.21.06.263282 R54-M1-N4-I:J18-U11 RAS APP FATAL ciod: LOGIN chdir(/bgl/apps/SWL/performance/MINIBEN///2005.09.20-18.06.01) fa…"
+    },
+    {
+     "n": 14,
+     "timestamp": "2005-09-20-18.22.11.721083",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1127265731 2005.09.20 R16-M1-N4-I:J18-U11 2005-09-20-18.22.11.721083 R16-M1-N4-I:J18-U11 RAS APP FATAL ciod: LOGIN chdir(/bgl/apps/SWL/performance/MINIBEN///2005.09.20-18.06.08) fa…"
+    },
+    {
+     "n": 15,
+     "timestamp": "2005-09-20-18.22.57.490109",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1127265777 2005.09.20 R62-M1-N8-I:J18-U01 2005-09-20-18.22.57.490109 R62-M1-N8-I:J18-U01 RAS APP FATAL ciod: LOGIN chdir(/bgl/apps/SWL/performance/MINIBEN///2005.09.20-18.06.01) fa…"
+    }
+   ],
+   "cronologia_omitidos": 0,
+   "raw_procedencia": {
+    "sha256": "347bc7ed2fdcdb94cec523c19c2fe0bb903ddaeb169d7a3e8e089fb6f7aaaac7",
+    "lineas": 20,
+    "bytes": 4119
+   },
+   "reputacion_ips": {},
+   "perfil_lote": {
+    "tipo": "texto",
+    "filas": 20,
+    "con_formato_reconocido": 20,
+    "severidades": {
+     "FATAL": 13,
+     "INFO": 5,
+     "ERROR": 2
+    },
+    "componentes": {
+     "bgl.app": 12,
+     "bgl.kernel": 6,
+     "bgl.mmcs": 2
+    },
+    "nodos": {
+     "NULL": 2,
+     "R27-M0-N8-I:J18-U11": 1,
+     "R45-M0-N0-I:J18-U01": 1,
+     "R72-M0-N8-I:J18-U01": 1,
+     "R34-M1-N8-I:J18-U01": 1,
+     "R44-M1-NC-I:J18-U01": 1,
+     "R05-M0-N1-C:J06-U11": 1,
+     "R73-M1-NC-I:J18-U11": 1,
+     "R26-M1-N8-I:J18-U01": 1,
+     "R27-M1-N4-I:J18-U01": 1
+    },
+    "nodos_distintos": 19,
+    "lineas_severidad_alta": {
+     "total": 15,
+     "omitidas": 0,
+     "lineas": [
+      {
+       "uid": "log_record_000001",
+       "severidad": "ERROR",
+       "group_id": "G01"
+      },
+      {
+       "uid": "log_record_000002",
+       "severidad": "ERROR",
+       "group_id": "G01"
+      },
+      {
+       "uid": "log_record_000003",
+       "severidad": "FATAL",
+       "group_id": "G02"
+      },
+      {
+       "uid": "log_record_000004",
+       "severidad": "FATAL",
+       "group_id": "G03"
+      },
+      {
+       "uid": "log_record_000005",
+       "severidad": "FATAL",
+       "group_id": "G03"
+      },
+      {
+       "uid": "log_record_000006",
+       "severidad": "FATAL",
+       "group_id": "G03"
+      },
+      {
+       "uid": "log_record_000007",
+       "severidad": "FATAL",
+       "group_id": "G04"
+      },
+      {
+       "uid": "log_record_000008",
+       "severidad": "FATAL",
+       "group_id": "G05"
+      },
+      {
+       "uid": "log_record_000009",
+       "severidad": "FATAL",
+       "group_id": "G06"
+      },
+      {
+       "uid": "log_record_000010",
+       "severidad": "FATAL",
+       "group_id": "G07"
+      },
+      {
+       "uid": "log_record_000011",
+       "severidad": "FATAL",
+       "group_id": "G08"
+      },
+      {
+       "uid": "log_record_000012",
+       "severidad": "FATAL",
+       "group_id": "G08"
+      },
+      {
+       "uid": "log_record_000013",
+       "severidad": "FATAL",
+       "group_id": "G08"
+      },
+      {
+       "uid": "log_record_000014",
+       "severidad": "FATAL",
+       "group_id": "G08"
+      },
+      {
+       "uid": "log_record_000015",
+       "severidad": "FATAL",
+       "group_id": "G08"
+      }
+     ]
+    },
+    "grupos": 11
+   }
+  },
+  "preprocessing_metadata": {
+   "schema_version": "2.0",
+   "total_lineas_fisicas": 20,
+   "total_eventos": 20,
+   "decoder_distribution": {
+    "text": 20
+   },
+   "product_distribution": {
+    "BlueGene/L": 20
+   },
+   "vendor_distribution": {
+    "IBM": 20
+   },
+   "version_distribution": {},
+   "protocol_distribution": {},
+   "profile_distribution": {
+    "bgl": 20
+   },
+   "severity_distribution": {
+    "FATAL": 13,
+    "INFO": 5,
+    "ERROR": 2
+   },
+   "event_categories": {},
+   "event_outcomes": {},
+   "entities": {
+    "host": {
+     "NULL": 2,
+     "R05-M0-N1-C:J06-U11": 1,
+     "R10-M0-N0-C:J06-U01": 1,
+     "R16-M1-N4-I:J18-U11": 1,
+     "R23-M0-N5-C:J12-U01": 1,
+     "R23-M1-N8-I:J18-U11": 1,
+     "R26-M1-N8-I:J18-U01": 1,
+     "R27-M0-N8-I:J18-U11": 1,
+     "R27-M1-N4-I:J18-U01": 1,
+     "R34-M1-N8-I:J18-U01": 1,
+     "R35-M1-NE-C:J09-U01": 1,
+     "R44-M1-NC-I:J18-U01": 1,
+     "R45-M0-N0-I:J18-U01": 1,
+     "R54-M1-N4-I:J18-U11": 1,
+     "R57-M0-NB-C:J07-U11": 1,
+     "R62-M1-N8-I:J18-U01": 1,
+     "R63-M1-NA-C:J14-U11": 1,
+     "R72-M0-N8-I:J18-U01": 1,
+     "R73-M1-NC-I:J18-U11": 1
+    },
+    "servicio": {
+     "bgl.app": 12,
+     "bgl.kernel": 6,
+     "bgl.mmcs": 2
+    },
+    "producto": {
+     "BlueGene/L": 20
+    }
+   },
+   "time_window": {
+    "inicio": "2005-09-20-13.41.08.107703",
+    "fin": "2005-09-23-01.43.18.801088"
+   },
+   "parsing": {
+    "parsed_events": 20,
+    "fallback_events": 0,
+    "coverage": 1.0
+   },
+   "segments": [
+    {
+     "index": 0,
+     "decoder": "text",
+     "line_start": 1,
+     "line_end": 20,
+     "n_records": 20,
+     "confidence": 0.1,
+     "decoder_inicial": "text",
+     "confidence_inicial": 0.1,
+     "decoder_distribution": {
+      "text": 20
+     },
+     "context": {}
+    }
+   ],
+   "entities_resumen": {
+    "host": 19,
+    "servicio": 3,
+    "producto": 1
+   },
+   "config": {
+    "LOG_DETECTION_CHUNK_SIZE": 50,
+    "LOG_ENABLE_MULTILINE": true,
+    "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+    "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+    "LOG_MAX_EVENTS": 100000,
+    "LOG_MAX_FILE_BYTES": 52428800,
+    "LOG_MAX_RAW_SAMPLES": 20,
+    "LOG_MAX_UNMAPPED_FIELDS": 100,
+    "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+    "LOG_PARSING_MODE": "hybrid",
+    "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+    "LOG_PRESERVE_RAW": true
+   }
+  },
+  "parsing_warnings": [],
+  "evidencia_logs": [
+   {
+    "uid": "log_record_000001",
+    "record_number": 1,
+    "line_start": 1,
+    "line_end": 1,
+    "timestamp": "2005-09-20-13.41.08.107703",
+    "group_id": "G01",
+    "source_host": "NULL",
+    "service_name": "bgl.mmcs",
+    "severity": "ERROR",
+    "message": "idoproxydb hit ASSERT condition: ASSERT expression=0 Source file=idotransportmgr.cpp Source line=1043 Function=int IdoTransportMgr::SendPacket(IdoUdpMgr*, BglCtlPavTrace*)"
+   },
+   {
+    "uid": "log_record_000002",
+    "record_number": 2,
+    "line_start": 2,
+    "line_end": 2,
+    "timestamp": "2005-09-20-13.41.10.218619",
+    "group_id": "G01",
+    "source_host": "NULL",
+    "service_name": "bgl.mmcs",
+    "severity": "ERROR",
+    "message": "idoproxydb hit ASSERT condition: ASSERT expression=0 Source file=idotransportmgr.cpp Source line=1043 Function=int IdoTransportMgr::SendPacket(IdoUdpMgr*, BglCtlPavTrace*)"
+   },
+   {
+    "uid": "log_record_000003",
+    "record_number": 3,
+    "line_start": 3,
+    "line_end": 3,
+    "timestamp": "2005-09-20-17.55.22.058829",
+    "group_id": "G02",
+    "source_host": "R27-M0-N8-I:J18-U11",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: Error loading /home/yates//bandwidth.rts: invalid or missing program image, No such file or directory"
+   },
+   {
+    "uid": "log_record_000004",
+    "record_number": 4,
+    "line_start": 4,
+    "line_end": 4,
+    "timestamp": "2005-09-20-17.58.53.385609",
+    "group_id": "G03",
+    "source_host": "R45-M0-N0-I:J18-U01",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: Error loading /home/yates//torus-latency.rts: invalid or missing program image, No such file or directory"
+   },
+   {
+    "uid": "log_record_000005",
+    "record_number": 5,
+    "line_start": 5,
+    "line_end": 5,
+    "timestamp": "2005-09-20-17.59.07.131519",
+    "group_id": "G03",
+    "source_host": "R72-M0-N8-I:J18-U01",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: Error loading /home/yates//torus-latency.rts: invalid or missing program image, No such file or directory"
+   },
+   {
+    "uid": "log_record_000006",
+    "record_number": 6,
+    "line_start": 6,
+    "line_end": 6,
+    "timestamp": "2005-09-20-17.59.57.105133",
+    "group_id": "G03",
+    "source_host": "R34-M1-N8-I:J18-U01",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: Error loading /home/yates//torus-latency.rts: invalid or missing program image, No such file or directory"
+   },
+   {
+    "uid": "log_record_000007",
+    "record_number": 7,
+    "line_start": 7,
+    "line_end": 7,
+    "timestamp": "2005-09-20-18.01.15.836848",
+    "group_id": "G04",
+    "source_host": "R44-M1-NC-I:J18-U01",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: Error loading /home/yates//broadcast.rts: invalid or missing program image, No such file or directory"
+   },
+   {
+    "uid": "log_record_000008",
+    "record_number": 8,
+    "line_start": 8,
+    "line_end": 8,
+    "timestamp": "2005-09-20-18.01.56.398119",
+    "group_id": "G05",
+    "source_host": "R05-M0-N1-C:J06-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "rts: bad message header: expecting type 57 instead of type 3 (softheader=00131db8 81aa0003 00000002 00000000) PSR0=00001f01 PSR1=00000000 PRXF=00000002 PIXF=00000007"
+   },
+   {
+    "uid": "log_record_000009",
+    "record_number": 9,
+    "line_start": 9,
+    "line_end": 9,
+    "timestamp": "2005-09-20-18.07.46.603480",
+    "group_id": "G06",
+    "source_host": "R73-M1-NC-I:J18-U11",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: Error loading /bgl/apps/SWL/performance/MINIBEN//bandwidth.rts: invalid or missing program image, No such file or directory"
+   },
+   {
+    "uid": "log_record_000010",
+    "record_number": 10,
+    "line_start": 10,
+    "line_end": 10,
+    "timestamp": "2005-09-20-18.10.34.811726",
+    "group_id": "G07",
+    "source_host": "R26-M1-N8-I:J18-U01",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: Error loading /bgl/apps/SWL/performance/MINIBEN//torus-latency.rts: invalid or missing program image, No such file or directory"
+   },
+   {
+    "uid": "log_record_000011",
+    "record_number": 11,
+    "line_start": 11,
+    "line_end": 11,
+    "timestamp": "2005-09-20-18.15.14.037829",
+    "group_id": "G08",
+    "source_host": "R27-M1-N4-I:J18-U01",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: LOGIN chdir(/bgl/apps/SWL/performance/MINIBEN///2005.09.20-18.06.05) failed: No such file or directory"
+   },
+   {
+    "uid": "log_record_000012",
+    "record_number": 12,
+    "line_start": 12,
+    "line_end": 12,
+    "timestamp": "2005-09-20-18.18.55.570301",
+    "group_id": "G08",
+    "source_host": "R23-M1-N8-I:J18-U11",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: LOGIN chdir(/bgl/apps/SWL/performance/MINIBEN///2005.09.20-18.06.05) failed: No such file or directory"
+   },
+   {
+    "uid": "log_record_000013",
+    "record_number": 13,
+    "line_start": 13,
+    "line_end": 13,
+    "timestamp": "2005-09-20-18.21.06.263282",
+    "group_id": "G08",
+    "source_host": "R54-M1-N4-I:J18-U11",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: LOGIN chdir(/bgl/apps/SWL/performance/MINIBEN///2005.09.20-18.06.01) failed: No such file or directory"
+   },
+   {
+    "uid": "log_record_000014",
+    "record_number": 14,
+    "line_start": 14,
+    "line_end": 14,
+    "timestamp": "2005-09-20-18.22.11.721083",
+    "group_id": "G08",
+    "source_host": "R16-M1-N4-I:J18-U11",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: LOGIN chdir(/bgl/apps/SWL/performance/MINIBEN///2005.09.20-18.06.08) failed: No such file or directory"
+   },
+   {
+    "uid": "log_record_000015",
+    "record_number": 15,
+    "line_start": 15,
+    "line_end": 15,
+    "timestamp": "2005-09-20-18.22.57.490109",
+    "group_id": "G08",
+    "source_host": "R62-M1-N8-I:J18-U01",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: LOGIN chdir(/bgl/apps/SWL/performance/MINIBEN///2005.09.20-18.06.01) failed: No such file or directory"
+   },
+   {
+    "uid": "log_record_000016",
+    "record_number": 16,
+    "line_start": 16,
+    "line_end": 16,
+    "timestamp": "2005-09-21-19.29.35.484182",
+    "group_id": "G09",
+    "source_host": "R23-M0-N5-C:J12-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "CE sym 29, at 0x14123c20, mask 0x08"
+   },
+   {
+    "uid": "log_record_000017",
+    "record_number": 17,
+    "line_start": 17,
+    "line_end": 17,
+    "timestamp": "2005-09-22-02.16.55.345135",
+    "group_id": "G10",
+    "source_host": "R63-M1-NA-C:J14-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "total of 1 ddr error(s) detected and corrected"
+   },
+   {
+    "uid": "log_record_000018",
+    "record_number": 18,
+    "line_start": 18,
+    "line_end": 18,
+    "timestamp": "2005-09-22-23.22.50.037439",
+    "group_id": "G11",
+    "source_host": "R57-M0-NB-C:J07-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "1 ddr errors(s) detected and corrected on rank 0, symbol 35, bit 1"
+   },
+   {
+    "uid": "log_record_000019",
+    "record_number": 19,
+    "line_start": 19,
+    "line_end": 19,
+    "timestamp": "2005-09-23-01.43.14.910997",
+    "group_id": "G09",
+    "source_host": "R35-M1-NE-C:J09-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "CE sym 26, at 0x022c3fc0, mask 0x40"
+   },
+   {
+    "uid": "log_record_000020",
+    "record_number": 20,
+    "line_start": 20,
+    "line_end": 20,
+    "timestamp": "2005-09-23-01.43.18.801088",
+    "group_id": "G10",
+    "source_host": "R10-M0-N0-C:J06-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "total of 4 ddr error(s) detected and corrected"
+   }
+  ],
+  "evidencia_logs_omitidos": 0,
+  "grupos_evidencia": [
+   {
+    "group_id": "G01",
+    "clave": {
+     "componente": "bgl.mmcs",
+     "severidad": "ERROR",
+     "plantilla": "idoproxydb hit ASSERT condition: ASSERT expression=<n> Source file=idotransportmgr.cpp Source line=<n> Function=int IdoT"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000001",
+     "log_record_000002"
+    ],
+    "nodos": [
+     "NULL"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G02",
+    "clave": {
+     "componente": "bgl.app",
+     "severidad": "FATAL",
+     "plantilla": "ciod: Error loading /home/yates//bandwidth.rts: invalid or missing program image, No such file or directory"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000003"
+    ],
+    "nodos": [
+     "R27-M0-N8-I:J18-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G03",
+    "clave": {
+     "componente": "bgl.app",
+     "severidad": "FATAL",
+     "plantilla": "ciod: Error loading /home/yates//torus-latency.rts: invalid or missing program image, No such file or directory"
+    },
+    "conteo": 3,
+    "uids": [
+     "log_record_000004",
+     "log_record_000005",
+     "log_record_000006"
+    ],
+    "nodos": [
+     "R45-M0-N0-I:J18-U01",
+     "R72-M0-N8-I:J18-U01",
+     "R34-M1-N8-I:J18-U01"
+    ],
+    "n_nodos": 3
+   },
+   {
+    "group_id": "G04",
+    "clave": {
+     "componente": "bgl.app",
+     "severidad": "FATAL",
+     "plantilla": "ciod: Error loading /home/yates//broadcast.rts: invalid or missing program image, No such file or directory"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000007"
+    ],
+    "nodos": [
+     "R44-M1-NC-I:J18-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G05",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "rts: bad message header: expecting type <n> instead of type <n> (softheader=<n>db<n> <n>aa<n> <n> <n>) PSR<n>=<n>f<n> PS"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000008"
+    ],
+    "nodos": [
+     "R05-M0-N1-C:J06-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G06",
+    "clave": {
+     "componente": "bgl.app",
+     "severidad": "FATAL",
+     "plantilla": "ciod: Error loading /bgl/apps/SWL/performance/MINIBEN//bandwidth.rts: invalid or missing program image, No such file or "
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000009"
+    ],
+    "nodos": [
+     "R73-M1-NC-I:J18-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G07",
+    "clave": {
+     "componente": "bgl.app",
+     "severidad": "FATAL",
+     "plantilla": "ciod: Error loading /bgl/apps/SWL/performance/MINIBEN//torus-latency.rts: invalid or missing program image, No such file"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000010"
+    ],
+    "nodos": [
+     "R26-M1-N8-I:J18-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G08",
+    "clave": {
+     "componente": "bgl.app",
+     "severidad": "FATAL",
+     "plantilla": "ciod: LOGIN chdir(/bgl/apps/SWL/performance/MINIBEN///<n>.<n>.<n>-<n>.<n>.<n>) failed: No such file or directory"
+    },
+    "conteo": 5,
+    "uids": [
+     "log_record_000011",
+     "log_record_000012",
+     "log_record_000013",
+     "log_record_000014",
+     "log_record_000015"
+    ],
+    "nodos": [
+     "R27-M1-N4-I:J18-U01",
+     "R23-M1-N8-I:J18-U11",
+     "R54-M1-N4-I:J18-U11",
+     "R16-M1-N4-I:J18-U11",
+     "R62-M1-N8-I:J18-U01"
+    ],
+    "n_nodos": 5
+   },
+   {
+    "group_id": "G09",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "CE sym <n>, at <hex>, mask <hex>"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000016",
+     "log_record_000019"
+    ],
+    "nodos": [
+     "R23-M0-N5-C:J12-U01",
+     "R35-M1-NE-C:J09-U01"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G10",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "total of <n> ddr error(s) detected and corrected"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000017",
+     "log_record_000020"
+    ],
+    "nodos": [
+     "R63-M1-NA-C:J14-U11",
+     "R10-M0-N0-C:J06-U01"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G11",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "<n> ddr errors(s) detected and corrected on rank <n>, symbol <n>, bit <n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000018"
+    ],
+    "nodos": [
+     "R57-M0-NB-C:J07-U11"
+    ],
+    "n_nodos": 1
+   }
+  ],
+  "contenido_lote": {
+   "tipo": "texto",
+   "lineas": [
+    "[log_record_000001] 1127248868 2005.09.20 NULL 2005-09-20-13.41.08.107703 NULL RAS MMCS ERROR idoproxydb hit ASSERT condition: ASSERT expression=0 Source file=idotransportmgr.cpp Source line=1043 Function=int IdoTransportMgr::SendPacket(IdoUdpMgr*, BglCtlPavTrace*)",
+    "[log_record_000002] 1127248870 2005.09.20 NULL 2005-09-20-13.41.10.218619 NULL RAS MMCS ERROR idoproxydb hit ASSERT condition: ASSERT expression=0 Source file=idotransportmgr.cpp Source line=1043 Function=int IdoTransportMgr::SendPacket(IdoUdpMgr*, BglCtlPavTrace*)",
+    "[log_record_000003] 1127264122 2005.09.20 R27-M0-N8-I:J18-U11 2005-09-20-17.55.22.058829 R27-M0-N8-I:J18-U11 RAS APP FATAL ciod: Error loading /home/yates//bandwidth.rts: invalid or missing program image, No such file or directory",
+    "[log_record_000004] 1127264333 2005.09.20 R45-M0-N0-I:J18-U01 2005-09-20-17.58.53.385609 R45-M0-N0-I:J18-U01 RAS APP FATAL ciod: Error loading /home/yates//torus-latency.rts: invalid or missing program image, No such file or directory",
+    "[log_record_000005] 1127264347 2005.09.20 R72-M0-N8-I:J18-U01 2005-09-20-17.59.07.131519 R72-M0-N8-I:J18-U01 RAS APP FATAL ciod: Error loading /home/yates//torus-latency.rts: invalid or missing program image, No such file or directory",
+    "[log_record_000006] 1127264397 2005.09.20 R34-M1-N8-I:J18-U01 2005-09-20-17.59.57.105133 R34-M1-N8-I:J18-U01 RAS APP FATAL ciod: Error loading /home/yates//torus-latency.rts: invalid or missing program image, No such file or directory",
+    "[log_record_000007] 1127264475 2005.09.20 R44-M1-NC-I:J18-U01 2005-09-20-18.01.15.836848 R44-M1-NC-I:J18-U01 RAS APP FATAL ciod: Error loading /home/yates//broadcast.rts: invalid or missing program image, No such file or directory",
+    "[log_record_000008] 1127264516 2005.09.20 R05-M0-N1-C:J06-U11 2005-09-20-18.01.56.398119 R05-M0-N1-C:J06-U11 RAS KERNEL FATAL rts: bad message header: expecting type 57 instead of type 3 (softheader=00131db8 81aa0003 00000002 00000000) PSR0=00001f01 PSR1=00000000 PRXF=00000002 PIXF=00000007",
+    "[log_record_000009] 1127264866 2005.09.20 R73-M1-NC-I:J18-U11 2005-09-20-18.07.46.603480 R73-M1-NC-I:J18-U11 RAS APP FATAL ciod: Error loading /bgl/apps/SWL/performance/MINIBEN//bandwidth.rts: invalid or missing program image, No such file or directory",
+    "[log_record_000010] 1127265034 2005.09.20 R26-M1-N8-I:J18-U01 2005-09-20-18.10.34.811726 R26-M1-N8-I:J18-U01 RAS APP FATAL ciod: Error loading /bgl/apps/SWL/performance/MINIBEN//torus-latency.rts: invalid or missing program image, No such file or directory",
+    "[log_record_000011] 1127265314 2005.09.20 R27-M1-N4-I:J18-U01 2005-09-20-18.15.14.037829 R27-M1-N4-I:J18-U01 RAS APP FATAL ciod: LOGIN chdir(/bgl/apps/SWL/performance/MINIBEN///2005.09.20-18.06.05) failed: No such file or directory",
+    "[log_record_000012] 1127265535 2005.09.20 R23-M1-N8-I:J18-U11 2005-09-20-18.18.55.570301 R23-M1-N8-I:J18-U11 RAS APP FATAL ciod: LOGIN chdir(/bgl/apps/SWL/performance/MINIBEN///2005.09.20-18.06.05) failed: No such file or directory",
+    "[log_record_000013] 1127265666 2005.09.20 R54-M1-N4-I:J18-U11 2005-09-20-18.21.06.263282 R54-M1-N4-I:J18-U11 RAS APP FATAL ciod: LOGIN chdir(/bgl/apps/SWL/performance/MINIBEN///2005.09.20-18.06.01) failed: No such file or directory",
+    "[log_record_000014] 1127265731 2005.09.20 R16-M1-N4-I:J18-U11 2005-09-20-18.22.11.721083 R16-M1-N4-I:J18-U11 RAS APP FATAL ciod: LOGIN chdir(/bgl/apps/SWL/performance/MINIBEN///2005.09.20-18.06.08) failed: No such file or directory",
+    "[log_record_000015] 1127265777 2005.09.20 R62-M1-N8-I:J18-U01 2005-09-20-18.22.57.490109 R62-M1-N8-I:J18-U01 RAS APP FATAL ciod: LOGIN chdir(/bgl/apps/SWL/performance/MINIBEN///2005.09.20-18.06.01) failed: No such file or directory",
+    "[log_record_000016] 1127356175 2005.09.21 R23-M0-N5-C:J12-U01 2005-09-21-19.29.35.484182 R23-M0-N5-C:J12-U01 RAS KERNEL INFO CE sym 29, at 0x14123c20, mask 0x08",
+    "[log_record_000017] 1127380615 2005.09.22 R63-M1-NA-C:J14-U11 2005-09-22-02.16.55.345135 R63-M1-NA-C:J14-U11 RAS KERNEL INFO total of 1 ddr error(s) detected and corrected",
+    "[log_record_000018] 1127456570 2005.09.22 R57-M0-NB-C:J07-U11 2005-09-22-23.22.50.037439 R57-M0-NB-C:J07-U11 RAS KERNEL INFO 1 ddr errors(s) detected and corrected on rank 0, symbol 35, bit 1",
+    "[log_record_000019] 1127464994 2005.09.23 R35-M1-NE-C:J09-U01 2005-09-23-01.43.14.910997 R35-M1-NE-C:J09-U01 RAS KERNEL INFO CE sym 26, at 0x022c3fc0, mask 0x40",
+    "[log_record_000020] 1127464998 2005.09.23 R10-M0-N0-C:J06-U01 2005-09-23-01.43.18.801088 R10-M0-N0-C:J06-U01 RAS KERNEL INFO total of 4 ddr error(s) detected and corrected"
+   ],
+   "total_lineas": 20,
+   "lineas_entregadas": 20,
+   "recortado": false,
+   "topes": {
+    "lineas": 200,
+    "caracteres": 20000
+   }
+  },
+  "veredicto_preliminar": "anomalia_operativa",
+  "justificacion_veredicto_preliminar": "Presencia de aserciones críticas en MMCS, inconsistencias en cabeceras de red del kernel RTS y múltiples fallos fatales de ciod al cargar ejecutables, sin indicadores de intrusión.",
+  "invalid_evidence_group_count": 0,
+  "comandos_rechazados": [],
+  "casos_historicos": [
+   {
+    "id": "bgl_des_natural_0005",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 3 × [FATAL bgl.kernel] Error receiving packet on tree network, expecting type <n> instead of type <n> (softheader; 2 × [FATAL bgl.kernel] rts: kernel terminated for reason <n>. Composición: 20 eventos, severidades INFO 14, FATAL 6.",
+    "similitud": 0.794
+   },
+   {
+    "id": "bgl_des_balanceado_0000",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 1 × [FATAL bgl.app] ciod: Error reading message prefix after LOAD_MESSAGE on CioStream socket to <n>.<n>.<n>.<; 1 × [FATAL bgl.kernel] rts: kernel terminated for reason <n>. Composición: 20 eventos, severidades INFO 15, FATAL 5.",
+    "similitud": 0.789
+   },
+   {
+    "id": "bgl_des_natural_0003",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 2 × [FATAL bgl.app] ciod: Error reading message prefix on CioStream socket to <n>.<n>.<n>.<n>:<n>, Link has be. Composición: 20 eventos, severidades INFO 15, FATAL 5.",
+    "similitud": 0.783
+   }
+  ],
+  "historico_consulta": {
+   "excluidos_por_solapamiento": [
+    "rag_enriquecido_v2:bgl_des_natural_0012"
+   ],
+   "consultados": 56,
+   "excluidos_mismo_incidente": [],
+   "exclusion_por_incidente_activa": true,
+   "representacion": "Eventos destacados: [ERROR bgl.mmcs] idoproxydb hit ASSERT condition: ASSERT expression=<n> Source file=idotransportmgr.cpp Source line=<n> Function=int IdoT x2 en 1 nodos; [FATAL bgl.app] ciod: Error loading /home/yates//bandwidth.rts: invalid or missing program image, No such file or directory x1 en 1 nodos; [FATAL bgl.app] ciod: Error loading /home/yates//torus-latency.rts: invalid or missing program image, No such file or directory x3 en 3 nodos; [FATAL bgl.app] ciod: Error loading /home/yates//broadcast.rts: invalid or missing program image, No such file or directory x1 en 1 nodos; [FATAL bgl.kernel] rts: bad message header: expecting type <n> instead of type <n> (softheader=<n>db<n> <n>aa<n> <n> <n>) PSR<n>=<n>f<n> PS x1 en 1 nodos; [FATAL bgl.app] ciod: Error loading /bgl/apps/SWL/performance/MINIBEN//bandwidth.rts: invalid or missing program image, No such file or  x1 en 1 nodos; [FATAL bgl.app] ciod: Error loading /bgl/apps/SWL/performance/MINIBEN//torus-latency.rts: invalid or missing program image, No such file x1 en 1 nodos; [FATAL bgl.app] ciod: LOGIN chdir(/bgl/apps/SWL/performance/MINIBEN///<n>.<n>.<n>-<n>.<n>.<n>) failed: No such file or directory x5 en 5 nodos\nLog de texto, 20 eventos. Severidades: FATAL 13, INFO 5, ERROR 2. Componentes: bgl.app 12, bgl.kernel 6, bgl.mmcs 2. Nodos distintos: 19."
+  },
+  "hallazgos_cazador": [
+   {
+    "group_id": "G01",
+    "nivel_sospecha": "bajo",
+    "explicacion_benigna": "Fallo de aserción interna en el subsistema de gestión MMCS (idoproxydb) al enviar un paquete de traza/control mediante UDP en código C++ legítimo.",
+    "explicacion_alternativa": "Fallo operacional del demonio de base de datos o corrupción en memoria durante la comunicación interprocesos del plano de control.",
+    "justificacion": "El mensaje indica una condición de aserción fallida estándar de depuración ('ASSERT expression=0') en 'idotransportmgr.cpp', propia de un defecto de software o desincronización de estado interno sin indicios de manipulación maliciosa.",
+    "tecnica_candidata": null
+   },
+   {
+    "group_id": "G02",
+    "nivel_sospecha": "bajo",
+    "explicacion_benigna": "Intento de ejecución de un benchmark de ancho de banda ('bandwidth.rts') por parte del usuario 'yates' donde el binario no existe o la ruta fue mal especificada.",
+    "explicacion_alternativa": "Ejecución de scripts automatizados de benchmarking con dependencias de archivos faltantes o ruta NFS no montada.",
+    "justificacion": "Error operacional clásico de HPC reportado por el demonio ciod ('No such file or directory') al intentar cargar una imagen de programa en un nodo de cómputo.",
+    "tecnica_candidata": null
+   },
+   {
+    "group_id": "G03",
+    "nivel_sospecha": "bajo",
+    "explicacion_benigna": "Lanzamiento de un trabajo paralelo de prueba de latencia ('torus-latency.rts') en varios nodos que falla simultáneamente debido a la ausencia del ejecutable en el directorio de usuario.",
+    "explicacion_alternativa": "Configuración errónea o desincronización en el script de lanzamiento distribuido del usuario 'yates'.",
+    "justificacion": "Tres nodos distintos reportan el mismo fallo de carga de binario ('invalid or missing program image') en un intervalo estrecho de tiempo, típico de un trabajo MPI/RTS abortado al inicio.",
+    "tecnica_candidata": null
+   },
+   {
+    "group_id": "G04",
+    "nivel_sospecha": "bajo",
+    "explicacion_benigna": "Fallo al invocar la prueba de difusión ('broadcast.rts') en el directorio del usuario 'yates' por no encontrarse el ejecutable compilado.",
+    "explicacion_alternativa": "Error de ejecución secuencial dentro de una batería de pruebas de red en el supercomputador.",
+    "justificacion": "Registro idéntico en patrón a G02 y G03, atribuible a la misma secuencia de pruebas del usuario que referencia ejecutables inexistentes.",
+    "tecnica_candidata": null
+   },
+   {
+    "group_id": "G05",
+    "nivel_sospecha": "bajo",
+    "explicacion_benigna": "Desincronización o corrupción transitoria de encabezado de protocolo de paquetes RTS en el kernel durante la comunicación inter-nodo.",
+    "explicacion_alternativa": "Falla de integridad física en el canal de red o bug en la capa de transporte de hardware/kernel del nodo R05-M0-N1-C.",
+    "justificacion": "El kernel reporta discrepancia de tipos en el softheader ('expecting type 57 instead of type 3') con volcados de registros de hardware (PSR, PRXF), característico de un fallo a bajo nivel de protocolo o hardware en un solo nodo.",
+    "tecnica_candidata": null
+   },
+   {
+    "group_id": "G06",
+    "nivel_sospecha": "bajo",
+    "explicacion_benigna": "Ejecución del harness de rendimiento 'MINIBEN' intentando cargar 'bandwidth.rts' desde la ruta global compartida sin que el binario esté desplegado.",
+    "explicacion_alternativa": "Error de ruta o migración incompleta de la suite de rendimiento del sistema.",
+    "justificacion": "Error estándar de ciod ('No such file or directory') apuntando a la ruta de benchmarks del sistema '/bgl/apps/SWL/performance/MINIBEN'.",
+    "tecnica_candidata": null
+   },
+   {
+    "group_id": "G07",
+    "nivel_sospecha": "bajo",
+    "explicacion_benigna": "Lanzamiento del test de latencia 'torus-latency.rts' dentro de la suite MINIBEN en una ruta de aplicación donde el archivo no está presente.",
+    "explicacion_alternativa": "Fallo operacional en la ejecución por lotes de pruebas de rendimiento del clúster.",
+    "justificacion": "Mismo comportamiento que G06 pero para el binario de latencia de red, evidenciando una suite de pruebas mal configurada en el entorno.",
+    "tecnica_candidata": null
+   },
+   {
+    "group_id": "G08",
+    "nivel_sospecha": "bajo",
+    "explicacion_benigna": "Intentos concurrentes del demonio ciod de cambiar al directorio de trabajo temporal con marca temporal generado por la suite MINIBEN antes de su creación o por permisos/montaje.",
+    "explicacion_alternativa": "Problema de concurrencia o retraso en la propagación del sistema de archivos distribuido al crear los subdirectorios de trabajo por fecha/hora.",
+    "justificacion": "Cinco nodos I/O fallan de forma homogénea en la llamada 'chdir' hacia subdirectorios con marcas temporales (ej. '2005.09.20-18.06.05'), reflejando un fallo de sincronización en el sistema de archivos.",
+    "tecnica_candidata": null
+   }
+  ],
+  "cazador_ejecutado": true,
+  "veredicto_consolidado": "anomalia_operativa",
+  "consulta_mitre": "",
+  "rag_omitido": "sin hipótesis de seguridad: no se consultan técnicas",
+  "revision_hallazgos": [],
+  "diagnostico_inicial": "",
+  "diagnostico_corregido": "",
+  "correcciones_auditor": 0,
+  "historial_correcciones": [],
+  "eventos_reconstruidos": [
+   {
+    "event_id": "event_001",
+    "evidence_uids": [
+     "log_record_000001",
+     "log_record_000002"
+    ],
+    "timestamp": "2005-09-20-13.41.08.107703",
+    "event_type": "mmcs_assertion_failure",
+    "description": "Fallo de aserción interna en el demonio idoproxydb durante el envío de paquetes de control UDP.",
+    "confidence": null,
+    "evidence_groups": [
+     "G01"
+    ],
+    "categoria": "anomalia_operativa"
+   },
+   {
+    "event_id": "event_002",
+    "evidence_uids": [
+     "log_record_000003",
+     "log_record_000004",
+     "log_record_000005",
+     "log_record_000006",
+     "log_record_000007"
+    ],
+    "timestamp": "2005-09-20-17.55.22.058829",
+    "event_type": "app_image_load_failure",
+    "description": "Fallo recurrente al cargar binarios de pruebas en el espacio de usuario (/home/yates/) por archivo inexistente.",
+    "confidence": null,
+    "evidence_groups": [
+     "G02",
+     "G03",
+     "G04"
+    ],
+    "categoria": "anomalia_operativa"
+   },
+   {
+    "event_id": "event_003",
+    "evidence_uids": [
+     "log_record_000008"
+    ],
+    "timestamp": "2005-09-20-18.01.56.398119",
+    "event_type": "kernel_network_header_mismatch",
+    "description": "Discrepancia en la cabecera de mensaje de red recibida en el kernel de tiempo de ejecución (rts).",
+    "confidence": null,
+    "evidence_groups": [
+     "G05"
+    ],
+    "categoria": "anomalia_operativa"
+   },
+   {
+    "event_id": "event_004",
+    "evidence_uids": [
+     "log_record_000009",
+     "log_record_000010",
+     "log_record_000011",
+     "log_record_000012",
+     "log_record_000013",
+     "log_record_000014",
+     "log_record_000015"
+    ],
+    "timestamp": "2005-09-20-18.07.46.603480",
+    "event_type": "suite_execution_and_chdir_failure",
+    "description": "Fallo en la suite de pruebas MINIBEN por binarios ausentes y directorios temporales de trabajo no encontrados.",
+    "confidence": null,
+    "evidence_groups": [
+     "G06",
+     "G07",
+     "G08"
+    ],
+    "categoria": "anomalia_operativa"
+   },
+   {
+    "event_id": "event_005",
+    "evidence_uids": [
+     "log_record_000016",
+     "log_record_000019",
+     "log_record_000017",
+     "log_record_000020",
+     "log_record_000018"
+    ],
+    "timestamp": "2005-09-21-19.29.35.484182",
+    "event_type": "memory_ecc_corrected_errors",
+    "description": "Registros informativos de detección y corrección de errores de memoria DDR/ECC en nodos de cómputo.",
+    "confidence": null,
+    "evidence_groups": [
+     "G09",
+     "G10",
+     "G11"
+    ],
+    "categoria": "contexto"
+   }
+  ],
+  "secuencia_temporal": [
+   "event_001",
+   "event_002",
+   "event_003",
+   "event_004",
+   "event_005"
+  ],
+  "tecnicas_atribuidas": [],
+  "invalid_evidence_uid_count": 0,
+  "d11_warnings": [],
+  "telemetry": {
+   "llm_call_count": 6,
+   "input_tokens": 22003,
+   "output_tokens": 3422,
+   "total_tokens": 30863,
+   "execution_time": 77.417872,
+   "replan_count": 0,
+   "intentos_correccion": 1,
+   "invalid_evidence_uid_count": 0,
+   "d11_warning_count": 0,
+   "llm_calls": [
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 1479,
+     "output_tokens": 339,
+     "total_tokens": 2572,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 754,
+     "duration_s": 11.446,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 4903,
+     "output_tokens": 245,
+     "total_tokens": 5818,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 670,
+     "duration_s": 9.549,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 3816,
+     "output_tokens": 1406,
+     "total_tokens": 7254,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 2032,
+     "duration_s": 28.143,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 324,
+     "output_tokens": 58,
+     "total_tokens": 592,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 210,
+     "duration_s": 4.308,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 3483,
+     "output_tokens": 75,
+     "total_tokens": 4080,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 522,
+     "duration_s": 5.755,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 7998,
+     "output_tokens": 1299,
+     "total_tokens": 10547,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 1250,
+     "duration_s": 18.041,
+     "error": null
+    }
+   ]
+  },
+  "firma": "v2|lineas=20 ips=0 servicios=[bgl.app:12,bgl.kernel:6,bgl.mmcs:2] eventos=[evento_critico:15,evento_normal:5] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[FATAL:13,INFO:5,ERROR:2] categorias=[] cobertura=1.0",
+  "plan": {
+   "plan_version": 1,
+   "objetivo": "Analizar los eventos críticos y fatales detectados en los nodos del supercomputador BlueGene/L, evaluar posibles vulnerabilidades asociadas a sus componentes y establecer medidas de mitigación.",
+   "pasos": [
+    {
+     "id": 1,
+     "accion": "triage",
+     "objetivo": "Evaluar la naturaleza de los 15 eventos de severidad alta (FATAL y ERROR) correlacionando los fallos entre los 19 nodos afectados en los subsistemas bgl.app, bgl.kernel y bgl.mmcs.",
+     "estado": "ejecutado"
+    },
+    {
+     "id": 2,
+     "accion": "cve",
+     "objetivo": "Buscar vulnerabilidades conocidas relacionadas con el sistema IBM BlueGene/L y su núcleo (bgl.kernel).",
+     "estado": "omitido",
+     "motivo": "El diagnóstico concluye explícitamente que no se evidencia actividad maliciosa ni vectores de ataque externo, tratándose únicamente de fallas operativas, de software y eventos de hardware en el supercomputador."
+    },
+    {
+     "id": 3,
+     "accion": "mitigacion",
+     "objetivo": "Definir acciones de contención, aislamiento de nodos defectuosos y procedimientos de recuperación para estabilizar el clúster.",
+     "estado": "ejecutado"
+    }
+   ],
+   "criterios_finalizacion": [
+    "Causa raíz de los eventos FATAL y ERROR identificada preliminarmente.",
+    "Estado de vulnerabilidad de los componentes de BlueGene/L verificado.",
+    "Plan de mitigación y contingencia operativa generado."
+   ]
+  },
+  "plan_objetivo": "Analizar los eventos críticos y fatales detectados en los nodos del supercomputador BlueGene/L, evaluar posibles vulnerabilidades asociadas a sus componentes y establecer medidas de mitigación.",
+  "paso_actual": 3,
+  "historial_ejecucion": [
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_planificador",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "plan v1, 3 pasos: ['triage', 'cve', 'mitigacion']"
+   },
+   {
+    "plan_version": 1,
+    "step_id": 1,
+    "nodo": "agente_analista_triage",
+    "accion": "triage",
+    "estado": "ejecutado",
+    "resumen": "diagnóstico producido"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_cazador",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "8 hallazgos (0 alto)"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "tool_consultar_rag",
+    "accion": "rag",
+    "estado": "omitido",
+    "resumen": "técnicas MITRE no consultadas (sin hipótesis de seguridad: no se consultan técnicas)"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_selector_herramientas",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "usar_cve=False"
+   },
+   {
+    "plan_version": 1,
+    "step_id": 3,
+    "nodo": "agente_ingeniero_mitigacion",
+    "accion": "mitigacion",
+    "estado": "ejecutado",
+    "resumen": "6 comandos propuestos"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "tool_validar_comandos",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "comandos válidos"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_auditor_final",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "confianza=0.95 cobertura_suficiente=True"
+   }
+  ],
+  "desviaciones_plan": [],
+  "historial_planes": [],
+  "replan_count": 0,
+  "diagnostico": "El lote de logs del supercomputador BlueGene/L presenta múltiples fallas operativas y de ejecución en el sistema. Se registran errores de aserción en el subsistema de gestión MMCS (idoproxydb hit ASSERT condition), un error crítico en el kernel de tiempo de ejecución (rts: bad message header) y una serie recurrente de fallos fatales en el demonio de E/S de control (ciod) debidos a la imposibilidad de localizar imágenes de programas e ingresar a directorios de ejecución. Asimismo, se observan eventos informativos de corrección de memoria ECC/DDR. No se evidencia actividad maliciosa ni vectores de ataque externo, tratándose de una degradación de servicios y fallas en la ejecución de trabajos computacionales.",
+  "necesita_rag": false,
+  "usar_cve": false,
+  "razon_seleccion": "El diagnóstico concluye explícitamente que no se evidencia actividad maliciosa ni vectores de ataque externo, tratándose únicamente de fallas operativas, de software y eventos de hardware en el supercomputador.",
+  "contexto_rag": [
+   {
+    "id": "bgl_des_natural_0005",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 3 × [FATAL bgl.kernel] Error receiving packet on tree network, expecting type <n> instead of type <n> (softheader; 2 × [FATAL bgl.kernel] rts: kernel terminated for reason <n>. Composición: 20 eventos, severidades INFO 14, FATAL 6.",
+    "similitud": 0.794
+   },
+   {
+    "id": "bgl_des_balanceado_0000",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 1 × [FATAL bgl.app] ciod: Error reading message prefix after LOAD_MESSAGE on CioStream socket to <n>.<n>.<n>.<; 1 × [FATAL bgl.kernel] rts: kernel terminated for reason <n>. Composición: 20 eventos, severidades INFO 15, FATAL 5.",
+    "similitud": 0.789
+   },
+   {
+    "id": "bgl_des_natural_0003",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 2 × [FATAL bgl.app] ciod: Error reading message prefix on CioStream socket to <n>.<n>.<n>.<n>:<n>, Link has be. Composición: 20 eventos, severidades INFO 15, FATAL 5.",
+    "similitud": 0.783
+   }
+  ],
+  "tecnicas_mitre": [],
+  "cves_encontrados": [],
+  "comandos_mitigacion": [
+   "df -h",
+   "mount",
+   "ls -la /home/yates/",
+   "ls -la /bgl/apps/SWL/performance/MINIBEN/",
+   "ps aux | grep -E 'ciod|mmcs|idoproxydb'",
+   "dmesg -T | tail -n 50"
+  ],
+  "comandos_validos": true,
+  "motivos_rechazo": [],
+  "intentos_correccion": 1,
+  "confianza": 0.95,
+  "hay_incidente": false,
+  "hay_anomalia": true,
+  "evaluacion_auditor": "El lote de eventos refleja una serie de anomalías puramente operativas en la plataforma BlueGene/L. Se observan fallos de aserción en el subsistema de gestión MMCS (idoproxydb), un error de cabecera de protocolo RTS a nivel kernel y múltiples fallos fatales de ejecución reportados por ciod debido a binarios inexistentes o rutas no encontradas tanto en directorios de usuario como en el entorno compartido de benchmarks (MINIBEN). Los eventos de memoria corresponden a errores corregibles estándar (ECC/DDR). No se identifica ninguna acción maliciosa ni vectores de compromiso.",
+  "cobertura_auditor": true,
+  "cobertura_suficiente": true,
+  "motivo_replanificacion": "",
+  "requiere_replanificacion": false,
+  "_firma": "v2|lineas=20 ips=0 servicios=[bgl.app:12,bgl.kernel:6,bgl.mmcs:2] eventos=[evento_critico:15,evento_normal:5] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[FATAL:13,INFO:5,ERROR:2] categorias=[] cobertura=1.0",
+  "_error_api": null,
+  "requiere_revision_humana": false,
+  "output_contract_version": "d11-v1",
+  "classification_detallada": "anomalia_operativa"
+ },
+ "observaciones": [
+  {
+   "nodo": "planificador",
+   "llamadas": [
+    0
+   ],
+   "prompt_chars": 2543,
+   "system_chars": 869,
+   "tokens": [
+    {
+     "input_tokens": 1479,
+     "output_tokens": 339,
+     "reasoning_tokens": 754,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "triage",
+   "llamadas": [
+    1
+   ],
+   "prompt_chars": 8737,
+   "system_chars": 1394,
+   "tokens": [
+    {
+     "input_tokens": 4903,
+     "output_tokens": 245,
+     "reasoning_tokens": 670,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "cazador",
+   "llamadas": [
+    2
+   ],
+   "prompt_chars": 8082,
+   "system_chars": 1355,
+   "tokens": [
+    {
+     "input_tokens": 3816,
+     "output_tokens": 1406,
+     "reasoning_tokens": 2032,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "selector",
+   "llamadas": [
+    3
+   ],
+   "prompt_chars": 889,
+   "system_chars": 344,
+   "tokens": [
+    {
+     "input_tokens": 324,
+     "output_tokens": 58,
+     "reasoning_tokens": 210,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "mitigacion",
+   "llamadas": [
+    4
+   ],
+   "prompt_chars": 7000,
+   "system_chars": 854,
+   "tokens": [
+    {
+     "input_tokens": 3483,
+     "output_tokens": 75,
+     "reasoning_tokens": 522,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "auditor",
+   "llamadas": [
+    5
+   ],
+   "prompt_chars": 17453,
+   "system_chars": 4831,
+   "tokens": [
+    {
+     "input_tokens": 7998,
+     "output_tokens": 1299,
+     "reasoning_tokens": 1250,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  }
+ ],
+ "consultas_externas": []
+}
