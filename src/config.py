@@ -439,6 +439,85 @@ def config_preprocesamiento_efectiva() -> dict:
     return {k: valores[k] for k in sorted(valores)}
 
 
+# =============================================================================
+# NODEX final, Fase A (nov-2026): contexto, perfil, evidencia por grupos,
+# mitigación con límites y veredicto preliminar. Cada mejora tiene su
+# interruptor para que pueda identificarse y, si hiciera falta, aislarse.
+# Los valores por omisión son los del sistema final. Los umbrales son
+# genéricos (no se ajustaron a casos concretos) y su justificación está junto
+# a cada uno. Ver docs/experimentacion/nodex_final_fase_a.md.
+# =============================================================================
+
+# --- M1: contexto real del log ----------------------------------------------
+# El triage recibe el contenido del lote, no una muestra por decoder.
+CONTEXTO_LOTE_COMPLETO = _env_bool("CONTEXTO_LOTE_COMPLETO", True)
+# Tope de líneas y caracteres del bloque de contenido. 200 líneas cubren
+# holgadamente un lote de texto típico (los casos BGL tienen 20) y 20 000
+# caracteres (~6 000 tokens en texto de log) acotan el costo de un archivo
+# grande. Si se recorta, el prompt lo dice explícitamente.
+TRIAGE_MAX_LINEAS = _env_int("TRIAGE_MAX_LINEAS", 200)
+TRIAGE_MAX_CHARS = _env_int("TRIAGE_MAX_CHARS", 20000)
+# El catálogo de evidencia incluye el mensaje en logs de texto y los campos de
+# red que faltaban (bytes, duración, historia de conexión).
+EVIDENCIA_CONTEXTO_EXTENDIDO = _env_bool("EVIDENCIA_CONTEXTO_EXTENDIDO", True)
+# 300 caracteres conservan un mensaje de log completo en la gran mayoría de los
+# formatos (una línea de syslog o BGL tiene 80-200) sin que una línea anómala
+# muy larga domine el catálogo.
+EVIDENCIA_MAX_CHARS_MENSAJE = _env_int("EVIDENCIA_MAX_CHARS_MENSAJE", 300)
+
+# --- M2: perfil determinístico del lote ------------------------------------
+PERFIL_LOTE_ACTIVO = _env_bool("PERFIL_LOTE_ACTIVO", True)
+# Barrido de puertos: un origen con al menos 15 puertos de destino distintos
+# hacia UN mismo destino. Un cliente legítimo usa pocos servicios por servidor
+# (web, DNS, correo, administración: típicamente menos de 10); 15 deja margen
+# sobre ese uso y queda muy por debajo de un escaneo (cientos o miles).
+PERFIL_MIN_PUERTOS_BARRIDO = _env_int("PERFIL_MIN_PUERTOS_BARRIDO", 15)
+# Servicio o protocolo minoritario: menos del 5 % de las filas del lote. Es el
+# umbral habitual para llamar "raro" a un valor categórico.
+PERFIL_UMBRAL_MINORITARIO = _env_float("PERFIL_UMBRAL_MINORITARIO", 0.05)
+# Par origen-destino raro: aparece en a lo más 2 filas del lote. Un par que se
+# ve una o dos veces en una ventana no forma parte del tráfico recurrente.
+PERFIL_PAR_RARO_MAX_FILAS = _env_int("PERFIL_PAR_RARO_MAX_FILAS", 2)
+# Transferencia atípica: bytes totales por encima del percentil 95 del lote,
+# solo si hay al menos 20 filas con bytes (con menos, el percentil no es
+# estable).
+PERFIL_PERCENTIL_BYTES = _env_float("PERFIL_PERCENTIL_BYTES", 95.0)
+PERFIL_MIN_FILAS_PERCENTIL = _env_int("PERFIL_MIN_FILAS_PERCENTIL", 20)
+# Filas completas de flujos minoritarios que se entregan al modelo (tope de
+# costo). Si hay más, se declaran omitidas.
+PERFIL_MAX_FILAS_MINORITARIAS = _env_int("PERFIL_MAX_FILAS_MINORITARIAS", 60)
+# Orígenes que se detallan en el perfil (los más activos).
+PERFIL_MAX_ORIGENES = _env_int("PERFIL_MAX_ORIGENES", 20)
+# En UDP e ICMP no hay handshake: el estado S0 (sin respuesta) no es un intento
+# fallido. Antes, cada consulta DNS sin respuesta contaba como fallo y como
+# `evento_critico` (280 de 300 en un lote UWF de desarrollo).
+UDP_S0_NO_ES_FALLO = _env_bool("UDP_S0_NO_ES_FALLO", True)
+# BGL: el generador de casos retira el campo de alerta (evita la fuga de la
+# etiqueta). El enriquecedor exigía ese campo y no se aplicaba nunca
+# (cobertura 0 %). Con esto el campo pasa a ser opcional.
+BGL_ALERTA_OPCIONAL = _env_bool("BGL_ALERTA_OPCIONAL", True)
+
+# --- M6: evidencia por grupos ----------------------------------------------
+EVIDENCIA_POR_GRUPOS = _env_bool("EVIDENCIA_POR_GRUPOS", True)
+
+# --- M7: mitigación con contexto y límites ---------------------------------
+MITIGACION_CON_CONTEXTO = _env_bool("MITIGACION_CON_CONTEXTO", True)
+VALIDACION_COMANDOS_ESTRICTA = _env_bool("VALIDACION_COMANDOS_ESTRICTA", True)
+# Único directorio donde un comando propuesto puede escribir o redirigir.
+MITIGACION_DIR_SALIDA = os.environ.get("MITIGACION_DIR_SALIDA", "/var/tmp/nodex")
+
+# --- M8: veredicto preliminar y clasificación detallada --------------------
+VEREDICTO_PRELIMINAR = _env_bool("VEREDICTO_PRELIMINAR", True)
+VEREDICTOS = ("incidente_seguridad", "anomalia_operativa", "normal")
+
+# --- M9: generador UWF ------------------------------------------------------
+# Las filas rebasadas usan el mismo formato de `ts` y `datetime` que el fondo
+# (representación corta del número y microsegundos derivados de `ts`). Antes
+# `datetime` quedaba en milisegundos y `ts` con 6 decimales fijos, lo que
+# distinguía las filas inyectadas. Solo afecta a casos generados de nuevo.
+UWF_REBASE_FORMATO_FONDO = _env_bool("UWF_REBASE_FORMATO_FONDO", True)
+
+
 def validate_config() -> None:
     """Lanza un error claro si falta alguna key obligatoria antes de correr el grafo."""
     if not GEMINI_API_KEY:

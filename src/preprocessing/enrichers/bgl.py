@@ -32,6 +32,26 @@ _BGL_RE = re.compile(
     r"(?P<severidad>\S+)\s+(?P<msg>.*)$"
 )
 
+# Misma línea con el campo de alerta OPCIONAL (`BGL_ALERTA_OPCIONAL`, NODEX
+# final Fase A). El generador de casos retira ese campo para no filtrar la
+# etiqueta, así que la línea empieza por el epoch y `_BGL_RE` no calzaba
+# nunca: el enriquecedor no se aplicaba y la cobertura de BGL era 0 %. El
+# campo, cuando está, solo puede ser `-` o un código en mayúsculas (así lo
+# escribe el dataset); nunca un número, para no confundirlo con el epoch.
+_BGL_RE_OPCIONAL = re.compile(
+    r"^(?:(?P<flag>-|[A-Z][A-Z0-9_]*)\s+)?(?P<epoch>\d+)\s+(?P<fecha>\d{4}\.\d{2}\.\d{2})\s+"
+    r"(?P<nodo>\S+)\s+(?P<ts>\d{4}-\d{2}-\d{2}-\d{2}\.\d{2}\.\d{2}\.\d+)\s+"
+    r"(?P<nodo2>\S+)\s+(?P<tipo>\S+)\s+(?P<subsistema>\S+)\s+"
+    r"(?P<severidad>\S+)\s+(?P<msg>.*)$"
+)
+_FLAG_BGL = re.compile(r"-|[A-Z][A-Z0-9_]*")
+
+
+def _patron():
+    from src.config import BGL_ALERTA_OPCIONAL
+    return _BGL_RE_OPCIONAL if BGL_ALERTA_OPCIONAL else _BGL_RE
+
+
 _SUBSISTEMA_A_SERVICIO = {
     "KERNEL": "bgl.kernel",
     "APP": "bgl.app",
@@ -51,10 +71,10 @@ class BglEnricher(Enricher):
     producto = "BlueGene/L"
 
     def aplica(self, evento: NormalizedEvent) -> bool:
-        return bool(_BGL_RE.match(evento.raw.split("\n", 1)[0]))
+        return bool(_patron().match(evento.raw.split("\n", 1)[0]))
 
     def enriquecer(self, evento: NormalizedEvent) -> NormalizedEvent:
-        m = _BGL_RE.match(evento.raw.split("\n", 1)[0])
+        m = _patron().match(evento.raw.split("\n", 1)[0])
         if not m:
             return evento
 
@@ -87,6 +107,13 @@ class BglEnricher(Enricher):
         if not partes:
             return None
         flag = partes[0]
+        from src.config import BGL_ALERTA_OPCIONAL
+        if BGL_ALERTA_OPCIONAL and not _FLAG_BGL.fullmatch(flag):
+            # La línea no trae el campo de alerta (el generador lo retiró):
+            # no hay etiqueta que desviar. Leer el epoch como flag marcaría
+            # todas las líneas como alerta y, además, activaría la regla que
+            # oculta las muestras por "ground truth embebido".
+            return None
         # La clave se arma SOLO con lo disponible antes del enriquecimiento:
         # `bgl_nodo` lo escribe `enriquecer()`, que corre después, así que
         # usarlo acá daría siempre el fallback. BGL etiqueta por evento, y

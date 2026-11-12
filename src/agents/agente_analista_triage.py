@@ -21,7 +21,7 @@ sin diagnosticar todavía. El paso "rag" del plan (si existe) queda
 import json
 
 from src.llm import llm_json
-from src.preprocessing.prompt_context import contexto_preprocesamiento
+from src.preprocessing.prompt_context import contexto_contenido_lote, contexto_preprocesamiento
 from src.state import LogGuardState
 from src.tools.resumen_prompt import acotar_resumen_para_prompt
 
@@ -52,6 +52,43 @@ def _contexto_pre(state: LogGuardState) -> str:
     )
 
 
+#: Pedido del veredicto preliminar (M8, NODEX final). Va en el system de las
+#: dos pasadas que pueden diagnosticar.
+_INSTRUCCION_VEREDICTO = (
+    " Además del diagnóstico, entrega veredicto_preliminar con UNO de estos valores: "
+    '"incidente_seguridad" (actividad maliciosa o amenaza de seguridad), '
+    '"anomalia_operativa" (falla o comportamiento anómalo del sistema sin indicios de ataque) '
+    'o "normal" (nada fuera de lo esperado), y justificacion_veredicto: una frase breve '
+    "basada en la evidencia observada (líneas, flujos o señales del perfil del lote)."
+)
+
+
+def _pide_veredicto() -> bool:
+    from src.config import VEREDICTO_PRELIMINAR
+    return VEREDICTO_PRELIMINAR
+
+
+def _campos_json_veredicto() -> str:
+    return ', "veredicto_preliminar": "...", "justificacion_veredicto": "..."' if _pide_veredicto() else ""
+
+
+def _veredicto(respuesta: dict) -> dict:
+    """Veredicto preliminar validado contra el vocabulario cerrado (None si no calza)."""
+    if not _pide_veredicto():
+        return {}
+    from src.config import VEREDICTOS
+    valor = respuesta.get("veredicto_preliminar")
+    valor = valor.strip().lower() if isinstance(valor, str) else None
+    justificacion = respuesta.get("justificacion_veredicto")
+    return {"veredicto_preliminar": valor if valor in VEREDICTOS else None,
+            "justificacion_veredicto_preliminar": justificacion.strip()[:500] if isinstance(justificacion, str) else ""}
+
+
+def _contenido(state: LogGuardState) -> str:
+    """Contenido del lote (M1): líneas en texto, flujos minoritarios en red."""
+    return contexto_contenido_lote(state.get("contenido_lote"))
+
+
 def agente_analista_triage(state: LogGuardState) -> dict:
     print("\n🧠 [Agente Triage] Analizando el incidente...")
 
@@ -70,8 +107,10 @@ def agente_analista_triage(state: LogGuardState) -> dict:
             "genera un diagnóstico del ataque. Si alguna técnica listada en TÉCNICAS "
             "MITRE ATT&CK realmente aplica a lo que ves en el resumen, cita su ID "
             "(p. ej. \"T1110\") dentro del diagnóstico; si ninguna aplica, o la lista "
-            "viene vacía, no inventes IDs de técnica. "
-            'Responde SOLO en JSON: {"diagnostico": "...", "necesita_rag": false}'
+            "viene vacía, no inventes IDs de técnica."
+            + (_INSTRUCCION_VEREDICTO if _pide_veredicto() else "")
+            + ' Responde SOLO en JSON: {"diagnostico": "...", "necesita_rag": false'
+            + _campos_json_veredicto() + "}"
         )
         contexto_rag = state.get("contexto_rag") or []
         contexto_txt = (
@@ -107,6 +146,7 @@ def agente_analista_triage(state: LogGuardState) -> dict:
             (f"OBJETIVO DEL PLAN DE INVESTIGACIÓN: {plan_objetivo}\n\n" if plan_objetivo else "")
             + f"RESUMEN DEL LOTE:\n{json.dumps(resumen_para_llm, ensure_ascii=False)}\n\n"
             + (f"{contexto_pre}\n\n" if contexto_pre else "")
+            + (f"{contenido}\n\n" if (contenido := _contenido(state)) else "")
             + f"CONTEXTO HISTÓRICO (RAG):\n{contexto_txt}\n\n"
             + f"TÉCNICAS MITRE ATT&CK RELACIONADAS:\n{tecnicas_txt}"
         )
@@ -114,6 +154,7 @@ def agente_analista_triage(state: LogGuardState) -> dict:
         return {
             "diagnostico": respuesta.get("diagnostico", "Ataque indeterminado"),
             "necesita_rag": False,
+            **_veredicto(respuesta),
         }
 
     print("   → Primera pasada: decidiendo si hace falta contexto histórico...")
@@ -126,9 +167,12 @@ def agente_analista_triage(state: LogGuardState) -> dict:
         "decides que NO hace falta, diagnostica directamente basándote solo en "
         "el resumen. Si el lote se interpretó con baja cobertura o trae "
         "advertencias de parsing, tenlo en cuenta: puede convenir pedir "
-        "contexto histórico aunque el resumen por sí solo parezca alcanzar. "
-        'Responde SOLO en JSON: {"necesita_rag": true/false, '
-        '"diagnostico": "..." (vacío si necesita_rag es true), "razon": "..."}'
+        "contexto histórico aunque el resumen por sí solo parezca alcanzar."
+        + (_INSTRUCCION_VEREDICTO + " Si pides la consulta, deja veredicto_preliminar vacío."
+           if _pide_veredicto() else "")
+        + ' Responde SOLO en JSON: {"necesita_rag": true/false, '
+        '"diagnostico": "..." (vacío si necesita_rag es true), "razon": "..."'
+        + _campos_json_veredicto() + "}"
     )
     resumen_para_llm = acotar_resumen_para_prompt(state["resumen_logs"])
     # Antes esta primera pasada no recibía el contexto v2 (esquema, cobertura,
@@ -141,6 +185,7 @@ def agente_analista_triage(state: LogGuardState) -> dict:
         + f"{_contexto_plan_rag(state)}\n\n"
         + (f"{contexto_pre}\n\n" if contexto_pre else "")
         + f"RESUMEN DEL LOTE:\n{json.dumps(resumen_para_llm, ensure_ascii=False)}"
+        + (f"\n\n{contenido}" if (contenido := _contenido(state)) else "")
     )
     respuesta = llm_json(user_content, system=sys_instruction)
     necesita_rag = bool(respuesta.get("necesita_rag", True))
@@ -149,6 +194,7 @@ def agente_analista_triage(state: LogGuardState) -> dict:
         return {
             "diagnostico": respuesta.get("diagnostico") or "Ataque indeterminado",
             "necesita_rag": False,
+            **_veredicto(respuesta),
         }
     print(f"   → Solicitando RAG ({respuesta.get('razon', 'sin razón')})...")
     return {"necesita_rag": True}

@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=6106 salida=388 razonamiento=600 total=7094
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=16772 salida=449 razonamiento=3101 total=20322
+   → No hace falta RAG (El lote presenta 100% de cobertura de parsing y datos concluyentes en los registros Zeek: la señal de barrido de puertos, la distribución temporal de 1.6 segundos, los puertos objetivo y el estado SH proporcionan evidencia inequívoca y suficiente para diagnosticar el incidente de seguridad sin requerir memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=400 salida=59 razonamiento=414 total=873
+   → usar_cve: False | Razón: El diagnóstico reporta una actividad de reconocimiento/escaneo de puertos (T1046) sin sesiones completadas ni identificación de software, versiones específicas o vulnerabilidades explotadas que requieran búsqueda de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=1672 salida=88 razonamiento=565 total=2325
+   → 4 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=63082 salida=534 razonamiento=864 total=64480
+   → Confianza final: 1.00 | hay_anomalia=True | hay_incidente=True | cobertura_suficiente=True | El diagnóstico es completamente certero. La evidencia registrada en el grupo G11 confirma un barrido de puertos TCP sistemático desde 143.88.18.12 hacia 143.88.18.11 entre las 13:19:50 y 13:19:52, abarcando múltiples puertos clave con estado de conexión SH (SYN-sent sin respuesta establecida). Las medidas de contención mediante iptables son proporcionales y adecuadas.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

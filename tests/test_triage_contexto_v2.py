@@ -87,7 +87,13 @@ def test_el_contexto_no_supera_el_presupuesto_con_hdfs_real():
     assert len(contexto_pre) <= CONTEXTO_PREPROCESAMIENTO_MAX_CHARS
 
     resumen_acotado = acotar_resumen_para_prompt(estado["resumen_logs"])
-    resumen_txt = json.dumps(resumen_acotado, ensure_ascii=False)
+    # NODEX final (M2): el perfil del lote viaja dentro del resumen y tiene sus
+    # propios topes (orígenes, componentes, uids de severidad alta); no escala
+    # con la cantidad de IPs, que es lo que este test vigila. Se mide aparte.
+    perfil_txt = json.dumps(resumen_acotado.get("perfil_lote") or {}, ensure_ascii=False)
+    assert len(perfil_txt) < 3_000
+    resumen_txt = json.dumps({k: v for k, v in resumen_acotado.items() if k != "perfil_lote"},
+                             ensure_ascii=False)
     # Muy por debajo de los ~58 000 tokens (~232 000 caracteres) que el
     # resumen SIN acotar disparaba antes de que existiera acotar_resumen_
     # para_prompt: confirma que sumar el contexto v2 al primer prompt no

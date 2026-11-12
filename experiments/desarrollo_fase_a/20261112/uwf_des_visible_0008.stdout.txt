@@ -1,0 +1,50 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=5167 salida=314 razonamiento=1224 total=6705
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=8616 salida=443 razonamiento=1175 total=10234
+   → No hace falta RAG (La cobertura de parsing es del 100% y los datos del resumen junto con los flujos minoritarios entregan visibilidad suficiente sobre los protocolos, puertos, volúmenes y estados de conexión (S0) para determinar la naturaleza operativa del tráfico sin requerir contexto histórico.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=401 salida=62 razonamiento=204 total=667
+   → usar_cve: False | Razón: El diagnóstico no identifica actividad maliciosa, explotación de vulnerabilidades ni versiones específicas de software afectadas; el tráfico anómalo corresponde a reintentos legítimos por inalcanzabilidad del servidor DNS y tráfico de red estándar.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=1418 salida=98 razonamiento=516 total=2032
+   → 6 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ❌ Comandos rechazados: ["BINARIO_NO_RECONOCIDO: 'nc' en 'nc -zvw3 10.0.10.1 53'"]
+   → 1 comando(s) rechazado(s) en el intento 1.
+   🔀 Router Validación → agente_ingeniero_mitigacion (intento 1/2)
+👉 Transición completada en: 'tool_validar_comandos'
+
+👷 [Agente Mitigación] Generando comandos (intento 2)...
+   ⚠️ Autorreflexión: corrigiendo errores anteriores...
+   [tokens] entrada=1479 salida=59 razonamiento=377 total=1915
+   → 4 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=66171 salida=825 razonamiento=612 total=67608
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El análisis es correcto. El flujo dominante consiste en consultas DNS repetitivas sin respuesta (S0) dirigidas hacia 10.0.10.1, coherente con un problema de conectividad o desconfiguración del resolver local, descartando un ataque volumétrico o intrusión. El resto del tráfico corresponde a protocolos normales de red y resolución legítima.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

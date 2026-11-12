@@ -17,7 +17,24 @@ cuota ni tiempo real de espera.
 import ssl
 from types import SimpleNamespace
 
+import pytest
+
 import src.llm as llm_mod
+
+
+@pytest.fixture(autouse=True)
+def _modelos_distintos(monkeypatch):
+    """Las pruebas del respaldo distinguen el modelo principal del de respaldo por su nombre.
+
+    Con un `.env` que fija los dos al mismo modelo (la configuración de evaluación usa
+    `gemini-3.8-flash` en ambos), el simulador no podía distinguirlos y 4 pruebas fallaban
+    sin que el código tuviera un defecto. Se fijan nombres distintos para que las pruebas
+    no dependan del `.env` (NODEX final, Fase A). Solo se cambia el de respaldo: el
+    principal es también el valor por omisión de `_generate_con_backoff`, fijado al
+    definir la función, y una prueba lo verifica.
+    """
+    if llm_mod.LLM_MODEL_FALLBACK == llm_mod.LLM_MODEL_PRIMARY:
+        monkeypatch.setattr(llm_mod, "LLM_MODEL_FALLBACK", llm_mod.LLM_MODEL_PRIMARY + "-respaldo-de-prueba")
 
 
 def _respuesta_llm(texto: str):

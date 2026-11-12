@@ -1,0 +1,77 @@
+{
+  "inicio_utc": "2026-11-12T03:36:41.224309+00:00",
+  "tope_usd": 1.0,
+  "base_conocimiento": "experiments/knowledge/chroma_v2 (copia por caso)",
+  "parametros": {
+    "LLM_MODEL_PRIMARY": "gemini-3.8-flash",
+    "LLM_MODEL_FALLBACK": "gemini-3.8-flash",
+    "LLM_SIN_RESPALDO": true,
+    "REPUTACION_SIN_ENRIQUECIMIENTO": true,
+    "TEMPERATURE": 0.0,
+    "EMBEDDING_MODEL": "all-MiniLM-L6-v2",
+    "TOP_K_FEWSHOT": 3,
+    "TOP_K_ERRORS": 3,
+    "TOP_K_ATTACK": 3,
+    "ATTACK_MAX_CHARS_EMBED": 800,
+    "MAX_RAW_CHARS_EMBED": 2000,
+    "CONTEXTO_PREPROCESAMIENTO_MAX_CHARS": 2000,
+    "LOG_MAX_FILE_BYTES": 52428800,
+    "LOG_MAX_EVENTS": 100000,
+    "LOG_MAX_RAW_SAMPLES": 20,
+    "LOG_PRESERVE_RAW": true
+  },
+  "casos": [
+    {
+      "case_id": "bgl_des_balanceado_0000",
+      "codigo": 0,
+      "segundos_pared": 79.5,
+      "usd": 0.03627,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "case_id": "bgl_des_natural_0010",
+      "codigo": 0,
+      "segundos_pared": 90.9,
+      "usd": 0.04393,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "case_id": "uwf_des_visible_0000",
+      "codigo": 0,
+      "segundos_pared": 82.4,
+      "usd": 0.09251,
+      "llamadas": 5,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "case_id": "uwf_des_visible_0008",
+      "codigo": 0,
+      "segundos_pared": 73.3,
+      "usd": 0.0846,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "case_id": "uwf_des_sigiloso_0000",
+      "codigo": 0,
+      "segundos_pared": 103.0,
+      "usd": 0.11048,
+      "llamadas": 7,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    }
+  ],
+  "fin_utc": "2026-11-12T03:43:50.499367+00:00",
+  "gasto_usd": 0.36779
+}

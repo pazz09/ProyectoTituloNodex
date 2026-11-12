@@ -111,12 +111,31 @@ def _preparar_estado_inicial(raw_logs: str, thread_id: str | None = None):
     resumen["reputacion_ips"] = corroborar_ips(ips, get_ip_cache()) if ips else {}
 
     metadatos, advertencias, muestras = _metadatos_desde_v2(_resultado, v2)
-    evidencia, omitidos = construir_evidencia(_resultado)
+    # NODEX final, Fase A: perfil determinístico (M2), grupos de evidencia (M6)
+    # y contenido del lote para el triage (M1). Se calculan aquí, una vez, para
+    # que NODEX y el agente único (que también usa esta función) reciban lo
+    # mismo. El perfil va dentro del resumen: `acotar_resumen_para_prompt` lo
+    # conserva y llega a los dos.
+    from src.config import CONTEXTO_LOTE_COMPLETO, EVIDENCIA_POR_GRUPOS, PERFIL_LOTE_ACTIVO
+    from src.preprocessing.perfil_lote import analizar_lote as analizar_perfil
+    analisis = analizar_perfil(_resultado)
+    if PERFIL_LOTE_ACTIVO:
+        resumen["perfil_lote"] = analisis["perfil_lote"]
+    grupos = analisis["grupos_evidencia"] if EVIDENCIA_POR_GRUPOS else []
+    evidencia, omitidos = construir_evidencia(
+        _resultado, grupo_de=analisis["group_id_por_registro"] if EVIDENCIA_POR_GRUPOS else None)
     firma = firma_lote(resumen, metadatos)
 
     input_inicial = {
         "evidencia_logs": evidencia,
         "evidencia_logs_omitidos": omitidos,
+        # --- NODEX final, Fase A ---
+        "grupos_evidencia": grupos,
+        "contenido_lote": analisis["contenido_lote"] if CONTEXTO_LOTE_COMPLETO else {},
+        "veredicto_preliminar": None,
+        "justificacion_veredicto_preliminar": "",
+        "invalid_evidence_group_count": 0,
+        "comandos_rechazados": [],
         "eventos_reconstruidos": [],
         "secuencia_temporal": [],
         "tecnicas_atribuidas": [],

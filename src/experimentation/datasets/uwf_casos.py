@@ -346,14 +346,36 @@ def _recomputar_datetime(ts: float) -> str:
     )[:-3]
 
 
+def _formato_del_fondo(ts: float) -> tuple[str, str]:
+    """`ts` y `datetime` con la MISMA regla que usa el fondo benigno (M9).
+
+    Medido sobre los CSV convertidos (12-nov-2026): en los 4 shards benignos
+    (350 339 filas) `ts` es la representación más corta del número
+    (`repr(float)`, de 2 a 6 decimales) y `datetime` es
+    `str(datetime.fromtimestamp(ts, UTC))` sin zona: microsegundos y sin
+    fracción cuando valen 0. Los shards maliciosos traen `datetime` truncado a
+    milisegundos. La versión anterior escribía `ts` con 6 decimales fijos y
+    `datetime` en milisegundos, así que el formato delataba las filas
+    inyectadas. El `ts` se redondea a 6 decimales (la precisión del dataset)
+    antes de escribirlo.
+    """
+    nuevo = round(ts, 6)
+    return repr(nuevo), str(datetime.fromtimestamp(nuevo, tz=timezone.utc).replace(tzinfo=None))
+
+
 def _fila_rebasada(registro: Registro, offset: float) -> tuple:
     """Copia la fila con `ts` y `datetime` desplazados."""
+    from src.config import UWF_REBASE_FORMATO_FONDO
+
     valores = list(registro.valores)
     indice_ts = COLUMNAS_EVENTO.index("ts")
     indice_dt = COLUMNAS_EVENTO.index("datetime")
     nuevo_ts = registro.ts + offset
-    valores[indice_ts] = f"{nuevo_ts:.6f}"
-    valores[indice_dt] = _recomputar_datetime(nuevo_ts)
+    if UWF_REBASE_FORMATO_FONDO:
+        valores[indice_ts], valores[indice_dt] = _formato_del_fondo(nuevo_ts)
+    else:
+        valores[indice_ts] = f"{nuevo_ts:.6f}"
+        valores[indice_dt] = _recomputar_datetime(nuevo_ts)
     return tuple(valores)
 
 
@@ -571,8 +593,16 @@ def _seleccionar_por_tactica(
     return elegidos, consumidos
 
 
-def generar_casos_uwf(raiz_repo: Path, raiz_experimentos: Path) -> dict:
-    """Genera todos los casos de UWF y devuelve el manifiesto."""
+def generar_casos_uwf(raiz_repo: Path, raiz_experimentos: Path,
+                      particiones_a_escribir: tuple[str, ...] | None = None) -> dict:
+    """Genera todos los casos de UWF y devuelve el manifiesto.
+
+    `particiones_a_escribir` (NODEX final, M9): la generación recorre SIEMPRE
+    las dos particiones en el mismo orden, porque el fondo benigno se asigna
+    con un cursor compartido y saltarse una partición cambiaría los registros
+    de la otra. Este parámetro solo decide qué casos se ESCRIBEN; `None`
+    escribe todo (comportamiento original).
+    """
     destino_csv = raiz_repo / "data/experimentacion/uwf_csv"
     maliciosos, benignos = _leer(destino_csv)
     incidentes = construir_incidentes(maliciosos)
@@ -686,7 +716,8 @@ def generar_casos_uwf(raiz_repo: Path, raiz_experimentos: Path) -> dict:
                 casos.append(caso)
                 referencias.append(referencia)
 
-            _escribir(casos, referencias, raiz_experimentos)
+            if particiones_a_escribir is None or particion in particiones_a_escribir:
+                _escribir(casos, referencias, raiz_experimentos)
             proporciones = [c.notas["proporcion_maliciosa"] for c in casos
                             if c.notas["n_registros_maliciosos"]]
             manifiesto["condiciones"][particion][condicion] = {

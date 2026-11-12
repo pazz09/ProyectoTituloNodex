@@ -47,6 +47,13 @@ class LogGuardState(TypedDict):
     # Catálogo acotado de registros observados para D-11, sin etiquetas/raw.
     evidencia_logs: list
     evidencia_logs_omitidos: int
+    # --- NODEX final, Fase A (nov-2026) ---
+    grupos_evidencia: list           # M6: grupos determinísticos G01.. con sus uids
+    contenido_lote: dict             # M1: líneas (texto) o flujos minoritarios (red) para el triage
+    veredicto_preliminar: str        # M8: incidente_seguridad / anomalia_operativa / normal (triage)
+    justificacion_veredicto_preliminar: str
+    invalid_evidence_group_count: int  # M6: grupos citados que no existen
+    comandos_rechazados: Annotated[list, acumular]  # M7: comandos rechazados por el validador, con motivo
     eventos_reconstruidos: list[EventoReconstruido]
     secuencia_temporal: list[str]
     tecnicas_atribuidas: list[TecnicaAtribuida]

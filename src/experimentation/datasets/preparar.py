@@ -118,8 +118,14 @@ def _especificaciones(dataset: str, particion: str) -> list[EspecificacionCasos]
     return especificaciones
 
 
-def preparar_dataset(dataset: str, raiz_repo: Path, raiz_experimentos: Path) -> dict:
-    """Prepara un dataset completo y devuelve su manifiesto."""
+def preparar_dataset(dataset: str, raiz_repo: Path, raiz_experimentos: Path,
+                     particiones_a_escribir: tuple[str, ...] | None = None) -> dict:
+    """Prepara un dataset completo y devuelve su manifiesto.
+
+    `particiones_a_escribir` (NODEX final, M9): se generan siempre las dos
+    particiones (la semilla y el reparto no cambian), pero solo se ESCRIBEN
+    los casos de las indicadas. `None` escribe todo (comportamiento original).
+    """
     if dataset == "hdfs":
         grupos = agrupar_hdfs(
             raiz_repo / "data/logs/HDFS_2k.log",
@@ -167,6 +173,8 @@ def preparar_dataset(dataset: str, raiz_repo: Path, raiz_experimentos: Path) -> 
         resultados = generar_campana(
             grupos_particion, _especificaciones(dataset, particion)
         )
+        if particiones_a_escribir is not None and particion not in particiones_a_escribir:
+            continue
         manifiesto["condiciones"][particion] = {
             condicion: escribir_generacion(resultado, raiz_experimentos)
             for condicion, resultado in resultados.items()

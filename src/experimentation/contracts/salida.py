@@ -142,6 +142,10 @@ class ExperimentalOutput:
     #: Ruta relativa del output original de la arquitectura, preservado sin
     #: transformar (plan, Fase 4 acción 1).
     raw_output_ref: str | None = None
+    #: NODEX final (M8): `incidente_seguridad` / `anomalia_operativa` /
+    #: `normal`, derivada del veredicto final. Aditiva y de trazabilidad: no
+    #: reemplaza `classification`, que sigue siendo el par mandatado.
+    classification_detallada: str | None = None
 
     def __post_init__(self) -> None:
         if not self.case_id:
@@ -200,5 +204,6 @@ class ExperimentalOutput:
                 "motivo_no_evaluable": self.motivo_no_evaluable,
                 "mitre_candidates": [c.to_dict() for c in self.mitre_candidates],
                 "raw_output_ref": self.raw_output_ref,
+                "classification_detallada": self.classification_detallada,
             },
         }

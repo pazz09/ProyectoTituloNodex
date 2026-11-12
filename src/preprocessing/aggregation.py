@@ -153,9 +153,23 @@ _RESULTADOS_FALLIDOS = {"rej", "s0", "rsto", "rstr", "rstos0", "rstrh", "sh", "s
                         "error", "reject", "rejected"}
 
 
+#: Protocolos sin handshake. En ellos el estado S0 de Zeek ("se vio el
+#: originador, no hubo respuesta") describe una consulta sin contestación, no
+#: un intento rechazado: una consulta DNS por UDP sin respuesta es tráfico
+#: normal. Contarla como fallo inflaba `intentos_fallidos` y `evento_critico`
+#: (280 de 300 eventos en un lote UWF de desarrollo). NODEX final, Fase A.
+_PROTOCOLOS_SIN_HANDSHAKE = {"udp", "icmp", "icmp6", "ipv6-icmp"}
+
+
 def _es_fallido(evento: NormalizedEvent) -> bool:
     valor = (evento.event_outcome or "").strip().lower()
-    return valor in _RESULTADOS_FALLIDOS
+    if valor not in _RESULTADOS_FALLIDOS:
+        return False
+    from src.config import UDP_S0_NO_ES_FALLO
+    if (UDP_S0_NO_ES_FALLO and valor == "s0"
+            and (evento.protocol or "").strip().lower() in _PROTOCOLOS_SIN_HANDSHAKE):
+        return False
+    return True
 
 
 def _ventana_temporal(eventos: list[NormalizedEvent]) -> dict:

@@ -1,0 +1,60 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=6281 salida=415 razonamiento=901 total=7597
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=11916 salida=151 razonamiento=1987 total=14054
+   → Solicitando RAG (Conviene consultar la memoria histórica y la base de conocimiento MITRE ATT&CK (técnicas T1071.004 y T1572) para contrastar el patrón masivo de solicitudes DNS no respondidas (estado S0) y los intentos de conexión en el puerto TCP 44446 con firmas previas de balizamiento C2, túneles encubiertos o campañas conocidas antes de emitir un veredicto definitivo.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1071.004, T1584.002, T1590.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=12609 salida=352 razonamiento=1812 total=14773
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=378 salida=55 razonamiento=143 total=576
+   → usar_cve: False | Razón: El diagnóstico concluye que no hay actividad maliciosa ni se identifican versiones específicas de servicios vulnerables o ataques activos que justifiquen la búsqueda de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=1759 salida=99 razonamiento=688 total=2546
+   → 6 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ❌ Comandos rechazados: ["BINARIO_NO_RECONOCIDO: 'nc' en 'nc -zvu -w 2 10.0.10.1 53'"]
+   → 1 comando(s) rechazado(s) en el intento 1.
+   🔀 Router Validación → agente_ingeniero_mitigacion (intento 1/2)
+👉 Transición completada en: 'tool_validar_comandos'
+
+👷 [Agente Mitigación] Generando comandos (intento 2)...
+   ⚠️ Autorreflexión: corrigiendo errores anteriores...
+   [tokens] entrada=1823 salida=72 razonamiento=871 total=2766
+   → 4 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=66866 salida=539 razonamiento=1049 total=68454
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. La evidencia muestra una anomalía operativa por la falta de respuesta del servidor DNS interno en 10.0.10.1:53 (estado S0), ocasionando reintentos continuos por parte del cliente 143.88.255.10. El resto del tráfico observado comprende tráfico legítimo de red (consultas recursivas a servidores raíz DNS, difusión NetBIOS, DHCPv6 y un intento menor de conexión hacia un puerto interno inactivo). No se identifican indicadores de compromiso, túneles DNS ni actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

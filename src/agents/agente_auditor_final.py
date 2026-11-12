@@ -119,8 +119,9 @@ def agente_auditor_final(state: LogGuardState) -> dict:
 
     user_content += contexto_d11(state)
     respuesta = llm_json(user_content, system=sys_instruction)
-    d11 = normalizar_d11(respuesta, state.get("evidencia_logs"))
+    d11 = normalizar_d11(respuesta, state.get("evidencia_logs"), state.get("grupos_evidencia"))
     d11["invalid_evidence_uid_count"] += state.get("invalid_evidence_uid_count", 0) or 0
+    d11["invalid_evidence_group_count"] += state.get("invalid_evidence_group_count", 0) or 0
     d11["d11_warnings"] = list(state.get("d11_warnings") or []) + d11["d11_warnings"]
     if not isinstance(respuesta, dict):
         respuesta = {}

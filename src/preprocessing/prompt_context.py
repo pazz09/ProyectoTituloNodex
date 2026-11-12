@@ -150,3 +150,44 @@ def contexto_preprocesamiento(metadatos: dict | None,
     if len(restantes) < len(bloques):
         texto += "\n" + _MARCA_OMITIDO
     return texto
+
+
+def contexto_contenido_lote(contenido: dict | None) -> str:
+    """Bloque con el contenido del lote para el prompt (M1, NODEX final).
+
+    Compartido por el triage de NODEX y el agente único, para que las dos
+    arquitecturas lean lo mismo. En logs de texto entrega las líneas
+    (`[uid] línea`, sin el campo de alerta de BGL) con tope de líneas y de
+    caracteres, y lo dice si recorta. En logs de red entrega las filas
+    completas de los flujos minoritarios que señaló el perfil del lote; el
+    resto del tráfico está resumido en `perfil_lote`. Vacío si
+    `CONTEXTO_LOTE_COMPLETO` está apagado o no hay contenido.
+    """
+    import json
+
+    from src.config import CONTEXTO_LOTE_COMPLETO
+    if not CONTEXTO_LOTE_COMPLETO or not contenido:
+        return ""
+    if contenido.get("tipo") == "texto":
+        lineas = contenido.get("lineas") or []
+        partes = ["CONTENIDO DEL LOTE (líneas observadas, formato [uid] línea):"]
+        partes.extend(lineas)
+        if contenido.get("recortado"):
+            topes = contenido.get("topes") or {}
+            partes.append(
+                f"ATENCIÓN: se entregan {contenido.get('lineas_entregadas')} de "
+                f"{contenido.get('total_lineas')} líneas (tope de {topes.get('lineas')} líneas o "
+                f"{topes.get('caracteres')} caracteres). Las líneas omitidas no se muestran.")
+        return "\n".join(partes)
+    flujos = contenido.get("flujos_minoritarios") or []
+    if not flujos:
+        return ("FLUJOS MINORITARIOS: ninguna señal del perfil del lote marcó flujos "
+                "minoritarios; el tráfico está resumido en perfil_lote.")
+    partes = ["FLUJOS MINORITARIOS (filas completas de los grupos que cumplen alguna señal "
+              "del perfil del lote; el resto del tráfico está resumido en perfil_lote):"]
+    for flujo in flujos:
+        partes.append(json.dumps(flujo, ensure_ascii=False))
+    if contenido.get("filas_omitidas"):
+        partes.append(f"ATENCIÓN: se omitieron {contenido['filas_omitidas']} filas de flujos "
+                      f"minoritarios por el tope de {contenido.get('tope_filas')} filas.")
+    return "\n".join(partes)

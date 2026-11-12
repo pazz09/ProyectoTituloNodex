@@ -33,6 +33,7 @@ from src.experimentation.adapters.extraccion import (
 )
 from src.experimentation.contracts import CONTRATO_VERSION
 from src.experimentation.contracts.salida import ExperimentalOutput
+from src.output_contract import clasificacion_detallada
 
 #: Campos del estado que **nunca** se copian al artefacto crudo. No son
 #: secretos, pero son voluminosos y ya están en el caso: duplicarlos haría
@@ -90,6 +91,7 @@ def adaptar(
         veredicto_booleano_presente=veredicto is not None,
         motivo_no_evaluable=motivo_veredicto,
         raw_output_ref=raw_output_ref,
+        classification_detallada=clasificacion_detallada(estado),
     )
 
     estados: dict[str, str] = {}

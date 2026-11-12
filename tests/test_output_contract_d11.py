@@ -41,7 +41,9 @@ def respuesta(events=None, timeline=None, techniques=None):
 
 def test_contrato_vacio_valido():
     result = normalizar_d11(respuesta(), [])
-    assert result == {**respuesta(), "invalid_evidence_uid_count": 0, "d11_warnings": []}
+    # `invalid_evidence_group_count` es aditivo (M6, NODEX final): grupos citados que no existen.
+    assert result == {**respuesta(), "invalid_evidence_uid_count": 0,
+                      "invalid_evidence_group_count": 0, "d11_warnings": []}
 
 
 def test_evento_con_evidencia_se_conserva_sin_mutar():

@@ -1,0 +1,50 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1301 salida=331 razonamiento=390 total=2022
+   → Plan v1: ['triage', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=4124 salida=329 razonamiento=432 total=4885
+   → No hace falta RAG (El lote presenta una cobertura de parsing del 100% y contiene suficiente detalle técnico para identificar fallas operativas de hardware y software del clúster sin requerir contexto adicional de técnicas de ataque ni memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=331 salida=47 razonamiento=165 total=543
+   → usar_cve: False | Razón: El diagnóstico indica exclusivamente fallas operativas, de hardware y de ejecución de software sin indicios de actividad maliciosa ni vulnerabilidades de seguridad explotadas.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=1319 salida=100 razonamiento=569 total=1988
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ❌ Comandos rechazados: ["BINARIO_NO_RECONOCIDO: 'file' en 'file /bgl/apps/followup/RAPTOR/new.raptor.trace'", "BINARIO_NO_RECONOCIDO: 'edac-util' en 'edac-util -v'"]
+   → 2 comando(s) rechazado(s) en el intento 1.
+   🔀 Router Validación → agente_ingeniero_mitigacion (intento 1/2)
+👉 Transición completada en: 'tool_validar_comandos'
+
+👷 [Agente Mitigación] Generando comandos (intento 2)...
+   ⚠️ Autorreflexión: corrigiendo errores anteriores...
+   [tokens] entrada=1407 salida=68 razonamiento=1053 total=2528
+   → 4 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=5731 salida=2468 razonamiento=877 total=9076
+   → Confianza final: 0.98 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es totalmente preciso. Los registros evidencian fallos operativos, errores de paridad de caché, errores de memoria DDR corregibles, terminación de procesos con volcados de core y desconexiones de socket en la arquitectura BlueGene/L. No existe ninguna evidencia de compromiso o actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

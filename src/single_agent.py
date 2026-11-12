@@ -10,10 +10,25 @@ from src.config import CONFIDENCE_THRESHOLD
 from src.llm import llm_json
 from src.output_contract import PROMPT_D11, campos_d11, contexto_d11, normalizar_d11
 from src.pipeline import _preparar_estado_inicial
-from src.preprocessing.prompt_context import contexto_preprocesamiento
+from src.preprocessing.prompt_context import contexto_contenido_lote, contexto_preprocesamiento
 from src.telemetry import medir_ejecucion, resumen_telemetria
 from src.tools.resumen_prompt import acotar_resumen_para_prompt
 from src.tools.validation import validate_solution
+
+
+def _reglas_mitigacion() -> str:
+    """Las mismas reglas de mitigación que recibe NODEX (M7), para una comparación justa."""
+    from src.config import MITIGACION_CON_CONTEXTO, MITIGACION_DIR_SALIDA
+    if not MITIGACION_CON_CONTEXTO:
+        return ""
+    return (
+        "Para comandos_mitigacion: si no hay anomalía, lista vacía; si es una anomalía operativa "
+        "sin indicios de ataque, solo comandos de diagnóstico de solo lectura y ninguna regla de "
+        "firewall; si es un incidente de seguridad, contención proporcional y verificable sobre "
+        "las entidades de la evidencia. Nunca abras el firewall (-j ACCEPT, ufw allow), nunca "
+        "desbanees (fail2ban-client unban), no uses comandos destructivos y no escribas ni "
+        f"redirijas salida fuera de {MITIGACION_DIR_SALIDA}. "
+    )
 
 
 def analizar_lote_agente_unico(raw_logs: str, thread_id: str | None = None,
@@ -31,15 +46,20 @@ def analizar_lote_agente_unico(raw_logs: str, thread_id: str | None = None,
             'Devuelve SOLO JSON: {"diagnostico":"...", "hay_anomalia":true/false, '
             '"hay_incidente":true/false, "confianza":0.0, "evaluacion":"...", '
             '"comandos_mitigacion":[]}. '
+            + _reglas_mitigacion()
             + PROMPT_D11
         )
         prompt = "RESUMEN DEL LOTE:\n" + json.dumps(
             acotar_resumen_para_prompt(state["resumen_logs"]), ensure_ascii=False)
         prompt += "\n" + contexto_preprocesamiento(state["preprocessing_metadata"], state["parsing_warnings"])
+        # M1 (NODEX final): el mismo contenido del lote que recibe el triage de NODEX.
+        contenido = contexto_contenido_lote(state.get("contenido_lote"))
+        if contenido:
+            prompt += "\n" + contenido
         prompt += contexto_d11(state)
         try:
             respuesta = llm_json(prompt, system=system)
-            state.update(normalizar_d11(respuesta, state["evidencia_logs"]))
+            state.update(normalizar_d11(respuesta, state["evidencia_logs"], state.get("grupos_evidencia")))
             if not isinstance(respuesta, dict):
                 respuesta = {}
             for campo in ("diagnostico", "hay_anomalia", "hay_incidente", "confianza"):
@@ -51,6 +71,7 @@ def analizar_lote_agente_unico(raw_logs: str, thread_id: str | None = None,
             validacion = validate_solution(comandos)
             state["comandos_validos"] = validacion["valido"]
             state["motivos_rechazo"] = validacion["motivos"]
+            state["comandos_rechazados"] = [dict(r, intento=1) for r in validacion.get("rechazados", [])]
             state["_error_api"] = None
             if (respuesta.get("error") or not isinstance(state["hay_incidente"], bool)
                     or not isinstance(state["hay_anomalia"], bool)
