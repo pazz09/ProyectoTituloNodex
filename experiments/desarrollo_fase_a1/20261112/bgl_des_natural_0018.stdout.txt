@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=939 salida=244 razonamiento=936 total=2119
+   → Plan v1: ['triage', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3575 salida=218 razonamiento=451 total=4244
+   → No hace falta RAG (El lote presenta una cobertura de parsing del 100%, severidad uniforme INFO y patrones estándar de manejo de excepciones numéricas en HPC, sin necesidad de consultar memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=214 salida=44 razonamiento=127 total=385
+   → usar_cve: False | Razón: La actividad descrita corresponde a telemetría operacional normal y eventos informativos del kernel sin evidencia de vulnerabilidades, ataques o intentos de explotación.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=413 salida=6 razonamiento=44 total=463
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=4718 salida=747 razonamiento=1495 total=6960
+   → Confianza final: 0.95 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es acertado. Los registros corresponden exclusivamente a telemetría operacional rutinaria con severidad INFO del kernel BlueGene/L, que reporta excepciones de alineación de punto flotante y volcados informativos de registros iar/dear comunes durante la ejecución de cargas de trabajo de cómputo. No se evidencia ninguna anomalía del sistema ni actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

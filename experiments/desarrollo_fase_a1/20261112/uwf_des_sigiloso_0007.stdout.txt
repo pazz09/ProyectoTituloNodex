@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=5146 salida=347 razonamiento=924 total=6417
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=6663 salida=326 razonamiento=880 total=7869
+   → No hace falta RAG (La información del lote es completa (100% cobertura de parsing) y suficiente para identificar la causa del fallo de resolución y descartar actividad maliciosa sin requerir memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=323 salida=56 razonamiento=208 total=587
+   → usar_cve: False | Razón: El diagnóstico describe un problema de conectividad o reintentos de resolución DNS hacia un servidor inalcanzable, sin identificar software específico vulnerable, vectores de explotación ni indicios de un ataque activo.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=777 salida=88 razonamiento=500 total=1365
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=65753 salida=582 razonamiento=460 total=66795
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es preciso y está plenamente respaldado por la evidencia observada. Los registros muestran 264 consultas DNS UDP sin respuesta (S0) emitidas por 143.88.255.10 hacia 10.0.10.1 a intervalos regulares (~30 segundos), patrón característico de reintentos por caída o inalcanzabilidad del servidor DNS configurado. No existe evidencia de tráfico malicioso, exfiltración ni escaneo. Los comandos validados son los indicados para verificar la conectividad de red y la resolución de nombres.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

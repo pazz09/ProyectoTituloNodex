@@ -106,7 +106,13 @@ def hijo(dataset, case_id, salida):
 
 # --- lanzador -----------------------------------------------------------------------
 
-def ejecutar(tope):
+def casos_de_desarrollo():
+    """Todos los casos de desarrollo de BGL y UWF, en orden (BGL primero)."""
+    return [(ds, f.stem) for ds in ("bgl", "uwf")
+            for f in sorted((ROOT / "experiments" / "cases" / ds / "desarrollo").glob("*.json"))]
+
+
+def ejecutar(tope, casos=None, nombre_carpeta="desarrollo_fase_a"):
     from dotenv import dotenv_values
     from src.experimentation import campana
 
@@ -114,12 +120,13 @@ def ejecutar(tope):
     base = {**os.environ, **{k: v for k, v in dotenv_values(ROOT / ".env").items() if v is not None}}
     if not (base.get("GEMINI_API_KEY") or base.get("GOOGLE_API_KEY")):
         raise SystemExit("Falta credencial Gemini")
-    carpeta = ROOT / "experiments" / "desarrollo_fase_a" / datetime.now(ZoneInfo("America/Santiago")).strftime("%Y%m%d")
+    casos = casos or CASOS
+    carpeta = ROOT / "experiments" / nombre_carpeta / datetime.now(ZoneInfo("America/Santiago")).strftime("%Y%m%d")
     carpeta.mkdir(parents=True, exist_ok=True)
     registro = {"inicio_utc": utc(), "tope_usd": tope, "base_conocimiento": "experiments/knowledge/chroma_v2 (copia por caso)",
                 "parametros": congelada["parametros"], "casos": []}
     gastado = 0.0
-    for dataset, case_id in CASOS:
+    for dataset, case_id in casos:
         destino = carpeta / f"{case_id}.json"
         if destino.exists():
             print(f"Omitido (ya existe): {case_id}", flush=True)
@@ -161,9 +168,12 @@ if __name__ == "__main__":
     p.add_argument("--ejecutar", action="store_true")
     p.add_argument("--tope", type=float, default=1.0)
     p.add_argument("--hijo", nargs=3)
+    p.add_argument("--todos-desarrollo", action="store_true",
+                   help="todos los casos de desarrollo de BGL y UWF (línea base de la Fase A.1)")
+    p.add_argument("--carpeta", default="desarrollo_fase_a", help="subcarpeta de experiments/ para los resultados")
     a = p.parse_args()
     if a.hijo:
         raise SystemExit(hijo(*a.hijo))
     if a.ejecutar:
-        raise SystemExit(ejecutar(a.tope))
+        raise SystemExit(ejecutar(a.tope, casos_de_desarrollo() if a.todos_desarrollo else None, a.carpeta))
     print("Sin --ejecutar no se llama al modelo. Casos:", [c for _, c in CASOS])

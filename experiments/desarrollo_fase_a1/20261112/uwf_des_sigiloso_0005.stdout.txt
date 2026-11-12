@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=6667 salida=283 razonamiento=1276 total=8226
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=9864 salida=430 razonamiento=1004 total=11298
+   → No hace falta RAG (La evidencia provista por el perfil determinístico y las muestras crudas es suficiente para determinar que se trata de un fallo de conectividad/resolución DNS operativa sin patrones maliciosos, además de que el plan explícitamente descarta la memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=387 salida=64 razonamiento=153 total=604
+   → usar_cve: False | Razón: El diagnóstico concluye que se trata de una anomalía operativa de conectividad o configuración DNS en la red local, sin indicios de ataque, explotación ni mención de versiones o servicios de software vulnerables específicos.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=1386 salida=117 razonamiento=668 total=2171
+   → 7 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=66295 salida=702 razonamiento=699 total=67696
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es preciso y está sólidamente sustentado. Se trata de un problema operativo de resolución DNS/conectividad hacia el resolver 10.0.10.1, el cual no responde a las consultas de 143.88.255.10 (estado Zeek S0 repetido). El resto de los flujos corresponden a protocolos estándar de red local (NetBIOS, DHCPv6, ICMPv6 y tráfico DNS legítimo en otros segmentos), sin indicadores de compromiso ni actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

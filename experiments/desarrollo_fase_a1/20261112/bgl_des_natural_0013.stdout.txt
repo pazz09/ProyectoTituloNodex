@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=937 salida=241 razonamiento=813 total=1991
+   → Plan v1: ['triage', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3683 salida=225 razonamiento=502 total=4410
+   → No hace falta RAG (El lote presenta cobertura del 100% y registros estándar de supercómputo BlueGene/L con severidad INFO, suficientes para confirmar normalidad operativa sin requerir consulta histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=224 salida=48 razonamiento=155 total=427
+   → usar_cve: False | Razón: Los eventos analizados son exclusivamente de nivel informativo y corresponden a operaciones rutinarias del kernel de BlueGene/L sin indicios de vulnerabilidades ni ataques de seguridad.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=416 salida=6 razonamiento=60 total=482
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=5701 salida=510 razonamiento=2449 total=8660
+   → Confianza final: 1.00 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. La totalidad de los registros analizados presentan severidad INFO y provienen del subsistema bgl.kernel de IBM BlueGene/L. Reflejan el comportamiento operativo habitual del procesador (gestión de excepciones de alineación de coma flotante y volcados de registros iar/dear), sin evidencia de anomalías funcionales ni incidentes de seguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

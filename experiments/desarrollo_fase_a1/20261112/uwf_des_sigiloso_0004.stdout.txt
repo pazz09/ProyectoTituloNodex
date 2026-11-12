@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=6850 salida=304 razonamiento=393 total=7547
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=9374 salida=373 razonamiento=999 total=10746
+   → No hace falta RAG (El plan de investigación no contempla consultar memoria histórica, la cobertura de parsing es del 100% y los datos del resumen junto a los flujos minoritarios son suficientes para caracterizar el volumen, tasa y naturaleza operativa del tráfico sin requerir contexto adicional.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=330 salida=54 razonamiento=219 total=603
+   → usar_cve: False | Razón: El diagnóstico concluye que se trata de una anomalía operativa o error de configuración de red/resolver y descarta actividad maliciosa o explotación de vulnerabilidades específicas en un software o servicio.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=1070 salida=101 razonamiento=494 total=1665
+   → 6 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=66136 salida=521 razonamiento=1032 total=67689
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto y preciso. Se observan peticiones DNS repetitivas (UDP/53) desde 143.88.255.10 hacia la IP privada 10.0.10.1 que finalizan en estado S0 (sin respuesta) con un ritmo bajo (~9 peticiones por minuto), descartando DoS o escaneo. El tráfico restante corresponde a operaciones normales de red (DNS exitoso hacia 143.88.1.1, DHCPv6, ICMPv6). Por tanto, se trata de una anomalía operativa por resolver inalcanzable o mal enrutado, no de un incidente de seguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

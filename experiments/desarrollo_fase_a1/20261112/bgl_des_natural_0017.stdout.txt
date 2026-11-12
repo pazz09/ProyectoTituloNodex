@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1608 salida=319 razonamiento=932 total=2859
+   → Plan v1: ['triage', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=4148 salida=288 razonamiento=432 total=4868
+   → No hace falta RAG (El lote cuenta con una cobertura de parsing del 100% y la sintaxis de los registros de RAS de BlueGene/L es explícita, mostrando errores internos de procesador/kernel sin involucrar artefactos de red ni credenciales.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=269 salida=55 razonamiento=367 total=691
+   → usar_cve: False | Razón: El diagnóstico descarta explícitamente actividad maliciosa y vectores de ataque, señalando que los fallos se deben a problemas de hardware, microcódigo o inestabilidad del sistema físico.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=2528 salida=83 razonamiento=560 total=3171
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=5280 salida=470 razonamiento=1860 total=7610
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es preciso y consistente con la evidencia. Los 20 eventos corresponden a volcados de estado del procesador PowerPC 440 generados por el subsistema RAS del kernel en nodos de cómputo del supercomputador BlueGene/L (machine checks, interrupciones de programa, fallos de caché y excepciones de coma flotante). Se trata de una anomalía puramente operativa ligada a inestabilidad de hardware o microcódigo, sin indicios de actividad maliciosa ni técnicas de intrusión.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

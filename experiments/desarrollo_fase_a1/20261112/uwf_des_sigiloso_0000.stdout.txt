@@ -1,0 +1,60 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=6399 salida=357 razonamiento=1054 total=7810
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=8920 salida=136 razonamiento=884 total=9940
+   → Solicitando RAG (Se requiere consultar el historial de casos y técnicas de MITRE ATT&CK para evaluar si el patrón masivo de solicitudes DNS sin respuesta (S0) desde 143.88.255.10 y los intentos de conexión TCP al puerto efímero/no estándar 44446 corresponden a técnicas conocidas de C2, túneles encubiertos o denegación de servicio antes de formular el diagnóstico y medidas de contención.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1071.004, T1584.002, T1590.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=9603 salida=360 razonamiento=1831 total=11794
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=393 salida=46 razonamiento=97 total=536
+   → usar_cve: False | Razón: El diagnóstico no identifica ataques, indicadores de compromiso ni vulnerabilidades o versiones específicas de software; el tráfico refleja problemas de conectividad o degradación del servicio DNS.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=1061 salida=144 razonamiento=527 total=1732
+   → 8 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ❌ Comandos rechazados: ["BINARIO_NO_RECONOCIDO: 'nc' en 'nc -zv -w 2 143.88.5.12 44446'"]
+   → 1 comando(s) rechazado(s) en el intento 1.
+   🔀 Router Validación → agente_ingeniero_mitigacion (intento 1/2)
+👉 Transición completada en: 'tool_validar_comandos'
+
+👷 [Agente Mitigación] Generando comandos (intento 2)...
+   ⚠️ Autorreflexión: corrigiendo errores anteriores...
+   [tokens] entrada=1129 salida=97 razonamiento=751 total=1977
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=66904 salida=491 razonamiento=1382 total=68777
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Se observa un alto volumen de consultas DNS UDP en estado S0 dirigidas al resolver interno 10.0.10.1 sin recibir respuesta, lo que denota una degradación o problema de conectividad/infraestructura en el servicio DNS y no un incidente de seguridad ni actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

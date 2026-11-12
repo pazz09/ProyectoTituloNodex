@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=3915 salida=420 razonamiento=503 total=4838
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=12711 salida=371 razonamiento=870 total=13952
+   → No hace falta RAG (La evidencia técnica es contundente y el lote cuenta con 100% de cobertura de parsing; la ráfaga de conexiones TCP hacia múltiples puertos identifica de forma directa la técnica de barrido de puertos sin requerir contexto adicional de la base histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=331 salida=48 razonamiento=449 total=828
+   → usar_cve: False | Razón: La actividad detectada corresponde a un escaneo de puertos y reconocimiento genérico de red sin explotación activa ni mención de versiones específicas de software o servicios vulnerables.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=695 salida=78 razonamiento=486 total=1259
+   → 3 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=62291 salida=671 razonamiento=972 total=63934
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=True | cobertura_suficiente=True | Se observa un escaneo rápido de puertos TCP realizado por la IP 143.88.18.12 sobre el host 143.88.18.11 afectando servicios comunes y críticos, característico de una fase de reconocimiento de red activa. Adicionalmente, se detectan fallos continuos de resolución DNS desde 143.88.255.10 hacia 10.0.10.1 sin respuesta.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

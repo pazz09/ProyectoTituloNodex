@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1001 salida=246 razonamiento=950 total=2197
+   → Plan v1: ['triage', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3838 salida=327 razonamiento=708 total=4873
+   → No hace falta RAG (El lote presenta 100% de cobertura y los eventos son claramente interpretables a partir de las descripciones nativas de RAS y Discovery de BlueGene/L, evidenciando problemas puramente de hardware y operaciones sin implicación de seguridad.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=306 salida=54 razonamiento=113 total=473
+   → usar_cve: False | Razón: El diagnóstico indica exclusivamente fallos a nivel de hardware y anomalías físicas en el suministro eléctrico de la tarjeta de nodo, sin evidencia de explotación de vulnerabilidades de software ni actividad maliciosa.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=676 salida=112 razonamiento=444 total=1232
+   → 4 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=5783 salida=1150 razonamiento=961 total=7894
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros evidencian una falla de hardware a nivel de suministro eléctrico (latch de error PGOOD/MPGOOD) en el nodo R11-M1-N7, junto con telemetría operativa estándar de BlueGene/L (errores corregibles de memoria DDR y excepciones de punto flotante Double-Hummer). No existe evidencia de intrusión ni actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

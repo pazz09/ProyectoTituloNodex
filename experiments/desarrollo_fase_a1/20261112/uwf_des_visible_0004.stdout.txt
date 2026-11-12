@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=6435 salida=390 razonamiento=504 total=7329
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=13473 salida=165 razonamiento=658 total=14296
+   → Solicitando RAG (Se requiere consultar la base de conocimiento histórico y la técnica MITRE ATT&CK T1071.004 para contrastar el comportamiento de 143.88.255.10 (230 conexiones S0 hacia el resolver 10.0.10.1 e inversión de rol con tráfico SF desde 143.88.10.11) con patrones conocidos de tunelado DNS, exfiltración o fallas operativas de reenvío/resolución upstream.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1071.004, T1584.002, T1568.001
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=14145 salida=339 razonamiento=2100 total=16584
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=344 salida=69 razonamiento=167 total=580
+   → usar_cve: False | Razón: El diagnóstico describe una técnica de abuso de protocolo y canal encubierto/tunelización DNS (T1071.004) y no identifica ningún software, servicio específico con versión vulnerable ni fallo explotable que requiera la búsqueda de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=984 salida=197 razonamiento=1064 total=2245
+   → 7 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=67236 salida=763 razonamiento=769 total=68768
+   → Confianza final: 0.90 | hay_anomalia=True | hay_incidente=True | cobertura_suficiente=True | Se confirma comportamiento anómalo y altamente sospechoso consistente con el uso indebido de DNS. El grupo G08 muestra flujos bidireccionales con transferencia simétrica de bytes elevados (408-720 bytes) en ráfagas rápidas de alta frecuencia entre 143.88.10.11 y 143.88.255.10, característico de tunelización DNS o canal C2 encubierto (T1071.004). Asimismo, 143.88.255.10 intenta de forma persistente contactar al resolver 10.0.10.1 sin éxito (estado S0, G01). Las acciones de contención en iptables son pertinentes para aislar ambos extremos.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

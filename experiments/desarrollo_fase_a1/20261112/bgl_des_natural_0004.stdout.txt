@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1597 salida=400 razonamiento=447 total=2444
+   → Plan v1: ['triage', 'rag', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=4225 salida=389 razonamiento=3162 total=7776
+   → No hace falta RAG (La cobertura de parsing es del 100% y los registros muestran con total claridad una serie de trampas de hardware y excepciones de memoria típicas de fallos de software HPC, haciendo innecesaria la consulta de bases de conocimiento MITRE ATT&CK o memoria histórica para su determinación.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=350 salida=65 razonamiento=173 total=588
+   → usar_cve: False | Razón: El diagnóstico concluye que las fallas corresponden a errores de ejecución en una aplicación paralela (desreferencia de memoria/fallo MPI) o fallos de hardware, sin indicios de vulnerabilidades explotadas ni actividad maliciosa externa.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=2662 salida=109 razonamiento=441 total=3212
+   → 6 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=5031 salida=997 razonamiento=2547 total=8575
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es preciso. Los registros evidencian excepciones fatales del kernel y fallos de hardware/software (data storage interrupt, machine check, desreferencias a direcciones bajas e instrucciones ilegales) distribuidos en nodos de cálculo de BlueGene/L, consistentes con una falla operativa o caída en cascada de un trabajo paralelo (ej. MPI), sin indicios de compromiso de seguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

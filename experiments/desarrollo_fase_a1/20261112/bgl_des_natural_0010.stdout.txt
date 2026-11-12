@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=940 salida=259 razonamiento=456 total=1655
+   → Plan v1: ['triage', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3467 salida=226 razonamiento=289 total=3982
+   → No hace falta RAG (El lote presenta una cobertura de parsing del 100% y patrones uniformes de volcados de memoria de procesos a nivel de kernel, permitiendo diagnosticar directamente un fallo de ejecución operativa sin requerir contexto histórico.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=219 salida=53 razonamiento=415 total=687
+   → usar_cve: False | Razón: Los eventos reflejan terminaciones anormales de tareas de computación distribuida (trabajos MPI) sin indicios de explotación, actividad maliciosa ni mención de vulnerabilidades específicas.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=412 salida=70 razonamiento=488 total=970
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=4495 salida=336 razonamiento=490 total=5321
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | Los eventos corresponden a la terminación anormal de procesos de usuario y generación de volcados de memoria (core dumps) distribuidos en 20 nodos de BlueGene/L, característicos de fallos a nivel de aplicación o tareas MPI concurrentes sin implicaciones de seguridad ni actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

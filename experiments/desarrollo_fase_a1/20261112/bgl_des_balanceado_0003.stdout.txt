@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=932 salida=237 razonamiento=621 total=1790
+   → Plan v1: ['triage', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3698 salida=244 razonamiento=402 total=4344
+   → No hace falta RAG (El lote presenta 100% de cobertura en formato BGL, con 20 eventos clasificados como normales con severidad INFO, documentando operaciones y excepciones matemáticas habituales de la carga de trabajo sin indicios de compromiso.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=237 salida=57 razonamiento=328 total=622
+   → usar_cve: False | Razón: El diagnóstico confirma un comportamiento operativo estándar a nivel INFO propio de la arquitectura HPC, sin indicios de vulnerabilidades, incidentes de seguridad o actividad maliciosa que justifiquen la búsqueda de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=427 salida=6 razonamiento=158 total=591
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=4932 salida=479 razonamiento=1612 total=7023
+   → Confianza final: 1.00 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es completamente preciso. La totalidad de los registros analizados corresponde a mensajes informativos (INFO) rutinarios del kernel de un supercomputador BlueGene/L. Los eventos reflejan la captura de registros de arquitectura PowerPC (IAR/DEAR) y el reporte de excepciones de alineación de punto flotante gestionadas por el sistema operativo durante la ejecución de cargas de trabajo numéricas habituales en HPC. No existe evidencia de anomalía operativa ni de actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1305 salida=338 razonamiento=902 total=2545
+   → Plan v1: ['triage', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=4083 salida=415 razonamiento=1353 total=5851
+   → No hace falta RAG (El lote cuenta con un 100% de cobertura de parsing, los registros son autoexplicativos respecto a fallos de hardware y límites de software en arquitectura HPC, y el plan descarta expresamente la consulta a memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=413 salida=60 razonamiento=145 total=618
+   → usar_cve: False | Razón: El diagnóstico confirma que los eventos corresponden a fallos operacionales, límites de memoria y errores físicos de hardware (ECC/paridad), descartando vectores de explotación o vulnerabilidades de seguridad que requieran consulta de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=1425 salida=100 razonamiento=489 total=2014
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=5552 salida=1547 razonamiento=1703 total=8802
+   → Confianza final: 1.00 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es preciso y está fundamentado. Los eventos observados corresponden estrictamente a fallos operacionales y problemas de hardware típicos en un clúster BlueGene/L (desconexión de sockets de control de E/S, desbordamiento del límite de memoria para binarios, caídas de depurador/procesos con generación de volcados de memoria y correcciones de paridad/ECC en hardware). No hay indicios de intrusión o explotación maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

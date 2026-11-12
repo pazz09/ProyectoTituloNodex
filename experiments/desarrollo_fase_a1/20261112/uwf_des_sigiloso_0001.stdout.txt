@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=6448 salida=367 razonamiento=614 total=7429
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=8869 salida=196 razonamiento=1274 total=10339
+   → Solicitando RAG (Se observa un volumen significativo de conexiones DNS en estado S0 (260 flujos de 143.88.255.10 hacia 10.0.10.1 sin respuesta) e intentos hacia servidores raíz de DNS. Para determinar si este comportamiento corresponde a una técnica de C2/beaconing mediante DNS (T1071.004), exfiltración (T1048.003), DoS UDP (T1498) o una anomalía operativa por indisponibilidad del resolver interno, es necesario cotejar los patrones con la base de conocimiento MITRE ATT&CK y la memoria histórica de casos similares.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1071.004, T1584.002, T1568.001
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=9551 salida=285 razonamiento=1583 total=11419
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=305 salida=51 razonamiento=122 total=478
+   → usar_cve: False | Razón: El diagnóstico no identifica un software o versión de servicio DNS específico ni una vulnerabilidad/exploit concreto, sugiriendo en su lugar problemas de configuración o conectividad de red.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=941 salida=124 razonamiento=450 total=1515
+   → 6 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=67051 salida=593 razonamiento=605 total=68249
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. La evidencia muestra una anomalía operativa caracterizada por una alta tasa de consultas DNS UDP en estado S0 (sin respuesta) dirigidas desde 143.88.255.10 hacia el servidor 10.0.10.1, así como consultas no respondidas desde 143.88.10.11 hacia 143.88.255.10. No se observa tráfico bidireccional ni patrones compatibles con tunelado DNS o C2 malicioso, respaldando la conclusión de fallo de conectividad o indisponibilidad del servicio de nombres.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

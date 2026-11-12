@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1204 salida=340 razonamiento=676 total=2220
+   → Plan v1: ['triage', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3821 salida=287 razonamiento=850 total=4958
+   → No hace falta RAG (La cobertura de parsing es del 100% y la información contextual provista en los registros RAS de BlueGene/L es suficiente y concluyente para diagnosticar fallos operacionales y de comunicación interna sin requerir memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=308 salida=63 razonamiento=197 total=568
+   → usar_cve: False | Razón: El diagnóstico concluye que los eventos corresponden a fallas operacionales y de comunicación interna del supercomputador BlueGene/L, descartando indicadores de compromiso o actividad maliciosa, por lo que no aplica la búsqueda de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=829 salida=107 razonamiento=522 total=1458
+   → 6 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=4947 salida=1118 razonamiento=1033 total=7098
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros reflejan fallas operacionales y eventos internos del supercomputador BlueGene/L: fallos de comunicación en el demonio ciod sobre un socket de control interno, correcciones de paridad de caché, excepciones de coma flotante y volcados de memoria (core dumps) tras la terminación de procesos. No existe evidencia de actividad maliciosa ni compromiso de seguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

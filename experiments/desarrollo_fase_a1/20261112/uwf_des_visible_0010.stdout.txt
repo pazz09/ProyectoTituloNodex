@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=6620 salida=333 razonamiento=1485 total=8438
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=8691 salida=182 razonamiento=1220 total=10093
+   → Solicitando RAG (Se requiere consultar la base de conocimiento histórico y técnicas MITRE ATT&CK para contextualizar si el patrón de consultas DNS masivas sin respuesta (estado S0) desde 143.88.255.10 hacia 10.0.10.1 y servidores raíz corresponde a técnicas de escaneo/reconocimiento (T1046), comando y control/túnel DNS (T1071.004), denegación de servicio (T1498) o si se asemeja a incidentes previos de falla operativa de conectividad/resolución.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1071.004, T1584.002, T1568.001
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=9370 salida=291 razonamiento=1266 total=10927
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=339 salida=76 razonamiento=202 total=617
+   → usar_cve: False | Razón: El diagnóstico concluye que el tráfico corresponde a un problema de conectividad de red o indisponibilidad del servidor DNS (reintentos legítimos en estado S0) y descarta actividad maliciosa o explotación, por lo que no hay software vulnerable ni vector de ataque específico para consultar CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=975 salida=112 razonamiento=480 total=1567
+   → 7 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=66895 salida=436 razonamiento=999 total=68330
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Se observa un fallo operativo recurrente de resolución DNS en el host 143.88.255.10, el cual envía peticiones UDP/53 tanto a su resolvedor configurado (10.0.10.1) como a servidores raíz externos sin obtener respuesta (todas registradas en estado S0 con resp_bytes=0). La cadencia baja y regular descarta DoS volumétrico, escaneo masivo o tunelización maliciosa activa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

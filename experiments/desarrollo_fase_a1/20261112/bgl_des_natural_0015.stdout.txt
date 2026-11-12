@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=941 salida=243 razonamiento=408 total=1592
+   → Plan v1: ['triage', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3471 salida=231 razonamiento=610 total=4312
+   → No hace falta RAG (Los registros son unívocos y muestran con total cobertura caídas de procesos en nodos de cómputo del supercomputador, permitiendo un diagnóstico operativo certero sin necesidad de consultar el historial.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=223 salida=51 razonamiento=340 total=614
+   → usar_cve: False | Razón: El diagnóstico indica que los eventos corresponden a terminaciones anormales de procesos computacionales distribuidos habituales y descarta indicios de compromiso de seguridad, explotación o vulnerabilidades específicas.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=422 salida=79 razonamiento=339 total=840
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=4510 salida=310 razonamiento=584 total=5404
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. La generación coordinada de volcados de memoria ('core dumps') a lo largo de 20 nodos distintos evidencia un fallo de ejecución o terminación anómala en una tarea paralela distribuida (anomalía operativa), sin indicios de explotación o intrusión de seguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

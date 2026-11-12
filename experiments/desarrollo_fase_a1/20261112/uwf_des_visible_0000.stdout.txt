@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=6204 salida=452 razonamiento=420 total=7076
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=16043 salida=116 razonamiento=2079 total=18238
+   → Solicitando RAG (Se requiere consultar la memoria histórica y las técnicas MITRE ATT&CK (específicamente T1046 Network Service Scanning) según lo establecido en el plan de investigación, con el fin de correlacionar el patrón de barrido de puertos TCP y evaluar adecuadamente el alcance y las medidas de contención.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1071.004, T1584.002, T1568.001
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=16720 salida=427 razonamiento=1027 total=18174
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=452 salida=48 razonamiento=206 total=706
+   → usar_cve: False | Razón: El diagnóstico describe únicamente actividades de reconocimiento de red y barrido de puertos sin identificar servicios específicos vulnerables, software con versión determinada ni intentos de explotación de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=1264 salida=103 razonamiento=839 total=2206
+   → 4 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=63893 salida=635 razonamiento=1099 total=65627
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=True | cobertura_suficiente=True | El diagnóstico es preciso. La evidencia confirma un barrido de puertos TCP desde 143.88.18.12 hacia 143.88.18.11 dirigido a servicios de administración y puertos estándar en estado 'SH' (SYN sin completar handshake), consistente con reconocimiento de red. Asimismo, se descartan acertadamente las técnicas de C2 sobre DNS recuperadas por RAG debido a la falta de correlación y la naturaleza del tráfico observado.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

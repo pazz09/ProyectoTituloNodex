@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=938 salida=295 razonamiento=458 total=1691
+   → Plan v1: ['triage', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3630 salida=241 razonamiento=461 total=4332
+   → No hace falta RAG (El lote presenta 100% de cobertura sintáctica y registros informativos rutinarios y homogéneos del kernel de BlueGene/L, lo que permite emitir un diagnóstico directo sin necesidad de consultar memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=233 salida=40 razonamiento=287 total=560
+   → usar_cve: False | Razón: El diagnóstico no identifica ninguna vulnerabilidad, fallo crítico ni actividad maliciosa, tratándose únicamente de operaciones estándar del sistema.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=428 salida=6 razonamiento=66 total=500
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=5026 salida=461 razonamiento=1016 total=6503
+   → Confianza final: 0.95 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros corresponden a operaciones rutinarias de cálculo en coma flotante del supercomputador BlueGene/L (excepciones de alineación double-hummer y volcados informativos de registros IAR/DEAR a nivel INFO), sin presencia de fallos operativos ni indicios de actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

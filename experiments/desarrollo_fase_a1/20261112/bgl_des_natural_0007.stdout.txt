@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=936 salida=292 razonamiento=627 total=1855
+   → Plan v1: ['triage', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3466 salida=249 razonamiento=303 total=4018
+   → No hace falta RAG (La información del lote es 100% homogénea y autodescriptiva; los eventos reflejan fallos a nivel de aplicación (core dumps) típicos del entorno de cómputo sin indicios de intrusión.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=228 salida=54 razonamiento=182 total=464
+   → usar_cve: False | Razón: El diagnóstico indica que los eventos corresponden a caídas de aplicaciones y volcados de memoria normales en el clúster, sin evidencia de actividad maliciosa ni vulnerabilidades de seguridad identificables.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=433 salida=61 razonamiento=371 total=865
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=4501 salida=314 razonamiento=794 total=5609
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Se observan múltiples volcados de memoria (core dumps) de procesos en 20 nodos del clúster BlueGene/L en un lapso aproximado de 28 minutos. Esto representa una anomalía operativa por fallo o terminación abrupta de procesos/aplicaciones distribuidas, pero no presenta indicadores de compromiso ni actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

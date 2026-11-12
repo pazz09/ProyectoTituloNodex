@@ -1,0 +1,1054 @@
+{
+ "case_id": "bgl_des_natural_0011",
+ "dataset": "bgl",
+ "segundos_pared_hijo": 45.42947379999896,
+ "estado": {
+  "resumen_logs": {
+   "formato_detectado": "bgl",
+   "total_lineas": 20,
+   "servicios": {
+    "bgl.kernel": 18,
+    "bgl.app": 2
+   },
+   "eventos": {
+    "evento_critico": 2,
+    "evento_normal": 18
+   },
+   "ventana_temporal": {
+    "inicio": "2005-11-04-15.34.11.676048",
+    "fin": "2005-11-08-10.09.13.667082"
+   },
+   "n_ips_distintas": 0,
+   "ips_distintas": [],
+   "por_ip": {},
+   "usuarios": {},
+   "n_usuarios_distintos": 0,
+   "codigos_respuesta": {},
+   "entidades": [],
+   "cronologia": [
+    {
+     "n": 14,
+     "timestamp": "2005-11-07-04.32.10.481855",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1131366730 2005.11.07 R50-M0-N4-I:J18-U01 2005-11-07-04.32.10.481855 R50-M0-N4-I:J18-U01 RAS APP FATAL ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r1: in…"
+    },
+    {
+     "n": 15,
+     "timestamp": "2005-11-07-04.34.41.779706",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1131366881 2005.11.07 R60-M0-N0-I:J18-U01 2005-11-07-04.34.41.779706 R60-M0-N0-I:J18-U01 RAS APP FATAL ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r1: in…"
+    }
+   ],
+   "cronologia_omitidos": 0,
+   "raw_procedencia": {
+    "sha256": "445b643897b3c0f3b1f1e88b5c8486ab73531034775feb5b7a1664ca9bb3027e",
+    "lineas": 20,
+    "bytes": 3030
+   },
+   "reputacion_ips": {},
+   "perfil_lote": {
+    "tipo": "texto",
+    "filas": 20,
+    "con_formato_reconocido": 20,
+    "severidades": {
+     "INFO": 18,
+     "FATAL": 2
+    },
+    "componentes": {
+     "bgl.kernel": 18,
+     "bgl.app": 2
+    },
+    "nodos": {
+     "R63-M0-N3-C:J02-U11": 2,
+     "R63-M0-N1-C:J16-U01": 1,
+     "R63-M0-N4-C:J05-U11": 1,
+     "R63-M0-N0-C:J03-U01": 1,
+     "R63-M0-N7-C:J09-U01": 1,
+     "R63-M0-N4-C:J02-U01": 1,
+     "R63-M0-N0-C:J17-U01": 1,
+     "R63-M0-N2-C:J03-U11": 1,
+     "R63-M0-NF-C:J08-U11": 1,
+     "R45-M1-NA-C:J11-U01": 1
+    },
+    "nodos_distintos": 19,
+    "lineas_severidad_alta": {
+     "total": 2,
+     "omitidas": 0,
+     "lineas": [
+      {
+       "uid": "log_record_000014",
+       "severidad": "FATAL",
+       "group_id": "G10"
+      },
+      {
+       "uid": "log_record_000015",
+       "severidad": "FATAL",
+       "group_id": "G10"
+      }
+     ]
+    },
+    "grupos": 13
+   }
+  },
+  "preprocessing_metadata": {
+   "schema_version": "2.0",
+   "total_lineas_fisicas": 20,
+   "total_eventos": 20,
+   "decoder_distribution": {
+    "text": 20
+   },
+   "product_distribution": {
+    "BlueGene/L": 20
+   },
+   "vendor_distribution": {
+    "IBM": 20
+   },
+   "version_distribution": {},
+   "protocol_distribution": {},
+   "profile_distribution": {
+    "bgl": 20
+   },
+   "severity_distribution": {
+    "INFO": 18,
+    "FATAL": 2
+   },
+   "event_categories": {},
+   "event_outcomes": {},
+   "entities": {
+    "host": {
+     "R63-M0-N3-C:J02-U11": 2,
+     "R11-M1-N4-C:J03-U01": 1,
+     "R17-M0-N8-C:J05-U01": 1,
+     "R27-M0-N0-I:J18-U11": 1,
+     "R45-M1-NA-C:J11-U01": 1,
+     "R50-M0-N4-I:J18-U01": 1,
+     "R60-M0-N0-I:J18-U01": 1,
+     "R62-M0-N2-C:J13-U11": 1,
+     "R63-M0-N0-C:J03-U01": 1,
+     "R63-M0-N0-C:J17-U01": 1,
+     "R63-M0-N1-C:J16-U01": 1,
+     "R63-M0-N2-C:J03-U11": 1,
+     "R63-M0-N4-C:J02-U01": 1,
+     "R63-M0-N4-C:J05-U11": 1,
+     "R63-M0-N6-C:J15-U01": 1,
+     "R63-M0-N7-C:J09-U01": 1,
+     "R63-M0-N9-C:J10-U01": 1,
+     "R63-M0-NF-C:J08-U11": 1,
+     "R74-M0-N1-C:J05-U01": 1
+    },
+    "servicio": {
+     "bgl.kernel": 18,
+     "bgl.app": 2
+    },
+    "producto": {
+     "BlueGene/L": 20
+    }
+   },
+   "time_window": {
+    "inicio": "2005-11-04-15.34.11.676048",
+    "fin": "2005-11-08-10.09.13.667082"
+   },
+   "parsing": {
+    "parsed_events": 20,
+    "fallback_events": 0,
+    "coverage": 1.0
+   },
+   "segments": [
+    {
+     "index": 0,
+     "decoder": "text",
+     "line_start": 1,
+     "line_end": 20,
+     "n_records": 20,
+     "confidence": 0.1,
+     "decoder_inicial": "text",
+     "confidence_inicial": 0.1,
+     "decoder_distribution": {
+      "text": 20
+     },
+     "context": {}
+    }
+   ],
+   "entities_resumen": {
+    "host": 19,
+    "servicio": 2,
+    "producto": 1
+   },
+   "config": {
+    "LOG_DETECTION_CHUNK_SIZE": 50,
+    "LOG_ENABLE_MULTILINE": true,
+    "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+    "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+    "LOG_MAX_EVENTS": 100000,
+    "LOG_MAX_FILE_BYTES": 52428800,
+    "LOG_MAX_RAW_SAMPLES": 20,
+    "LOG_MAX_UNMAPPED_FIELDS": 100,
+    "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+    "LOG_PARSING_MODE": "hybrid",
+    "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+    "LOG_PRESERVE_RAW": true
+   }
+  },
+  "parsing_warnings": [],
+  "evidencia_logs": [
+   {
+    "uid": "log_record_000001",
+    "record_number": 1,
+    "line_start": 1,
+    "line_end": 1,
+    "timestamp": "2005-11-04-15.34.11.676048",
+    "group_id": "G01",
+    "source_host": "R63-M0-N1-C:J16-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 00106570 dear 0245a5ec"
+   },
+   {
+    "uid": "log_record_000002",
+    "record_number": 2,
+    "line_start": 2,
+    "line_end": 2,
+    "timestamp": "2005-11-04-15.34.33.610222",
+    "group_id": "G02",
+    "source_host": "R63-M0-N4-C:J05-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 0010653c dear 0245a63c"
+   },
+   {
+    "uid": "log_record_000003",
+    "record_number": 3,
+    "line_start": 3,
+    "line_end": 3,
+    "timestamp": "2005-11-04-15.50.49.414886",
+    "group_id": "G03",
+    "source_host": "R63-M0-N0-C:J03-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "407736 floating point alignment exceptions"
+   },
+   {
+    "uid": "log_record_000004",
+    "record_number": 4,
+    "line_start": 4,
+    "line_end": 4,
+    "timestamp": "2005-11-04-15.53.55.739224",
+    "group_id": "G03",
+    "source_host": "R63-M0-N7-C:J09-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "428412 floating point alignment exceptions"
+   },
+   {
+    "uid": "log_record_000005",
+    "record_number": 5,
+    "line_start": 5,
+    "line_end": 5,
+    "timestamp": "2005-11-04-15.54.06.214936",
+    "group_id": "G03",
+    "source_host": "R63-M0-N4-C:J02-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "441348 floating point alignment exceptions"
+   },
+   {
+    "uid": "log_record_000006",
+    "record_number": 6,
+    "line_start": 6,
+    "line_end": 6,
+    "timestamp": "2005-11-04-15.54.42.089011",
+    "group_id": "G04",
+    "source_host": "R63-M0-N0-C:J17-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 001061d4 dear 024696cc"
+   },
+   {
+    "uid": "log_record_000007",
+    "record_number": 7,
+    "line_start": 7,
+    "line_end": 7,
+    "timestamp": "2005-11-04-15.54.46.919787",
+    "group_id": "G05",
+    "source_host": "R63-M0-N2-C:J03-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 00106348 dear 024696bc"
+   },
+   {
+    "uid": "log_record_000008",
+    "record_number": 8,
+    "line_start": 8,
+    "line_end": 8,
+    "timestamp": "2005-11-04-15.54.56.089471",
+    "group_id": "G06",
+    "source_host": "R63-M0-NF-C:J08-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 00106204 dear 02f75edc"
+   },
+   {
+    "uid": "log_record_000009",
+    "record_number": 9,
+    "line_start": 9,
+    "line_end": 9,
+    "timestamp": "2005-11-04-18.02.11.252563",
+    "group_id": "G07",
+    "source_host": "R45-M1-NA-C:J11-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "CE sym 21, at 0x111d8c60, mask 0x01"
+   },
+   {
+    "uid": "log_record_000010",
+    "record_number": 10,
+    "line_start": 10,
+    "line_end": 10,
+    "timestamp": "2005-11-04-20.01.23.415003",
+    "group_id": "G08",
+    "source_host": "R63-M0-N3-C:J02-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "instruction cache parity error corrected"
+   },
+   {
+    "uid": "log_record_000011",
+    "record_number": 11,
+    "line_start": 11,
+    "line_end": 11,
+    "timestamp": "2005-11-05-07.57.31.806929",
+    "group_id": "G07",
+    "source_host": "R17-M0-N8-C:J05-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "CE sym 34, at 0x11e7ed80, mask 0x80"
+   },
+   {
+    "uid": "log_record_000012",
+    "record_number": 12,
+    "line_start": 12,
+    "line_end": 12,
+    "timestamp": "2005-11-05-11.24.43.382408",
+    "group_id": "G09",
+    "source_host": "R11-M1-N4-C:J03-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "2 ddr errors(s) detected and corrected on rank 0, symbol 18, bit 6"
+   },
+   {
+    "uid": "log_record_000013",
+    "record_number": 13,
+    "line_start": 13,
+    "line_end": 13,
+    "timestamp": "2005-11-06-23.08.06.640071",
+    "group_id": "G08",
+    "source_host": "R63-M0-N3-C:J02-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "instruction cache parity error corrected"
+   },
+   {
+    "uid": "log_record_000014",
+    "record_number": 14,
+    "line_start": 14,
+    "line_end": 14,
+    "timestamp": "2005-11-07-04.32.10.481855",
+    "group_id": "G10",
+    "source_host": "R50-M0-N4-I:J18-U01",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r1: invalid or missing program image, Permission denied"
+   },
+   {
+    "uid": "log_record_000015",
+    "record_number": 15,
+    "line_start": 15,
+    "line_end": 15,
+    "timestamp": "2005-11-07-04.34.41.779706",
+    "group_id": "G10",
+    "source_host": "R60-M0-N0-I:J18-U01",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r1: invalid or missing program image, Permission denied"
+   },
+   {
+    "uid": "log_record_000016",
+    "record_number": 16,
+    "line_start": 16,
+    "line_end": 16,
+    "timestamp": "2005-11-07-16.13.02.108416",
+    "group_id": "G11",
+    "source_host": "R63-M0-N6-C:J15-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 00105e88 dear 02f6436c"
+   },
+   {
+    "uid": "log_record_000017",
+    "record_number": 17,
+    "line_start": 17,
+    "line_end": 17,
+    "timestamp": "2005-11-07-16.13.50.630658",
+    "group_id": "G11",
+    "source_host": "R63-M0-N9-C:J10-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 00105e84 dear 0244f29c"
+   },
+   {
+    "uid": "log_record_000018",
+    "record_number": 18,
+    "line_start": 18,
+    "line_end": 18,
+    "timestamp": "2005-11-08-06.06.28.982001",
+    "group_id": "G07",
+    "source_host": "R74-M0-N1-C:J05-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "CE sym 30, at 0x042358a0, mask 0x20"
+   },
+   {
+    "uid": "log_record_000019",
+    "record_number": 19,
+    "line_start": 19,
+    "line_end": 19,
+    "timestamp": "2005-11-08-09.13.47.353261",
+    "group_id": "G12",
+    "source_host": "R27-M0-N0-I:J18-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "ciod: generated 128 core files for program /g/g24/germann2/BGL-demo/SPaSM_mpi"
+   },
+   {
+    "uid": "log_record_000020",
+    "record_number": 20,
+    "line_start": 20,
+    "line_end": 20,
+    "timestamp": "2005-11-08-10.09.13.667082",
+    "group_id": "G13",
+    "source_host": "R62-M0-N2-C:J13-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 001061e8 dear 0247012c"
+   }
+  ],
+  "evidencia_logs_omitidos": 0,
+  "grupos_evidencia": [
+   {
+    "group_id": "G01",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n> dear <n>a<n>ec"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000001"
+    ],
+    "nodos": [
+     "R63-M0-N1-C:J16-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G02",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n>c dear <n>a<n>c"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000002"
+    ],
+    "nodos": [
+     "R63-M0-N4-C:J05-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G03",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "<n> floating point alignment exceptions"
+    },
+    "conteo": 3,
+    "uids": [
+     "log_record_000003",
+     "log_record_000004",
+     "log_record_000005"
+    ],
+    "nodos": [
+     "R63-M0-N0-C:J03-U01",
+     "R63-M0-N7-C:J09-U01",
+     "R63-M0-N4-C:J02-U01"
+    ],
+    "n_nodos": 3
+   },
+   {
+    "group_id": "G04",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n>d<n> dear <n>cc"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000006"
+    ],
+    "nodos": [
+     "R63-M0-N0-C:J17-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G05",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n> dear <n>bc"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000007"
+    ],
+    "nodos": [
+     "R63-M0-N2-C:J03-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G06",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n> dear <n>f<n>edc"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000008"
+    ],
+    "nodos": [
+     "R63-M0-NF-C:J08-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G07",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "CE sym <n>, at <hex>, mask <hex>"
+    },
+    "conteo": 3,
+    "uids": [
+     "log_record_000009",
+     "log_record_000011",
+     "log_record_000018"
+    ],
+    "nodos": [
+     "R45-M1-NA-C:J11-U01",
+     "R17-M0-N8-C:J05-U01",
+     "R74-M0-N1-C:J05-U01"
+    ],
+    "n_nodos": 3
+   },
+   {
+    "group_id": "G08",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "instruction cache parity error corrected"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000010",
+     "log_record_000013"
+    ],
+    "nodos": [
+     "R63-M0-N3-C:J02-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G09",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "<n> ddr errors(s) detected and corrected on rank <n>, symbol <n>, bit <n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000012"
+    ],
+    "nodos": [
+     "R11-M1-N4-C:J03-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G10",
+    "clave": {
+     "componente": "bgl.app",
+     "severidad": "FATAL",
+     "plantilla": "ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r<n>: invalid or missing program image, Permissio"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000014",
+     "log_record_000015"
+    ],
+    "nodos": [
+     "R50-M0-N4-I:J18-U01",
+     "R60-M0-N0-I:J18-U01"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G11",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n>e<n> dear <n>f<n>c"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000016",
+     "log_record_000017"
+    ],
+    "nodos": [
+     "R63-M0-N6-C:J15-U01",
+     "R63-M0-N9-C:J10-U01"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G12",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "ciod: generated <n> core files for program /g/g<n>/germann<n>/BGL-demo/SPaSM_mpi"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000019"
+    ],
+    "nodos": [
+     "R27-M0-N0-I:J18-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G13",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n>e<n> dear <n>c"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000020"
+    ],
+    "nodos": [
+     "R62-M0-N2-C:J13-U11"
+    ],
+    "n_nodos": 1
+   }
+  ],
+  "contenido_lote": {
+   "tipo": "texto",
+   "lineas": [
+    "[log_record_000001] 1131147251 2005.11.04 R63-M0-N1-C:J16-U01 2005-11-04-15.34.11.676048 R63-M0-N1-C:J16-U01 RAS KERNEL INFO iar 00106570 dear 0245a5ec",
+    "[log_record_000002] 1131147273 2005.11.04 R63-M0-N4-C:J05-U11 2005-11-04-15.34.33.610222 R63-M0-N4-C:J05-U11 RAS KERNEL INFO iar 0010653c dear 0245a63c",
+    "[log_record_000003] 1131148249 2005.11.04 R63-M0-N0-C:J03-U01 2005-11-04-15.50.49.414886 R63-M0-N0-C:J03-U01 RAS KERNEL INFO 407736 floating point alignment exceptions",
+    "[log_record_000004] 1131148435 2005.11.04 R63-M0-N7-C:J09-U01 2005-11-04-15.53.55.739224 R63-M0-N7-C:J09-U01 RAS KERNEL INFO 428412 floating point alignment exceptions",
+    "[log_record_000005] 1131148446 2005.11.04 R63-M0-N4-C:J02-U01 2005-11-04-15.54.06.214936 R63-M0-N4-C:J02-U01 RAS KERNEL INFO 441348 floating point alignment exceptions",
+    "[log_record_000006] 1131148482 2005.11.04 R63-M0-N0-C:J17-U01 2005-11-04-15.54.42.089011 R63-M0-N0-C:J17-U01 RAS KERNEL INFO iar 001061d4 dear 024696cc",
+    "[log_record_000007] 1131148486 2005.11.04 R63-M0-N2-C:J03-U11 2005-11-04-15.54.46.919787 R63-M0-N2-C:J03-U11 RAS KERNEL INFO iar 00106348 dear 024696bc",
+    "[log_record_000008] 1131148496 2005.11.04 R63-M0-NF-C:J08-U11 2005-11-04-15.54.56.089471 R63-M0-NF-C:J08-U11 RAS KERNEL INFO iar 00106204 dear 02f75edc",
+    "[log_record_000009] 1131156131 2005.11.04 R45-M1-NA-C:J11-U01 2005-11-04-18.02.11.252563 R45-M1-NA-C:J11-U01 RAS KERNEL INFO CE sym 21, at 0x111d8c60, mask 0x01",
+    "[log_record_000010] 1131163283 2005.11.04 R63-M0-N3-C:J02-U11 2005-11-04-20.01.23.415003 R63-M0-N3-C:J02-U11 RAS KERNEL INFO instruction cache parity error corrected",
+    "[log_record_000011] 1131206251 2005.11.05 R17-M0-N8-C:J05-U01 2005-11-05-07.57.31.806929 R17-M0-N8-C:J05-U01 RAS KERNEL INFO CE sym 34, at 0x11e7ed80, mask 0x80",
+    "[log_record_000012] 1131218683 2005.11.05 R11-M1-N4-C:J03-U01 2005-11-05-11.24.43.382408 R11-M1-N4-C:J03-U01 RAS KERNEL INFO 2 ddr errors(s) detected and corrected on rank 0, symbol 18, bit 6",
+    "[log_record_000013] 1131347286 2005.11.06 R63-M0-N3-C:J02-U11 2005-11-06-23.08.06.640071 R63-M0-N3-C:J02-U11 RAS KERNEL INFO instruction cache parity error corrected",
+    "[log_record_000014] 1131366730 2005.11.07 R50-M0-N4-I:J18-U01 2005-11-07-04.32.10.481855 R50-M0-N4-I:J18-U01 RAS APP FATAL ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r1: invalid or missing program image, Permission denied",
+    "[log_record_000015] 1131366881 2005.11.07 R60-M0-N0-I:J18-U01 2005-11-07-04.34.41.779706 R60-M0-N0-I:J18-U01 RAS APP FATAL ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r1: invalid or missing program image, Permission denied",
+    "[log_record_000016] 1131408782 2005.11.07 R63-M0-N6-C:J15-U01 2005-11-07-16.13.02.108416 R63-M0-N6-C:J15-U01 RAS KERNEL INFO iar 00105e88 dear 02f6436c",
+    "[log_record_000017] 1131408830 2005.11.07 R63-M0-N9-C:J10-U01 2005-11-07-16.13.50.630658 R63-M0-N9-C:J10-U01 RAS KERNEL INFO iar 00105e84 dear 0244f29c",
+    "[log_record_000018] 1131458788 2005.11.08 R74-M0-N1-C:J05-U01 2005-11-08-06.06.28.982001 R74-M0-N1-C:J05-U01 RAS KERNEL INFO CE sym 30, at 0x042358a0, mask 0x20",
+    "[log_record_000019] 1131470027 2005.11.08 R27-M0-N0-I:J18-U11 2005-11-08-09.13.47.353261 R27-M0-N0-I:J18-U11 RAS KERNEL INFO ciod: generated 128 core files for program /g/g24/germann2/BGL-demo/SPaSM_mpi",
+    "[log_record_000020] 1131473353 2005.11.08 R62-M0-N2-C:J13-U11 2005-11-08-10.09.13.667082 R62-M0-N2-C:J13-U11 RAS KERNEL INFO iar 001061e8 dear 0247012c"
+   ],
+   "total_lineas": 20,
+   "lineas_entregadas": 20,
+   "recortado": false,
+   "topes": {
+    "lineas": 200,
+    "caracteres": 20000
+   }
+  },
+  "veredicto_preliminar": "anomalia_operativa",
+  "justificacion_veredicto_preliminar": "Los eventos FATAL se deben a fallos operativos de permisos de archivo en el cargador ciod ('Permission denied'), sin indicios de explotación o actividad maliciosa.",
+  "invalid_evidence_group_count": 0,
+  "comandos_rechazados": [],
+  "eventos_reconstruidos": [
+   {
+    "event_id": "event_001",
+    "evidence_uids": [
+     "log_record_000003",
+     "log_record_000004",
+     "log_record_000005"
+    ],
+    "timestamp": "2005-11-04-15.50.49.414886",
+    "event_type": "hardware_alignment_exception",
+    "description": "Excepciones masivas de alineación de punto flotante registradas por el kernel en varios nodos de cómputo.",
+    "confidence": null,
+    "evidence_groups": [
+     "G03"
+    ]
+   },
+   {
+    "event_id": "event_002",
+    "evidence_uids": [
+     "log_record_000009",
+     "log_record_000011",
+     "log_record_000018",
+     "log_record_000010",
+     "log_record_000013",
+     "log_record_000012"
+    ],
+    "timestamp": "2005-11-04-18.02.11.252563",
+    "event_type": "corrected_hardware_error",
+    "description": "Detección y corrección automática de errores de memoria DDR y paridad de caché de instrucciones.",
+    "confidence": null,
+    "evidence_groups": [
+     "G07",
+     "G08",
+     "G09"
+    ]
+   },
+   {
+    "event_id": "event_003",
+    "evidence_uids": [
+     "log_record_000014",
+     "log_record_000015"
+    ],
+    "timestamp": "2005-11-07-04.32.10.481855",
+    "event_type": "application_launch_failure",
+    "description": "Falla fatal del demonio ciod al cargar el binario raptor.newcomp.r1 debido a permisos denegados o imagen inválida.",
+    "confidence": null,
+    "evidence_groups": [
+     "G10"
+    ]
+   },
+   {
+    "event_id": "event_004",
+    "evidence_uids": [
+     "log_record_000019"
+    ],
+    "timestamp": "2005-11-08-09.13.47.353261",
+    "event_type": "core_dump_generation",
+    "description": "Generación de 128 archivos core tras la terminación anormal del programa SPaSM_mpi.",
+    "confidence": null,
+    "evidence_groups": [
+     "G12"
+    ]
+   }
+  ],
+  "secuencia_temporal": [
+   "event_001",
+   "event_002",
+   "event_003",
+   "event_004"
+  ],
+  "tecnicas_atribuidas": [],
+  "invalid_evidence_uid_count": 0,
+  "d11_warnings": [],
+  "telemetry": {
+   "llm_call_count": 5,
+   "input_tokens": 11722,
+   "output_tokens": 1754,
+   "total_tokens": 15995,
+   "execution_time": 45.428522,
+   "replan_count": 0,
+   "intentos_correccion": 1,
+   "invalid_evidence_uid_count": 0,
+   "d11_warning_count": 0,
+   "llm_calls": [
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 1049,
+     "output_tokens": 346,
+     "total_tokens": 2044,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 649,
+     "duration_s": 11.406,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 3854,
+     "output_tokens": 288,
+     "total_tokens": 4682,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 540,
+     "duration_s": 9.731,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 284,
+     "output_tokens": 54,
+     "total_tokens": 534,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 196,
+     "duration_s": 4.999,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 812,
+     "output_tokens": 128,
+     "total_tokens": 1356,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 416,
+     "duration_s": 6.648,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 5723,
+     "output_tokens": 938,
+     "total_tokens": 7379,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 718,
+     "duration_s": 12.573,
+     "error": null
+    }
+   ]
+  },
+  "firma": "v2|lineas=20 ips=0 servicios=[bgl.kernel:18,bgl.app:2] eventos=[evento_critico:2,evento_normal:18] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[INFO:18,FATAL:2] categorias=[] cobertura=1.0",
+  "plan": {
+   "plan_version": 1,
+   "objetivo": "Investigar y mitigar los eventos de severidad FATAL detectados en el sistema BlueGene/L para determinar si corresponden a fallas de hardware, errores de kernel o explotación de vulnerabilidades.",
+   "pasos": [
+    {
+     "id": 1,
+     "accion": "triage",
+     "objetivo": "Analizar los registros críticos de severidad FATAL (log_record_000014 y log_record_000015) y evaluar el impacto operativo en los nodos del clúster BlueGene/L.",
+     "estado": "ejecutado"
+    },
+    {
+     "id": 2,
+     "accion": "cve",
+     "objetivo": "Consultar vulnerabilidades conocidas asociadas a los componentes de kernel y aplicaciones del sistema IBM BlueGene/L.",
+     "estado": "omitido",
+     "motivo": "El diagnóstico no evidencia un ataque ni explotación de vulnerabilidades; los eventos corresponden a errores de permisos de archivo al ejecutar un programa local y fallos de hardware corregibles en BlueGene/L."
+    },
+    {
+     "id": 3,
+     "accion": "mitigacion",
+     "objetivo": "Definir medidas de contención, aislamiento de nodos afectados y recuperación del servicio frente a los errores críticos identificados.",
+     "estado": "ejecutado"
+    }
+   ],
+   "criterios_finalizacion": [
+    "Causa raíz de los eventos FATAL determinada o clasificada (falla de sistema vs. incidente de seguridad)",
+    "Vulnerabilidades conocidas de BlueGene/L verificadas o descartadas",
+    "Plan de mitigación y contención propuesto para los nodos afectados"
+   ]
+  },
+  "plan_objetivo": "Investigar y mitigar los eventos de severidad FATAL detectados en el sistema BlueGene/L para determinar si corresponden a fallas de hardware, errores de kernel o explotación de vulnerabilidades.",
+  "paso_actual": 3,
+  "historial_ejecucion": [
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_planificador",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "plan v1, 3 pasos: ['triage', 'cve', 'mitigacion']"
+   },
+   {
+    "plan_version": 1,
+    "step_id": 1,
+    "nodo": "agente_analista_triage",
+    "accion": "triage",
+    "estado": "ejecutado",
+    "resumen": "diagnóstico producido"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_selector_herramientas",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "usar_cve=False"
+   },
+   {
+    "plan_version": 1,
+    "step_id": 3,
+    "nodo": "agente_ingeniero_mitigacion",
+    "accion": "mitigacion",
+    "estado": "ejecutado",
+    "resumen": "6 comandos propuestos"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "tool_validar_comandos",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "comandos válidos"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_auditor_final",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "confianza=0.95 cobertura_suficiente=True"
+   }
+  ],
+  "desviaciones_plan": [],
+  "historial_planes": [],
+  "replan_count": 0,
+  "diagnostico": "Los eventos clasificados con severidad FATAL (log_record_000014 y log_record_000015) corresponden a fallas de ejecución del demonio de control de E/S (ciod) al intentar lanzar el ejecutable 'raptor.newcomp.r1', debido a permisos de archivo insuficientes o imagen de programa inválida/ausente ('Permission denied'). Los eventos a nivel de KERNEL reflejan actividad rutinaria y eventos corregibles (CE en memoria DDR, correcciones de paridad de caché de instrucciones y excepciones de alineación de coma flotante), sin evidencia de compromiso de seguridad o explotación.",
+  "necesita_rag": false,
+  "usar_cve": false,
+  "razon_seleccion": "El diagnóstico no evidencia un ataque ni explotación de vulnerabilidades; los eventos corresponden a errores de permisos de archivo al ejecutar un programa local y fallos de hardware corregibles en BlueGene/L.",
+  "contexto_rag": [],
+  "tecnicas_mitre": [],
+  "cves_encontrados": [],
+  "comandos_mitigacion": [
+   "ls -la /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r1",
+   "stat /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r1",
+   "file /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r1",
+   "df -h /bgl/apps/followup/RAPTOR/pre-study",
+   "mount | grep -i bgl",
+   "dmesg | tail -n 50"
+  ],
+  "comandos_validos": true,
+  "motivos_rechazo": [],
+  "intentos_correccion": 1,
+  "confianza": 0.95,
+  "hay_incidente": false,
+  "hay_anomalia": true,
+  "evaluacion_auditor": "El diagnóstico es correcto. Los registros evidencian fallas operativas típicas en un supercomputador BlueGene/L: errores de permisos al intentar cargar un ejecutable ('Permission denied'), generación de volcados de memoria (core dumps) tras la falla de una aplicación MPI, y errores de hardware corregidos de forma transparente por paridad/ECC en memoria y caché. No existe evidencia de actividad maliciosa o compromiso de seguridad.",
+  "cobertura_auditor": true,
+  "cobertura_suficiente": true,
+  "motivo_replanificacion": "",
+  "requiere_replanificacion": false,
+  "_firma": "v2|lineas=20 ips=0 servicios=[bgl.kernel:18,bgl.app:2] eventos=[evento_critico:2,evento_normal:18] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[INFO:18,FATAL:2] categorias=[] cobertura=1.0",
+  "_error_api": null,
+  "requiere_revision_humana": false,
+  "output_contract_version": "d11-v1",
+  "classification_detallada": "anomalia_operativa"
+ },
+ "observaciones": [
+  {
+   "nodo": "planificador",
+   "llamadas": [
+    0
+   ],
+   "prompt_chars": 1583,
+   "system_chars": 869,
+   "prompt": "RESUMEN DEL LOTE:\n{\"formato_detectado\": \"bgl\", \"total_lineas\": 20, \"servicios\": {\"bgl.kernel\": 18, \"bgl.app\": 2}, \"eventos\": {\"evento_critico\": 2, \"evento_normal\": 18}, \"ventana_temporal\": {\"inicio\": \"2005-11-04-15.34.11.676048\", \"fin\": \"2005-11-08-10.09.13.667082\"}, \"n_ips_distintas\": 0, \"ips_distintas\": [], \"por_ip\": {}, \"usuarios\": {}, \"n_usuarios_distintos\": 0, \"codigos_respuesta\": {}, \"raw_procedencia\": {\"sha256\": \"445b643897b3c0f3b1f1e88b5c8486ab73531034775feb5b7a1664ca9bb3027e\", \"lineas\": 20, \"bytes\": 3030}, \"reputacion_ips\": {}, \"perfil_lote\": {\"tipo\": \"texto\", \"filas\": 20, \"con_formato_reconocido\": 20, \"severidades\": {\"INFO\": 18, \"FATAL\": 2}, \"componentes\": {\"bgl.kernel\": 18, \"bgl.app\": 2}, \"nodos\": {\"R63-M0-N3-C:J02-U11\": 2, \"R63-M0-N1-C:J16-U01\": 1, \"R63-M0-N4-C:J05-U11\": 1, \"R63-M0-N0-C:J03-U01\": 1, \"R63-M0-N7-C:J09-U01\": 1, \"R63-M0-N4-C:J02-U01\": 1, \"R63-M0-N0-C:J17-U01\": 1, \"R63-M0-N2-C:J03-U11\": 1, \"R63-M0-NF-C:J08-U11\": 1, \"R45-M1-NA-C:J11-U01\": 1}, \"nodos_distintos\": 19, \"lineas_severidad_alta\": {\"total\": 2, \"omitidas\": 0, \"lineas\": [{\"uid\": \"log_record_000014\", \"severidad\": \"FATAL\", \"group_id\": \"G10\"}, {\"uid\": \"log_record_000015\", \"severidad\": \"FATAL\", \"group_id\": \"G10\"}]}, \"grupos\": 13}}\n\nCÓMO SE INTERPRETÓ EL LOTE (preprocesamiento determinístico):\n- 20 eventos lógicos a partir de 20 líneas físicas.\n- Cobertura del parsing: 100% (20 decodificados, 0 en texto libre).\n- Severidad declarada por el propio log: INFO=18, FATAL=2.\n- Perfiles de enriquecimiento aplicados: bgl (20).\n- Productos reconocidos: BlueGene/L (20).\n- Formato único: text.",
+   "system": "Eres el planificador de un sistema multiagente de análisis de seguridad. A partir del resumen del lote, produce un plan de investigación ANTES de que el análisis especializado comience. El plan tiene como máximo estas acciones, cada una a lo sumo una vez: 'triage' (diagnóstico inicial -- SIEMPRE se incluye), 'rag' (consultar memoria histórica y técnicas MITRE ATT&CK -- inclúyela solo si el resumen sugiere que hace falta contexto de casos anteriores), 'cve' (consultar vulnerabilidades conocidas -- inclúyela solo si el resumen identifica un servicio o producto concreto), 'mitigacion' (proponer contención -- SIEMPRE se incluye). No inventes otras acciones: cualquiera fuera de esta lista se descarta. Responde SOLO en JSON: {\"objetivo\": \"...\", \"pasos\": [{\"id\": 1, \"accion\": \"...\", \"objetivo\": \"...\", \"estado\": \"pendiente\"}, ...], \"criterios_finalizacion\": [\"...\"]}",
+   "tokens": [
+    {
+     "input_tokens": 1049,
+     "output_tokens": 346,
+     "reasoning_tokens": 649,
+     "model": "gemini-3.8-flash",
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "triage",
+   "llamadas": [
+    1
+   ],
+   "prompt_chars": 5582,
+   "system_chars": 1247,
+   "prompt": "OBJETIVO DEL PLAN DE INVESTIGACIÓN: Investigar y mitigar los eventos de severidad FATAL detectados en el sistema BlueGene/L para determinar si corresponden a fallas de hardware, errores de kernel o explotación de vulnerabilidades.\n\nEl plan de investigación no contempla consultar memoria histórica para este caso.\n\nCÓMO SE INTERPRETÓ EL LOTE (preprocesamiento determinístico):\n- 20 eventos lógicos a partir de 20 líneas físicas.\n- Cobertura del parsing: 100% (20 decodificados, 0 en texto libre).\n- Muestras de registros crudos, una por formato:\n    [text] 1131147251 2005.11.04 R63-M0-N1-C:J16-U01 2005-11-04-15.34.11.676048 R63-M0-N1-C:J16-U01 RAS KERNEL INFO iar 00106570 dear 0245a5ec\n- Severidad declarada por el propio log: INFO=18, FATAL=2.\n- Perfiles de enriquecimiento aplicados: bgl (20).\n- Productos reconocidos: BlueGene/L (20).\n- Formato único: text.\n\nRESUMEN DEL LOTE:\n{\"formato_detectado\": \"bgl\", \"total_lineas\": 20, \"servicios\": {\"bgl.kernel\": 18, \"bgl.app\": 2}, \"eventos\": {\"evento_critico\": 2, \"evento_normal\": 18}, \"ventana_temporal\": {\"inicio\": \"2005-11-04-15.34.11.676048\", \"fin\": \"2005-11-08-10.09.13.667082\"}, \"n_ips_distintas\": 0, \"ips_distintas\": [], \"por_ip\": {}, \"usuarios\": {}, \"n_usuarios_distintos\": 0, \"codigos_respuesta\": {}, \"raw_procedencia\": {\"sha256\": \"445b643897b3c0f3b1f1e88b5c8486ab73531034775feb5b7a1664ca9bb3027e\", \"lineas\": 20, \"bytes\": 3030}, \"reputacion_ips\": {}, \"perfil_lote\": {\"tipo\": \"texto\", \"filas\": 20, \"con_formato_reconocido\": 20, \"severidades\": {\"INFO\": 18, \"FATAL\": 2}, \"componentes\": {\"bgl.kernel\": 18, \"bgl.app\": 2}, \"nodos\": {\"R63-M0-N3-C:J02-U11\": 2, \"R63-M0-N1-C:J16-U01\": 1, \"R63-M0-N4-C:J05-U11\": 1, \"R63-M0-N0-C:J03-U01\": 1, \"R63-M0-N7-C:J09-U01\": 1, \"R63-M0-N4-C:J02-U01\": 1, \"R63-M0-N0-C:J17-U01\": 1, \"R63-M0-N2-C:J03-U11\": 1, \"R63-M0-NF-C:J08-U11\": 1, \"R45-M1-NA-C:J11-U01\": 1}, \"nodos_distintos\": 19, \"lineas_severidad_alta\": {\"total\": 2, \"omitidas\": 0, \"lineas\": [{\"uid\": \"log_record_000014\", \"severidad\": \"FATAL\", \"group_id\": \"G10\"}, {\"uid\": \"log_record_000015\", \"severidad\": \"FATAL\", \"group_id\": \"G10\"}]}, \"grupos\": 13}}\n\nCONTENIDO DEL LOTE (líneas observadas, formato [uid] línea):\n[log_record_000001] 1131147251 2005.11.04 R63-M0-N1-C:J16-U01 2005-11-04-15.34.11.676048 R63-M0-N1-C:J16-U01 RAS KERNEL INFO iar 00106570 dear 0245a5ec\n[log_record_000002] 1131147273 2005.11.04 R63-M0-N4-C:J05-U11 2005-11-04-15.34.33.610222 R63-M0-N4-C:J05-U11 RAS KERNEL INFO iar 0010653c dear 0245a63c\n[log_record_000003] 1131148249 2005.11.04 R63-M0-N0-C:J03-U01 2005-11-04-15.50.49.414886 R63-M0-N0-C:J03-U01 RAS KERNEL INFO 407736 floating point alignment exceptions\n[log_record_000004] 1131148435 2005.11.04 R63-M0-N7-C:J09-U01 2005-11-04-15.53.55.739224 R63-M0-N7-C:J09-U01 RAS KERNEL INFO 428412 floating point alignment exceptions\n[log_record_000005] 1131148446 2005.11.04 R63-M0-N4-C:J02-U01 2005-11-04-15.54.06.214936 R63-M0-N4-C:J02-U01 RAS KERNEL INFO 441348 floating point alignment exceptions\n[log_record_000006] 1131148482 2005.11.04 R63-M0-N0-C:J17-U01 2005-11-04-15.54.42.089011 R63-M0-N0-C:J17-U01 RAS KERNEL INFO iar 001061d4 dear 024696cc\n[log_record_000007] 1131148486 2005.11.04 R63-M0-N2-C:J03-U11 2005-11-04-15.54.46.919787 R63-M0-N2-C:J03-U11 RAS KERNEL INFO iar 00106348 dear 024696bc\n[log_record_000008] 1131148496 2005.11.04 R63-M0-NF-C:J08-U11 2005-11-04-15.54.56.089471 R63-M0-NF-C:J08-U11 RAS KERNEL INFO iar 00106204 dear 02f75edc\n[log_record_000009] 1131156131 2005.11.04 R45-M1-NA-C:J11-U01 2005-11-04-18.02.11.252563 R45-M1-NA-C:J11-U01 RAS KERNEL INFO CE sym 21, at 0x111d8c60, mask 0x01\n[log_record_000010] 1131163283 2005.11.04 R63-M0-N3-C:J02-U11 2005-11-04-20.01.23.415003 R63-M0-N3-C:J02-U11 RAS KERNEL INFO instruction cache parity error corrected\n[log_record_000011] 1131206251 2005.11.05 R17-M0-N8-C:J05-U01 2005-11-05-07.57.31.806929 R17-M0-N8-C:J05-U01 RAS KERNEL INFO CE sym 34, at 0x11e7ed80, mask 0x80\n[log_record_000012] 1131218683 2005.11.05 R11-M1-N4-C:J03-U01 2005-11-05-11.24.43.382408 R11-M1-N4-C:J03-U01 RAS KERNEL INFO 2 ddr errors(s) detected and corrected on rank 0, symbol 18, bit 6\n[log_record_000013] 1131347286 2005.11.06 R63-M0-N3-C:J02-U11 2005-11-06-23.08.06.640071 R63-M0-N3-C:J02-U11 RAS KERNEL INFO instruction cache parity error corrected\n[log_record_000014] 1131366730 2005.11.07 R50-M0-N4-I:J18-U01 2005-11-07-04.32.10.481855 R50-M0-N4-I:J18-U01 RAS APP FATAL ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r1: invalid or missing program image, Permission denied\n[log_record_000015] 1131366881 2005.11.07 R60-M0-N0-I:J18-U01 2005-11-07-04.34.41.779706 R60-M0-N0-I:J18-U01 RAS APP FATAL ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r1: invalid or missing program image, Permission denied\n[log_record_000016] 1131408782 2005.11.07 R63-M0-N6-C:J15-U01 2005-11-07-16.13.02.108416 R63-M0-N6-C:J15-U01 RAS KERNEL INFO iar 00105e88 dear 02f6436c\n[log_record_000017] 1131408830 2005.11.07 R63-M0-N9-C:J10-U01 2005-11-07-16.13.50.630658 R63-M0-N9-C:J10-U01 RAS KERNEL INFO iar 00105e84 dear 0244f29c\n[log_record_000018] 1131458788 2005.11.08 R74-M0-N1-C:J05-U01 2005-11-08-06.06.28.982001 R74-M0-N1-C:J05-U01 RAS KERNEL INFO CE sym 30, at 0x042358a0, mask 0x20\n[log_record_000019] 1131470027 2005.11.08 R27-M0-N0-I:J18-U11 2005-11-08-09.13.47.353261 R27-M0-N0-I:J18-U11 RAS KERNEL INFO ciod: generated 128 core files for program /g/g24/germann2/BGL-demo/SPaSM_mpi\n[log_record_000020] 1131473353 2005.11.08 R62-M0-N2-C:J13-U11 2005-11-08-10.09.13.667082 R62-M0-N2-C:J13-U11 RAS KERNEL INFO iar 001061e8 dear 0247012c",
+   "system": "Eres un analista SOC experto. A partir del resumen del lote, decide si puedes diagnosticar directamente o si conviene primero consultar el historial de casos similares y técnicas MITRE ATT&CK relacionadas (memoria de largo plazo) antes de diagnosticar. Si decides que SÍ hace falta ese contexto, no diagnostiques todavía: pide la consulta. Si decides que NO hace falta, diagnostica directamente basándote solo en el resumen. Si el lote se interpretó con baja cobertura o trae advertencias de parsing, tenlo en cuenta: puede convenir pedir contexto histórico aunque el resumen por sí solo parezca alcanzar. Además del diagnóstico, entrega veredicto_preliminar con UNO de estos valores: \"incidente_seguridad\" (actividad maliciosa o amenaza de seguridad), \"anomalia_operativa\" (falla o comportamiento anómalo del sistema sin indicios de ataque) o \"normal\" (nada fuera de lo esperado), y justificacion_veredicto: una frase breve basada en la evidencia observada (líneas, flujos o señales del perfil del lote). Si pides la consulta, deja veredicto_preliminar vacío. Responde SOLO en JSON: {\"necesita_rag\": true/false, \"diagnostico\": \"...\" (vacío si necesita_rag es true), \"razon\": \"...\", \"veredicto_preliminar\": \"...\", \"justificacion_veredicto\": \"...\"}",
+   "tokens": [
+    {
+     "input_tokens": 3854,
+     "output_tokens": 288,
+     "reasoning_tokens": 540,
+     "model": "gemini-3.8-flash",
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "selector",
+   "llamadas": [
+    2
+   ],
+   "prompt_chars": 715,
+   "system_chars": 344,
+   "prompt": "DIAGNÓSTICO ACTUAL: Los eventos clasificados con severidad FATAL (log_record_000014 y log_record_000015) corresponden a fallas de ejecución del demonio de control de E/S (ciod) al intentar lanzar el ejecutable 'raptor.newcomp.r1', debido a permisos de archivo insuficientes o imagen de programa inválida/ausente ('Permission denied'). Los eventos a nivel de KERNEL reflejan actividad rutinaria y eventos corregibles (CE en memoria DDR, correcciones de paridad de caché de instrucciones y excepciones de alineación de coma flotante), sin evidencia de compromiso de seguridad o explotación.\nRESUMEN DEL LOTE: servicios={'bgl.kernel': 18, 'bgl.app': 2} productos={'BlueGene/L': 20} severidades={'INFO': 18, 'FATAL': 2}",
+   "system": "Eres un coordinador de análisis de seguridad. Tienes acceso a estas herramientas: [query_cve, validate_solution]. Analiza el diagnóstico y decide si se deben buscar CVEs asociados al ataque. query_cve es útil cuando el diagnóstico menciona un servicio o vulnerabilidad específica. Responde SOLO en JSON: {\"usar_cve\": true/false, \"razon\": \"...\"}",
+   "tokens": [
+    {
+     "input_tokens": 284,
+     "output_tokens": 54,
+     "reasoning_tokens": 196,
+     "model": "gemini-3.8-flash",
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "mitigacion",
+   "llamadas": [
+    3
+   ],
+   "prompt_chars": 1562,
+   "system_chars": 854,
+   "prompt": "DIAGNÓSTICO: Los eventos clasificados con severidad FATAL (log_record_000014 y log_record_000015) corresponden a fallas de ejecución del demonio de control de E/S (ciod) al intentar lanzar el ejecutable 'raptor.newcomp.r1', debido a permisos de archivo insuficientes o imagen de programa inválida/ausente ('Permission denied'). Los eventos a nivel de KERNEL reflejan actividad rutinaria y eventos corregibles (CE en memoria DDR, correcciones de paridad de caché de instrucciones y excepciones de alineación de coma flotante), sin evidencia de compromiso de seguridad o explotación.\n\nVEREDICTO PRELIMINAR: anomalia_operativa (Los eventos FATAL se deben a fallos operativos de permisos de archivo en el cargador ciod ('Permission denied'), sin indicios de explotación o actividad maliciosa.)\nEVIDENCIA: {\"tipo\": \"texto\", \"severidades\": {\"INFO\": 18, \"FATAL\": 2}, \"componentes\": {\"bgl.kernel\": 18, \"bgl.app\": 2}, \"lineas_severidad_alta\": [{\"uid\": \"log_record_000014\", \"severidad\": \"FATAL\", \"group_id\": \"G10\", \"linea\": \"1131366730 2005.11.07 R50-M0-N4-I:J18-U01 2005-11-07-04.32.10.481855 R50-M0-N4-I:J18-U01 RAS APP FATAL ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r1: invalid or missing program image, Permission denied\"}, {\"uid\": \"log_record_000015\", \"severidad\": \"FATAL\", \"group_id\": \"G10\", \"linea\": \"1131366881 2005.11.07 R60-M0-N0-I:J18-U01 2005-11-07-04.34.41.779706 R60-M0-N0-I:J18-U01 RAS APP FATAL ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r1: invalid or missing program image, Permission denied\"}]}\n",
+   "system": "Eres un ingeniero de sistemas Linux con experiencia en respuesta a incidentes. Propón comandos según el VEREDICTO PRELIMINAR y la EVIDENCIA, con estas reglas: (1) normal: no propongas comandos (lista vacía). (2) anomalia_operativa: solo comandos de diagnóstico de SOLO LECTURA (revisar logs, estado de servicios y hardware, conectividad); ninguna regla de firewall ni cambio de configuración. (3) incidente_seguridad: contención proporcional y verificable, aplicada solo a las entidades (IP, puertos, servicios, usuarios) que aparecen en la evidencia. Nunca abras el firewall (-j ACCEPT, ufw allow), nunca desbanees (fail2ban-client unban), no uses comandos destructivos y no escribas ni redirijas salida fuera de /var/tmp/nodex. Si no hay veredicto preliminar, actúa como en anomalia_operativa. Responde SOLO en JSON: {\"comandos\": [\"cmd1\", \"cmd2\", ...]}",
+   "tokens": [
+    {
+     "input_tokens": 812,
+     "output_tokens": 128,
+     "reasoning_tokens": 416,
+     "model": "gemini-3.8-flash",
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "auditor",
+   "llamadas": [
+    4
+   ],
+   "prompt_chars": 10211,
+   "system_chars": 3402,
+   "prompt": "DIAGNÓSTICO: Los eventos clasificados con severidad FATAL (log_record_000014 y log_record_000015) corresponden a fallas de ejecución del demonio de control de E/S (ciod) al intentar lanzar el ejecutable 'raptor.newcomp.r1', debido a permisos de archivo insuficientes o imagen de programa inválida/ausente ('Permission denied'). Los eventos a nivel de KERNEL reflejan actividad rutinaria y eventos corregibles (CE en memoria DDR, correcciones de paridad de caché de instrucciones y excepciones de alineación de coma flotante), sin evidencia de compromiso de seguridad o explotación.\nCOMANDOS VALIDADOS: ['ls -la /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r1', 'stat /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r1', 'file /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r1', 'df -h /bgl/apps/followup/RAPTOR/pre-study', 'mount | grep -i bgl', 'dmesg | tail -n 50']\nCVEs ENCONTRADOS: 0 CVEs\nCONTEXTO RAG: No\n\nCÓMO SE INTERPRETÓ EL LOTE (preprocesamiento determinístico):\n- 20 eventos lógicos a partir de 20 líneas físicas.\n- Cobertura del parsing: 100% (20 decodificados, 0 en texto libre).\n- Severidad declarada por el propio log: INFO=18, FATAL=2.\n- Perfiles de enriquecimiento aplicados: bgl (20).\n- Productos reconocidos: BlueGene/L (20).\n- Formato único: text.\nEVIDENCIA DISPONIBLE (catálogo de logs observados):\n[{\"uid\": \"log_record_000001\", \"record_number\": 1, \"line_start\": 1, \"line_end\": 1, \"timestamp\": \"2005-11-04-15.34.11.676048\", \"group_id\": \"G01\", \"source_host\": \"R63-M0-N1-C:J16-U01\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"iar 00106570 dear 0245a5ec\"}, {\"uid\": \"log_record_000002\", \"record_number\": 2, \"line_start\": 2, \"line_end\": 2, \"timestamp\": \"2005-11-04-15.34.33.610222\", \"group_id\": \"G02\", \"source_host\": \"R63-M0-N4-C:J05-U11\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"iar 0010653c dear 0245a63c\"}, {\"uid\": \"log_record_000003\", \"record_number\": 3, \"line_start\": 3, \"line_end\": 3, \"timestamp\": \"2005-11-04-15.50.49.414886\", \"group_id\": \"G03\", \"source_host\": \"R63-M0-N0-C:J03-U01\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"407736 floating point alignment exceptions\"}, {\"uid\": \"log_record_000004\", \"record_number\": 4, \"line_start\": 4, \"line_end\": 4, \"timestamp\": \"2005-11-04-15.53.55.739224\", \"group_id\": \"G03\", \"source_host\": \"R63-M0-N7-C:J09-U01\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"428412 floating point alignment exceptions\"}, {\"uid\": \"log_record_000005\", \"record_number\": 5, \"line_start\": 5, \"line_end\": 5, \"timestamp\": \"2005-11-04-15.54.06.214936\", \"group_id\": \"G03\", \"source_host\": \"R63-M0-N4-C:J02-U01\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"441348 floating point alignment exceptions\"}, {\"uid\": \"log_record_000006\", \"record_number\": 6, \"line_start\": 6, \"line_end\": 6, \"timestamp\": \"2005-11-04-15.54.42.089011\", \"group_id\": \"G04\", \"source_host\": \"R63-M0-N0-C:J17-U01\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"iar 001061d4 dear 024696cc\"}, {\"uid\": \"log_record_000007\", \"record_number\": 7, \"line_start\": 7, \"line_end\": 7, \"timestamp\": \"2005-11-04-15.54.46.919787\", \"group_id\": \"G05\", \"source_host\": \"R63-M0-N2-C:J03-U11\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"iar 00106348 dear 024696bc\"}, {\"uid\": \"log_record_000008\", \"record_number\": 8, \"line_start\": 8, \"line_end\": 8, \"timestamp\": \"2005-11-04-15.54.56.089471\", \"group_id\": \"G06\", \"source_host\": \"R63-M0-NF-C:J08-U11\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"iar 00106204 dear 02f75edc\"}, {\"uid\": \"log_record_000009\", \"record_number\": 9, \"line_start\": 9, \"line_end\": 9, \"timestamp\": \"2005-11-04-18.02.11.252563\", \"group_id\": \"G07\", \"source_host\": \"R45-M1-NA-C:J11-U01\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"CE sym 21, at 0x111d8c60, mask 0x01\"}, {\"uid\": \"log_record_000010\", \"record_number\": 10, \"line_start\": 10, \"line_end\": 10, \"timestamp\": \"2005-11-04-20.01.23.415003\", \"group_id\": \"G08\", \"source_host\": \"R63-M0-N3-C:J02-U11\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"instruction cache parity error corrected\"}, {\"uid\": \"log_record_000011\", \"record_number\": 11, \"line_start\": 11, \"line_end\": 11, \"timestamp\": \"2005-11-05-07.57.31.806929\", \"group_id\": \"G07\", \"source_host\": \"R17-M0-N8-C:J05-U01\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"CE sym 34, at 0x11e7ed80, mask 0x80\"}, {\"uid\": \"log_record_000012\", \"record_number\": 12, \"line_start\": 12, \"line_end\": 12, \"timestamp\": \"2005-11-05-11.24.43.382408\", \"group_id\": \"G09\", \"source_host\": \"R11-M1-N4-C:J03-U01\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"2 ddr errors(s) detected and corrected on rank 0, symbol 18, bit 6\"}, {\"uid\": \"log_record_000013\", \"record_number\": 13, \"line_start\": 13, \"line_end\": 13, \"timestamp\": \"2005-11-06-23.08.06.640071\", \"group_id\": \"G08\", \"source_host\": \"R63-M0-N3-C:J02-U11\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"instruction cache parity error corrected\"}, {\"uid\": \"log_record_000014\", \"record_number\": 14, \"line_start\": 14, \"line_end\": 14, \"timestamp\": \"2005-11-07-04.32.10.481855\", \"group_id\": \"G10\", \"source_host\": \"R50-M0-N4-I:J18-U01\", \"service_name\": \"bgl.app\", \"severity\": \"FATAL\", \"message\": \"ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r1: invalid or missing program image, Permission denied\"}, {\"uid\": \"log_record_000015\", \"record_number\": 15, \"line_start\": 15, \"line_end\": 15, \"timestamp\": \"2005-11-07-04.34.41.779706\", \"group_id\": \"G10\", \"source_host\": \"R60-M0-N0-I:J18-U01\", \"service_name\": \"bgl.app\", \"severity\": \"FATAL\", \"message\": \"ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r1: invalid or missing program image, Permission denied\"}, {\"uid\": \"log_record_000016\", \"record_number\": 16, \"line_start\": 16, \"line_end\": 16, \"timestamp\": \"2005-11-07-16.13.02.108416\", \"group_id\": \"G11\", \"source_host\": \"R63-M0-N6-C:J15-U01\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"iar 00105e88 dear 02f6436c\"}, {\"uid\": \"log_record_000017\", \"record_number\": 17, \"line_start\": 17, \"line_end\": 17, \"timestamp\": \"2005-11-07-16.13.50.630658\", \"group_id\": \"G11\", \"source_host\": \"R63-M0-N9-C:J10-U01\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"iar 00105e84 dear 0244f29c\"}, {\"uid\": \"log_record_000018\", \"record_number\": 18, \"line_start\": 18, \"line_end\": 18, \"timestamp\": \"2005-11-08-06.06.28.982001\", \"group_id\": \"G07\", \"source_host\": \"R74-M0-N1-C:J05-U01\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"CE sym 30, at 0x042358a0, mask 0x20\"}, {\"uid\": \"log_record_000019\", \"record_number\": 19, \"line_start\": 19, \"line_end\": 19, \"timestamp\": \"2005-11-08-09.13.47.353261\", \"group_id\": \"G12\", \"source_host\": \"R27-M0-N0-I:J18-U11\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"ciod: generated 128 core files for program /g/g24/germann2/BGL-demo/SPaSM_mpi\"}, {\"uid\": \"log_record_000020\", \"record_number\": 20, \"line_start\": 20, \"line_end\": 20, \"timestamp\": \"2005-11-08-10.09.13.667082\", \"group_id\": \"G13\", \"source_host\": \"R62-M0-N2-C:J13-U11\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"iar 001061e8 dear 0247012c\"}]\nRegistros omitidos del catálogo: 0\nGRUPOS DE EVIDENCIA (registros que describen lo mismo; sus uids son los registros del catálogo con ese group_id; citar un grupo equivale a citar todos sus uids):\n[{\"group_id\": \"G01\", \"clave\": {\"componente\": \"bgl.kernel\", \"severidad\": \"INFO\", \"plantilla\": \"iar <n> dear <n>a<n>ec\"}, \"conteo\": 1, \"n_nodos\": 1, \"nodos\": [\"R63-M0-N1-C:J16-U01\"]}, {\"group_id\": \"G02\", \"clave\": {\"componente\": \"bgl.kernel\", \"severidad\": \"INFO\", \"plantilla\": \"iar <n>c dear <n>a<n>c\"}, \"conteo\": 1, \"n_nodos\": 1, \"nodos\": [\"R63-M0-N4-C:J05-U11\"]}, {\"group_id\": \"G03\", \"clave\": {\"componente\": \"bgl.kernel\", \"severidad\": \"INFO\", \"plantilla\": \"<n> floating point alignment exceptions\"}, \"conteo\": 3, \"n_nodos\": 3, \"nodos\": [\"R63-M0-N0-C:J03-U01\", \"R63-M0-N7-C:J09-U01\", \"R63-M0-N4-C:J02-U01\"]}, {\"group_id\": \"G04\", \"clave\": {\"componente\": \"bgl.kernel\", \"severidad\": \"INFO\", \"plantilla\": \"iar <n>d<n> dear <n>cc\"}, \"conteo\": 1, \"n_nodos\": 1, \"nodos\": [\"R63-M0-N0-C:J17-U01\"]}, {\"group_id\": \"G05\", \"clave\": {\"componente\": \"bgl.kernel\", \"severidad\": \"INFO\", \"plantilla\": \"iar <n> dear <n>bc\"}, \"conteo\": 1, \"n_nodos\": 1, \"nodos\": [\"R63-M0-N2-C:J03-U11\"]}, {\"group_id\": \"G06\", \"clave\": {\"componente\": \"bgl.kernel\", \"severidad\": \"INFO\", \"plantilla\": \"iar <n> dear <n>f<n>edc\"}, \"conteo\": 1, \"n_nodos\": 1, \"nodos\": [\"R63-M0-NF-C:J08-U11\"]}, {\"group_id\": \"G07\", \"clave\": {\"componente\": \"bgl.kernel\", \"severidad\": \"INFO\", \"plantilla\": \"CE sym <n>, at <hex>, mask <hex>\"}, \"conteo\": 3, \"n_nodos\": 3, \"nodos\": [\"R45-M1-NA-C:J11-U01\", \"R17-M0-N8-C:J05-U01\", \"R74-M0-N1-C:J05-U01\"]}, {\"group_id\": \"G08\", \"clave\": {\"componente\": \"bgl.kernel\", \"severidad\": \"INFO\", \"plantilla\": \"instruction cache parity error corrected\"}, \"conteo\": 2, \"n_nodos\": 1, \"nodos\": [\"R63-M0-N3-C:J02-U11\"]}, {\"group_id\": \"G09\", \"clave\": {\"componente\": \"bgl.kernel\", \"severidad\": \"INFO\", \"plantilla\": \"<n> ddr errors(s) detected and corrected on rank <n>, symbol <n>, bit <n>\"}, \"conteo\": 1, \"n_nodos\": 1, \"nodos\": [\"R11-M1-N4-C:J03-U01\"]}, {\"group_id\": \"G10\", \"clave\": {\"componente\": \"bgl.app\", \"severidad\": \"FATAL\", \"plantilla\": \"ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r<n>: invalid or missing program image, Permissio\"}, \"conteo\": 2, \"n_nodos\": 2, \"nodos\": [\"R50-M0-N4-I:J18-U01\", \"R60-M0-N0-I:J18-U01\"]}, {\"group_id\": \"G11\", \"clave\": {\"componente\": \"bgl.kernel\", \"severidad\": \"INFO\", \"plantilla\": \"iar <n>e<n> dear <n>f<n>c\"}, \"conteo\": 2, \"n_nodos\": 2, \"nodos\": [\"R63-M0-N6-C:J15-U01\", \"R63-M0-N9-C:J10-U01\"]}, {\"group_id\": \"G12\", \"clave\": {\"componente\": \"bgl.kernel\", \"severidad\": \"INFO\", \"plantilla\": \"ciod: generated <n> core files for program /g/g<n>/germann<n>/BGL-demo/SPaSM_mpi\"}, \"conteo\": 1, \"n_nodos\": 1, \"nodos\": [\"R27-M0-N0-I:J18-U11\"]}, {\"group_id\": \"G13\", \"clave\": {\"componente\": \"bgl.kernel\", \"severidad\": \"INFO\", \"plantilla\": \"iar <n>e<n> dear <n>c\"}, \"conteo\": 1, \"n_nodos\": 1, \"nodos\": [\"R62-M0-N2-C:J13-U11\"]}]\nCANDIDATOS MITRE RECUPERADOS POR RAG (no atribuidos):\n[]",
+   "system": "Evalúa la solución de seguridad propuesta. Considera: precisión del diagnóstico, relevancia de los comandos y evidencia disponible. Responde CUATRO cosas por separado, sin confundirlas entre sí: (1) hay_anomalia: ¿el sistema se está comportando de forma anómala o irregular, sea o no un problema de seguridad? (p. ej. una falla de hardware, un error de infraestructura o un fallo de replicación también cuentan como anomalía, aunque no sean un ataque). (2) hay_incidente: de las anomalías anteriores, ¿esta es específicamente un incidente o amenaza de seguridad real (intrusión, abuso, actividad maliciosa)? Una anomalía puramente operativa (p. ej. mantenimiento de hardware) es hay_anomalia=true pero hay_incidente=false. (3) confianza: qué tan seguro estás de tu propia evaluación -- un diagnóstico de 'todo normal' bien fundamentado debe tener confianza alta y tanto hay_anomalia como hay_incidente en false. (4) cobertura_auditor: ¿la evidencia reunida (diagnóstico, CVEs, contexto histórico, comandos validados) alcanza para sostener esta conclusión, o falta investigar algo concreto para poder afirmarla con solidez? Esto es independiente de confianza: puedes estar muy seguro de una conclusión basada en poca evidencia real. Si cobertura_auditor es false, explica en motivo_cobertura qué falta investigar. No confundas estos cuatro campos entre sí. Responde SOLO en JSON: {\"confianza\": 0.0-1.0, \"hay_anomalia\": true/false, \"hay_incidente\": true/false, \"evaluacion\": \"...\", \"cobertura_auditor\": true/false, \"motivo_cobertura\": \"...\"}\nLa salida formal incluye eventos_reconstruidos, secuencia_temporal y\ntecnicas_atribuidas. Reconstruye los eventos que la evidencia observada\nrespalda, usando el catálogo EVIDENCIA DISPONIBLE y la tabla GRUPOS DE\nEVIDENCIA. Para cada evento cita TODA la evidencia que lo respalda: en\nevidence_groups, los grupos cuyos registros pertenecen todos a ese evento; en\nevidence_uids, los registros sueltos. Si un grupo mezcla registros del evento\ncon otros que no lo son, cita solo los uids que corresponden; no inventes UIDs,\ngrupos ni timestamps. event_id es un identificador interno distinto del UID del\nlog (event_001, event_002, ...). timestamp debe ser una marca de los logs\ncitados o null. event_type es una etiqueta breve snake_case.\nsecuencia_temporal referencia event_id: usa únicamente el orden temporal\nobservable; orden temporal no implica causalidad. No ordenes eventos sin fecha.\nLas técnicas recuperadas por RAG son CANDIDATOS, no conclusiones. Atribuye una\ntécnica solo si la evidencia observada la respalda; usa un ID MITRE Tdddd o\nTdddd.ddd y cita su evidencia con evidence_groups y/o evidence_uids válidos.\nNunca copies automáticamente candidatos. Puedes devolver listas vacías si la\nevidencia no respalda eventos o técnicas: no especules.\nUsa confidence=null en eventos y técnicas; no inventes probabilidades.\ndescription y justification son breves y verificables; no expongas razonamiento\ninterno. Añade al objeto JSON estos campos:\n\"eventos_reconstruidos\": [{\"event_id\":\"event_001\", \"evidence_groups\":[\"G01\"],\n\"evidence_uids\":[\"UID\"], \"timestamp\":null, \"event_type\":\"authentication_failure\",\n\"description\":\"...\", \"confidence\":null}], \"secuencia_temporal\":[\"event_001\"],\n\"tecnicas_atribuidas\": [{\"technique_id\":\"T1110\", \"technique_name\":\"Brute Force\",\n\"evidence_groups\":[\"G01\"], \"evidence_uids\":[\"UID\"], \"justification\":\"...\",\n\"confidence\":null}].\n",
+   "tokens": [
+    {
+     "input_tokens": 5723,
+     "output_tokens": 938,
+     "reasoning_tokens": 718,
+     "model": "gemini-3.8-flash",
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  }
+ ],
+ "consultas_externas": []
+}

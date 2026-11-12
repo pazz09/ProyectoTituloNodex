@@ -1,0 +1,60 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=6284 salida=302 razonamiento=661 total=7247
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=12877 salida=175 razonamiento=991 total=14043
+   → Solicitando RAG (Se observan 239 solicitudes DNS consecutivas hacia 10.0.10.1 en estado S0 (sin respuesta) originadas por 143.88.255.10, además de consultas fallidas hacia servidores raíz DNS externos. De acuerdo con el plan de investigación, se requiere consultar la memoria histórica y la base MITRE ATT&CK para correlacionar este patrón con técnicas de túneles DNS (T1071.004), reconocimiento o denegación de servicio, y verificar antecedentes de comportamiento similar en el entorno.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1071.004, T1584.002, T1568.003
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=13548 salida=356 razonamiento=1680 total=15584
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=362 salida=58 razonamiento=220 total=640
+   → usar_cve: False | Razón: El diagnóstico concluye que se trata de un problema de conectividad o desconfiguración de red en el servidor DNS upstream, descartando actividad maliciosa o explotación de vulnerabilidades en un producto de software específico.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=1109 salida=144 razonamiento=479 total=1732
+   → 7 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ❌ Comandos rechazados: ["BINARIO_NO_RECONOCIDO: 'nc' en 'nc -zvw3 -u 10.0.10.1 53'"]
+   → 1 comando(s) rechazado(s) en el intento 1.
+   🔀 Router Validación → agente_ingeniero_mitigacion (intento 1/2)
+👉 Transición completada en: 'tool_validar_comandos'
+
+👷 [Agente Mitigación] Generando comandos (intento 2)...
+   ⚠️ Autorreflexión: corrigiendo errores anteriores...
+   [tokens] entrada=1172 salida=65 razonamiento=464 total=1701
+   → 4 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=67063 salida=566 razonamiento=333 total=67962
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros muestran un alto volumen de consultas DNS UDP originadas en 143.88.255.10 hacia 10.0.10.1 sin respuesta (estado S0), mientras el host atiende con normalidad peticiones de 143.88.255.1. El comportamiento y tamaños de paquetes corresponden a un problema de conectividad o falla en el reenviador DNS hacia su servidor upstream, sin indicios de exfiltración, tunelado C2 o ataque malicioso.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

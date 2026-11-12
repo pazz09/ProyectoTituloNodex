@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=6230 salida=396 razonamiento=855 total=7481
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=7679 salida=147 razonamiento=580 total=8406
+   → Solicitando RAG (El plan de investigación contempla consultar la memoria histórica y la base de conocimiento de MITRE ATT&CK para contrastar los patrones de tráfico DNS/UDP unidireccional sin respuesta (estado S0 entre 143.88.255.10 y 10.0.10.1) con casos previos de túneles DNS, denegación de servicio o escaneos UDP antes de emitir un dictamen definitivo.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 3 técnicas MITRE ATT&CK relacionadas: T1071.004, T1584.002, T1568.001
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=8367 salida=327 razonamiento=910 total=9604
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=338 salida=61 razonamiento=214 total=613
+   → usar_cve: False | Razón: El diagnóstico concluye que el comportamiento se debe a un problema de conectividad o desconfiguración de red hacia un servidor DNS inalcanzable, descartando ataques específicos o la explotación de software/vulnerabilidades conocidas.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=833 salida=70 razonamiento=435 total=1338
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=66853 salida=517 razonamiento=673 total=68043
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El análisis es correcto. El tráfico evidencia consultas DNS repetitivas (258 eventos) desde 143.88.255.10 hacia 10.0.10.1:53 sin obtener respuesta (estado S0), con una cadencia moderada incompatible con un ataque DoS o exfiltración activa. Se trata de un problema operativo de resolución de nombres o conectividad hacia un servidor DNS inalcanzable, acompañado de tráfico legítimo y de difusión estándar.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

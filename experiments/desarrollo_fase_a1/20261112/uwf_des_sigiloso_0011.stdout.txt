@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=5878 salida=309 razonamiento=1931 total=8118
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=7080 salida=367 razonamiento=957 total=8404
+   → No hace falta RAG (El análisis se basa en el 100% de los eventos correctamente parseados, que muestran con claridad un fallo de conectividad/resolución DNS localizado sin necesidad de correlación externa ni consulta histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=365 salida=59 razonamiento=199 total=623
+   → usar_cve: False | Razón: El diagnóstico concluye que se trata de un problema de conectividad o desconfiguración de red hacia un servidor DNS inalcanzable, descartando un ataque o la explotación de una vulnerabilidad específica de software.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=839 salida=82 razonamiento=520 total=1441
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=66086 salida=568 razonamiento=434 total=67088
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es preciso y coincide plenamente con los datos de red. Se identifican 265 solicitudes DNS en estado S0 desde 143.88.255.10 hacia 10.0.10.1 sin respuesta, consistentes con una falla operativa de conectividad o desconfiguración del resolver DNS, mientras que otros clientes resuelven con normalidad hacia 143.88.1.1. No se evidencia intención maliciosa, abuso ni patrones de ataque.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

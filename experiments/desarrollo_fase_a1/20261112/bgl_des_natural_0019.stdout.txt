@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1048 salida=235 razonamiento=1038 total=2321
+   → Plan v1: ['triage', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=4106 salida=291 razonamiento=342 total=4739
+   → No hace falta RAG (La información provista es completamente legible y autosuficiente para identificar la causa raíz del fallo fatal, la cual es un error operativo de ruta inexistente en la ejecución de Linpack, sumado a que el plan no contempla memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=305 salida=67 razonamiento=193 total=565
+   → usar_cve: False | Razón: El diagnóstico indica un fallo operativo por una ruta de archivo inexistente ('No such file or directory') y operaciones normales del sistema, sin evidencia de actividad maliciosa, vulnerabilidades explotadas o indicadores de compromiso que justifiquen la búsqueda de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=810 salida=68 razonamiento=404 total=1282
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=5494 salida=1342 razonamiento=3235 total=10071
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es preciso. Los registros con severidad FATAL reflejan una falla operativa en el demonio ciod provocada por la inexistencia de la ruta de trabajo especificada para el benchmark Linpack (/g/g0/spelce1/Linpack_SWL). El resto de eventos corresponden a señales estándar de terminación de procesos, telemetría rutinaria de hardware y estadísticas del kernel de BlueGene/L. No se identifican vectores de ataque ni compromisos de seguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

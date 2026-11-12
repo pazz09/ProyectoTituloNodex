@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1191 salida=265 razonamiento=446 total=1902
+   → Plan v1: ['triage', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=5972 salida=326 razonamiento=379 total=6677
+   → No hace falta RAG (La evidencia provista cuenta con un 100% de cobertura y describe claramente problemas físicos (DDR ECC), de almacenamiento distribuido (Lustre) y excepciones a nivel de kernel/aplicación típicas de computación de alto rendimiento, suficientes para descartar un incidente de seguridad sin requerir memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=324 salida=49 razonamiento=137 total=510
+   → usar_cve: False | Razón: El diagnóstico concluye que los eventos corresponden a fallos operativos, de hardware y de software sin indicios de intrusión, explotación de vulnerabilidades ni actividad adversaria.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=1377 salida=134 razonamiento=359 total=1870
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=7090 salida=833 razonamiento=1092 total=9015
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros evidencian fallos de hardware (errores de memoria DDR corregidos mediante ECC, tarjeta de nodo no funcional), problemas de infraestructura de almacenamiento (fallo de montaje de Lustre), excepciones a nivel de arquitectura de software (alineación de enteros) y errores de ejecución operativa por falta de archivos binarios. No existen indicios de actividad maliciosa, intrusión ni explotación de vulnerabilidades.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

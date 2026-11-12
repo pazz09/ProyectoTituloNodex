@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1198 salida=271 razonamiento=1146 total=2615
+   → Plan v1: ['triage', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=4389 salida=492 razonamiento=851 total=5732
+   → No hace falta RAG (La información contenida en las 20 líneas decodificadas con cobertura total (100%) es suficiente y concluyente para caracterizar los errores como eventos operacionales y de hardware/red HPC, sin requerir memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=493 salida=63 razonamiento=137 total=693
+   → usar_cve: False | Razón: El diagnóstico concluye que los incidentes corresponden a fallas operativas, de sincronización de red interna y problemas de permisos en la arquitectura BlueGene/L, descartando actividad maliciosa o explotación de vulnerabilidades de seguridad conocidas.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=1845 salida=83 razonamiento=461 total=2389
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=6743 salida=917 razonamiento=1276 total=8936
+   → Confianza final: 0.98 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es totalmente correcto. Los registros reflejan anomalías operativas de hardware y software del supercomputador BlueGene/L (fallas de sincronización en red de árbol, terminación anómala del runtime del kernel, generación de core dumps y un fallo de permisos al cargar una imagen de aplicación). No existe evidencia de intrusión ni compromiso de seguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

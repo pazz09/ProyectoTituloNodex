@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1049 salida=346 razonamiento=649 total=2044
+   → Plan v1: ['triage', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3854 salida=288 razonamiento=540 total=4682
+   → No hace falta RAG (El lote presenta 100% de cobertura y los mensajes de error FATAL son explícitos respecto a su origen (fallo de permisos en sistema de archivos/ejecución de software en ciod), permitiendo un diagnóstico determinístico sin requerir memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=284 salida=54 razonamiento=196 total=534
+   → usar_cve: False | Razón: El diagnóstico no evidencia un ataque ni explotación de vulnerabilidades; los eventos corresponden a errores de permisos de archivo al ejecutar un programa local y fallos de hardware corregibles en BlueGene/L.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=812 salida=128 razonamiento=416 total=1356
+   → 6 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=5723 salida=938 razonamiento=718 total=7379
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros evidencian fallas operativas típicas en un supercomputador BlueGene/L: errores de permisos al intentar cargar un ejecutable ('Permission denied'), generación de volcados de memoria (core dumps) tras la falla de una aplicación MPI, y errores de hardware corregidos de forma transparente por paridad/ECC en memoria y caché. No existe evidencia de actividad maliciosa o compromiso de seguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

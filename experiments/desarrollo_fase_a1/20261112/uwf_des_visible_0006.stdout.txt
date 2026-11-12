@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=5896 salida=409 razonamiento=642 total=6947
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=7655 salida=350 razonamiento=915 total=8920
+   → No hace falta RAG (Los datos del resumen y los flujos minoritarios son suficientes y unívocos para determinar que la causa de las peticiones S0 es la indisponibilidad de un resolver DNS local y actividad de broadcast propia del sistema, sin requerir cotejo histórico.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=298 salida=52 razonamiento=170 total=520
+   → usar_cve: False | Razón: El diagnóstico descarta actividad maliciosa y clasifica el evento como una anomalía operativa por falta de respuesta del servidor DNS interno, sin identificar explotación ni vulnerabilidades específicas de software.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=890 salida=73 razonamiento=453 total=1416
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=66191 salida=652 razonamiento=662 total=67505
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto y exhaustivo. Los registros evidencian un fallo operacional consistente en la falta de respuesta de la IP 10.0.10.1 a consultas DNS UDP (estado S0 y longitud de payload fija/reducida), lo que provoca reintentos continuos por parte del cliente 143.88.255.10. El resto del tráfico muestra resolución DNS exitosa hacia 143.88.1.1 (estado SF) y tráfico administrativo multicast/broadcast propio de red local (DHCPv6, NetBIOS), sin indicios de actividad maliciosa ni exfiltración.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

@@ -1,0 +1,50 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=4582 salida=318 razonamiento=1245 total=6145
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=6165 salida=415 razonamiento=852 total=7432
+   → No hace falta RAG (La evidencia técnica provista en los flujos y perfiles Zeek es 100% concluyente sobre la naturaleza del tráfico sin requerir correlación con ataques históricos.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=394 salida=60 razonamiento=149 total=603
+   → usar_cve: False | Razón: El diagnóstico concluye que la anomalía se debe a un fallo de conectividad/resolución DNS y tráfico de red legítimo (NetBIOS, DHCP), descartando cualquier intrusión, explotación o vulnerabilidad específica de software.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=867 salida=84 razonamiento=453 total=1404
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ❌ Comandos rechazados: ["BINARIO_NO_RECONOCIDO: 'nc' en 'nc -zvw3 -u 10.0.10.1 53'"]
+   → 1 comando(s) rechazado(s) en el intento 1.
+   🔀 Router Validación → agente_ingeniero_mitigacion (intento 1/2)
+👉 Transición completada en: 'tool_validar_comandos'
+
+👷 [Agente Mitigación] Generando comandos (intento 2)...
+   ⚠️ Autorreflexión: corrigiendo errores anteriores...
+   [tokens] entrada=930 salida=47 razonamiento=849 total=1826
+   → 4 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=65964 salida=1379 razonamiento=1257 total=68600
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es preciso y coincide con la evidencia analizada. Se observa una anomalía netamente operativa debida a la falta de respuesta del servidor DNS configurado (10.0.10.1) ante las consultas del host 143.88.255.10, lo que genera estados S0 e intentos fallidos hacia servidores raíz. El resto del tráfico observado corresponde a actividad legítima de red (DHCP, DHCPv6, NetBIOS y consultas DNS exitosas de otros hosts). No se aprecian patrones de exfiltración, escaneo malicioso ni actividad hostil.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

@@ -1,0 +1,1069 @@
+{
+ "case_id": "bgl_des_balanceado_0002",
+ "dataset": "bgl",
+ "segundos_pared_hijo": 49.51042459999917,
+ "estado": {
+  "resumen_logs": {
+   "formato_detectado": "bgl",
+   "total_lineas": 20,
+   "servicios": {
+    "bgl.kernel": 19,
+    "bgl.discovery": 1
+   },
+   "eventos": {
+    "evento_critico": 1,
+    "evento_normal": 19
+   },
+   "ventana_temporal": {
+    "inicio": "2005-08-26-12.28.10.329248",
+    "fin": "2005-08-28-02.30.29.169747"
+   },
+   "n_ips_distintas": 0,
+   "ips_distintas": [],
+   "por_ip": {},
+   "usuarios": {},
+   "n_usuarios_distintos": 0,
+   "codigos_respuesta": {},
+   "entidades": [],
+   "cronologia": [
+    {
+     "n": 10,
+     "timestamp": "2005-08-27-18.49.52.912954",
+     "servicio": "bgl.discovery",
+     "evento": "evento_critico",
+     "mensaje": "1125193792 2005.08.27 R11-M1-N7 2005-08-27-18.49.52.912954 R11-M1-N7 NULL DISCOVERY ERROR Node card status: no ALERTs are active. Clock Mode is Low. Clock Select is Midplane. Phy J…"
+    }
+   ],
+   "cronologia_omitidos": 0,
+   "raw_procedencia": {
+    "sha256": "5f252ce66c7c1cfdc6bac2f91f68bc2a929a26e7ec6117b4073546e84343e4b4",
+    "lineas": 20,
+    "bytes": 3156
+   },
+   "reputacion_ips": {},
+   "perfil_lote": {
+    "tipo": "texto",
+    "filas": 20,
+    "con_formato_reconocido": 20,
+    "severidades": {
+     "INFO": 19,
+     "ERROR": 1
+    },
+    "componentes": {
+     "bgl.kernel": 19,
+     "bgl.discovery": 1
+    },
+    "nodos": {
+     "R66-M0-N9-C:J10-U01": 1,
+     "R77-M0-N8-C:J09-U01": 1,
+     "R60-M0-NF-C:J10-U11": 1,
+     "R67-M1-N1-C:J05-U11": 1,
+     "R65-M1-NC-C:J09-U01": 1,
+     "R64-M0-N1-C:J02-U01": 1,
+     "R14-M1-N5-C:J12-U11": 1,
+     "R74-M1-N0-C:J12-U01": 1,
+     "R36-M0-N5-C:J03-U01": 1,
+     "R11-M1-N7": 1
+    },
+    "nodos_distintos": 20,
+    "lineas_severidad_alta": {
+     "total": 1,
+     "omitidas": 0,
+     "lineas": [
+      {
+       "uid": "log_record_000010",
+       "severidad": "ERROR",
+       "group_id": "G09"
+      }
+     ]
+    },
+    "grupos": 13
+   }
+  },
+  "preprocessing_metadata": {
+   "schema_version": "2.0",
+   "total_lineas_fisicas": 20,
+   "total_eventos": 20,
+   "decoder_distribution": {
+    "text": 20
+   },
+   "product_distribution": {
+    "BlueGene/L": 20
+   },
+   "vendor_distribution": {
+    "IBM": 20
+   },
+   "version_distribution": {},
+   "protocol_distribution": {},
+   "profile_distribution": {
+    "bgl": 20
+   },
+   "severity_distribution": {
+    "INFO": 19,
+    "ERROR": 1
+   },
+   "event_categories": {},
+   "event_outcomes": {},
+   "entities": {
+    "host": {
+     "R11-M1-N7": 1,
+     "R14-M1-N0-C:J07-U11": 1,
+     "R14-M1-N5-C:J12-U11": 1,
+     "R36-M0-N5-C:J03-U01": 1,
+     "R41-M0-N2-C:J10-U01": 1,
+     "R55-M0-N2-C:J08-U01": 1,
+     "R60-M0-NF-C:J10-U11": 1,
+     "R64-M0-N1-C:J02-U01": 1,
+     "R65-M1-NC-C:J09-U01": 1,
+     "R66-M0-N9-C:J10-U01": 1,
+     "R67-M1-N1-C:J05-U11": 1,
+     "R70-M0-NF-C:J06-U01": 1,
+     "R72-M1-NA-C:J04-U11": 1,
+     "R73-M1-N8-C:J06-U01": 1,
+     "R74-M0-NB-C:J17-U01": 1,
+     "R74-M1-N0-C:J12-U01": 1,
+     "R75-M1-N8-C:J13-U11": 1,
+     "R76-M1-ND-C:J11-U11": 1,
+     "R77-M0-N8-C:J09-U01": 1,
+     "R77-M1-NF-C:J02-U11": 1
+    },
+    "servicio": {
+     "bgl.kernel": 19,
+     "bgl.discovery": 1
+    },
+    "producto": {
+     "BlueGene/L": 20
+    }
+   },
+   "time_window": {
+    "inicio": "2005-08-26-12.28.10.329248",
+    "fin": "2005-08-28-02.30.29.169747"
+   },
+   "parsing": {
+    "parsed_events": 20,
+    "fallback_events": 0,
+    "coverage": 1.0
+   },
+   "segments": [
+    {
+     "index": 0,
+     "decoder": "text",
+     "line_start": 1,
+     "line_end": 20,
+     "n_records": 20,
+     "confidence": 0.1,
+     "decoder_inicial": "text",
+     "confidence_inicial": 0.1,
+     "decoder_distribution": {
+      "text": 20
+     },
+     "context": {}
+    }
+   ],
+   "entities_resumen": {
+    "host": 20,
+    "servicio": 2,
+    "producto": 1
+   },
+   "config": {
+    "LOG_DETECTION_CHUNK_SIZE": 50,
+    "LOG_ENABLE_MULTILINE": true,
+    "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+    "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+    "LOG_MAX_EVENTS": 100000,
+    "LOG_MAX_FILE_BYTES": 52428800,
+    "LOG_MAX_RAW_SAMPLES": 20,
+    "LOG_MAX_UNMAPPED_FIELDS": 100,
+    "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+    "LOG_PARSING_MODE": "hybrid",
+    "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+    "LOG_PRESERVE_RAW": true
+   }
+  },
+  "parsing_warnings": [],
+  "evidencia_logs": [
+   {
+    "uid": "log_record_000001",
+    "record_number": 1,
+    "line_start": 1,
+    "line_end": 1,
+    "timestamp": "2005-08-26-12.28.10.329248",
+    "group_id": "G01",
+    "source_host": "R66-M0-N9-C:J10-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 003a929c dear 0136b2d8"
+   },
+   {
+    "uid": "log_record_000002",
+    "record_number": 2,
+    "line_start": 2,
+    "line_end": 2,
+    "timestamp": "2005-08-26-12.28.37.922676",
+    "group_id": "G02",
+    "source_host": "R77-M0-N8-C:J09-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 003a9260 dear 00e24bd8"
+   },
+   {
+    "uid": "log_record_000003",
+    "record_number": 3,
+    "line_start": 3,
+    "line_end": 3,
+    "timestamp": "2005-08-26-12.29.13.250807",
+    "group_id": "G03",
+    "source_host": "R60-M0-NF-C:J10-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 003a9260 dear 00f2a468"
+   },
+   {
+    "uid": "log_record_000004",
+    "record_number": 4,
+    "line_start": 4,
+    "line_end": 4,
+    "timestamp": "2005-08-26-12.29.40.731213",
+    "group_id": "G04",
+    "source_host": "R67-M1-N1-C:J05-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 003a92a0 dear 0129a488"
+   },
+   {
+    "uid": "log_record_000005",
+    "record_number": 5,
+    "line_start": 5,
+    "line_end": 5,
+    "timestamp": "2005-08-26-12.30.39.328425",
+    "group_id": "G05",
+    "source_host": "R65-M1-NC-C:J09-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 003a9260 dear 00f29b68"
+   },
+   {
+    "uid": "log_record_000006",
+    "record_number": 6,
+    "line_start": 6,
+    "line_end": 6,
+    "timestamp": "2005-08-26-12.31.35.708190",
+    "group_id": "G06",
+    "source_host": "R64-M0-N1-C:J02-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 003a926c dear 00f2b078"
+   },
+   {
+    "uid": "log_record_000007",
+    "record_number": 7,
+    "line_start": 7,
+    "line_end": 7,
+    "timestamp": "2005-08-26-13.19.21.725812",
+    "group_id": "G07",
+    "source_host": "R14-M1-N5-C:J12-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "CE sym 0, at 0x12af93a0, mask 0x08"
+   },
+   {
+    "uid": "log_record_000008",
+    "record_number": 8,
+    "line_start": 8,
+    "line_end": 8,
+    "timestamp": "2005-08-26-20.51.56.845739",
+    "group_id": "G08",
+    "source_host": "R74-M1-N0-C:J12-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "1 ddr errors(s) detected and corrected on rank 0, symbol 28, bit 3"
+   },
+   {
+    "uid": "log_record_000009",
+    "record_number": 9,
+    "line_start": 9,
+    "line_end": 9,
+    "timestamp": "2005-08-27-06.25.05.684576",
+    "group_id": "G07",
+    "source_host": "R36-M0-N5-C:J03-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "CE sym 23, at 0x03f89c00, mask 0x10"
+   },
+   {
+    "uid": "log_record_000010",
+    "record_number": 10,
+    "line_start": 10,
+    "line_end": 10,
+    "timestamp": "2005-08-27-18.49.52.912954",
+    "group_id": "G09",
+    "source_host": "R11-M1-N7",
+    "service_name": "bgl.discovery",
+    "severity": "ERROR",
+    "message": "Node card status: no ALERTs are active. Clock Mode is Low. Clock Select is Midplane. Phy JTAG Reset is asserted. ASIC JTAG Reset is asserted. Temperature Mask is not active. No temperature error. Temperature Limit Error Latch is clear. PGOOD IS NOT ASSERTED. PGOOD ERROR LATCH IS ACTIVE. MPGOOD IS NO"
+   },
+   {
+    "uid": "log_record_000011",
+    "record_number": 11,
+    "line_start": 11,
+    "line_end": 11,
+    "timestamp": "2005-08-27-23.11.52.680924",
+    "group_id": "G07",
+    "source_host": "R14-M1-N0-C:J07-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "CE sym 10, at 0x01d7a160, mask 0x10"
+   },
+   {
+    "uid": "log_record_000012",
+    "record_number": 12,
+    "line_start": 12,
+    "line_end": 12,
+    "timestamp": "2005-08-28-01.58.37.175646",
+    "group_id": "G10",
+    "source_host": "R77-M1-NF-C:J02-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "156055738 double-hummer alignment exceptions"
+   },
+   {
+    "uid": "log_record_000013",
+    "record_number": 13,
+    "line_start": 13,
+    "line_end": 13,
+    "timestamp": "2005-08-28-02.00.10.847914",
+    "group_id": "G10",
+    "source_host": "R72-M1-NA-C:J04-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "147337410 double-hummer alignment exceptions"
+   },
+   {
+    "uid": "log_record_000014",
+    "record_number": 14,
+    "line_start": 14,
+    "line_end": 14,
+    "timestamp": "2005-08-28-02.09.20.654913",
+    "group_id": "G10",
+    "source_host": "R73-M1-N8-C:J06-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "139632470 double-hummer alignment exceptions"
+   },
+   {
+    "uid": "log_record_000015",
+    "record_number": 15,
+    "line_start": 15,
+    "line_end": 15,
+    "timestamp": "2005-08-28-02.11.08.660202",
+    "group_id": "G10",
+    "source_host": "R75-M1-N8-C:J13-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "155918940 double-hummer alignment exceptions"
+   },
+   {
+    "uid": "log_record_000016",
+    "record_number": 16,
+    "line_start": 16,
+    "line_end": 16,
+    "timestamp": "2005-08-28-02.13.32.663293",
+    "group_id": "G11",
+    "source_host": "R74-M0-NB-C:J17-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 00149fc0 dear 00739d98"
+   },
+   {
+    "uid": "log_record_000017",
+    "record_number": 17,
+    "line_start": 17,
+    "line_end": 17,
+    "timestamp": "2005-08-28-02.15.25.781153",
+    "group_id": "G12",
+    "source_host": "R76-M1-ND-C:J11-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 0014a150 dear 0072b9f8"
+   },
+   {
+    "uid": "log_record_000018",
+    "record_number": 18,
+    "line_start": 18,
+    "line_end": 18,
+    "timestamp": "2005-08-28-02.16.18.871630",
+    "group_id": "G13",
+    "source_host": "R70-M0-NF-C:J06-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 0014a150 dear 00719fc8"
+   },
+   {
+    "uid": "log_record_000019",
+    "record_number": 19,
+    "line_start": 19,
+    "line_end": 19,
+    "timestamp": "2005-08-28-02.25.52.876786",
+    "group_id": "G10",
+    "source_host": "R41-M0-N2-C:J10-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "28298332 double-hummer alignment exceptions"
+   },
+   {
+    "uid": "log_record_000020",
+    "record_number": 20,
+    "line_start": 20,
+    "line_end": 20,
+    "timestamp": "2005-08-28-02.30.29.169747",
+    "group_id": "G10",
+    "source_host": "R55-M0-N2-C:J08-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "23768676 double-hummer alignment exceptions"
+   }
+  ],
+  "evidencia_logs_omitidos": 0,
+  "grupos_evidencia": [
+   {
+    "group_id": "G01",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n>a<n>c dear <n>b<n>d<n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000001"
+    ],
+    "nodos": [
+     "R66-M0-N9-C:J10-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G02",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n>a<n> dear <n>e<n>bd<n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000002"
+    ],
+    "nodos": [
+     "R77-M0-N8-C:J09-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G03",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n>a<n> dear <n>f<n>a<n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000003"
+    ],
+    "nodos": [
+     "R60-M0-NF-C:J10-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G04",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n>a<n>a<n> dear <n>a<n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000004"
+    ],
+    "nodos": [
+     "R67-M1-N1-C:J05-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G05",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n>a<n> dear <n>f<n>b<n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000005"
+    ],
+    "nodos": [
+     "R65-M1-NC-C:J09-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G06",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n>a<n>c dear <n>f<n>b<n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000006"
+    ],
+    "nodos": [
+     "R64-M0-N1-C:J02-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G07",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "CE sym <n>, at <hex>, mask <hex>"
+    },
+    "conteo": 3,
+    "uids": [
+     "log_record_000007",
+     "log_record_000009",
+     "log_record_000011"
+    ],
+    "nodos": [
+     "R14-M1-N5-C:J12-U11",
+     "R36-M0-N5-C:J03-U01",
+     "R14-M1-N0-C:J07-U11"
+    ],
+    "n_nodos": 3
+   },
+   {
+    "group_id": "G08",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "<n> ddr errors(s) detected and corrected on rank <n>, symbol <n>, bit <n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000008"
+    ],
+    "nodos": [
+     "R74-M1-N0-C:J12-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G09",
+    "clave": {
+     "componente": "bgl.discovery",
+     "severidad": "ERROR",
+     "plantilla": "Node card status: no ALERTs are active. Clock Mode is Low. Clock Select is Midplane. Phy JTAG Reset is asserted. ASIC JT"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000010"
+    ],
+    "nodos": [
+     "R11-M1-N7"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G10",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "<n> double-hummer alignment exceptions"
+    },
+    "conteo": 6,
+    "uids": [
+     "log_record_000012",
+     "log_record_000013",
+     "log_record_000014",
+     "log_record_000015",
+     "log_record_000019",
+     "log_record_000020"
+    ],
+    "nodos": [
+     "R77-M1-NF-C:J02-U11",
+     "R72-M1-NA-C:J04-U11",
+     "R73-M1-N8-C:J06-U01",
+     "R75-M1-N8-C:J13-U11",
+     "R41-M0-N2-C:J10-U01",
+     "R55-M0-N2-C:J08-U01"
+    ],
+    "n_nodos": 6
+   },
+   {
+    "group_id": "G11",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n>fc<n> dear <n>d<n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000016"
+    ],
+    "nodos": [
+     "R74-M0-NB-C:J17-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G12",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n>a<n> dear <n>b<n>f<n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000017"
+    ],
+    "nodos": [
+     "R76-M1-ND-C:J11-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G13",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n>a<n> dear <n>fc<n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000018"
+    ],
+    "nodos": [
+     "R70-M0-NF-C:J06-U01"
+    ],
+    "n_nodos": 1
+   }
+  ],
+  "contenido_lote": {
+   "tipo": "texto",
+   "lineas": [
+    "[log_record_000001] 1125084490 2005.08.26 R66-M0-N9-C:J10-U01 2005-08-26-12.28.10.329248 R66-M0-N9-C:J10-U01 RAS KERNEL INFO iar 003a929c dear 0136b2d8",
+    "[log_record_000002] 1125084517 2005.08.26 R77-M0-N8-C:J09-U01 2005-08-26-12.28.37.922676 R77-M0-N8-C:J09-U01 RAS KERNEL INFO iar 003a9260 dear 00e24bd8",
+    "[log_record_000003] 1125084553 2005.08.26 R60-M0-NF-C:J10-U11 2005-08-26-12.29.13.250807 R60-M0-NF-C:J10-U11 RAS KERNEL INFO iar 003a9260 dear 00f2a468",
+    "[log_record_000004] 1125084580 2005.08.26 R67-M1-N1-C:J05-U11 2005-08-26-12.29.40.731213 R67-M1-N1-C:J05-U11 RAS KERNEL INFO iar 003a92a0 dear 0129a488",
+    "[log_record_000005] 1125084639 2005.08.26 R65-M1-NC-C:J09-U01 2005-08-26-12.30.39.328425 R65-M1-NC-C:J09-U01 RAS KERNEL INFO iar 003a9260 dear 00f29b68",
+    "[log_record_000006] 1125084695 2005.08.26 R64-M0-N1-C:J02-U01 2005-08-26-12.31.35.708190 R64-M0-N1-C:J02-U01 RAS KERNEL INFO iar 003a926c dear 00f2b078",
+    "[log_record_000007] 1125087561 2005.08.26 R14-M1-N5-C:J12-U11 2005-08-26-13.19.21.725812 R14-M1-N5-C:J12-U11 RAS KERNEL INFO CE sym 0, at 0x12af93a0, mask 0x08",
+    "[log_record_000008] 1125114716 2005.08.26 R74-M1-N0-C:J12-U01 2005-08-26-20.51.56.845739 R74-M1-N0-C:J12-U01 RAS KERNEL INFO 1 ddr errors(s) detected and corrected on rank 0, symbol 28, bit 3",
+    "[log_record_000009] 1125149105 2005.08.27 R36-M0-N5-C:J03-U01 2005-08-27-06.25.05.684576 R36-M0-N5-C:J03-U01 RAS KERNEL INFO CE sym 23, at 0x03f89c00, mask 0x10",
+    "[log_record_000010] 1125193792 2005.08.27 R11-M1-N7 2005-08-27-18.49.52.912954 R11-M1-N7 NULL DISCOVERY ERROR Node card status: no ALERTs are active. Clock Mode is Low. Clock Select is Midplane. Phy JTAG Reset is asserted. ASIC JTAG Reset is asserted. Temperature Mask is not active. No temperature error. Temperature Limit Error Latch is clear. PGOOD IS NOT ASSERTED. PGOOD ERROR LATCH IS ACTIVE. MPGOOD IS NOT OK. MPGOOD ERROR LATCH IS ACTIVE. The 2.5 volt rail is OK. The 1.5 volt rail is OK.",
+    "[log_record_000011] 1125209512 2005.08.27 R14-M1-N0-C:J07-U11 2005-08-27-23.11.52.680924 R14-M1-N0-C:J07-U11 RAS KERNEL INFO CE sym 10, at 0x01d7a160, mask 0x10",
+    "[log_record_000012] 1125219517 2005.08.28 R77-M1-NF-C:J02-U11 2005-08-28-01.58.37.175646 R77-M1-NF-C:J02-U11 RAS KERNEL INFO 156055738 double-hummer alignment exceptions",
+    "[log_record_000013] 1125219610 2005.08.28 R72-M1-NA-C:J04-U11 2005-08-28-02.00.10.847914 R72-M1-NA-C:J04-U11 RAS KERNEL INFO 147337410 double-hummer alignment exceptions",
+    "[log_record_000014] 1125220160 2005.08.28 R73-M1-N8-C:J06-U01 2005-08-28-02.09.20.654913 R73-M1-N8-C:J06-U01 RAS KERNEL INFO 139632470 double-hummer alignment exceptions",
+    "[log_record_000015] 1125220268 2005.08.28 R75-M1-N8-C:J13-U11 2005-08-28-02.11.08.660202 R75-M1-N8-C:J13-U11 RAS KERNEL INFO 155918940 double-hummer alignment exceptions",
+    "[log_record_000016] 1125220412 2005.08.28 R74-M0-NB-C:J17-U01 2005-08-28-02.13.32.663293 R74-M0-NB-C:J17-U01 RAS KERNEL INFO iar 00149fc0 dear 00739d98",
+    "[log_record_000017] 1125220525 2005.08.28 R76-M1-ND-C:J11-U11 2005-08-28-02.15.25.781153 R76-M1-ND-C:J11-U11 RAS KERNEL INFO iar 0014a150 dear 0072b9f8",
+    "[log_record_000018] 1125220578 2005.08.28 R70-M0-NF-C:J06-U01 2005-08-28-02.16.18.871630 R70-M0-NF-C:J06-U01 RAS KERNEL INFO iar 0014a150 dear 00719fc8",
+    "[log_record_000019] 1125221152 2005.08.28 R41-M0-N2-C:J10-U01 2005-08-28-02.25.52.876786 R41-M0-N2-C:J10-U01 RAS KERNEL INFO 28298332 double-hummer alignment exceptions",
+    "[log_record_000020] 1125221429 2005.08.28 R55-M0-N2-C:J08-U01 2005-08-28-02.30.29.169747 R55-M0-N2-C:J08-U01 RAS KERNEL INFO 23768676 double-hummer alignment exceptions"
+   ],
+   "total_lineas": 20,
+   "lineas_entregadas": 20,
+   "recortado": false,
+   "topes": {
+    "lineas": 200,
+    "caracteres": 20000
+   }
+  },
+  "veredicto_preliminar": "anomalia_operativa",
+  "justificacion_veredicto_preliminar": "Falla de señal de potencia en la tarjeta de nodo R11-M1-N7 (PGOOD/MPGOOD inactivo en log_record_000010) y eventos de memoria/alineación sin indicios de actividad maliciosa.",
+  "invalid_evidence_group_count": 0,
+  "comandos_rechazados": [],
+  "eventos_reconstruidos": [
+   {
+    "event_id": "event_001",
+    "evidence_uids": [
+     "log_record_000001",
+     "log_record_000002",
+     "log_record_000003",
+     "log_record_000004",
+     "log_record_000005",
+     "log_record_000006"
+    ],
+    "timestamp": "2005-08-26-12.28.10.329248",
+    "event_type": "kernel_register_dump",
+    "description": "Registros de diagnóstico del kernel con punteros iar y dear en múltiples nodos.",
+    "confidence": null,
+    "evidence_groups": [
+     "G01",
+     "G02",
+     "G03",
+     "G04",
+     "G05",
+     "G06"
+    ]
+   },
+   {
+    "event_id": "event_002",
+    "evidence_uids": [
+     "log_record_000007",
+     "log_record_000009",
+     "log_record_000011",
+     "log_record_000008"
+    ],
+    "timestamp": "2005-08-26-13.19.21.725812",
+    "event_type": "memory_correctable_error",
+    "description": "Detección y corrección automática de errores en memoria DDR (ECC/CE).",
+    "confidence": null,
+    "evidence_groups": [
+     "G07",
+     "G08"
+    ]
+   },
+   {
+    "event_id": "event_003",
+    "evidence_uids": [
+     "log_record_000010"
+    ],
+    "timestamp": "2005-08-27-18.49.52.912954",
+    "event_type": "hardware_power_fault",
+    "description": "Activación de pestillo de error de potencia (PGOOD no activo) en el nodo R11-M1-N7.",
+    "confidence": null,
+    "evidence_groups": [
+     "G09"
+    ]
+   },
+   {
+    "event_id": "event_004",
+    "evidence_uids": [
+     "log_record_000012",
+     "log_record_000013",
+     "log_record_000014",
+     "log_record_000015",
+     "log_record_000019",
+     "log_record_000020"
+    ],
+    "timestamp": "2005-08-28-01.58.37.175646",
+    "event_type": "alignment_exception",
+    "description": "Excepciones de alineación de punto flotante (double-hummer) reportadas por el kernel.",
+    "confidence": null,
+    "evidence_groups": [
+     "G10"
+    ]
+   },
+   {
+    "event_id": "event_005",
+    "evidence_uids": [
+     "log_record_000016",
+     "log_record_000017",
+     "log_record_000018"
+    ],
+    "timestamp": "2005-08-28-02.13.32.663293",
+    "event_type": "kernel_register_dump",
+    "description": "Registros de diagnóstico del kernel con punteros iar y dear.",
+    "confidence": null,
+    "evidence_groups": [
+     "G11",
+     "G12",
+     "G13"
+    ]
+   }
+  ],
+  "secuencia_temporal": [
+   "event_001",
+   "event_002",
+   "event_003",
+   "event_004",
+   "event_005"
+  ],
+  "tecnicas_atribuidas": [],
+  "invalid_evidence_uid_count": 0,
+  "d11_warnings": [],
+  "telemetry": {
+   "llm_call_count": 5,
+   "input_tokens": 11604,
+   "output_tokens": 1889,
+   "total_tokens": 16669,
+   "execution_time": 49.510053,
+   "replan_count": 0,
+   "intentos_correccion": 1,
+   "invalid_evidence_uid_count": 0,
+   "d11_warning_count": 0,
+   "llm_calls": [
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 1001,
+     "output_tokens": 246,
+     "total_tokens": 2197,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 950,
+     "duration_s": 12.987,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 3838,
+     "output_tokens": 327,
+     "total_tokens": 4873,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 708,
+     "duration_s": 9.166,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 306,
+     "output_tokens": 54,
+     "total_tokens": 473,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 113,
+     "duration_s": 4.909,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 676,
+     "output_tokens": 112,
+     "total_tokens": 1232,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 444,
+     "duration_s": 6.551,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 5783,
+     "output_tokens": 1150,
+     "total_tokens": 7894,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 961,
+     "duration_s": 15.818,
+     "error": null
+    }
+   ]
+  },
+  "firma": "v2|lineas=20 ips=0 servicios=[bgl.kernel:19,bgl.discovery:1] eventos=[evento_critico:1,evento_normal:19] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[INFO:19,ERROR:1] categorias=[] cobertura=1.0",
+  "plan": {
+   "plan_version": 1,
+   "objetivo": "Analizar la anomalía detectada en los registros del sistema BlueGene/L, investigar posibles vulnerabilidades asociadas al componente de kernel y definir acciones de mitigación correspondientes.",
+   "pasos": [
+    {
+     "id": 1,
+     "accion": "triage",
+     "objetivo": "Evaluar y categorizar los 20 eventos del lote, priorizando el evento con severidad ERROR en el componente bgl.kernel y revisando los nodos afectados.",
+     "estado": "ejecutado"
+    },
+    {
+     "id": 2,
+     "accion": "cve",
+     "objetivo": "Consultar vulnerabilidades conocidas asociadas a la plataforma IBM BlueGene/L y su implementación de kernel.",
+     "estado": "omitido",
+     "motivo": "El diagnóstico indica exclusivamente fallos a nivel de hardware y anomalías físicas en el suministro eléctrico de la tarjeta de nodo, sin evidencia de explotación de vulnerabilidades de software ni actividad maliciosa."
+    },
+    {
+     "id": 3,
+     "accion": "mitigacion",
+     "objetivo": "Establecer recomendaciones de contención, estabilidad operativa y resolución del error identificado en el nodo afectado.",
+     "estado": "ejecutado"
+    }
+   ],
+   "criterios_finalizacion": [
+    "Causa raíz del evento de severidad ERROR identificada.",
+    "Evaluación de vulnerabilidades conocidas para BlueGene/L completada.",
+    "Medidas de mitigación y recomendaciones de corrección documentadas."
+   ]
+  },
+  "plan_objetivo": "Analizar la anomalía detectada en los registros del sistema BlueGene/L, investigar posibles vulnerabilidades asociadas al componente de kernel y definir acciones de mitigación correspondientes.",
+  "paso_actual": 3,
+  "historial_ejecucion": [
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_planificador",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "plan v1, 3 pasos: ['triage', 'cve', 'mitigacion']"
+   },
+   {
+    "plan_version": 1,
+    "step_id": 1,
+    "nodo": "agente_analista_triage",
+    "accion": "triage",
+    "estado": "ejecutado",
+    "resumen": "diagnóstico producido"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_selector_herramientas",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "usar_cve=False"
+   },
+   {
+    "plan_version": 1,
+    "step_id": 3,
+    "nodo": "agente_ingeniero_mitigacion",
+    "accion": "mitigacion",
+    "estado": "ejecutado",
+    "resumen": "4 comandos propuestos"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "tool_validar_comandos",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "comandos válidos"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_auditor_final",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "confianza=0.95 cobertura_suficiente=True"
+   }
+  ],
+  "desviaciones_plan": [],
+  "historial_planes": [],
+  "replan_count": 0,
+  "diagnostico": "Los registros analizados corresponden a eventos de telemetría y diagnósticos de hardware del supercomputador BlueGene/L. Se detecta una anomalía física en el nodo R11-M1-N7 (log_record_000010) caracterizada por la activación de pestillos de error de suministro eléctrico (PGOOD y MPGOOD no presentes), lo que indica un problema en las líneas de potencia de la tarjeta de nodo. Adicionalmente, el resto de los registros reflejan condiciones operativas típicas del sistema: eventos de corrección de memoria DDR (CE) y excepciones de alineación de punto flotante ('double-hummer alignment exceptions'). No se identifican patrones de explotación de vulnerabilidades, actividad maliciosa ni vectores de intrusión.",
+  "necesita_rag": false,
+  "usar_cve": false,
+  "razon_seleccion": "El diagnóstico indica exclusivamente fallos a nivel de hardware y anomalías físicas en el suministro eléctrico de la tarjeta de nodo, sin evidencia de explotación de vulnerabilidades de software ni actividad maliciosa.",
+  "contexto_rag": [],
+  "tecnicas_mitre": [],
+  "cves_encontrados": [],
+  "comandos_mitigacion": [
+   "dmesg -T | grep -iE 'error|fail|power|edac|mce'",
+   "journalctl -p err..emerg -n 50 --no-pager",
+   "ipmitool sdr list 2>/dev/null || sensors 2>/dev/null || true",
+   "grep -E 'PGOOD|MPGOOD|R11-M1-N7' /var/log/messages /var/log/syslog 2>/dev/null || true"
+  ],
+  "comandos_validos": true,
+  "motivos_rechazo": [],
+  "intentos_correccion": 1,
+  "confianza": 0.95,
+  "hay_incidente": false,
+  "hay_anomalia": true,
+  "evaluacion_auditor": "El diagnóstico es correcto. Los registros evidencian una falla de hardware a nivel de suministro eléctrico (latch de error PGOOD/MPGOOD) en el nodo R11-M1-N7, junto con telemetría operativa estándar de BlueGene/L (errores corregibles de memoria DDR y excepciones de punto flotante Double-Hummer). No existe evidencia de intrusión ni actividad maliciosa.",
+  "cobertura_auditor": true,
+  "cobertura_suficiente": true,
+  "motivo_replanificacion": "",
+  "requiere_replanificacion": false,
+  "_firma": "v2|lineas=20 ips=0 servicios=[bgl.kernel:19,bgl.discovery:1] eventos=[evento_critico:1,evento_normal:19] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[INFO:19,ERROR:1] categorias=[] cobertura=1.0",
+  "_error_api": null,
+  "requiere_revision_humana": false,
+  "output_contract_version": "d11-v1",
+  "classification_detallada": "anomalia_operativa"
+ },
+ "observaciones": [
+  {
+   "nodo": "planificador",
+   "llamadas": [
+    0
+   ],
+   "prompt_chars": 1514,
+   "system_chars": 869,
+   "prompt": "RESUMEN DEL LOTE:\n{\"formato_detectado\": \"bgl\", \"total_lineas\": 20, \"servicios\": {\"bgl.kernel\": 19, \"bgl.discovery\": 1}, \"eventos\": {\"evento_critico\": 1, \"evento_normal\": 19}, \"ventana_temporal\": {\"inicio\": \"2005-08-26-12.28.10.329248\", \"fin\": \"2005-08-28-02.30.29.169747\"}, \"n_ips_distintas\": 0, \"ips_distintas\": [], \"por_ip\": {}, \"usuarios\": {}, \"n_usuarios_distintos\": 0, \"codigos_respuesta\": {}, \"raw_procedencia\": {\"sha256\": \"5f252ce66c7c1cfdc6bac2f91f68bc2a929a26e7ec6117b4073546e84343e4b4\", \"lineas\": 20, \"bytes\": 3156}, \"reputacion_ips\": {}, \"perfil_lote\": {\"tipo\": \"texto\", \"filas\": 20, \"con_formato_reconocido\": 20, \"severidades\": {\"INFO\": 19, \"ERROR\": 1}, \"componentes\": {\"bgl.kernel\": 19, \"bgl.discovery\": 1}, \"nodos\": {\"R66-M0-N9-C:J10-U01\": 1, \"R77-M0-N8-C:J09-U01\": 1, \"R60-M0-NF-C:J10-U11\": 1, \"R67-M1-N1-C:J05-U11\": 1, \"R65-M1-NC-C:J09-U01\": 1, \"R64-M0-N1-C:J02-U01\": 1, \"R14-M1-N5-C:J12-U11\": 1, \"R74-M1-N0-C:J12-U01\": 1, \"R36-M0-N5-C:J03-U01\": 1, \"R11-M1-N7\": 1}, \"nodos_distintos\": 20, \"lineas_severidad_alta\": {\"total\": 1, \"omitidas\": 0, \"lineas\": [{\"uid\": \"log_record_000010\", \"severidad\": \"ERROR\", \"group_id\": \"G09\"}]}, \"grupos\": 13}}\n\nCÓMO SE INTERPRETÓ EL LOTE (preprocesamiento determinístico):\n- 20 eventos lógicos a partir de 20 líneas físicas.\n- Cobertura del parsing: 100% (20 decodificados, 0 en texto libre).\n- Severidad declarada por el propio log: INFO=19, ERROR=1.\n- Perfiles de enriquecimiento aplicados: bgl (20).\n- Productos reconocidos: BlueGene/L (20).\n- Formato único: text.",
+   "system": "Eres el planificador de un sistema multiagente de análisis de seguridad. A partir del resumen del lote, produce un plan de investigación ANTES de que el análisis especializado comience. El plan tiene como máximo estas acciones, cada una a lo sumo una vez: 'triage' (diagnóstico inicial -- SIEMPRE se incluye), 'rag' (consultar memoria histórica y técnicas MITRE ATT&CK -- inclúyela solo si el resumen sugiere que hace falta contexto de casos anteriores), 'cve' (consultar vulnerabilidades conocidas -- inclúyela solo si el resumen identifica un servicio o producto concreto), 'mitigacion' (proponer contención -- SIEMPRE se incluye). No inventes otras acciones: cualquiera fuera de esta lista se descarta. Responde SOLO en JSON: {\"objetivo\": \"...\", \"pasos\": [{\"id\": 1, \"accion\": \"...\", \"objetivo\": \"...\", \"estado\": \"pendiente\"}, ...], \"criterios_finalizacion\": [\"...\"]}",
+   "tokens": [
+    {
+     "input_tokens": 1001,
+     "output_tokens": 246,
+     "reasoning_tokens": 950,
+     "model": "gemini-3.8-flash",
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "triage",
+   "llamadas": [
+    1
+   ],
+   "prompt_chars": 5638,
+   "system_chars": 1247,
+   "prompt": "OBJETIVO DEL PLAN DE INVESTIGACIÓN: Analizar la anomalía detectada en los registros del sistema BlueGene/L, investigar posibles vulnerabilidades asociadas al componente de kernel y definir acciones de mitigación correspondientes.\n\nEl plan de investigación no contempla consultar memoria histórica para este caso.\n\nCÓMO SE INTERPRETÓ EL LOTE (preprocesamiento determinístico):\n- 20 eventos lógicos a partir de 20 líneas físicas.\n- Cobertura del parsing: 100% (20 decodificados, 0 en texto libre).\n- Muestras de registros crudos, una por formato:\n    [text] 1125084490 2005.08.26 R66-M0-N9-C:J10-U01 2005-08-26-12.28.10.329248 R66-M0-N9-C:J10-U01 RAS KERNEL INFO iar 003a929c dear 0136b2d8\n- Severidad declarada por el propio log: INFO=19, ERROR=1.\n- Perfiles de enriquecimiento aplicados: bgl (20).\n- Productos reconocidos: BlueGene/L (20).\n- Formato único: text.\n\nRESUMEN DEL LOTE:\n{\"formato_detectado\": \"bgl\", \"total_lineas\": 20, \"servicios\": {\"bgl.kernel\": 19, \"bgl.discovery\": 1}, \"eventos\": {\"evento_critico\": 1, \"evento_normal\": 19}, \"ventana_temporal\": {\"inicio\": \"2005-08-26-12.28.10.329248\", \"fin\": \"2005-08-28-02.30.29.169747\"}, \"n_ips_distintas\": 0, \"ips_distintas\": [], \"por_ip\": {}, \"usuarios\": {}, \"n_usuarios_distintos\": 0, \"codigos_respuesta\": {}, \"raw_procedencia\": {\"sha256\": \"5f252ce66c7c1cfdc6bac2f91f68bc2a929a26e7ec6117b4073546e84343e4b4\", \"lineas\": 20, \"bytes\": 3156}, \"reputacion_ips\": {}, \"perfil_lote\": {\"tipo\": \"texto\", \"filas\": 20, \"con_formato_reconocido\": 20, \"severidades\": {\"INFO\": 19, \"ERROR\": 1}, \"componentes\": {\"bgl.kernel\": 19, \"bgl.discovery\": 1}, \"nodos\": {\"R66-M0-N9-C:J10-U01\": 1, \"R77-M0-N8-C:J09-U01\": 1, \"R60-M0-NF-C:J10-U11\": 1, \"R67-M1-N1-C:J05-U11\": 1, \"R65-M1-NC-C:J09-U01\": 1, \"R64-M0-N1-C:J02-U01\": 1, \"R14-M1-N5-C:J12-U11\": 1, \"R74-M1-N0-C:J12-U01\": 1, \"R36-M0-N5-C:J03-U01\": 1, \"R11-M1-N7\": 1}, \"nodos_distintos\": 20, \"lineas_severidad_alta\": {\"total\": 1, \"omitidas\": 0, \"lineas\": [{\"uid\": \"log_record_000010\", \"severidad\": \"ERROR\", \"group_id\": \"G09\"}]}, \"grupos\": 13}}\n\nCONTENIDO DEL LOTE (líneas observadas, formato [uid] línea):\n[log_record_000001] 1125084490 2005.08.26 R66-M0-N9-C:J10-U01 2005-08-26-12.28.10.329248 R66-M0-N9-C:J10-U01 RAS KERNEL INFO iar 003a929c dear 0136b2d8\n[log_record_000002] 1125084517 2005.08.26 R77-M0-N8-C:J09-U01 2005-08-26-12.28.37.922676 R77-M0-N8-C:J09-U01 RAS KERNEL INFO iar 003a9260 dear 00e24bd8\n[log_record_000003] 1125084553 2005.08.26 R60-M0-NF-C:J10-U11 2005-08-26-12.29.13.250807 R60-M0-NF-C:J10-U11 RAS KERNEL INFO iar 003a9260 dear 00f2a468\n[log_record_000004] 1125084580 2005.08.26 R67-M1-N1-C:J05-U11 2005-08-26-12.29.40.731213 R67-M1-N1-C:J05-U11 RAS KERNEL INFO iar 003a92a0 dear 0129a488\n[log_record_000005] 1125084639 2005.08.26 R65-M1-NC-C:J09-U01 2005-08-26-12.30.39.328425 R65-M1-NC-C:J09-U01 RAS KERNEL INFO iar 003a9260 dear 00f29b68\n[log_record_000006] 1125084695 2005.08.26 R64-M0-N1-C:J02-U01 2005-08-26-12.31.35.708190 R64-M0-N1-C:J02-U01 RAS KERNEL INFO iar 003a926c dear 00f2b078\n[log_record_000007] 1125087561 2005.08.26 R14-M1-N5-C:J12-U11 2005-08-26-13.19.21.725812 R14-M1-N5-C:J12-U11 RAS KERNEL INFO CE sym 0, at 0x12af93a0, mask 0x08\n[log_record_000008] 1125114716 2005.08.26 R74-M1-N0-C:J12-U01 2005-08-26-20.51.56.845739 R74-M1-N0-C:J12-U01 RAS KERNEL INFO 1 ddr errors(s) detected and corrected on rank 0, symbol 28, bit 3\n[log_record_000009] 1125149105 2005.08.27 R36-M0-N5-C:J03-U01 2005-08-27-06.25.05.684576 R36-M0-N5-C:J03-U01 RAS KERNEL INFO CE sym 23, at 0x03f89c00, mask 0x10\n[log_record_000010] 1125193792 2005.08.27 R11-M1-N7 2005-08-27-18.49.52.912954 R11-M1-N7 NULL DISCOVERY ERROR Node card status: no ALERTs are active. Clock Mode is Low. Clock Select is Midplane. Phy JTAG Reset is asserted. ASIC JTAG Reset is asserted. Temperature Mask is not active. No temperature error. Temperature Limit Error Latch is clear. PGOOD IS NOT ASSERTED. PGOOD ERROR LATCH IS ACTIVE. MPGOOD IS NOT OK. MPGOOD ERROR LATCH IS ACTIVE. The 2.5 volt rail is OK. The 1.5 volt rail is OK.\n[log_record_000011] 1125209512 2005.08.27 R14-M1-N0-C:J07-U11 2005-08-27-23.11.52.680924 R14-M1-N0-C:J07-U11 RAS KERNEL INFO CE sym 10, at 0x01d7a160, mask 0x10\n[log_record_000012] 1125219517 2005.08.28 R77-M1-NF-C:J02-U11 2005-08-28-01.58.37.175646 R77-M1-NF-C:J02-U11 RAS KERNEL INFO 156055738 double-hummer alignment exceptions\n[log_record_000013] 1125219610 2005.08.28 R72-M1-NA-C:J04-U11 2005-08-28-02.00.10.847914 R72-M1-NA-C:J04-U11 RAS KERNEL INFO 147337410 double-hummer alignment exceptions\n[log_record_000014] 1125220160 2005.08.28 R73-M1-N8-C:J06-U01 2005-08-28-02.09.20.654913 R73-M1-N8-C:J06-U01 RAS KERNEL INFO 139632470 double-hummer alignment exceptions\n[log_record_000015] 1125220268 2005.08.28 R75-M1-N8-C:J13-U11 2005-08-28-02.11.08.660202 R75-M1-N8-C:J13-U11 RAS KERNEL INFO 155918940 double-hummer alignment exceptions\n[log_record_000016] 1125220412 2005.08.28 R74-M0-NB-C:J17-U01 2005-08-28-02.13.32.663293 R74-M0-NB-C:J17-U01 RAS KERNEL INFO iar 00149fc0 dear 00739d98\n[log_record_000017] 1125220525 2005.08.28 R76-M1-ND-C:J11-U11 2005-08-28-02.15.25.781153 R76-M1-ND-C:J11-U11 RAS KERNEL INFO iar 0014a150 dear 0072b9f8\n[log_record_000018] 1125220578 2005.08.28 R70-M0-NF-C:J06-U01 2005-08-28-02.16.18.871630 R70-M0-NF-C:J06-U01 RAS KERNEL INFO iar 0014a150 dear 00719fc8\n[log_record_000019] 1125221152 2005.08.28 R41-M0-N2-C:J10-U01 2005-08-28-02.25.52.876786 R41-M0-N2-C:J10-U01 RAS KERNEL INFO 28298332 double-hummer alignment exceptions\n[log_record_000020] 1125221429 2005.08.28 R55-M0-N2-C:J08-U01 2005-08-28-02.30.29.169747 R55-M0-N2-C:J08-U01 RAS KERNEL INFO 23768676 double-hummer alignment exceptions",
+   "system": "Eres un analista SOC experto. A partir del resumen del lote, decide si puedes diagnosticar directamente o si conviene primero consultar el historial de casos similares y técnicas MITRE ATT&CK relacionadas (memoria de largo plazo) antes de diagnosticar. Si decides que SÍ hace falta ese contexto, no diagnostiques todavía: pide la consulta. Si decides que NO hace falta, diagnostica directamente basándote solo en el resumen. Si el lote se interpretó con baja cobertura o trae advertencias de parsing, tenlo en cuenta: puede convenir pedir contexto histórico aunque el resumen por sí solo parezca alcanzar. Además del diagnóstico, entrega veredicto_preliminar con UNO de estos valores: \"incidente_seguridad\" (actividad maliciosa o amenaza de seguridad), \"anomalia_operativa\" (falla o comportamiento anómalo del sistema sin indicios de ataque) o \"normal\" (nada fuera de lo esperado), y justificacion_veredicto: una frase breve basada en la evidencia observada (líneas, flujos o señales del perfil del lote). Si pides la consulta, deja veredicto_preliminar vacío. Responde SOLO en JSON: {\"necesita_rag\": true/false, \"diagnostico\": \"...\" (vacío si necesita_rag es true), \"razon\": \"...\", \"veredicto_preliminar\": \"...\", \"justificacion_veredicto\": \"...\"}",
+   "tokens": [
+    {
+     "input_tokens": 3838,
+     "output_tokens": 327,
+     "reasoning_tokens": 708,
+     "model": "gemini-3.8-flash",
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "selector",
+   "llamadas": [
+    2
+   ],
+   "prompt_chars": 861,
+   "system_chars": 344,
+   "prompt": "DIAGNÓSTICO ACTUAL: Los registros analizados corresponden a eventos de telemetría y diagnósticos de hardware del supercomputador BlueGene/L. Se detecta una anomalía física en el nodo R11-M1-N7 (log_record_000010) caracterizada por la activación de pestillos de error de suministro eléctrico (PGOOD y MPGOOD no presentes), lo que indica un problema en las líneas de potencia de la tarjeta de nodo. Adicionalmente, el resto de los registros reflejan condiciones operativas típicas del sistema: eventos de corrección de memoria DDR (CE) y excepciones de alineación de punto flotante ('double-hummer alignment exceptions'). No se identifican patrones de explotación de vulnerabilidades, actividad maliciosa ni vectores de intrusión.\nRESUMEN DEL LOTE: servicios={'bgl.kernel': 19, 'bgl.discovery': 1} productos={'BlueGene/L': 20} severidades={'INFO': 19, 'ERROR': 1}",
+   "system": "Eres un coordinador de análisis de seguridad. Tienes acceso a estas herramientas: [query_cve, validate_solution]. Analiza el diagnóstico y decide si se deben buscar CVEs asociados al ataque. query_cve es útil cuando el diagnóstico menciona un servicio o vulnerabilidad específica. Responde SOLO en JSON: {\"usar_cve\": true/false, \"razon\": \"...\"}",
+   "tokens": [
+    {
+     "input_tokens": 306,
+     "output_tokens": 54,
+     "reasoning_tokens": 113,
+     "model": "gemini-3.8-flash",
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "mitigacion",
+   "llamadas": [
+    3
+   ],
+   "prompt_chars": 1475,
+   "system_chars": 854,
+   "prompt": "DIAGNÓSTICO: Los registros analizados corresponden a eventos de telemetría y diagnósticos de hardware del supercomputador BlueGene/L. Se detecta una anomalía física en el nodo R11-M1-N7 (log_record_000010) caracterizada por la activación de pestillos de error de suministro eléctrico (PGOOD y MPGOOD no presentes), lo que indica un problema en las líneas de potencia de la tarjeta de nodo. Adicionalmente, el resto de los registros reflejan condiciones operativas típicas del sistema: eventos de corrección de memoria DDR (CE) y excepciones de alineación de punto flotante ('double-hummer alignment exceptions'). No se identifican patrones de explotación de vulnerabilidades, actividad maliciosa ni vectores de intrusión.\n\nVEREDICTO PRELIMINAR: anomalia_operativa (Falla de señal de potencia en la tarjeta de nodo R11-M1-N7 (PGOOD/MPGOOD inactivo en log_record_000010) y eventos de memoria/alineación sin indicios de actividad maliciosa.)\nEVIDENCIA: {\"tipo\": \"texto\", \"severidades\": {\"INFO\": 19, \"ERROR\": 1}, \"componentes\": {\"bgl.kernel\": 19, \"bgl.discovery\": 1}, \"lineas_severidad_alta\": [{\"uid\": \"log_record_000010\", \"severidad\": \"ERROR\", \"group_id\": \"G09\", \"linea\": \"1125193792 2005.08.27 R11-M1-N7 2005-08-27-18.49.52.912954 R11-M1-N7 NULL DISCOVERY ERROR Node card status: no ALERTs are active. Clock Mode is Low. Clock Select is Midplane. Phy JTAG Reset is asserted. ASIC JTAG Reset is asserted. Temperature Mask is not active. No temperature error. Temperature Li\"}]}\n",
+   "system": "Eres un ingeniero de sistemas Linux con experiencia en respuesta a incidentes. Propón comandos según el VEREDICTO PRELIMINAR y la EVIDENCIA, con estas reglas: (1) normal: no propongas comandos (lista vacía). (2) anomalia_operativa: solo comandos de diagnóstico de SOLO LECTURA (revisar logs, estado de servicios y hardware, conectividad); ninguna regla de firewall ni cambio de configuración. (3) incidente_seguridad: contención proporcional y verificable, aplicada solo a las entidades (IP, puertos, servicios, usuarios) que aparecen en la evidencia. Nunca abras el firewall (-j ACCEPT, ufw allow), nunca desbanees (fail2ban-client unban), no uses comandos destructivos y no escribas ni redirijas salida fuera de /var/tmp/nodex. Si no hay veredicto preliminar, actúa como en anomalia_operativa. Responde SOLO en JSON: {\"comandos\": [\"cmd1\", \"cmd2\", ...]}",
+   "tokens": [
+    {
+     "input_tokens": 676,
+     "output_tokens": 112,
+     "reasoning_tokens": 444,
+     "model": "gemini-3.8-flash",
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "auditor",
+   "llamadas": [
+    4
+   ],
+   "prompt_chars": 10367,
+   "system_chars": 3402,
+   "prompt": "DIAGNÓSTICO: Los registros analizados corresponden a eventos de telemetría y diagnósticos de hardware del supercomputador BlueGene/L. Se detecta una anomalía física en el nodo R11-M1-N7 (log_record_000010) caracterizada por la activación de pestillos de error de suministro eléctrico (PGOOD y MPGOOD no presentes), lo que indica un problema en las líneas de potencia de la tarjeta de nodo. Adicionalmente, el resto de los registros reflejan condiciones operativas típicas del sistema: eventos de corrección de memoria DDR (CE) y excepciones de alineación de punto flotante ('double-hummer alignment exceptions'). No se identifican patrones de explotación de vulnerabilidades, actividad maliciosa ni vectores de intrusión.\nCOMANDOS VALIDADOS: [\"dmesg -T | grep -iE 'error|fail|power|edac|mce'\", 'journalctl -p err..emerg -n 50 --no-pager', 'ipmitool sdr list 2>/dev/null || sensors 2>/dev/null || true', \"grep -E 'PGOOD|MPGOOD|R11-M1-N7' /var/log/messages /var/log/syslog 2>/dev/null || true\"]\nCVEs ENCONTRADOS: 0 CVEs\nCONTEXTO RAG: No\n\nCÓMO SE INTERPRETÓ EL LOTE (preprocesamiento determinístico):\n- 20 eventos lógicos a partir de 20 líneas físicas.\n- Cobertura del parsing: 100% (20 decodificados, 0 en texto libre).\n- Severidad declarada por el propio log: INFO=19, ERROR=1.\n- Perfiles de enriquecimiento aplicados: bgl (20).\n- Productos reconocidos: BlueGene/L (20).\n- Formato único: text.\nEVIDENCIA DISPONIBLE (catálogo de logs observados):\n[{\"uid\": \"log_record_000001\", \"record_number\": 1, \"line_start\": 1, \"line_end\": 1, \"timestamp\": \"2005-08-26-12.28.10.329248\", \"group_id\": \"G01\", \"source_host\": \"R66-M0-N9-C:J10-U01\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"iar 003a929c dear 0136b2d8\"}, {\"uid\": \"log_record_000002\", \"record_number\": 2, \"line_start\": 2, \"line_end\": 2, \"timestamp\": \"2005-08-26-12.28.37.922676\", \"group_id\": \"G02\", \"source_host\": \"R77-M0-N8-C:J09-U01\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"iar 003a9260 dear 00e24bd8\"}, {\"uid\": \"log_record_000003\", \"record_number\": 3, \"line_start\": 3, \"line_end\": 3, \"timestamp\": \"2005-08-26-12.29.13.250807\", \"group_id\": \"G03\", \"source_host\": \"R60-M0-NF-C:J10-U11\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"iar 003a9260 dear 00f2a468\"}, {\"uid\": \"log_record_000004\", \"record_number\": 4, \"line_start\": 4, \"line_end\": 4, \"timestamp\": \"2005-08-26-12.29.40.731213\", \"group_id\": \"G04\", \"source_host\": \"R67-M1-N1-C:J05-U11\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"iar 003a92a0 dear 0129a488\"}, {\"uid\": \"log_record_000005\", \"record_number\": 5, \"line_start\": 5, \"line_end\": 5, \"timestamp\": \"2005-08-26-12.30.39.328425\", \"group_id\": \"G05\", \"source_host\": \"R65-M1-NC-C:J09-U01\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"iar 003a9260 dear 00f29b68\"}, {\"uid\": \"log_record_000006\", \"record_number\": 6, \"line_start\": 6, \"line_end\": 6, \"timestamp\": \"2005-08-26-12.31.35.708190\", \"group_id\": \"G06\", \"source_host\": \"R64-M0-N1-C:J02-U01\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"iar 003a926c dear 00f2b078\"}, {\"uid\": \"log_record_000007\", \"record_number\": 7, \"line_start\": 7, \"line_end\": 7, \"timestamp\": \"2005-08-26-13.19.21.725812\", \"group_id\": \"G07\", \"source_host\": \"R14-M1-N5-C:J12-U11\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"CE sym 0, at 0x12af93a0, mask 0x08\"}, {\"uid\": \"log_record_000008\", \"record_number\": 8, \"line_start\": 8, \"line_end\": 8, \"timestamp\": \"2005-08-26-20.51.56.845739\", \"group_id\": \"G08\", \"source_host\": \"R74-M1-N0-C:J12-U01\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"1 ddr errors(s) detected and corrected on rank 0, symbol 28, bit 3\"}, {\"uid\": \"log_record_000009\", \"record_number\": 9, \"line_start\": 9, \"line_end\": 9, \"timestamp\": \"2005-08-27-06.25.05.684576\", \"group_id\": \"G07\", \"source_host\": \"R36-M0-N5-C:J03-U01\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"CE sym 23, at 0x03f89c00, mask 0x10\"}, {\"uid\": \"log_record_000010\", \"record_number\": 10, \"line_start\": 10, \"line_end\": 10, \"timestamp\": \"2005-08-27-18.49.52.912954\", \"group_id\": \"G09\", \"source_host\": \"R11-M1-N7\", \"service_name\": \"bgl.discovery\", \"severity\": \"ERROR\", \"message\": \"Node card status: no ALERTs are active. Clock Mode is Low. Clock Select is Midplane. Phy JTAG Reset is asserted. ASIC JTAG Reset is asserted. Temperature Mask is not active. No temperature error. Temperature Limit Error Latch is clear. PGOOD IS NOT ASSERTED. PGOOD ERROR LATCH IS ACTIVE. MPGOOD IS NO\"}, {\"uid\": \"log_record_000011\", \"record_number\": 11, \"line_start\": 11, \"line_end\": 11, \"timestamp\": \"2005-08-27-23.11.52.680924\", \"group_id\": \"G07\", \"source_host\": \"R14-M1-N0-C:J07-U11\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"CE sym 10, at 0x01d7a160, mask 0x10\"}, {\"uid\": \"log_record_000012\", \"record_number\": 12, \"line_start\": 12, \"line_end\": 12, \"timestamp\": \"2005-08-28-01.58.37.175646\", \"group_id\": \"G10\", \"source_host\": \"R77-M1-NF-C:J02-U11\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"156055738 double-hummer alignment exceptions\"}, {\"uid\": \"log_record_000013\", \"record_number\": 13, \"line_start\": 13, \"line_end\": 13, \"timestamp\": \"2005-08-28-02.00.10.847914\", \"group_id\": \"G10\", \"source_host\": \"R72-M1-NA-C:J04-U11\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"147337410 double-hummer alignment exceptions\"}, {\"uid\": \"log_record_000014\", \"record_number\": 14, \"line_start\": 14, \"line_end\": 14, \"timestamp\": \"2005-08-28-02.09.20.654913\", \"group_id\": \"G10\", \"source_host\": \"R73-M1-N8-C:J06-U01\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"139632470 double-hummer alignment exceptions\"}, {\"uid\": \"log_record_000015\", \"record_number\": 15, \"line_start\": 15, \"line_end\": 15, \"timestamp\": \"2005-08-28-02.11.08.660202\", \"group_id\": \"G10\", \"source_host\": \"R75-M1-N8-C:J13-U11\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"155918940 double-hummer alignment exceptions\"}, {\"uid\": \"log_record_000016\", \"record_number\": 16, \"line_start\": 16, \"line_end\": 16, \"timestamp\": \"2005-08-28-02.13.32.663293\", \"group_id\": \"G11\", \"source_host\": \"R74-M0-NB-C:J17-U01\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"iar 00149fc0 dear 00739d98\"}, {\"uid\": \"log_record_000017\", \"record_number\": 17, \"line_start\": 17, \"line_end\": 17, \"timestamp\": \"2005-08-28-02.15.25.781153\", \"group_id\": \"G12\", \"source_host\": \"R76-M1-ND-C:J11-U11\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"iar 0014a150 dear 0072b9f8\"}, {\"uid\": \"log_record_000018\", \"record_number\": 18, \"line_start\": 18, \"line_end\": 18, \"timestamp\": \"2005-08-28-02.16.18.871630\", \"group_id\": \"G13\", \"source_host\": \"R70-M0-NF-C:J06-U01\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"iar 0014a150 dear 00719fc8\"}, {\"uid\": \"log_record_000019\", \"record_number\": 19, \"line_start\": 19, \"line_end\": 19, \"timestamp\": \"2005-08-28-02.25.52.876786\", \"group_id\": \"G10\", \"source_host\": \"R41-M0-N2-C:J10-U01\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"28298332 double-hummer alignment exceptions\"}, {\"uid\": \"log_record_000020\", \"record_number\": 20, \"line_start\": 20, \"line_end\": 20, \"timestamp\": \"2005-08-28-02.30.29.169747\", \"group_id\": \"G10\", \"source_host\": \"R55-M0-N2-C:J08-U01\", \"service_name\": \"bgl.kernel\", \"severity\": \"INFO\", \"message\": \"23768676 double-hummer alignment exceptions\"}]\nRegistros omitidos del catálogo: 0\nGRUPOS DE EVIDENCIA (registros que describen lo mismo; sus uids son los registros del catálogo con ese group_id; citar un grupo equivale a citar todos sus uids):\n[{\"group_id\": \"G01\", \"clave\": {\"componente\": \"bgl.kernel\", \"severidad\": \"INFO\", \"plantilla\": \"iar <n>a<n>c dear <n>b<n>d<n>\"}, \"conteo\": 1, \"n_nodos\": 1, \"nodos\": [\"R66-M0-N9-C:J10-U01\"]}, {\"group_id\": \"G02\", \"clave\": {\"componente\": \"bgl.kernel\", \"severidad\": \"INFO\", \"plantilla\": \"iar <n>a<n> dear <n>e<n>bd<n>\"}, \"conteo\": 1, \"n_nodos\": 1, \"nodos\": [\"R77-M0-N8-C:J09-U01\"]}, {\"group_id\": \"G03\", \"clave\": {\"componente\": \"bgl.kernel\", \"severidad\": \"INFO\", \"plantilla\": \"iar <n>a<n> dear <n>f<n>a<n>\"}, \"conteo\": 1, \"n_nodos\": 1, \"nodos\": [\"R60-M0-NF-C:J10-U11\"]}, {\"group_id\": \"G04\", \"clave\": {\"componente\": \"bgl.kernel\", \"severidad\": \"INFO\", \"plantilla\": \"iar <n>a<n>a<n> dear <n>a<n>\"}, \"conteo\": 1, \"n_nodos\": 1, \"nodos\": [\"R67-M1-N1-C:J05-U11\"]}, {\"group_id\": \"G05\", \"clave\": {\"componente\": \"bgl.kernel\", \"severidad\": \"INFO\", \"plantilla\": \"iar <n>a<n> dear <n>f<n>b<n>\"}, \"conteo\": 1, \"n_nodos\": 1, \"nodos\": [\"R65-M1-NC-C:J09-U01\"]}, {\"group_id\": \"G06\", \"clave\": {\"componente\": \"bgl.kernel\", \"severidad\": \"INFO\", \"plantilla\": \"iar <n>a<n>c dear <n>f<n>b<n>\"}, \"conteo\": 1, \"n_nodos\": 1, \"nodos\": [\"R64-M0-N1-C:J02-U01\"]}, {\"group_id\": \"G07\", \"clave\": {\"componente\": \"bgl.kernel\", \"severidad\": \"INFO\", \"plantilla\": \"CE sym <n>, at <hex>, mask <hex>\"}, \"conteo\": 3, \"n_nodos\": 3, \"nodos\": [\"R14-M1-N5-C:J12-U11\", \"R36-M0-N5-C:J03-U01\", \"R14-M1-N0-C:J07-U11\"]}, {\"group_id\": \"G08\", \"clave\": {\"componente\": \"bgl.kernel\", \"severidad\": \"INFO\", \"plantilla\": \"<n> ddr errors(s) detected and corrected on rank <n>, symbol <n>, bit <n>\"}, \"conteo\": 1, \"n_nodos\": 1, \"nodos\": [\"R74-M1-N0-C:J12-U01\"]}, {\"group_id\": \"G09\", \"clave\": {\"componente\": \"bgl.discovery\", \"severidad\": \"ERROR\", \"plantilla\": \"Node card status: no ALERTs are active. Clock Mode is Low. Clock Select is Midplane. Phy JTAG Reset is asserted. ASIC JT\"}, \"conteo\": 1, \"n_nodos\": 1, \"nodos\": [\"R11-M1-N7\"]}, {\"group_id\": \"G10\", \"clave\": {\"componente\": \"bgl.kernel\", \"severidad\": \"INFO\", \"plantilla\": \"<n> double-hummer alignment exceptions\"}, \"conteo\": 6, \"n_nodos\": 6, \"nodos\": [\"R77-M1-NF-C:J02-U11\", \"R72-M1-NA-C:J04-U11\", \"R73-M1-N8-C:J06-U01\", \"R75-M1-N8-C:J13-U11\", \"R41-M0-N2-C:J10-U01\", \"R55-M0-N2-C:J08-U01\"]}, {\"group_id\": \"G11\", \"clave\": {\"componente\": \"bgl.kernel\", \"severidad\": \"INFO\", \"plantilla\": \"iar <n>fc<n> dear <n>d<n>\"}, \"conteo\": 1, \"n_nodos\": 1, \"nodos\": [\"R74-M0-NB-C:J17-U01\"]}, {\"group_id\": \"G12\", \"clave\": {\"componente\": \"bgl.kernel\", \"severidad\": \"INFO\", \"plantilla\": \"iar <n>a<n> dear <n>b<n>f<n>\"}, \"conteo\": 1, \"n_nodos\": 1, \"nodos\": [\"R76-M1-ND-C:J11-U11\"]}, {\"group_id\": \"G13\", \"clave\": {\"componente\": \"bgl.kernel\", \"severidad\": \"INFO\", \"plantilla\": \"iar <n>a<n> dear <n>fc<n>\"}, \"conteo\": 1, \"n_nodos\": 1, \"nodos\": [\"R70-M0-NF-C:J06-U01\"]}]\nCANDIDATOS MITRE RECUPERADOS POR RAG (no atribuidos):\n[]",
+   "system": "Evalúa la solución de seguridad propuesta. Considera: precisión del diagnóstico, relevancia de los comandos y evidencia disponible. Responde CUATRO cosas por separado, sin confundirlas entre sí: (1) hay_anomalia: ¿el sistema se está comportando de forma anómala o irregular, sea o no un problema de seguridad? (p. ej. una falla de hardware, un error de infraestructura o un fallo de replicación también cuentan como anomalía, aunque no sean un ataque). (2) hay_incidente: de las anomalías anteriores, ¿esta es específicamente un incidente o amenaza de seguridad real (intrusión, abuso, actividad maliciosa)? Una anomalía puramente operativa (p. ej. mantenimiento de hardware) es hay_anomalia=true pero hay_incidente=false. (3) confianza: qué tan seguro estás de tu propia evaluación -- un diagnóstico de 'todo normal' bien fundamentado debe tener confianza alta y tanto hay_anomalia como hay_incidente en false. (4) cobertura_auditor: ¿la evidencia reunida (diagnóstico, CVEs, contexto histórico, comandos validados) alcanza para sostener esta conclusión, o falta investigar algo concreto para poder afirmarla con solidez? Esto es independiente de confianza: puedes estar muy seguro de una conclusión basada en poca evidencia real. Si cobertura_auditor es false, explica en motivo_cobertura qué falta investigar. No confundas estos cuatro campos entre sí. Responde SOLO en JSON: {\"confianza\": 0.0-1.0, \"hay_anomalia\": true/false, \"hay_incidente\": true/false, \"evaluacion\": \"...\", \"cobertura_auditor\": true/false, \"motivo_cobertura\": \"...\"}\nLa salida formal incluye eventos_reconstruidos, secuencia_temporal y\ntecnicas_atribuidas. Reconstruye los eventos que la evidencia observada\nrespalda, usando el catálogo EVIDENCIA DISPONIBLE y la tabla GRUPOS DE\nEVIDENCIA. Para cada evento cita TODA la evidencia que lo respalda: en\nevidence_groups, los grupos cuyos registros pertenecen todos a ese evento; en\nevidence_uids, los registros sueltos. Si un grupo mezcla registros del evento\ncon otros que no lo son, cita solo los uids que corresponden; no inventes UIDs,\ngrupos ni timestamps. event_id es un identificador interno distinto del UID del\nlog (event_001, event_002, ...). timestamp debe ser una marca de los logs\ncitados o null. event_type es una etiqueta breve snake_case.\nsecuencia_temporal referencia event_id: usa únicamente el orden temporal\nobservable; orden temporal no implica causalidad. No ordenes eventos sin fecha.\nLas técnicas recuperadas por RAG son CANDIDATOS, no conclusiones. Atribuye una\ntécnica solo si la evidencia observada la respalda; usa un ID MITRE Tdddd o\nTdddd.ddd y cita su evidencia con evidence_groups y/o evidence_uids válidos.\nNunca copies automáticamente candidatos. Puedes devolver listas vacías si la\nevidencia no respalda eventos o técnicas: no especules.\nUsa confidence=null en eventos y técnicas; no inventes probabilidades.\ndescription y justification son breves y verificables; no expongas razonamiento\ninterno. Añade al objeto JSON estos campos:\n\"eventos_reconstruidos\": [{\"event_id\":\"event_001\", \"evidence_groups\":[\"G01\"],\n\"evidence_uids\":[\"UID\"], \"timestamp\":null, \"event_type\":\"authentication_failure\",\n\"description\":\"...\", \"confidence\":null}], \"secuencia_temporal\":[\"event_001\"],\n\"tecnicas_atribuidas\": [{\"technique_id\":\"T1110\", \"technique_name\":\"Brute Force\",\n\"evidence_groups\":[\"G01\"], \"evidence_uids\":[\"UID\"], \"justification\":\"...\",\n\"confidence\":null}].\n",
+   "tokens": [
+    {
+     "input_tokens": 5783,
+     "output_tokens": 1150,
+     "reasoning_tokens": 961,
+     "model": "gemini-3.8-flash",
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  }
+ ],
+ "consultas_externas": []
+}

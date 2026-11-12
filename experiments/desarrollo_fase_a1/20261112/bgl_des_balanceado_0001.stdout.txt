@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1073 salida=233 razonamiento=1034 total=2340
+   → Plan v1: ['triage', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3679 salida=333 razonamiento=538 total=4550
+   → No hace falta RAG (El lote presenta 100% de cobertura y la información proporcionada es suficiente y explícita para caracterizar la causa de los eventos críticos sin requerir contexto histórico.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=353 salida=79 razonamiento=181 total=613
+   → usar_cve: False | Razón: El diagnóstico indica fallas puramente operativas relacionadas con rutas inválidas de ejecutables y pánicos del kernel durante la ejecución de tareas, descartando explícitamente intrusiones o actividad maliciosa, por lo que no corresponde a una vulnerabilidad explotable o ataque que requiera consulta de CVEs.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=1003 salida=110 razonamiento=702 total=1815
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=5072 salida=960 razonamiento=698 total=6730
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es preciso y concuerda con la evidencia observada en los logs del supercomputador BlueGene/L. Se identifican fallas operativas legítimas: error en la carga de una imagen de programa por ciod, pánicos de runtime del kernel ('rts panic!'), volcados masivos de core dumps y excepciones de alineación de hardware/runtime. No existe ningún indicio de actividad maliciosa ni compromiso de seguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

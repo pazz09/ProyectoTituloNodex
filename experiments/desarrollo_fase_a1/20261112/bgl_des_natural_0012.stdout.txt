@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1479 salida=342 razonamiento=817 total=2638
+   → Plan v1: ['triage', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=4546 salida=328 razonamiento=665 total=5539
+   → No hace falta RAG (El lote presenta 100% de cobertura en el parsing y los registros detallan de forma clara problemas operacionales estándar de HPC (archivos no encontrados en ciod, aserciones de software y correcciones ECC de hardware), por lo que no se requiere consulta histórica externa.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=339 salida=49 razonamiento=220 total=608
+   → usar_cve: False | Razón: El diagnóstico concluye que los eventos corresponden a fallas operativas, de configuración y hardware (ECC), descartando cualquier incidente de seguridad o vector de ataque explotable.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=3059 salida=122 razonamiento=474 total=3655
+   → 7 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=6076 salida=1161 razonamiento=1324 total=8561
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros evidencian problemas operativos y de configuración en una supercomputadora BlueGene/L: aserciones fallidas en idoproxydb, intentos fallidos de ejecución por rutas o archivos faltantes (/home/yates y MINIBEN), un error de protocolo a nivel kernel/rts y eventos rutinarios de corrección de memoria ECC. No existen indicios de actividad maliciosa ni vectores de intrusión.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

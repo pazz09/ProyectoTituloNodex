@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=993 salida=252 razonamiento=554 total=1799
+   → Plan v1: ['triage', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=3778 salida=305 razonamiento=913 total=4996
+   → No hace falta RAG (El lote cuenta con cobertura de parsing del 100%, el plan de investigación descarta la consulta histórica y la evidencia técnica en los registros es suficiente para determinar que se trata de un problema operativo de kernel y hardware.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=307 salida=71 razonamiento=184 total=562
+   → usar_cve: False | Razón: El diagnóstico confirma que los eventos corresponden a fallos operativos y de hardware (RAS) en el supercomputador BlueGene/L, descartando patrones de intrusión, explotación o actividad adversaria, por lo que no aplica la búsqueda de CVEs de ciberseguridad.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=652 salida=141 razonamiento=174 total=967
+   → 6 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=5810 salida=961 razonamiento=1713 total=8484
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros RAS corresponden a eventos normales de diagnóstico, excepciones de punto flotante, errores de hardware corregidos (EDRAM, DDR, Torus) y una terminación fatal del kernel (código 1004) propia de la operativa HPC, sin evidencia de actividad maliciosa ni intrusión.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

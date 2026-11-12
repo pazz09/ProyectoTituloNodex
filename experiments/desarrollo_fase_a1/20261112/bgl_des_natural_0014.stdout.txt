@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=1602 salida=279 razonamiento=867 total=2748
+   → Plan v1: ['triage', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=4165 salida=288 razonamiento=397 total=4850
+   → No hace falta RAG (El lote cuenta con un 100% de cobertura de parsing y las líneas crudas proporcionan suficiente detalle técnico sobre las interrupciones del kernel PowerPC, además de que el plan de investigación especifica no consultar memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=265 salida=61 razonamiento=200 total=526
+   → usar_cve: False | Razón: El diagnóstico concluye que los errores se deben a fallas de software/compilación en tareas HPC, corrupción de memoria o inestabilidad de hardware, sin indicios de actividad maliciosa ni explotación de vulnerabilidades conocidas.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=2552 salida=66 razonamiento=450 total=3068
+   → 5 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=5295 salida=1957 razonamiento=4103 total=11355
+   → Confianza final: 0.98 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Los registros reflejan interrupciones fatales del kernel y excepciones de hardware (machine check, illegal instruction, data store interrupts) en la arquitectura PowerPC del supercomputador BlueGene/L. No existen indicios de actividad maliciosa, intrusión ni explotación de vulnerabilidades, tratándose de una anomalía operativa/de hardware o fallas en la ejecución de aplicaciones científicas.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

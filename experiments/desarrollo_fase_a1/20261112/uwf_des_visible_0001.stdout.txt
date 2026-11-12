@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=6586 salida=290 razonamiento=1033 total=7909
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=16428 salida=406 razonamiento=1218 total=18052
+   → No hace falta RAG (El resumen y los flujos minoritarios proporcionan evidencia concluyente y de alta fidelidad (100% decodificada) sobre el barrido de puertos y el comportamiento del tráfico DNS, haciendo innecesaria la consulta a memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=372 salida=48 razonamiento=222 total=642
+   → usar_cve: False | Razón: El diagnóstico describe únicamente una actividad de reconocimiento y escaneo de puertos (T1046) sin identificar servicios específicos vulnerables ni versiones de software explotadas.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=1010 salida=58 razonamiento=640 total=1708
+   → 3 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=63232 salida=723 razonamiento=733 total=64688
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=True | cobertura_suficiente=True | El diagnóstico es preciso y está plenamente respaldado por la evidencia. Se observa un escaneo rápido de múltiples puertos TCP (G10) originado en 143.88.5.11 hacia 143.88.5.12 en un intervalo de aproximadamente un segundo, exhibiendo el patrón clásico de reconocimiento mediante Network Service Discovery (T1046). Asimismo, las solicitudes DNS no respondidas (G01) evidencian fallas de conectividad o resolución con el servidor 10.0.10.1. Las acciones de contención propuestas con iptables son pertinentes para neutralizar el origen del escaneo.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

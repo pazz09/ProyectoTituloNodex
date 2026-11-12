@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=938 salida=245 razonamiento=726 total=1909
+   → Plan v1: ['triage', 'cve', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=4042 salida=231 razonamiento=336 total=4609
+   → No hace falta RAG (El lote cuenta con un 100% de cobertura de parsing y contiene exclusivamente eventos informativos rutinarios de estado del kernel, suficientes para determinar la normalidad operativa sin requerir consulta a la base de conocimiento histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=231 salida=47 razonamiento=149 total=427
+   → usar_cve: False | Razón: El diagnóstico confirma que los eventos son métricas y reportes rutinarios del sistema sin indicios de ataques, fallos ni vulnerabilidades de seguridad identificadas.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=417 salida=6 razonamiento=151 total=574
+   → 0 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=5061 salida=442 razonamiento=678 total=6181
+   → Confianza final: 1.00 | hay_anomalia=False | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. Todos los registros analizados corresponden a reportes periódicos y métricas operacionales del kernel BlueGene/L (estadísticas de interrupciones y monitoreo de manejadores RBS) con nivel de severidad INFO. No se registran interrupciones críticas, fallos de memoria DDR ni anomalías de sistema o seguridad.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

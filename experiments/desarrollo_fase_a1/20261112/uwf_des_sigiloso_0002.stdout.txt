@@ -1,0 +1,48 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=5392 salida=357 razonamiento=1131 total=6880
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=8033 salida=129 razonamiento=1088 total=9250
+   → Solicitando RAG (Se requiere consultar las técnicas de MITRE ATT&CK y el historial de casos similares para correlacionar el patrón de 262 conexiones DNS unidireccionales en estado S0 (posible DoS, sondeo o túnel fallido) y las transferencias HTTP atípicas entre hosts internos, evaluando si corresponden a exfiltración o comportamiento operativo conocido.)...
+   🔀 Router Triage → tool_consultar_rag
+👉 Transición completada en: 'agente_analista_triage'
+   🔍 [Tool RAG] Buscando en ChromaDB...
+   → 0 patrones similares encontrados.
+   → 2 técnicas MITRE ATT&CK relacionadas: T1071.004, T1584.002
+👉 Transición completada en: 'tool_consultar_rag'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Contexto RAG disponible. Generando diagnóstico...
+   [tokens] entrada=8454 salida=342 razonamiento=1083 total=9879
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=367 salida=52 razonamiento=152 total=571
+   → usar_cve: False | Razón: El diagnóstico concluye que la actividad corresponde a una desconfiguración de red o caída del servicio DNS, descartando ataques y sin identificar productos, versiones específicas o vulnerabilidades asociadas.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=1026 salida=105 razonamiento=419 total=1550
+   → 6 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=66633 salida=544 razonamiento=959 total=68136
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=False | cobertura_suficiente=True | El diagnóstico es correcto. El flujo dominante consiste en 262 solicitudes DNS periódicas y de baja frecuencia hacia 10.0.10.1 que quedan sin respuesta (estado S0), lo cual refleja un problema operativo (caída del resolver o desconfiguración de red) y descarta tanto ataques DoS como canales encubiertos C2. El resto del tráfico corresponde a actividad común de red (HTTP local SF, DHCPv6, NetBIOS). No se evidencia compromiso de seguridad ni actividad maliciosa.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

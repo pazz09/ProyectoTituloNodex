@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=6372 salida=340 razonamiento=1222 total=7934
+   → Plan v1: ['triage', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=18887 salida=436 razonamiento=1233 total=20556
+   → No hace falta RAG (El plan de investigación excluye la consulta a memoria histórica y el desglose de flujos y marcas temporales del lote proporciona evidencia suficiente para caracterizar la anomalía.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=404 salida=63 razonamiento=202 total=669
+   → usar_cve: False | Razón: El diagnóstico describe un ataque genérico de denegación de servicio volumétrico (DNS flood) sin especificar software, servidor DNS (ej. BIND, Unbound, Windows DNS) ni versiones afectadas que permitan buscar CVEs concretos.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=1141 salida=88 razonamiento=584 total=1813
+   → 4 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=66136 salida=734 razonamiento=1310 total=68180
+   → Confianza final: 0.95 | hay_anomalia=True | hay_incidente=True | cobertura_suficiente=True | El diagnóstico es preciso y está plenamente respaldado por la evidencia. Se identifica una ráfaga anómala de 60 consultas DNS en 60 ms desde 143.88.10.11 hacia 143.88.255.10 (grupo G10) con resultado S0, consistente con un ataque de inundación DNS / DoS. Asimismo, se evidencia un tráfico anómalo continuo de 211 consultas DNS sin respuesta desde 143.88.255.10 hacia 10.0.10.1 (grupo G01). Las acciones de mitigación y comandos de bloqueo propuestos son pertinentes para neutralizar el origen del tráfico malicioso.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.

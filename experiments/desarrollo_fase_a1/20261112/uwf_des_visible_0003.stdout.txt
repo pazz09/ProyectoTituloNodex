@@ -1,0 +1,38 @@
+🚀 EJECUTANDO FLUJO CÍCLICO MULTIAGENTE CON PERSISTENCIA...
+============================================================
+
+🗺️ [Agente Planificador] Generando plan de investigación...
+   [tokens] entrada=5870 salida=328 razonamiento=610 total=6808
+   → Plan v1: ['triage', 'rag', 'mitigacion']
+👉 Transición completada en: 'agente_planificador'
+
+🧠 [Agente Triage] Analizando el incidente...
+   → Primera pasada: decidiendo si hace falta contexto histórico...
+   [tokens] entrada=15646 salida=475 razonamiento=4376 total=20497
+   → No hace falta RAG (La cobertura de parsing es del 100% sin advertencias y los datos de telemetría de Zeek son plenamente concluyentes para identificar la actividad de escaneo de puertos (T1046) y la falla de respuestas DNS, haciendo innecesaria la consulta a memoria histórica.). Diagnosticando directo...
+   🔀 Router Triage → agente_selector_herramientas
+👉 Transición completada en: 'agente_analista_triage'
+
+🤖 [Agente Selector] Decidiendo qué herramientas usar...
+   [tokens] entrada=443 salida=64 razonamiento=181 total=688
+   → usar_cve: False | Razón: El diagnóstico describe una actividad de reconocimiento de red (escaneo de puertos T1046) y problemas de conectividad DNS, sin identificar versiones de software específicas, servicios vulnerables o explotación activa de vulnerabilidades asociadas a un CVE.
+   🔀 Router Selector → agente_ingeniero_mitigacion
+👉 Transición completada en: 'agente_selector_herramientas'
+
+👷 [Agente Mitigación] Generando comandos (intento 1)...
+   [tokens] entrada=1163 salida=102 razonamiento=844 total=2109
+   → 4 comandos generados.
+👉 Transición completada en: 'agente_ingeniero_mitigacion'
+
+   🛡️ [Tool Validador] Verificando seguridad de los comandos...
+   ✅ Comandos aprobados.
+   🔀 Router Validación → agente_auditor_final (comandos OK)
+👉 Transición completada en: 'tool_validar_comandos'
+
+🕵️ [Agente Auditor] Evaluando calidad de la solución...
+   [tokens] entrada=63062 salida=658 razonamiento=1270 total=64990
+   → Confianza final: 0.98 | hay_anomalia=True | hay_incidente=True | cobertura_suficiente=True | El diagnóstico es correcto y se encuentra plenamente respaldado por la evidencia observada. Se identifica con precisión la actividad de escaneo de puertos TCP desde 143.88.18.12 hacia 143.88.18.11 (T1046), con 60 conexiones en estado SH dirigidas a múltiples puertos estándar. Asimismo, se verifica la anomalía operativa de 218 consultas DNS no respondidas (S0) hacia 10.0.10.1. Las acciones de contención mediante iptables son proporcionales y adecuadas.
+   🔀 Router Finalización → END (plan cumplido)
+👉 Transición completada en: 'agente_auditor_final'
+============================================================
+🎯 Ejecución finalizada de manera segura.
