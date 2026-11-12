@@ -1,6 +1,6 @@
 # Arquitectura de NODEX final
 
-Rama `nodex-final` (desde el tag `piloto-12casos`). Fases A, A.1 y B. Todos los agentes LLM usan
+Rama `nodex-final` (desde el tag `piloto-12casos`). Fases A, A.1, B y B.1. Todos los agentes LLM usan
 `gemini-3.8-flash` con temperatura 0 y sin modelo de respaldo (configuración de evaluación). Cada mejora
 tiene un interruptor en `src/config.py`; con los de la Fase B apagados el grafo vuelve al de la Fase A.
 
@@ -8,7 +8,7 @@ tiene un interruptor en `src/config.py`; con los de la Fase B apagados el grafo 
 
 ```mermaid
 flowchart TD
-    E([Lote de logs]) --> P0[/Preprocesamiento determinístico<br/>perfil del lote, grupos, contenido,<br/>catálogo de evidencia, memoria histórica k=3/]
+    E([Lote de logs]) --> P0[/Preprocesamiento determinístico<br/>perfil del lote, grupos, contenido,<br/>catálogo de evidencia, memoria histórica<br/>contrastiva 2+2 y memoria de grupos/]
     P0 --> PL[agente_planificador<br/>LLM]
     PL --> TR[agente_analista_triage<br/>LLM, una pasada]
     TR --> RC{router_caza}
@@ -41,10 +41,10 @@ coherencia), `MAX_REPLANS = 1` (replanificación).
 |---|---|---|
 | `agente_planificador` | Resumen del lote | Plan: objetivo, pasos (`triage`, `rag`, `cve`, `mitigacion`) |
 | `agente_analista_triage` | Resumen acotado (con `perfil_lote`), contexto de preprocesamiento, contenido del lote (líneas o flujos minoritarios), casos históricos, definiciones del criterio de la organización | `diagnostico`, `veredicto_preliminar`, `justificacion_veredicto_preliminar` |
-| `agente_cazador` | Grupos con señal (red) o de severidad alta / plantilla minoritaria (texto), con todas sus filas; resumen del comportamiento dominante. **No** recibe el diagnóstico del triage | `hallazgos_cazador`: por grupo, explicación benigna, explicación maliciosa u operativa, `nivel_sospecha`, justificación, técnica candidata |
+| `agente_cazador` | Grupos con señal (red) o de severidad alta / plantilla minoritaria (texto), con todas sus filas y el motivo factual de la señal (B.1); por grupo de red, el grupo malicioso y el benigno más parecidos de la memoria de grupos (B.1); lista de verificación de patrones MITRE (B.1); resumen del comportamiento dominante. **No** recibe el diagnóstico del triage | `hallazgos_cazador`: por grupo, explicación benigna, explicación maliciosa u operativa, `nivel_sospecha`, `patron_lista` (B.1), justificación, técnica candidata |
 | `agente_selector_herramientas` | Diagnóstico | `usar_cve`, `razon_seleccion` |
 | `agente_ingeniero_mitigacion` | Diagnóstico, veredicto consolidado, resumen de evidencia (grupos y flujos señalados), hallazgos alto/medio, rechazos previos | `comandos_mitigacion` (reglas por veredicto) |
-| `agente_auditor_final` | Diagnóstico, comandos, veredicto consolidado, hallazgos del cazador, casos históricos, definiciones, catálogo de evidencia, tabla de grupos, candidatos MITRE | `hay_anomalia`, `hay_incidente`, `confianza`, `evaluacion_auditor`, cobertura, eventos por categoría, técnicas, `revision_hallazgos` (cada hallazgo alto confirmado o descartado) |
+| `agente_auditor_final` | Diagnóstico, comandos, veredicto consolidado, hallazgos del cazador, casos históricos, definiciones, catálogo de evidencia, tabla de grupos, candidatos MITRE | `hay_anomalia`, `hay_incidente`, `confianza`, `evaluacion_auditor`, cobertura, eventos por categoría, técnicas, `revision_hallazgos` (cada hallazgo alto o medio confirmado o descartado; medio desde B.1) |
 
 Herramientas (sin LLM): `tool_consultar_rag` (técnicas MITRE por hipótesis y veredicto consolidado),
 `tool_consultar_cve` (NVD bloqueada en evaluación, respaldo local), `tool_validar_comandos` (validador
@@ -76,6 +76,7 @@ estricto), `tool_corregir_diagnostico` (corrección tras el auditor).
 | `revision_hallazgos` | lista | auditor (B1) | reporte |
 | `diagnostico_inicial`, `diagnostico_corregido`, `correcciones_auditor` | str, str, int | corrección (B2) | router de coherencia, reporte |
 | `historial_correcciones` | lista (acumula) | corrección (B2) | reporte |
+| `memoria_grupos`, `memoria_grupos_consulta` | dict, dict | pipeline (B.1-2) | cazador, agente único, salida |
 
 Salida (`campos_d11`, aditiva): además de lo anterior, `classification_detallada`
 (`incidente_seguridad` / `anomalia_operativa` / `normal`, derivada del veredicto final). Los eventos
@@ -100,10 +101,21 @@ reconstruidos llevan `categoria` (`incidente` / `anomalia_operativa` / `contexto
 | B, B3 | `RAG_POR_HIPOTESIS` | true |
 | B, B4 | `HISTORICO_ACTIVO` / `HISTORICO_K` | true / 3 |
 | B, B5 | `EVENTOS_POR_CATEGORIA` | true |
+| B.1-1 | `HISTORICO_CONTRASTIVO` / `HISTORICO_K_POR_CLASE` | true / 2 |
+| B.1-2 | `MEMORIA_GRUPOS_ACTIVA` / `MEMORIA_GRUPOS_PATH` | true / `experiments/knowledge/memoria_grupos_v1/memoria_grupos.json` |
+| B.1-3 | `CAZADOR_MOTIVO_FACTUAL` / `CAZADOR_LISTA_PATRONES` / `AUDITOR_REVISA_MEDIOS` | true / true / true |
 
 La memoria histórica se elige con `CHROMA_PATH` (copia del snapshot): `rag_enriquecido_30_v2` (los 30
 históricos de la v1 re-indexados) o `rag_enriquecido_v2` (todos los casos de desarrollo más 8 incidentes
 UWF de la v1 sin solapamiento; 56 patrones).
+
+**Fase B.1.** La consulta de lotes es contrastiva: los 2 casos más parecidos de cada clase (normal y
+anómala/maliciosa) del mismo tipo de lote, presentados como comparación y sin la similitud numérica.
+La memoria de grupos (`memoria_grupos_v1`, 54 grupos de la partición de desarrollo de UWF: 12 con eventos
+del incidente, etiquetados con su táctica, y 42 grupos con señal de casos benignos) describe cada grupo por
+su comportamiento, sin IP; para cada grupo con señal del lote se recupera el malicioso y el benigno más
+parecidos, con exclusión por solapamiento de registros. Solo logs de red. Se construye con
+`python -m src.experimentation.knowledge.memoria_grupos`.
 
 ## 6. Qué recibe cada sistema
 
@@ -112,7 +124,9 @@ UWF de la v1 sin solapamiento; 56 patrones).
 | Preprocesamiento, resumen acotado con `perfil_lote` | sí | sí (misma función) |
 | Contenido del lote (líneas o flujos minoritarios) | triage | sí (mismo bloque) |
 | Catálogo de evidencia y tabla de grupos | auditor | sí (mismo `contexto_d11`) |
-| Casos históricos (k=3, misma consulta y exclusión por solapamiento) | triage y auditor | sí |
+| Casos históricos (2 por clase desde B.1, misma consulta y exclusión por solapamiento) | triage y auditor | sí |
+| Memoria de grupos (B.1) | cazador | sí (mismo bloque por grupo) |
+| Motivo factual de la señal y lista de patrones (B.1) | cazador | no (son entrada del cazador) |
 | Definiciones del criterio de la organización | triage y auditor | sí |
 | Candidatos MITRE | por hipótesis (diagnóstico + hallazgos), en el nodo RAG | consulta sobre el resumen del lote (la de su campaña) |
 | Reglas de mitigación por veredicto y validador estricto | sí | sí (validador sin ciclo de corrección) |
@@ -123,7 +137,7 @@ UWF de la v1 sin solapamiento; 56 patrones).
 
 ## 7. Pruebas por módulo (12-nov-2026)
 
-Suite de Python: **1 576 pruebas**, 1 573 pasan; fallan 3 por el entorno de este equipo (Python 3.13 y
+Suite de Python: **1 593 pruebas**, 1 590 pasan; fallan 3 por el entorno de este equipo (Python 3.13 y
 finales de línea del corpus enriquecido v1), sin relación con NODEX final. Frontend: **100 pruebas**
 (5 archivos, vitest), todas pasan.
 
@@ -131,6 +145,7 @@ finales de línea del corpus enriquecido v1), sin relación con NODEX final. Fro
 |---|---:|
 | `test_nodex_final_fase_a.py` (M1, M2, M6, M7, M8, M9, A.1) | 52 |
 | `test_nodex_final_fase_b.py` (B1-B5, grafo, traza, ciclo de corrección extremo a extremo) | 32 |
+| `test_nodex_final_fase_b1.py` (memoria contrastiva, memoria de grupos, motivo factual, lista de patrones, revisión de medios, arnés) | 17 |
 | `test_output_contract_d11.py` | 26 |
 | `test_llm.py` | 38 |
 | `test_informe_pdf.py` | 34 |
@@ -147,7 +162,7 @@ finales de línea del corpus enriquecido v1), sin relación con NODEX final. Fro
 | API e historial (4 archivos: `test_api_*`, `test_historial.py`) | 87 |
 | Capa experimental (32 archivos en `tests/experimentation/`) | 846 |
 | Resto (12 archivos: reporte, baseline, evaluación de detección, memoria, reputación, telemetría, MITRE, etc.) | 105 |
-| **Total** | **1 576** |
+| **Total** | **1 593** |
 
 Las pruebas del flujo de la Fase A (triage <-> RAG, grafo de 8 nodos, contrato sin categorías) siguen
 activas con los interruptores de la Fase B apagados (`tests/conftest.py::modo_fase_a`).

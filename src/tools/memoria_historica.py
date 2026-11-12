@@ -109,11 +109,42 @@ def huellas_registros(eventos) -> list[str]:
     return sorted({huella_evento(e) for e in eventos})
 
 
-def consultar_historicos(coleccion, representacion: str, huellas: list[str], k: int) -> dict:
-    """Los k patrones más parecidos que no comparten registros con el lote.
+#: Etiquetas de la clase positiva (B.1-1). El resto de las etiquetas conocidas es "normal".
+ETIQUETAS_ANOMALAS = {"anomalo", "malicioso", "anomalous", "malicious", "incidente", "anomalia"}
+
+
+def clase_de_etiqueta(etiqueta) -> str | None:
+    """'anomala' (anómalo o malicioso), 'normal', o None si la etiqueta no se reconoce."""
+    valor = str(etiqueta or "").strip().lower()
+    if valor in ETIQUETAS_ANOMALAS:
+        return "anomala"
+    if valor in ("normal", "benigno", "benign"):
+        return "normal"
+    return None
+
+
+def tipo_de_representacion(texto) -> str | None:
+    """Tipo de lote (red/texto) de una representación de `representacion_lote`, o None."""
+    if not isinstance(texto, str):
+        return None
+    if texto.startswith("Grupos con señal:"):
+        return "red"
+    if texto.startswith("Eventos destacados:"):
+        return "texto"
+    return None
+
+
+def consultar_historicos(coleccion, representacion: str, huellas: list[str], k: int,
+                         k_por_clase: int | None = None, tipo: str | None = None) -> dict:
+    """Los patrones más parecidos que no comparten registros con el lote.
+
+    - Sin `k_por_clase` (Fase B): los k más parecidos, de cualquier clase.
+    - Con `k_por_clase` (B.1-1, memoria contrastiva): los `k_por_clase` más parecidos de CADA
+      clase (normal y anómala), solo del mismo `tipo` de lote (red o texto) si se indica. Un
+      patrón cuyo tipo no se puede leer (sin documento) se considera compatible.
 
     Devuelve `{"casos": [...], "excluidos_por_solapamiento": [...], "consultados": n}`.
-    Cada caso: id, dataset, etiqueta, descripción y similitud (coseno).
+    Cada caso: id, dataset, etiqueta, clase, descripción y similitud (coseno).
     """
     if coleccion is None or k <= 0:
         return {"casos": [], "excluidos_por_solapamiento": [], "consultados": 0}
@@ -121,9 +152,11 @@ def consultar_historicos(coleccion, representacion: str, huellas: list[str], k: 
     if total == 0:
         return {"casos": [], "excluidos_por_solapamiento": [], "consultados": 0}
     res = coleccion.query(query_texts=[representacion[:MAX_CHARS_REPRESENTACION]], n_results=total)
+    documentos = (res.get("documents") or [[None] * len(res["ids"][0])])[0] if isinstance(res, dict) else None
+    documentos = documentos or [None] * len(res["ids"][0])
     propias = set(huellas)
-    casos, excluidos = [], []
-    for vid, meta, dist in zip(res["ids"][0], res["metadatas"][0], res["distances"][0]):
+    casos, excluidos, por_clase, otro_tipo = [], [], {"anomala": 0, "normal": 0}, 0
+    for vid, meta, dist, doc in zip(res["ids"][0], res["metadatas"][0], res["distances"][0], documentos):
         meta = meta or {}
         try:
             ajenas = set(json.loads(meta.get("huellas") or "[]"))
@@ -132,21 +165,56 @@ def consultar_historicos(coleccion, representacion: str, huellas: list[str], k: 
         if propias & ajenas:
             excluidos.append(vid)
             continue
-        if len(casos) < k:
-            # Los patrones antiguos (feedback de la interfaz) no traen el esquema de la
-            # Fase B: se usa su `clasificacion` y se declara que no hay descripción.
-            casos.append({"id": meta.get("historical_case_id") or vid, "dataset": meta.get("dataset"),
-                          "etiqueta": meta.get("etiqueta") or meta.get("clasificacion"),
-                          "descripcion": meta.get("descripcion") or "patrón validado sin descripción",
-                          "similitud": round(1 - dist, 3)})
-    return {"casos": casos, "excluidos_por_solapamiento": excluidos, "consultados": total}
+        # Los patrones antiguos (feedback de la interfaz) no traen el esquema de la
+        # Fase B: se usa su `clasificacion` y se declara que no hay descripción.
+        etiqueta = meta.get("etiqueta") or meta.get("clasificacion")
+        caso = {"id": meta.get("historical_case_id") or vid, "dataset": meta.get("dataset"),
+                "etiqueta": etiqueta, "clase": clase_de_etiqueta(etiqueta),
+                "descripcion": meta.get("descripcion") or "patrón validado sin descripción",
+                "similitud": round(1 - dist, 3)}
+        if k_por_clase is None:
+            if len(casos) < k:
+                casos.append(caso)
+            continue
+        tipo_patron = tipo_de_representacion(doc)
+        if tipo and tipo_patron and tipo_patron != tipo:
+            otro_tipo += 1
+            continue
+        if caso["clase"] in por_clase and por_clase[caso["clase"]] < k_por_clase:
+            por_clase[caso["clase"]] += 1
+            casos.append(caso)
+    salida = {"casos": casos, "excluidos_por_solapamiento": excluidos, "consultados": total}
+    if k_por_clase is not None:
+        salida.update(contrastiva=True, k_por_clase=k_por_clase, tipo=tipo, omitidos_otro_tipo=otro_tipo)
+    return salida
+
+
+_INSTRUCCION_CONTRASTIVA = (
+    "Esto es una COMPARACIÓN, no una votación: que el lote se parezca más a unos que a otros no decide "
+    "el veredicto. Identifica qué evidencia concreta diferencia a los casos anómalos de los normales (los "
+    "eventos que determinaron la alerta) y verifica si esa evidencia está presente en este lote. Decide por "
+    "esa evidencia.")
 
 
 def contexto_historico(casos: list[dict] | None) -> str:
-    """Bloque del prompt con los casos históricos (compartido por triage, auditor y agente único)."""
-    from src.config import HISTORICO_ACTIVO
+    """Bloque del prompt con los casos históricos (compartido por triage, auditor y agente único).
+
+    Con `HISTORICO_CONTRASTIVO` (B.1-1) se presentan separados por clase y sin la similitud
+    numérica, como comparación; sin él, en una lista con su similitud (Fase B).
+    """
+    from src.config import HISTORICO_ACTIVO, HISTORICO_CONTRASTIVO
     if not HISTORICO_ACTIVO or not casos:
         return ""
+    if HISTORICO_CONTRASTIVO:
+        normales = [c for c in casos if (c.get("clase") or clase_de_etiqueta(c.get("etiqueta"))) == "normal"]
+        anomalos = [c for c in casos if (c.get("clase") or clase_de_etiqueta(c.get("etiqueta"))) == "anomala"]
+        lineas = ["CASOS HISTÓRICOS DE LA ORGANIZACIÓN PARA COMPARAR (referencia de criterio, no prueba). "
+                  "El lote se parece a estos casos NORMALES:"]
+        lineas += [f"- [{c.get('etiqueta')}] {c.get('descripcion')}" for c in normales] or ["- (ninguno disponible)"]
+        lineas.append("y a estos casos ANÓMALOS o MALICIOSOS:")
+        lineas += [f"- [{c.get('etiqueta')}] {c.get('descripcion')}" for c in anomalos] or ["- (ninguno disponible)"]
+        lineas.append(_INSTRUCCION_CONTRASTIVA)
+        return "\n".join(lineas)
     lineas = ["CASOS HISTÓRICOS DE LA ORGANIZACIÓN MÁS PARECIDOS (referencia de criterio, no prueba):"]
     for c in casos:
         lineas.append(f"- [{c.get('etiqueta')}] (similitud {c.get('similitud')}): {c.get('descripcion')}")

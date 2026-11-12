@@ -138,6 +138,7 @@ function CuerpoNodo({ nodo, detalle, visita }: { nodo: NombreNodo; detalle: Reco
       nivel_sospecha: string
       justificacion?: string
       tecnica_candidata?: string | null
+      patron_lista?: string
     }[]
     const altos = hallazgos.filter((h) => h.nivel_sospecha === 'alto').length
     return (
@@ -154,6 +155,9 @@ function CuerpoNodo({ nodo, detalle, visita }: { nodo: NombreNodo; detalle: Reco
               <span className={h.nivel_sospecha === 'alto' ? 'chip crit mono' : 'chip warn mono'}>
                 {h.group_id} · {h.nivel_sospecha}
                 {h.tecnica_candidata ? ` · ${h.tecnica_candidata}` : ''}
+                {h.patron_lista && !['ninguno', 'no_indicado', 'fuera_de_lista'].includes(h.patron_lista)
+                  ? ` · ${h.patron_lista}`
+                  : ''}
               </span>{' '}
               {h.justificacion}
             </p>

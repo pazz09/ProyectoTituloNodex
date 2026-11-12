@@ -74,6 +74,12 @@ def analizar_lote_agente_unico(raw_logs: str, thread_id: str | None = None,
         historicos = contexto_historico(state.get("casos_historicos"))
         if historicos:
             prompt += "\n" + historicos
+        # B.1-2: la misma memoria de grupos que recibe el cazador de NODEX (misma consulta,
+        # calculada en `_preparar_estado_inicial`), para una comparación justa.
+        from src.tools.memoria_grupos import contexto_memoria_grupos
+        grupos_memoria = contexto_memoria_grupos(state.get("memoria_grupos"))
+        if grupos_memoria:
+            prompt += "\n" + grupos_memoria
         prompt += contexto_d11(state)
         try:
             respuesta = llm_json(prompt, system=system)

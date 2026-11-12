@@ -1,7 +1,8 @@
-"""Evaluación de DESARROLLO de NODEX final (Fase B) y del agente único. Nunca usa la partición de evaluación.
+"""Evaluación de DESARROLLO de NODEX final (Fases B y B.1) y del agente único. Nunca usa la partición de evaluación.
 
     python tools/evaluar_desarrollo_fase_b.py --ejecutar                 # NODEX y agente único, 48 + 48
     python tools/evaluar_desarrollo_fase_b.py --ejecutar --arquitectura nodex
+    python tools/evaluar_desarrollo_fase_b.py --ejecutar --carpeta desarrollo_fase_b1   # Fase B.1
 
 Configuración de evaluación del piloto (`gemini-3.8-flash`, temperatura 0, sin respaldo, sin
 reputación externa, red bloqueada con registro de intentos), un proceso por caso y una copia
@@ -14,6 +15,8 @@ experimental, no del sistema: en desarrollo, un caso UWF malicioso podría recup
 mismo atacante (UWF tiene solo 10 IP atacantes). Para cada caso UWF malicioso se excluyen además los
 patrones cuyo incidente comparte IP de origen atacante y táctica con el incidente del caso (datos del
 ground truth de DESARROLLO). Se aplica igual a NODEX y al agente único y queda registrada por caso.
+Fase B.1: la misma lista se aplica a la memoria de grupos (`memoria_grupos_v1`): se excluyen los grupos
+de los casos del mismo incidente. La memoria de lotes se filtra ANTES de elegir los k por clase.
 
 Tokens por nodo: el `llm_json` de cada agente se envuelve solo para observar. Tope de gasto conjunto
 (USD 15 por omisión), verificado antes de cada caso con la cota máxima de su celda. Los resultados
@@ -40,6 +43,11 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 MEMORIA = ROOT / "experiments/knowledge/rag_enriquecido_v2"
+MEMORIA_GRUPOS = ROOT / "experiments/knowledge/memoria_grupos_v1"
+#: Interruptores de NODEX final que se registran con cada corrida.
+INTERRUPTORES = ("RAG_POR_HIPOTESIS", "CAZADOR_ACTIVO", "CORRECCION_AUDITOR", "HISTORICO_ACTIVO", "HISTORICO_K",
+                 "EVENTOS_POR_CATEGORIA", "HISTORICO_CONTRASTIVO", "HISTORICO_K_POR_CLASE", "MEMORIA_GRUPOS_ACTIVA",
+                 "CAZADOR_MOTIVO_FACTUAL", "CAZADOR_LISTA_PATRONES", "AUDITOR_REVISA_MEDIOS")
 CONFIG_REFERENCIA = ROOT / "experiments/config/config_oficial-12casos-r1-20261028.json"
 PRECIO = {"entrada": 0.75, "salida": 3.75}
 COTA = {("nodex", "bgl"): 0.08, ("nodex", "uwf"): 0.35, ("agente_unico", "bgl"): 0.04,
@@ -107,20 +115,52 @@ def excluir_por_incidente(case_id: str, dataset: str, patrones: dict) -> list[st
 
 # --- proceso hijo -------------------------------------------------------------------------
 
+class _ColeccionSinIncidente:
+    """Vista de la colección de patrones sin los del mismo incidente (filtra antes de elegir)."""
+
+    def __init__(self, coleccion, excluir: set):
+        self.coleccion, self.excluir, self.excluidos = coleccion, excluir, []
+
+    def count(self):
+        return self.coleccion.count()
+
+    def query(self, **kwargs):
+        r = self.coleccion.query(**kwargs)
+        quedan = [i for i, m in enumerate(r["metadatas"][0])
+                  if ((m or {}).get("historical_case_id") or r["ids"][0][i]) not in self.excluir]
+        self.excluidos = [((r["metadatas"][0][i] or {}).get("historical_case_id") or r["ids"][0][i])
+                          for i in range(len(r["ids"][0])) if i not in set(quedan)]
+        return {k: ([[v[0][i] for i in quedan]] if isinstance(v, list) and v and isinstance(v[0], list) else v)
+                for k, v in r.items()}
+
+
 def _instalar_exclusion(ruta: str):
-    """Envuelve la consulta histórica para excluir también los patrones del mismo incidente (arnés)."""
+    """Envuelve las consultas de memoria para excluir también lo del mismo incidente (arnés)."""
+    import src.tools.memoria_grupos as mg
     import src.tools.memoria_historica as mh
     excluir = set(json.loads(Path(ruta).read_text(encoding="utf-8")))
     original = mh.consultar_historicos
 
-    def con_exclusion(coleccion, representacion, huellas, k):
-        total = coleccion.count() if coleccion is not None else 0
-        r = original(coleccion, representacion, huellas, total)
-        r["excluidos_mismo_incidente"] = [c["id"] for c in r["casos"] if c["id"] in excluir]
-        r["casos"] = [c for c in r["casos"] if c["id"] not in excluir][:k]
+    def con_exclusion(coleccion, representacion, huellas, k, **kwargs):
+        vista = _ColeccionSinIncidente(coleccion, excluir) if coleccion is not None else None
+        r = original(vista, representacion, huellas, k, **kwargs)
+        r["excluidos_mismo_incidente"] = sorted(set(vista.excluidos)) if vista else []
         r["exclusion_por_incidente_activa"] = True
         return r
     mh.consultar_historicos = con_exclusion
+
+    original_grupos = mg.consultar_memoria_grupos
+
+    def grupos_con_exclusion(memoria, consultas, huellas_lote, embed):
+        if memoria:
+            fuera = [e["id"] for e in memoria.get("entradas") or [] if e.get("case_id") in excluir]
+            memoria = dict(memoria, entradas=[e for e in memoria.get("entradas") or [] if e["id"] not in set(fuera)])
+        else:
+            fuera = []
+        r = original_grupos(memoria, consultas, huellas_lote, embed)
+        r.update(excluidos_mismo_incidente=fuera, exclusion_por_incidente_activa=True)
+        return r
+    mg.consultar_memoria_grupos = grupos_con_exclusion
 
 
 def hijo(arquitectura, dataset, case_id, salida, exclusion):
@@ -194,10 +234,27 @@ def ejecutar(arquitecturas, tope, excluir_incidente, nombre_carpeta):
     carpeta = ROOT / "experiments" / nombre_carpeta / datetime.now(ZoneInfo("America/Santiago")).strftime("%Y%m%d")
     carpeta.mkdir(parents=True, exist_ok=True)
     patrones = incidentes_de_patrones() if excluir_incidente else {}
+    import hashlib
+    import src.config as cfg
+    cambios_src = git("diff", "HEAD", "--", "src")
+    if cambios_src:
+        # Sin commit de los cambios: el parche exacto evaluado queda junto a los resultados.
+        (carpeta / "src_sin_commit.patch").write_text(cambios_src + "\n", encoding="utf-8")
+    for nuevo in git("ls-files", "--others", "--exclude-standard", "--", "src").splitlines():
+        # Archivos nuevos de src sin seguimiento: se copian tal cual junto a los resultados.
+        copia = carpeta / "src_sin_seguimiento" / nuevo
+        copia.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(ROOT / nuevo, copia)
     registro = {"inicio_utc": utc(), "commit": git("rev-parse", "HEAD"), "rama": git("rev-parse", "--abbrev-ref", "HEAD"),
                 "src_sin_cambios": not git("status", "--porcelain", "--", "src"), "tope_usd": tope,
                 "memoria": MEMORIA.relative_to(ROOT).as_posix(),
                 "memoria_manifiesto_sha256": __import__("hashlib").sha256((MEMORIA / "manifiesto.json").read_bytes()).hexdigest(),
+                "src_diff_sha256": hashlib.sha256(cambios_src.encode("utf-8")).hexdigest() if cambios_src else None,
+                "src_nuevos_sin_seguimiento": git("ls-files", "--others", "--exclude-standard", "--", "src").splitlines(),
+                "memoria_grupos": MEMORIA_GRUPOS.relative_to(ROOT).as_posix(),
+                "memoria_grupos_sha256": (hashlib.sha256((MEMORIA_GRUPOS / "memoria_grupos.json").read_bytes()).hexdigest()
+                                          if (MEMORIA_GRUPOS / "memoria_grupos.json").exists() else None),
+                "interruptores": {k: getattr(cfg, k, None) for k in INTERRUPTORES},
                 "exclusion_por_solapamiento": "del sistema (siempre)",
                 "exclusion_por_incidente": excluir_incidente,
                 "criterio_exclusion_por_incidente": "mismo IP de origen atacante y al menos una táctica en común (GT de desarrollo)",
@@ -225,6 +282,7 @@ def ejecutar(arquitecturas, tope, excluir_incidente, nombre_carpeta):
                     ruta_exclusion = str(tmp / "excluir.json")
                     Path(ruta_exclusion).write_text(json.dumps(excluidos), encoding="utf-8")
                 entorno = campana.entorno_de_la_corrida(base, congelada, tmp / "chroma", tmp / "ip.json")
+                entorno["MEMORIA_GRUPOS_PATH"] = str(MEMORIA_GRUPOS / "memoria_grupos.json")
                 reloj = time.perf_counter()
                 r = subprocess.run([sys.executable, str(Path(__file__).resolve()), "--hijo", arquitectura, dataset,
                                     case_id, str(destino), ruta_exclusion], cwd=ROOT, env=entorno,

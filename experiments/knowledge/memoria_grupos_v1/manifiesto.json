@@ -1,0 +1,667 @@
+{
+  "nombre": "memoria_grupos_v1",
+  "creado_utc": "2026-11-12T07:27:55.019378+00:00",
+  "modelo_embeddings": "all-MiniLM-L6-v2",
+  "descripcion": "Grupos etiquetados de la partición de desarrollo de UWF: grupos con eventos del incidente (malicioso) y grupos con señal de los casos benignos (benigno).",
+  "memoria_sha256": "93e974579d50296821958528279b56db2aa7ac12dd4c6a9e1983addfade05c42",
+  "entradas": 54,
+  "por_etiqueta": {
+    "malicioso": 12,
+    "benigno": 42
+  },
+  "por_tactica": {
+    "Resource Development": 3,
+    "Reconnaissance": 6,
+    "Discovery": 3
+  },
+  "grupos": [
+    {
+      "id": "uwf_des_sigiloso_0000:G08",
+      "case_id": "uwf_des_sigiloso_0000",
+      "group_id": "G08",
+      "etiqueta": "malicioso",
+      "tacticas": [
+        "Resource Development"
+      ],
+      "tecnicas": [
+        "T1587"
+      ],
+      "filas": 3,
+      "representacion": "Señal: protocolo_minoritario/servicio_minoritario (el servicio/puerto puerto:44446 aparece en 3 de 300 filas del lote (1.0%); el protocolo tcp aparece en 3 de 300 filas del lote (1.0%)). Protocolo tcp 3; servicio puerto:44446 3; 1 puertos de destino distintos (44446). 3 filas, 1 origen(es) y 1 destino(s); ventana 13.7 s, 0.22 filas/s. Estados: S0 3. Historia: S 3. Mediana de duración 2.02 s, bytes enviados 0, bytes recibidos 0.",
+      "n_huellas": 3
+    },
+    {
+      "id": "uwf_des_sigiloso_0001:G09",
+      "case_id": "uwf_des_sigiloso_0001",
+      "group_id": "G09",
+      "etiqueta": "malicioso",
+      "tacticas": [
+        "Reconnaissance"
+      ],
+      "tecnicas": [
+        "T1590",
+        "T1592"
+      ],
+      "filas": 5,
+      "representacion": "Señal: inversion_de_rol (el destino de este grupo actúa como origen en 260 filas del lote y como destino solo en 5). Protocolo udp 5; servicio dns 5; 1 puertos de destino distintos (53). 5 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s, 9.9e+02 filas/s. Estados: S0 5. Historia: D 5. Mediana de duración 1.5e-05 s, bytes enviados 86, bytes recibidos 0.",
+      "n_huellas": 5
+    },
+    {
+      "id": "uwf_des_sigiloso_0002:G08",
+      "case_id": "uwf_des_sigiloso_0002",
+      "group_id": "G08",
+      "etiqueta": "malicioso",
+      "tacticas": [
+        "Resource Development"
+      ],
+      "tecnicas": [
+        "T1587"
+      ],
+      "filas": 5,
+      "representacion": "Señal: protocolo_minoritario/servicio_minoritario (el servicio/puerto http aparece en 5 de 300 filas del lote (1.7%); el protocolo tcp aparece en 5 de 300 filas del lote (1.7%)). Protocolo tcp 5; servicio http 5; 1 puertos de destino distintos (80). 5 filas, 1 origen(es) y 1 destino(s); ventana 0.4 s, 14 filas/s. Estados: SF 5. Historia: ShADadFf 5. Mediana de duración 0.0967 s, bytes enviados 315, bytes recibidos 1.02e+04.",
+      "n_huellas": 5
+    },
+    {
+      "id": "uwf_des_sigiloso_0003:G10",
+      "case_id": "uwf_des_sigiloso_0003",
+      "group_id": "G10",
+      "etiqueta": "malicioso",
+      "tacticas": [
+        "Reconnaissance"
+      ],
+      "tecnicas": [
+        "T1590",
+        "T1592"
+      ],
+      "filas": 5,
+      "representacion": "Señal: inversion_de_rol (el destino de este grupo actúa como origen en 270 filas del lote y como destino solo en 5). Protocolo udp 5; servicio dns 5; 1 puertos de destino distintos (53). 5 filas, 1 origen(es) y 1 destino(s); ventana 10.0 s, 0.5 filas/s. Estados: S0 5. Historia: D 5. Mediana de duración 1.31e-05 s, bytes enviados 116, bytes recibidos 0.",
+      "n_huellas": 5
+    },
+    {
+      "id": "uwf_des_sigiloso_0004:G09",
+      "case_id": "uwf_des_sigiloso_0004",
+      "group_id": "G09",
+      "etiqueta": "malicioso",
+      "tacticas": [
+        "Reconnaissance"
+      ],
+      "tecnicas": [
+        "T1590",
+        "T1592"
+      ],
+      "filas": 3,
+      "representacion": "Señal: inversion_de_rol (el destino de este grupo actúa como origen en 265 filas del lote y como destino solo en 3). Protocolo udp 3; servicio dns 3; 1 puertos de destino distintos (53). 3 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s, 1.2e+03 filas/s. Estados: S0 3. Historia: D 3. Mediana de duración 1.41e-05 s, bytes enviados 86, bytes recibidos 0.",
+      "n_huellas": 3
+    },
+    {
+      "id": "uwf_des_sigiloso_0005:G08",
+      "case_id": "uwf_des_sigiloso_0005",
+      "group_id": "G08",
+      "etiqueta": "malicioso",
+      "tacticas": [
+        "Reconnaissance"
+      ],
+      "tecnicas": [
+        "T1590",
+        "T1592"
+      ],
+      "filas": 3,
+      "representacion": "Señal: inversion_de_rol (el destino de este grupo actúa como origen en 265 filas del lote y como destino solo en 3). Protocolo udp 3; servicio dns 3; 1 puertos de destino distintos (53). 3 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s, 1.4e+03 filas/s. Estados: S0 3. Historia: D 3. Mediana de duración 6.91e-06 s, bytes enviados 86, bytes recibidos 0.",
+      "n_huellas": 3
+    },
+    {
+      "id": "uwf_des_sigiloso_0006:G05",
+      "case_id": "uwf_des_sigiloso_0006",
+      "group_id": "G05",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 1,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:547 aparece en 2 de 300 filas del lote (0.7%)). Protocolo udp 1; servicio puerto:547 1; 1 puertos de destino distintos (547). 1 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s. Estados: S0 1. Historia: D 1. Mediana de duración 63.1 s, bytes enviados 714, bytes recibidos 0.",
+      "n_huellas": 1
+    },
+    {
+      "id": "uwf_des_sigiloso_0006:G07",
+      "case_id": "uwf_des_sigiloso_0006",
+      "group_id": "G07",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 2,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:138 aparece en 2 de 300 filas del lote (0.7%)). Protocolo udp 2; servicio puerto:138 2; 1 puertos de destino distintos (138). 2 filas, 1 origen(es) y 1 destino(s); ventana 304.2 s, 0.0066 filas/s. Estados: S0 2. Historia: D 2. Mediana de duración 33 s, bytes enviados 1.15e+03, bytes recibidos 0.",
+      "n_huellas": 2
+    },
+    {
+      "id": "uwf_des_sigiloso_0006:G08",
+      "case_id": "uwf_des_sigiloso_0006",
+      "group_id": "G08",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 1,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:547 aparece en 2 de 300 filas del lote (0.7%)). Protocolo udp 1; servicio puerto:547 1; 1 puertos de destino distintos (547). 1 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s. Estados: S0 1. Historia: D 1. Mediana de duración sin dato s, bytes enviados sin dato, bytes recibidos sin dato.",
+      "n_huellas": 1
+    },
+    {
+      "id": "uwf_des_sigiloso_0007:G05",
+      "case_id": "uwf_des_sigiloso_0007",
+      "group_id": "G05",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 3,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:547 aparece en 3 de 300 filas del lote (1.0%)). Protocolo udp 3; servicio puerto:547 3; 1 puertos de destino distintos (547). 3 filas, 1 origen(es) y 1 destino(s); ventana 1073.3 s, 0.0028 filas/s. Estados: S0 3. Historia: D 3. Mediana de duración sin dato s, bytes enviados sin dato, bytes recibidos sin dato.",
+      "n_huellas": 3
+    },
+    {
+      "id": "uwf_des_sigiloso_0007:G07",
+      "case_id": "uwf_des_sigiloso_0007",
+      "group_id": "G07",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 1,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto dhcp aparece en 1 de 300 filas del lote (0.3%) (único flujo con ese servicio en el lote)). Protocolo udp 1; servicio dhcp 1; 1 puertos de destino distintos (67). 1 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s. Estados: SF 1. Historia: Dd 1. Mediana de duración 0.00141 s, bytes enviados 282, bytes recibidos 300.",
+      "n_huellas": 1
+    },
+    {
+      "id": "uwf_des_sigiloso_0007:G09",
+      "case_id": "uwf_des_sigiloso_0007",
+      "group_id": "G09",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 1,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:138 aparece en 1 de 300 filas del lote (0.3%) (único flujo con ese servicio en el lote)). Protocolo udp 1; servicio puerto:138 1; 1 puertos de destino distintos (138). 1 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s. Estados: S0 1. Historia: D 1. Mediana de duración sin dato s, bytes enviados sin dato, bytes recibidos sin dato.",
+      "n_huellas": 1
+    },
+    {
+      "id": "uwf_des_sigiloso_0008:G02",
+      "case_id": "uwf_des_sigiloso_0008",
+      "group_id": "G02",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 2,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:547 aparece en 3 de 300 filas del lote (1.0%)). Protocolo udp 2; servicio puerto:547 2; 1 puertos de destino distintos (547). 2 filas, 1 origen(es) y 1 destino(s); ventana 833.9 s, 0.0024 filas/s. Estados: S0 2. Historia: D 2. Mediana de duración sin dato s, bytes enviados sin dato, bytes recibidos sin dato.",
+      "n_huellas": 2
+    },
+    {
+      "id": "uwf_des_sigiloso_0008:G05",
+      "case_id": "uwf_des_sigiloso_0008",
+      "group_id": "G05",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 2,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:138 aparece en 4 de 300 filas del lote (1.3%)). Protocolo udp 2; servicio puerto:138 2; 1 puertos de destino distintos (138). 2 filas, 1 origen(es) y 1 destino(s); ventana 301.6 s, 0.0066 filas/s. Estados: S0 2. Historia: D 2. Mediana de duración 18 s, bytes enviados 1.15e+03, bytes recibidos 0.",
+      "n_huellas": 2
+    },
+    {
+      "id": "uwf_des_sigiloso_0008:G07",
+      "case_id": "uwf_des_sigiloso_0008",
+      "group_id": "G07",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 1,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:547 aparece en 3 de 300 filas del lote (1.0%)). Protocolo udp 1; servicio puerto:547 1; 1 puertos de destino distintos (547). 1 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s. Estados: S0 1. Historia: D 1. Mediana de duración 63.1 s, bytes enviados 714, bytes recibidos 0.",
+      "n_huellas": 1
+    },
+    {
+      "id": "uwf_des_sigiloso_0008:G09",
+      "case_id": "uwf_des_sigiloso_0008",
+      "group_id": "G09",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 2,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:138 aparece en 4 de 300 filas del lote (1.3%)). Protocolo udp 2; servicio puerto:138 2; 1 puertos de destino distintos (138). 2 filas, 1 origen(es) y 1 destino(s); ventana 605.8 s, 0.0033 filas/s. Estados: S0 2. Historia: D 2. Mediana de duración 18 s, bytes enviados 1.15e+03, bytes recibidos 0.",
+      "n_huellas": 2
+    },
+    {
+      "id": "uwf_des_sigiloso_0009:G04",
+      "case_id": "uwf_des_sigiloso_0009",
+      "group_id": "G04",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 1,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:138 aparece en 1 de 300 filas del lote (0.3%) (único flujo con ese servicio en el lote)). Protocolo udp 1; servicio puerto:138 1; 1 puertos de destino distintos (138). 1 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s. Estados: S0 1. Historia: D 1. Mediana de duración 24 s, bytes enviados 1.27e+03, bytes recibidos 0.",
+      "n_huellas": 1
+    },
+    {
+      "id": "uwf_des_sigiloso_0009:G06",
+      "case_id": "uwf_des_sigiloso_0009",
+      "group_id": "G06",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 1,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:547 aparece en 4 de 300 filas del lote (1.3%)). Protocolo udp 1; servicio puerto:547 1; 1 puertos de destino distintos (547). 1 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s. Estados: S0 1. Historia: D 1. Mediana de duración 63.1 s, bytes enviados 714, bytes recibidos 0.",
+      "n_huellas": 1
+    },
+    {
+      "id": "uwf_des_sigiloso_0009:G07",
+      "case_id": "uwf_des_sigiloso_0009",
+      "group_id": "G07",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 3,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:547 aparece en 4 de 300 filas del lote (1.3%)). Protocolo udp 3; servicio puerto:547 3; 1 puertos de destino distintos (547). 3 filas, 1 origen(es) y 1 destino(s); ventana 838.4 s, 0.0036 filas/s. Estados: S0 3. Historia: D 3. Mediana de duración sin dato s, bytes enviados sin dato, bytes recibidos sin dato.",
+      "n_huellas": 3
+    },
+    {
+      "id": "uwf_des_sigiloso_0009:G08",
+      "case_id": "uwf_des_sigiloso_0009",
+      "group_id": "G08",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 1,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto dhcp aparece en 1 de 300 filas del lote (0.3%) (único flujo con ese servicio en el lote)). Protocolo udp 1; servicio dhcp 1; 1 puertos de destino distintos (67). 1 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s. Estados: SF 1. Historia: Dd 1. Mediana de duración 0.000887 s, bytes enviados 300, bytes recibidos 300.",
+      "n_huellas": 1
+    },
+    {
+      "id": "uwf_des_sigiloso_0010:G03",
+      "case_id": "uwf_des_sigiloso_0010",
+      "group_id": "G03",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 2,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:138 aparece en 2 de 300 filas del lote (0.7%)). Protocolo udp 2; servicio puerto:138 2; 1 puertos de destino distintos (138). 2 filas, 1 origen(es) y 1 destino(s); ventana 1211.6 s, 0.0017 filas/s. Estados: S0 2. Historia: D 2. Mediana de duración 8.01 s, bytes enviados 1.02e+03, bytes recibidos 0.",
+      "n_huellas": 2
+    },
+    {
+      "id": "uwf_des_sigiloso_0010:G09",
+      "case_id": "uwf_des_sigiloso_0010",
+      "group_id": "G09",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 1,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:547 aparece en 1 de 300 filas del lote (0.3%) (único flujo con ese servicio en el lote)). Protocolo udp 1; servicio puerto:547 1; 1 puertos de destino distintos (547). 1 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s. Estados: S0 1. Historia: D 1. Mediana de duración sin dato s, bytes enviados sin dato, bytes recibidos sin dato.",
+      "n_huellas": 1
+    },
+    {
+      "id": "uwf_des_sigiloso_0011:G06",
+      "case_id": "uwf_des_sigiloso_0011",
+      "group_id": "G06",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 1,
+      "representacion": "Señal: protocolo_minoritario/servicio_minoritario (el servicio/puerto puerto:134 aparece en 1 de 300 filas del lote (0.3%) (único flujo con ese servicio en el lote); el protocolo icmp aparece en 1 de 300 filas del lote (0.3%) (único flujo ICMP del lote)). Protocolo icmp 1; servicio puerto:134 1; 1 puertos de destino distintos (134). 1 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s. Estados: OTH 1. Historia: - 1. Mediana de duración sin dato s, bytes enviados sin dato, bytes recibidos sin dato.",
+      "n_huellas": 1
+    },
+    {
+      "id": "uwf_des_sigiloso_0011:G09",
+      "case_id": "uwf_des_sigiloso_0011",
+      "group_id": "G09",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 1,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:138 aparece en 1 de 300 filas del lote (0.3%) (único flujo con ese servicio en el lote)). Protocolo udp 1; servicio puerto:138 1; 1 puertos de destino distintos (138). 1 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s. Estados: S0 1. Historia: D 1. Mediana de duración 8.01 s, bytes enviados 1.02e+03, bytes recibidos 0.",
+      "n_huellas": 1
+    },
+    {
+      "id": "uwf_des_sigiloso_0011:G10",
+      "case_id": "uwf_des_sigiloso_0011",
+      "group_id": "G10",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 1,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:547 aparece en 1 de 300 filas del lote (0.3%) (único flujo con ese servicio en el lote)). Protocolo udp 1; servicio puerto:547 1; 1 puertos de destino distintos (547). 1 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s. Estados: S0 1. Historia: D 1. Mediana de duración sin dato s, bytes enviados sin dato, bytes recibidos sin dato.",
+      "n_huellas": 1
+    },
+    {
+      "id": "uwf_des_visible_0000:G11",
+      "case_id": "uwf_des_visible_0000",
+      "group_id": "G11",
+      "etiqueta": "malicioso",
+      "tacticas": [
+        "Discovery"
+      ],
+      "tecnicas": [
+        "T1046"
+      ],
+      "filas": 60,
+      "representacion": "Señal: barrido_de_puertos (un mismo origen contactó 32 puertos de destino distintos de un mismo destino (tcp) en 1.6 s (60 conexiones)). Protocolo tcp 60; servicio puerto:3389 2, puerto:443 2, puerto:554 2; 32 puertos de destino distintos (21, 22, 23, 25, 53, 80, 110, 111 ...). 60 filas, 1 origen(es) y 1 destino(s); ventana 1.6 s, 37 filas/s. Estados: SH 60. Historia: F 60. Mediana de duración sin dato s, bytes enviados sin dato, bytes recibidos sin dato.",
+      "n_huellas": 60
+    },
+    {
+      "id": "uwf_des_visible_0001:G10",
+      "case_id": "uwf_des_visible_0001",
+      "group_id": "G10",
+      "etiqueta": "malicioso",
+      "tacticas": [
+        "Resource Development"
+      ],
+      "tecnicas": [
+        "T1587"
+      ],
+      "filas": 60,
+      "representacion": "Señal: barrido_de_puertos (un mismo origen contactó 47 puertos de destino distintos de un mismo destino (tcp) en 1.2 s (60 conexiones)). Protocolo tcp 60; servicio puerto:139 2, puerto:5900 2, puerto:135 2; 47 puertos de destino distintos (21, 22, 23, 25, 53, 80, 110, 111 ...). 60 filas, 1 origen(es) y 1 destino(s); ventana 1.2 s, 50 filas/s. Estados: S0 54, RSTO 6. Historia: S 54, ShR 6. Mediana de duración 0.000325 s, bytes enviados 0, bytes recibidos 0.",
+      "n_huellas": 60
+    },
+    {
+      "id": "uwf_des_visible_0002:G10",
+      "case_id": "uwf_des_visible_0002",
+      "group_id": "G10",
+      "etiqueta": "malicioso",
+      "tacticas": [
+        "Reconnaissance"
+      ],
+      "tecnicas": [
+        "T1590",
+        "T1592"
+      ],
+      "filas": 60,
+      "representacion": "Señal: inversion_de_rol (el destino de este grupo actúa como origen en 211 filas del lote y como destino solo en 60). Protocolo udp 60; servicio dns 60; 1 puertos de destino distintos (53). 60 filas, 1 origen(es) y 1 destino(s); ventana 0.1 s, 1e+03 filas/s. Estados: S0 60. Historia: D 60. Mediana de duración 2.48e-05 s, bytes enviados 114, bytes recibidos 0.",
+      "n_huellas": 60
+    },
+    {
+      "id": "uwf_des_visible_0003:G09",
+      "case_id": "uwf_des_visible_0003",
+      "group_id": "G09",
+      "etiqueta": "malicioso",
+      "tacticas": [
+        "Discovery"
+      ],
+      "tecnicas": [
+        "T1046"
+      ],
+      "filas": 60,
+      "representacion": "Señal: barrido_de_puertos (un mismo origen contactó 32 puertos de destino distintos de un mismo destino (tcp) en 1.7 s (60 conexiones)). Protocolo tcp 60; servicio puerto:8080 2, puerto:113 2, puerto:587 2; 32 puertos de destino distintos (21, 22, 23, 25, 53, 80, 110, 111 ...). 60 filas, 1 origen(es) y 1 destino(s); ventana 1.7 s, 35 filas/s. Estados: SH 60. Historia: F 60. Mediana de duración sin dato s, bytes enviados sin dato, bytes recibidos sin dato.",
+      "n_huellas": 60
+    },
+    {
+      "id": "uwf_des_visible_0004:G08",
+      "case_id": "uwf_des_visible_0004",
+      "group_id": "G08",
+      "etiqueta": "malicioso",
+      "tacticas": [
+        "Reconnaissance"
+      ],
+      "tecnicas": [
+        "T1590",
+        "T1592"
+      ],
+      "filas": 28,
+      "representacion": "Señal: inversion_de_rol (el destino de este grupo actúa como origen en 230 filas del lote y como destino solo en 28). Protocolo udp 28; servicio dns 28; 1 puertos de destino distintos (53). 28 filas, 1 origen(es) y 1 destino(s); ventana 6.8 s, 4.1 filas/s. Estados: SF 28. Historia: Dd 28. Mediana de duración 0.00159 s, bytes enviados 564, bytes recibidos 564.",
+      "n_huellas": 28
+    },
+    {
+      "id": "uwf_des_visible_0005:G04",
+      "case_id": "uwf_des_visible_0005",
+      "group_id": "G04",
+      "etiqueta": "malicioso",
+      "tacticas": [
+        "Discovery"
+      ],
+      "tecnicas": [
+        "T1046"
+      ],
+      "filas": 60,
+      "representacion": "Señal: barrido_de_puertos (un mismo origen contactó 32 puertos de destino distintos de un mismo destino (tcp) en 1.6 s (60 conexiones)). Protocolo tcp 60; servicio puerto:554 2, puerto:993 2, puerto:445 2; 32 puertos de destino distintos (21, 22, 23, 25, 53, 80, 110, 111 ...). 60 filas, 1 origen(es) y 1 destino(s); ventana 1.6 s, 37 filas/s. Estados: OTH 60. Historia: - 60. Mediana de duración sin dato s, bytes enviados sin dato, bytes recibidos sin dato.",
+      "n_huellas": 60
+    },
+    {
+      "id": "uwf_des_visible_0006:G02",
+      "case_id": "uwf_des_visible_0006",
+      "group_id": "G02",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 2,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:547 aparece en 4 de 300 filas del lote (1.3%)). Protocolo udp 2; servicio puerto:547 2; 1 puertos de destino distintos (547). 2 filas, 1 origen(es) y 1 destino(s); ventana 854.1 s, 0.0023 filas/s. Estados: S0 2. Historia: D 2. Mediana de duración 63 s, bytes enviados 714, bytes recibidos 0.",
+      "n_huellas": 2
+    },
+    {
+      "id": "uwf_des_visible_0006:G08",
+      "case_id": "uwf_des_visible_0006",
+      "group_id": "G08",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 1,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:138 aparece en 1 de 300 filas del lote (0.3%) (único flujo con ese servicio en el lote)). Protocolo udp 1; servicio puerto:138 1; 1 puertos de destino distintos (138). 1 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s. Estados: S0 1. Historia: D 1. Mediana de duración 8.01 s, bytes enviados 1.02e+03, bytes recibidos 0.",
+      "n_huellas": 1
+    },
+    {
+      "id": "uwf_des_visible_0006:G10",
+      "case_id": "uwf_des_visible_0006",
+      "group_id": "G10",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 1,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:547 aparece en 4 de 300 filas del lote (1.3%)). Protocolo udp 1; servicio puerto:547 1; 1 puertos de destino distintos (547). 1 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s. Estados: S0 1. Historia: D 1. Mediana de duración 63 s, bytes enviados 714, bytes recibidos 0.",
+      "n_huellas": 1
+    },
+    {
+      "id": "uwf_des_visible_0006:G12",
+      "case_id": "uwf_des_visible_0006",
+      "group_id": "G12",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 1,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:547 aparece en 4 de 300 filas del lote (1.3%)). Protocolo udp 1; servicio puerto:547 1; 1 puertos de destino distintos (547). 1 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s. Estados: S0 1. Historia: D 1. Mediana de duración sin dato s, bytes enviados sin dato, bytes recibidos sin dato.",
+      "n_huellas": 1
+    },
+    {
+      "id": "uwf_des_visible_0007:G07",
+      "case_id": "uwf_des_visible_0007",
+      "group_id": "G07",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 24,
+      "representacion": "Señal: inversion_de_rol (el destino de este grupo actúa como origen en 239 filas del lote y como destino solo en 24). Protocolo udp 24; servicio dns 24; 1 puertos de destino distintos (53). 24 filas, 1 origen(es) y 1 destino(s); ventana 6.3 s, 3.8 filas/s. Estados: SF 24. Historia: Dd 24. Mediana de duración 3.41e-05 s, bytes enviados 38, bytes recibidos 38.",
+      "n_huellas": 24
+    },
+    {
+      "id": "uwf_des_visible_0007:G03",
+      "case_id": "uwf_des_visible_0007",
+      "group_id": "G03",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 2,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:138 aparece en 2 de 300 filas del lote (0.7%)). Protocolo udp 2; servicio puerto:138 2; 1 puertos de destino distintos (138). 2 filas, 1 origen(es) y 1 destino(s); ventana 1211.6 s, 0.0017 filas/s. Estados: S0 2. Historia: D 2. Mediana de duración 8.01 s, bytes enviados 1.02e+03, bytes recibidos 0.",
+      "n_huellas": 2
+    },
+    {
+      "id": "uwf_des_visible_0007:G04",
+      "case_id": "uwf_des_visible_0007",
+      "group_id": "G04",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 1,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:547 aparece en 2 de 300 filas del lote (0.7%)). Protocolo udp 1; servicio puerto:547 1; 1 puertos de destino distintos (547). 1 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s. Estados: S0 1. Historia: D 1. Mediana de duración sin dato s, bytes enviados sin dato, bytes recibidos sin dato.",
+      "n_huellas": 1
+    },
+    {
+      "id": "uwf_des_visible_0007:G11",
+      "case_id": "uwf_des_visible_0007",
+      "group_id": "G11",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 1,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:547 aparece en 2 de 300 filas del lote (0.7%)). Protocolo udp 1; servicio puerto:547 1; 1 puertos de destino distintos (547). 1 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s. Estados: S0 1. Historia: D 1. Mediana de duración 63.1 s, bytes enviados 714, bytes recibidos 0.",
+      "n_huellas": 1
+    },
+    {
+      "id": "uwf_des_visible_0007:G14",
+      "case_id": "uwf_des_visible_0007",
+      "group_id": "G14",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 1,
+      "representacion": "Señal: protocolo_minoritario/servicio_minoritario (el servicio/puerto puerto:136 aparece en 1 de 300 filas del lote (0.3%) (único flujo con ese servicio en el lote); el protocolo icmp aparece en 1 de 300 filas del lote (0.3%) (único flujo ICMP del lote)). Protocolo icmp 1; servicio puerto:136 1; 1 puertos de destino distintos (136). 1 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s. Estados: OTH 1. Historia: - 1. Mediana de duración 7.8e-05 s, bytes enviados 24, bytes recibidos 16.",
+      "n_huellas": 1
+    },
+    {
+      "id": "uwf_des_visible_0008:G04",
+      "case_id": "uwf_des_visible_0008",
+      "group_id": "G04",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 1,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:138 aparece en 2 de 300 filas del lote (0.7%)). Protocolo udp 1; servicio puerto:138 1; 1 puertos de destino distintos (138). 1 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s. Estados: S0 1. Historia: D 1. Mediana de duración 8.01 s, bytes enviados 1.02e+03, bytes recibidos 0.",
+      "n_huellas": 1
+    },
+    {
+      "id": "uwf_des_visible_0008:G10",
+      "case_id": "uwf_des_visible_0008",
+      "group_id": "G10",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 1,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:138 aparece en 2 de 300 filas del lote (0.7%)). Protocolo udp 1; servicio puerto:138 1; 1 puertos de destino distintos (138). 1 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s. Estados: S0 1. Historia: D 1. Mediana de duración 8.01 s, bytes enviados 1.02e+03, bytes recibidos 0.",
+      "n_huellas": 1
+    },
+    {
+      "id": "uwf_des_visible_0008:G11",
+      "case_id": "uwf_des_visible_0008",
+      "group_id": "G11",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 2,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:547 aparece en 3 de 300 filas del lote (1.0%)). Protocolo udp 2; servicio puerto:547 2; 1 puertos de destino distintos (547). 2 filas, 1 origen(es) y 1 destino(s); ventana 120.2 s, 0.017 filas/s. Estados: S0 2. Historia: D 2. Mediana de duración sin dato s, bytes enviados sin dato, bytes recibidos sin dato.",
+      "n_huellas": 2
+    },
+    {
+      "id": "uwf_des_visible_0008:G12",
+      "case_id": "uwf_des_visible_0008",
+      "group_id": "G12",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 1,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:547 aparece en 3 de 300 filas del lote (1.0%)). Protocolo udp 1; servicio puerto:547 1; 1 puertos de destino distintos (547). 1 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s. Estados: S0 1. Historia: D 1. Mediana de duración 63.1 s, bytes enviados 714, bytes recibidos 0.",
+      "n_huellas": 1
+    },
+    {
+      "id": "uwf_des_visible_0009:G03",
+      "case_id": "uwf_des_visible_0009",
+      "group_id": "G03",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 2,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:547 aparece en 3 de 300 filas del lote (1.0%)). Protocolo udp 2; servicio puerto:547 2; 1 puertos de destino distintos (547). 2 filas, 1 origen(es) y 1 destino(s); ventana 854.1 s, 0.0023 filas/s. Estados: S0 2. Historia: D 2. Mediana de duración 63 s, bytes enviados 714, bytes recibidos 0.",
+      "n_huellas": 2
+    },
+    {
+      "id": "uwf_des_visible_0009:G10",
+      "case_id": "uwf_des_visible_0009",
+      "group_id": "G10",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 1,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:547 aparece en 3 de 300 filas del lote (1.0%)). Protocolo udp 1; servicio puerto:547 1; 1 puertos de destino distintos (547). 1 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s. Estados: S0 1. Historia: D 1. Mediana de duración sin dato s, bytes enviados sin dato, bytes recibidos sin dato.",
+      "n_huellas": 1
+    },
+    {
+      "id": "uwf_des_visible_0009:G12",
+      "case_id": "uwf_des_visible_0009",
+      "group_id": "G12",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 1,
+      "representacion": "Señal: protocolo_minoritario/servicio_minoritario (el servicio/puerto puerto:136 aparece en 1 de 300 filas del lote (0.3%) (único flujo con ese servicio en el lote); el protocolo icmp aparece en 1 de 300 filas del lote (0.3%) (único flujo ICMP del lote)). Protocolo icmp 1; servicio puerto:136 1; 1 puertos de destino distintos (136). 1 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s. Estados: OTH 1. Historia: - 1. Mediana de duración 9.8e-05 s, bytes enviados 24, bytes recibidos 16.",
+      "n_huellas": 1
+    },
+    {
+      "id": "uwf_des_visible_0010:G13",
+      "case_id": "uwf_des_visible_0010",
+      "group_id": "G13",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 1,
+      "representacion": "Señal: inversion_de_rol/protocolo_minoritario/servicio_minoritario (el servicio/puerto puerto:136 aparece en 1 de 300 filas del lote (0.3%) (único flujo con ese servicio en el lote); el protocolo icmp aparece en 1 de 300 filas del lote (0.3%) (único flujo ICMP del lote); el destino de este grupo actúa como origen en 3 filas del lote y como destino solo en 1). Protocolo icmp 1; servicio puerto:136 1; 1 puertos de destino distintos (136). 1 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s. Estados: OTH 1. Historia: - 1. Mediana de duración 5.32e-05 s, bytes enviados 24, bytes recibidos 16.",
+      "n_huellas": 1
+    },
+    {
+      "id": "uwf_des_visible_0010:G03",
+      "case_id": "uwf_des_visible_0010",
+      "group_id": "G03",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 4,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:547 aparece en 5 de 300 filas del lote (1.7%)). Protocolo udp 4; servicio puerto:547 4; 1 puertos de destino distintos (547). 4 filas, 1 origen(es) y 1 destino(s); ventana 1478.3 s, 0.0027 filas/s. Estados: S0 4. Historia: D 4. Mediana de duración sin dato s, bytes enviados sin dato, bytes recibidos sin dato.",
+      "n_huellas": 4
+    },
+    {
+      "id": "uwf_des_visible_0010:G07",
+      "case_id": "uwf_des_visible_0010",
+      "group_id": "G07",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 1,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:547 aparece en 5 de 300 filas del lote (1.7%)). Protocolo udp 1; servicio puerto:547 1; 1 puertos de destino distintos (547). 1 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s. Estados: S0 1. Historia: D 1. Mediana de duración 63.1 s, bytes enviados 714, bytes recibidos 0.",
+      "n_huellas": 1
+    },
+    {
+      "id": "uwf_des_visible_0010:G14",
+      "case_id": "uwf_des_visible_0010",
+      "group_id": "G14",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 1,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto dhcp aparece en 1 de 300 filas del lote (0.3%) (único flujo con ese servicio en el lote)). Protocolo udp 1; servicio dhcp 1; 1 puertos de destino distintos (67). 1 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s. Estados: SF 1. Historia: Dd 1. Mediana de duración 0.000691 s, bytes enviados 300, bytes recibidos 300.",
+      "n_huellas": 1
+    },
+    {
+      "id": "uwf_des_visible_0011:G02",
+      "case_id": "uwf_des_visible_0011",
+      "group_id": "G02",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 2,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:547 aparece en 2 de 300 filas del lote (0.7%)). Protocolo udp 2; servicio puerto:547 2; 1 puertos de destino distintos (547). 2 filas, 1 origen(es) y 1 destino(s); ventana 258.3 s, 0.0077 filas/s. Estados: S0 2. Historia: D 2. Mediana de duración sin dato s, bytes enviados sin dato, bytes recibidos sin dato.",
+      "n_huellas": 2
+    },
+    {
+      "id": "uwf_des_visible_0011:G04",
+      "case_id": "uwf_des_visible_0011",
+      "group_id": "G04",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 2,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto puerto:138 aparece en 2 de 300 filas del lote (0.7%)). Protocolo udp 2; servicio puerto:138 2; 1 puertos de destino distintos (138). 2 filas, 1 origen(es) y 1 destino(s); ventana 1532.8 s, 0.0013 filas/s. Estados: S0 2. Historia: D 2. Mediana de duración 15.5 s, bytes enviados 1.15e+03, bytes recibidos 0.",
+      "n_huellas": 2
+    },
+    {
+      "id": "uwf_des_visible_0011:G05",
+      "case_id": "uwf_des_visible_0011",
+      "group_id": "G05",
+      "etiqueta": "benigno",
+      "tacticas": [],
+      "tecnicas": [],
+      "filas": 1,
+      "representacion": "Señal: servicio_minoritario (el servicio/puerto dhcp aparece en 1 de 300 filas del lote (0.3%) (único flujo con ese servicio en el lote)). Protocolo udp 1; servicio dhcp 1; 1 puertos de destino distintos (67). 1 filas, 1 origen(es) y 1 destino(s); ventana 0.0 s. Estados: SF 1. Historia: Dd 1. Mediana de duración 0.000559 s, bytes enviados 328, bytes recibidos 300.",
+      "n_huellas": 1
+    }
+  ]
+}

@@ -67,6 +67,9 @@ class LogGuardState(TypedDict):
     diagnostico_corregido: str       # B2: diagnóstico tras la corrección (evaluación del auditor)
     correcciones_auditor: int        # B2: correcciones aplicadas tras el auditor
     historial_correcciones: Annotated[list, acumular]  # B2: clase anterior y nueva por corrección
+    # --- NODEX final, Fase B.1 (nov-2026) ---
+    memoria_grupos: dict             # B.1-2: por grupo con señal, el grupo malicioso y el benigno más parecidos
+    memoria_grupos_consulta: dict    # B.1-2: memoria usada, grupos excluidos por solapamiento
     eventos_reconstruidos: list[EventoReconstruido]
     secuencia_temporal: list[str]
     tecnicas_atribuidas: list[TecnicaAtribuida]

@@ -102,9 +102,11 @@ def agente_auditor_final(state: LogGuardState) -> dict:
         '"hay_incidente": true/false, "evaluacion": "...", '
         '"cobertura_auditor": true/false, "motivo_cobertura": "..."}'
     )
-    from src.config import HISTORICO_ACTIVO, RAG_POR_HIPOTESIS
+    from src.config import AUDITOR_REVISA_MEDIOS, HISTORICO_ACTIVO, RAG_POR_HIPOTESIS
     from src.tools.memoria_historica import CRITERIO_ORGANIZACION, contexto_historico
-    altos = [h for h in state.get("hallazgos_cazador") or [] if h.get("nivel_sospecha") == "alto"]
+    # B1: el auditor revisa cada hallazgo alto; B.1-3c: también los medio.
+    niveles_revisados = ("alto", "medio") if AUDITOR_REVISA_MEDIOS else ("alto",)
+    altos = [h for h in state.get("hallazgos_cazador") or [] if h.get("nivel_sospecha") in niveles_revisados]
     if HISTORICO_ACTIVO:
         # B4 (NODEX final): la definición anterior de hay_anomalia contaba como
         # anomalía cualquier falla de hardware o infraestructura, lo que
@@ -121,7 +123,8 @@ def agente_auditor_final(state: LogGuardState) -> dict:
     if RAG_POR_HIPOTESIS:
         sys_instruction += (
             " Recibes el veredicto consolidado y los hallazgos del agente cazador (que examinó los grupos "
-            "minoritarios). Tú decides el veredicto final. Por cada hallazgo de nivel alto debes "
+            "minoritarios). Tú decides el veredicto final. Por cada hallazgo de nivel "
+            + " o ".join(niveles_revisados) + " debes "
             "pronunciarte explícitamente: confírmalo o descártalo con evidencia concreta, en "
             'revision_hallazgos: [{"group_id": "G01", "decision": "confirmado|descartado", '
             '"evidencia": "..."}].')
@@ -206,11 +209,13 @@ def agente_auditor_final(state: LogGuardState) -> dict:
     motivo_llm = respuesta.get("motivo_cobertura") if not cobertura_auditor else None
     motivo_replanificacion = " | ".join(filter(None, [motivo_llm, *notas_deterministicas]))
 
-    # B1: revisión explícita de cada hallazgo alto del cazador.
+    # B1: revisión explícita de cada hallazgo alto del cazador (B.1-3c: y medio).
     revision = _revisar_hallazgos(respuesta.get("revision_hallazgos"), altos)
-    faltantes = [h["group_id"] for h in altos if h["group_id"] not in {r["group_id"] for r in revision}]
+    revisados = {r["group_id"] for r in revision}
+    faltantes = [h for h in altos if h["group_id"] not in revisados]
     if faltantes:
-        d11["d11_warnings"] = d11["d11_warnings"] + [f"hallazgo_alto_sin_revision:{g}" for g in faltantes]
+        d11["d11_warnings"] = d11["d11_warnings"] + [
+            f"hallazgo_{h['nivel_sospecha']}_sin_revision:{h['group_id']}" for h in faltantes]
 
     print(f"   → Confianza final: {confianza:.2f} | hay_anomalia={hay_anomalia} | "
           f"hay_incidente={hay_incidente} | cobertura_suficiente={cobertura_suficiente} | {evaluacion}")

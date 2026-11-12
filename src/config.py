@@ -558,6 +558,40 @@ HISTORICO_K = _env_int("HISTORICO_K", 3)
 EVENTOS_POR_CATEGORIA = _env_bool("EVENTOS_POR_CATEGORIA", True)
 CATEGORIAS_EVENTO = ("incidente", "anomalia_operativa", "contexto")
 
+# =============================================================================
+# NODEX final, Fase B.1 (nov-2026). En la evaluación de desarrollo de la Fase B
+# los dos sistemas siguieron la etiqueta de los k casos más parecidos: en
+# reconocimiento por DNS los vecinos más cercanos eran de la clase contraria.
+# =============================================================================
+
+# --- B.1-1: memoria contrastiva por lote --------------------------------------------
+# La consulta histórica devuelve los k más parecidos de CADA clase (normal y
+# anómala/maliciosa) del mismo tipo de lote (red o texto; aquí, mismo dataset), y
+# se presentan como comparación, no como votación. Apagado: los k más parecidos
+# sin distinguir clase (Fase B, HISTORICO_K).
+HISTORICO_CONTRASTIVO = _env_bool("HISTORICO_CONTRASTIVO", True)
+HISTORICO_K_POR_CLASE = _env_int("HISTORICO_K_POR_CLASE", 2)
+
+# --- B.1-2: memoria por grupo de eventos ---------------------------------------------
+# Grupos etiquetados (malicioso con su táctica / benigno), construidos offline a
+# partir de desarrollo (`src/experimentation/knowledge/memoria_grupos.py`). Para
+# cada grupo con señal del lote se recupera el grupo malicioso y el benigno más
+# parecidos, con exclusión por solapamiento de registros. Solo logs de red: la
+# representación es de flujos (protocolo, servicio, estados, ventana).
+MEMORIA_GRUPOS_ACTIVA = _env_bool("MEMORIA_GRUPOS_ACTIVA", True)
+MEMORIA_GRUPOS_PATH = os.environ.get("MEMORIA_GRUPOS_PATH",
+                                     "./experiments/knowledge/memoria_grupos_v1/memoria_grupos.json")
+
+# --- B.1-3: cazador -----------------------------------------------------------------
+# a) Cada grupo llega con el motivo FACTUAL de su señal (conteos del lote).
+CAZADOR_MOTIVO_FACTUAL = _env_bool("CAZADOR_MOTIVO_FACTUAL", True)
+# b) Lista de verificación general de patrones observables (MITRE ATT&CK); el
+#    cazador indica qué patrón calza con cada grupo o que ninguno calza.
+CAZADOR_LISTA_PATRONES = _env_bool("CAZADOR_LISTA_PATRONES", True)
+# c) El auditor revisa explícitamente también los hallazgos "medio". El veredicto
+#    consolidado sigue cambiando solo con "alto".
+AUDITOR_REVISA_MEDIOS = _env_bool("AUDITOR_REVISA_MEDIOS", True)
+
 
 def validate_config() -> None:
     """Lanza un error claro si falta alguna key obligatoria antes de correr el grafo."""

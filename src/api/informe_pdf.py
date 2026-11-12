@@ -430,6 +430,9 @@ def generar_informe_pdf(corrida: dict, comprimir: bool = True) -> bytes:
                 r = revision.get(h.get("group_id"))
                 _parrafo(pdf, f"{h.get('group_id')} (sospecha {h.get('nivel_sospecha')}"
                               + (f", {h.get('tecnica_candidata')}" if h.get("tecnica_candidata") else "")
+                              # B.1-3b: patrón de la lista de verificación que calzó.
+                              + (f", patrón {h.get('patron_lista')}" if h.get("patron_lista") not in
+                                 (None, "ninguno", "no_indicado", "fuera_de_lista") else "")
                               + f"): {h.get('justificacion') or ''}"
                               + (f" Auditor: {r.get('decision')}. {r.get('evidencia') or ''}" if r else ""))
 

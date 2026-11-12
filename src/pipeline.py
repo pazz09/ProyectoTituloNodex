@@ -101,20 +101,48 @@ def _consultar_memoria_historica(resultado, analisis: dict) -> dict:
     `_preparar_estado_inicial`). Devuelve también la representación consultada y
     los patrones excluidos por compartir registros con el lote.
     """
-    from src.config import HISTORICO_ACTIVO, HISTORICO_K
+    from src.config import HISTORICO_ACTIVO, HISTORICO_CONTRASTIVO, HISTORICO_K, HISTORICO_K_POR_CLASE
     from src.tools.memoria_historica import consultar_historicos, huellas_registros, representacion_lote
     vacio = {"casos": [], "excluidos_por_solapamiento": [], "consultados": 0, "representacion": ""}
     if not HISTORICO_ACTIVO:
         return vacio
     representacion = representacion_lote(analisis["perfil_lote"], analisis["grupos_evidencia"],
                                          analisis["contenido_lote"])
+    # B.1-1: memoria contrastiva (k por clase, mismo tipo de lote).
+    extra = ({"k_por_clase": HISTORICO_K_POR_CLASE, "tipo": analisis["perfil_lote"].get("tipo")}
+             if HISTORICO_CONTRASTIVO else {})
     try:
         resultado_consulta = consultar_historicos(ltm.patterns, representacion,
-                                                  huellas_registros(resultado.events), HISTORICO_K)
+                                                  huellas_registros(resultado.events), HISTORICO_K, **extra)
     except Exception as e:  # noqa: BLE001 - la memoria es contexto: su falla no detiene el análisis
         print(f"   ⚠️ No se pudo consultar la memoria histórica: {e}")
         return dict(vacio, representacion=representacion, error=str(e))
     return dict(resultado_consulta, representacion=representacion)
+
+
+def _consultar_memoria_grupos(resultado, analisis: dict) -> dict:
+    """B.1-2 (NODEX final): para cada grupo con señal de un lote de red, el grupo malicioso y el
+    benigno más parecidos de la memoria de grupos, sin solapamiento de registros.
+
+    Determinístico y común a NODEX (cazador) y al agente único. Vacío en logs de texto, sin
+    grupos con señal o sin la memoria.
+    """
+    from src.config import MEMORIA_GRUPOS_ACTIVA, MEMORIA_GRUPOS_PATH
+    from src.tools import memoria_grupos as mg
+    from src.tools.memoria_historica import huellas_registros
+    vacio = {"por_grupo": {}, "excluidos_por_solapamiento": [], "consultados": 0}
+    if not MEMORIA_GRUPOS_ACTIVA or (analisis.get("perfil_lote") or {}).get("tipo") != "red":
+        return vacio
+    try:
+        memoria = mg.cargar_memoria(MEMORIA_GRUPOS_PATH)
+        if memoria is None:
+            return dict(vacio, error=f"no existe la memoria de grupos {MEMORIA_GRUPOS_PATH}")
+        consultas = mg.grupos_con_senal_red(list(resultado.events), analisis)
+        salida = mg.consultar_memoria_grupos(memoria, consultas, huellas_registros(resultado.events), ltm._ef)
+        return dict(salida, memoria=memoria.get("nombre"))
+    except Exception as e:  # noqa: BLE001 - la memoria es contexto: su falla no detiene el análisis
+        print(f"   ⚠️ No se pudo consultar la memoria de grupos: {e}")
+        return dict(vacio, error=str(e))
 
 
 def _preparar_estado_inicial(raw_logs: str, thread_id: str | None = None):
@@ -150,6 +178,7 @@ def _preparar_estado_inicial(raw_logs: str, thread_id: str | None = None):
         _resultado, grupo_de=analisis["group_id_por_registro"] if EVIDENCIA_POR_GRUPOS else None)
     firma = firma_lote(resumen, metadatos)
     historico = _consultar_memoria_historica(_resultado, analisis)
+    memoria_grupos = _consultar_memoria_grupos(_resultado, analisis)
 
     input_inicial = {
         "evidencia_logs": evidencia,
@@ -164,6 +193,9 @@ def _preparar_estado_inicial(raw_logs: str, thread_id: str | None = None):
         # --- NODEX final, Fase B ---
         "casos_historicos": historico["casos"],
         "historico_consulta": {k: v for k, v in historico.items() if k != "casos"},
+        # --- NODEX final, Fase B.1 ---
+        "memoria_grupos": memoria_grupos["por_grupo"],
+        "memoria_grupos_consulta": {k: v for k, v in memoria_grupos.items() if k != "por_grupo"},
         "hallazgos_cazador": [],
         "cazador_ejecutado": False,
         "veredicto_consolidado": None,

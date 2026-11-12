@@ -19,6 +19,15 @@ Salida: `hallazgos_cazador`, una entrada por grupo con explicación benigna,
 explicación maliciosa u operativa, `nivel_sospecha` (alto/medio/bajo),
 justificación y técnica MITRE candidata. Las reglas del prompt son generales:
 no hay ejemplos tomados de casos de desarrollo.
+
+Fase B.1 (cada parte con su interruptor):
+- `CAZADOR_MOTIVO_FACTUAL`: cada grupo trae el motivo factual de su señal
+  (`motivos_factuales`, conteos del lote calculados por el perfil).
+- `CAZADOR_LISTA_PATRONES`: lista de verificación general de patrones de ataque
+  observables en logs, basada en MITRE ATT&CK (`PATRONES_ATAQUE`), no en los
+  casos; por cada grupo, `patron_lista` dice qué patrón calza o `ninguno`.
+- `MEMORIA_GRUPOS_ACTIVA`: cada grupo con señal trae el grupo malicioso y el
+  benigno más parecidos de la memoria de grupos (comparación, no votación).
 """
 
 import json
@@ -48,6 +57,73 @@ _SISTEMA = (
 )
 
 
+#: B.1-3b. Patrones de ataque observables en logs, tomados de MITRE ATT&CK (descripciones
+#: generales de las técnicas, no de los casos). (id, comportamiento observable, técnicas).
+PATRONES_ATAQUE = (
+    ("barrido_descubrimiento_servicios",
+     "un origen prueba muchos puertos o muchos equipos en poco tiempo, con conexiones cortas, rechazadas, "
+     "reiniciadas o sin respuesta", "T1046, T1595"),
+    ("enumeracion_reconocimiento_dns",
+     "consultas DNS en volumen o en ráfaga desde un mismo origen, enumeración de nombres o de direcciones "
+     "(incluida la resolución inversa), transferencias de zona (DNS sobre TCP), o consultas a servidores que no "
+     "son los que usa el resto del lote", "T1590.002, T1018, T1595"),
+    ("fuerza_bruta_autenticacion",
+     "muchos intentos de autenticación o de conexión a un servicio de acceso (SSH, RDP, SMB, LDAP, Kerberos, "
+     "formularios web) desde un origen, con fallos repetidos o sesiones muy cortas", "T1110"),
+    ("beaconing_c2",
+     "conexiones repetidas a intervalos regulares hacia un mismo destino, con tamaños parecidos y poca carga, o "
+     "un protocolo de aplicación usado como canal de control", "T1071, T1573"),
+    ("transferencia_exfiltracion_atipica",
+     "un volumen enviado desde el origen muy superior a lo recibido o al resto del lote, hacia un destino poco "
+     "habitual o por un canal no usual", "T1041, T1048"),
+    ("ejecucion_remota_movimiento_lateral",
+     "conexiones entre equipos internos a servicios de administración o ejecución remota (SMB, RDP, WinRM, SSH, "
+     "RPC/DCOM) que el resto del lote no muestra", "T1021, T1570, T1047"),
+    ("puerto_no_estandar",
+     "un protocolo de aplicación en un puerto que no le corresponde, o un servicio en un puerto inusual",
+     "T1571"),
+)
+IDS_PATRONES = tuple(p[0] for p in PATRONES_ATAQUE) + ("ninguno",)
+
+
+def _instrucciones_b1() -> str:
+    """Partes del prompt de la Fase B.1, según sus interruptores."""
+    from src.config import CAZADOR_LISTA_PATRONES, CAZADOR_MOTIVO_FACTUAL, MEMORIA_GRUPOS_ACTIVA
+    partes = []
+    if CAZADOR_MOTIVO_FACTUAL:
+        partes.append("Cada grupo trae motivos_factuales: el hecho del lote que hizo que se señalara.")
+    if CAZADOR_LISTA_PATRONES:
+        partes.append(
+            "LISTA DE VERIFICACIÓN de patrones de ataque observables en logs (MITRE ATT&CK): "
+            + " ".join(f"[{pid}] {desc} ({tec})." for pid, desc, tec in PATRONES_ATAQUE)
+            + " Para cada grupo indica en patron_lista qué patrón de la lista calza con lo observado, o "
+            "'ninguno' si ninguno calza; un calce exige que la forma observable coincida (volumen, ritmo, "
+            "dirección, puertos, estados), no solo el servicio. La regla sobre el tráfico de infraestructura "
+            "se refiere a la rareza: un grupo de infraestructura también puede calzar con un patrón por su forma.")
+    if MEMORIA_GRUPOS_ACTIVA:
+        partes.append(
+            "Algunos grupos traen memoria: el grupo malicioso y el grupo benigno de casos pasados de la "
+            "organización más parecidos en comportamiento. Es una comparación, no una votación: decide qué "
+            "referente comparte los rasgos que importan y justifícalo con las filas.")
+    return (" " + " ".join(partes)) if partes else ""
+
+
+def _formato_respuesta() -> str:
+    from src.config import CAZADOR_LISTA_PATRONES
+    patron = ('"patron_lista": "' + "|".join(IDS_PATRONES) + '", ') if CAZADOR_LISTA_PATRONES else ""
+    return (' Responde SOLO JSON: {"hallazgos": [{"group_id": "G01", "explicacion_benigna": "...", '
+            '"explicacion_alternativa": "...", "nivel_sospecha": "alto|medio|bajo", ' + patron
+            + '"justificacion": "...", "tecnica_candidata": "T1046" o null}]}')
+
+
+def _sistema() -> str:
+    from src.config import CAZADOR_LISTA_PATRONES, CAZADOR_MOTIVO_FACTUAL, MEMORIA_GRUPOS_ACTIVA
+    if not (CAZADOR_LISTA_PATRONES or CAZADOR_MOTIVO_FACTUAL or MEMORIA_GRUPOS_ACTIVA):
+        return _SISTEMA
+    base = _SISTEMA.split(" Responde SOLO JSON:")[0]
+    return base + _instrucciones_b1() + _formato_respuesta()
+
+
 def _filas_por_grupo(state: LogGuardState) -> dict:
     filas = {}
     for registro in state.get("evidencia_logs") or []:
@@ -59,12 +135,15 @@ def _filas_por_grupo(state: LogGuardState) -> dict:
 
 def grupos_para_cazador(state: LogGuardState) -> list[dict]:
     """Grupos que el cazador examina, con sus filas (vacío = no hay nada que cazar)."""
-    from src.config import CAZADOR_MAX_FILAS, CAZADOR_MAX_GRUPOS
+    from src.config import CAZADOR_MAX_FILAS, CAZADOR_MAX_GRUPOS, CAZADOR_MOTIVO_FACTUAL, MEMORIA_GRUPOS_ACTIVA
+    from src.tools.memoria_grupos import referentes_de_grupo
     perfil = (state.get("resumen_logs") or {}).get("perfil_lote") or {}
     grupos = {g["group_id"]: g for g in state.get("grupos_evidencia") or [] if isinstance(g, dict)}
+    factuales = {}
     if perfil.get("tipo") == "red":
-        elegidos = [(f["group_id"], f.get("motivos") or [])
-                    for f in (state.get("contenido_lote") or {}).get("flujos_minoritarios") or []]
+        flujos = (state.get("contenido_lote") or {}).get("flujos_minoritarios") or []
+        elegidos = [(f["group_id"], f.get("motivos") or []) for f in flujos]
+        factuales = {f["group_id"]: f.get("motivos_factuales") or [] for f in flujos}
     else:
         total = max(1, sum(g.get("conteo", 0) for g in grupos.values()))
         elegidos = []
@@ -82,9 +161,15 @@ def grupos_para_cazador(state: LogGuardState) -> list[dict]:
         g = grupos.get(gid) or {}
         propias = filas.get(gid, [])[:max(0, restantes)]
         restantes -= len(propias)
-        salida.append({"group_id": gid, "clave": g.get("clave"), "conteo": g.get("conteo"),
-                       "motivos": motivos, **({"n_nodos": g["n_nodos"]} if "n_nodos" in g else {}),
-                       "filas": propias, "filas_omitidas": max(0, (g.get("conteo") or 0) - len(propias))})
+        item = {"group_id": gid, "clave": g.get("clave"), "conteo": g.get("conteo"),
+                "motivos": motivos, **({"n_nodos": g["n_nodos"]} if "n_nodos" in g else {})}
+        if CAZADOR_MOTIVO_FACTUAL and factuales.get(gid):
+            item["motivos_factuales"] = factuales[gid]                       # B.1-3a
+        referentes = referentes_de_grupo((state.get("memoria_grupos") or {}).get(gid))
+        if MEMORIA_GRUPOS_ACTIVA and referentes:
+            item["memoria"] = referentes                                     # B.1-2
+        item.update(filas=propias, filas_omitidas=max(0, (g.get("conteo") or 0) - len(propias)))
+        salida.append(item)
     return salida
 
 
@@ -116,7 +201,10 @@ def normalizar_hallazgos(respuesta, examinados: set) -> list[dict]:
         tecnica = tecnica.strip().upper() if isinstance(tecnica, str) else None
         if tecnica and not re.fullmatch(r"T\d{4}(?:\.\d{3})?", tecnica):
             tecnica = None
+        patron = str(item.get("patron_lista") or "").strip().lower()
         hallazgos.append({"group_id": gid, "nivel_sospecha": nivel,
+                          "patron_lista": patron if patron in IDS_PATRONES else ("no_indicado" if not patron
+                                                                                  else "fuera_de_lista"),
                           "explicacion_benigna": str(item.get("explicacion_benigna") or "")[:600],
                           "explicacion_alternativa": str(item.get("explicacion_alternativa") or "")[:600],
                           "justificacion": str(item.get("justificacion") or "")[:600],
@@ -131,7 +219,7 @@ def agente_cazador(state: LogGuardState) -> dict:
                     + json.dumps(resumen_dominante(state), ensure_ascii=False)
                     + "\n\nGRUPOS A EXAMINAR (uno por uno, con todas sus filas):\n"
                     + json.dumps(grupos, ensure_ascii=False))
-    respuesta = llm_json(user_content, system=_SISTEMA)
+    respuesta = llm_json(user_content, system=_sistema())
     hallazgos = normalizar_hallazgos(respuesta, {g["group_id"] for g in grupos})
     altos = sum(1 for h in hallazgos if h["nivel_sospecha"] == "alto")
     print(f"   → {len(hallazgos)} hallazgos ({altos} alto) sobre {len(grupos)} grupos.")

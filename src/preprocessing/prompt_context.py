@@ -186,7 +186,10 @@ def contexto_contenido_lote(contenido: dict | None) -> str:
     partes = ["FLUJOS MINORITARIOS (filas completas de los grupos que cumplen alguna señal "
               "del perfil del lote; el resto del tráfico está resumido en perfil_lote):"]
     for flujo in flujos:
-        partes.append(json.dumps(flujo, ensure_ascii=False))
+        # B.1-3a: el motivo factual de la señal es entrada del cazador, no del triage ni
+        # del agente único (que siguen leyendo lo mismo que en la Fase B).
+        partes.append(json.dumps({k: v for k, v in flujo.items() if k != "motivos_factuales"},
+                                 ensure_ascii=False))
     if contenido.get("filas_omitidas"):
         partes.append(f"ATENCIÓN: se omitieron {contenido['filas_omitidas']} filas de flujos "
                       f"minoritarios por el tope de {contenido.get('tope_filas')} filas.")

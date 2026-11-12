@@ -472,7 +472,9 @@ def campos_d11(state):
             "consulta_mitre": state.get("consulta_mitre") or "",
             "diagnostico_inicial": state.get("diagnostico_inicial") or "",
             "correcciones_auditor": state.get("correcciones_auditor") or 0,
-            "historial_correcciones": copy.deepcopy(state.get("historial_correcciones") or [])}
+            "historial_correcciones": copy.deepcopy(state.get("historial_correcciones") or []),
+            # NODEX final, Fase B.1 (aditivos).
+            "memoria_grupos": copy.deepcopy(state.get("memoria_grupos") or {})}
 
 
 def normalizar_salida_experimental(state):

@@ -94,6 +94,28 @@ def _percentil(valores: list[float], p: float) -> float:
     return ordenados[min(rango, len(ordenados)) - 1]
 
 
+def segundos_de_evento(evento):
+    """Marca de tiempo en segundos (epoch): `ts` de Zeek o el timestamp ISO; None si no hay."""
+    from datetime import datetime, timezone
+    ts = _numero(evento.attributes.get("ts"))
+    if ts is not None:
+        return ts
+    try:
+        momento = datetime.fromisoformat(str(evento.timestamp).replace("Z", "+00:00"))
+    except (TypeError, ValueError):
+        return None
+    if momento.tzinfo is None:
+        momento = momento.replace(tzinfo=timezone.utc)
+    return momento.timestamp()
+
+
+def _ventana(eventos) -> str:
+    marcas = [s for e in eventos if (s := segundos_de_evento(e)) is not None]
+    if len(marcas) < 2:
+        return "un instante"
+    return f"{max(marcas) - min(marcas):.1f} s"
+
+
 def es_lote_de_red(eventos) -> bool:
     """La mayoría de los eventos trae origen y destino: es un log de red."""
     if not eventos:
@@ -290,6 +312,36 @@ def _perfil_red(eventos, uids, grupos, grupo_de, barridos, cfg) -> tuple[dict, l
                     marcadas[i].add("inversion_de_rol")
     senales["inversion_de_rol"] = inversiones
 
+    # B.1-3a: el MOTIVO FACTUAL de cada señal, por grupo (conteos del lote). Lo lee el
+    # cazador; `contexto_contenido_lote` no lo muestra al triage ni al agente único.
+    factuales: dict[str, list[str]] = defaultdict(list)
+    motivos_de_grupo: dict[str, set] = defaultdict(set)
+    for i, motivos in marcadas.items():
+        motivos_de_grupo[grupo_de[i]] |= motivos
+    inversion_por_ip = {inv["ip"]: inv for inv in inversiones}
+    for g in grupos:
+        gid, clave = g["group_id"], g["clave"]
+        motivos = motivos_de_grupo.get(gid) or set()
+        if "barrido_de_puertos" in motivos:
+            filas = [e for e, gg in zip(eventos, grupo_de) if gg == gid]
+            puertos = {e.destination_port for e in filas if e.destination_port is not None}
+            factuales[gid].append(f"un mismo origen contactó {len(puertos)} puertos de destino distintos de un "
+                                  f"mismo destino ({clave['protocolo']}) en {_ventana(filas)} "
+                                  f"({len(filas)} conexiones)")
+        if "servicio_minoritario" in motivos and proporcionales:
+            c = servicios.get(clave["servicio_o_puerto"], 0)
+            factuales[gid].append(f"el servicio/puerto {clave['servicio_o_puerto']} aparece en {c} de {n} filas del "
+                                  f"lote ({c / n:.1%})" + (" (único flujo con ese servicio en el lote)" if c == 1 else ""))
+        if "protocolo_minoritario" in motivos and proporcionales:
+            c = protocolos.get(clave["protocolo"], 0)
+            factuales[gid].append(f"el protocolo {clave['protocolo']} aparece en {c} de {n} filas del lote "
+                                  f"({c / n:.1%})" + (f" (único flujo {clave['protocolo'].upper()} del lote)"
+                                                       if c == 1 else ""))
+        if "inversion_de_rol" in motivos and clave["destino"] in inversion_por_ip:
+            inv = inversion_por_ip[clave["destino"]]
+            factuales[gid].append(f"el destino de este grupo actúa como origen en {inv['como_origen']} filas del "
+                                  f"lote y como destino solo en {inv['como_destino']}")
+
     perfil = {"tipo": "red", "filas": n,
               "protocolos": dict(Counter((e.protocol or "-").lower() for e in eventos).most_common()),
               "servicios": dict(Counter(_servicio_o_puerto(e) for e in eventos).most_common(15)),
@@ -334,6 +386,7 @@ def _perfil_red(eventos, uids, grupos, grupo_de, barridos, cfg) -> tuple[dict, l
         omitidas += g["conteo"] - len(indices)
         flujos.append({"group_id": gid, "clave": g["clave"], "conteo": g["conteo"],
                        "motivos": sorted(motivos_por_grupo[gid]),
+                       "motivos_factuales": factuales.get(gid, []),
                        "filas_omitidas": g["conteo"] - len(indices),
                        "filas": [fila_de_red(eventos[i], uids[i]) for i in indices]})
     perfil["flujos_minoritarios"] = {"grupos": len(flujos), "filas_entregadas": entregadas,

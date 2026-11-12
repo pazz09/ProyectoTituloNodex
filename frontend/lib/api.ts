@@ -109,6 +109,8 @@ export type ReporteFinal = {
     nivel_sospecha: string
     justificacion?: string
     tecnica_candidata?: string | null
+    /** Patrón de la lista de verificación que calzó (B.1). */
+    patron_lista?: string
   }[]
   veredicto_consolidado?: string | null
   classification_detallada?: string | null
