@@ -99,3 +99,20 @@ Resultados en `experiments/desarrollo_fase_a/20261112/`. Son observaciones de de
 
 En el sigiloso, las 3 filas del incidente llegaron al triage en los flujos minoritarios (grupo G08) y el
 auditor las citó, pero las interpretó como un intento menor de conexión a un puerto inactivo.
+
+## Fase A.1 (ajustes tras la prueba de desarrollo)
+
+- **Validador, lista blanca.** Criterio: entra un binario cuya función normal es leer o informar el
+  estado del sistema (archivos, logs, procesos, memoria, hardware, red local) sin modificarlo. Se
+  agregaron `file`, `edac-util`, `coredumpctl`, `ras-mc-ctl`, `mcelog` y otras de solo lectura. Quedan
+  fuera los sondeos activos y las transferencias (`nc`, `nmap`, `telnet`, `ssh`, `curl`, `wget`, `socat`),
+  que generan tráfico nuevo. La lista blanca no exime de las demás reglas (escritura fuera del
+  directorio, destructivos).
+- **Grupos de texto.** La clave pasa a (componente, severidad, plantilla); los nodos afectados quedan como
+  atributo del grupo (`nodos`, `n_nodos`) y aparecen en la tabla de grupos del prompt.
+- **Señales del perfil de red.** Solo barrido de puertos, servicio o protocolo minoritario e inversión de
+  rol son señales y deciden los flujos minoritarios. Pares raros y transferencias atípicas pasan a
+  `perfil_lote.contexto_descriptivo`: describen el lote sin señalar nada (en la prueba aparecían igual en
+  lotes benignos y maliciosos).
+- Los dos errores observados (BGL normal → anomalía; sigiloso no reconocido) no se corrigen: primero se
+  miden con la línea base de desarrollo.

@@ -186,8 +186,15 @@ def tabla_grupos(grupos) -> list[dict]:
     Los uids de cada grupo no se repiten aquí: son los registros del catálogo
     que llevan ese `group_id`. Repetirlos costaba ~28 000 caracteres por
     llamada en un lote UWF de 300 filas."""
-    return [{"group_id": g["group_id"], "clave": g["clave"], "conteo": g["conteo"]}
-            for g in grupos or [] if isinstance(g, dict) and g.get("group_id")]
+    tabla = []
+    for g in grupos or []:
+        if not (isinstance(g, dict) and g.get("group_id")):
+            continue
+        fila = {"group_id": g["group_id"], "clave": g["clave"], "conteo": g["conteo"]}
+        if "nodos" in g:      # logs de texto (Fase A.1): nodos afectados como atributo
+            fila.update(n_nodos=g.get("n_nodos", len(g["nodos"])), nodos=g["nodos"])
+        tabla.append(fila)
+    return tabla
 
 
 def contexto_d11(state):

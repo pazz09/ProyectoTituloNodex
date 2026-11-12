@@ -49,6 +49,18 @@ _DESTRUCTIVO = [
     (r"\bkill(all)?\s+-9\s+1\b", "mata init"),
     (r"\bchmod\s+(-R\s+)?777\b", "permisos 777"),
 ]
+#: Lista blanca de herramientas de diagnóstico (M7, ampliada en la Fase A.1).
+#:
+#: **Criterio.** Entra un binario cuya función normal es LEER o INFORMAR el
+#: estado del sistema (archivos, logs, procesos, memoria, hardware, red local) y
+#: no modificarlo. Quedan fuera las herramientas de sondeo activo hacia otros
+#: equipos o de transferencia (`nc`/`netcat`, `nmap`, `telnet`, `ssh`, `curl`,
+#: `wget`, `scp`): generan tráfico nuevo y pueden usarse para exfiltrar o atacar,
+#: así que no son "solo lectura" aunque se usen para diagnosticar. `ping`,
+#: `traceroute`, `dig` y similares sí entran: son las pruebas de conectividad
+#: estándar de un diagnóstico y no transportan datos. Estar en la lista no
+#: exime de las demás reglas: una escritura fuera de `MITIGACION_DIR_SALIDA` se
+#: rechaza igual (p. ej. `dd of=/dev/sda`, `tee /etc/...`).
 _PERMITIDOS_SOLO_LECTURA = (
     "journalctl", "dmesg", "cat", "less", "more", "tail", "head", "grep", "egrep", "zgrep",
     "zcat", "awk", "wc", "sort", "uniq", "ls", "stat", "find", "df", "du", "free", "uptime",
@@ -57,7 +69,15 @@ _PERMITIDOS_SOLO_LECTURA = (
     "ipmitool", "lscpu", "lspci", "lsusb", "dmidecode", "uname", "who", "w", "last", "lastb",
     "id", "getent", "date", "hostname", "mount", "findmnt", "vmstat", "iostat", "mpstat",
     "sar", "tcpdump", "nmcli", "conntrack", "aureport", "ausearch", "tee", "dd", "truncate",
+    # Fase A.1: herramientas de solo lectura que la prueba de desarrollo mostró rechazadas.
+    "file", "edac-util", "coredumpctl", "ras-mc-ctl", "mcelog", "strings", "hexdump", "xxd",
+    "md5sum", "sha256sum", "sha1sum", "readlink", "realpath", "which", "whereis", "lsmod",
+    "modinfo", "ethtool", "numastat", "ipcs", "getfacl", "lsattr", "systemd-analyze",
+    "timedatectl", "hostnamectl", "loginctl", "resolvectl", "nproc", "arp", "route", "iptables-save",
+    "lastlog", "faillog", "ldd", "pstree", "pidstat", "slabtop", "zdump",
 )
+#: Sondeos activos y transferencias: nunca entran en la lista blanca (ver criterio).
+_EXCLUIDOS_DE_LA_LISTA = ("nc", "netcat", "ncat", "nmap", "telnet", "ssh", "scp", "curl", "wget", "socat")
 _ESCRITURA = [
     re.compile(r"(?:^|[^0-9&<>])>>?\s*(?P<ruta>[^\s;&|]+)"),
     re.compile(r"\btee\s+(?:-a\s+)?(?P<ruta>[^\s;&|]+)"),

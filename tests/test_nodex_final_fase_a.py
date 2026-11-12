@@ -106,8 +106,12 @@ def test_perfil_de_red_detecta_las_senales_genericas():
     valores = {(m["tipo"], m["valor"]) for m in senales["servicio_o_protocolo_minoritario"]}
     assert ("servicio", "ssl") in valores and ("servicio", "ssh") in valores
     assert not any(v.startswith("puerto:10") for _, v in valores)          # el barrido no es "minoritario"
-    assert senales["transferencias_atipicas"]["filas"][0]["uid"] == "Cbig000"
     assert senales["inversion_de_rol"][0]["ip"] == "10.0.0.5"
+    # Fase A.1: pares raros y transferencias atípicas son contexto descriptivo, no señales.
+    assert set(senales) == {"barrido_de_puertos", "servicio_o_protocolo_minoritario", "inversion_de_rol"}
+    descriptivo = perfil["contexto_descriptivo"]
+    assert descriptivo["transferencias_atipicas"]["filas"][0]["uid"] == "Cbig000"
+    assert descriptivo["pares_raros"]["total"] >= 1
     assert perfil["por_origen"]["10.0.0.9"]["puertos_destino_distintos"] == 20
 
 
@@ -131,6 +135,25 @@ def test_flujos_minoritarios_reparten_el_tope_por_turnos(monkeypatch):
     assert analisis["contenido_lote"]["filas_omitidas"] == sum(f["conteo"] for f in flujos) - 5
     fila_barrido = flujos[0]["filas"][0]
     assert {"uid", "source_ip", "destination_port", "conn_state", "history", "orig_bytes"} <= set(fila_barrido)
+
+
+def test_pares_raros_y_transferencias_no_marcan_flujos_minoritarios():
+    flujos = analizar_lote(preprocesar(lote_red()))["contenido_lote"]["flujos_minoritarios"]
+    motivos = {m for f in flujos for m in f["motivos"]}
+    assert motivos <= {"barrido_de_puertos", "servicio_minoritario", "protocolo_minoritario", "inversion_de_rol"}
+    assert not motivos & {"par_raro", "transferencia_atipica"}
+
+
+def test_grupos_de_texto_no_dependen_del_nodo_y_lo_guardan_como_atributo():
+    lineas = [_BGL.format(ep=1117838570 + i, s=i, us=0, comp="KERNEL", sev="INFO",
+                          msg=f"generating core.{100 + i}").replace("R02-M1-N0-C:J12-U11", f"R{i:02d}-M0-N0-C:J01-U01")
+              for i in range(5)]
+    grupos = analizar_lote(preprocesar("\n".join(lineas) + "\n"))["grupos_evidencia"]
+    assert len(grupos) == 1 and grupos[0]["conteo"] == 5
+    assert set(grupos[0]["clave"]) == {"componente", "severidad", "plantilla"}
+    assert grupos[0]["n_nodos"] == 5 and len(grupos[0]["nodos"]) == 5
+    from src.output_contract import tabla_grupos
+    assert tabla_grupos(grupos)[0]["n_nodos"] == 5
 
 
 def test_perfil_de_texto_y_grupos_por_plantilla():
@@ -292,9 +315,26 @@ def test_validador_estricto_rechaza(comando, motivo):
     "echo revisado > /var/tmp/nodex/estado.txt",
     "smartctl -a /dev/sda 2>/dev/null",
     "sudo ss -tunap",
+    # Fase A.1: diagnóstico de solo lectura que la prueba de desarrollo mostró rechazado.
+    "file /bgl/apps/followup/trace",
+    "edac-util -v",
+    "coredumpctl list",
 ])
 def test_validador_estricto_acepta(comando):
     assert validate_solution([comando])["valido"] is True
+
+
+@pytest.mark.parametrize("comando", ["nc -zvu -w 2 10.0.10.1 53", "nmap -sS 10.0.0.1", "curl http://x"])
+def test_los_sondeos_activos_siguen_rechazados(comando):
+    resultado = validate_solution([comando])
+    assert resultado["valido"] is False
+    assert resultado["rechazados"][0]["motivos"][0].startswith("BINARIO_NO_RECONOCIDO")
+
+
+def test_la_lista_blanca_no_incluye_sondeos_activos():
+    from src.tools import validation
+    permitidos = set(validation._PERMITIDOS) | set(validation._PERMITIDOS_SOLO_LECTURA)
+    assert not permitidos & set(validation._EXCLUIDOS_DE_LA_LISTA)
 
 
 def test_tool_validar_registra_los_rechazos_con_el_intento():

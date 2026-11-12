@@ -4,17 +4,19 @@ NODEX final, Fase A (M1, M2 y M6). Todo se calcula sin LLM, a partir de los
 eventos ya normalizados, y nunca a partir de una etiqueta del dataset.
 
 - `perfil_lote` (M2): lo que el resumen por IP ocultaba. En logs de red, por
-  origen: conexiones, destinos y puertos distintos, ventana y estados; y
-  señales genéricas (barrido de puertos, servicio o protocolo minoritario,
-  pares raros, inversión de rol, transferencias atípicas). En logs de texto
-  con formato conocido: distribución de severidad y componente, y las líneas
-  de severidad alta. Los umbrales están en `src/config.py`, con su
-  justificación.
+  origen: conexiones, destinos y puertos distintos, ventana y estados;
+  `senales` genéricas (barrido de puertos, servicio o protocolo minoritario,
+  inversión de rol), que deciden los flujos minoritarios; y un
+  `contexto_descriptivo` (pares raros, transferencias atípicas) que describe el
+  lote sin señalar nada (Fase A.1). En logs de texto con formato conocido:
+  distribución de severidad y componente, y las líneas de severidad alta. Los
+  umbrales están en `src/config.py`, con su justificación.
 - `grupos_evidencia` (M6): grupos estables (G01, G02...) de registros que
   describen lo mismo. Red: (origen, destino, protocolo, servicio o puerto); un
   barrido de puertos es UN grupo por (origen, destino, protocolo). Texto:
-  (nodo, componente, severidad, plantilla del mensaje). El auditor puede citar
-  un grupo en vez de enumerar sus uids, y `normalizar_d11` lo expande.
+  (componente, severidad, plantilla del mensaje), con los nodos afectados como
+  atributo (Fase A.1). El auditor puede citar un grupo en vez de enumerar sus
+  uids, y `normalizar_d11` lo expande.
 - `contenido_lote` (M1): lo que el triage lee del lote. En texto, las líneas
   (con tope y aviso de recorte). En red, las filas completas de los flujos
   minoritarios. La etiqueta de alerta de BGL, si una línea la trajera, se
@@ -150,8 +152,13 @@ def _clave_grupo_red(e, barridos: set) -> tuple:
 
 
 def _clave_grupo_texto(e) -> tuple:
+    """(componente, severidad, plantilla). Fase A.1: el nodo ya no es parte de la clave.
+
+    En BGL casi cada línea viene de un nodo distinto: con el nodo en la clave, 20
+    líneas daban 15 y 20 grupos, y los volcados de memoria repetidos en muchos
+    nodos no se agrupaban. Los nodos quedan como atributo del grupo."""
     componente = (e.service_name or e.attributes.get("bgl_subsistema") or e.process_name or "-")
-    return (e.source_host or "-", componente, e.severity or "-", plantilla_mensaje(e.message))
+    return (componente, e.severity or "-", plantilla_mensaje(e.message))
 
 
 def _barridos(eventos, minimo: int) -> dict:
@@ -170,14 +177,21 @@ def construir_grupos(eventos, uids: list[str], red: bool, barridos: dict) -> tup
         clave = _clave_grupo_red(e, set(barridos)) if red else _clave_grupo_texto(e)
         grupo = claves.get(clave)
         if grupo is None:
-            grupo = {"group_id": f"G{len(claves) + 1:02d}", "clave": clave, "uids": []}
+            grupo = {"group_id": f"G{len(claves) + 1:02d}", "clave": clave, "uids": [], "nodos": []}
             claves[clave] = grupo
         grupo["uids"].append(uid)
+        if not red and e.source_host and e.source_host not in grupo["nodos"]:
+            grupo["nodos"].append(e.source_host)
         por_evento.append(grupo["group_id"])
     nombres = (("origen", "destino", "protocolo", "servicio_o_puerto") if red
-               else ("nodo", "componente", "severidad", "plantilla"))
-    grupos = [{"group_id": g["group_id"], "clave": dict(zip(nombres, g["clave"])),
-               "conteo": len(g["uids"]), "uids": g["uids"]} for g in claves.values()]
+               else ("componente", "severidad", "plantilla"))
+    grupos = []
+    for g in claves.values():
+        grupo = {"group_id": g["group_id"], "clave": dict(zip(nombres, g["clave"])),
+                 "conteo": len(g["uids"]), "uids": g["uids"]}
+        if not red:
+            grupo.update(nodos=g["nodos"], n_nodos=len(g["nodos"]))
+        grupos.append(grupo)
     return grupos, por_evento
 
 
@@ -217,6 +231,10 @@ def _perfil_red(eventos, uids, grupos, grupo_de, barridos, cfg) -> tuple[dict, l
         if (e.source_ip, e.destination_ip, (e.protocol or "-").lower()) in barridos:
             marcadas[i].add("barrido_de_puertos")
 
+    descriptivo: dict = {}
+    grupo_por_par = {}
+    for i, e in enumerate(eventos):
+        grupo_por_par.setdefault((e.source_ip, e.destination_ip), grupo_de[i])
     proporcionales = n >= cfg["min_filas"]
     if proporcionales:
         # Las filas de un barrido ya forman su propio grupo y su propia señal:
@@ -238,27 +256,26 @@ def _perfil_red(eventos, uids, grupos, grupo_de, barridos, cfg) -> tuple[dict, l
                             marcadas[i].add(f"{tipo}_minoritario")
         senales["servicio_o_protocolo_minoritario"] = minoritarios
 
+        # Fase A.1: pares raros y transferencias atípicas son CONTEXTO DESCRIPTIVO, no
+        # señales. En la prueba de desarrollo aparecían igual en lotes benignos y
+        # maliciosos (con 300 filas de fondo, "≤ 2 filas" o "> p95" siempre marca algo),
+        # así que no marcan filas para los flujos minoritarios.
         pares = Counter((e.source_ip, e.destination_ip) for e in eventos if e.source_ip and e.destination_ip)
         raros = sorted(p for p, c in pares.items() if c <= cfg["par_raro_max"])
-        senales["pares_raros"] = {"total": len(raros), "umbral_filas": cfg["par_raro_max"],
-                                  "pares": [{"origen": a, "destino": b, "filas": pares[(a, b)]} for a, b in raros[:20]]}
-        raros_set = set(raros)
-        for i, e in enumerate(eventos):
-            if (e.source_ip, e.destination_ip) in raros_set:
-                marcadas[i].add("par_raro")
+        descriptivo["pares_raros"] = {"total": len(raros), "umbral_filas": cfg["par_raro_max"],
+                                      "pares": [{"origen": a, "destino": b, "filas": pares[(a, b)],
+                                                 "group_id": grupo_por_par.get((a, b))} for a, b in raros[:20]]}
 
         con_bytes = [(i, b) for i, e in enumerate(eventos) if (b := _bytes_totales(e)) is not None]
         if len(con_bytes) >= cfg["min_filas"]:
             umbral = _percentil([b for _, b in con_bytes], cfg["percentil"])
             atipicas = sorted(((i, b) for i, b in con_bytes if b > umbral and b > 0), key=lambda t: -t[1])
-            senales["transferencias_atipicas"] = {
+            descriptivo["transferencias_atipicas"] = {
                 "percentil": cfg["percentil"], "umbral_bytes": umbral, "total": len(atipicas),
                 "filas": [{"uid": uids[i], "bytes": b, "group_id": grupo_de[i]} for i, b in atipicas[:20]]}
-            for i, _ in atipicas:
-                marcadas[i].add("transferencia_atipica")
     else:
-        senales["nota"] = (f"Lote de {n} filas: las señales proporcionales (minoritarios, pares raros, "
-                           f"percentil de bytes) requieren al menos {cfg['min_filas']}.")
+        senales["nota"] = (f"Lote de {n} filas: la señal de servicio o protocolo minoritario y el contexto "
+                           f"descriptivo (pares raros, percentil de bytes) requieren al menos {cfg['min_filas']}.")
 
     como_origen = Counter(e.source_ip for e in eventos if e.source_ip)
     como_destino = Counter(e.destination_ip for e in eventos if e.destination_ip)
@@ -278,7 +295,9 @@ def _perfil_red(eventos, uids, grupos, grupo_de, barridos, cfg) -> tuple[dict, l
               "servicios": dict(Counter(_servicio_o_puerto(e) for e in eventos).most_common(15)),
               "estados": dict(Counter(e.event_outcome or "-" for e in eventos).most_common()),
               "por_origen": detalle, "origenes_omitidos": max(0, len(ordenados) - cfg["max_origenes"]),
-              "senales": senales}
+              "senales": senales,
+              # Fase A.1: describe el lote, no señala nada (ver arriba).
+              "contexto_descriptivo": descriptivo}
 
     # Flujos minoritarios: los GRUPOS que contienen alguna fila señalada, con sus filas completas.
     motivos_por_grupo: dict[str, set] = defaultdict(set)
@@ -288,8 +307,8 @@ def _perfil_red(eventos, uids, grupos, grupo_de, barridos, cfg) -> tuple[dict, l
     for i, g in enumerate(grupo_de):
         indices_por_grupo[g].append(i)
     # Orden de los grupos señalados: primero los de señales más específicas.
-    prioridad = {"barrido_de_puertos": 0, "transferencia_atipica": 1, "inversion_de_rol": 2,
-                 "servicio_minoritario": 3, "protocolo_minoritario": 3, "par_raro": 4}
+    prioridad = {"barrido_de_puertos": 0, "inversion_de_rol": 1,
+                 "servicio_minoritario": 2, "protocolo_minoritario": 2}
     senalados = sorted((g for g in grupos if g["group_id"] in motivos_por_grupo),
                        key=lambda g: (min(prioridad.get(m, 9) for m in motivos_por_grupo[g["group_id"]]),
                                       g["group_id"]))
