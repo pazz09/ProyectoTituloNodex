@@ -41,12 +41,25 @@ def _criterio_organizacion() -> str:
             "hay_incidente, si es un incidente de seguridad. " + CRITERIO_ORGANIZACION)
 
 
+def _grupos_con_senal(state) -> list[dict]:
+    """Los mismos grupos con señal que evalúa el auditor reforzado de NODEX (vacío si está apagado)."""
+    from src.config import AGENTE_UNICO_GRUPOS_CON_SENAL
+    if not AGENTE_UNICO_GRUPOS_CON_SENAL:
+        return []
+    from src.tools.grupos_con_senal import grupos_con_senal
+    return grupos_con_senal(state)
+
+
 def analizar_lote_agente_unico(raw_logs: str, thread_id: str | None = None,
                               tecnicas_mitre: list | None = None) -> dict:
     """Misma tarea y contrato, arquitectura de una sola llamada (más retries)."""
     with medir_ejecucion():
         state, _, firma = _preparar_estado_inicial(raw_logs, thread_id)
         state["tecnicas_mitre"] = list(tecnicas_mitre or [])
+        from src.tools.grupos_con_senal import (CAMPO_EVALUACION_GRUPOS, avisos_evaluacion_grupos,
+                                                bloque_grupos, instruccion_evaluacion_grupos,
+                                                normalizar_evaluacion_grupos)
+        grupos_senal = _grupos_con_senal(state)
         system = (
             "Eres un analista de logs de seguridad. Analiza la evidencia observada "
             "y entrega diagnóstico, veredictos independientes y propuesta de mitigación. "
@@ -58,8 +71,13 @@ def analizar_lote_agente_unico(raw_logs: str, thread_id: str | None = None,
             '"comandos_mitigacion":[]}. '
             + _reglas_mitigacion()
             + _criterio_organizacion()
-            + PROMPT_D11
         )
+        if grupos_senal:
+            # Estudio de ablación: la misma evaluación de grupos que el auditor reforzado, primer
+            # campo del JSON, con la misma instrucción.
+            system = system.replace('Devuelve SOLO JSON: {', 'Devuelve SOLO JSON: {' + CAMPO_EVALUACION_GRUPOS, 1)
+            system += instruccion_evaluacion_grupos()
+        system += PROMPT_D11
         prompt = "RESUMEN DEL LOTE:\n" + json.dumps(
             acotar_resumen_para_prompt(state["resumen_logs"]), ensure_ascii=False)
         prompt += "\n" + contexto_preprocesamiento(state["preprocessing_metadata"], state["parsing_warnings"])
@@ -78,14 +96,23 @@ def analizar_lote_agente_unico(raw_logs: str, thread_id: str | None = None,
         # calculada en `_preparar_estado_inicial`), para una comparación justa.
         from src.tools.memoria_grupos import contexto_memoria_grupos
         grupos_memoria = contexto_memoria_grupos(state.get("memoria_grupos"))
-        if grupos_memoria:
+        if grupos_memoria and not grupos_senal:
+            # Con el bloque de grupos con señal, los referentes de la memoria de grupos ya llegan dentro
+            # de cada grupo (igual que al auditor reforzado); no se repiten.
             prompt += "\n" + grupos_memoria
+        if grupos_senal:
+            prompt += bloque_grupos(state, grupos_senal)
         prompt += contexto_d11(state)
         try:
             respuesta = llm_json(prompt, system=system)
             state.update(normalizar_d11(respuesta, state["evidencia_logs"], state.get("grupos_evidencia")))
             if not isinstance(respuesta, dict):
                 respuesta = {}
+            if grupos_senal:
+                state["evaluacion_grupos"] = normalizar_evaluacion_grupos(
+                    respuesta.get("evaluacion_grupos"), {g["group_id"] for g in grupos_senal})
+                state["d11_warnings"] = list(state.get("d11_warnings") or []) + avisos_evaluacion_grupos(
+                    grupos_senal, state["evaluacion_grupos"])
             for campo in ("diagnostico", "hay_anomalia", "hay_incidente", "confianza"):
                 state[campo] = respuesta.get(campo)
             state["evaluacion_auditor"] = respuesta.get("evaluacion")

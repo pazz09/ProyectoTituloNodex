@@ -1,0 +1,1042 @@
+{
+ "case_id": "bgl_des_natural_0005",
+ "dataset": "bgl",
+ "arquitectura": "agente_unico",
+ "segundos_pared_hijo": 38.03857690000041,
+ "interruptores_efectivos": {
+  "RAG_POR_HIPOTESIS": true,
+  "CORRECCION_AUDITOR": true,
+  "HISTORICO_ACTIVO": true,
+  "HISTORICO_K": 3,
+  "EVENTOS_POR_CATEGORIA": true,
+  "HISTORICO_CONTRASTIVO": true,
+  "HISTORICO_K_POR_CLASE": 2,
+  "MEMORIA_GRUPOS_ACTIVA": true,
+  "AUDITOR_REFORZADO": true,
+  "GRUPOS_MOTIVO_FACTUAL": true,
+  "LISTA_PATRONES_MITRE": true,
+  "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+ },
+ "estado": {
+  "evidencia_logs": [
+   {
+    "uid": "log_record_000001",
+    "record_number": 1,
+    "line_start": 1,
+    "line_end": 1,
+    "timestamp": "2005-11-10-23.03.41.120402",
+    "group_id": "G01",
+    "source_host": "R63-M0-NF-C:J06-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 00106274 dear 0246da8c"
+   },
+   {
+    "uid": "log_record_000002",
+    "record_number": 2,
+    "line_start": 2,
+    "line_end": 2,
+    "timestamp": "2005-11-10-23.04.01.480413",
+    "group_id": "G02",
+    "source_host": "R63-M0-N4-C:J04-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 00106448 dear 0246dacc"
+   },
+   {
+    "uid": "log_record_000003",
+    "record_number": 3,
+    "line_start": 3,
+    "line_end": 3,
+    "timestamp": "2005-11-10-23.04.09.760063",
+    "group_id": "G03",
+    "source_host": "R63-M0-N3-C:J14-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 00106298 dear 02f7a18c"
+   },
+   {
+    "uid": "log_record_000004",
+    "record_number": 4,
+    "line_start": 4,
+    "line_end": 4,
+    "timestamp": "2005-11-10-23.12.32.269153",
+    "group_id": "G04",
+    "source_host": "R63-M0-N5-C:J12-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "488205 floating point alignment exceptions"
+   },
+   {
+    "uid": "log_record_000005",
+    "record_number": 5,
+    "line_start": 5,
+    "line_end": 5,
+    "timestamp": "2005-11-11-04.39.52.183132",
+    "group_id": "G05",
+    "source_host": "R31-M0-N8-I:J18-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "ciod: generated 128 core files for program /bgl/apps/followup/SPaSM_static/SPaSM_mpi.new_comp"
+   },
+   {
+    "uid": "log_record_000006",
+    "record_number": 6,
+    "line_start": 6,
+    "line_end": 6,
+    "timestamp": "2005-11-11-06.45.23.635450",
+    "group_id": "G06",
+    "source_host": "R02-M1-N4-C:J06-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "1 ddr errors(s) detected and corrected on rank 0, symbol 8, bit 7"
+   },
+   {
+    "uid": "log_record_000007",
+    "record_number": 7,
+    "line_start": 7,
+    "line_end": 7,
+    "timestamp": "2005-11-11-18.58.22.474164",
+    "group_id": "G07",
+    "source_host": "R23-M1-N0-C:J08-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "CE sym 25, at 0x12127ee0, mask 0x10"
+   },
+   {
+    "uid": "log_record_000008",
+    "record_number": 8,
+    "line_start": 8,
+    "line_end": 8,
+    "timestamp": "2005-11-14-18.25.23.269634",
+    "group_id": "G08",
+    "source_host": "R46-M1-NE-C:J14-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "rts: kernel terminated for reason 1004"
+   },
+   {
+    "uid": "log_record_000009",
+    "record_number": 9,
+    "line_start": 9,
+    "line_end": 9,
+    "timestamp": "2005-11-14-18.25.41.161796",
+    "group_id": "G09",
+    "source_host": "R46-M1-NF-C:J11-U01",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "Error receiving packet on tree network, expecting type 57 instead of type 3 (softheader=00ce22e8 e6200003 00000002 00000000) PSR0=00001f01 PSR1=00000000 PRXF=00000002 PIXF=00000007"
+   },
+   {
+    "uid": "log_record_000010",
+    "record_number": 10,
+    "line_start": 10,
+    "line_end": 10,
+    "timestamp": "2005-11-14-18.25.42.152117",
+    "group_id": "G09",
+    "source_host": "R46-M1-N1-C:J02-U01",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "Error receiving packet on tree network, expecting type 57 instead of type 3 (softheader=00ce22e8 e6200003 00000002 00000000) PSR0=20021f01 PSR1=00000000 PRXF=00000002 PIXF=00000007"
+   },
+   {
+    "uid": "log_record_000011",
+    "record_number": 11,
+    "line_start": 11,
+    "line_end": 11,
+    "timestamp": "2005-11-15-05.41.23.201247",
+    "group_id": "G10",
+    "source_host": "R05-M0-NC-C:J04-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "critical input interrupt (unit=0x0b bit=0x0a): warning for torus z+ wire, suppressing further interrupts of same type"
+   },
+   {
+    "uid": "log_record_000012",
+    "record_number": 12,
+    "line_start": 12,
+    "line_end": 12,
+    "timestamp": "2005-11-15-07.04.39.066903",
+    "group_id": "G11",
+    "source_host": "R17-M1-N0-I:J18-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "ciod: generated 128 core files for program /bgl/apps/followup/SPaSM_static/SPaSM_mpi.rel2"
+   },
+   {
+    "uid": "log_record_000013",
+    "record_number": 13,
+    "line_start": 13,
+    "line_end": 13,
+    "timestamp": "2005-11-15-07.53.03.697929",
+    "group_id": "G12",
+    "source_host": "R34-M1-N4-I:J18-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "ciod: generated 64 core files for program /bgl/apps/followup/hellow/a.out.1111"
+   },
+   {
+    "uid": "log_record_000014",
+    "record_number": 14,
+    "line_start": 14,
+    "line_end": 14,
+    "timestamp": "2005-11-15-07.53.59.004294",
+    "group_id": "G12",
+    "source_host": "R15-M0-NC-I:J18-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "ciod: generated 64 core files for program /bgl/apps/followup/hellow/a.out.1111"
+   },
+   {
+    "uid": "log_record_000015",
+    "record_number": 15,
+    "line_start": 15,
+    "line_end": 15,
+    "timestamp": "2005-11-15-09.43.17.181620",
+    "group_id": "G13",
+    "source_host": "R23-M0-N7",
+    "service_name": "bgl.discovery",
+    "severity": "INFO",
+    "message": "Node card VPD check: U11 node in processor card slot J04 do not match. VPD ecid 04D58088CB2FFFFF08031C104CE9, found 04CA80D8012FFFFF08061A8094CB"
+   },
+   {
+    "uid": "log_record_000016",
+    "record_number": 16,
+    "line_start": 16,
+    "line_end": 16,
+    "timestamp": "2005-11-15-09.49.12.022636",
+    "group_id": "G14",
+    "source_host": "R67-M1-NA",
+    "service_name": "bgl.discovery",
+    "severity": "INFO",
+    "message": "Node card VPD check: U11 node in processor card slot J10 do not match. VPD ecid 07570DD8002FFFFF09031B7090E2, found 04D480D8482FFFFF0A071BA052DE"
+   },
+   {
+    "uid": "log_record_000017",
+    "record_number": 17,
+    "line_start": 17,
+    "line_end": 17,
+    "timestamp": "2005-11-15-19.19.28.379713",
+    "group_id": "G08",
+    "source_host": "R57-M0-NA-C:J13-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "rts: kernel terminated for reason 1004"
+   },
+   {
+    "uid": "log_record_000018",
+    "record_number": 18,
+    "line_start": 18,
+    "line_end": 18,
+    "timestamp": "2005-11-15-19.21.18.471861",
+    "group_id": "G15",
+    "source_host": "R57-M0-N8-C:J12-U01",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "Error receiving packet on tree network, expecting type 57 instead of type 3 (softheader=009756d5 8bfa0003 00000002 00000000) PSR0=20021f01 PSR1=00000000 PRXF=00000002 PIXF=00000007"
+   },
+   {
+    "uid": "log_record_000019",
+    "record_number": 19,
+    "line_start": 19,
+    "line_end": 19,
+    "timestamp": "2005-11-17-05.02.15.807696",
+    "group_id": "G16",
+    "source_host": "R64-M1-N4-I:J18-U01",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: Error loading /bgl/apps/followup/SPaSM_static/SPaSM.460-1115: invalid or missing program image, Permission denied"
+   },
+   {
+    "uid": "log_record_000020",
+    "record_number": 20,
+    "line_start": 20,
+    "line_end": 20,
+    "timestamp": "2005-11-17-05.35.26.782649",
+    "group_id": "G17",
+    "source_host": "R72-M1-NE-C:J04-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "18507114 torus sender z- retransmission error(s) (dcr 0x02f9) detected and corrected over 198 seconds"
+   }
+  ],
+  "evidencia_logs_omitidos": 0,
+  "grupos_evidencia": [
+   {
+    "group_id": "G01",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n> dear <n>da<n>c"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000001"
+    ],
+    "nodos": [
+     "R63-M0-NF-C:J06-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G02",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n> dear <n>dacc"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000002"
+    ],
+    "nodos": [
+     "R63-M0-N4-C:J04-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G03",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n> dear <n>f<n>a<n>c"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000003"
+    ],
+    "nodos": [
+     "R63-M0-N3-C:J14-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G04",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "<n> floating point alignment exceptions"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000004"
+    ],
+    "nodos": [
+     "R63-M0-N5-C:J12-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G05",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "ciod: generated <n> core files for program /bgl/apps/followup/SPaSM_static/SPaSM_mpi.new_comp"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000005"
+    ],
+    "nodos": [
+     "R31-M0-N8-I:J18-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G06",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "<n> ddr errors(s) detected and corrected on rank <n>, symbol <n>, bit <n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000006"
+    ],
+    "nodos": [
+     "R02-M1-N4-C:J06-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G07",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "CE sym <n>, at <hex>, mask <hex>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000007"
+    ],
+    "nodos": [
+     "R23-M1-N0-C:J08-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G08",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "rts: kernel terminated for reason <n>"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000008",
+     "log_record_000017"
+    ],
+    "nodos": [
+     "R46-M1-NE-C:J14-U11",
+     "R57-M0-NA-C:J13-U11"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G09",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "Error receiving packet on tree network, expecting type <n> instead of type <n> (softheader=<n>ce<n>e<n> e<n> <n> <n>) PS"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000009",
+     "log_record_000010"
+    ],
+    "nodos": [
+     "R46-M1-NF-C:J11-U01",
+     "R46-M1-N1-C:J02-U01"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G10",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "critical input interrupt (unit=<hex> bit=<hex>): warning for torus z+ wire, suppressing further interrupts of same type"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000011"
+    ],
+    "nodos": [
+     "R05-M0-NC-C:J04-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G11",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "ciod: generated <n> core files for program /bgl/apps/followup/SPaSM_static/SPaSM_mpi.rel<n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000012"
+    ],
+    "nodos": [
+     "R17-M1-N0-I:J18-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G12",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "ciod: generated <n> core files for program /bgl/apps/followup/hellow/a.out.<n>"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000013",
+     "log_record_000014"
+    ],
+    "nodos": [
+     "R34-M1-N4-I:J18-U01",
+     "R15-M0-NC-I:J18-U11"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G13",
+    "clave": {
+     "componente": "bgl.discovery",
+     "severidad": "INFO",
+     "plantilla": "Node card VPD check: U<n> node in processor card slot J<n> do not match. VPD ecid <n>D<n>CB<n>FFFFF<n>C<n>CE<n>, found <"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000015"
+    ],
+    "nodos": [
+     "R23-M0-N7"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G14",
+    "clave": {
+     "componente": "bgl.discovery",
+     "severidad": "INFO",
+     "plantilla": "Node card VPD check: U<n> node in processor card slot J<n> do not match. VPD ecid <n>DD<n>FFFFF<n>B<n>E<n>, found <n>D<n"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000016"
+    ],
+    "nodos": [
+     "R67-M1-NA"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G15",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "Error receiving packet on tree network, expecting type <n> instead of type <n> (softheader=<n>d<n> <n>bfa<n> <n> <n>) PS"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000018"
+    ],
+    "nodos": [
+     "R57-M0-N8-C:J12-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G16",
+    "clave": {
+     "componente": "bgl.app",
+     "severidad": "FATAL",
+     "plantilla": "ciod: Error loading /bgl/apps/followup/SPaSM_static/SPaSM.<n>-<n>: invalid or missing program image, Permission denied"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000019"
+    ],
+    "nodos": [
+     "R64-M1-N4-I:J18-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G17",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "<n> torus sender z- retransmission error(s) (dcr <hex>) detected and corrected over <n> seconds"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000020"
+    ],
+    "nodos": [
+     "R72-M1-NE-C:J04-U01"
+    ],
+    "n_nodos": 1
+   }
+  ],
+  "contenido_lote": {
+   "tipo": "texto",
+   "lineas": [
+    "[log_record_000001] 1131692621 2005.11.10 R63-M0-NF-C:J06-U01 2005-11-10-23.03.41.120402 R63-M0-NF-C:J06-U01 RAS KERNEL INFO iar 00106274 dear 0246da8c",
+    "[log_record_000002] 1131692641 2005.11.10 R63-M0-N4-C:J04-U11 2005-11-10-23.04.01.480413 R63-M0-N4-C:J04-U11 RAS KERNEL INFO iar 00106448 dear 0246dacc",
+    "[log_record_000003] 1131692649 2005.11.10 R63-M0-N3-C:J14-U11 2005-11-10-23.04.09.760063 R63-M0-N3-C:J14-U11 RAS KERNEL INFO iar 00106298 dear 02f7a18c",
+    "[log_record_000004] 1131693152 2005.11.10 R63-M0-N5-C:J12-U01 2005-11-10-23.12.32.269153 R63-M0-N5-C:J12-U01 RAS KERNEL INFO 488205 floating point alignment exceptions",
+    "[log_record_000005] 1131712792 2005.11.11 R31-M0-N8-I:J18-U01 2005-11-11-04.39.52.183132 R31-M0-N8-I:J18-U01 RAS KERNEL INFO ciod: generated 128 core files for program /bgl/apps/followup/SPaSM_static/SPaSM_mpi.new_comp",
+    "[log_record_000006] 1131720323 2005.11.11 R02-M1-N4-C:J06-U01 2005-11-11-06.45.23.635450 R02-M1-N4-C:J06-U01 RAS KERNEL INFO 1 ddr errors(s) detected and corrected on rank 0, symbol 8, bit 7",
+    "[log_record_000007] 1131764302 2005.11.11 R23-M1-N0-C:J08-U11 2005-11-11-18.58.22.474164 R23-M1-N0-C:J08-U11 RAS KERNEL INFO CE sym 25, at 0x12127ee0, mask 0x10",
+    "[log_record_000008] 1132021523 2005.11.14 R46-M1-NE-C:J14-U11 2005-11-14-18.25.23.269634 R46-M1-NE-C:J14-U11 RAS KERNEL FATAL rts: kernel terminated for reason 1004",
+    "[log_record_000009] 1132021541 2005.11.14 R46-M1-NF-C:J11-U01 2005-11-14-18.25.41.161796 R46-M1-NF-C:J11-U01 RAS KERNEL FATAL Error receiving packet on tree network, expecting type 57 instead of type 3 (softheader=00ce22e8 e6200003 00000002 00000000) PSR0=00001f01 PSR1=00000000 PRXF=00000002 PIXF=00000007",
+    "[log_record_000010] 1132021542 2005.11.14 R46-M1-N1-C:J02-U01 2005-11-14-18.25.42.152117 R46-M1-N1-C:J02-U01 RAS KERNEL FATAL Error receiving packet on tree network, expecting type 57 instead of type 3 (softheader=00ce22e8 e6200003 00000002 00000000) PSR0=20021f01 PSR1=00000000 PRXF=00000002 PIXF=00000007",
+    "[log_record_000011] 1132062083 2005.11.15 R05-M0-NC-C:J04-U11 2005-11-15-05.41.23.201247 R05-M0-NC-C:J04-U11 RAS KERNEL INFO critical input interrupt (unit=0x0b bit=0x0a): warning for torus z+ wire, suppressing further interrupts of same type",
+    "[log_record_000012] 1132067079 2005.11.15 R17-M1-N0-I:J18-U01 2005-11-15-07.04.39.066903 R17-M1-N0-I:J18-U01 RAS KERNEL INFO ciod: generated 128 core files for program /bgl/apps/followup/SPaSM_static/SPaSM_mpi.rel2",
+    "[log_record_000013] 1132069983 2005.11.15 R34-M1-N4-I:J18-U01 2005-11-15-07.53.03.697929 R34-M1-N4-I:J18-U01 RAS KERNEL INFO ciod: generated 64 core files for program /bgl/apps/followup/hellow/a.out.1111",
+    "[log_record_000014] 1132070039 2005.11.15 R15-M0-NC-I:J18-U11 2005-11-15-07.53.59.004294 R15-M0-NC-I:J18-U11 RAS KERNEL INFO ciod: generated 64 core files for program /bgl/apps/followup/hellow/a.out.1111",
+    "[log_record_000015] 1132076597 2005.11.15 R23-M0-N7 2005-11-15-09.43.17.181620 R23-M0-N7 NULL DISCOVERY INFO Node card VPD check: U11 node in processor card slot J04 do not match. VPD ecid 04D58088CB2FFFFF08031C104CE9, found 04CA80D8012FFFFF08061A8094CB",
+    "[log_record_000016] 1132076952 2005.11.15 R67-M1-NA 2005-11-15-09.49.12.022636 R67-M1-NA NULL DISCOVERY INFO Node card VPD check: U11 node in processor card slot J10 do not match. VPD ecid 07570DD8002FFFFF09031B7090E2, found 04D480D8482FFFFF0A071BA052DE",
+    "[log_record_000017] 1132111168 2005.11.15 R57-M0-NA-C:J13-U11 2005-11-15-19.19.28.379713 R57-M0-NA-C:J13-U11 RAS KERNEL FATAL rts: kernel terminated for reason 1004",
+    "[log_record_000018] 1132111278 2005.11.15 R57-M0-N8-C:J12-U01 2005-11-15-19.21.18.471861 R57-M0-N8-C:J12-U01 RAS KERNEL FATAL Error receiving packet on tree network, expecting type 57 instead of type 3 (softheader=009756d5 8bfa0003 00000002 00000000) PSR0=20021f01 PSR1=00000000 PRXF=00000002 PIXF=00000007",
+    "[log_record_000019] 1132232535 2005.11.17 R64-M1-N4-I:J18-U01 2005-11-17-05.02.15.807696 R64-M1-N4-I:J18-U01 RAS APP FATAL ciod: Error loading /bgl/apps/followup/SPaSM_static/SPaSM.460-1115: invalid or missing program image, Permission denied",
+    "[log_record_000020] 1132234526 2005.11.17 R72-M1-NE-C:J04-U01 2005-11-17-05.35.26.782649 R72-M1-NE-C:J04-U01 RAS KERNEL INFO 18507114 torus sender z- retransmission error(s) (dcr 0x02f9) detected and corrected over 198 seconds"
+   ],
+   "total_lineas": 20,
+   "lineas_entregadas": 20,
+   "recortado": false,
+   "topes": {
+    "lineas": 200,
+    "caracteres": 20000
+   }
+  },
+  "veredicto_preliminar": null,
+  "justificacion_veredicto_preliminar": "",
+  "invalid_evidence_group_count": 0,
+  "comandos_rechazados": [],
+  "casos_historicos": [
+   {
+    "id": "bgl_des_natural_0003",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "clase": "anomala",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 2 × [FATAL bgl.app] ciod: Error reading message prefix on CioStream socket to <n>.<n>.<n>.<n>:<n>, Link has be. Composición: 20 eventos, severidades INFO 15, FATAL 5.",
+    "similitud": 0.804
+   },
+   {
+    "id": "bgl_des_natural_0012",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Contiene eventos de severidad alta que no se consideraron alerta: 5 × [FATAL bgl.app] ciod: LOGIN chdir(/bgl/apps/SWL/performance/MINIBEN///<n>.<n>.<n>-<n>.<n>.<n>) failed: No ; 3 × [FATAL bgl.app] ciod: Error loading /home/yates//torus-latency.rts: invalid or missing program image, No s; 2 × [ERROR bgl.mmcs] idoproxydb hit ASSERT condition: ASSERT expression=<n> Source file=idotransportmgr.cpp Sou; 1 × [FATAL bgl.app] ciod: Error loading /home/yates//bandwidth.rts: invalid or missing program image, No such . Composición: 20 eventos, severidades FATAL 13, INFO 5, ERROR 2.",
+    "similitud": 0.794
+   },
+   {
+    "id": "bgl_des_balanceado_0000",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "clase": "anomala",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 1 × [FATAL bgl.app] ciod: Error reading message prefix after LOAD_MESSAGE on CioStream socket to <n>.<n>.<n>.<; 1 × [FATAL bgl.kernel] rts: kernel terminated for reason <n>. Composición: 20 eventos, severidades INFO 15, FATAL 5.",
+    "similitud": 0.792
+   },
+   {
+    "id": "bgl_des_natural_0019",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Contiene eventos de severidad alta que no se consideraron alerta: 2 × [FATAL bgl.app] ciod: LOGIN chdir(/g/g<n>/spelce<n>/Linpack_SWL) failed: No such file or directory. Composición: 20 eventos, severidades INFO 18, FATAL 2.",
+    "similitud": 0.7
+   }
+  ],
+  "historico_consulta": {
+   "excluidos_por_solapamiento": [
+    "rag_enriquecido_v2:bgl_des_natural_0005"
+   ],
+   "consultados": 56,
+   "contrastiva": true,
+   "k_por_clase": 2,
+   "tipo": "texto",
+   "omitidos_otro_tipo": 31,
+   "excluidos_mismo_incidente": [],
+   "exclusion_por_incidente_activa": true,
+   "representacion": "Eventos destacados: [FATAL bgl.kernel] rts: kernel terminated for reason <n> x2 en 2 nodos; [FATAL bgl.kernel] Error receiving packet on tree network, expecting type <n> instead of type <n> (softheader=<n>ce<n>e<n> e<n> <n> <n>) PS x2 en 2 nodos; [FATAL bgl.kernel] Error receiving packet on tree network, expecting type <n> instead of type <n> (softheader=<n>d<n> <n>bfa<n> <n> <n>) PS x1 en 1 nodos; [FATAL bgl.app] ciod: Error loading /bgl/apps/followup/SPaSM_static/SPaSM.<n>-<n>: invalid or missing program image, Permission denied x1 en 1 nodos\nLog de texto, 20 eventos. Severidades: INFO 14, FATAL 6. Componentes: bgl.kernel 17, bgl.discovery 2, bgl.app 1. Nodos distintos: 20."
+  },
+  "memoria_grupos": {},
+  "memoria_grupos_consulta": {
+   "excluidos_por_solapamiento": [],
+   "consultados": 0
+  },
+  "veredicto_consolidado": null,
+  "consulta_mitre": "",
+  "evaluacion_grupos": [
+   {
+    "group_id": "G08",
+    "explicacion_benigna": "Terminación no anómala de un proceso o runtime bajo condiciones de parada controlada.",
+    "explicacion_maliciosa": "Fallo crítico en el sistema operativo o hardware del nodo de cómputo que provoca la terminación abrupta del kernel (código 1004), requiriendo reinicio del nodo y diagnóstico de hardware.",
+    "patron_lista": "ninguno"
+   },
+   {
+    "group_id": "G09",
+    "explicacion_benigna": "Paquetes residuales o fuera de secuencia en la red de árbol tras la finalización normal de una aplicación distribuida.",
+    "explicacion_maliciosa": "Corrupción o desincronización crítica de tramas en la red de árbol (tree network) del supercomputador, recibiendo tipos de paquete incompatibles (tipo 3 en vez de 57) que provocan fallos FATAL en múltiples nodos.",
+    "patron_lista": "ninguno"
+   },
+   {
+    "group_id": "G15",
+    "explicacion_benigna": "Desincronización transitoria menor en la interfaz de red interna.",
+    "explicacion_maliciosa": "Fallo crítico persistente en la topología de red de árbol que interrumpe la comunicación inter-nodo en el rack R57.",
+    "patron_lista": "ninguno"
+   },
+   {
+    "group_id": "G16",
+    "explicacion_benigna": "Error común de configuración o permisos del usuario al intentar ejecutar un binario para el cual no cuenta con permisos de ejecución o lectura.",
+    "explicacion_maliciosa": "Intento de ejecución no autorizada de binarios protegidos o fallo operativo en la gestión de identidades y permisos del sistema de archivos compartido.",
+    "patron_lista": "ninguno"
+   }
+  ],
+  "diagnostico_inicial": "",
+  "diagnostico_corregido": "",
+  "correcciones_auditor": 0,
+  "historial_correcciones": [],
+  "eventos_reconstruidos": [
+   {
+    "event_id": "event_001",
+    "evidence_uids": [
+     "log_record_000008",
+     "log_record_000017",
+     "log_record_000009",
+     "log_record_000010"
+    ],
+    "timestamp": "2005-11-14-18.25.23.269634",
+    "event_type": "kernel_and_tree_network_fatal_failure",
+    "description": "Fallo fatal con terminación del kernel (código 1004) y error en red de árbol en nodos del rack R46.",
+    "confidence": null,
+    "evidence_groups": [
+     "G08",
+     "G09"
+    ],
+    "categoria": "anomalia_operativa"
+   },
+   {
+    "event_id": "event_002",
+    "evidence_uids": [
+     "log_record_000018",
+     "log_record_000017"
+    ],
+    "timestamp": "2005-11-15-19.19.28.379713",
+    "event_type": "kernel_and_tree_network_fatal_failure",
+    "description": "Fallo fatal con terminación del kernel y error en red de árbol en nodos del rack R57.",
+    "confidence": null,
+    "evidence_groups": [
+     "G15"
+    ],
+    "categoria": "anomalia_operativa"
+   },
+   {
+    "event_id": "event_003",
+    "evidence_uids": [
+     "log_record_000019"
+    ],
+    "timestamp": "2005-11-17-05.02.15.807696",
+    "event_type": "app_load_permission_denied",
+    "description": "Error al cargar binario SPaSM por denegación de permisos de archivo.",
+    "confidence": null,
+    "evidence_groups": [
+     "G16"
+    ],
+    "categoria": "contexto"
+   }
+  ],
+  "secuencia_temporal": [
+   "event_001",
+   "event_002",
+   "event_003"
+  ],
+  "tecnicas_atribuidas": [],
+  "invalid_evidence_uid_count": 0,
+  "d11_warnings": [],
+  "telemetry": {
+   "llm_call_count": 1,
+   "input_tokens": 13663,
+   "output_tokens": 1324,
+   "total_tokens": 15972,
+   "execution_time": 20.208811,
+   "replan_count": 0,
+   "intentos_correccion": 0,
+   "invalid_evidence_uid_count": 0,
+   "d11_warning_count": 0,
+   "llm_calls": [
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 13663,
+     "output_tokens": 1324,
+     "total_tokens": 15972,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 985,
+     "duration_s": 20.082,
+     "error": null
+    }
+   ]
+  },
+  "resumen_logs": {
+   "formato_detectado": "bgl",
+   "total_lineas": 20,
+   "servicios": {
+    "bgl.kernel": 17,
+    "bgl.discovery": 2,
+    "bgl.app": 1
+   },
+   "eventos": {
+    "evento_critico": 6,
+    "evento_normal": 14
+   },
+   "ventana_temporal": {
+    "inicio": "2005-11-10-23.03.41.120402",
+    "fin": "2005-11-17-05.35.26.782649"
+   },
+   "n_ips_distintas": 0,
+   "ips_distintas": [],
+   "por_ip": {},
+   "usuarios": {},
+   "n_usuarios_distintos": 0,
+   "codigos_respuesta": {},
+   "entidades": [],
+   "cronologia": [
+    {
+     "n": 8,
+     "timestamp": "2005-11-14-18.25.23.269634",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1132021523 2005.11.14 R46-M1-NE-C:J14-U11 2005-11-14-18.25.23.269634 R46-M1-NE-C:J14-U11 RAS KERNEL FATAL rts: kernel terminated for reason 1004"
+    },
+    {
+     "n": 9,
+     "timestamp": "2005-11-14-18.25.41.161796",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1132021541 2005.11.14 R46-M1-NF-C:J11-U01 2005-11-14-18.25.41.161796 R46-M1-NF-C:J11-U01 RAS KERNEL FATAL Error receiving packet on tree network, expecting type 57 instead of type…"
+    },
+    {
+     "n": 10,
+     "timestamp": "2005-11-14-18.25.42.152117",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1132021542 2005.11.14 R46-M1-N1-C:J02-U01 2005-11-14-18.25.42.152117 R46-M1-N1-C:J02-U01 RAS KERNEL FATAL Error receiving packet on tree network, expecting type 57 instead of type…"
+    },
+    {
+     "n": 17,
+     "timestamp": "2005-11-15-19.19.28.379713",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1132111168 2005.11.15 R57-M0-NA-C:J13-U11 2005-11-15-19.19.28.379713 R57-M0-NA-C:J13-U11 RAS KERNEL FATAL rts: kernel terminated for reason 1004"
+    },
+    {
+     "n": 18,
+     "timestamp": "2005-11-15-19.21.18.471861",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1132111278 2005.11.15 R57-M0-N8-C:J12-U01 2005-11-15-19.21.18.471861 R57-M0-N8-C:J12-U01 RAS KERNEL FATAL Error receiving packet on tree network, expecting type 57 instead of type…"
+    },
+    {
+     "n": 19,
+     "timestamp": "2005-11-17-05.02.15.807696",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1132232535 2005.11.17 R64-M1-N4-I:J18-U01 2005-11-17-05.02.15.807696 R64-M1-N4-I:J18-U01 RAS APP FATAL ciod: Error loading /bgl/apps/followup/SPaSM_static/SPaSM.460-1115: invalid o…"
+    }
+   ],
+   "cronologia_omitidos": 0,
+   "raw_procedencia": {
+    "sha256": "83411ee419950487165a6fe13986662663b5e8c339b199119bd8e6b6fda7c79b",
+    "lineas": 20,
+    "bytes": 3890
+   },
+   "reputacion_ips": {},
+   "perfil_lote": {
+    "tipo": "texto",
+    "filas": 20,
+    "con_formato_reconocido": 20,
+    "severidades": {
+     "INFO": 14,
+     "FATAL": 6
+    },
+    "componentes": {
+     "bgl.kernel": 17,
+     "bgl.discovery": 2,
+     "bgl.app": 1
+    },
+    "nodos": {
+     "R63-M0-NF-C:J06-U01": 1,
+     "R63-M0-N4-C:J04-U11": 1,
+     "R63-M0-N3-C:J14-U11": 1,
+     "R63-M0-N5-C:J12-U01": 1,
+     "R31-M0-N8-I:J18-U01": 1,
+     "R02-M1-N4-C:J06-U01": 1,
+     "R23-M1-N0-C:J08-U11": 1,
+     "R46-M1-NE-C:J14-U11": 1,
+     "R46-M1-NF-C:J11-U01": 1,
+     "R46-M1-N1-C:J02-U01": 1
+    },
+    "nodos_distintos": 20,
+    "lineas_severidad_alta": {
+     "total": 6,
+     "omitidas": 0,
+     "lineas": [
+      {
+       "uid": "log_record_000008",
+       "severidad": "FATAL",
+       "group_id": "G08"
+      },
+      {
+       "uid": "log_record_000009",
+       "severidad": "FATAL",
+       "group_id": "G09"
+      },
+      {
+       "uid": "log_record_000010",
+       "severidad": "FATAL",
+       "group_id": "G09"
+      },
+      {
+       "uid": "log_record_000017",
+       "severidad": "FATAL",
+       "group_id": "G08"
+      },
+      {
+       "uid": "log_record_000018",
+       "severidad": "FATAL",
+       "group_id": "G15"
+      },
+      {
+       "uid": "log_record_000019",
+       "severidad": "FATAL",
+       "group_id": "G16"
+      }
+     ]
+    },
+    "grupos": 17
+   }
+  },
+  "preprocessing_metadata": {
+   "schema_version": "2.0",
+   "total_lineas_fisicas": 20,
+   "total_eventos": 20,
+   "decoder_distribution": {
+    "text": 20
+   },
+   "product_distribution": {
+    "BlueGene/L": 20
+   },
+   "vendor_distribution": {
+    "IBM": 20
+   },
+   "version_distribution": {},
+   "protocol_distribution": {},
+   "profile_distribution": {
+    "bgl": 20
+   },
+   "severity_distribution": {
+    "INFO": 14,
+    "FATAL": 6
+   },
+   "event_categories": {},
+   "event_outcomes": {},
+   "entities": {
+    "host": {
+     "R02-M1-N4-C:J06-U01": 1,
+     "R05-M0-NC-C:J04-U11": 1,
+     "R15-M0-NC-I:J18-U11": 1,
+     "R17-M1-N0-I:J18-U01": 1,
+     "R23-M0-N7": 1,
+     "R23-M1-N0-C:J08-U11": 1,
+     "R31-M0-N8-I:J18-U01": 1,
+     "R34-M1-N4-I:J18-U01": 1,
+     "R46-M1-N1-C:J02-U01": 1,
+     "R46-M1-NE-C:J14-U11": 1,
+     "R46-M1-NF-C:J11-U01": 1,
+     "R57-M0-N8-C:J12-U01": 1,
+     "R57-M0-NA-C:J13-U11": 1,
+     "R63-M0-N3-C:J14-U11": 1,
+     "R63-M0-N4-C:J04-U11": 1,
+     "R63-M0-N5-C:J12-U01": 1,
+     "R63-M0-NF-C:J06-U01": 1,
+     "R64-M1-N4-I:J18-U01": 1,
+     "R67-M1-NA": 1,
+     "R72-M1-NE-C:J04-U01": 1
+    },
+    "servicio": {
+     "bgl.kernel": 17,
+     "bgl.discovery": 2,
+     "bgl.app": 1
+    },
+    "producto": {
+     "BlueGene/L": 20
+    }
+   },
+   "time_window": {
+    "inicio": "2005-11-10-23.03.41.120402",
+    "fin": "2005-11-17-05.35.26.782649"
+   },
+   "parsing": {
+    "parsed_events": 20,
+    "fallback_events": 0,
+    "coverage": 1.0
+   },
+   "segments": [
+    {
+     "index": 0,
+     "decoder": "text",
+     "line_start": 1,
+     "line_end": 20,
+     "n_records": 20,
+     "confidence": 0.1,
+     "decoder_inicial": "text",
+     "confidence_inicial": 0.1,
+     "decoder_distribution": {
+      "text": 20
+     },
+     "context": {}
+    }
+   ],
+   "entities_resumen": {
+    "host": 20,
+    "servicio": 3,
+    "producto": 1
+   },
+   "config": {
+    "LOG_DETECTION_CHUNK_SIZE": 50,
+    "LOG_ENABLE_MULTILINE": true,
+    "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+    "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+    "LOG_MAX_EVENTS": 100000,
+    "LOG_MAX_FILE_BYTES": 52428800,
+    "LOG_MAX_RAW_SAMPLES": 20,
+    "LOG_MAX_UNMAPPED_FIELDS": 100,
+    "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+    "LOG_PARSING_MODE": "hybrid",
+    "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+    "LOG_PRESERVE_RAW": true
+   }
+  },
+  "parsing_warnings": [],
+  "firma": "v2|lineas=20 ips=0 servicios=[bgl.kernel:17,bgl.discovery:2,bgl.app:1] eventos=[evento_critico:6,evento_normal:14] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[INFO:14,FATAL:6] categorias=[] cobertura=1.0",
+  "plan": {},
+  "plan_objetivo": "",
+  "paso_actual": 0,
+  "historial_ejecucion": [],
+  "desviaciones_plan": [],
+  "historial_planes": [],
+  "replan_count": 0,
+  "diagnostico": "Anomalía operativa en el clúster BlueGene/L caracterizada por terminación del kernel (rts reason 1004) y fallos fatales de recepción de paquetes en la red de árbol (tree network), sin indicios de actividad maliciosa ni intrusión de seguridad.",
+  "necesita_rag": false,
+  "usar_cve": false,
+  "contexto_rag": [],
+  "tecnicas_mitre": [],
+  "cves_encontrados": [],
+  "comandos_mitigacion": [
+   "/bin/dmesg | /bin/tail -n 50 > /var/tmp/nodex/dmesg_diag.txt",
+   "/bin/cat /proc/uptime > /var/tmp/nodex/uptime_status.txt"
+  ],
+  "comandos_validos": true,
+  "motivos_rechazo": [
+   "OK"
+  ],
+  "confianza": 0.95,
+  "hay_incidente": false,
+  "hay_anomalia": true,
+  "evaluacion_auditor": "El lote presenta eventos clasificados históricamente como anómalos que requieren intervención operativa: registros FATAL del kernel indicando 'rts: kernel terminated for reason 1004' (G08) y desincronizaciones críticas en la red de interconexión interna ('Error receiving packet on tree network', G09 y G15). No se aprecian patrones de intrusión, persistencia, movimiento lateral ni exfiltración, tratándose de incidencias puramente operativas y de hardware del entorno HPC.",
+  "intentos_correccion": 0,
+  "cobertura_auditor": null,
+  "cobertura_suficiente": null,
+  "motivo_replanificacion": "",
+  "requiere_replanificacion": false,
+  "_error_api": null,
+  "_firma": "v2|lineas=20 ips=0 servicios=[bgl.kernel:17,bgl.discovery:2,bgl.app:1] eventos=[evento_critico:6,evento_normal:14] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[INFO:14,FATAL:6] categorias=[] cobertura=1.0",
+  "requiere_revision_humana": false,
+  "output_contract_version": "d11-v1",
+  "classification_detallada": "anomalia_operativa"
+ },
+ "observaciones": [
+  {
+   "nodo": "agente_unico",
+   "llamadas": [
+    0
+   ],
+   "prompt_chars": 23456,
+   "system_chars": 8062,
+   "tokens": [
+    {
+     "input_tokens": 13663,
+     "output_tokens": 1324,
+     "reasoning_tokens": 985,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  }
+ ],
+ "consultas_externas": []
+}

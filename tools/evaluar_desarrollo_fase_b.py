@@ -56,7 +56,7 @@ MEMORIA_GRUPOS = ROOT / "experiments/knowledge/memoria_grupos_v1"
 #: Interruptores de NODEX final que se registran con cada corrida.
 INTERRUPTORES = ("RAG_POR_HIPOTESIS", "CORRECCION_AUDITOR", "HISTORICO_ACTIVO", "HISTORICO_K",
                  "EVENTOS_POR_CATEGORIA", "HISTORICO_CONTRASTIVO", "HISTORICO_K_POR_CLASE", "MEMORIA_GRUPOS_ACTIVA",
-                 "AUDITOR_REFORZADO", "GRUPOS_MOTIVO_FACTUAL", "LISTA_PATRONES_MITRE")
+                 "AUDITOR_REFORZADO", "GRUPOS_MOTIVO_FACTUAL", "LISTA_PATRONES_MITRE", "AGENTE_UNICO_GRUPOS_CON_SENAL")
 CONFIG_REFERENCIA = ROOT / "experiments/config/config_oficial-12casos-r1-20261028.json"
 PRECIO = {"entrada": 0.75, "salida": 3.75}
 COTA = {("nodex", "bgl"): 0.08, ("nodex", "uwf"): 0.35, ("agente_unico", "bgl"): 0.04,

@@ -599,6 +599,14 @@ LISTA_PATRONES_MITRE = _env_bool("LISTA_PATRONES_MITRE", True)
 GRUPOS_SENAL_MAX_GRUPOS = _env_int("GRUPOS_SENAL_MAX_GRUPOS", 15)
 GRUPOS_SENAL_MAX_FILAS = _env_int("GRUPOS_SENAL_MAX_FILAS", 200)
 
+# --- Agente único como estudio de ablación de arquitectura (13-nov-2026) -----------------
+# El agente único recibe, en su única llamada, el mismo bloque de grupos con señal que el
+# auditor reforzado (`bloque_grupos`, mismas filas, motivo factual, referentes de la memoria de
+# grupos y comportamiento dominante), la misma lista de patrones MITRE y la misma instrucción de
+# evaluar cada grupo antes del veredicto; su salida incluye `evaluacion_grupos`. La única
+# diferencia con NODEX es la arquitectura. Apagado: el agente único de la Fase B.1.
+AGENTE_UNICO_GRUPOS_CON_SENAL = _env_bool("AGENTE_UNICO_GRUPOS_CON_SENAL", True)
+
 
 def validate_config() -> None:
     """Lanza un error claro si falta alguna key obligatoria antes de correr el grafo."""

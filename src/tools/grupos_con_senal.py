@@ -1,7 +1,8 @@
 """Grupos con señal del lote y lista de verificación de patrones MITRE (NODEX final). Sin LLM.
 
-Lo que el auditor reforzado (`AUDITOR_REFORZADO`) recibe en un bloque destacado para evaluar
-cada grupo antes del veredicto:
+Lo que el auditor reforzado (`AUDITOR_REFORZADO`) y el agente único
+(`AGENTE_UNICO_GRUPOS_CON_SENAL`, estudio de ablación) reciben en un bloque destacado para evaluar
+cada grupo antes del veredicto (`bloque_grupos`, `instruccion_evaluacion_grupos`):
 
 - `grupos_con_senal`: en logs de red, los grupos que el perfil marcó con alguna SEÑAL (barrido
   de puertos, servicio o protocolo minoritario, inversión de rol); en logs de texto, los grupos
@@ -17,6 +18,8 @@ Origen: era la entrada del agente cazador de las Fases B y B.1, eliminado del si
 (docs/experimentacion/bitacora_desarrollo_nodex_final.md). El contenido y el texto de las
 instrucciones son los mismos con que se evaluó la configuración final.
 """
+
+import json
 
 from src.preprocessing.perfil_lote import _SEVERIDADES_ALTAS
 from src.state import LogGuardState
@@ -133,3 +136,66 @@ def resumen_dominante(state: LogGuardState) -> dict:
     return {"composicion": composicion,
             "grupos_dominantes": [{"group_id": g["group_id"], "clave": g.get("clave"), "conteo": g.get("conteo")}
                                   for g in grupos]}
+
+
+# --- evaluación de grupos antes del veredicto (auditor reforzado y agente único) ----------------------
+# Mismo texto para los dos: el agente único (estudio de ablación) recibe exactamente la misma
+# información e instrucción que el auditor reforzado, en su única llamada.
+
+CAMPO_EVALUACION_GRUPOS = (
+    '"evaluacion_grupos": [{"group_id": "G01", "explicacion_benigna": "...", "explicacion_maliciosa": "...", '
+    '"patron_lista": "id de la lista o ninguno"}], ')
+
+
+def instruccion_evaluacion_grupos() -> str:
+    """Instrucción de evaluar cada grupo con señal antes del veredicto (auditor reforzado y agente único)."""
+    return (
+        " GRUPOS CON SEÑAL: recibes en un bloque destacado los grupos minoritarios o señalados del lote, con todas "
+        "sus filas, y un resumen del comportamiento dominante para comparar. ANTES de emitir el veredicto debes "
+        "evaluar explícitamente CADA grupo con señal, uno por uno, en evaluacion_grupos (el primer campo del JSON): "
+        "(1) explicacion_benigna: la explicación legítima más plausible; (2) explicacion_maliciosa: la explicación "
+        "maliciosa u operativa (falla) más plausible; (3) patron_lista: el patrón de la lista de verificación que "
+        "calza (" + "|".join(IDS_PATRONES) + "). Basa cada explicación en campos concretos de las filas (puertos, "
+        "protocolo, estado e historia de la conexión, bytes, duración, tiempos, severidad, componente, mensaje). "
+        "Reglas: un grupo sostiene un incidente solo si su explicación benigna NO es plausible con la evidencia "
+        "observada. Que un grupo sea minoritario no lo hace sospechoso: el tráfico de infraestructura habitual "
+        "(resolución de nombres, descubrimiento de red local, asignación de direcciones, sincronización de "
+        "tiempo, difusión) no es sospechoso por ser poco frecuente. Tampoco descartes un grupo solo porque el "
+        "resto del lote sea normal: evalúa cada grupo por sí mismo. No inventes grupos ni campos."
+        + instrucciones_grupos()
+        + " Tu veredicto (hay_anomalia, hay_incidente) debe ser coherente con esa evaluación.")
+
+
+def bloque_grupos(state: LogGuardState, grupos: list[dict]) -> str:
+    """Bloque destacado: comportamiento dominante y grupos con señal con todas sus filas."""
+    return ("\n\n===== GRUPOS CON SEÑAL: EVALÚALOS UNO POR UNO ANTES DEL VEREDICTO =====\n"
+            "COMPORTAMIENTO DOMINANTE DEL LOTE (para comparar):\n"
+            + json.dumps(resumen_dominante(state), ensure_ascii=False)
+            + "\n\nGRUPOS A EXAMINAR (uno por uno, con todas sus filas):\n"
+            + json.dumps(grupos, ensure_ascii=False)
+            + "\n===== FIN DE LOS GRUPOS CON SEÑAL =====\n")
+
+
+def normalizar_evaluacion_grupos(valor, examinados: set) -> list[dict]:
+    """Evaluaciones válidas: grupo examinado, una por grupo, patrón validado contra la lista."""
+    salida, vistos = [], set()
+    for item in valor if isinstance(valor, list) else []:
+        if not isinstance(item, dict):
+            continue
+        gid = str(item.get("group_id") or "").strip()
+        if gid not in examinados or gid in vistos:
+            continue
+        vistos.add(gid)
+        patron = str(item.get("patron_lista") or "").strip().lower()
+        salida.append({"group_id": gid,
+                       "explicacion_benigna": str(item.get("explicacion_benigna") or "")[:600],
+                       "explicacion_maliciosa": str(item.get("explicacion_maliciosa") or "")[:600],
+                       "patron_lista": patron if patron in IDS_PATRONES else ("no_indicado" if not patron
+                                                                               else "fuera_de_lista")})
+    return salida
+
+
+def avisos_evaluacion_grupos(grupos: list[dict], evaluacion: list[dict]) -> list[str]:
+    """Advertencias por cada grupo con señal que quedó sin evaluar."""
+    evaluados = {e["group_id"] for e in evaluacion}
+    return [f"grupo_con_senal_sin_evaluacion:{g['group_id']}" for g in grupos if g["group_id"] not in evaluados]

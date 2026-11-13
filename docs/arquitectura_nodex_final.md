@@ -110,6 +110,7 @@ reconstruidos llevan `categoria` (`incidente` / `anomalia_operativa` / `contexto
 | B.1-2 | `MEMORIA_GRUPOS_ACTIVA` / `MEMORIA_GRUPOS_PATH` | true / `experiments/knowledge/memoria_grupos_v1/memoria_grupos.json` |
 | Final | `AUDITOR_REFORZADO` / `GRUPOS_MOTIVO_FACTUAL` / `LISTA_PATRONES_MITRE` | true / true / true |
 | Final | `GRUPOS_SENAL_MAX_GRUPOS` / `GRUPOS_SENAL_MAX_FILAS` | 15 / 200 |
+| Comparación | `AGENTE_UNICO_GRUPOS_CON_SENAL` (agente único como estudio de ablación) | true |
 
 Interruptores retirados con el cazador: `CAZADOR_ACTIVO`, `AUDITOR_REVISA_MEDIOS` (revisión de sus
 hallazgos) y `NIVELES_SOSPECHA`. Renombrados porque ahora son entrada del auditor: `CAZADOR_MOTIVO_FACTUAL`
@@ -171,27 +172,44 @@ Difieren solo funciones de operación de la aplicación:
 Los demás parámetros congelados (temperatura 0, modelo de embeddings `all-MiniLM-L6-v2`, topes de
 recuperación y de ingesta) coinciden con los valores por omisión de la aplicación.
 
-## 7. Qué recibe cada sistema
+## 7. Sistemas de comparación de la evaluación final
 
-| | NODEX | Agente único |
-|---|---|---|
-| Preprocesamiento, resumen acotado con `perfil_lote` | sí | sí (misma función) |
-| Contenido del lote (líneas o flujos minoritarios) | triage | sí (mismo bloque) |
-| Catálogo de evidencia y tabla de grupos | auditor | sí (mismo `contexto_d11`) |
-| Casos históricos (2 por clase desde B.1, misma consulta y exclusión por solapamiento) | triage y auditor | sí |
-| Memoria de grupos (B.1) | auditor (en el bloque de grupos con señal) | sí (mismo bloque por grupo) |
-| Grupos con señal con todas sus filas, motivo factual y lista de patrones MITRE | auditor | no (el agente único recibe el contenido del lote, como el triage) |
-| Definiciones del criterio de la organización | triage y auditor | sí |
-| Candidatos MITRE | por hipótesis (diagnóstico, si el triage ve un incidente), en el nodo RAG | consulta sobre el resumen del lote (la de su campaña) |
-| Reglas de mitigación por veredicto y validador estricto | sí | sí (validador sin ciclo de corrección) |
-| Contrato D-11 con grupos y categorías | sí | sí (mismo `PROMPT_D11`) |
-| Planificador, triage y auditor separados | sí | no: una llamada |
-| Evaluación explícita de cada grupo con señal antes del veredicto | sí (auditor reforzado) | no |
-| Ciclos de corrección (comandos y coherencia) y replanificación | sí | no |
+**Agente único (estudio de ablación de arquitectura).** Desde el 13-nov-2026
+(`AGENTE_UNICO_GRUPOS_CON_SENAL`) recibe, en su única llamada, el mismo bloque de grupos con señal que el
+auditor reforzado (`bloque_grupos`, idéntico byte a byte para un mismo caso), la misma lista de patrones MITRE y
+la misma instrucción de evaluar cada grupo antes del veredicto; su salida incluye `evaluacion_grupos`. Los
+referentes de la memoria de grupos le llegan dentro de ese bloque (ya no en un bloque aparte). La única
+diferencia con NODEX es la arquitectura.
 
-## 8. Pruebas por módulo (12-nov-2026)
+**Gemini 3.8 Flash directo (comparación con el modelo base)**
+(`src/experimentation/runners/gemini_directo.py`). El prompt estructurado v2.1
+(`experiments/config/prompt_gemini_directo_v2_1.txt`, SHA-256 verificado antes de cada llamada) seguido del
+archivo crudo y completo del caso, en un solo mensaje: mismo modelo, temperatura 0, una llamada, sin
+respaldo, reintentos, herramientas, búsqueda, preprocesamiento, memoria ni RAG. Se guardan la respuesta cruda,
+el JSON extraído del bloque de código (sin repararlo; un JSON inválido es falla del sistema) y su normalización
+al esquema de NODEX con el mismo filtro de evidencia que `normalizar_d11` (todos sus eventos cuentan como
+`incidente`, porque su contrato solo admite eventos de incidente).
 
-Suite de Python: **1 591 pruebas**, 1 588 pasan; fallan 3 por el entorno de este equipo (Python 3.13 y
+Ejecución y extracción: `tools/ejecutar_evaluacion_final.py` y `tools/exportar_evaluacion_final.py`.
+
+| | NODEX | Agente único | Gemini directo |
+|---|---|---|---|
+| Preprocesamiento, resumen acotado con `perfil_lote` | sí | sí (misma función) | no: archivo crudo |
+| Contenido del lote (líneas o flujos minoritarios) | triage | sí (mismo bloque) | el archivo completo |
+| Catálogo de evidencia y tabla de grupos | auditor | sí (mismo `contexto_d11`) | no |
+| Casos históricos (2 por clase, misma consulta y exclusión por solapamiento) | triage y auditor | sí | no |
+| Grupos con señal con todas sus filas, motivo factual, memoria de grupos y lista de patrones MITRE | auditor | sí (mismo bloque) | no |
+| Evaluación explícita de cada grupo con señal antes del veredicto | sí (auditor reforzado) | sí (en su única llamada) | no |
+| Definiciones del criterio de la organización | triage y auditor | sí | no |
+| Candidatos MITRE | por hipótesis (diagnóstico, si el triage ve un incidente), en el nodo RAG | consulta sobre el resumen del lote (la de su campaña) | no |
+| Reglas de mitigación por veredicto y validador estricto | sí | sí (validador sin ciclo de corrección) | no |
+| Contrato de salida | D-11 con grupos y categorías | el mismo (`PROMPT_D11`) | prompt v2.1 (eventos de incidente) |
+| Planificador, triage y auditor separados | sí | no: una llamada | no: una llamada |
+| Ciclos de corrección (comandos y coherencia) y replanificación | sí | no | no |
+
+## 8. Pruebas por módulo (13-nov-2026)
+
+Suite de Python: **1 617 pruebas**, 1 614 pasan; fallan 3 por el entorno de este equipo (Python 3.13 y
 finales de línea del corpus enriquecido v1), sin relación con NODEX final. Frontend: **100 pruebas**
 (5 archivos, vitest), todas pasan.
 
@@ -200,7 +218,9 @@ finales de línea del corpus enriquecido v1), sin relación con NODEX final. Fro
 | `test_nodex_final_fase_a.py` (M1, M2, M6, M7, M8, M9, A.1) | 52 |
 | `test_nodex_final_fase_b.py` (grupos con señal, B2-B5, grafo final, traza, ciclo de corrección extremo a extremo) | 27 |
 | `test_nodex_final_fase_b1.py` (memoria contrastiva, memoria de grupos, motivo factual, lista de patrones, arnés) | 14 |
-| `test_nodex_final_variante_auditor.py` (auditor reforzado, valores por omisión de la configuración elegida, interruptores en el arnés) | 6 |
+| `test_nodex_final_variante_auditor.py` (auditor reforzado, valores por omisión, agente único con el mismo bloque byte a byte, arnés) | 9 |
+| `test_gemini_directo.py` (prompt congelado, archivo completo, extracción del JSON, fallas, filtro de uids) | 12 |
+| `test_evaluacion_final.py` (plan, clasificación de fallas, ejecución simulada con hashes de prompts, exportación, reanudación) | 11 |
 | `test_output_contract_d11.py` | 26 |
 | `test_llm.py` | 38 |
 | `test_informe_pdf.py` | 34 |
@@ -217,7 +237,7 @@ finales de línea del corpus enriquecido v1), sin relación con NODEX final. Fro
 | API e historial (4 archivos: `test_api_*`, `test_historial.py`) | 87 |
 | Capa experimental (32 archivos en `tests/experimentation/`) | 846 |
 | Resto (12 archivos: reporte, baseline, evaluación de detección, memoria, reputación, telemetría, MITRE, etc.) | 105 |
-| **Total** | **1 591** |
+| **Total** | **1 617** |
 
 Las pruebas del flujo de la Fase A (triage <-> RAG, grafo de 8 nodos, contrato sin categorías) siguen
 activas con los interruptores de la Fase B apagados (`tests/conftest.py::modo_fase_a`).

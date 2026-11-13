@@ -1,0 +1,909 @@
+{
+  "semilla": 20261113,
+  "particion": "evaluacion",
+  "n_casos": 60,
+  "fuentes": {
+    "uwf": "experiments/manifests/uwf.json (incidentes_usados, case_ids)",
+    "bgl": "data/logs/BGL_2k.log + generador reproducido en memoria (agrupar_bgl, particionar_grupos, generar_campana, semillas registradas)",
+    "piloto_excluido": "experiments/ejecucion/enriquecido-12casos-r1-20261104/selection.json",
+    "memoria": "experiments/knowledge/rag_enriquecido_v2/manifiesto.json"
+  },
+  "excluidos_piloto": [
+    "bgl_eva_balanceado_0001",
+    "bgl_eva_balanceado_0005",
+    "bgl_eva_balanceado_0006",
+    "bgl_eva_natural_0002",
+    "bgl_eva_natural_0016",
+    "bgl_eva_natural_0031",
+    "uwf_eva_sigiloso_0013",
+    "uwf_eva_sigiloso_0018",
+    "uwf_eva_sigiloso_0024",
+    "uwf_eva_visible_0004",
+    "uwf_eva_visible_0027",
+    "uwf_eva_visible_0028"
+  ],
+  "candidatos": {
+    "bgl_con_alerta": 17,
+    "bgl_sin_alerta": 39,
+    "uwf_malicioso": 37,
+    "uwf_benigno": 37
+  },
+  "memoria_uwf": {
+    "ips": [
+      "143.88.10.11",
+      "143.88.18.12",
+      "143.88.20.11",
+      "143.88.3.11",
+      "143.88.5.11",
+      "143.88.7.11"
+    ],
+    "incidentes": [
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0005",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0006",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0010",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0014",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0021",
+      "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0058",
+      "2022-09-04_2022-09-11__Reconnaissance__143.88.3.11__0007",
+      "2022-09-04_2022-09-11__Reconnaissance__143.88.7.11__0001",
+      "2022-09-04_2022-09-11__Reconnaissance__143.88.7.11__0002",
+      "2022-09-04_2022-09-11__Reconnaissance__143.88.7.11__0016",
+      "2022-09-04_2022-09-11__Reconnaissance__143.88.7.11__0022",
+      "2022-09-04_2022-09-11__Reconnaissance__143.88.7.11__0023",
+      "2022-09-04_2022-09-11__Reconnaissance__143.88.7.11__0024",
+      "2022-09-11_2022-09-18__Discovery__143.88.18.12__0004",
+      "2022-09-11_2022-09-18__Discovery__143.88.18.12__0005",
+      "2022-09-11_2022-09-18__Discovery__143.88.18.12__0007",
+      "2022-09-18_2022-09-25__Resource Development__143.88.5.11__0001",
+      "2022-09-18_2022-09-25__Resource Development__143.88.5.11__0003",
+      "2022-09-18_2022-09-25__Resource Development__143.88.5.11__0014",
+      "2022-09-25_2022-10-02__Reconnaissance__143.88.20.11__0000"
+    ]
+  },
+  "decisiones": [
+    {
+      "regla": "BGL con alerta: estratificado por categoría con tope por categoría",
+      "cumplida": true,
+      "tope_por_categoria": 3,
+      "disponibles_por_categoria": {
+        "APPCHILD": 1,
+        "APPOUT": 1,
+        "APPREAD": 1,
+        "APPSEV": 3,
+        "KERNDTLB": 4,
+        "KERNMNTF": 2,
+        "KERNREC": 2,
+        "KERNSTOR": 2,
+        "KERNTERM": 1
+      },
+      "elegidos_por_categoria": {
+        "APPCHILD": 1,
+        "APPOUT": 1,
+        "APPREAD": 1,
+        "APPSEV": 2,
+        "KERNDTLB": 3,
+        "KERNMNTF": 2,
+        "KERNREC": 2,
+        "KERNSTOR": 2,
+        "KERNTERM": 1
+      },
+      "criterio_del_tope": "el menor tope que permite llegar a 15; el exceso se recorta al azar de las categorías más grandes"
+    },
+    {
+      "regla": "BGL: 15 sin alerta, ventanas distintas",
+      "cumplida": true,
+      "nota": "cada caso es una ventana contigua y disjunta de 20 líneas del log fuente; ningún grupo se repite entre los 30 casos BGL"
+    },
+    {
+      "regla": "UWF maliciosos: método",
+      "nota": "3000 intentos greedy con orden al azar (semilla 20261113); se conserva el que cumple todas las reglas y reparte mejor las IP atacantes (menor suma de cuadrados de casos por IP, luego menor máximo). Elegido: intento 0, clave [0, 45, 5]."
+    },
+    {
+      "regla": "UWF maliciosos: cubrir todas las tácticas disponibles",
+      "cumplida": true,
+      "tacticas_disponibles": [
+        "Defense Evasion",
+        "Discovery",
+        "Execution",
+        "Initial Access",
+        "Reconnaissance",
+        "Resource Development"
+      ],
+      "tacticas_cubiertas": [
+        "Defense Evasion",
+        "Discovery",
+        "Execution",
+        "Initial Access",
+        "Reconnaissance",
+        "Resource Development"
+      ],
+      "nota": "las etiquetas compuestas del dataset (p. ej. Discovery|Reconnaissance) cuentan para cada táctica que nombran, en la cobertura y en el tope"
+    },
+    {
+      "regla": "UWF maliciosos: a lo más 2 por táctica salvo Reconnaissance",
+      "cumplida": true,
+      "casos_por_tactica": {
+        "Defense Evasion": 1,
+        "Discovery": 2,
+        "Execution": 1,
+        "Initial Access": 1,
+        "Reconnaissance": 9,
+        "Resource Development": 2
+      }
+    },
+    {
+      "regla": "UWF maliciosos: un caso por incidente",
+      "cumplida": true
+    },
+    {
+      "regla": "UWF maliciosos: IP atacantes distintas cuando sea posible",
+      "cumplida": false,
+      "ips_distintas": 7,
+      "ips_disponibles": 7,
+      "casos_por_ip": {
+        "143.88.10.11": 5,
+        "143.88.18.12": 2,
+        "143.88.3.12": 1,
+        "143.88.5.11": 2,
+        "143.88.6.11": 1,
+        "143.88.7.11": 3,
+        "143.88.9.12": 1
+      },
+      "alternativa": "con 15 casos y las IP disponibles no es posible que todas sean distintas: se usan todas las IP disponibles y se minimiza la repetición"
+    },
+    {
+      "regla": "UWF maliciosos: ~7 visibles y 8 sigilosos",
+      "resultado": {
+        "sigiloso": 8,
+        "visible": 7
+      }
+    },
+    {
+      "regla": "UWF: 15 benignos de ventanas distintas",
+      "cumplida": true,
+      "nota": "el fondo de cada caso es un tramo contiguo propio (ningún uid se repite entre casos, lo verifica el generador); además se eligen índices espaciados (muestreo sistemático con inicio al azar), que el cursor del generador asigna a tramos separados en el tiempo. La ventana efectiva de cada caso se informa en la composición."
+    }
+  ],
+  "casos": [
+    {
+      "case_id": "bgl_eva_balanceado_0000",
+      "dataset": "bgl",
+      "condicion": "balanceado",
+      "indice": 0,
+      "positivo": true,
+      "grupo": "bgl_l01961-01980",
+      "categoria": "APPOUT",
+      "categorias_del_grupo": [
+        "APPOUT",
+        "APPSEV"
+      ],
+      "lineas_con_alerta": 3
+    },
+    {
+      "case_id": "bgl_eva_balanceado_0002",
+      "dataset": "bgl",
+      "condicion": "balanceado",
+      "indice": 2,
+      "positivo": true,
+      "grupo": "bgl_l01381-01400",
+      "categoria": "KERNMNTF",
+      "categorias_del_grupo": [
+        "APPSEV",
+        "KERNMNTF"
+      ],
+      "lineas_con_alerta": 7
+    },
+    {
+      "case_id": "bgl_eva_balanceado_0003",
+      "dataset": "bgl",
+      "condicion": "balanceado",
+      "indice": 3,
+      "positivo": true,
+      "grupo": "bgl_l01021-01040",
+      "categoria": "KERNTERM",
+      "categorias_del_grupo": [
+        "KERNTERM"
+      ],
+      "lineas_con_alerta": 1
+    },
+    {
+      "case_id": "bgl_eva_balanceado_0004",
+      "dataset": "bgl",
+      "condicion": "balanceado",
+      "indice": 4,
+      "positivo": true,
+      "grupo": "bgl_l00201-00220",
+      "categoria": "KERNSTOR",
+      "categorias_del_grupo": [
+        "KERNSTOR"
+      ],
+      "lineas_con_alerta": 9
+    },
+    {
+      "case_id": "bgl_eva_balanceado_0009",
+      "dataset": "bgl",
+      "condicion": "balanceado",
+      "indice": 9,
+      "positivo": false,
+      "grupo": "bgl_l00941-00960",
+      "categoria": null,
+      "categorias_del_grupo": [],
+      "lineas_con_alerta": 0
+    },
+    {
+      "case_id": "bgl_eva_balanceado_0011",
+      "dataset": "bgl",
+      "condicion": "balanceado",
+      "indice": 11,
+      "positivo": false,
+      "grupo": "bgl_l00981-01000",
+      "categoria": null,
+      "categorias_del_grupo": [],
+      "lineas_con_alerta": 0
+    },
+    {
+      "case_id": "bgl_eva_natural_0000",
+      "dataset": "bgl",
+      "condicion": "natural",
+      "indice": 0,
+      "positivo": true,
+      "grupo": "bgl_l00161-00180",
+      "categoria": "KERNDTLB",
+      "categorias_del_grupo": [
+        "KERNDTLB",
+        "KERNSTOR"
+      ],
+      "lineas_con_alerta": 11
+    },
+    {
+      "case_id": "bgl_eva_natural_0003",
+      "dataset": "bgl",
+      "condicion": "natural",
+      "indice": 3,
+      "positivo": true,
+      "grupo": "bgl_l01241-01260",
+      "categoria": "APPSEV",
+      "categorias_del_grupo": [
+        "APPSEV",
+        "KERNTERM"
+      ],
+      "lineas_con_alerta": 3
+    },
+    {
+      "case_id": "bgl_eva_natural_0004",
+      "dataset": "bgl",
+      "condicion": "natural",
+      "indice": 4,
+      "positivo": true,
+      "grupo": "bgl_l01521-01540",
+      "categoria": "KERNREC",
+      "categorias_del_grupo": [
+        "KERNREC"
+      ],
+      "lineas_con_alerta": 1
+    },
+    {
+      "case_id": "bgl_eva_natural_0005",
+      "dataset": "bgl",
+      "condicion": "natural",
+      "indice": 5,
+      "positivo": true,
+      "grupo": "bgl_l01361-01380",
+      "categoria": "KERNMNTF",
+      "categorias_del_grupo": [
+        "KERNMNTF"
+      ],
+      "lineas_con_alerta": 2
+    },
+    {
+      "case_id": "bgl_eva_natural_0007",
+      "dataset": "bgl",
+      "condicion": "natural",
+      "indice": 7,
+      "positivo": true,
+      "grupo": "bgl_l01701-01720",
+      "categoria": "KERNREC",
+      "categorias_del_grupo": [
+        "KERNREC"
+      ],
+      "lineas_con_alerta": 1
+    },
+    {
+      "case_id": "bgl_eva_natural_0008",
+      "dataset": "bgl",
+      "condicion": "natural",
+      "indice": 8,
+      "positivo": true,
+      "grupo": "bgl_l00121-00140",
+      "categoria": "KERNDTLB",
+      "categorias_del_grupo": [
+        "KERNDTLB"
+      ],
+      "lineas_con_alerta": 20
+    },
+    {
+      "case_id": "bgl_eva_natural_0009",
+      "dataset": "bgl",
+      "condicion": "natural",
+      "indice": 9,
+      "positivo": true,
+      "grupo": "bgl_l00341-00360",
+      "categoria": "APPREAD",
+      "categorias_del_grupo": [
+        "APPREAD"
+      ],
+      "lineas_con_alerta": 1
+    },
+    {
+      "case_id": "bgl_eva_natural_0010",
+      "dataset": "bgl",
+      "condicion": "natural",
+      "indice": 10,
+      "positivo": true,
+      "grupo": "bgl_l00101-00120",
+      "categoria": "KERNDTLB",
+      "categorias_del_grupo": [
+        "KERNDTLB"
+      ],
+      "lineas_con_alerta": 17
+    },
+    {
+      "case_id": "bgl_eva_natural_0011",
+      "dataset": "bgl",
+      "condicion": "natural",
+      "indice": 11,
+      "positivo": true,
+      "grupo": "bgl_l00181-00200",
+      "categoria": "KERNSTOR",
+      "categorias_del_grupo": [
+        "KERNSTOR"
+      ],
+      "lineas_con_alerta": 8
+    },
+    {
+      "case_id": "bgl_eva_natural_0012",
+      "dataset": "bgl",
+      "condicion": "natural",
+      "indice": 12,
+      "positivo": true,
+      "grupo": "bgl_l00361-00380",
+      "categoria": "APPCHILD",
+      "categorias_del_grupo": [
+        "APPCHILD"
+      ],
+      "lineas_con_alerta": 1
+    },
+    {
+      "case_id": "bgl_eva_natural_0013",
+      "dataset": "bgl",
+      "condicion": "natural",
+      "indice": 13,
+      "positivo": true,
+      "grupo": "bgl_l01481-01500",
+      "categoria": "APPSEV",
+      "categorias_del_grupo": [
+        "APPSEV"
+      ],
+      "lineas_con_alerta": 1
+    },
+    {
+      "case_id": "bgl_eva_natural_0014",
+      "dataset": "bgl",
+      "condicion": "natural",
+      "indice": 14,
+      "positivo": false,
+      "grupo": "bgl_l01121-01140",
+      "categoria": null,
+      "categorias_del_grupo": [],
+      "lineas_con_alerta": 0
+    },
+    {
+      "case_id": "bgl_eva_natural_0015",
+      "dataset": "bgl",
+      "condicion": "natural",
+      "indice": 15,
+      "positivo": false,
+      "grupo": "bgl_l01141-01160",
+      "categoria": null,
+      "categorias_del_grupo": [],
+      "lineas_con_alerta": 0
+    },
+    {
+      "case_id": "bgl_eva_natural_0021",
+      "dataset": "bgl",
+      "condicion": "natural",
+      "indice": 21,
+      "positivo": false,
+      "grupo": "bgl_l01041-01060",
+      "categoria": null,
+      "categorias_del_grupo": [],
+      "lineas_con_alerta": 0
+    },
+    {
+      "case_id": "bgl_eva_natural_0024",
+      "dataset": "bgl",
+      "condicion": "natural",
+      "indice": 24,
+      "positivo": false,
+      "grupo": "bgl_l00681-00700",
+      "categoria": null,
+      "categorias_del_grupo": [],
+      "lineas_con_alerta": 0
+    },
+    {
+      "case_id": "bgl_eva_natural_0027",
+      "dataset": "bgl",
+      "condicion": "natural",
+      "indice": 27,
+      "positivo": false,
+      "grupo": "bgl_l00081-00100",
+      "categoria": null,
+      "categorias_del_grupo": [],
+      "lineas_con_alerta": 0
+    },
+    {
+      "case_id": "bgl_eva_natural_0028",
+      "dataset": "bgl",
+      "condicion": "natural",
+      "indice": 28,
+      "positivo": false,
+      "grupo": "bgl_l00041-00060",
+      "categoria": null,
+      "categorias_del_grupo": [],
+      "lineas_con_alerta": 0
+    },
+    {
+      "case_id": "bgl_eva_natural_0033",
+      "dataset": "bgl",
+      "condicion": "natural",
+      "indice": 33,
+      "positivo": false,
+      "grupo": "bgl_l00481-00500",
+      "categoria": null,
+      "categorias_del_grupo": [],
+      "lineas_con_alerta": 0
+    },
+    {
+      "case_id": "bgl_eva_natural_0035",
+      "dataset": "bgl",
+      "condicion": "natural",
+      "indice": 35,
+      "positivo": false,
+      "grupo": "bgl_l00421-00440",
+      "categoria": null,
+      "categorias_del_grupo": [],
+      "lineas_con_alerta": 0
+    },
+    {
+      "case_id": "bgl_eva_natural_0038",
+      "dataset": "bgl",
+      "condicion": "natural",
+      "indice": 38,
+      "positivo": false,
+      "grupo": "bgl_l00641-00660",
+      "categoria": null,
+      "categorias_del_grupo": [],
+      "lineas_con_alerta": 0
+    },
+    {
+      "case_id": "bgl_eva_natural_0041",
+      "dataset": "bgl",
+      "condicion": "natural",
+      "indice": 41,
+      "positivo": false,
+      "grupo": "bgl_l00921-00940",
+      "categoria": null,
+      "categorias_del_grupo": [],
+      "lineas_con_alerta": 0
+    },
+    {
+      "case_id": "bgl_eva_natural_0042",
+      "dataset": "bgl",
+      "condicion": "natural",
+      "indice": 42,
+      "positivo": false,
+      "grupo": "bgl_l00381-00400",
+      "categoria": null,
+      "categorias_del_grupo": [],
+      "lineas_con_alerta": 0
+    },
+    {
+      "case_id": "bgl_eva_natural_0045",
+      "dataset": "bgl",
+      "condicion": "natural",
+      "indice": 45,
+      "positivo": false,
+      "grupo": "bgl_l00521-00540",
+      "categoria": null,
+      "categorias_del_grupo": [],
+      "lineas_con_alerta": 0
+    },
+    {
+      "case_id": "bgl_eva_natural_0047",
+      "dataset": "bgl",
+      "condicion": "natural",
+      "indice": 47,
+      "positivo": false,
+      "grupo": "bgl_l00801-00820",
+      "categoria": null,
+      "categorias_del_grupo": [],
+      "lineas_con_alerta": 0
+    },
+    {
+      "case_id": "uwf_eva_sigiloso_0001",
+      "dataset": "uwf",
+      "condicion": "sigiloso",
+      "indice": 1,
+      "positivo": true,
+      "incidente_id": "2022-09-25_2022-10-02__Discovery|Reconnaissance__143.88.6.11__0000#r4",
+      "incidente_base": "2022-09-25_2022-10-02__Discovery|Reconnaissance__143.88.6.11__0000",
+      "ventana_incidente": "2022-09-25_2022-10-02",
+      "tactica": "Discovery|Reconnaissance",
+      "tacticas": [
+        "Discovery",
+        "Reconnaissance"
+      ],
+      "ip_atacante": "143.88.6.11",
+      "recorte_filas": 4,
+      "ip_en_memoria": false,
+      "incidente_en_memoria": false
+    },
+    {
+      "case_id": "uwf_eva_sigiloso_0002",
+      "dataset": "uwf",
+      "condicion": "sigiloso",
+      "indice": 2,
+      "positivo": true,
+      "incidente_id": "2022-10-02_2022-10-09__Execution__143.88.10.11__0000#r3",
+      "incidente_base": "2022-10-02_2022-10-09__Execution__143.88.10.11__0000",
+      "ventana_incidente": "2022-10-02_2022-10-09",
+      "tactica": "Execution",
+      "tacticas": [
+        "Execution"
+      ],
+      "ip_atacante": "143.88.10.11",
+      "recorte_filas": 3,
+      "ip_en_memoria": true,
+      "incidente_en_memoria": false
+    },
+    {
+      "case_id": "uwf_eva_sigiloso_0004",
+      "dataset": "uwf",
+      "condicion": "sigiloso",
+      "indice": 4,
+      "positivo": true,
+      "incidente_id": "2022-09-25_2022-10-02__Initial Access__143.88.9.12__0001#r4",
+      "incidente_base": "2022-09-25_2022-10-02__Initial Access__143.88.9.12__0001",
+      "ventana_incidente": "2022-09-25_2022-10-02",
+      "tactica": "Initial Access",
+      "tacticas": [
+        "Initial Access"
+      ],
+      "ip_atacante": "143.88.9.12",
+      "recorte_filas": 4,
+      "ip_en_memoria": false,
+      "incidente_en_memoria": false
+    },
+    {
+      "case_id": "uwf_eva_sigiloso_0007",
+      "dataset": "uwf",
+      "condicion": "sigiloso",
+      "indice": 7,
+      "positivo": true,
+      "incidente_id": "2022-09-18_2022-09-25__Resource Development__143.88.5.11__0002#r4",
+      "incidente_base": "2022-09-18_2022-09-25__Resource Development__143.88.5.11__0002",
+      "ventana_incidente": "2022-09-18_2022-09-25",
+      "tactica": "Resource Development",
+      "tacticas": [
+        "Resource Development"
+      ],
+      "ip_atacante": "143.88.5.11",
+      "recorte_filas": 4,
+      "ip_en_memoria": true,
+      "incidente_en_memoria": false
+    },
+    {
+      "case_id": "uwf_eva_sigiloso_0010",
+      "dataset": "uwf",
+      "condicion": "sigiloso",
+      "indice": 10,
+      "positivo": true,
+      "incidente_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0002#r4",
+      "incidente_base": "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0002",
+      "ventana_incidente": "2022-08-28_2022-09-04",
+      "tactica": "Reconnaissance",
+      "tacticas": [
+        "Reconnaissance"
+      ],
+      "ip_atacante": "143.88.10.11",
+      "recorte_filas": 4,
+      "ip_en_memoria": true,
+      "incidente_en_memoria": false
+    },
+    {
+      "case_id": "uwf_eva_sigiloso_0012",
+      "dataset": "uwf",
+      "condicion": "sigiloso",
+      "indice": 12,
+      "positivo": true,
+      "incidente_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0003#r5",
+      "incidente_base": "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0003",
+      "ventana_incidente": "2022-08-28_2022-09-04",
+      "tactica": "Reconnaissance",
+      "tacticas": [
+        "Reconnaissance"
+      ],
+      "ip_atacante": "143.88.10.11",
+      "recorte_filas": 5,
+      "ip_en_memoria": true,
+      "incidente_en_memoria": false
+    },
+    {
+      "case_id": "uwf_eva_sigiloso_0016",
+      "dataset": "uwf",
+      "condicion": "sigiloso",
+      "indice": 16,
+      "positivo": true,
+      "incidente_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0007#r3",
+      "incidente_base": "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0007",
+      "ventana_incidente": "2022-08-28_2022-09-04",
+      "tactica": "Reconnaissance",
+      "tacticas": [
+        "Reconnaissance"
+      ],
+      "ip_atacante": "143.88.10.11",
+      "recorte_filas": 3,
+      "ip_en_memoria": true,
+      "incidente_en_memoria": false
+    },
+    {
+      "case_id": "uwf_eva_sigiloso_0017",
+      "dataset": "uwf",
+      "condicion": "sigiloso",
+      "indice": 17,
+      "positivo": true,
+      "incidente_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0008#r4",
+      "incidente_base": "2022-08-28_2022-09-04__Reconnaissance__143.88.10.11__0008",
+      "ventana_incidente": "2022-08-28_2022-09-04",
+      "tactica": "Reconnaissance",
+      "tacticas": [
+        "Reconnaissance"
+      ],
+      "ip_atacante": "143.88.10.11",
+      "recorte_filas": 4,
+      "ip_en_memoria": true,
+      "incidente_en_memoria": false
+    },
+    {
+      "case_id": "uwf_eva_sigiloso_0021",
+      "dataset": "uwf",
+      "condicion": "sigiloso",
+      "indice": 21,
+      "positivo": false
+    },
+    {
+      "case_id": "uwf_eva_sigiloso_0023",
+      "dataset": "uwf",
+      "condicion": "sigiloso",
+      "indice": 23,
+      "positivo": false
+    },
+    {
+      "case_id": "uwf_eva_sigiloso_0027",
+      "dataset": "uwf",
+      "condicion": "sigiloso",
+      "indice": 27,
+      "positivo": false
+    },
+    {
+      "case_id": "uwf_eva_sigiloso_0029",
+      "dataset": "uwf",
+      "condicion": "sigiloso",
+      "indice": 29,
+      "positivo": false
+    },
+    {
+      "case_id": "uwf_eva_sigiloso_0031",
+      "dataset": "uwf",
+      "condicion": "sigiloso",
+      "indice": 31,
+      "positivo": false
+    },
+    {
+      "case_id": "uwf_eva_sigiloso_0034",
+      "dataset": "uwf",
+      "condicion": "sigiloso",
+      "indice": 34,
+      "positivo": false
+    },
+    {
+      "case_id": "uwf_eva_sigiloso_0036",
+      "dataset": "uwf",
+      "condicion": "sigiloso",
+      "indice": 36,
+      "positivo": false
+    },
+    {
+      "case_id": "uwf_eva_sigiloso_0038",
+      "dataset": "uwf",
+      "condicion": "sigiloso",
+      "indice": 38,
+      "positivo": false
+    },
+    {
+      "case_id": "uwf_eva_visible_0000",
+      "dataset": "uwf",
+      "condicion": "visible",
+      "indice": 0,
+      "positivo": true,
+      "incidente_id": "2022-08-28_2022-09-04__Defense Evasion__143.88.18.12__0000",
+      "incidente_base": "2022-08-28_2022-09-04__Defense Evasion__143.88.18.12__0000",
+      "ventana_incidente": "2022-08-28_2022-09-04",
+      "tactica": "Defense Evasion",
+      "tacticas": [
+        "Defense Evasion"
+      ],
+      "ip_atacante": "143.88.18.12",
+      "recorte_filas": null,
+      "ip_en_memoria": true,
+      "incidente_en_memoria": false
+    },
+    {
+      "case_id": "uwf_eva_visible_0001",
+      "dataset": "uwf",
+      "condicion": "visible",
+      "indice": 1,
+      "positivo": true,
+      "incidente_id": "2022-09-11_2022-09-18__Discovery__143.88.18.12__0000",
+      "incidente_base": "2022-09-11_2022-09-18__Discovery__143.88.18.12__0000",
+      "ventana_incidente": "2022-09-11_2022-09-18",
+      "tactica": "Discovery",
+      "tacticas": [
+        "Discovery"
+      ],
+      "ip_atacante": "143.88.18.12",
+      "recorte_filas": null,
+      "ip_en_memoria": true,
+      "incidente_en_memoria": false
+    },
+    {
+      "case_id": "uwf_eva_visible_0002",
+      "dataset": "uwf",
+      "condicion": "visible",
+      "indice": 2,
+      "positivo": true,
+      "incidente_id": "2022-09-18_2022-09-25__Resource Development__143.88.5.11__0004",
+      "incidente_base": "2022-09-18_2022-09-25__Resource Development__143.88.5.11__0004",
+      "ventana_incidente": "2022-09-18_2022-09-25",
+      "tactica": "Resource Development",
+      "tacticas": [
+        "Resource Development"
+      ],
+      "ip_atacante": "143.88.5.11",
+      "recorte_filas": null,
+      "ip_en_memoria": true,
+      "incidente_en_memoria": false
+    },
+    {
+      "case_id": "uwf_eva_visible_0016",
+      "dataset": "uwf",
+      "condicion": "visible",
+      "indice": 16,
+      "positivo": true,
+      "incidente_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.3.12__0000",
+      "incidente_base": "2022-08-28_2022-09-04__Reconnaissance__143.88.3.12__0000",
+      "ventana_incidente": "2022-08-28_2022-09-04",
+      "tactica": "Reconnaissance",
+      "tacticas": [
+        "Reconnaissance"
+      ],
+      "ip_atacante": "143.88.3.12",
+      "recorte_filas": null,
+      "ip_en_memoria": false,
+      "incidente_en_memoria": false
+    },
+    {
+      "case_id": "uwf_eva_visible_0017",
+      "dataset": "uwf",
+      "condicion": "visible",
+      "indice": 17,
+      "positivo": true,
+      "incidente_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0000",
+      "incidente_base": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0000",
+      "ventana_incidente": "2022-08-28_2022-09-04",
+      "tactica": "Reconnaissance",
+      "tacticas": [
+        "Reconnaissance"
+      ],
+      "ip_atacante": "143.88.7.11",
+      "recorte_filas": null,
+      "ip_en_memoria": true,
+      "incidente_en_memoria": false
+    },
+    {
+      "case_id": "uwf_eva_visible_0018",
+      "dataset": "uwf",
+      "condicion": "visible",
+      "indice": 18,
+      "positivo": true,
+      "incidente_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0002",
+      "incidente_base": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0002",
+      "ventana_incidente": "2022-08-28_2022-09-04",
+      "tactica": "Reconnaissance",
+      "tacticas": [
+        "Reconnaissance"
+      ],
+      "ip_atacante": "143.88.7.11",
+      "recorte_filas": null,
+      "ip_en_memoria": true,
+      "incidente_en_memoria": false
+    },
+    {
+      "case_id": "uwf_eva_visible_0019",
+      "dataset": "uwf",
+      "condicion": "visible",
+      "indice": 19,
+      "positivo": true,
+      "incidente_id": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0011",
+      "incidente_base": "2022-08-28_2022-09-04__Reconnaissance__143.88.7.11__0011",
+      "ventana_incidente": "2022-08-28_2022-09-04",
+      "tactica": "Reconnaissance",
+      "tacticas": [
+        "Reconnaissance"
+      ],
+      "ip_atacante": "143.88.7.11",
+      "recorte_filas": null,
+      "ip_en_memoria": true,
+      "incidente_en_memoria": false
+    },
+    {
+      "case_id": "uwf_eva_visible_0021",
+      "dataset": "uwf",
+      "condicion": "visible",
+      "indice": 21,
+      "positivo": false
+    },
+    {
+      "case_id": "uwf_eva_visible_0023",
+      "dataset": "uwf",
+      "condicion": "visible",
+      "indice": 23,
+      "positivo": false
+    },
+    {
+      "case_id": "uwf_eva_visible_0026",
+      "dataset": "uwf",
+      "condicion": "visible",
+      "indice": 26,
+      "positivo": false
+    },
+    {
+      "case_id": "uwf_eva_visible_0030",
+      "dataset": "uwf",
+      "condicion": "visible",
+      "indice": 30,
+      "positivo": false
+    },
+    {
+      "case_id": "uwf_eva_visible_0033",
+      "dataset": "uwf",
+      "condicion": "visible",
+      "indice": 33,
+      "positivo": false
+    },
+    {
+      "case_id": "uwf_eva_visible_0036",
+      "dataset": "uwf",
+      "condicion": "visible",
+      "indice": 36,
+      "positivo": false
+    },
+    {
+      "case_id": "uwf_eva_visible_0038",
+      "dataset": "uwf",
+      "condicion": "visible",
+      "indice": 38,
+      "positivo": false
+    }
+  ]
+}

@@ -19,7 +19,7 @@ CONFIGURACION_ELEGIDA = {
     "HISTORICO_CONTRASTIVO": True, "HISTORICO_K_POR_CLASE": 2, "MEMORIA_GRUPOS_ACTIVA": True,
     "MEMORIA_GRUPOS_PATH": "./experiments/knowledge/memoria_grupos_v1/memoria_grupos.json",
     "AUDITOR_REFORZADO": True, "GRUPOS_MOTIVO_FACTUAL": True, "LISTA_PATRONES_MITRE": True,
-    "GRUPOS_SENAL_MAX_GRUPOS": 15, "GRUPOS_SENAL_MAX_FILAS": 200,
+    "GRUPOS_SENAL_MAX_GRUPOS": 15, "GRUPOS_SENAL_MAX_FILAS": 200, "AGENTE_UNICO_GRUPOS_CON_SENAL": True,
 }
 
 
@@ -132,3 +132,73 @@ def test_el_arnes_acepta_solo_interruptores_conocidos_y_los_registra():
     with pytest.raises(SystemExit):
         arnes.parsear_entorno(["AUDITOR_REFORZADO"])
     assert set(arnes.interruptores_efectivos()) == set(arnes.INTERRUPTORES)
+
+
+# --- agente único: estudio de ablación de arquitectura ---------------------------------------------
+
+def _bloque(texto: str) -> str:
+    inicio = texto.index("\n\n===== GRUPOS CON SEÑAL")
+    fin = texto.index("===== FIN DE LOS GRUPOS CON SEÑAL =====\n") + len("===== FIN DE LOS GRUPOS CON SEÑAL =====\n")
+    return texto[inicio:fin]
+
+
+def _visto_auditor_y_agente_unico(monkeypatch, raw):
+    import src.agents.agente_auditor_final as auditor
+    import src.single_agent as single
+    from src.tools.grupos_con_senal import grupos_con_senal
+    vistos = {}
+
+    def falso(nombre, respuesta):
+        def llm_json(prompt, system=None, **_):
+            vistos[nombre] = {"prompt": prompt, "system": system}
+            return respuesta
+        return llm_json
+
+    estado = estado_de(raw)
+    estado.update(diagnostico="d", veredicto_consolidado="normal", plan={"pasos": []})
+    monkeypatch.setattr(auditor, "llm_json", falso("auditor", _respuesta([])))
+    auditor.agente_auditor_final(estado)
+    primero = (grupos_con_senal(estado) or [{"group_id": "G01"}])[0]["group_id"]
+    respuesta_unico = dict(_respuesta([{"group_id": primero, "explicacion_benigna": "b",
+                                        "explicacion_maliciosa": "m", "patron_lista": "ninguno"}]),
+                           diagnostico="d", comandos_mitigacion=[])
+    monkeypatch.setattr(single, "llm_json", falso("agente_unico", respuesta_unico))
+    salida = single.analizar_lote_agente_unico(raw, thread_id="prueba_ablacion")
+    return vistos, salida, estado
+
+
+def test_el_agente_unico_recibe_el_mismo_bloque_de_grupos_que_el_auditor_byte_a_byte(monkeypatch):
+    from src.tools.grupos_con_senal import bloque_grupos, grupos_con_senal, instruccion_evaluacion_grupos
+    vistos, salida, estado = _visto_auditor_y_agente_unico(monkeypatch, lote_red())
+    bloque_auditor = _bloque(vistos["auditor"]["prompt"])
+    bloque_unico = _bloque(vistos["agente_unico"]["prompt"])
+    assert bloque_unico.encode("utf-8") == bloque_auditor.encode("utf-8")
+    assert bloque_unico == bloque_grupos(estado, grupos_con_senal(estado))
+    # La misma instrucción (con la lista de patrones MITRE) y la evaluación como primer campo del JSON.
+    instruccion = instruccion_evaluacion_grupos()
+    assert instruccion in vistos["auditor"]["system"] and instruccion in vistos["agente_unico"]["system"]
+    assert "LISTA DE VERIFICACIÓN" in vistos["agente_unico"]["system"]
+    sistema = vistos["agente_unico"]["system"]
+    assert sistema.index('"evaluacion_grupos"') < sistema.index('"diagnostico"')
+    # Los referentes de la memoria de grupos llegan dentro del bloque; no se repiten aparte.
+    assert "MEMORIA DE GRUPOS ETIQUETADOS" not in vistos["agente_unico"]["prompt"]
+    primero = grupos_con_senal(estado)[0]["group_id"]
+    assert salida["evaluacion_grupos"] == [{"group_id": primero, "explicacion_benigna": "b",
+                                            "explicacion_maliciosa": "m", "patron_lista": "ninguno"}]
+    otros = [g["group_id"] for g in grupos_con_senal(estado)][1:]
+    assert all(f"grupo_con_senal_sin_evaluacion:{g}" in salida["d11_warnings"] for g in otros)
+
+
+def test_en_bgl_el_agente_unico_tambien_recibe_el_mismo_bloque(monkeypatch):
+    from tests.test_nodex_final_fase_a import lote_bgl
+    vistos, _, _ = _visto_auditor_y_agente_unico(monkeypatch, lote_bgl())
+    assert _bloque(vistos["agente_unico"]["prompt"]) == _bloque(vistos["auditor"]["prompt"])
+
+
+def test_con_el_interruptor_apagado_el_agente_unico_es_el_de_b1(monkeypatch):
+    monkeypatch.setattr(config, "AGENTE_UNICO_GRUPOS_CON_SENAL", False)
+    vistos, salida, _ = _visto_auditor_y_agente_unico(monkeypatch, lote_red())
+    assert "GRUPOS CON SEÑAL" not in vistos["agente_unico"]["prompt"]
+    assert "evaluacion_grupos" not in vistos["agente_unico"]["system"]
+    assert "MEMORIA DE GRUPOS ETIQUETADOS" in vistos["agente_unico"]["prompt"]
+    assert salida.get("evaluacion_grupos") in (None, [])

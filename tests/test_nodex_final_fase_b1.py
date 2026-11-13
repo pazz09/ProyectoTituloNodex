@@ -214,6 +214,11 @@ def test_el_agente_unico_recibe_la_memoria_de_grupos_y_la_contrastiva(monkeypatc
 
     monkeypatch.setattr(single, "llm_json", falso)
     single.analizar_lote_agente_unico(lote_red())
+    # Desde el estudio de ablación (AGENTE_UNICO_GRUPOS_CON_SENAL), los referentes llegan dentro del bloque de
+    # grupos con señal, igual que al auditor reforzado; con el interruptor apagado, en el bloque aparte de B.1.
+    assert '"malicioso_mas_parecido": {"tacticas": ["Discovery"], "comportamiento": "barrido"}' in visto["prompt"]
+    monkeypatch.setattr(config, "AGENTE_UNICO_GRUPOS_CON_SENAL", False)
+    single.analizar_lote_agente_unico(lote_red())
     assert "MEMORIA DE GRUPOS ETIQUETADOS" in visto["prompt"] and "malicioso más parecido (Discovery)" in visto["prompt"]
     assert "casos ANÓMALOS o MALICIOSOS" in visto["prompt"]
 

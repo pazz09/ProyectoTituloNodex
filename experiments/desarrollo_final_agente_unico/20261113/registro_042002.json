@@ -1,0 +1,1359 @@
+{
+  "inicio_utc": "2026-11-13T03:46:32.280999+00:00",
+  "commit": "e7db4846c49e03dad23cc66ea6edfc4bc371a135",
+  "rama": "nodex-final",
+  "src_sin_cambios": false,
+  "tope_usd": 3.0,
+  "memoria": "experiments/knowledge/rag_enriquecido_v2",
+  "memoria_manifiesto_sha256": "55c32dfe24ab803e06aba5ce6a7cd6712ea12d2db5031e6a8c62f15236a4b756",
+  "src_diff_sha256": "d39282aa392958f08140e62aa71b3e06447e854762857440539cdd05ac7b3778",
+  "src_nuevos_sin_seguimiento": [],
+  "memoria_grupos": "experiments/knowledge/memoria_grupos_v1",
+  "memoria_grupos_sha256": "93e974579d50296821958528279b56db2aa7ac12dd4c6a9e1983addfade05c42",
+  "interruptores": {
+    "RAG_POR_HIPOTESIS": true,
+    "CORRECCION_AUDITOR": true,
+    "HISTORICO_ACTIVO": true,
+    "HISTORICO_K": 3,
+    "EVENTOS_POR_CATEGORIA": true,
+    "HISTORICO_CONTRASTIVO": true,
+    "HISTORICO_K_POR_CLASE": 2,
+    "MEMORIA_GRUPOS_ACTIVA": true,
+    "AUDITOR_REFORZADO": true,
+    "GRUPOS_MOTIVO_FACTUAL": true,
+    "LISTA_PATRONES_MITRE": true,
+    "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+  },
+  "nota_interruptores": "valores del lanzador; los efectivos de cada caso están en casos[].interruptores",
+  "entorno_sobrescrito": {},
+  "exclusion_por_solapamiento": "del sistema (siempre)",
+  "exclusion_por_incidente": true,
+  "criterio_exclusion_por_incidente": "mismo IP de origen atacante y al menos una táctica en común (GT de desarrollo)",
+  "parametros": {
+    "LLM_MODEL_PRIMARY": "gemini-3.8-flash",
+    "LLM_MODEL_FALLBACK": "gemini-3.8-flash",
+    "LLM_SIN_RESPALDO": true,
+    "REPUTACION_SIN_ENRIQUECIMIENTO": true,
+    "TEMPERATURE": 0.0,
+    "EMBEDDING_MODEL": "all-MiniLM-L6-v2",
+    "TOP_K_FEWSHOT": 3,
+    "TOP_K_ERRORS": 3,
+    "TOP_K_ATTACK": 3,
+    "ATTACK_MAX_CHARS_EMBED": 800,
+    "MAX_RAW_CHARS_EMBED": 2000,
+    "CONTEXTO_PREPROCESAMIENTO_MAX_CHARS": 2000,
+    "LOG_MAX_FILE_BYTES": 52428800,
+    "LOG_MAX_EVENTS": 100000,
+    "LOG_MAX_RAW_SAMPLES": 20,
+    "LOG_PRESERVE_RAW": true
+  },
+  "arquitecturas": [
+    "agente_unico"
+  ],
+  "casos": [
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_balanceado_0000",
+      "codigo": 0,
+      "segundos_pared": 61.2,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.02947,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_balanceado_0001",
+      "codigo": 0,
+      "segundos_pared": 41.2,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.01934,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_balanceado_0002",
+      "codigo": 0,
+      "segundos_pared": 36.4,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.01631,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_balanceado_0003",
+      "codigo": 0,
+      "segundos_pared": 30.4,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.01128,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0000",
+      "codigo": 0,
+      "segundos_pared": 49.7,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.02224,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0001",
+      "codigo": 0,
+      "segundos_pared": 40.1,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.01817,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0002",
+      "codigo": 0,
+      "segundos_pared": 51.1,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.02615,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0003",
+      "codigo": 0,
+      "segundos_pared": 77.7,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.03891,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0004",
+      "codigo": 0,
+      "segundos_pared": 45.7,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.02148,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0005",
+      "codigo": 0,
+      "segundos_pared": 39.8,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.01891,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0006",
+      "codigo": 0,
+      "segundos_pared": 30.3,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.01014,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0007",
+      "codigo": 0,
+      "segundos_pared": 27.2,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.00822,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0008",
+      "codigo": 0,
+      "segundos_pared": 32.1,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.01024,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0009",
+      "codigo": 0,
+      "segundos_pared": 26.6,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.00864,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0010",
+      "codigo": 0,
+      "segundos_pared": 29.9,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.00959,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0011",
+      "codigo": 0,
+      "segundos_pared": 38.0,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.01565,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0012",
+      "codigo": 0,
+      "segundos_pared": 45.6,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.02521,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0013",
+      "codigo": 0,
+      "segundos_pared": 35.9,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.01545,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0014",
+      "codigo": 0,
+      "segundos_pared": 46.3,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.02299,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0015",
+      "codigo": 0,
+      "segundos_pared": 27.3,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.00993,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0016",
+      "codigo": 0,
+      "segundos_pared": 31.7,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.01267,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0017",
+      "codigo": 0,
+      "segundos_pared": 46.2,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.01999,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0018",
+      "codigo": 0,
+      "segundos_pared": 29.4,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.01113,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0019",
+      "codigo": 0,
+      "segundos_pared": 44.0,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.02088,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0000",
+      "codigo": 0,
+      "segundos_pared": 67.8,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0002",
+        "uwf_des_visible_0001"
+      ],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.08529,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0001",
+      "codigo": 0,
+      "segundos_pared": 39.0,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0003",
+        "uwf_des_sigiloso_0004",
+        "uwf_des_sigiloso_0005",
+        "uwf_des_visible_0002",
+        "uwf_des_visible_0004"
+      ],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.07,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0002",
+      "codigo": 0,
+      "segundos_pared": 35.8,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0000",
+        "uwf_des_visible_0001"
+      ],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.06762,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0003",
+      "codigo": 0,
+      "segundos_pared": 38.2,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0001",
+        "uwf_des_sigiloso_0004",
+        "uwf_des_sigiloso_0005",
+        "uwf_des_visible_0002",
+        "uwf_des_visible_0004"
+      ],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.0685,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0004",
+      "codigo": 0,
+      "segundos_pared": 43.7,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0001",
+        "uwf_des_sigiloso_0003",
+        "uwf_des_sigiloso_0005",
+        "uwf_des_visible_0002",
+        "uwf_des_visible_0004"
+      ],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.07395,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0005",
+      "codigo": 0,
+      "segundos_pared": 44.4,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0001",
+        "uwf_des_sigiloso_0003",
+        "uwf_des_sigiloso_0004",
+        "uwf_des_visible_0002",
+        "uwf_des_visible_0004"
+      ],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.07648,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0006",
+      "codigo": 0,
+      "segundos_pared": 38.7,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.06767,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0007",
+      "codigo": 0,
+      "segundos_pared": 40.0,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.06759,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0008",
+      "codigo": 0,
+      "segundos_pared": 42.9,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.07091,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0009",
+      "codigo": 0,
+      "segundos_pared": 39.7,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.06828,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0010",
+      "codigo": 0,
+      "segundos_pared": 33.9,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.06209,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0011",
+      "codigo": 0,
+      "segundos_pared": 40.7,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.06894,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0000",
+      "codigo": 0,
+      "segundos_pared": 43.9,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_visible_0003",
+        "uwf_des_visible_0005"
+      ],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.08145,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0001",
+      "codigo": 0,
+      "segundos_pared": 42.5,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0000",
+        "uwf_des_sigiloso_0002"
+      ],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.08013,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0002",
+      "codigo": 0,
+      "segundos_pared": 63.6,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0001",
+        "uwf_des_sigiloso_0003",
+        "uwf_des_sigiloso_0004",
+        "uwf_des_sigiloso_0005",
+        "uwf_des_visible_0004"
+      ],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.0974,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0003",
+      "codigo": 0,
+      "segundos_pared": 46.4,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_visible_0000",
+        "uwf_des_visible_0005"
+      ],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.08513,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0004",
+      "codigo": 0,
+      "segundos_pared": 43.6,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0001",
+        "uwf_des_sigiloso_0003",
+        "uwf_des_sigiloso_0004",
+        "uwf_des_sigiloso_0005",
+        "uwf_des_visible_0002"
+      ],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.07835,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0005",
+      "codigo": 0,
+      "segundos_pared": 41.7,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_visible_0000",
+        "uwf_des_visible_0003"
+      ],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.0748,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0006",
+      "codigo": 0,
+      "segundos_pared": 38.9,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.06783,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0007",
+      "codigo": 0,
+      "segundos_pared": 44.9,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.07822,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0008",
+      "codigo": 0,
+      "segundos_pared": 47.5,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.07114,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0009",
+      "codigo": 0,
+      "segundos_pared": 35.8,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.06505,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0010",
+      "codigo": 0,
+      "segundos_pared": 40.7,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.07029,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0011",
+      "codigo": 0,
+      "segundos_pared": 50.2,
+      "excluidos_mismo_incidente_previstos": [],
+      "interruptores": {
+        "RAG_POR_HIPOTESIS": true,
+        "CORRECCION_AUDITOR": true,
+        "HISTORICO_ACTIVO": true,
+        "HISTORICO_K": 3,
+        "EVENTOS_POR_CATEGORIA": true,
+        "HISTORICO_CONTRASTIVO": true,
+        "HISTORICO_K_POR_CLASE": 2,
+        "MEMORIA_GRUPOS_ACTIVA": true,
+        "AUDITOR_REFORZADO": true,
+        "GRUPOS_MOTIVO_FACTUAL": true,
+        "LISTA_PATRONES_MITRE": true,
+        "AGENTE_UNICO_GRUPOS_CON_SENAL": true
+      },
+      "usd": 0.07197,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    }
+  ],
+  "fin_utc": "2026-11-13T04:20:02.097272+00:00",
+  "gasto_usd": 2.19207
+}

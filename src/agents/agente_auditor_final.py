@@ -112,7 +112,9 @@ def agente_auditor_final(state: LogGuardState) -> dict:
         '"cobertura_auditor": true/false, "motivo_cobertura": "..."}'
     )
     from src.config import AUDITOR_REFORZADO, HISTORICO_ACTIVO, RAG_POR_HIPOTESIS
-    from src.tools.grupos_con_senal import grupos_con_senal
+    from src.tools.grupos_con_senal import (CAMPO_EVALUACION_GRUPOS, avisos_evaluacion_grupos, bloque_grupos,
+                                            grupos_con_senal, instruccion_evaluacion_grupos,
+                                            normalizar_evaluacion_grupos)
     from src.tools.memoria_historica import CRITERIO_ORGANIZACION, contexto_historico
     if HISTORICO_ACTIVO:
         # B4 (NODEX final): la definición anterior de hay_anomalia contaba como
@@ -131,8 +133,8 @@ def agente_auditor_final(state: LogGuardState) -> dict:
     if grupos_senal:
         # Auditor reforzado: evaluación de grupos ANTES del veredicto, primer campo del JSON.
         sys_instruction = sys_instruction.replace(
-            "Responde SOLO en JSON: {", "Responde SOLO en JSON: {" + _CAMPO_EVALUACION_GRUPOS, 1)
-        sys_instruction += _instruccion_reforzada()
+            "Responde SOLO en JSON: {", "Responde SOLO en JSON: {" + CAMPO_EVALUACION_GRUPOS, 1)
+        sys_instruction += instruccion_evaluacion_grupos()
     if RAG_POR_HIPOTESIS:
         sys_instruction += (" Recibes el veredicto consolidado del triage"
                             + (" (los grupos con señal los evalúas tú)" if grupos_senal else "")
@@ -159,7 +161,7 @@ def agente_auditor_final(state: LogGuardState) -> dict:
     if historicos:
         user_content += "\n" + historicos
     if grupos_senal:
-        user_content += _bloque_grupos(state, grupos_senal)
+        user_content += bloque_grupos(state, grupos_senal)
 
     user_content += contexto_d11(state)
     respuesta = llm_json(user_content, system=sys_instruction)
@@ -218,11 +220,9 @@ def agente_auditor_final(state: LogGuardState) -> dict:
 
     evaluacion_grupos = []
     if grupos_senal:
-        examinados = [g["group_id"] for g in grupos_senal]
-        evaluacion_grupos = normalizar_evaluacion_grupos(respuesta.get("evaluacion_grupos"), set(examinados))
-        evaluados = {e["group_id"] for e in evaluacion_grupos}
-        d11["d11_warnings"] = d11["d11_warnings"] + [
-            f"grupo_con_senal_sin_evaluacion:{gid}" for gid in examinados if gid not in evaluados]
+        evaluacion_grupos = normalizar_evaluacion_grupos(respuesta.get("evaluacion_grupos"),
+                                                         {g["group_id"] for g in grupos_senal})
+        d11["d11_warnings"] = d11["d11_warnings"] + avisos_evaluacion_grupos(grupos_senal, evaluacion_grupos)
 
     print(f"   → Confianza final: {confianza:.2f} | hay_anomalia={hay_anomalia} | "
           f"hay_incidente={hay_incidente} | cobertura_suficiente={cobertura_suficiente} | {evaluacion}")
@@ -240,57 +240,5 @@ def agente_auditor_final(state: LogGuardState) -> dict:
     }
 
 
-_CAMPO_EVALUACION_GRUPOS = (
-    '"evaluacion_grupos": [{"group_id": "G01", "explicacion_benigna": "...", "explicacion_maliciosa": "...", '
-    '"patron_lista": "id de la lista o ninguno"}], ')
-
-
-def _instruccion_reforzada() -> str:
-    """Instrucción del auditor reforzado: reglas de evaluación de grupos y lista de patrones MITRE."""
-    from src.tools.grupos_con_senal import IDS_PATRONES, instrucciones_grupos
-    return (
-        " GRUPOS CON SEÑAL: recibes en un bloque destacado los grupos minoritarios o señalados del lote, con todas "
-        "sus filas, y un resumen del comportamiento dominante para comparar. ANTES de emitir el veredicto debes "
-        "evaluar explícitamente CADA grupo con señal, uno por uno, en evaluacion_grupos (el primer campo del JSON): "
-        "(1) explicacion_benigna: la explicación legítima más plausible; (2) explicacion_maliciosa: la explicación "
-        "maliciosa u operativa (falla) más plausible; (3) patron_lista: el patrón de la lista de verificación que "
-        "calza (" + "|".join(IDS_PATRONES) + "). Basa cada explicación en campos concretos de las filas (puertos, "
-        "protocolo, estado e historia de la conexión, bytes, duración, tiempos, severidad, componente, mensaje). "
-        "Reglas: un grupo sostiene un incidente solo si su explicación benigna NO es plausible con la evidencia "
-        "observada. Que un grupo sea minoritario no lo hace sospechoso: el tráfico de infraestructura habitual "
-        "(resolución de nombres, descubrimiento de red local, asignación de direcciones, sincronización de "
-        "tiempo, difusión) no es sospechoso por ser poco frecuente. Tampoco descartes un grupo solo porque el "
-        "resto del lote sea normal: evalúa cada grupo por sí mismo. No inventes grupos ni campos."
-        + instrucciones_grupos()
-        + " Tu veredicto (hay_anomalia, hay_incidente) debe ser coherente con esa evaluación.")
-
-
-def _bloque_grupos(state: LogGuardState, grupos: list[dict]) -> str:
-    """Bloque destacado: comportamiento dominante y grupos con señal con todas sus filas."""
-    from src.tools.grupos_con_senal import resumen_dominante
-    return ("\n\n===== GRUPOS CON SEÑAL: EVALÚALOS UNO POR UNO ANTES DEL VEREDICTO =====\n"
-            "COMPORTAMIENTO DOMINANTE DEL LOTE (para comparar):\n"
-            + json.dumps(resumen_dominante(state), ensure_ascii=False)
-            + "\n\nGRUPOS A EXAMINAR (uno por uno, con todas sus filas):\n"
-            + json.dumps(grupos, ensure_ascii=False)
-            + "\n===== FIN DE LOS GRUPOS CON SEÑAL =====\n")
-
-
-def normalizar_evaluacion_grupos(valor, examinados: set) -> list[dict]:
-    """Evaluaciones válidas: grupo examinado, una por grupo, patrón validado contra la lista."""
-    from src.tools.grupos_con_senal import IDS_PATRONES
-    salida, vistos = [], set()
-    for item in valor if isinstance(valor, list) else []:
-        if not isinstance(item, dict):
-            continue
-        gid = str(item.get("group_id") or "").strip()
-        if gid not in examinados or gid in vistos:
-            continue
-        vistos.add(gid)
-        patron = str(item.get("patron_lista") or "").strip().lower()
-        salida.append({"group_id": gid,
-                       "explicacion_benigna": str(item.get("explicacion_benigna") or "")[:600],
-                       "explicacion_maliciosa": str(item.get("explicacion_maliciosa") or "")[:600],
-                       "patron_lista": patron if patron in IDS_PATRONES else ("no_indicado" if not patron
-                                                                               else "fuera_de_lista")})
-    return salida
+# Re-exportado: la normalización vive en `src/tools/grupos_con_senal.py` (compartida con el agente único).
+from src.tools.grupos_con_senal import normalizar_evaluacion_grupos  # noqa: E402,F401
