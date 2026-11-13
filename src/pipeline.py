@@ -201,6 +201,7 @@ def _preparar_estado_inicial(raw_logs: str, thread_id: str | None = None):
         "veredicto_consolidado": None,
         "consulta_mitre": "",
         "revision_hallazgos": [],
+        "evaluacion_grupos": [],
         "diagnostico_inicial": "",
         "diagnostico_corregido": "",
         "correcciones_auditor": 0,

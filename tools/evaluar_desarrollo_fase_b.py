@@ -3,6 +3,9 @@
     python tools/evaluar_desarrollo_fase_b.py --ejecutar                 # NODEX y agente único, 48 + 48
     python tools/evaluar_desarrollo_fase_b.py --ejecutar --arquitectura nodex
     python tools/evaluar_desarrollo_fase_b.py --ejecutar --carpeta desarrollo_fase_b1   # Fase B.1
+    python tools/evaluar_desarrollo_fase_b.py --ejecutar --arquitectura nodex --tope 8 \
+        --carpeta desarrollo_fase_b1_auditor_reforzado \
+        --entorno CAZADOR_ACTIVO=false --entorno AUDITOR_REFORZADO=true     # variante sin cazador
 
 Configuración de evaluación del piloto (`gemini-3.8-flash`, temperatura 0, sin respaldo, sin
 reputación externa, red bloqueada con registro de intentos), un proceso por caso y una copia
@@ -17,6 +20,10 @@ patrones cuyo incidente comparte IP de origen atacante y táctica con el inciden
 ground truth de DESARROLLO). Se aplica igual a NODEX y al agente único y queda registrada por caso.
 Fase B.1: la misma lista se aplica a la memoria de grupos (`memoria_grupos_v1`): se excluyen los grupos
 de los casos del mismo incidente. La memoria de lotes se filtra ANTES de elegir los k por clase.
+
+Variantes (`--entorno CLAVE=valor`, repetible): fija interruptores de `src/config.py` en el entorno de
+cada proceso hijo. El registro guarda lo pedido (`entorno_sobrescrito`) y cada caso guarda los
+interruptores EFECTIVOS leídos de `src.config` dentro del proceso hijo (`interruptores_efectivos`).
 
 Tokens por nodo: el `llm_json` de cada agente se envuelve solo para observar. Tope de gasto conjunto
 (USD 15 por omisión), verificado antes de cada caso con la cota máxima de su celda. Los resultados
@@ -47,7 +54,7 @@ MEMORIA_GRUPOS = ROOT / "experiments/knowledge/memoria_grupos_v1"
 #: Interruptores de NODEX final que se registran con cada corrida.
 INTERRUPTORES = ("RAG_POR_HIPOTESIS", "CAZADOR_ACTIVO", "CORRECCION_AUDITOR", "HISTORICO_ACTIVO", "HISTORICO_K",
                  "EVENTOS_POR_CATEGORIA", "HISTORICO_CONTRASTIVO", "HISTORICO_K_POR_CLASE", "MEMORIA_GRUPOS_ACTIVA",
-                 "CAZADOR_MOTIVO_FACTUAL", "CAZADOR_LISTA_PATRONES", "AUDITOR_REVISA_MEDIOS")
+                 "CAZADOR_MOTIVO_FACTUAL", "CAZADOR_LISTA_PATRONES", "AUDITOR_REVISA_MEDIOS", "AUDITOR_REFORZADO")
 CONFIG_REFERENCIA = ROOT / "experiments/config/config_oficial-12casos-r1-20261028.json"
 PRECIO = {"entrada": 0.75, "salida": 3.75}
 COTA = {("nodex", "bgl"): 0.08, ("nodex", "uwf"): 0.35, ("agente_unico", "bgl"): 0.04,
@@ -163,6 +170,23 @@ def _instalar_exclusion(ruta: str):
     mg.consultar_memoria_grupos = grupos_con_exclusion
 
 
+def parsear_entorno(pares) -> dict:
+    """`["CLAVE=valor", ...]` -> dict; solo interruptores conocidos de NODEX final."""
+    salida = {}
+    for par in pares or []:
+        clave, sep, valor = par.partition("=")
+        clave = clave.strip()
+        if not sep or clave not in INTERRUPTORES:
+            raise SystemExit(f"--entorno inválido: {par!r} (se espera CLAVE=valor con CLAVE en {INTERRUPTORES})")
+        salida[clave] = valor.strip()
+    return salida
+
+
+def interruptores_efectivos() -> dict:
+    import src.config as cfg
+    return {k: getattr(cfg, k, None) for k in INTERRUPTORES}
+
+
 def hijo(arquitectura, dataset, case_id, salida, exclusion):
     from src.experimentation.runtime.consultas_externas import RegistroConsultas, instalar
     registro = RegistroConsultas()
@@ -211,7 +235,8 @@ def hijo(arquitectura, dataset, case_id, salida, exclusion):
                        for i in o["llamadas"] if i < len(llamadas)]
     estado.pop("raw_samples", None)
     Path(salida).write_text(json.dumps({"case_id": case_id, "dataset": dataset, "arquitectura": arquitectura,
-                                        "segundos_pared_hijo": segundos, "estado": estado,
+                                        "segundos_pared_hijo": segundos,
+                                        "interruptores_efectivos": interruptores_efectivos(), "estado": estado,
                                         "observaciones": observaciones, "consultas_externas": registro.a_lista()},
                                        ensure_ascii=False, indent=1, default=str), encoding="utf-8")
     return 0
@@ -224,7 +249,7 @@ def git(*args):
                           text=True, encoding="utf-8", errors="replace").stdout.strip()
 
 
-def ejecutar(arquitecturas, tope, excluir_incidente, nombre_carpeta):
+def ejecutar(arquitecturas, tope, excluir_incidente, nombre_carpeta, sobrescrito=None):
     from dotenv import dotenv_values
     from src.experimentation import campana
     congelada = json.loads(CONFIG_REFERENCIA.read_text(encoding="utf-8"))
@@ -255,6 +280,8 @@ def ejecutar(arquitecturas, tope, excluir_incidente, nombre_carpeta):
                 "memoria_grupos_sha256": (hashlib.sha256((MEMORIA_GRUPOS / "memoria_grupos.json").read_bytes()).hexdigest()
                                           if (MEMORIA_GRUPOS / "memoria_grupos.json").exists() else None),
                 "interruptores": {k: getattr(cfg, k, None) for k in INTERRUPTORES},
+                "nota_interruptores": "valores del lanzador; los efectivos de cada caso están en casos[].interruptores",
+                "entorno_sobrescrito": dict(sobrescrito or {}),
                 "exclusion_por_solapamiento": "del sistema (siempre)",
                 "exclusion_por_incidente": excluir_incidente,
                 "criterio_exclusion_por_incidente": "mismo IP de origen atacante y al menos una táctica en común (GT de desarrollo)",
@@ -283,6 +310,7 @@ def ejecutar(arquitecturas, tope, excluir_incidente, nombre_carpeta):
                     Path(ruta_exclusion).write_text(json.dumps(excluidos), encoding="utf-8")
                 entorno = campana.entorno_de_la_corrida(base, congelada, tmp / "chroma", tmp / "ip.json")
                 entorno["MEMORIA_GRUPOS_PATH"] = str(MEMORIA_GRUPOS / "memoria_grupos.json")
+                entorno.update(sobrescrito or {})
                 reloj = time.perf_counter()
                 r = subprocess.run([sys.executable, str(Path(__file__).resolve()), "--hijo", arquitectura, dataset,
                                     case_id, str(destino), ruta_exclusion], cwd=ROOT, env=entorno,
@@ -291,7 +319,9 @@ def ejecutar(arquitecturas, tope, excluir_incidente, nombre_carpeta):
             fila = {"arquitectura": arquitectura, "case_id": case_id, "codigo": r.returncode,
                     "segundos_pared": round(time.perf_counter() - reloj, 1), "excluidos_mismo_incidente_previstos": excluidos}
             if destino.exists():
-                llamadas = (json.loads(destino.read_text(encoding="utf-8"))["estado"].get("telemetry") or {}).get("llm_calls") or []
+                datos = json.loads(destino.read_text(encoding="utf-8"))
+                llamadas = (datos["estado"].get("telemetry") or {}).get("llm_calls") or []
+                fila["interruptores"] = datos.get("interruptores_efectivos")
                 fila.update(usd=round(costo(llamadas), 5), llamadas=len(llamadas),
                             versiones=sorted({c.get("model_version") for c in llamadas if c.get("model_version")}))
                 gastado += fila["usd"]
@@ -315,11 +345,12 @@ if __name__ == "__main__":
     p.add_argument("--excluir-mismo-incidente", dest="excluir", action="store_true", default=True)
     p.add_argument("--sin-excluir-mismo-incidente", dest="excluir", action="store_false")
     p.add_argument("--carpeta", default="desarrollo_fase_b")
+    p.add_argument("--entorno", action="append", default=[], metavar="CLAVE=valor")
     p.add_argument("--hijo", nargs=5)
     a = p.parse_args()
     if a.hijo:
         raise SystemExit(hijo(*a.hijo))
     if a.ejecutar:
         arqs = ["nodex", "agente_unico"] if a.arquitectura == "ambas" else [a.arquitectura]
-        raise SystemExit(ejecutar(arqs, a.tope, a.excluir, a.carpeta))
+        raise SystemExit(ejecutar(arqs, a.tope, a.excluir, a.carpeta, parsear_entorno(a.entorno)))
     print("Sin --ejecutar no se llama al modelo.", len(casos_de_desarrollo()), "casos de desarrollo.")

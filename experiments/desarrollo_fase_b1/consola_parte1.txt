@@ -1,0 +1,62 @@
+Terminó nodex bgl_des_balanceado_0000: código 0, USD 0.03687, llamadas 6
+Terminó nodex bgl_des_balanceado_0001: código 0, USD 0.03346, llamadas 6
+Terminó nodex bgl_des_balanceado_0002: código 0, USD 0.02977, llamadas 6
+Terminó nodex bgl_des_balanceado_0003: código 0, USD 0.02104, llamadas 5
+Terminó nodex bgl_des_natural_0000: código 0, USD 0.03606, llamadas 6
+Terminó nodex bgl_des_natural_0001: código 0, USD 0.04525, llamadas 6
+Terminó nodex bgl_des_natural_0002: código 0, USD 0.04645, llamadas 7
+Terminó nodex bgl_des_natural_0003: código 0, USD 0.04154, llamadas 6
+Terminó nodex bgl_des_natural_0004: código 0, USD 0.03506, llamadas 6
+Terminó nodex bgl_des_natural_0005: código 0, USD 0.03944, llamadas 6
+Terminó nodex bgl_des_natural_0006: código 0, USD 0.01878, llamadas 5
+Terminó nodex bgl_des_natural_0007: código 0, USD 0.02331, llamadas 5
+Terminó nodex bgl_des_natural_0008: código 0, USD 0.02016, llamadas 5
+Terminó nodex bgl_des_natural_0009: código 0, USD 0.01968, llamadas 5
+Terminó nodex bgl_des_natural_0010: código 0, USD 0.0179, llamadas 5
+Terminó nodex bgl_des_natural_0011: código 0, USD 0.02797, llamadas 6
+Terminó nodex bgl_des_natural_0012: código 0, USD 0.05039, llamadas 6
+Terminó nodex bgl_des_natural_0013: código 0, USD 0.02145, llamadas 5
+Terminó nodex bgl_des_natural_0014: código 0, USD 0.04871, llamadas 6
+Terminó nodex bgl_des_natural_0015: código 0, USD 0.01785, llamadas 5
+Terminó nodex bgl_des_natural_0016: código 0, USD 0.01825, llamadas 5
+Terminó nodex bgl_des_natural_0017: código 0, USD 0.03834, llamadas 6
+Terminó nodex bgl_des_natural_0018: código 0, USD 0.02023, llamadas 5
+Terminó nodex bgl_des_natural_0019: código 0, USD 0.03119, llamadas 6
+Terminó nodex uwf_des_sigiloso_0000: código 0, USD 0.09402, llamadas 6
+Terminó nodex uwf_des_sigiloso_0001: código 0, USD 0.09382, llamadas 6
+Terminó nodex uwf_des_sigiloso_0002: código 0, USD 0.08876, llamadas 6
+Terminó nodex uwf_des_sigiloso_0003: código 0, USD 0.09443, llamadas 6
+Terminó nodex uwf_des_sigiloso_0004: código 0, USD 0.09381, llamadas 6
+Terminó nodex uwf_des_sigiloso_0005: código 0, USD 0.10504, llamadas 6
+Terminó nodex uwf_des_sigiloso_0006: código 0, USD 0.08497, llamadas 6
+Terminó nodex uwf_des_sigiloso_0007: código 0, USD 0.09003, llamadas 7
+Terminó nodex uwf_des_sigiloso_0008: código 0, USD 0.08651, llamadas 6
+Terminó nodex uwf_des_sigiloso_0009: código 0, USD 0.08724, llamadas 6
+Terminó nodex uwf_des_sigiloso_0010: código 0, USD 0.07998, llamadas 6
+Terminó nodex uwf_des_sigiloso_0011: código 0, USD 0.09567, llamadas 6
+Terminó nodex uwf_des_visible_0000: código 0, USD 0.10633, llamadas 6
+Terminó nodex uwf_des_visible_0001: código 0, USD 0.11238, llamadas 7
+Terminó nodex uwf_des_visible_0002: código 0, USD 0.11459, llamadas 6
+Terminó nodex uwf_des_visible_0003: código 0, USD 0.10261, llamadas 6
+Terminó nodex uwf_des_visible_0004: código 0, USD 0.10162, llamadas 6
+Terminó nodex uwf_des_visible_0005: código 0, USD 0.10408, llamadas 6
+Traceback (most recent call last):
+  File "C:\Users\antop\Desktop\NODEX\tools\evaluar_desarrollo_fase_b.py", line 324, in <module>
+    raise SystemExit(ejecutar(arqs, a.tope, a.excluir, a.carpeta))
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\antop\Desktop\NODEX\tools\evaluar_desarrollo_fase_b.py", line 287, in ejecutar
+    r = subprocess.run([sys.executable, str(Path(__file__).resolve()), "--hijo", arquitectura, dataset,
+                        case_id, str(destino), ruta_exclusion], cwd=ROOT, env=entorno,
+                       capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=7200)
+  File "C:\Python313\Lib\subprocess.py", line 556, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\subprocess.py", line 1241, in communicate
+    sts = self.wait(timeout=self._remaining_time(endtime))
+  File "C:\Python313\Lib\subprocess.py", line 1280, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\subprocess.py", line 1609, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['C:\\Users\\antop\\Desktop\\NODEX\\.venv\\Scripts\\python.exe', 'C:\\Users\\antop\\Desktop\\NODEX\\tools\\evaluar_desarrollo_fase_b.py', '--hijo', 'nodex', 'uwf', 'uwf_des_visible_0006', 'C:\\Users\\antop\\Desktop\\NODEX\\experiments\\desarrollo_fase_b1\\20261112\\nodex\\uwf_des_visible_0006.json', 'C:\\Users\\antop\\AppData\\Local\\Temp\\fase_b_8l5ffarv\\excluir.json']' timed out after 7200 seconds
+CODIGO=1

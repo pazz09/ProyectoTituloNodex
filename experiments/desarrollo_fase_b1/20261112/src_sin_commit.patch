@@ -1,0 +1,602 @@
+diff --git a/src/agents/agente_auditor_final.py b/src/agents/agente_auditor_final.py
+index 4cbce7d..7caf54b 100644
+--- a/src/agents/agente_auditor_final.py
++++ b/src/agents/agente_auditor_final.py
+@@ -102,9 +102,11 @@ def agente_auditor_final(state: LogGuardState) -> dict:
+         '"hay_incidente": true/false, "evaluacion": "...", '
+         '"cobertura_auditor": true/false, "motivo_cobertura": "..."}'
+     )
+-    from src.config import HISTORICO_ACTIVO, RAG_POR_HIPOTESIS
++    from src.config import AUDITOR_REVISA_MEDIOS, HISTORICO_ACTIVO, RAG_POR_HIPOTESIS
+     from src.tools.memoria_historica import CRITERIO_ORGANIZACION, contexto_historico
+-    altos = [h for h in state.get("hallazgos_cazador") or [] if h.get("nivel_sospecha") == "alto"]
++    # B1: el auditor revisa cada hallazgo alto; B.1-3c: también los medio.
++    niveles_revisados = ("alto", "medio") if AUDITOR_REVISA_MEDIOS else ("alto",)
++    altos = [h for h in state.get("hallazgos_cazador") or [] if h.get("nivel_sospecha") in niveles_revisados]
+     if HISTORICO_ACTIVO:
+         # B4 (NODEX final): la definición anterior de hay_anomalia contaba como
+         # anomalía cualquier falla de hardware o infraestructura, lo que
+@@ -121,7 +123,8 @@ def agente_auditor_final(state: LogGuardState) -> dict:
+     if RAG_POR_HIPOTESIS:
+         sys_instruction += (
+             " Recibes el veredicto consolidado y los hallazgos del agente cazador (que examinó los grupos "
+-            "minoritarios). Tú decides el veredicto final. Por cada hallazgo de nivel alto debes "
++            "minoritarios). Tú decides el veredicto final. Por cada hallazgo de nivel "
++            + " o ".join(niveles_revisados) + " debes "
+             "pronunciarte explícitamente: confírmalo o descártalo con evidencia concreta, en "
+             'revision_hallazgos: [{"group_id": "G01", "decision": "confirmado|descartado", '
+             '"evidencia": "..."}].')
+@@ -206,11 +209,13 @@ def agente_auditor_final(state: LogGuardState) -> dict:
+     motivo_llm = respuesta.get("motivo_cobertura") if not cobertura_auditor else None
+     motivo_replanificacion = " | ".join(filter(None, [motivo_llm, *notas_deterministicas]))
+ 
+-    # B1: revisión explícita de cada hallazgo alto del cazador.
++    # B1: revisión explícita de cada hallazgo alto del cazador (B.1-3c: y medio).
+     revision = _revisar_hallazgos(respuesta.get("revision_hallazgos"), altos)
+-    faltantes = [h["group_id"] for h in altos if h["group_id"] not in {r["group_id"] for r in revision}]
++    revisados = {r["group_id"] for r in revision}
++    faltantes = [h for h in altos if h["group_id"] not in revisados]
+     if faltantes:
+-        d11["d11_warnings"] = d11["d11_warnings"] + [f"hallazgo_alto_sin_revision:{g}" for g in faltantes]
++        d11["d11_warnings"] = d11["d11_warnings"] + [
++            f"hallazgo_{h['nivel_sospecha']}_sin_revision:{h['group_id']}" for h in faltantes]
+ 
+     print(f"   → Confianza final: {confianza:.2f} | hay_anomalia={hay_anomalia} | "
+           f"hay_incidente={hay_incidente} | cobertura_suficiente={cobertura_suficiente} | {evaluacion}")
+diff --git a/src/agents/agente_cazador.py b/src/agents/agente_cazador.py
+index 9b2ed3a..d624672 100644
+--- a/src/agents/agente_cazador.py
++++ b/src/agents/agente_cazador.py
+@@ -19,6 +19,15 @@ Salida: `hallazgos_cazador`, una entrada por grupo con explicación benigna,
+ explicación maliciosa u operativa, `nivel_sospecha` (alto/medio/bajo),
+ justificación y técnica MITRE candidata. Las reglas del prompt son generales:
+ no hay ejemplos tomados de casos de desarrollo.
++
++Fase B.1 (cada parte con su interruptor):
++- `CAZADOR_MOTIVO_FACTUAL`: cada grupo trae el motivo factual de su señal
++  (`motivos_factuales`, conteos del lote calculados por el perfil).
++- `CAZADOR_LISTA_PATRONES`: lista de verificación general de patrones de ataque
++  observables en logs, basada en MITRE ATT&CK (`PATRONES_ATAQUE`), no en los
++  casos; por cada grupo, `patron_lista` dice qué patrón calza o `ninguno`.
++- `MEMORIA_GRUPOS_ACTIVA`: cada grupo con señal trae el grupo malicioso y el
++  benigno más parecidos de la memoria de grupos (comparación, no votación).
+ """
+ 
+ import json
+@@ -48,6 +57,73 @@ _SISTEMA = (
+ )
+ 
+ 
++#: B.1-3b. Patrones de ataque observables en logs, tomados de MITRE ATT&CK (descripciones
++#: generales de las técnicas, no de los casos). (id, comportamiento observable, técnicas).
++PATRONES_ATAQUE = (
++    ("barrido_descubrimiento_servicios",
++     "un origen prueba muchos puertos o muchos equipos en poco tiempo, con conexiones cortas, rechazadas, "
++     "reiniciadas o sin respuesta", "T1046, T1595"),
++    ("enumeracion_reconocimiento_dns",
++     "consultas DNS en volumen o en ráfaga desde un mismo origen, enumeración de nombres o de direcciones "
++     "(incluida la resolución inversa), transferencias de zona (DNS sobre TCP), o consultas a servidores que no "
++     "son los que usa el resto del lote", "T1590.002, T1018, T1595"),
++    ("fuerza_bruta_autenticacion",
++     "muchos intentos de autenticación o de conexión a un servicio de acceso (SSH, RDP, SMB, LDAP, Kerberos, "
++     "formularios web) desde un origen, con fallos repetidos o sesiones muy cortas", "T1110"),
++    ("beaconing_c2",
++     "conexiones repetidas a intervalos regulares hacia un mismo destino, con tamaños parecidos y poca carga, o "
++     "un protocolo de aplicación usado como canal de control", "T1071, T1573"),
++    ("transferencia_exfiltracion_atipica",
++     "un volumen enviado desde el origen muy superior a lo recibido o al resto del lote, hacia un destino poco "
++     "habitual o por un canal no usual", "T1041, T1048"),
++    ("ejecucion_remota_movimiento_lateral",
++     "conexiones entre equipos internos a servicios de administración o ejecución remota (SMB, RDP, WinRM, SSH, "
++     "RPC/DCOM) que el resto del lote no muestra", "T1021, T1570, T1047"),
++    ("puerto_no_estandar",
++     "un protocolo de aplicación en un puerto que no le corresponde, o un servicio en un puerto inusual",
++     "T1571"),
++)
++IDS_PATRONES = tuple(p[0] for p in PATRONES_ATAQUE) + ("ninguno",)
++
++
++def _instrucciones_b1() -> str:
++    """Partes del prompt de la Fase B.1, según sus interruptores."""
++    from src.config import CAZADOR_LISTA_PATRONES, CAZADOR_MOTIVO_FACTUAL, MEMORIA_GRUPOS_ACTIVA
++    partes = []
++    if CAZADOR_MOTIVO_FACTUAL:
++        partes.append("Cada grupo trae motivos_factuales: el hecho del lote que hizo que se señalara.")
++    if CAZADOR_LISTA_PATRONES:
++        partes.append(
++            "LISTA DE VERIFICACIÓN de patrones de ataque observables en logs (MITRE ATT&CK): "
++            + " ".join(f"[{pid}] {desc} ({tec})." for pid, desc, tec in PATRONES_ATAQUE)
++            + " Para cada grupo indica en patron_lista qué patrón de la lista calza con lo observado, o "
++            "'ninguno' si ninguno calza; un calce exige que la forma observable coincida (volumen, ritmo, "
++            "dirección, puertos, estados), no solo el servicio. La regla sobre el tráfico de infraestructura "
++            "se refiere a la rareza: un grupo de infraestructura también puede calzar con un patrón por su forma.")
++    if MEMORIA_GRUPOS_ACTIVA:
++        partes.append(
++            "Algunos grupos traen memoria: el grupo malicioso y el grupo benigno de casos pasados de la "
++            "organización más parecidos en comportamiento. Es una comparación, no una votación: decide qué "
++            "referente comparte los rasgos que importan y justifícalo con las filas.")
++    return (" " + " ".join(partes)) if partes else ""
++
++
++def _formato_respuesta() -> str:
++    from src.config import CAZADOR_LISTA_PATRONES
++    patron = ('"patron_lista": "' + "|".join(IDS_PATRONES) + '", ') if CAZADOR_LISTA_PATRONES else ""
++    return (' Responde SOLO JSON: {"hallazgos": [{"group_id": "G01", "explicacion_benigna": "...", '
++            '"explicacion_alternativa": "...", "nivel_sospecha": "alto|medio|bajo", ' + patron
++            + '"justificacion": "...", "tecnica_candidata": "T1046" o null}]}')
++
++
++def _sistema() -> str:
++    from src.config import CAZADOR_LISTA_PATRONES, CAZADOR_MOTIVO_FACTUAL, MEMORIA_GRUPOS_ACTIVA
++    if not (CAZADOR_LISTA_PATRONES or CAZADOR_MOTIVO_FACTUAL or MEMORIA_GRUPOS_ACTIVA):
++        return _SISTEMA
++    base = _SISTEMA.split(" Responde SOLO JSON:")[0]
++    return base + _instrucciones_b1() + _formato_respuesta()
++
++
+ def _filas_por_grupo(state: LogGuardState) -> dict:
+     filas = {}
+     for registro in state.get("evidencia_logs") or []:
+@@ -59,12 +135,15 @@ def _filas_por_grupo(state: LogGuardState) -> dict:
+ 
+ def grupos_para_cazador(state: LogGuardState) -> list[dict]:
+     """Grupos que el cazador examina, con sus filas (vacío = no hay nada que cazar)."""
+-    from src.config import CAZADOR_MAX_FILAS, CAZADOR_MAX_GRUPOS
++    from src.config import CAZADOR_MAX_FILAS, CAZADOR_MAX_GRUPOS, CAZADOR_MOTIVO_FACTUAL, MEMORIA_GRUPOS_ACTIVA
++    from src.tools.memoria_grupos import referentes_de_grupo
+     perfil = (state.get("resumen_logs") or {}).get("perfil_lote") or {}
+     grupos = {g["group_id"]: g for g in state.get("grupos_evidencia") or [] if isinstance(g, dict)}
++    factuales = {}
+     if perfil.get("tipo") == "red":
+-        elegidos = [(f["group_id"], f.get("motivos") or [])
+-                    for f in (state.get("contenido_lote") or {}).get("flujos_minoritarios") or []]
++        flujos = (state.get("contenido_lote") or {}).get("flujos_minoritarios") or []
++        elegidos = [(f["group_id"], f.get("motivos") or []) for f in flujos]
++        factuales = {f["group_id"]: f.get("motivos_factuales") or [] for f in flujos}
+     else:
+         total = max(1, sum(g.get("conteo", 0) for g in grupos.values()))
+         elegidos = []
+@@ -82,9 +161,15 @@ def grupos_para_cazador(state: LogGuardState) -> list[dict]:
+         g = grupos.get(gid) or {}
+         propias = filas.get(gid, [])[:max(0, restantes)]
+         restantes -= len(propias)
+-        salida.append({"group_id": gid, "clave": g.get("clave"), "conteo": g.get("conteo"),
+-                       "motivos": motivos, **({"n_nodos": g["n_nodos"]} if "n_nodos" in g else {}),
+-                       "filas": propias, "filas_omitidas": max(0, (g.get("conteo") or 0) - len(propias))})
++        item = {"group_id": gid, "clave": g.get("clave"), "conteo": g.get("conteo"),
++                "motivos": motivos, **({"n_nodos": g["n_nodos"]} if "n_nodos" in g else {})}
++        if CAZADOR_MOTIVO_FACTUAL and factuales.get(gid):
++            item["motivos_factuales"] = factuales[gid]                       # B.1-3a
++        referentes = referentes_de_grupo((state.get("memoria_grupos") or {}).get(gid))
++        if MEMORIA_GRUPOS_ACTIVA and referentes:
++            item["memoria"] = referentes                                     # B.1-2
++        item.update(filas=propias, filas_omitidas=max(0, (g.get("conteo") or 0) - len(propias)))
++        salida.append(item)
+     return salida
+ 
+ 
+@@ -116,7 +201,10 @@ def normalizar_hallazgos(respuesta, examinados: set) -> list[dict]:
+         tecnica = tecnica.strip().upper() if isinstance(tecnica, str) else None
+         if tecnica and not re.fullmatch(r"T\d{4}(?:\.\d{3})?", tecnica):
+             tecnica = None
++        patron = str(item.get("patron_lista") or "").strip().lower()
+         hallazgos.append({"group_id": gid, "nivel_sospecha": nivel,
++                          "patron_lista": patron if patron in IDS_PATRONES else ("no_indicado" if not patron
++                                                                                  else "fuera_de_lista"),
+                           "explicacion_benigna": str(item.get("explicacion_benigna") or "")[:600],
+                           "explicacion_alternativa": str(item.get("explicacion_alternativa") or "")[:600],
+                           "justificacion": str(item.get("justificacion") or "")[:600],
+@@ -131,7 +219,7 @@ def agente_cazador(state: LogGuardState) -> dict:
+                     + json.dumps(resumen_dominante(state), ensure_ascii=False)
+                     + "\n\nGRUPOS A EXAMINAR (uno por uno, con todas sus filas):\n"
+                     + json.dumps(grupos, ensure_ascii=False))
+-    respuesta = llm_json(user_content, system=_SISTEMA)
++    respuesta = llm_json(user_content, system=_sistema())
+     hallazgos = normalizar_hallazgos(respuesta, {g["group_id"] for g in grupos})
+     altos = sum(1 for h in hallazgos if h["nivel_sospecha"] == "alto")
+     print(f"   → {len(hallazgos)} hallazgos ({altos} alto) sobre {len(grupos)} grupos.")
+diff --git a/src/api/informe_pdf.py b/src/api/informe_pdf.py
+index 2e6b5b1..e96043e 100644
+--- a/src/api/informe_pdf.py
++++ b/src/api/informe_pdf.py
+@@ -430,6 +430,9 @@ def generar_informe_pdf(corrida: dict, comprimir: bool = True) -> bytes:
+                 r = revision.get(h.get("group_id"))
+                 _parrafo(pdf, f"{h.get('group_id')} (sospecha {h.get('nivel_sospecha')}"
+                               + (f", {h.get('tecnica_candidata')}" if h.get("tecnica_candidata") else "")
++                              # B.1-3b: patrón de la lista de verificación que calzó.
++                              + (f", patrón {h.get('patron_lista')}" if h.get("patron_lista") not in
++                                 (None, "ninguno", "no_indicado", "fuera_de_lista") else "")
+                               + f"): {h.get('justificacion') or ''}"
+                               + (f" Auditor: {r.get('decision')}. {r.get('evidencia') or ''}" if r else ""))
+ 
+diff --git a/src/config.py b/src/config.py
+index e1de936..7cc14fe 100644
+--- a/src/config.py
++++ b/src/config.py
+@@ -558,6 +558,40 @@ HISTORICO_K = _env_int("HISTORICO_K", 3)
+ EVENTOS_POR_CATEGORIA = _env_bool("EVENTOS_POR_CATEGORIA", True)
+ CATEGORIAS_EVENTO = ("incidente", "anomalia_operativa", "contexto")
+ 
++# =============================================================================
++# NODEX final, Fase B.1 (nov-2026). En la evaluación de desarrollo de la Fase B
++# los dos sistemas siguieron la etiqueta de los k casos más parecidos: en
++# reconocimiento por DNS los vecinos más cercanos eran de la clase contraria.
++# =============================================================================
++
++# --- B.1-1: memoria contrastiva por lote --------------------------------------------
++# La consulta histórica devuelve los k más parecidos de CADA clase (normal y
++# anómala/maliciosa) del mismo tipo de lote (red o texto; aquí, mismo dataset), y
++# se presentan como comparación, no como votación. Apagado: los k más parecidos
++# sin distinguir clase (Fase B, HISTORICO_K).
++HISTORICO_CONTRASTIVO = _env_bool("HISTORICO_CONTRASTIVO", True)
++HISTORICO_K_POR_CLASE = _env_int("HISTORICO_K_POR_CLASE", 2)
++
++# --- B.1-2: memoria por grupo de eventos ---------------------------------------------
++# Grupos etiquetados (malicioso con su táctica / benigno), construidos offline a
++# partir de desarrollo (`src/experimentation/knowledge/memoria_grupos.py`). Para
++# cada grupo con señal del lote se recupera el grupo malicioso y el benigno más
++# parecidos, con exclusión por solapamiento de registros. Solo logs de red: la
++# representación es de flujos (protocolo, servicio, estados, ventana).
++MEMORIA_GRUPOS_ACTIVA = _env_bool("MEMORIA_GRUPOS_ACTIVA", True)
++MEMORIA_GRUPOS_PATH = os.environ.get("MEMORIA_GRUPOS_PATH",
++                                     "./experiments/knowledge/memoria_grupos_v1/memoria_grupos.json")
++
++# --- B.1-3: cazador -----------------------------------------------------------------
++# a) Cada grupo llega con el motivo FACTUAL de su señal (conteos del lote).
++CAZADOR_MOTIVO_FACTUAL = _env_bool("CAZADOR_MOTIVO_FACTUAL", True)
++# b) Lista de verificación general de patrones observables (MITRE ATT&CK); el
++#    cazador indica qué patrón calza con cada grupo o que ninguno calza.
++CAZADOR_LISTA_PATRONES = _env_bool("CAZADOR_LISTA_PATRONES", True)
++# c) El auditor revisa explícitamente también los hallazgos "medio". El veredicto
++#    consolidado sigue cambiando solo con "alto".
++AUDITOR_REVISA_MEDIOS = _env_bool("AUDITOR_REVISA_MEDIOS", True)
++
+ 
+ def validate_config() -> None:
+     """Lanza un error claro si falta alguna key obligatoria antes de correr el grafo."""
+diff --git a/src/output_contract.py b/src/output_contract.py
+index 2512203..d3d9d0d 100644
+--- a/src/output_contract.py
++++ b/src/output_contract.py
+@@ -472,7 +472,9 @@ def campos_d11(state):
+             "consulta_mitre": state.get("consulta_mitre") or "",
+             "diagnostico_inicial": state.get("diagnostico_inicial") or "",
+             "correcciones_auditor": state.get("correcciones_auditor") or 0,
+-            "historial_correcciones": copy.deepcopy(state.get("historial_correcciones") or [])}
++            "historial_correcciones": copy.deepcopy(state.get("historial_correcciones") or []),
++            # NODEX final, Fase B.1 (aditivos).
++            "memoria_grupos": copy.deepcopy(state.get("memoria_grupos") or {})}
+ 
+ 
+ def normalizar_salida_experimental(state):
+diff --git a/src/pipeline.py b/src/pipeline.py
+index 9c37c7a..778c6ee 100644
+--- a/src/pipeline.py
++++ b/src/pipeline.py
+@@ -101,22 +101,50 @@ def _consultar_memoria_historica(resultado, analisis: dict) -> dict:
+     `_preparar_estado_inicial`). Devuelve también la representación consultada y
+     los patrones excluidos por compartir registros con el lote.
+     """
+-    from src.config import HISTORICO_ACTIVO, HISTORICO_K
++    from src.config import HISTORICO_ACTIVO, HISTORICO_CONTRASTIVO, HISTORICO_K, HISTORICO_K_POR_CLASE
+     from src.tools.memoria_historica import consultar_historicos, huellas_registros, representacion_lote
+     vacio = {"casos": [], "excluidos_por_solapamiento": [], "consultados": 0, "representacion": ""}
+     if not HISTORICO_ACTIVO:
+         return vacio
+     representacion = representacion_lote(analisis["perfil_lote"], analisis["grupos_evidencia"],
+                                          analisis["contenido_lote"])
++    # B.1-1: memoria contrastiva (k por clase, mismo tipo de lote).
++    extra = ({"k_por_clase": HISTORICO_K_POR_CLASE, "tipo": analisis["perfil_lote"].get("tipo")}
++             if HISTORICO_CONTRASTIVO else {})
+     try:
+         resultado_consulta = consultar_historicos(ltm.patterns, representacion,
+-                                                  huellas_registros(resultado.events), HISTORICO_K)
++                                                  huellas_registros(resultado.events), HISTORICO_K, **extra)
+     except Exception as e:  # noqa: BLE001 - la memoria es contexto: su falla no detiene el análisis
+         print(f"   ⚠️ No se pudo consultar la memoria histórica: {e}")
+         return dict(vacio, representacion=representacion, error=str(e))
+     return dict(resultado_consulta, representacion=representacion)
+ 
+ 
++def _consultar_memoria_grupos(resultado, analisis: dict) -> dict:
++    """B.1-2 (NODEX final): para cada grupo con señal de un lote de red, el grupo malicioso y el
++    benigno más parecidos de la memoria de grupos, sin solapamiento de registros.
++
++    Determinístico y común a NODEX (cazador) y al agente único. Vacío en logs de texto, sin
++    grupos con señal o sin la memoria.
++    """
++    from src.config import MEMORIA_GRUPOS_ACTIVA, MEMORIA_GRUPOS_PATH
++    from src.tools import memoria_grupos as mg
++    from src.tools.memoria_historica import huellas_registros
++    vacio = {"por_grupo": {}, "excluidos_por_solapamiento": [], "consultados": 0}
++    if not MEMORIA_GRUPOS_ACTIVA or (analisis.get("perfil_lote") or {}).get("tipo") != "red":
++        return vacio
++    try:
++        memoria = mg.cargar_memoria(MEMORIA_GRUPOS_PATH)
++        if memoria is None:
++            return dict(vacio, error=f"no existe la memoria de grupos {MEMORIA_GRUPOS_PATH}")
++        consultas = mg.grupos_con_senal_red(list(resultado.events), analisis)
++        salida = mg.consultar_memoria_grupos(memoria, consultas, huellas_registros(resultado.events), ltm._ef)
++        return dict(salida, memoria=memoria.get("nombre"))
++    except Exception as e:  # noqa: BLE001 - la memoria es contexto: su falla no detiene el análisis
++        print(f"   ⚠️ No se pudo consultar la memoria de grupos: {e}")
++        return dict(vacio, error=str(e))
++
++
+ def _preparar_estado_inicial(raw_logs: str, thread_id: str | None = None):
+     """Agregación determinística + corroboración de IPs, común a
+     `analizar_lote` (CLI/informe) y `analizar_lote_stream` (interfaz web,
+@@ -150,6 +178,7 @@ def _preparar_estado_inicial(raw_logs: str, thread_id: str | None = None):
+         _resultado, grupo_de=analisis["group_id_por_registro"] if EVIDENCIA_POR_GRUPOS else None)
+     firma = firma_lote(resumen, metadatos)
+     historico = _consultar_memoria_historica(_resultado, analisis)
++    memoria_grupos = _consultar_memoria_grupos(_resultado, analisis)
+ 
+     input_inicial = {
+         "evidencia_logs": evidencia,
+@@ -164,6 +193,9 @@ def _preparar_estado_inicial(raw_logs: str, thread_id: str | None = None):
+         # --- NODEX final, Fase B ---
+         "casos_historicos": historico["casos"],
+         "historico_consulta": {k: v for k, v in historico.items() if k != "casos"},
++        # --- NODEX final, Fase B.1 ---
++        "memoria_grupos": memoria_grupos["por_grupo"],
++        "memoria_grupos_consulta": {k: v for k, v in memoria_grupos.items() if k != "por_grupo"},
+         "hallazgos_cazador": [],
+         "cazador_ejecutado": False,
+         "veredicto_consolidado": None,
+diff --git a/src/preprocessing/perfil_lote.py b/src/preprocessing/perfil_lote.py
+index 1c1f042..b55d01b 100644
+--- a/src/preprocessing/perfil_lote.py
++++ b/src/preprocessing/perfil_lote.py
+@@ -94,6 +94,28 @@ def _percentil(valores: list[float], p: float) -> float:
+     return ordenados[min(rango, len(ordenados)) - 1]
+ 
+ 
++def segundos_de_evento(evento):
++    """Marca de tiempo en segundos (epoch): `ts` de Zeek o el timestamp ISO; None si no hay."""
++    from datetime import datetime, timezone
++    ts = _numero(evento.attributes.get("ts"))
++    if ts is not None:
++        return ts
++    try:
++        momento = datetime.fromisoformat(str(evento.timestamp).replace("Z", "+00:00"))
++    except (TypeError, ValueError):
++        return None
++    if momento.tzinfo is None:
++        momento = momento.replace(tzinfo=timezone.utc)
++    return momento.timestamp()
++
++
++def _ventana(eventos) -> str:
++    marcas = [s for e in eventos if (s := segundos_de_evento(e)) is not None]
++    if len(marcas) < 2:
++        return "un instante"
++    return f"{max(marcas) - min(marcas):.1f} s"
++
++
+ def es_lote_de_red(eventos) -> bool:
+     """La mayoría de los eventos trae origen y destino: es un log de red."""
+     if not eventos:
+@@ -290,6 +312,36 @@ def _perfil_red(eventos, uids, grupos, grupo_de, barridos, cfg) -> tuple[dict, l
+                     marcadas[i].add("inversion_de_rol")
+     senales["inversion_de_rol"] = inversiones
+ 
++    # B.1-3a: el MOTIVO FACTUAL de cada señal, por grupo (conteos del lote). Lo lee el
++    # cazador; `contexto_contenido_lote` no lo muestra al triage ni al agente único.
++    factuales: dict[str, list[str]] = defaultdict(list)
++    motivos_de_grupo: dict[str, set] = defaultdict(set)
++    for i, motivos in marcadas.items():
++        motivos_de_grupo[grupo_de[i]] |= motivos
++    inversion_por_ip = {inv["ip"]: inv for inv in inversiones}
++    for g in grupos:
++        gid, clave = g["group_id"], g["clave"]
++        motivos = motivos_de_grupo.get(gid) or set()
++        if "barrido_de_puertos" in motivos:
++            filas = [e for e, gg in zip(eventos, grupo_de) if gg == gid]
++            puertos = {e.destination_port for e in filas if e.destination_port is not None}
++            factuales[gid].append(f"un mismo origen contactó {len(puertos)} puertos de destino distintos de un "
++                                  f"mismo destino ({clave['protocolo']}) en {_ventana(filas)} "
++                                  f"({len(filas)} conexiones)")
++        if "servicio_minoritario" in motivos and proporcionales:
++            c = servicios.get(clave["servicio_o_puerto"], 0)
++            factuales[gid].append(f"el servicio/puerto {clave['servicio_o_puerto']} aparece en {c} de {n} filas del "
++                                  f"lote ({c / n:.1%})" + (" (único flujo con ese servicio en el lote)" if c == 1 else ""))
++        if "protocolo_minoritario" in motivos and proporcionales:
++            c = protocolos.get(clave["protocolo"], 0)
++            factuales[gid].append(f"el protocolo {clave['protocolo']} aparece en {c} de {n} filas del lote "
++                                  f"({c / n:.1%})" + (f" (único flujo {clave['protocolo'].upper()} del lote)"
++                                                       if c == 1 else ""))
++        if "inversion_de_rol" in motivos and clave["destino"] in inversion_por_ip:
++            inv = inversion_por_ip[clave["destino"]]
++            factuales[gid].append(f"el destino de este grupo actúa como origen en {inv['como_origen']} filas del "
++                                  f"lote y como destino solo en {inv['como_destino']}")
++
+     perfil = {"tipo": "red", "filas": n,
+               "protocolos": dict(Counter((e.protocol or "-").lower() for e in eventos).most_common()),
+               "servicios": dict(Counter(_servicio_o_puerto(e) for e in eventos).most_common(15)),
+@@ -334,6 +386,7 @@ def _perfil_red(eventos, uids, grupos, grupo_de, barridos, cfg) -> tuple[dict, l
+         omitidas += g["conteo"] - len(indices)
+         flujos.append({"group_id": gid, "clave": g["clave"], "conteo": g["conteo"],
+                        "motivos": sorted(motivos_por_grupo[gid]),
++                       "motivos_factuales": factuales.get(gid, []),
+                        "filas_omitidas": g["conteo"] - len(indices),
+                        "filas": [fila_de_red(eventos[i], uids[i]) for i in indices]})
+     perfil["flujos_minoritarios"] = {"grupos": len(flujos), "filas_entregadas": entregadas,
+diff --git a/src/preprocessing/prompt_context.py b/src/preprocessing/prompt_context.py
+index b5fa8c5..c4113df 100644
+--- a/src/preprocessing/prompt_context.py
++++ b/src/preprocessing/prompt_context.py
+@@ -186,7 +186,10 @@ def contexto_contenido_lote(contenido: dict | None) -> str:
+     partes = ["FLUJOS MINORITARIOS (filas completas de los grupos que cumplen alguna señal "
+               "del perfil del lote; el resto del tráfico está resumido en perfil_lote):"]
+     for flujo in flujos:
+-        partes.append(json.dumps(flujo, ensure_ascii=False))
++        # B.1-3a: el motivo factual de la señal es entrada del cazador, no del triage ni
++        # del agente único (que siguen leyendo lo mismo que en la Fase B).
++        partes.append(json.dumps({k: v for k, v in flujo.items() if k != "motivos_factuales"},
++                                 ensure_ascii=False))
+     if contenido.get("filas_omitidas"):
+         partes.append(f"ATENCIÓN: se omitieron {contenido['filas_omitidas']} filas de flujos "
+                       f"minoritarios por el tope de {contenido.get('tope_filas')} filas.")
+diff --git a/src/single_agent.py b/src/single_agent.py
+index b6708e8..94d761f 100644
+--- a/src/single_agent.py
++++ b/src/single_agent.py
+@@ -74,6 +74,12 @@ def analizar_lote_agente_unico(raw_logs: str, thread_id: str | None = None,
+         historicos = contexto_historico(state.get("casos_historicos"))
+         if historicos:
+             prompt += "\n" + historicos
++        # B.1-2: la misma memoria de grupos que recibe el cazador de NODEX (misma consulta,
++        # calculada en `_preparar_estado_inicial`), para una comparación justa.
++        from src.tools.memoria_grupos import contexto_memoria_grupos
++        grupos_memoria = contexto_memoria_grupos(state.get("memoria_grupos"))
++        if grupos_memoria:
++            prompt += "\n" + grupos_memoria
+         prompt += contexto_d11(state)
+         try:
+             respuesta = llm_json(prompt, system=system)
+diff --git a/src/state.py b/src/state.py
+index 8949de0..8d4bde6 100644
+--- a/src/state.py
++++ b/src/state.py
+@@ -67,6 +67,9 @@ class LogGuardState(TypedDict):
+     diagnostico_corregido: str       # B2: diagnóstico tras la corrección (evaluación del auditor)
+     correcciones_auditor: int        # B2: correcciones aplicadas tras el auditor
+     historial_correcciones: Annotated[list, acumular]  # B2: clase anterior y nueva por corrección
++    # --- NODEX final, Fase B.1 (nov-2026) ---
++    memoria_grupos: dict             # B.1-2: por grupo con señal, el grupo malicioso y el benigno más parecidos
++    memoria_grupos_consulta: dict    # B.1-2: memoria usada, grupos excluidos por solapamiento
+     eventos_reconstruidos: list[EventoReconstruido]
+     secuencia_temporal: list[str]
+     tecnicas_atribuidas: list[TecnicaAtribuida]
+diff --git a/src/tools/memoria_historica.py b/src/tools/memoria_historica.py
+index 94022e4..19feaba 100644
+--- a/src/tools/memoria_historica.py
++++ b/src/tools/memoria_historica.py
+@@ -109,11 +109,42 @@ def huellas_registros(eventos) -> list[str]:
+     return sorted({huella_evento(e) for e in eventos})
+ 
+ 
+-def consultar_historicos(coleccion, representacion: str, huellas: list[str], k: int) -> dict:
+-    """Los k patrones más parecidos que no comparten registros con el lote.
++#: Etiquetas de la clase positiva (B.1-1). El resto de las etiquetas conocidas es "normal".
++ETIQUETAS_ANOMALAS = {"anomalo", "malicioso", "anomalous", "malicious", "incidente", "anomalia"}
++
++
++def clase_de_etiqueta(etiqueta) -> str | None:
++    """'anomala' (anómalo o malicioso), 'normal', o None si la etiqueta no se reconoce."""
++    valor = str(etiqueta or "").strip().lower()
++    if valor in ETIQUETAS_ANOMALAS:
++        return "anomala"
++    if valor in ("normal", "benigno", "benign"):
++        return "normal"
++    return None
++
++
++def tipo_de_representacion(texto) -> str | None:
++    """Tipo de lote (red/texto) de una representación de `representacion_lote`, o None."""
++    if not isinstance(texto, str):
++        return None
++    if texto.startswith("Grupos con señal:"):
++        return "red"
++    if texto.startswith("Eventos destacados:"):
++        return "texto"
++    return None
++
++
++def consultar_historicos(coleccion, representacion: str, huellas: list[str], k: int,
++                         k_por_clase: int | None = None, tipo: str | None = None) -> dict:
++    """Los patrones más parecidos que no comparten registros con el lote.
++
++    - Sin `k_por_clase` (Fase B): los k más parecidos, de cualquier clase.
++    - Con `k_por_clase` (B.1-1, memoria contrastiva): los `k_por_clase` más parecidos de CADA
++      clase (normal y anómala), solo del mismo `tipo` de lote (red o texto) si se indica. Un
++      patrón cuyo tipo no se puede leer (sin documento) se considera compatible.
+ 
+     Devuelve `{"casos": [...], "excluidos_por_solapamiento": [...], "consultados": n}`.
+-    Cada caso: id, dataset, etiqueta, descripción y similitud (coseno).
++    Cada caso: id, dataset, etiqueta, clase, descripción y similitud (coseno).
+     """
+     if coleccion is None or k <= 0:
+         return {"casos": [], "excluidos_por_solapamiento": [], "consultados": 0}
+@@ -121,9 +152,11 @@ def consultar_historicos(coleccion, representacion: str, huellas: list[str], k:
+     if total == 0:
+         return {"casos": [], "excluidos_por_solapamiento": [], "consultados": 0}
+     res = coleccion.query(query_texts=[representacion[:MAX_CHARS_REPRESENTACION]], n_results=total)
++    documentos = (res.get("documents") or [[None] * len(res["ids"][0])])[0] if isinstance(res, dict) else None
++    documentos = documentos or [None] * len(res["ids"][0])
+     propias = set(huellas)
+-    casos, excluidos = [], []
+-    for vid, meta, dist in zip(res["ids"][0], res["metadatas"][0], res["distances"][0]):
++    casos, excluidos, por_clase, otro_tipo = [], [], {"anomala": 0, "normal": 0}, 0
++    for vid, meta, dist, doc in zip(res["ids"][0], res["metadatas"][0], res["distances"][0], documentos):
+         meta = meta or {}
+         try:
+             ajenas = set(json.loads(meta.get("huellas") or "[]"))
+@@ -132,21 +165,56 @@ def consultar_historicos(coleccion, representacion: str, huellas: list[str], k:
+         if propias & ajenas:
+             excluidos.append(vid)
+             continue
+-        if len(casos) < k:
+-            # Los patrones antiguos (feedback de la interfaz) no traen el esquema de la
+-            # Fase B: se usa su `clasificacion` y se declara que no hay descripción.
+-            casos.append({"id": meta.get("historical_case_id") or vid, "dataset": meta.get("dataset"),
+-                          "etiqueta": meta.get("etiqueta") or meta.get("clasificacion"),
+-                          "descripcion": meta.get("descripcion") or "patrón validado sin descripción",
+-                          "similitud": round(1 - dist, 3)})
+-    return {"casos": casos, "excluidos_por_solapamiento": excluidos, "consultados": total}
++        # Los patrones antiguos (feedback de la interfaz) no traen el esquema de la
++        # Fase B: se usa su `clasificacion` y se declara que no hay descripción.
++        etiqueta = meta.get("etiqueta") or meta.get("clasificacion")
++        caso = {"id": meta.get("historical_case_id") or vid, "dataset": meta.get("dataset"),
++                "etiqueta": etiqueta, "clase": clase_de_etiqueta(etiqueta),
++                "descripcion": meta.get("descripcion") or "patrón validado sin descripción",
++                "similitud": round(1 - dist, 3)}
++        if k_por_clase is None:
++            if len(casos) < k:
++                casos.append(caso)
++            continue
++        tipo_patron = tipo_de_representacion(doc)
++        if tipo and tipo_patron and tipo_patron != tipo:
++            otro_tipo += 1
++            continue
++        if caso["clase"] in por_clase and por_clase[caso["clase"]] < k_por_clase:
++            por_clase[caso["clase"]] += 1
++            casos.append(caso)
++    salida = {"casos": casos, "excluidos_por_solapamiento": excluidos, "consultados": total}
++    if k_por_clase is not None:
++        salida.update(contrastiva=True, k_por_clase=k_por_clase, tipo=tipo, omitidos_otro_tipo=otro_tipo)
++    return salida
++
++
++_INSTRUCCION_CONTRASTIVA = (
++    "Esto es una COMPARACIÓN, no una votación: que el lote se parezca más a unos que a otros no decide "
++    "el veredicto. Identifica qué evidencia concreta diferencia a los casos anómalos de los normales (los "
++    "eventos que determinaron la alerta) y verifica si esa evidencia está presente en este lote. Decide por "
++    "esa evidencia.")
+ 
+ 
+ def contexto_historico(casos: list[dict] | None) -> str:
+-    """Bloque del prompt con los casos históricos (compartido por triage, auditor y agente único)."""
+-    from src.config import HISTORICO_ACTIVO
++    """Bloque del prompt con los casos históricos (compartido por triage, auditor y agente único).
++
++    Con `HISTORICO_CONTRASTIVO` (B.1-1) se presentan separados por clase y sin la similitud
++    numérica, como comparación; sin él, en una lista con su similitud (Fase B).
++    """
++    from src.config import HISTORICO_ACTIVO, HISTORICO_CONTRASTIVO
+     if not HISTORICO_ACTIVO or not casos:
+         return ""
++    if HISTORICO_CONTRASTIVO:
++        normales = [c for c in casos if (c.get("clase") or clase_de_etiqueta(c.get("etiqueta"))) == "normal"]
++        anomalos = [c for c in casos if (c.get("clase") or clase_de_etiqueta(c.get("etiqueta"))) == "anomala"]
++        lineas = ["CASOS HISTÓRICOS DE LA ORGANIZACIÓN PARA COMPARAR (referencia de criterio, no prueba). "
++                  "El lote se parece a estos casos NORMALES:"]
++        lineas += [f"- [{c.get('etiqueta')}] {c.get('descripcion')}" for c in normales] or ["- (ninguno disponible)"]
++        lineas.append("y a estos casos ANÓMALOS o MALICIOSOS:")
++        lineas += [f"- [{c.get('etiqueta')}] {c.get('descripcion')}" for c in anomalos] or ["- (ninguno disponible)"]
++        lineas.append(_INSTRUCCION_CONTRASTIVA)
++        return "\n".join(lineas)
+     lineas = ["CASOS HISTÓRICOS DE LA ORGANIZACIÓN MÁS PARECIDOS (referencia de criterio, no prueba):"]
+     for c in casos:
+         lineas.append(f"- [{c.get('etiqueta')}] (similitud {c.get('similitud')}): {c.get('descripcion')}")

@@ -1,0 +1,1020 @@
+{
+ "case_id": "bgl_des_natural_0009",
+ "dataset": "bgl",
+ "arquitectura": "nodex",
+ "segundos_pared_hijo": 48.48653240000567,
+ "interruptores_efectivos": {
+  "RAG_POR_HIPOTESIS": true,
+  "CAZADOR_ACTIVO": false,
+  "CORRECCION_AUDITOR": true,
+  "HISTORICO_ACTIVO": true,
+  "HISTORICO_K": 3,
+  "EVENTOS_POR_CATEGORIA": true,
+  "HISTORICO_CONTRASTIVO": true,
+  "HISTORICO_K_POR_CLASE": 2,
+  "MEMORIA_GRUPOS_ACTIVA": true,
+  "CAZADOR_MOTIVO_FACTUAL": true,
+  "CAZADOR_LISTA_PATRONES": true,
+  "AUDITOR_REVISA_MEDIOS": true,
+  "AUDITOR_REFORZADO": true
+ },
+ "estado": {
+  "resumen_logs": {
+   "formato_detectado": "bgl",
+   "total_lineas": 20,
+   "servicios": {
+    "bgl.kernel": 20
+   },
+   "eventos": {
+    "evento_normal": 20
+   },
+   "ventana_temporal": {
+    "inicio": "2005-08-28-02.33.11.392223",
+    "fin": "2005-08-28-03.11.22.587537"
+   },
+   "n_ips_distintas": 0,
+   "ips_distintas": [],
+   "por_ip": {},
+   "usuarios": {},
+   "n_usuarios_distintos": 0,
+   "codigos_respuesta": {},
+   "entidades": [],
+   "cronologia": [],
+   "cronologia_omitidos": 0,
+   "raw_procedencia": {
+    "sha256": "12b204baae56e138cb567963bde8f47bda1f502c2b630f37ee842352cd877444",
+    "lineas": 20,
+    "bytes": 2878
+   },
+   "reputacion_ips": {},
+   "perfil_lote": {
+    "tipo": "texto",
+    "filas": 20,
+    "con_formato_reconocido": 20,
+    "severidades": {
+     "INFO": 20
+    },
+    "componentes": {
+     "bgl.kernel": 20
+    },
+    "nodos": {
+     "R44-M0-NF-C:J13-U11": 1,
+     "R44-M0-NE-C:J10-U01": 1,
+     "R40-M0-N1-C:J10-U01": 1,
+     "R40-M1-N6-C:J12-U11": 1,
+     "R50-M1-NB-C:J07-U11": 1,
+     "R57-M1-NF-C:J11-U11": 1,
+     "R47-M0-N5-C:J15-U01": 1,
+     "R45-M0-NA-C:J04-U11": 1,
+     "R50-M1-N1-C:J05-U11": 1,
+     "R42-M1-NE-C:J15-U11": 1
+    },
+    "nodos_distintos": 20,
+    "lineas_severidad_alta": {
+     "total": 0,
+     "omitidas": 0,
+     "lineas": []
+    },
+    "grupos": 7
+   }
+  },
+  "preprocessing_metadata": {
+   "schema_version": "2.0",
+   "total_lineas_fisicas": 20,
+   "total_eventos": 20,
+   "decoder_distribution": {
+    "text": 20
+   },
+   "product_distribution": {
+    "BlueGene/L": 20
+   },
+   "vendor_distribution": {
+    "IBM": 20
+   },
+   "version_distribution": {},
+   "protocol_distribution": {},
+   "profile_distribution": {
+    "bgl": 20
+   },
+   "severity_distribution": {
+    "INFO": 20
+   },
+   "event_categories": {},
+   "event_outcomes": {},
+   "entities": {
+    "host": {
+     "R40-M0-N1-C:J10-U01": 1,
+     "R40-M0-N1-C:J16-U01": 1,
+     "R40-M1-N4-C:J17-U01": 1,
+     "R40-M1-N6-C:J12-U11": 1,
+     "R41-M1-N3-C:J15-U11": 1,
+     "R42-M1-NE-C:J15-U11": 1,
+     "R44-M0-NE-C:J10-U01": 1,
+     "R44-M0-NF-C:J13-U11": 1,
+     "R45-M0-NA-C:J04-U11": 1,
+     "R45-M1-ND-C:J16-U11": 1,
+     "R47-M0-N5-C:J15-U01": 1,
+     "R50-M1-N1-C:J05-U11": 1,
+     "R50-M1-NB-C:J07-U11": 1,
+     "R51-M1-N9-C:J10-U01": 1,
+     "R52-M0-N4-C:J17-U11": 1,
+     "R54-M0-NB-C:J07-U01": 1,
+     "R54-M0-NC-C:J09-U11": 1,
+     "R54-M1-ND-C:J08-U11": 1,
+     "R57-M0-N1-C:J16-U01": 1,
+     "R57-M1-NF-C:J11-U11": 1
+    },
+    "servicio": {
+     "bgl.kernel": 20
+    },
+    "producto": {
+     "BlueGene/L": 20
+    }
+   },
+   "time_window": {
+    "inicio": "2005-08-28-02.33.11.392223",
+    "fin": "2005-08-28-03.11.22.587537"
+   },
+   "parsing": {
+    "parsed_events": 20,
+    "fallback_events": 0,
+    "coverage": 1.0
+   },
+   "segments": [
+    {
+     "index": 0,
+     "decoder": "text",
+     "line_start": 1,
+     "line_end": 20,
+     "n_records": 20,
+     "confidence": 0.1,
+     "decoder_inicial": "text",
+     "confidence_inicial": 0.1,
+     "decoder_distribution": {
+      "text": 20
+     },
+     "context": {}
+    }
+   ],
+   "entities_resumen": {
+    "host": 20,
+    "servicio": 1,
+    "producto": 1
+   },
+   "config": {
+    "LOG_DETECTION_CHUNK_SIZE": 50,
+    "LOG_ENABLE_MULTILINE": true,
+    "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+    "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+    "LOG_MAX_EVENTS": 100000,
+    "LOG_MAX_FILE_BYTES": 52428800,
+    "LOG_MAX_RAW_SAMPLES": 20,
+    "LOG_MAX_UNMAPPED_FIELDS": 100,
+    "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+    "LOG_PARSING_MODE": "hybrid",
+    "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+    "LOG_PRESERVE_RAW": true
+   }
+  },
+  "parsing_warnings": [],
+  "evidencia_logs": [
+   {
+    "uid": "log_record_000001",
+    "record_number": 1,
+    "line_start": 1,
+    "line_end": 1,
+    "timestamp": "2005-08-28-02.33.11.392223",
+    "group_id": "G01",
+    "source_host": "R44-M0-NF-C:J13-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "34253552 double-hummer alignment exceptions"
+   },
+   {
+    "uid": "log_record_000002",
+    "record_number": 2,
+    "line_start": 2,
+    "line_end": 2,
+    "timestamp": "2005-08-28-02.33.45.151094",
+    "group_id": "G01",
+    "source_host": "R44-M0-NE-C:J10-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "35050330 double-hummer alignment exceptions"
+   },
+   {
+    "uid": "log_record_000003",
+    "record_number": 3,
+    "line_start": 3,
+    "line_end": 3,
+    "timestamp": "2005-08-28-02.36.05.474124",
+    "group_id": "G01",
+    "source_host": "R40-M0-N1-C:J10-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "35418742 double-hummer alignment exceptions"
+   },
+   {
+    "uid": "log_record_000004",
+    "record_number": 4,
+    "line_start": 4,
+    "line_end": 4,
+    "timestamp": "2005-08-28-02.36.50.012310",
+    "group_id": "G01",
+    "source_host": "R40-M1-N6-C:J12-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "47332148 double-hummer alignment exceptions"
+   },
+   {
+    "uid": "log_record_000005",
+    "record_number": 5,
+    "line_start": 5,
+    "line_end": 5,
+    "timestamp": "2005-08-28-02.38.20.600044",
+    "group_id": "G01",
+    "source_host": "R50-M1-NB-C:J07-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "39190074 double-hummer alignment exceptions"
+   },
+   {
+    "uid": "log_record_000006",
+    "record_number": 6,
+    "line_start": 6,
+    "line_end": 6,
+    "timestamp": "2005-08-28-02.39.17.369798",
+    "group_id": "G01",
+    "source_host": "R57-M1-NF-C:J11-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "30646810 double-hummer alignment exceptions"
+   },
+   {
+    "uid": "log_record_000007",
+    "record_number": 7,
+    "line_start": 7,
+    "line_end": 7,
+    "timestamp": "2005-08-28-02.41.40.753192",
+    "group_id": "G01",
+    "source_host": "R47-M0-N5-C:J15-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "36833864 double-hummer alignment exceptions"
+   },
+   {
+    "uid": "log_record_000008",
+    "record_number": 8,
+    "line_start": 8,
+    "line_end": 8,
+    "timestamp": "2005-08-28-02.45.37.895456",
+    "group_id": "G01",
+    "source_host": "R45-M0-NA-C:J04-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "24669022 double-hummer alignment exceptions"
+   },
+   {
+    "uid": "log_record_000009",
+    "record_number": 9,
+    "line_start": 9,
+    "line_end": 9,
+    "timestamp": "2005-08-28-02.46.24.315745",
+    "group_id": "G01",
+    "source_host": "R50-M1-N1-C:J05-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "38029258 double-hummer alignment exceptions"
+   },
+   {
+    "uid": "log_record_000010",
+    "record_number": 10,
+    "line_start": 10,
+    "line_end": 10,
+    "timestamp": "2005-08-28-02.48.11.570833",
+    "group_id": "G01",
+    "source_host": "R42-M1-NE-C:J15-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "39309752 double-hummer alignment exceptions"
+   },
+   {
+    "uid": "log_record_000011",
+    "record_number": 11,
+    "line_start": 11,
+    "line_end": 11,
+    "timestamp": "2005-08-28-02.48.46.001360",
+    "group_id": "G01",
+    "source_host": "R54-M0-NB-C:J07-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "27901852 double-hummer alignment exceptions"
+   },
+   {
+    "uid": "log_record_000012",
+    "record_number": 12,
+    "line_start": 12,
+    "line_end": 12,
+    "timestamp": "2005-08-28-02.52.23.119441",
+    "group_id": "G01",
+    "source_host": "R40-M1-N4-C:J17-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "41097026 double-hummer alignment exceptions"
+   },
+   {
+    "uid": "log_record_000013",
+    "record_number": 13,
+    "line_start": 13,
+    "line_end": 13,
+    "timestamp": "2005-08-28-02.55.25.760111",
+    "group_id": "G01",
+    "source_host": "R52-M0-N4-C:J17-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "54600944 double-hummer alignment exceptions"
+   },
+   {
+    "uid": "log_record_000014",
+    "record_number": 14,
+    "line_start": 14,
+    "line_end": 14,
+    "timestamp": "2005-08-28-02.57.06.184496",
+    "group_id": "G01",
+    "source_host": "R54-M0-NC-C:J09-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "32888202 double-hummer alignment exceptions"
+   },
+   {
+    "uid": "log_record_000015",
+    "record_number": 15,
+    "line_start": 15,
+    "line_end": 15,
+    "timestamp": "2005-08-28-02.57.56.219310",
+    "group_id": "G02",
+    "source_host": "R41-M1-N3-C:J15-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 0014a150 dear 0098d458"
+   },
+   {
+    "uid": "log_record_000016",
+    "record_number": 16,
+    "line_start": 16,
+    "line_end": 16,
+    "timestamp": "2005-08-28-03.00.13.685722",
+    "group_id": "G03",
+    "source_host": "R54-M1-ND-C:J08-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 0014a150 dear 0098e178"
+   },
+   {
+    "uid": "log_record_000017",
+    "record_number": 17,
+    "line_start": 17,
+    "line_end": 17,
+    "timestamp": "2005-08-28-03.02.40.130543",
+    "group_id": "G04",
+    "source_host": "R51-M1-N9-C:J10-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 0014a150 dear 00998588"
+   },
+   {
+    "uid": "log_record_000018",
+    "record_number": 18,
+    "line_start": 18,
+    "line_end": 18,
+    "timestamp": "2005-08-28-03.05.05.139218",
+    "group_id": "G05",
+    "source_host": "R45-M1-ND-C:J16-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 0014a150 dear 00991c88"
+   },
+   {
+    "uid": "log_record_000019",
+    "record_number": 19,
+    "line_start": 19,
+    "line_end": 19,
+    "timestamp": "2005-08-28-03.07.53.456194",
+    "group_id": "G06",
+    "source_host": "R40-M0-N1-C:J16-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 00149ee0 dear 009a2788"
+   },
+   {
+    "uid": "log_record_000020",
+    "record_number": 20,
+    "line_start": 20,
+    "line_end": 20,
+    "timestamp": "2005-08-28-03.11.22.587537",
+    "group_id": "G07",
+    "source_host": "R57-M0-N1-C:J16-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 00149f88 dear 0099be48"
+   }
+  ],
+  "evidencia_logs_omitidos": 0,
+  "grupos_evidencia": [
+   {
+    "group_id": "G01",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "<n> double-hummer alignment exceptions"
+    },
+    "conteo": 14,
+    "uids": [
+     "log_record_000001",
+     "log_record_000002",
+     "log_record_000003",
+     "log_record_000004",
+     "log_record_000005",
+     "log_record_000006",
+     "log_record_000007",
+     "log_record_000008",
+     "log_record_000009",
+     "log_record_000010",
+     "log_record_000011",
+     "log_record_000012",
+     "log_record_000013",
+     "log_record_000014"
+    ],
+    "nodos": [
+     "R44-M0-NF-C:J13-U11",
+     "R44-M0-NE-C:J10-U01",
+     "R40-M0-N1-C:J10-U01",
+     "R40-M1-N6-C:J12-U11",
+     "R50-M1-NB-C:J07-U11",
+     "R57-M1-NF-C:J11-U11",
+     "R47-M0-N5-C:J15-U01",
+     "R45-M0-NA-C:J04-U11",
+     "R50-M1-N1-C:J05-U11",
+     "R42-M1-NE-C:J15-U11",
+     "R54-M0-NB-C:J07-U01",
+     "R40-M1-N4-C:J17-U01",
+     "R52-M0-N4-C:J17-U11",
+     "R54-M0-NC-C:J09-U11"
+    ],
+    "n_nodos": 14
+   },
+   {
+    "group_id": "G02",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n>a<n> dear <n>d<n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000015"
+    ],
+    "nodos": [
+     "R41-M1-N3-C:J15-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G03",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n>a<n> dear <n>e<n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000016"
+    ],
+    "nodos": [
+     "R54-M1-ND-C:J08-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G04",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n>a<n> dear <n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000017"
+    ],
+    "nodos": [
+     "R51-M1-N9-C:J10-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G05",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n>a<n> dear <n>c<n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000018"
+    ],
+    "nodos": [
+     "R45-M1-ND-C:J16-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G06",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n>ee<n> dear <n>a<n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000019"
+    ],
+    "nodos": [
+     "R40-M0-N1-C:J16-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G07",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n>f<n> dear <n>be<n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000020"
+    ],
+    "nodos": [
+     "R57-M0-N1-C:J16-U01"
+    ],
+    "n_nodos": 1
+   }
+  ],
+  "contenido_lote": {
+   "tipo": "texto",
+   "lineas": [
+    "[log_record_000001] 1125221591 2005.08.28 R44-M0-NF-C:J13-U11 2005-08-28-02.33.11.392223 R44-M0-NF-C:J13-U11 RAS KERNEL INFO 34253552 double-hummer alignment exceptions",
+    "[log_record_000002] 1125221625 2005.08.28 R44-M0-NE-C:J10-U01 2005-08-28-02.33.45.151094 R44-M0-NE-C:J10-U01 RAS KERNEL INFO 35050330 double-hummer alignment exceptions",
+    "[log_record_000003] 1125221765 2005.08.28 R40-M0-N1-C:J10-U01 2005-08-28-02.36.05.474124 R40-M0-N1-C:J10-U01 RAS KERNEL INFO 35418742 double-hummer alignment exceptions",
+    "[log_record_000004] 1125221810 2005.08.28 R40-M1-N6-C:J12-U11 2005-08-28-02.36.50.012310 R40-M1-N6-C:J12-U11 RAS KERNEL INFO 47332148 double-hummer alignment exceptions",
+    "[log_record_000005] 1125221900 2005.08.28 R50-M1-NB-C:J07-U11 2005-08-28-02.38.20.600044 R50-M1-NB-C:J07-U11 RAS KERNEL INFO 39190074 double-hummer alignment exceptions",
+    "[log_record_000006] 1125221957 2005.08.28 R57-M1-NF-C:J11-U11 2005-08-28-02.39.17.369798 R57-M1-NF-C:J11-U11 RAS KERNEL INFO 30646810 double-hummer alignment exceptions",
+    "[log_record_000007] 1125222100 2005.08.28 R47-M0-N5-C:J15-U01 2005-08-28-02.41.40.753192 R47-M0-N5-C:J15-U01 RAS KERNEL INFO 36833864 double-hummer alignment exceptions",
+    "[log_record_000008] 1125222337 2005.08.28 R45-M0-NA-C:J04-U11 2005-08-28-02.45.37.895456 R45-M0-NA-C:J04-U11 RAS KERNEL INFO 24669022 double-hummer alignment exceptions",
+    "[log_record_000009] 1125222384 2005.08.28 R50-M1-N1-C:J05-U11 2005-08-28-02.46.24.315745 R50-M1-N1-C:J05-U11 RAS KERNEL INFO 38029258 double-hummer alignment exceptions",
+    "[log_record_000010] 1125222491 2005.08.28 R42-M1-NE-C:J15-U11 2005-08-28-02.48.11.570833 R42-M1-NE-C:J15-U11 RAS KERNEL INFO 39309752 double-hummer alignment exceptions",
+    "[log_record_000011] 1125222526 2005.08.28 R54-M0-NB-C:J07-U01 2005-08-28-02.48.46.001360 R54-M0-NB-C:J07-U01 RAS KERNEL INFO 27901852 double-hummer alignment exceptions",
+    "[log_record_000012] 1125222743 2005.08.28 R40-M1-N4-C:J17-U01 2005-08-28-02.52.23.119441 R40-M1-N4-C:J17-U01 RAS KERNEL INFO 41097026 double-hummer alignment exceptions",
+    "[log_record_000013] 1125222925 2005.08.28 R52-M0-N4-C:J17-U11 2005-08-28-02.55.25.760111 R52-M0-N4-C:J17-U11 RAS KERNEL INFO 54600944 double-hummer alignment exceptions",
+    "[log_record_000014] 1125223026 2005.08.28 R54-M0-NC-C:J09-U11 2005-08-28-02.57.06.184496 R54-M0-NC-C:J09-U11 RAS KERNEL INFO 32888202 double-hummer alignment exceptions",
+    "[log_record_000015] 1125223076 2005.08.28 R41-M1-N3-C:J15-U11 2005-08-28-02.57.56.219310 R41-M1-N3-C:J15-U11 RAS KERNEL INFO iar 0014a150 dear 0098d458",
+    "[log_record_000016] 1125223213 2005.08.28 R54-M1-ND-C:J08-U11 2005-08-28-03.00.13.685722 R54-M1-ND-C:J08-U11 RAS KERNEL INFO iar 0014a150 dear 0098e178",
+    "[log_record_000017] 1125223360 2005.08.28 R51-M1-N9-C:J10-U01 2005-08-28-03.02.40.130543 R51-M1-N9-C:J10-U01 RAS KERNEL INFO iar 0014a150 dear 00998588",
+    "[log_record_000018] 1125223505 2005.08.28 R45-M1-ND-C:J16-U11 2005-08-28-03.05.05.139218 R45-M1-ND-C:J16-U11 RAS KERNEL INFO iar 0014a150 dear 00991c88",
+    "[log_record_000019] 1125223673 2005.08.28 R40-M0-N1-C:J16-U01 2005-08-28-03.07.53.456194 R40-M0-N1-C:J16-U01 RAS KERNEL INFO iar 00149ee0 dear 009a2788",
+    "[log_record_000020] 1125223882 2005.08.28 R57-M0-N1-C:J16-U01 2005-08-28-03.11.22.587537 R57-M0-N1-C:J16-U01 RAS KERNEL INFO iar 00149f88 dear 0099be48"
+   ],
+   "total_lineas": 20,
+   "lineas_entregadas": 20,
+   "recortado": false,
+   "topes": {
+    "lineas": 200,
+    "caracteres": 20000
+   }
+  },
+  "veredicto_preliminar": "normal",
+  "justificacion_veredicto_preliminar": "Todos los eventos presentan severidad INFO y reportan excepciones de alineación habituales manejadas por el kernel, sin presencia de errores críticos ni actividad maliciosa.",
+  "invalid_evidence_group_count": 0,
+  "comandos_rechazados": [],
+  "casos_historicos": [
+   {
+    "id": "bgl_des_balanceado_0003",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Composición: 20 eventos, severidades INFO 20.",
+    "similitud": 1.0
+   },
+   {
+    "id": "bgl_des_natural_0006",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Composición: 20 eventos, severidades INFO 20.",
+    "similitud": 1.0
+   },
+   {
+    "id": "uwf_hist_008",
+    "dataset": "uwf",
+    "etiqueta": "malicioso",
+    "clase": "anomala",
+    "descripcion": "Malicioso (Reconnaissance; T1592). Actividad del incidente: 1 conexiones (tcp gssapi 1), 1 puertos de destino distintos, estados SF 1. Resto del lote: 3 conexiones de fondo (protocolos - 3).",
+    "similitud": 0.873
+   },
+   {
+    "id": "bgl_des_natural_0000",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "clase": "anomala",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 1 × [FATAL bgl.kernel] rts: kernel terminated for reason <n>. Composición: 20 eventos, severidades INFO 19, FATAL 1.",
+    "similitud": 0.64
+   }
+  ],
+  "historico_consulta": {
+   "excluidos_por_solapamiento": [
+    "rag_enriquecido_v2:bgl_des_natural_0009"
+   ],
+   "consultados": 56,
+   "contrastiva": true,
+   "k_por_clase": 2,
+   "tipo": "texto",
+   "omitidos_otro_tipo": 31,
+   "excluidos_mismo_incidente": [],
+   "exclusion_por_incidente_activa": true,
+   "representacion": "Eventos destacados: ninguno\nLog de texto, 20 eventos. Severidades: INFO 20. Componentes: bgl.kernel 20. Nodos distintos: 20."
+  },
+  "hallazgos_cazador": [],
+  "cazador_ejecutado": false,
+  "veredicto_consolidado": "normal",
+  "consulta_mitre": "",
+  "rag_omitido": "sin hipótesis de seguridad: no se consultan técnicas",
+  "revision_hallazgos": [],
+  "diagnostico_inicial": "",
+  "diagnostico_corregido": "",
+  "correcciones_auditor": 0,
+  "historial_correcciones": [],
+  "memoria_grupos": {},
+  "memoria_grupos_consulta": {
+   "excluidos_por_solapamiento": [],
+   "consultados": 0
+  },
+  "evaluacion_grupos": [],
+  "eventos_reconstruidos": [
+   {
+    "event_id": "event_001",
+    "evidence_uids": [
+     "log_record_000001",
+     "log_record_000002",
+     "log_record_000003",
+     "log_record_000004",
+     "log_record_000005",
+     "log_record_000006",
+     "log_record_000007",
+     "log_record_000008",
+     "log_record_000009",
+     "log_record_000010",
+     "log_record_000011",
+     "log_record_000012",
+     "log_record_000013",
+     "log_record_000014",
+     "log_record_000015",
+     "log_record_000016",
+     "log_record_000017",
+     "log_record_000018",
+     "log_record_000019",
+     "log_record_000020"
+    ],
+    "timestamp": "2005-08-28-02.33.11.392223",
+    "event_type": "bgl_alignment_diagnostics",
+    "description": "Registros de diagnóstico rutinario del kernel de BlueGene/L reportando excepciones de alineación y estados de registros iar/dear.",
+    "confidence": null,
+    "evidence_groups": [
+     "G01",
+     "G02",
+     "G03",
+     "G04",
+     "G05",
+     "G06",
+     "G07"
+    ],
+    "categoria": "contexto"
+   }
+  ],
+  "secuencia_temporal": [
+   "event_001"
+  ],
+  "tecnicas_atribuidas": [],
+  "invalid_evidence_uid_count": 0,
+  "d11_warnings": [],
+  "telemetry": {
+   "llm_call_count": 5,
+   "input_tokens": 11529,
+   "output_tokens": 740,
+   "total_tokens": 14011,
+   "execution_time": 33.3326,
+   "replan_count": 0,
+   "intentos_correccion": 1,
+   "invalid_evidence_uid_count": 0,
+   "d11_warning_count": 0,
+   "llm_calls": [
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 938,
+     "output_tokens": 234,
+     "total_tokens": 1882,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 710,
+     "duration_s": 9.045,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 3951,
+     "output_tokens": 135,
+     "total_tokens": 4360,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 274,
+     "duration_s": 6.74,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 196,
+     "output_tokens": 53,
+     "total_tokens": 391,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 142,
+     "duration_s": 4.086,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 778,
+     "output_tokens": 6,
+     "total_tokens": 833,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 49,
+     "duration_s": 3.657,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 5666,
+     "output_tokens": 312,
+     "total_tokens": 6545,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 567,
+     "duration_s": 9.647,
+     "error": null
+    }
+   ]
+  },
+  "firma": "v2|lineas=20 ips=0 servicios=[bgl.kernel:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[INFO:20] categorias=[] cobertura=1.0",
+  "plan": {
+   "plan_version": 1,
+   "objetivo": "Analizar los registros del kernel de BlueGene/L para descartar anomalías latentes, verificar vulnerabilidades asociadas al producto y definir pautas de supervisión.",
+   "pasos": [
+    {
+     "id": 1,
+     "accion": "triage",
+     "objetivo": "Evaluar los 20 eventos de severidad INFO reportados por los nodos para confirmar la operatividad normal y ausencia de fallos encubiertos.",
+     "estado": "ejecutado"
+    },
+    {
+     "id": 2,
+     "accion": "cve",
+     "objetivo": "Consultar vulnerabilidades conocidas que afecten a la plataforma y kernel de BlueGene/L.",
+     "estado": "omitido",
+     "motivo": "Los registros corresponden a eventos informativos normales de excepciones de punto flotante en el kernel de BlueGene/L, sin indicios de patrones maliciosos, vulnerabilidades ni ataques de seguridad."
+    },
+    {
+     "id": 3,
+     "accion": "mitigacion",
+     "objetivo": "Establecer pautas de monitoreo y contención preventiva sobre los nodos del clúster identificados.",
+     "estado": "ejecutado"
+    }
+   ],
+   "criterios_finalizacion": [
+    "Diagnóstico de estado de los nodos completado",
+    "Evaluación de CVEs para BlueGene/L concluida",
+    "Recomendaciones operativas y preventivas emitidas"
+   ]
+  },
+  "plan_objetivo": "Analizar los registros del kernel de BlueGene/L para descartar anomalías latentes, verificar vulnerabilidades asociadas al producto y definir pautas de supervisión.",
+  "paso_actual": 3,
+  "historial_ejecucion": [
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_planificador",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "plan v1, 3 pasos: ['triage', 'cve', 'mitigacion']"
+   },
+   {
+    "plan_version": 1,
+    "step_id": 1,
+    "nodo": "agente_analista_triage",
+    "accion": "triage",
+    "estado": "ejecutado",
+    "resumen": "diagnóstico producido"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_cazador",
+    "accion": null,
+    "estado": "omitido",
+    "resumen": "sin grupos con señal que examinar"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "tool_consultar_rag",
+    "accion": "rag",
+    "estado": "omitido",
+    "resumen": "técnicas MITRE no consultadas (sin hipótesis de seguridad: no se consultan técnicas)"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_selector_herramientas",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "usar_cve=False"
+   },
+   {
+    "plan_version": 1,
+    "step_id": 3,
+    "nodo": "agente_ingeniero_mitigacion",
+    "accion": "mitigacion",
+    "estado": "ejecutado",
+    "resumen": "0 comandos propuestos"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "tool_validar_comandos",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "comandos válidos"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_auditor_final",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "confianza=0.98 cobertura_suficiente=True"
+   }
+  ],
+  "desviaciones_plan": [],
+  "historial_planes": [],
+  "replan_count": 0,
+  "diagnostico": "El lote contiene únicamente 20 registros informativos (INFO) del kernel de BlueGene/L correspondientes a excepciones de alineación de punto flotante ('double-hummer alignment exceptions') y registros iar/dear asociados. No se observan fallos fatales, interrupciones del kernel ni patrones maliciosos.",
+  "necesita_rag": false,
+  "usar_cve": false,
+  "razon_seleccion": "Los registros corresponden a eventos informativos normales de excepciones de punto flotante en el kernel de BlueGene/L, sin indicios de patrones maliciosos, vulnerabilidades ni ataques de seguridad.",
+  "contexto_rag": [
+   {
+    "id": "bgl_des_balanceado_0003",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Composición: 20 eventos, severidades INFO 20.",
+    "similitud": 1.0
+   },
+   {
+    "id": "bgl_des_natural_0006",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Composición: 20 eventos, severidades INFO 20.",
+    "similitud": 1.0
+   },
+   {
+    "id": "uwf_hist_008",
+    "dataset": "uwf",
+    "etiqueta": "malicioso",
+    "clase": "anomala",
+    "descripcion": "Malicioso (Reconnaissance; T1592). Actividad del incidente: 1 conexiones (tcp gssapi 1), 1 puertos de destino distintos, estados SF 1. Resto del lote: 3 conexiones de fondo (protocolos - 3).",
+    "similitud": 0.873
+   },
+   {
+    "id": "bgl_des_natural_0000",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "clase": "anomala",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 1 × [FATAL bgl.kernel] rts: kernel terminated for reason <n>. Composición: 20 eventos, severidades INFO 19, FATAL 1.",
+    "similitud": 0.64
+   }
+  ],
+  "tecnicas_mitre": [],
+  "cves_encontrados": [],
+  "comandos_mitigacion": [],
+  "comandos_validos": true,
+  "motivos_rechazo": [],
+  "intentos_correccion": 1,
+  "confianza": 0.98,
+  "hay_incidente": false,
+  "hay_anomalia": false,
+  "evaluacion_auditor": "El lote se compone exclusivamente de 20 mensajes informativos (INFO) del kernel de BlueGene/L que detallan excepciones rutinarias de alineación de punto flotante ('double-hummer') y volcados de registros iar/dear. No se evidencian fallas de hardware, caídas del kernel ni indicios de actividad maliciosa.",
+  "cobertura_auditor": true,
+  "cobertura_suficiente": true,
+  "motivo_replanificacion": "",
+  "requiere_replanificacion": false,
+  "_firma": "v2|lineas=20 ips=0 servicios=[bgl.kernel:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[INFO:20] categorias=[] cobertura=1.0",
+  "_error_api": null,
+  "requiere_revision_humana": false,
+  "output_contract_version": "d11-v1",
+  "classification_detallada": "normal"
+ },
+ "observaciones": [
+  {
+   "nodo": "planificador",
+   "llamadas": [
+    0
+   ],
+   "prompt_chars": 1372,
+   "system_chars": 869,
+   "tokens": [
+    {
+     "input_tokens": 938,
+     "output_tokens": 234,
+     "reasoning_tokens": 710,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "triage",
+   "llamadas": [
+    1
+   ],
+   "prompt_chars": 6260,
+   "system_chars": 1394,
+   "tokens": [
+    {
+     "input_tokens": 3951,
+     "output_tokens": 135,
+     "reasoning_tokens": 274,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "selector",
+   "llamadas": [
+    2
+   ],
+   "prompt_chars": 421,
+   "system_chars": 344,
+   "tokens": [
+    {
+     "input_tokens": 196,
+     "output_tokens": 53,
+     "reasoning_tokens": 142,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "mitigacion",
+   "llamadas": [
+    3
+   ],
+   "prompt_chars": 1793,
+   "system_chars": 854,
+   "tokens": [
+    {
+     "input_tokens": 778,
+     "output_tokens": 6,
+     "reasoning_tokens": 49,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "auditor",
+   "llamadas": [
+    4
+   ],
+   "prompt_chars": 9616,
+   "system_chars": 4839,
+   "tokens": [
+    {
+     "input_tokens": 5666,
+     "output_tokens": 312,
+     "reasoning_tokens": 567,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  }
+ ],
+ "consultas_externas": []
+}

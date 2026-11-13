@@ -1,0 +1,1417 @@
+{
+ "case_id": "bgl_des_natural_0014",
+ "dataset": "bgl",
+ "arquitectura": "nodex",
+ "segundos_pared_hijo": 76.8788174999936,
+ "interruptores_efectivos": {
+  "RAG_POR_HIPOTESIS": true,
+  "CAZADOR_ACTIVO": false,
+  "CORRECCION_AUDITOR": true,
+  "HISTORICO_ACTIVO": true,
+  "HISTORICO_K": 3,
+  "EVENTOS_POR_CATEGORIA": true,
+  "HISTORICO_CONTRASTIVO": true,
+  "HISTORICO_K_POR_CLASE": 2,
+  "MEMORIA_GRUPOS_ACTIVA": true,
+  "CAZADOR_MOTIVO_FACTUAL": true,
+  "CAZADOR_LISTA_PATRONES": true,
+  "AUDITOR_REVISA_MEDIOS": true,
+  "AUDITOR_REFORZADO": true
+ },
+ "estado": {
+  "resumen_logs": {
+   "formato_detectado": "bgl",
+   "total_lineas": 20,
+   "servicios": {
+    "bgl.kernel": 20
+   },
+   "eventos": {
+    "evento_critico": 20
+   },
+   "ventana_temporal": {
+    "inicio": "2005-06-14-10.26.31.242578",
+    "fin": "2005-06-14-10.44.35.353282"
+   },
+   "n_ips_distintas": 0,
+   "ips_distintas": [],
+   "por_ip": {},
+   "usuarios": {},
+   "n_usuarios_distintos": 0,
+   "codigos_respuesta": {},
+   "entidades": [],
+   "cronologia": [
+    {
+     "n": 1,
+     "timestamp": "2005-06-14-10.26.31.242578",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118769991 2005.06.14 R26-M0-NA-C:J04-U11 2005-06-14-10.26.31.242578 R26-M0-NA-C:J04-U11 RAS KERNEL FATAL data store interrupt caused by dcbf.........0"
+    },
+    {
+     "n": 2,
+     "timestamp": "2005-06-14-10.26.33.758477",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118769993 2005.06.14 R20-M0-N4-C:J15-U01 2005-06-14-10.26.33.758477 R20-M0-N4-C:J15-U01 RAS KERNEL FATAL machine check: i-fetch......................0"
+    },
+    {
+     "n": 3,
+     "timestamp": "2005-06-14-10.26.37.865134",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118769997 2005.06.14 R26-M0-N2-C:J05-U01 2005-06-14-10.26.37.865134 R26-M0-N2-C:J05-U01 RAS KERNEL FATAL data store interrupt caused by dcbf.........0"
+    },
+    {
+     "n": 4,
+     "timestamp": "2005-06-14-10.27.08.151309",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118770028 2005.06.14 R20-M0-ND-C:J05-U01 2005-06-14-10.27.08.151309 R20-M0-ND-C:J05-U01 RAS KERNEL FATAL program interrupt: illegal instruction......0"
+    },
+    {
+     "n": 5,
+     "timestamp": "2005-06-14-10.28.21.217840",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118770101 2005.06.14 R21-M1-N6-C:J03-U11 2005-06-14-10.28.21.217840 R21-M1-N6-C:J03-U11 RAS KERNEL FATAL program interrupt: illegal instruction......0"
+    },
+    {
+     "n": 6,
+     "timestamp": "2005-06-14-10.30.27.419268",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118770227 2005.06.14 R25-M1-N6-C:J15-U11 2005-06-14-10.30.27.419268 R25-M1-N6-C:J15-U11 RAS KERNEL FATAL program interrupt: privileged instruction...0"
+    },
+    {
+     "n": 7,
+     "timestamp": "2005-06-14-10.30.36.559680",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118770236 2005.06.14 R25-M1-N3-C:J14-U11 2005-06-14-10.30.36.559680 R25-M1-N3-C:J14-U11 RAS KERNEL FATAL program interrupt: privileged instruction...0"
+    },
+    {
+     "n": 8,
+     "timestamp": "2005-06-14-10.31.49.464584",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118770309 2005.06.14 R20-M1-NB-C:J03-U11 2005-06-14-10.31.49.464584 R20-M1-NB-C:J03-U11 RAS KERNEL FATAL program interrupt: trap instruction.........0"
+    },
+    {
+     "n": 9,
+     "timestamp": "2005-06-14-10.32.55.359107",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118770375 2005.06.14 R27-M0-N3-C:J15-U01 2005-06-14-10.32.55.359107 R27-M0-N3-C:J15-U01 RAS KERNEL FATAL program interrupt: imprecise exception......0"
+    },
+    {
+     "n": 10,
+     "timestamp": "2005-06-14-10.36.43.928442",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118770603 2005.06.14 R24-M1-NE-C:J15-U11 2005-06-14-10.36.43.928442 R24-M1-NE-C:J15-U11 RAS KERNEL FATAL store operation.............................1"
+    },
+    {
+     "n": 11,
+     "timestamp": "2005-06-14-10.37.05.332040",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118770625 2005.06.14 R20-M0-NF-C:J07-U01 2005-06-14-10.37.05.332040 R20-M0-NF-C:J07-U01 RAS KERNEL FATAL store operation.............................1"
+    },
+    {
+     "n": 12,
+     "timestamp": "2005-06-14-10.37.26.925212",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118770646 2005.06.14 R27-M1-N9-C:J11-U11 2005-06-14-10.37.26.925212 R27-M1-N9-C:J11-U11 RAS KERNEL FATAL machine state register: 0x00002000"
+    },
+    {
+     "n": 13,
+     "timestamp": "2005-06-14-10.41.58.776391",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118770918 2005.06.14 R24-M0-N5-C:J05-U01 2005-06-14-10.41.58.776391 R24-M0-N5-C:J05-U01 RAS KERNEL FATAL data store interrupt caused by icbi.........0"
+    },
+    {
+     "n": 14,
+     "timestamp": "2005-06-14-10.42.34.598602",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118770954 2005.06.14 R26-M0-N4-C:J15-U11 2005-06-14-10.42.34.598602 R26-M0-N4-C:J15-U11 RAS KERNEL FATAL problem state (0=sup,1=usr).......0"
+    },
+    {
+     "n": 15,
+     "timestamp": "2005-06-14-10.43.09.420211",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118770989 2005.06.14 R21-M1-N4-C:J17-U11 2005-06-14-10.43.09.420211 R21-M1-N4-C:J17-U11 RAS KERNEL FATAL data store interrupt caused by icbi.........0"
+    },
+    {
+     "n": 16,
+     "timestamp": "2005-06-14-10.43.21.406138",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118771001 2005.06.14 R25-M0-N8-C:J16-U11 2005-06-14-10.43.21.406138 R25-M0-N8-C:J16-U11 RAS KERNEL FATAL data store interrupt caused by icbi.........0"
+    },
+    {
+     "n": 17,
+     "timestamp": "2005-06-14-10.43.21.582308",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118771001 2005.06.14 R26-M1-NF-C:J11-U11 2005-06-14-10.43.21.582308 R26-M1-NF-C:J11-U11 RAS KERNEL FATAL floating point instr. enabled.....1"
+    },
+    {
+     "n": 18,
+     "timestamp": "2005-06-14-10.43.27.316459",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118771007 2005.06.14 R27-M0-N2-C:J12-U11 2005-06-14-10.43.27.316459 R27-M0-N2-C:J12-U11 RAS KERNEL FATAL floating point instr. enabled.....1"
+    },
+    {
+     "n": 19,
+     "timestamp": "2005-06-14-10.43.34.293126",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118771014 2005.06.14 R27-M1-NF-C:J03-U11 2005-06-14-10.43.34.293126 R27-M1-NF-C:J03-U11 RAS KERNEL FATAL floating point instr. enabled.....1"
+    },
+    {
+     "n": 20,
+     "timestamp": "2005-06-14-10.44.35.353282",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1118771075 2005.06.14 R24-M0-NF-C:J09-U01 2005-06-14-10.44.35.353282 R24-M0-NF-C:J09-U01 RAS KERNEL FATAL auxiliary processor.........................0"
+    }
+   ],
+   "cronologia_omitidos": 0,
+   "raw_procedencia": {
+    "sha256": "ed66d258dd87abaf12f9281fd13d9a7d1229aa3c8e5cfcb7b4244796817cf356",
+    "lineas": 20,
+    "bytes": 2989
+   },
+   "reputacion_ips": {},
+   "perfil_lote": {
+    "tipo": "texto",
+    "filas": 20,
+    "con_formato_reconocido": 20,
+    "severidades": {
+     "FATAL": 20
+    },
+    "componentes": {
+     "bgl.kernel": 20
+    },
+    "nodos": {
+     "R26-M0-NA-C:J04-U11": 1,
+     "R20-M0-N4-C:J15-U01": 1,
+     "R26-M0-N2-C:J05-U01": 1,
+     "R20-M0-ND-C:J05-U01": 1,
+     "R21-M1-N6-C:J03-U11": 1,
+     "R25-M1-N6-C:J15-U11": 1,
+     "R25-M1-N3-C:J14-U11": 1,
+     "R20-M1-NB-C:J03-U11": 1,
+     "R27-M0-N3-C:J15-U01": 1,
+     "R24-M1-NE-C:J15-U11": 1
+    },
+    "nodos_distintos": 20,
+    "lineas_severidad_alta": {
+     "total": 20,
+     "omitidas": 0,
+     "lineas": [
+      {
+       "uid": "log_record_000001",
+       "severidad": "FATAL",
+       "group_id": "G01"
+      },
+      {
+       "uid": "log_record_000002",
+       "severidad": "FATAL",
+       "group_id": "G02"
+      },
+      {
+       "uid": "log_record_000003",
+       "severidad": "FATAL",
+       "group_id": "G01"
+      },
+      {
+       "uid": "log_record_000004",
+       "severidad": "FATAL",
+       "group_id": "G03"
+      },
+      {
+       "uid": "log_record_000005",
+       "severidad": "FATAL",
+       "group_id": "G03"
+      },
+      {
+       "uid": "log_record_000006",
+       "severidad": "FATAL",
+       "group_id": "G04"
+      },
+      {
+       "uid": "log_record_000007",
+       "severidad": "FATAL",
+       "group_id": "G04"
+      },
+      {
+       "uid": "log_record_000008",
+       "severidad": "FATAL",
+       "group_id": "G05"
+      },
+      {
+       "uid": "log_record_000009",
+       "severidad": "FATAL",
+       "group_id": "G06"
+      },
+      {
+       "uid": "log_record_000010",
+       "severidad": "FATAL",
+       "group_id": "G07"
+      },
+      {
+       "uid": "log_record_000011",
+       "severidad": "FATAL",
+       "group_id": "G07"
+      },
+      {
+       "uid": "log_record_000012",
+       "severidad": "FATAL",
+       "group_id": "G08"
+      },
+      {
+       "uid": "log_record_000013",
+       "severidad": "FATAL",
+       "group_id": "G09"
+      },
+      {
+       "uid": "log_record_000014",
+       "severidad": "FATAL",
+       "group_id": "G10"
+      },
+      {
+       "uid": "log_record_000015",
+       "severidad": "FATAL",
+       "group_id": "G09"
+      },
+      {
+       "uid": "log_record_000016",
+       "severidad": "FATAL",
+       "group_id": "G09"
+      },
+      {
+       "uid": "log_record_000017",
+       "severidad": "FATAL",
+       "group_id": "G11"
+      },
+      {
+       "uid": "log_record_000018",
+       "severidad": "FATAL",
+       "group_id": "G11"
+      },
+      {
+       "uid": "log_record_000019",
+       "severidad": "FATAL",
+       "group_id": "G11"
+      },
+      {
+       "uid": "log_record_000020",
+       "severidad": "FATAL",
+       "group_id": "G12"
+      }
+     ]
+    },
+    "grupos": 12
+   }
+  },
+  "preprocessing_metadata": {
+   "schema_version": "2.0",
+   "total_lineas_fisicas": 20,
+   "total_eventos": 20,
+   "decoder_distribution": {
+    "text": 20
+   },
+   "product_distribution": {
+    "BlueGene/L": 20
+   },
+   "vendor_distribution": {
+    "IBM": 20
+   },
+   "version_distribution": {},
+   "protocol_distribution": {},
+   "profile_distribution": {
+    "bgl": 20
+   },
+   "severity_distribution": {
+    "FATAL": 20
+   },
+   "event_categories": {},
+   "event_outcomes": {},
+   "entities": {
+    "host": {
+     "R20-M0-N4-C:J15-U01": 1,
+     "R20-M0-ND-C:J05-U01": 1,
+     "R20-M0-NF-C:J07-U01": 1,
+     "R20-M1-NB-C:J03-U11": 1,
+     "R21-M1-N4-C:J17-U11": 1,
+     "R21-M1-N6-C:J03-U11": 1,
+     "R24-M0-N5-C:J05-U01": 1,
+     "R24-M0-NF-C:J09-U01": 1,
+     "R24-M1-NE-C:J15-U11": 1,
+     "R25-M0-N8-C:J16-U11": 1,
+     "R25-M1-N3-C:J14-U11": 1,
+     "R25-M1-N6-C:J15-U11": 1,
+     "R26-M0-N2-C:J05-U01": 1,
+     "R26-M0-N4-C:J15-U11": 1,
+     "R26-M0-NA-C:J04-U11": 1,
+     "R26-M1-NF-C:J11-U11": 1,
+     "R27-M0-N2-C:J12-U11": 1,
+     "R27-M0-N3-C:J15-U01": 1,
+     "R27-M1-N9-C:J11-U11": 1,
+     "R27-M1-NF-C:J03-U11": 1
+    },
+    "servicio": {
+     "bgl.kernel": 20
+    },
+    "producto": {
+     "BlueGene/L": 20
+    }
+   },
+   "time_window": {
+    "inicio": "2005-06-14-10.26.31.242578",
+    "fin": "2005-06-14-10.44.35.353282"
+   },
+   "parsing": {
+    "parsed_events": 20,
+    "fallback_events": 0,
+    "coverage": 1.0
+   },
+   "segments": [
+    {
+     "index": 0,
+     "decoder": "text",
+     "line_start": 1,
+     "line_end": 20,
+     "n_records": 20,
+     "confidence": 0.1,
+     "decoder_inicial": "text",
+     "confidence_inicial": 0.1,
+     "decoder_distribution": {
+      "text": 20
+     },
+     "context": {}
+    }
+   ],
+   "entities_resumen": {
+    "host": 20,
+    "servicio": 1,
+    "producto": 1
+   },
+   "config": {
+    "LOG_DETECTION_CHUNK_SIZE": 50,
+    "LOG_ENABLE_MULTILINE": true,
+    "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+    "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+    "LOG_MAX_EVENTS": 100000,
+    "LOG_MAX_FILE_BYTES": 52428800,
+    "LOG_MAX_RAW_SAMPLES": 20,
+    "LOG_MAX_UNMAPPED_FIELDS": 100,
+    "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+    "LOG_PARSING_MODE": "hybrid",
+    "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+    "LOG_PRESERVE_RAW": true
+   }
+  },
+  "parsing_warnings": [],
+  "evidencia_logs": [
+   {
+    "uid": "log_record_000001",
+    "record_number": 1,
+    "line_start": 1,
+    "line_end": 1,
+    "timestamp": "2005-06-14-10.26.31.242578",
+    "group_id": "G01",
+    "source_host": "R26-M0-NA-C:J04-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "data store interrupt caused by dcbf.........0"
+   },
+   {
+    "uid": "log_record_000002",
+    "record_number": 2,
+    "line_start": 2,
+    "line_end": 2,
+    "timestamp": "2005-06-14-10.26.33.758477",
+    "group_id": "G02",
+    "source_host": "R20-M0-N4-C:J15-U01",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "machine check: i-fetch......................0"
+   },
+   {
+    "uid": "log_record_000003",
+    "record_number": 3,
+    "line_start": 3,
+    "line_end": 3,
+    "timestamp": "2005-06-14-10.26.37.865134",
+    "group_id": "G01",
+    "source_host": "R26-M0-N2-C:J05-U01",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "data store interrupt caused by dcbf.........0"
+   },
+   {
+    "uid": "log_record_000004",
+    "record_number": 4,
+    "line_start": 4,
+    "line_end": 4,
+    "timestamp": "2005-06-14-10.27.08.151309",
+    "group_id": "G03",
+    "source_host": "R20-M0-ND-C:J05-U01",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "program interrupt: illegal instruction......0"
+   },
+   {
+    "uid": "log_record_000005",
+    "record_number": 5,
+    "line_start": 5,
+    "line_end": 5,
+    "timestamp": "2005-06-14-10.28.21.217840",
+    "group_id": "G03",
+    "source_host": "R21-M1-N6-C:J03-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "program interrupt: illegal instruction......0"
+   },
+   {
+    "uid": "log_record_000006",
+    "record_number": 6,
+    "line_start": 6,
+    "line_end": 6,
+    "timestamp": "2005-06-14-10.30.27.419268",
+    "group_id": "G04",
+    "source_host": "R25-M1-N6-C:J15-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "program interrupt: privileged instruction...0"
+   },
+   {
+    "uid": "log_record_000007",
+    "record_number": 7,
+    "line_start": 7,
+    "line_end": 7,
+    "timestamp": "2005-06-14-10.30.36.559680",
+    "group_id": "G04",
+    "source_host": "R25-M1-N3-C:J14-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "program interrupt: privileged instruction...0"
+   },
+   {
+    "uid": "log_record_000008",
+    "record_number": 8,
+    "line_start": 8,
+    "line_end": 8,
+    "timestamp": "2005-06-14-10.31.49.464584",
+    "group_id": "G05",
+    "source_host": "R20-M1-NB-C:J03-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "program interrupt: trap instruction.........0"
+   },
+   {
+    "uid": "log_record_000009",
+    "record_number": 9,
+    "line_start": 9,
+    "line_end": 9,
+    "timestamp": "2005-06-14-10.32.55.359107",
+    "group_id": "G06",
+    "source_host": "R27-M0-N3-C:J15-U01",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "program interrupt: imprecise exception......0"
+   },
+   {
+    "uid": "log_record_000010",
+    "record_number": 10,
+    "line_start": 10,
+    "line_end": 10,
+    "timestamp": "2005-06-14-10.36.43.928442",
+    "group_id": "G07",
+    "source_host": "R24-M1-NE-C:J15-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "store operation.............................1"
+   },
+   {
+    "uid": "log_record_000011",
+    "record_number": 11,
+    "line_start": 11,
+    "line_end": 11,
+    "timestamp": "2005-06-14-10.37.05.332040",
+    "group_id": "G07",
+    "source_host": "R20-M0-NF-C:J07-U01",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "store operation.............................1"
+   },
+   {
+    "uid": "log_record_000012",
+    "record_number": 12,
+    "line_start": 12,
+    "line_end": 12,
+    "timestamp": "2005-06-14-10.37.26.925212",
+    "group_id": "G08",
+    "source_host": "R27-M1-N9-C:J11-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "machine state register: 0x00002000"
+   },
+   {
+    "uid": "log_record_000013",
+    "record_number": 13,
+    "line_start": 13,
+    "line_end": 13,
+    "timestamp": "2005-06-14-10.41.58.776391",
+    "group_id": "G09",
+    "source_host": "R24-M0-N5-C:J05-U01",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "data store interrupt caused by icbi.........0"
+   },
+   {
+    "uid": "log_record_000014",
+    "record_number": 14,
+    "line_start": 14,
+    "line_end": 14,
+    "timestamp": "2005-06-14-10.42.34.598602",
+    "group_id": "G10",
+    "source_host": "R26-M0-N4-C:J15-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "problem state (0=sup,1=usr).......0"
+   },
+   {
+    "uid": "log_record_000015",
+    "record_number": 15,
+    "line_start": 15,
+    "line_end": 15,
+    "timestamp": "2005-06-14-10.43.09.420211",
+    "group_id": "G09",
+    "source_host": "R21-M1-N4-C:J17-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "data store interrupt caused by icbi.........0"
+   },
+   {
+    "uid": "log_record_000016",
+    "record_number": 16,
+    "line_start": 16,
+    "line_end": 16,
+    "timestamp": "2005-06-14-10.43.21.406138",
+    "group_id": "G09",
+    "source_host": "R25-M0-N8-C:J16-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "data store interrupt caused by icbi.........0"
+   },
+   {
+    "uid": "log_record_000017",
+    "record_number": 17,
+    "line_start": 17,
+    "line_end": 17,
+    "timestamp": "2005-06-14-10.43.21.582308",
+    "group_id": "G11",
+    "source_host": "R26-M1-NF-C:J11-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "floating point instr. enabled.....1"
+   },
+   {
+    "uid": "log_record_000018",
+    "record_number": 18,
+    "line_start": 18,
+    "line_end": 18,
+    "timestamp": "2005-06-14-10.43.27.316459",
+    "group_id": "G11",
+    "source_host": "R27-M0-N2-C:J12-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "floating point instr. enabled.....1"
+   },
+   {
+    "uid": "log_record_000019",
+    "record_number": 19,
+    "line_start": 19,
+    "line_end": 19,
+    "timestamp": "2005-06-14-10.43.34.293126",
+    "group_id": "G11",
+    "source_host": "R27-M1-NF-C:J03-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "floating point instr. enabled.....1"
+   },
+   {
+    "uid": "log_record_000020",
+    "record_number": 20,
+    "line_start": 20,
+    "line_end": 20,
+    "timestamp": "2005-06-14-10.44.35.353282",
+    "group_id": "G12",
+    "source_host": "R24-M0-NF-C:J09-U01",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "auxiliary processor.........................0"
+   }
+  ],
+  "evidencia_logs_omitidos": 0,
+  "grupos_evidencia": [
+   {
+    "group_id": "G01",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "data store interrupt caused by dcbf.........<n>"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000001",
+     "log_record_000003"
+    ],
+    "nodos": [
+     "R26-M0-NA-C:J04-U11",
+     "R26-M0-N2-C:J05-U01"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G02",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "machine check: i-fetch......................<n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000002"
+    ],
+    "nodos": [
+     "R20-M0-N4-C:J15-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G03",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "program interrupt: illegal instruction......<n>"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000004",
+     "log_record_000005"
+    ],
+    "nodos": [
+     "R20-M0-ND-C:J05-U01",
+     "R21-M1-N6-C:J03-U11"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G04",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "program interrupt: privileged instruction...<n>"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000006",
+     "log_record_000007"
+    ],
+    "nodos": [
+     "R25-M1-N6-C:J15-U11",
+     "R25-M1-N3-C:J14-U11"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G05",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "program interrupt: trap instruction.........<n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000008"
+    ],
+    "nodos": [
+     "R20-M1-NB-C:J03-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G06",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "program interrupt: imprecise exception......<n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000009"
+    ],
+    "nodos": [
+     "R27-M0-N3-C:J15-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G07",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "store operation.............................<n>"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000010",
+     "log_record_000011"
+    ],
+    "nodos": [
+     "R24-M1-NE-C:J15-U11",
+     "R20-M0-NF-C:J07-U01"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G08",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "machine state register: <hex>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000012"
+    ],
+    "nodos": [
+     "R27-M1-N9-C:J11-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G09",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "data store interrupt caused by icbi.........<n>"
+    },
+    "conteo": 3,
+    "uids": [
+     "log_record_000013",
+     "log_record_000015",
+     "log_record_000016"
+    ],
+    "nodos": [
+     "R24-M0-N5-C:J05-U01",
+     "R21-M1-N4-C:J17-U11",
+     "R25-M0-N8-C:J16-U11"
+    ],
+    "n_nodos": 3
+   },
+   {
+    "group_id": "G10",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "problem state (<n>=sup,<n>=usr).......<n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000014"
+    ],
+    "nodos": [
+     "R26-M0-N4-C:J15-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G11",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "floating point instr. enabled.....<n>"
+    },
+    "conteo": 3,
+    "uids": [
+     "log_record_000017",
+     "log_record_000018",
+     "log_record_000019"
+    ],
+    "nodos": [
+     "R26-M1-NF-C:J11-U11",
+     "R27-M0-N2-C:J12-U11",
+     "R27-M1-NF-C:J03-U11"
+    ],
+    "n_nodos": 3
+   },
+   {
+    "group_id": "G12",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "auxiliary processor.........................<n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000020"
+    ],
+    "nodos": [
+     "R24-M0-NF-C:J09-U01"
+    ],
+    "n_nodos": 1
+   }
+  ],
+  "contenido_lote": {
+   "tipo": "texto",
+   "lineas": [
+    "[log_record_000001] 1118769991 2005.06.14 R26-M0-NA-C:J04-U11 2005-06-14-10.26.31.242578 R26-M0-NA-C:J04-U11 RAS KERNEL FATAL data store interrupt caused by dcbf.........0",
+    "[log_record_000002] 1118769993 2005.06.14 R20-M0-N4-C:J15-U01 2005-06-14-10.26.33.758477 R20-M0-N4-C:J15-U01 RAS KERNEL FATAL machine check: i-fetch......................0",
+    "[log_record_000003] 1118769997 2005.06.14 R26-M0-N2-C:J05-U01 2005-06-14-10.26.37.865134 R26-M0-N2-C:J05-U01 RAS KERNEL FATAL data store interrupt caused by dcbf.........0",
+    "[log_record_000004] 1118770028 2005.06.14 R20-M0-ND-C:J05-U01 2005-06-14-10.27.08.151309 R20-M0-ND-C:J05-U01 RAS KERNEL FATAL program interrupt: illegal instruction......0",
+    "[log_record_000005] 1118770101 2005.06.14 R21-M1-N6-C:J03-U11 2005-06-14-10.28.21.217840 R21-M1-N6-C:J03-U11 RAS KERNEL FATAL program interrupt: illegal instruction......0",
+    "[log_record_000006] 1118770227 2005.06.14 R25-M1-N6-C:J15-U11 2005-06-14-10.30.27.419268 R25-M1-N6-C:J15-U11 RAS KERNEL FATAL program interrupt: privileged instruction...0",
+    "[log_record_000007] 1118770236 2005.06.14 R25-M1-N3-C:J14-U11 2005-06-14-10.30.36.559680 R25-M1-N3-C:J14-U11 RAS KERNEL FATAL program interrupt: privileged instruction...0",
+    "[log_record_000008] 1118770309 2005.06.14 R20-M1-NB-C:J03-U11 2005-06-14-10.31.49.464584 R20-M1-NB-C:J03-U11 RAS KERNEL FATAL program interrupt: trap instruction.........0",
+    "[log_record_000009] 1118770375 2005.06.14 R27-M0-N3-C:J15-U01 2005-06-14-10.32.55.359107 R27-M0-N3-C:J15-U01 RAS KERNEL FATAL program interrupt: imprecise exception......0",
+    "[log_record_000010] 1118770603 2005.06.14 R24-M1-NE-C:J15-U11 2005-06-14-10.36.43.928442 R24-M1-NE-C:J15-U11 RAS KERNEL FATAL store operation.............................1",
+    "[log_record_000011] 1118770625 2005.06.14 R20-M0-NF-C:J07-U01 2005-06-14-10.37.05.332040 R20-M0-NF-C:J07-U01 RAS KERNEL FATAL store operation.............................1",
+    "[log_record_000012] 1118770646 2005.06.14 R27-M1-N9-C:J11-U11 2005-06-14-10.37.26.925212 R27-M1-N9-C:J11-U11 RAS KERNEL FATAL machine state register: 0x00002000",
+    "[log_record_000013] 1118770918 2005.06.14 R24-M0-N5-C:J05-U01 2005-06-14-10.41.58.776391 R24-M0-N5-C:J05-U01 RAS KERNEL FATAL data store interrupt caused by icbi.........0",
+    "[log_record_000014] 1118770954 2005.06.14 R26-M0-N4-C:J15-U11 2005-06-14-10.42.34.598602 R26-M0-N4-C:J15-U11 RAS KERNEL FATAL problem state (0=sup,1=usr).......0",
+    "[log_record_000015] 1118770989 2005.06.14 R21-M1-N4-C:J17-U11 2005-06-14-10.43.09.420211 R21-M1-N4-C:J17-U11 RAS KERNEL FATAL data store interrupt caused by icbi.........0",
+    "[log_record_000016] 1118771001 2005.06.14 R25-M0-N8-C:J16-U11 2005-06-14-10.43.21.406138 R25-M0-N8-C:J16-U11 RAS KERNEL FATAL data store interrupt caused by icbi.........0",
+    "[log_record_000017] 1118771001 2005.06.14 R26-M1-NF-C:J11-U11 2005-06-14-10.43.21.582308 R26-M1-NF-C:J11-U11 RAS KERNEL FATAL floating point instr. enabled.....1",
+    "[log_record_000018] 1118771007 2005.06.14 R27-M0-N2-C:J12-U11 2005-06-14-10.43.27.316459 R27-M0-N2-C:J12-U11 RAS KERNEL FATAL floating point instr. enabled.....1",
+    "[log_record_000019] 1118771014 2005.06.14 R27-M1-NF-C:J03-U11 2005-06-14-10.43.34.293126 R27-M1-NF-C:J03-U11 RAS KERNEL FATAL floating point instr. enabled.....1",
+    "[log_record_000020] 1118771075 2005.06.14 R24-M0-NF-C:J09-U01 2005-06-14-10.44.35.353282 R24-M0-NF-C:J09-U01 RAS KERNEL FATAL auxiliary processor.........................0"
+   ],
+   "total_lineas": 20,
+   "lineas_entregadas": 20,
+   "recortado": false,
+   "topes": {
+    "lineas": 200,
+    "caracteres": 20000
+   }
+  },
+  "veredicto_preliminar": "anomalia_operativa",
+  "justificacion_veredicto_preliminar": "Múltiples excepciones críticas de almacenamiento de datos (data store interrupt) y fallos de instrucción en el kernel distribuidos en 20 nodos distintos.",
+  "invalid_evidence_group_count": 0,
+  "comandos_rechazados": [],
+  "casos_historicos": [
+   {
+    "id": "bgl_des_natural_0017",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Contiene eventos de severidad alta que no se consideraron alerta: 3 × [FATAL bgl.kernel] program interrupt: fp cr field .............<n>; 2 × [FATAL bgl.kernel] machine check enable..............<n>; 2 × [FATAL bgl.kernel] floating pt ex mode <n> enable......<n>; 2 × [FATAL bgl.kernel] byte ordering exception.....................<n>. Composición: 20 eventos, severidades FATAL 20.",
+    "similitud": 0.934
+   },
+   {
+    "id": "bgl_des_natural_0004",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "clase": "anomala",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 5 × [FATAL bgl.kernel] data storage interrupt. Composición: 20 eventos, severidades FATAL 20.",
+    "similitud": 0.88
+   },
+   {
+    "id": "bgl_des_natural_0003",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "clase": "anomala",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 2 × [FATAL bgl.app] ciod: Error reading message prefix on CioStream socket to <n>.<n>.<n>.<n>:<n>, Link has be. Composición: 20 eventos, severidades INFO 15, FATAL 5.",
+    "similitud": 0.724
+   },
+   {
+    "id": "bgl_des_natural_0012",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Contiene eventos de severidad alta que no se consideraron alerta: 5 × [FATAL bgl.app] ciod: LOGIN chdir(/bgl/apps/SWL/performance/MINIBEN///<n>.<n>.<n>-<n>.<n>.<n>) failed: No ; 3 × [FATAL bgl.app] ciod: Error loading /home/yates//torus-latency.rts: invalid or missing program image, No s; 2 × [ERROR bgl.mmcs] idoproxydb hit ASSERT condition: ASSERT expression=<n> Source file=idotransportmgr.cpp Sou; 1 × [FATAL bgl.app] ciod: Error loading /home/yates//bandwidth.rts: invalid or missing program image, No such . Composición: 20 eventos, severidades FATAL 13, INFO 5, ERROR 2.",
+    "similitud": 0.638
+   }
+  ],
+  "historico_consulta": {
+   "excluidos_por_solapamiento": [
+    "rag_enriquecido_v2:bgl_des_natural_0014"
+   ],
+   "consultados": 56,
+   "contrastiva": true,
+   "k_por_clase": 2,
+   "tipo": "texto",
+   "omitidos_otro_tipo": 31,
+   "excluidos_mismo_incidente": [],
+   "exclusion_por_incidente_activa": true,
+   "representacion": "Eventos destacados: [FATAL bgl.kernel] data store interrupt caused by dcbf.........<n> x2 en 2 nodos; [FATAL bgl.kernel] machine check: i-fetch......................<n> x1 en 1 nodos; [FATAL bgl.kernel] program interrupt: illegal instruction......<n> x2 en 2 nodos; [FATAL bgl.kernel] program interrupt: privileged instruction...<n> x2 en 2 nodos; [FATAL bgl.kernel] program interrupt: trap instruction.........<n> x1 en 1 nodos; [FATAL bgl.kernel] program interrupt: imprecise exception......<n> x1 en 1 nodos; [FATAL bgl.kernel] store operation.............................<n> x2 en 2 nodos; [FATAL bgl.kernel] machine state register: <hex> x1 en 1 nodos; [FATAL bgl.kernel] data store interrupt caused by icbi.........<n> x3 en 3 nodos; [FATAL bgl.kernel] problem state (<n>=sup,<n>=usr).......<n> x1 en 1 nodos; [FATAL bgl.kernel] floating point instr. enabled.....<n> x3 en 3 nodos; [FATAL bgl.kernel] auxiliary processor.........................<n> x1 en 1 nodos\nLog de texto, 20 eventos. Severidades: FATAL 20. Componentes: bgl.kernel 20. Nodos distintos: 20."
+  },
+  "hallazgos_cazador": [],
+  "cazador_ejecutado": false,
+  "veredicto_consolidado": "anomalia_operativa",
+  "consulta_mitre": "",
+  "rag_omitido": "sin hipótesis de seguridad: no se consultan técnicas",
+  "revision_hallazgos": [],
+  "diagnostico_inicial": "",
+  "diagnostico_corregido": "",
+  "correcciones_auditor": 0,
+  "historial_correcciones": [],
+  "memoria_grupos": {},
+  "memoria_grupos_consulta": {
+   "excluidos_por_solapamiento": [],
+   "consultados": 0
+  },
+  "evaluacion_grupos": [
+   {
+    "group_id": "G01",
+    "explicacion_benigna": "Fallo de ejecución o desalineación de memoria durante una instrucción de vaciado de línea de caché de datos (dcbf) en el núcleo de cómputo.",
+    "explicacion_maliciosa": "Intento de explotación de memoria o corrupción deliberada del espacio de direcciones del kernel.",
+    "patron_lista": "ninguno"
+   },
+   {
+    "group_id": "G02",
+    "explicacion_benigna": "Error de hardware o fallo de paridad de bus durante la búsqueda de instrucciones (i-fetch) en el procesador.",
+    "explicacion_maliciosa": "Ejecución forzada de código en regiones de memoria no mapeadas mediante técnicas de explotación.",
+    "patron_lista": "ninguno"
+   },
+   {
+    "group_id": "G03",
+    "explicacion_benigna": "Ejecución de un binario corrupto, compilado para una arquitectura distinta o puntero de función inválido en el trabajo distribuido.",
+    "explicacion_maliciosa": "Ejecución de shellcode o payload malicioso corrupto que contiene opcodes no válidos.",
+    "patron_lista": "ninguno"
+   },
+   {
+    "group_id": "G04",
+    "explicacion_benigna": "Trabajo de cómputo que intentó invocar inadvertidamente una instrucción de procesador restringida al modo supervisor.",
+    "explicacion_maliciosa": "Intento de escalada local de privilegios ejecutando instrucciones protegidas del kernel desde espacio de usuario.",
+    "patron_lista": "ninguno"
+   },
+   {
+    "group_id": "G05",
+    "explicacion_benigna": "Condición de parada de depuración, aserción fallida de software (trap) dentro del código de cómputo.",
+    "explicacion_maliciosa": "Activación de trampas de depuración para evadir mecanismos de control o volcar memoria.",
+    "patron_lista": "ninguno"
+   },
+   {
+    "group_id": "G06",
+    "explicacion_benigna": "Excepción asíncrona no precisa generada por operaciones de coma flotante o de memoria retrasadas en la arquitectura PowerPC.",
+    "explicacion_maliciosa": "Corrupción de memoria provocada de manera asíncrona.",
+    "patron_lista": "ninguno"
+   },
+   {
+    "group_id": "G07",
+    "explicacion_benigna": "Registro contextual del volcado del procesador que especifica que la excepción se originó en una operación de almacenamiento.",
+    "explicacion_maliciosa": "Sobrescritura maliciosa de memoria durante un ataque de corrupción.",
+    "patron_lista": "ninguno"
+   },
+   {
+    "group_id": "G08",
+    "explicacion_benigna": "Volcado del registro de estado de máquina (MSR 0x00002000) generado durante el manejo del volcado de depuración del kernel.",
+    "explicacion_maliciosa": "Ninguna plausible en aislamiento; forma parte del volcado de estado de la CPU.",
+    "patron_lista": "ninguno"
+   },
+   {
+    "group_id": "G09",
+    "explicacion_benigna": "Excepción de almacenamiento provocada por una instrucción de invalidación de bloque de caché de instrucciones (icbi).",
+    "explicacion_maliciosa": "Manipulación deliberada de la caché de instrucciones para evadir protecciones de ejecución de memoria.",
+    "patron_lista": "ninguno"
+   },
+   {
+    "group_id": "G10",
+    "explicacion_benigna": "Volcado del bit de estado del procesador que refleja si la CPU se encontraba en modo usuario o supervisor al fallar.",
+    "explicacion_maliciosa": "Ninguna plausible en aislamiento; telemetría estándar de registro del procesador.",
+    "patron_lista": "ninguno"
+   },
+   {
+    "group_id": "G11",
+    "explicacion_benigna": "Volcado de telemetría del procesador indicando que las instrucciones de punto flotante estaban habilitadas al momento del fallo.",
+    "explicacion_maliciosa": "Ninguna plausible en aislamiento; registro informativo de contexto de hardware.",
+    "patron_lista": "ninguno"
+   },
+   {
+    "group_id": "G12",
+    "explicacion_benigna": "Volcado de diagnóstico del coprocesador auxiliar que confirma su estado durante la excepción del kernel.",
+    "explicacion_maliciosa": "Ninguna plausible en aislamiento; telemetría de arquitectura de hardware.",
+    "patron_lista": "ninguno"
+   }
+  ],
+  "eventos_reconstruidos": [
+   {
+    "event_id": "event_001",
+    "evidence_uids": [
+     "log_record_000001",
+     "log_record_000003",
+     "log_record_000002",
+     "log_record_000004",
+     "log_record_000005",
+     "log_record_000006",
+     "log_record_000007",
+     "log_record_000008",
+     "log_record_000009",
+     "log_record_000010",
+     "log_record_000011",
+     "log_record_000012",
+     "log_record_000013",
+     "log_record_000015",
+     "log_record_000016",
+     "log_record_000014",
+     "log_record_000017",
+     "log_record_000018",
+     "log_record_000019",
+     "log_record_000020"
+    ],
+    "timestamp": "2005-06-14-10.26.31.242578",
+    "event_type": "kernel_hardware_exception_cascade",
+    "description": "Serie de excepciones de kernel e interrupciones de hardware/almacenamiento de datos (dcbf, icbi, machine check, instrucciones no válidas) a través de múltiples nodos del clúster de cómputo.",
+    "confidence": null,
+    "evidence_groups": [
+     "G01",
+     "G02",
+     "G03",
+     "G04",
+     "G05",
+     "G06",
+     "G07",
+     "G08",
+     "G09",
+     "G10",
+     "G11",
+     "G12"
+    ],
+    "categoria": "anomalia_operativa"
+   }
+  ],
+  "secuencia_temporal": [
+   "event_001"
+  ],
+  "tecnicas_atribuidas": [],
+  "invalid_evidence_uid_count": 0,
+  "d11_warnings": [],
+  "telemetry": {
+   "llm_call_count": 5,
+   "input_tokens": 20687,
+   "output_tokens": 2518,
+   "total_tokens": 26855,
+   "execution_time": 61.91053,
+   "replan_count": 0,
+   "intentos_correccion": 1,
+   "invalid_evidence_uid_count": 0,
+   "d11_warning_count": 0,
+   "llm_calls": [
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 1602,
+     "output_tokens": 232,
+     "total_tokens": 2972,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 1138,
+     "duration_s": 15.841,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 4760,
+     "output_tokens": 218,
+     "total_tokens": 5725,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 747,
+     "duration_s": 10.336,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 284,
+     "output_tokens": 60,
+     "total_tokens": 774,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 430,
+     "duration_s": 6.062,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 3253,
+     "output_tokens": 76,
+     "total_tokens": 3723,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 394,
+     "duration_s": 5.539,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 10788,
+     "output_tokens": 1932,
+     "total_tokens": 13661,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 941,
+     "duration_s": 23.927,
+     "error": null
+    }
+   ]
+  },
+  "firma": "v2|lineas=20 ips=0 servicios=[bgl.kernel:20] eventos=[evento_critico:20] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[FATAL:20] categorias=[] cobertura=1.0",
+  "plan": {
+   "plan_version": 1,
+   "objetivo": "Investigar la causa de los 20 eventos FATAL en el kernel del clúster BlueGene/L y definir acciones de respuesta.",
+   "pasos": [
+    {
+     "id": 1,
+     "accion": "triage",
+     "objetivo": "Evaluar el impacto y la naturaleza de los 20 fallos de severidad FATAL distribuidos en los nodos bgl.kernel.",
+     "estado": "ejecutado"
+    },
+    {
+     "id": 2,
+     "accion": "cve",
+     "objetivo": "Consultar vulnerabilidades conocidas que afecten a la plataforma y componentes de BlueGene/L.",
+     "estado": "omitido",
+     "motivo": "El diagnóstico concluye que los eventos se deben a inestabilidad operativa y fallas de hardware/memoria en la ejecución de tareas distribuidas, sin indicios de actividad maliciosa ni vulnerabilidades de seguridad identificadas."
+    },
+    {
+     "id": 3,
+     "accion": "mitigacion",
+     "objetivo": "Elaborar recomendaciones de contención, aislamiento o recuperación para los nodos afectados del clúster.",
+     "estado": "ejecutado"
+    }
+   ],
+   "criterios_finalizacion": [
+    "Causa de los errores FATAL identificada o categorizada",
+    "Verificación de vulnerabilidades conocidas para BlueGene/L completada",
+    "Estrategia de mitigación y estabilización de nodos documentada"
+   ]
+  },
+  "plan_objetivo": "Investigar la causa de los 20 eventos FATAL en el kernel del clúster BlueGene/L y definir acciones de respuesta.",
+  "paso_actual": 3,
+  "historial_ejecucion": [
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_planificador",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "plan v1, 3 pasos: ['triage', 'cve', 'mitigacion']"
+   },
+   {
+    "plan_version": 1,
+    "step_id": 1,
+    "nodo": "agente_analista_triage",
+    "accion": "triage",
+    "estado": "ejecutado",
+    "resumen": "diagnóstico producido"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_cazador",
+    "accion": null,
+    "estado": "omitido",
+    "resumen": "sin grupos con señal que examinar"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "tool_consultar_rag",
+    "accion": "rag",
+    "estado": "omitido",
+    "resumen": "técnicas MITRE no consultadas (sin hipótesis de seguridad: no se consultan técnicas)"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_selector_herramientas",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "usar_cve=False"
+   },
+   {
+    "plan_version": 1,
+    "step_id": 3,
+    "nodo": "agente_ingeniero_mitigacion",
+    "accion": "mitigacion",
+    "estado": "ejecutado",
+    "resumen": "6 comandos propuestos"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "tool_validar_comandos",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "comandos válidos"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_auditor_final",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "confianza=0.95 cobertura_suficiente=True"
+   }
+  ],
+  "desviaciones_plan": [],
+  "historial_planes": [],
+  "replan_count": 0,
+  "diagnostico": "Se observan 20 eventos de severidad FATAL generados por el subsistema bgl.kernel a lo largo de 20 nodos distintos en un lapso de 18 minutos. Los registros evidencian fallas de ejecución a nivel de procesador y memoria, incluyendo múltiples excepciones de interrupción de almacenamiento de datos ('data store interrupt caused by dcbf/icbi'), verificaciones de máquina ('machine check: i-fetch') e instrucciones ilegales y privilegiadas. En concordancia con los criterios históricos donde las interrupciones de almacenamiento de datos determinan alerta operativa, el patrón indica inestabilidad del entorno de cómputo o fallos en la ejecución de tareas distribuidas sin indicios de actividad maliciosa.",
+  "necesita_rag": false,
+  "usar_cve": false,
+  "razon_seleccion": "El diagnóstico concluye que los eventos se deben a inestabilidad operativa y fallas de hardware/memoria en la ejecución de tareas distribuidas, sin indicios de actividad maliciosa ni vulnerabilidades de seguridad identificadas.",
+  "contexto_rag": [
+   {
+    "id": "bgl_des_natural_0017",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Contiene eventos de severidad alta que no se consideraron alerta: 3 × [FATAL bgl.kernel] program interrupt: fp cr field .............<n>; 2 × [FATAL bgl.kernel] machine check enable..............<n>; 2 × [FATAL bgl.kernel] floating pt ex mode <n> enable......<n>; 2 × [FATAL bgl.kernel] byte ordering exception.....................<n>. Composición: 20 eventos, severidades FATAL 20.",
+    "similitud": 0.934
+   },
+   {
+    "id": "bgl_des_natural_0004",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "clase": "anomala",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 5 × [FATAL bgl.kernel] data storage interrupt. Composición: 20 eventos, severidades FATAL 20.",
+    "similitud": 0.88
+   },
+   {
+    "id": "bgl_des_natural_0003",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "clase": "anomala",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 2 × [FATAL bgl.app] ciod: Error reading message prefix on CioStream socket to <n>.<n>.<n>.<n>:<n>, Link has be. Composición: 20 eventos, severidades INFO 15, FATAL 5.",
+    "similitud": 0.724
+   },
+   {
+    "id": "bgl_des_natural_0012",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Contiene eventos de severidad alta que no se consideraron alerta: 5 × [FATAL bgl.app] ciod: LOGIN chdir(/bgl/apps/SWL/performance/MINIBEN///<n>.<n>.<n>-<n>.<n>.<n>) failed: No ; 3 × [FATAL bgl.app] ciod: Error loading /home/yates//torus-latency.rts: invalid or missing program image, No s; 2 × [ERROR bgl.mmcs] idoproxydb hit ASSERT condition: ASSERT expression=<n> Source file=idotransportmgr.cpp Sou; 1 × [FATAL bgl.app] ciod: Error loading /home/yates//bandwidth.rts: invalid or missing program image, No such . Composición: 20 eventos, severidades FATAL 13, INFO 5, ERROR 2.",
+    "similitud": 0.638
+   }
+  ],
+  "tecnicas_mitre": [],
+  "cves_encontrados": [],
+  "comandos_mitigacion": [
+   "dmesg -T --level=emerg,alert,crit,err",
+   "journalctl -k -b -p 3 -n 100 --no-pager",
+   "ras-mc-ctl --summary",
+   "ipmitool sel elist",
+   "cat /proc/cpuinfo",
+   "cat /proc/meminfo"
+  ],
+  "comandos_validos": true,
+  "motivos_rechazo": [],
+  "intentos_correccion": 1,
+  "confianza": 0.95,
+  "hay_incidente": false,
+  "hay_anomalia": true,
+  "evaluacion_auditor": "Los eventos corresponden a fallos y excepciones de ejecución del procesador a nivel de kernel (bgl.kernel) en 20 nodos distintos de la infraestructura BlueGene/L. Destacan cinco interrupciones de almacenamiento de datos (dcbf e icbi), machine checks e instrucciones ilegales/privilegiadas que, conforme a los criterios y casos históricos de la organización, configuran una anomalía operativa crítica que requiere intervención sobre el clúster o los jobs en ejecución. No existen indicios de intrusión, persistencia, movimiento lateral ni actividad maliciosa.",
+  "cobertura_auditor": true,
+  "cobertura_suficiente": true,
+  "motivo_replanificacion": "",
+  "requiere_replanificacion": false,
+  "_firma": "v2|lineas=20 ips=0 servicios=[bgl.kernel:20] eventos=[evento_critico:20] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[FATAL:20] categorias=[] cobertura=1.0",
+  "_error_api": null,
+  "requiere_revision_humana": false,
+  "output_contract_version": "d11-v1",
+  "classification_detallada": "anomalia_operativa"
+ },
+ "observaciones": [
+  {
+   "nodo": "planificador",
+   "llamadas": [
+    0
+   ],
+   "prompt_chars": 2795,
+   "system_chars": 869,
+   "tokens": [
+    {
+     "input_tokens": 1602,
+     "output_tokens": 232,
+     "reasoning_tokens": 1138,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "triage",
+   "llamadas": [
+    1
+   ],
+   "prompt_chars": 8655,
+   "system_chars": 1394,
+   "tokens": [
+    {
+     "input_tokens": 4760,
+     "output_tokens": 218,
+     "reasoning_tokens": 747,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "selector",
+   "llamadas": [
+    2
+   ],
+   "prompt_chars": 822,
+   "system_chars": 344,
+   "tokens": [
+    {
+     "input_tokens": 284,
+     "output_tokens": 60,
+     "reasoning_tokens": 430,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "mitigacion",
+   "llamadas": [
+    3
+   ],
+   "prompt_chars": 6607,
+   "system_chars": 854,
+   "tokens": [
+    {
+     "input_tokens": 3253,
+     "output_tokens": 76,
+     "reasoning_tokens": 394,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "auditor",
+   "llamadas": [
+    4
+   ],
+   "prompt_chars": 20538,
+   "system_chars": 8455,
+   "tokens": [
+    {
+     "input_tokens": 10788,
+     "output_tokens": 1932,
+     "reasoning_tokens": 941,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  }
+ ],
+ "consultas_externas": []
+}

@@ -1,0 +1,914 @@
+{
+ "case_id": "bgl_des_natural_0006",
+ "dataset": "bgl",
+ "arquitectura": "nodex",
+ "segundos_pared_hijo": 53.326489399998536,
+ "estado": {
+  "resumen_logs": {
+   "formato_detectado": "bgl",
+   "total_lineas": 20,
+   "servicios": {
+    "bgl.kernel": 20
+   },
+   "eventos": {
+    "evento_normal": 20
+   },
+   "ventana_temporal": {
+    "inicio": "2005-07-13-19.36.05.649243",
+    "fin": "2005-07-13-20.19.17.435123"
+   },
+   "n_ips_distintas": 0,
+   "ips_distintas": [],
+   "por_ip": {},
+   "usuarios": {},
+   "n_usuarios_distintos": 0,
+   "codigos_respuesta": {},
+   "entidades": [],
+   "cronologia": [],
+   "cronologia_omitidos": 0,
+   "raw_procedencia": {
+    "sha256": "10a75d0b84fdb4f4c2266e0d3678fbb16027bd5d77b1ff6537825dcf9e0e89e2",
+    "lineas": 20,
+    "bytes": 2530
+   },
+   "reputacion_ips": {},
+   "perfil_lote": {
+    "tipo": "texto",
+    "filas": 20,
+    "con_formato_reconocido": 20,
+    "severidades": {
+     "INFO": 20
+    },
+    "componentes": {
+     "bgl.kernel": 20
+    },
+    "nodos": {
+     "R01-M0-NC-C:J12-U01": 1,
+     "R23-M0-NB-C:J05-U01": 1,
+     "R24-M0-N6-C:J15-U01": 1,
+     "R35-M1-NE-C:J09-U11": 1,
+     "R20-M0-N0-C:J06-U11": 1,
+     "R00-M1-N2-C:J02-U11": 1,
+     "R05-M1-N7-C:J15-U11": 1,
+     "R05-M0-NE-C:J04-U11": 1,
+     "R05-M0-N9-C:J07-U11": 1,
+     "R04-M1-N6-C:J12-U11": 1
+    },
+    "nodos_distintos": 20,
+    "lineas_severidad_alta": {
+     "total": 0,
+     "omitidas": 0,
+     "lineas": []
+    },
+    "grupos": 1
+   }
+  },
+  "preprocessing_metadata": {
+   "schema_version": "2.0",
+   "total_lineas_fisicas": 20,
+   "total_eventos": 20,
+   "decoder_distribution": {
+    "text": 20
+   },
+   "product_distribution": {
+    "BlueGene/L": 20
+   },
+   "vendor_distribution": {
+    "IBM": 20
+   },
+   "version_distribution": {},
+   "protocol_distribution": {},
+   "profile_distribution": {
+    "bgl": 20
+   },
+   "severity_distribution": {
+    "INFO": 20
+   },
+   "event_categories": {},
+   "event_outcomes": {},
+   "entities": {
+    "host": {
+     "R00-M1-N2-C:J02-U11": 1,
+     "R01-M0-NC-C:J12-U01": 1,
+     "R04-M1-N6-C:J12-U11": 1,
+     "R05-M0-N9-C:J07-U11": 1,
+     "R05-M0-NE-C:J04-U11": 1,
+     "R05-M1-N7-C:J15-U11": 1,
+     "R20-M0-N0-C:J06-U11": 1,
+     "R20-M1-ND-C:J05-U11": 1,
+     "R23-M0-NB-C:J05-U01": 1,
+     "R24-M0-N6-C:J15-U01": 1,
+     "R24-M0-NF-C:J15-U11": 1,
+     "R25-M0-NB-C:J03-U11": 1,
+     "R25-M1-N6-C:J07-U11": 1,
+     "R26-M0-N9-C:J08-U01": 1,
+     "R27-M0-N5-C:J10-U01": 1,
+     "R30-M1-NA-C:J14-U01": 1,
+     "R33-M1-ND-C:J05-U11": 1,
+     "R34-M1-NE-C:J03-U11": 1,
+     "R35-M1-NE-C:J09-U11": 1,
+     "R37-M0-ND-C:J03-U11": 1
+    },
+    "servicio": {
+     "bgl.kernel": 20
+    },
+    "producto": {
+     "BlueGene/L": 20
+    }
+   },
+   "time_window": {
+    "inicio": "2005-07-13-19.36.05.649243",
+    "fin": "2005-07-13-20.19.17.435123"
+   },
+   "parsing": {
+    "parsed_events": 20,
+    "fallback_events": 0,
+    "coverage": 1.0
+   },
+   "segments": [
+    {
+     "index": 0,
+     "decoder": "text",
+     "line_start": 1,
+     "line_end": 20,
+     "n_records": 20,
+     "confidence": 0.1,
+     "decoder_inicial": "text",
+     "confidence_inicial": 0.1,
+     "decoder_distribution": {
+      "text": 20
+     },
+     "context": {}
+    }
+   ],
+   "entities_resumen": {
+    "host": 20,
+    "servicio": 1,
+    "producto": 1
+   },
+   "config": {
+    "LOG_DETECTION_CHUNK_SIZE": 50,
+    "LOG_ENABLE_MULTILINE": true,
+    "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+    "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+    "LOG_MAX_EVENTS": 100000,
+    "LOG_MAX_FILE_BYTES": 52428800,
+    "LOG_MAX_RAW_SAMPLES": 20,
+    "LOG_MAX_UNMAPPED_FIELDS": 100,
+    "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+    "LOG_PARSING_MODE": "hybrid",
+    "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+    "LOG_PRESERVE_RAW": true
+   }
+  },
+  "parsing_warnings": [],
+  "evidencia_logs": [
+   {
+    "uid": "log_record_000001",
+    "record_number": 1,
+    "line_start": 1,
+    "line_end": 1,
+    "timestamp": "2005-07-13-19.36.05.649243",
+    "group_id": "G01",
+    "source_host": "R01-M0-NC-C:J12-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.5381"
+   },
+   {
+    "uid": "log_record_000002",
+    "record_number": 2,
+    "line_start": 2,
+    "line_end": 2,
+    "timestamp": "2005-07-13-19.37.35.130931",
+    "group_id": "G01",
+    "source_host": "R23-M0-NB-C:J05-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.27051"
+   },
+   {
+    "uid": "log_record_000003",
+    "record_number": 3,
+    "line_start": 3,
+    "line_end": 3,
+    "timestamp": "2005-07-13-19.37.57.813607",
+    "group_id": "G01",
+    "source_host": "R24-M0-N6-C:J15-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.29420"
+   },
+   {
+    "uid": "log_record_000004",
+    "record_number": 4,
+    "line_start": 4,
+    "line_end": 4,
+    "timestamp": "2005-07-13-19.38.27.805883",
+    "group_id": "G01",
+    "source_host": "R35-M1-NE-C:J09-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.8374"
+   },
+   {
+    "uid": "log_record_000005",
+    "record_number": 5,
+    "line_start": 5,
+    "line_end": 5,
+    "timestamp": "2005-07-13-19.39.17.229626",
+    "group_id": "G01",
+    "source_host": "R20-M0-N0-C:J06-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.15966"
+   },
+   {
+    "uid": "log_record_000006",
+    "record_number": 6,
+    "line_start": 6,
+    "line_end": 6,
+    "timestamp": "2005-07-13-19.45.00.645776",
+    "group_id": "G01",
+    "source_host": "R00-M1-N2-C:J02-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.7855"
+   },
+   {
+    "uid": "log_record_000007",
+    "record_number": 7,
+    "line_start": 7,
+    "line_end": 7,
+    "timestamp": "2005-07-13-19.45.38.909318",
+    "group_id": "G01",
+    "source_host": "R05-M1-N7-C:J15-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.2296"
+   },
+   {
+    "uid": "log_record_000008",
+    "record_number": 8,
+    "line_start": 8,
+    "line_end": 8,
+    "timestamp": "2005-07-13-19.45.41.015068",
+    "group_id": "G01",
+    "source_host": "R05-M0-NE-C:J04-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.1103"
+   },
+   {
+    "uid": "log_record_000009",
+    "record_number": 9,
+    "line_start": 9,
+    "line_end": 9,
+    "timestamp": "2005-07-13-19.46.09.666973",
+    "group_id": "G01",
+    "source_host": "R05-M0-N9-C:J07-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.2010"
+   },
+   {
+    "uid": "log_record_000010",
+    "record_number": 10,
+    "line_start": 10,
+    "line_end": 10,
+    "timestamp": "2005-07-13-19.46.26.896284",
+    "group_id": "G01",
+    "source_host": "R04-M1-N6-C:J12-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.3181"
+   },
+   {
+    "uid": "log_record_000011",
+    "record_number": 11,
+    "line_start": 11,
+    "line_end": 11,
+    "timestamp": "2005-07-13-20.14.27.766914",
+    "group_id": "G01",
+    "source_host": "R26-M0-N9-C:J08-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.32010"
+   },
+   {
+    "uid": "log_record_000012",
+    "record_number": 12,
+    "line_start": 12,
+    "line_end": 12,
+    "timestamp": "2005-07-13-20.15.09.106661",
+    "group_id": "G01",
+    "source_host": "R33-M1-ND-C:J05-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.9651"
+   },
+   {
+    "uid": "log_record_000013",
+    "record_number": 13,
+    "line_start": 13,
+    "line_end": 13,
+    "timestamp": "2005-07-13-20.15.15.724512",
+    "group_id": "G01",
+    "source_host": "R27-M0-N5-C:J10-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.10057"
+   },
+   {
+    "uid": "log_record_000014",
+    "record_number": 14,
+    "line_start": 14,
+    "line_end": 14,
+    "timestamp": "2005-07-13-20.15.26.655051",
+    "group_id": "G01",
+    "source_host": "R37-M0-ND-C:J03-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.5939"
+   },
+   {
+    "uid": "log_record_000015",
+    "record_number": 15,
+    "line_start": 15,
+    "line_end": 15,
+    "timestamp": "2005-07-13-20.17.02.167067",
+    "group_id": "G01",
+    "source_host": "R24-M0-NF-C:J15-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.12984"
+   },
+   {
+    "uid": "log_record_000016",
+    "record_number": 16,
+    "line_start": 16,
+    "line_end": 16,
+    "timestamp": "2005-07-13-20.17.08.205986",
+    "group_id": "G01",
+    "source_host": "R20-M1-ND-C:J05-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.17467"
+   },
+   {
+    "uid": "log_record_000017",
+    "record_number": 17,
+    "line_start": 17,
+    "line_end": 17,
+    "timestamp": "2005-07-13-20.18.29.526143",
+    "group_id": "G01",
+    "source_host": "R34-M1-NE-C:J03-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.29367"
+   },
+   {
+    "uid": "log_record_000018",
+    "record_number": 18,
+    "line_start": 18,
+    "line_end": 18,
+    "timestamp": "2005-07-13-20.18.31.598175",
+    "group_id": "G01",
+    "source_host": "R30-M1-NA-C:J14-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.14852"
+   },
+   {
+    "uid": "log_record_000019",
+    "record_number": 19,
+    "line_start": 19,
+    "line_end": 19,
+    "timestamp": "2005-07-13-20.19.01.767232",
+    "group_id": "G01",
+    "source_host": "R25-M1-N6-C:J07-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.4862"
+   },
+   {
+    "uid": "log_record_000020",
+    "record_number": 20,
+    "line_start": 20,
+    "line_end": 20,
+    "timestamp": "2005-07-13-20.19.17.435123",
+    "group_id": "G01",
+    "source_host": "R25-M0-NB-C:J03-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.27323"
+   }
+  ],
+  "evidencia_logs_omitidos": 0,
+  "grupos_evidencia": [
+   {
+    "group_id": "G01",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "generating core.<n>"
+    },
+    "conteo": 20,
+    "uids": [
+     "log_record_000001",
+     "log_record_000002",
+     "log_record_000003",
+     "log_record_000004",
+     "log_record_000005",
+     "log_record_000006",
+     "log_record_000007",
+     "log_record_000008",
+     "log_record_000009",
+     "log_record_000010",
+     "log_record_000011",
+     "log_record_000012",
+     "log_record_000013",
+     "log_record_000014",
+     "log_record_000015",
+     "log_record_000016",
+     "log_record_000017",
+     "log_record_000018",
+     "log_record_000019",
+     "log_record_000020"
+    ],
+    "nodos": [
+     "R01-M0-NC-C:J12-U01",
+     "R23-M0-NB-C:J05-U01",
+     "R24-M0-N6-C:J15-U01",
+     "R35-M1-NE-C:J09-U11",
+     "R20-M0-N0-C:J06-U11",
+     "R00-M1-N2-C:J02-U11",
+     "R05-M1-N7-C:J15-U11",
+     "R05-M0-NE-C:J04-U11",
+     "R05-M0-N9-C:J07-U11",
+     "R04-M1-N6-C:J12-U11",
+     "R26-M0-N9-C:J08-U01",
+     "R33-M1-ND-C:J05-U11",
+     "R27-M0-N5-C:J10-U01",
+     "R37-M0-ND-C:J03-U11",
+     "R24-M0-NF-C:J15-U11",
+     "R20-M1-ND-C:J05-U11",
+     "R34-M1-NE-C:J03-U11",
+     "R30-M1-NA-C:J14-U01",
+     "R25-M1-N6-C:J07-U11",
+     "R25-M0-NB-C:J03-U11"
+    ],
+    "n_nodos": 20
+   }
+  ],
+  "contenido_lote": {
+   "tipo": "texto",
+   "lineas": [
+    "[log_record_000001] 1121308565 2005.07.13 R01-M0-NC-C:J12-U01 2005-07-13-19.36.05.649243 R01-M0-NC-C:J12-U01 RAS KERNEL INFO generating core.5381",
+    "[log_record_000002] 1121308655 2005.07.13 R23-M0-NB-C:J05-U01 2005-07-13-19.37.35.130931 R23-M0-NB-C:J05-U01 RAS KERNEL INFO generating core.27051",
+    "[log_record_000003] 1121308677 2005.07.13 R24-M0-N6-C:J15-U01 2005-07-13-19.37.57.813607 R24-M0-N6-C:J15-U01 RAS KERNEL INFO generating core.29420",
+    "[log_record_000004] 1121308707 2005.07.13 R35-M1-NE-C:J09-U11 2005-07-13-19.38.27.805883 R35-M1-NE-C:J09-U11 RAS KERNEL INFO generating core.8374",
+    "[log_record_000005] 1121308757 2005.07.13 R20-M0-N0-C:J06-U11 2005-07-13-19.39.17.229626 R20-M0-N0-C:J06-U11 RAS KERNEL INFO generating core.15966",
+    "[log_record_000006] 1121309100 2005.07.13 R00-M1-N2-C:J02-U11 2005-07-13-19.45.00.645776 R00-M1-N2-C:J02-U11 RAS KERNEL INFO generating core.7855",
+    "[log_record_000007] 1121309138 2005.07.13 R05-M1-N7-C:J15-U11 2005-07-13-19.45.38.909318 R05-M1-N7-C:J15-U11 RAS KERNEL INFO generating core.2296",
+    "[log_record_000008] 1121309141 2005.07.13 R05-M0-NE-C:J04-U11 2005-07-13-19.45.41.015068 R05-M0-NE-C:J04-U11 RAS KERNEL INFO generating core.1103",
+    "[log_record_000009] 1121309169 2005.07.13 R05-M0-N9-C:J07-U11 2005-07-13-19.46.09.666973 R05-M0-N9-C:J07-U11 RAS KERNEL INFO generating core.2010",
+    "[log_record_000010] 1121309186 2005.07.13 R04-M1-N6-C:J12-U11 2005-07-13-19.46.26.896284 R04-M1-N6-C:J12-U11 RAS KERNEL INFO generating core.3181",
+    "[log_record_000011] 1121310867 2005.07.13 R26-M0-N9-C:J08-U01 2005-07-13-20.14.27.766914 R26-M0-N9-C:J08-U01 RAS KERNEL INFO generating core.32010",
+    "[log_record_000012] 1121310909 2005.07.13 R33-M1-ND-C:J05-U11 2005-07-13-20.15.09.106661 R33-M1-ND-C:J05-U11 RAS KERNEL INFO generating core.9651",
+    "[log_record_000013] 1121310915 2005.07.13 R27-M0-N5-C:J10-U01 2005-07-13-20.15.15.724512 R27-M0-N5-C:J10-U01 RAS KERNEL INFO generating core.10057",
+    "[log_record_000014] 1121310926 2005.07.13 R37-M0-ND-C:J03-U11 2005-07-13-20.15.26.655051 R37-M0-ND-C:J03-U11 RAS KERNEL INFO generating core.5939",
+    "[log_record_000015] 1121311022 2005.07.13 R24-M0-NF-C:J15-U11 2005-07-13-20.17.02.167067 R24-M0-NF-C:J15-U11 RAS KERNEL INFO generating core.12984",
+    "[log_record_000016] 1121311028 2005.07.13 R20-M1-ND-C:J05-U11 2005-07-13-20.17.08.205986 R20-M1-ND-C:J05-U11 RAS KERNEL INFO generating core.17467",
+    "[log_record_000017] 1121311109 2005.07.13 R34-M1-NE-C:J03-U11 2005-07-13-20.18.29.526143 R34-M1-NE-C:J03-U11 RAS KERNEL INFO generating core.29367",
+    "[log_record_000018] 1121311111 2005.07.13 R30-M1-NA-C:J14-U01 2005-07-13-20.18.31.598175 R30-M1-NA-C:J14-U01 RAS KERNEL INFO generating core.14852",
+    "[log_record_000019] 1121311141 2005.07.13 R25-M1-N6-C:J07-U11 2005-07-13-20.19.01.767232 R25-M1-N6-C:J07-U11 RAS KERNEL INFO generating core.4862",
+    "[log_record_000020] 1121311157 2005.07.13 R25-M0-NB-C:J03-U11 2005-07-13-20.19.17.435123 R25-M0-NB-C:J03-U11 RAS KERNEL INFO generating core.27323"
+   ],
+   "total_lineas": 20,
+   "lineas_entregadas": 20,
+   "recortado": false,
+   "topes": {
+    "lineas": 200,
+    "caracteres": 20000
+   }
+  },
+  "veredicto_preliminar": "normal",
+  "justificacion_veredicto_preliminar": "Todos los eventos son registros INFO de generación de core dumps de aplicaciones sin indicios de fallos del kernel ni eventos FATAL.",
+  "invalid_evidence_group_count": 0,
+  "comandos_rechazados": [],
+  "casos_historicos": [
+   {
+    "id": "bgl_des_balanceado_0003",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Composición: 20 eventos, severidades INFO 20.",
+    "similitud": 1.0
+   },
+   {
+    "id": "bgl_des_natural_0007",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Composición: 20 eventos, severidades INFO 20.",
+    "similitud": 1.0
+   },
+   {
+    "id": "uwf_hist_008",
+    "dataset": "uwf",
+    "etiqueta": "malicioso",
+    "clase": "anomala",
+    "descripcion": "Malicioso (Reconnaissance; T1592). Actividad del incidente: 1 conexiones (tcp gssapi 1), 1 puertos de destino distintos, estados SF 1. Resto del lote: 3 conexiones de fondo (protocolos - 3).",
+    "similitud": 0.873
+   },
+   {
+    "id": "bgl_des_natural_0000",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "clase": "anomala",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 1 × [FATAL bgl.kernel] rts: kernel terminated for reason <n>. Composición: 20 eventos, severidades INFO 19, FATAL 1.",
+    "similitud": 0.64
+   }
+  ],
+  "historico_consulta": {
+   "excluidos_por_solapamiento": [
+    "rag_enriquecido_v2:bgl_des_natural_0006"
+   ],
+   "consultados": 56,
+   "contrastiva": true,
+   "k_por_clase": 2,
+   "tipo": "texto",
+   "omitidos_otro_tipo": 31,
+   "excluidos_mismo_incidente": [],
+   "exclusion_por_incidente_activa": true,
+   "representacion": "Eventos destacados: ninguno\nLog de texto, 20 eventos. Severidades: INFO 20. Componentes: bgl.kernel 20. Nodos distintos: 20."
+  },
+  "hallazgos_cazador": [],
+  "cazador_ejecutado": false,
+  "veredicto_consolidado": "normal",
+  "consulta_mitre": "",
+  "rag_omitido": "sin hipótesis de seguridad: no se consultan técnicas",
+  "revision_hallazgos": [],
+  "diagnostico_inicial": "",
+  "diagnostico_corregido": "",
+  "correcciones_auditor": 0,
+  "historial_correcciones": [],
+  "memoria_grupos": {},
+  "memoria_grupos_consulta": {
+   "excluidos_por_solapamiento": [],
+   "consultados": 0
+  },
+  "eventos_reconstruidos": [
+   {
+    "event_id": "event_001",
+    "evidence_uids": [
+     "log_record_000001",
+     "log_record_000002",
+     "log_record_000003",
+     "log_record_000004",
+     "log_record_000005",
+     "log_record_000006",
+     "log_record_000007",
+     "log_record_000008",
+     "log_record_000009",
+     "log_record_000010",
+     "log_record_000011",
+     "log_record_000012",
+     "log_record_000013",
+     "log_record_000014",
+     "log_record_000015",
+     "log_record_000016",
+     "log_record_000017",
+     "log_record_000018",
+     "log_record_000019",
+     "log_record_000020"
+    ],
+    "timestamp": "2005-07-13-19.36.05.649243",
+    "event_type": "core_dump_generation",
+    "description": "Generación de archivos core dump asociados a procesos en nodos de cómputo BlueGene/L con severidad INFO",
+    "confidence": null,
+    "evidence_groups": [
+     "G01"
+    ],
+    "categoria": "contexto"
+   }
+  ],
+  "secuencia_temporal": [
+   "event_001"
+  ],
+  "tecnicas_atribuidas": [],
+  "invalid_evidence_uid_count": 0,
+  "d11_warnings": [],
+  "telemetry": {
+   "llm_call_count": 5,
+   "input_tokens": 10827,
+   "output_tokens": 801,
+   "total_tokens": 13670,
+   "execution_time": 37.590465,
+   "replan_count": 0,
+   "intentos_correccion": 1,
+   "invalid_evidence_uid_count": 0,
+   "d11_warning_count": 0,
+   "llm_calls": [
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 942,
+     "output_tokens": 228,
+     "total_tokens": 1638,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 468,
+     "duration_s": 8.691,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 3762,
+     "output_tokens": 157,
+     "total_tokens": 4729,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 810,
+     "duration_s": 10.377,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 225,
+     "output_tokens": 58,
+     "total_tokens": 453,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 170,
+     "duration_s": 5.678,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 800,
+     "output_tokens": 5,
+     "total_tokens": 907,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 102,
+     "duration_s": 4.284,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 5098,
+     "output_tokens": 353,
+     "total_tokens": 5943,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 492,
+     "duration_s": 8.416,
+     "error": null
+    }
+   ]
+  },
+  "firma": "v2|lineas=20 ips=0 servicios=[bgl.kernel:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[INFO:20] categorias=[] cobertura=1.0",
+  "plan": {
+   "plan_version": 1,
+   "objetivo": "Evaluar la normalidad operativa y descartar riesgos de seguridad o vulnerabilidades conocidas en los eventos informativos del kernel de BlueGene/L.",
+   "pasos": [
+    {
+     "id": 1,
+     "accion": "triage",
+     "objetivo": "Analizar los 20 eventos informativos de bgl.kernel y confirmar la ausencia de anomalías de seguridad.",
+     "estado": "ejecutado"
+    },
+    {
+     "id": 2,
+     "accion": "cve",
+     "objetivo": "Consultar vulnerabilidades conocidas asociadas al sistema BlueGene/L y sus componentes de kernel.",
+     "estado": "omitido",
+     "motivo": "El diagnóstico indica actividad rutinaria de nivel informativo (generación de core dumps de procesos de usuario) sin indicios de ataques, anomalías críticas ni vulnerabilidades específicas que justifiquen una búsqueda de CVEs."
+    },
+    {
+     "id": 3,
+     "accion": "mitigacion",
+     "objetivo": "Formular recomendaciones de monitorización continua y directrices operativas según los hallazgos.",
+     "estado": "ejecutado"
+    }
+   ],
+   "criterios_finalizacion": [
+    "Confirmación del estado benigno de los registros de kernel analizados.",
+    "Revisión completada de posibles vulnerabilidades conocidas asociadas al producto.",
+    "Propuesta de pautas de supervisión o mitigación preventiva establecida."
+   ]
+  },
+  "plan_objetivo": "Evaluar la normalidad operativa y descartar riesgos de seguridad o vulnerabilidades conocidas en los eventos informativos del kernel de BlueGene/L.",
+  "paso_actual": 3,
+  "historial_ejecucion": [
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_planificador",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "plan v1, 3 pasos: ['triage', 'cve', 'mitigacion']"
+   },
+   {
+    "plan_version": 1,
+    "step_id": 1,
+    "nodo": "agente_analista_triage",
+    "accion": "triage",
+    "estado": "ejecutado",
+    "resumen": "diagnóstico producido"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_cazador",
+    "accion": null,
+    "estado": "omitido",
+    "resumen": "sin grupos con señal que examinar"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "tool_consultar_rag",
+    "accion": "rag",
+    "estado": "omitido",
+    "resumen": "técnicas MITRE no consultadas (sin hipótesis de seguridad: no se consultan técnicas)"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_selector_herramientas",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "usar_cve=False"
+   },
+   {
+    "plan_version": 1,
+    "step_id": 3,
+    "nodo": "agente_ingeniero_mitigacion",
+    "accion": "mitigacion",
+    "estado": "ejecutado",
+    "resumen": "0 comandos propuestos"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "tool_validar_comandos",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "comandos válidos"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_auditor_final",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "confianza=0.98 cobertura_suficiente=True"
+   }
+  ],
+  "desviaciones_plan": [],
+  "historial_planes": [],
+  "replan_count": 0,
+  "diagnostico": "El lote contiene 20 registros informativos del kernel de BlueGene/L distribuidos en diversos nodos de cómputo, documentando la generación rutinaria de archivos core dump ('generating core') asociados a procesos de usuario. No se observan terminaciones anómalas del kernel del sistema ('rts: kernel terminated'), eventos con severidad FATAL, ni patrones de actividad maliciosa o de reconocimiento como los descritos en los casos históricos de alerta.",
+  "necesita_rag": false,
+  "usar_cve": false,
+  "razon_seleccion": "El diagnóstico indica actividad rutinaria de nivel informativo (generación de core dumps de procesos de usuario) sin indicios de ataques, anomalías críticas ni vulnerabilidades específicas que justifiquen una búsqueda de CVEs.",
+  "contexto_rag": [
+   {
+    "id": "bgl_des_balanceado_0003",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Composición: 20 eventos, severidades INFO 20.",
+    "similitud": 1.0
+   },
+   {
+    "id": "bgl_des_natural_0007",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Composición: 20 eventos, severidades INFO 20.",
+    "similitud": 1.0
+   },
+   {
+    "id": "uwf_hist_008",
+    "dataset": "uwf",
+    "etiqueta": "malicioso",
+    "clase": "anomala",
+    "descripcion": "Malicioso (Reconnaissance; T1592). Actividad del incidente: 1 conexiones (tcp gssapi 1), 1 puertos de destino distintos, estados SF 1. Resto del lote: 3 conexiones de fondo (protocolos - 3).",
+    "similitud": 0.873
+   },
+   {
+    "id": "bgl_des_natural_0000",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "clase": "anomala",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 1 × [FATAL bgl.kernel] rts: kernel terminated for reason <n>. Composición: 20 eventos, severidades INFO 19, FATAL 1.",
+    "similitud": 0.64
+   }
+  ],
+  "tecnicas_mitre": [],
+  "cves_encontrados": [],
+  "comandos_mitigacion": [],
+  "comandos_validos": true,
+  "motivos_rechazo": [],
+  "intentos_correccion": 1,
+  "confianza": 0.98,
+  "hay_incidente": false,
+  "hay_anomalia": false,
+  "evaluacion_auditor": "El lote se compone exclusivamente de 20 mensajes informativos (INFO) del kernel de BlueGene/L que registran la generación rutinaria de archivos core dump por procesos de usuario ('generating core.<n>'). No se observa ningún mensaje de terminación anómala del kernel ('rts: kernel terminated') con severidad FATAL, ni indicios de actividad maliciosa. El comportamiento coincide plenamente con los casos históricos clasificados como normales por la organización.",
+  "cobertura_auditor": true,
+  "cobertura_suficiente": true,
+  "motivo_replanificacion": "",
+  "requiere_replanificacion": false,
+  "_firma": "v2|lineas=20 ips=0 servicios=[bgl.kernel:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[INFO:20] categorias=[] cobertura=1.0",
+  "_error_api": null,
+  "requiere_revision_humana": false,
+  "output_contract_version": "d11-v1",
+  "classification_detallada": "normal"
+ },
+ "observaciones": [
+  {
+   "nodo": "planificador",
+   "llamadas": [
+    0
+   ],
+   "prompt_chars": 1372,
+   "system_chars": 869,
+   "tokens": [
+    {
+     "input_tokens": 942,
+     "output_tokens": 228,
+     "reasoning_tokens": 468,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "triage",
+   "llamadas": [
+    1
+   ],
+   "prompt_chars": 5872,
+   "system_chars": 1394,
+   "tokens": [
+    {
+     "input_tokens": 3762,
+     "output_tokens": 157,
+     "reasoning_tokens": 810,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "selector",
+   "llamadas": [
+    2
+   ],
+   "prompt_chars": 570,
+   "system_chars": 344,
+   "tokens": [
+    {
+     "input_tokens": 225,
+     "output_tokens": 58,
+     "reasoning_tokens": 170,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "mitigacion",
+   "llamadas": [
+    3
+   ],
+   "prompt_chars": 1901,
+   "system_chars": 854,
+   "tokens": [
+    {
+     "input_tokens": 800,
+     "output_tokens": 5,
+     "reasoning_tokens": 102,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "auditor",
+   "llamadas": [
+    4
+   ],
+   "prompt_chars": 8440,
+   "system_chars": 4839,
+   "tokens": [
+    {
+     "input_tokens": 5098,
+     "output_tokens": 353,
+     "reasoning_tokens": 492,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  }
+ ],
+ "consultas_externas": []
+}

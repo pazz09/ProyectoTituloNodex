@@ -1,0 +1,1090 @@
+{
+ "case_id": "bgl_des_balanceado_0001",
+ "dataset": "bgl",
+ "arquitectura": "nodex",
+ "segundos_pared_hijo": 75.83577829999922,
+ "estado": {
+  "resumen_logs": {
+   "formato_detectado": "bgl",
+   "total_lineas": 20,
+   "servicios": {
+    "bgl.kernel": 19,
+    "bgl.app": 1
+   },
+   "eventos": {
+    "evento_critico": 3,
+    "evento_normal": 17
+   },
+   "ventana_temporal": {
+    "inicio": "2005-07-11-07.12.53.947417",
+    "fin": "2005-07-13-03.58.30.362009"
+   },
+   "n_ips_distintas": 0,
+   "ips_distintas": [],
+   "por_ip": {},
+   "usuarios": {},
+   "n_usuarios_distintos": 0,
+   "codigos_respuesta": {},
+   "entidades": [],
+   "cronologia": [
+    {
+     "n": 2,
+     "timestamp": "2005-07-11-12.54.51.738880",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1121111691 2005.07.11 R22-M0-N0-I:J18-U11 2005-07-11-12.54.51.738880 R22-M0-N0-I:J18-U11 RAS APP FATAL ciod: Error loading /home/greeno/raptor.new.dev.3d.BGL.CXX_XL.MPI.ex: invalid…"
+    },
+    {
+     "n": 3,
+     "timestamp": "2005-07-11-14.03.37.675251",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1121115817 2005.07.11 R01-M0-N1-C:J09-U11 2005-07-11-14.03.37.675251 R01-M0-N1-C:J09-U11 RAS KERNEL FATAL rts panic! - stopping execution"
+    },
+    {
+     "n": 4,
+     "timestamp": "2005-07-11-14.03.39.101778",
+     "servicio": "bgl.kernel",
+     "evento": "evento_critico",
+     "mensaje": "1121115819 2005.07.11 R04-M0-N1-C:J02-U01 2005-07-11-14.03.39.101778 R04-M0-N1-C:J02-U01 RAS KERNEL FATAL rts panic! - stopping execution"
+    }
+   ],
+   "cronologia_omitidos": 0,
+   "raw_procedencia": {
+    "sha256": "ad18bdd3370a748edf30659a0c46f4da63ec4f3bd12b460ac21d919fd1a4ca95",
+    "lineas": 20,
+    "bytes": 2741
+   },
+   "reputacion_ips": {},
+   "perfil_lote": {
+    "tipo": "texto",
+    "filas": 20,
+    "con_formato_reconocido": 20,
+    "severidades": {
+     "INFO": 17,
+     "FATAL": 3
+    },
+    "componentes": {
+     "bgl.kernel": 19,
+     "bgl.app": 1
+    },
+    "nodos": {
+     "R30-M0-NB-C:J09-U01": 1,
+     "R22-M0-N0-I:J18-U11": 1,
+     "R01-M0-N1-C:J09-U11": 1,
+     "R04-M0-N1-C:J02-U01": 1,
+     "R37-M1-N6-C:J03-U11": 1,
+     "R27-M1-NB-C:J12-U11": 1,
+     "R26-M1-N1-C:J16-U01": 1,
+     "R31-M0-NA-C:J03-U11": 1,
+     "R34-M0-N2-C:J04-U11": 1,
+     "R25-M0-ND-C:J09-U01": 1
+    },
+    "nodos_distintos": 20,
+    "lineas_severidad_alta": {
+     "total": 3,
+     "omitidas": 0,
+     "lineas": [
+      {
+       "uid": "log_record_000002",
+       "severidad": "FATAL",
+       "group_id": "G02"
+      },
+      {
+       "uid": "log_record_000003",
+       "severidad": "FATAL",
+       "group_id": "G03"
+      },
+      {
+       "uid": "log_record_000004",
+       "severidad": "FATAL",
+       "group_id": "G03"
+      }
+     ]
+    },
+    "grupos": 6
+   }
+  },
+  "preprocessing_metadata": {
+   "schema_version": "2.0",
+   "total_lineas_fisicas": 20,
+   "total_eventos": 20,
+   "decoder_distribution": {
+    "text": 20
+   },
+   "product_distribution": {
+    "BlueGene/L": 20
+   },
+   "vendor_distribution": {
+    "IBM": 20
+   },
+   "version_distribution": {},
+   "protocol_distribution": {},
+   "profile_distribution": {
+    "bgl": 20
+   },
+   "severity_distribution": {
+    "INFO": 17,
+    "FATAL": 3
+   },
+   "event_categories": {},
+   "event_outcomes": {},
+   "entities": {
+    "host": {
+     "R01-M0-N1-C:J09-U11": 1,
+     "R04-M0-N1-C:J02-U01": 1,
+     "R11-M1-N3-C:J07-U11": 1,
+     "R11-M1-N6-C:J16-U11": 1,
+     "R15-M0-N8-C:J02-U11": 1,
+     "R16-M1-N1-C:J05-U01": 1,
+     "R17-M0-NF-C:J10-U11": 1,
+     "R22-M0-N0-I:J18-U11": 1,
+     "R22-M1-N0-C:J10-U11": 1,
+     "R24-M0-N1-C:J03-U01": 1,
+     "R25-M0-ND-C:J09-U01": 1,
+     "R26-M1-N1-C:J16-U01": 1,
+     "R27-M1-NB-C:J12-U11": 1,
+     "R30-M0-NB-C:J09-U01": 1,
+     "R31-M0-NA-C:J03-U11": 1,
+     "R33-M1-NE-C:J07-U01": 1,
+     "R34-M0-N2-C:J04-U11": 1,
+     "R34-M1-N4-C:J07-U11": 1,
+     "R34-M1-N4-C:J10-U01": 1,
+     "R37-M1-N6-C:J03-U11": 1
+    },
+    "servicio": {
+     "bgl.kernel": 19,
+     "bgl.app": 1
+    },
+    "producto": {
+     "BlueGene/L": 20
+    }
+   },
+   "time_window": {
+    "inicio": "2005-07-11-07.12.53.947417",
+    "fin": "2005-07-13-03.58.30.362009"
+   },
+   "parsing": {
+    "parsed_events": 20,
+    "fallback_events": 0,
+    "coverage": 1.0
+   },
+   "segments": [
+    {
+     "index": 0,
+     "decoder": "text",
+     "line_start": 1,
+     "line_end": 20,
+     "n_records": 20,
+     "confidence": 0.1,
+     "decoder_inicial": "text",
+     "confidence_inicial": 0.1,
+     "decoder_distribution": {
+      "text": 20
+     },
+     "context": {}
+    }
+   ],
+   "entities_resumen": {
+    "host": 20,
+    "servicio": 2,
+    "producto": 1
+   },
+   "config": {
+    "LOG_DETECTION_CHUNK_SIZE": 50,
+    "LOG_ENABLE_MULTILINE": true,
+    "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+    "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+    "LOG_MAX_EVENTS": 100000,
+    "LOG_MAX_FILE_BYTES": 52428800,
+    "LOG_MAX_RAW_SAMPLES": 20,
+    "LOG_MAX_UNMAPPED_FIELDS": 100,
+    "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+    "LOG_PARSING_MODE": "hybrid",
+    "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+    "LOG_PRESERVE_RAW": true
+   }
+  },
+  "parsing_warnings": [],
+  "evidencia_logs": [
+   {
+    "uid": "log_record_000001",
+    "record_number": 1,
+    "line_start": 1,
+    "line_end": 1,
+    "timestamp": "2005-07-11-07.12.53.947417",
+    "group_id": "G01",
+    "source_host": "R30-M0-NB-C:J09-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "CE sym 2, at 0x0d09f1c0, mask 0x80"
+   },
+   {
+    "uid": "log_record_000002",
+    "record_number": 2,
+    "line_start": 2,
+    "line_end": 2,
+    "timestamp": "2005-07-11-12.54.51.738880",
+    "group_id": "G02",
+    "source_host": "R22-M0-N0-I:J18-U11",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: Error loading /home/greeno/raptor.new.dev.3d.BGL.CXX_XL.MPI.ex: invalid or missing program image, No such file or directory"
+   },
+   {
+    "uid": "log_record_000003",
+    "record_number": 3,
+    "line_start": 3,
+    "line_end": 3,
+    "timestamp": "2005-07-11-14.03.37.675251",
+    "group_id": "G03",
+    "source_host": "R01-M0-N1-C:J09-U11",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "rts panic! - stopping execution"
+   },
+   {
+    "uid": "log_record_000004",
+    "record_number": 4,
+    "line_start": 4,
+    "line_end": 4,
+    "timestamp": "2005-07-11-14.03.39.101778",
+    "group_id": "G03",
+    "source_host": "R04-M0-N1-C:J02-U01",
+    "service_name": "bgl.kernel",
+    "severity": "FATAL",
+    "message": "rts panic! - stopping execution"
+   },
+   {
+    "uid": "log_record_000005",
+    "record_number": 5,
+    "line_start": 5,
+    "line_end": 5,
+    "timestamp": "2005-07-12-05.41.28.215496",
+    "group_id": "G04",
+    "source_host": "R37-M1-N6-C:J03-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.9079"
+   },
+   {
+    "uid": "log_record_000006",
+    "record_number": 6,
+    "line_start": 6,
+    "line_end": 6,
+    "timestamp": "2005-07-12-05.43.37.421103",
+    "group_id": "G04",
+    "source_host": "R27-M1-NB-C:J12-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.6425"
+   },
+   {
+    "uid": "log_record_000007",
+    "record_number": 7,
+    "line_start": 7,
+    "line_end": 7,
+    "timestamp": "2005-07-12-05.43.59.502921",
+    "group_id": "G04",
+    "source_host": "R26-M1-N1-C:J16-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.3400"
+   },
+   {
+    "uid": "log_record_000008",
+    "record_number": 8,
+    "line_start": 8,
+    "line_end": 8,
+    "timestamp": "2005-07-12-05.44.18.854186",
+    "group_id": "G04",
+    "source_host": "R31-M0-NA-C:J03-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.6711"
+   },
+   {
+    "uid": "log_record_000009",
+    "record_number": 9,
+    "line_start": 9,
+    "line_end": 9,
+    "timestamp": "2005-07-12-05.44.26.319459",
+    "group_id": "G04",
+    "source_host": "R34-M0-N2-C:J04-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.2263"
+   },
+   {
+    "uid": "log_record_000010",
+    "record_number": 10,
+    "line_start": 10,
+    "line_end": 10,
+    "timestamp": "2005-07-12-05.45.11.854624",
+    "group_id": "G04",
+    "source_host": "R25-M0-ND-C:J09-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.9386"
+   },
+   {
+    "uid": "log_record_000011",
+    "record_number": 11,
+    "line_start": 11,
+    "line_end": 11,
+    "timestamp": "2005-07-12-05.47.32.414558",
+    "group_id": "G04",
+    "source_host": "R22-M1-N0-C:J10-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.4061"
+   },
+   {
+    "uid": "log_record_000012",
+    "record_number": 12,
+    "line_start": 12,
+    "line_end": 12,
+    "timestamp": "2005-07-12-05.48.32.532637",
+    "group_id": "G04",
+    "source_host": "R34-M1-N4-C:J07-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.14070"
+   },
+   {
+    "uid": "log_record_000013",
+    "record_number": 13,
+    "line_start": 13,
+    "line_end": 13,
+    "timestamp": "2005-07-12-05.48.32.925986",
+    "group_id": "G04",
+    "source_host": "R34-M1-N4-C:J10-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.14021"
+   },
+   {
+    "uid": "log_record_000014",
+    "record_number": 14,
+    "line_start": 14,
+    "line_end": 14,
+    "timestamp": "2005-07-12-05.53.42.889632",
+    "group_id": "G04",
+    "source_host": "R16-M1-N1-C:J05-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.1715"
+   },
+   {
+    "uid": "log_record_000015",
+    "record_number": 15,
+    "line_start": 15,
+    "line_end": 15,
+    "timestamp": "2005-07-12-05.53.53.558095",
+    "group_id": "G04",
+    "source_host": "R17-M0-NF-C:J10-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.4489"
+   },
+   {
+    "uid": "log_record_000016",
+    "record_number": 16,
+    "line_start": 16,
+    "line_end": 16,
+    "timestamp": "2005-07-12-05.55.57.631026",
+    "group_id": "G04",
+    "source_host": "R11-M1-N6-C:J16-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.2092"
+   },
+   {
+    "uid": "log_record_000017",
+    "record_number": 17,
+    "line_start": 17,
+    "line_end": 17,
+    "timestamp": "2005-07-12-05.56.28.419299",
+    "group_id": "G04",
+    "source_host": "R15-M0-N8-C:J02-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.5967"
+   },
+   {
+    "uid": "log_record_000018",
+    "record_number": 18,
+    "line_start": 18,
+    "line_end": 18,
+    "timestamp": "2005-07-13-00.07.43.091930",
+    "group_id": "G05",
+    "source_host": "R11-M1-N3-C:J07-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "total of 1 ddr error(s) detected and corrected"
+   },
+   {
+    "uid": "log_record_000019",
+    "record_number": 19,
+    "line_start": 19,
+    "line_end": 19,
+    "timestamp": "2005-07-13-03.58.01.460537",
+    "group_id": "G06",
+    "source_host": "R33-M1-NE-C:J07-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "118661512 double-hummer alignment exceptions"
+   },
+   {
+    "uid": "log_record_000020",
+    "record_number": 20,
+    "line_start": 20,
+    "line_end": 20,
+    "timestamp": "2005-07-13-03.58.30.362009",
+    "group_id": "G06",
+    "source_host": "R24-M0-N1-C:J03-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "112099344 double-hummer alignment exceptions"
+   }
+  ],
+  "evidencia_logs_omitidos": 0,
+  "grupos_evidencia": [
+   {
+    "group_id": "G01",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "CE sym <n>, at <hex>, mask <hex>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000001"
+    ],
+    "nodos": [
+     "R30-M0-NB-C:J09-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G02",
+    "clave": {
+     "componente": "bgl.app",
+     "severidad": "FATAL",
+     "plantilla": "ciod: Error loading /home/greeno/raptor.new.dev.<n>d.BGL.CXX_XL.MPI.ex: invalid or missing program image, No such file o"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000002"
+    ],
+    "nodos": [
+     "R22-M0-N0-I:J18-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G03",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "FATAL",
+     "plantilla": "rts panic! - stopping execution"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000003",
+     "log_record_000004"
+    ],
+    "nodos": [
+     "R01-M0-N1-C:J09-U11",
+     "R04-M0-N1-C:J02-U01"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G04",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "generating core.<n>"
+    },
+    "conteo": 13,
+    "uids": [
+     "log_record_000005",
+     "log_record_000006",
+     "log_record_000007",
+     "log_record_000008",
+     "log_record_000009",
+     "log_record_000010",
+     "log_record_000011",
+     "log_record_000012",
+     "log_record_000013",
+     "log_record_000014",
+     "log_record_000015",
+     "log_record_000016",
+     "log_record_000017"
+    ],
+    "nodos": [
+     "R37-M1-N6-C:J03-U11",
+     "R27-M1-NB-C:J12-U11",
+     "R26-M1-N1-C:J16-U01",
+     "R31-M0-NA-C:J03-U11",
+     "R34-M0-N2-C:J04-U11",
+     "R25-M0-ND-C:J09-U01",
+     "R22-M1-N0-C:J10-U11",
+     "R34-M1-N4-C:J07-U11",
+     "R34-M1-N4-C:J10-U01",
+     "R16-M1-N1-C:J05-U01",
+     "R17-M0-NF-C:J10-U11",
+     "R11-M1-N6-C:J16-U11",
+     "R15-M0-N8-C:J02-U11"
+    ],
+    "n_nodos": 13
+   },
+   {
+    "group_id": "G05",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "total of <n> ddr error(s) detected and corrected"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000018"
+    ],
+    "nodos": [
+     "R11-M1-N3-C:J07-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G06",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "<n> double-hummer alignment exceptions"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000019",
+     "log_record_000020"
+    ],
+    "nodos": [
+     "R33-M1-NE-C:J07-U01",
+     "R24-M0-N1-C:J03-U01"
+    ],
+    "n_nodos": 2
+   }
+  ],
+  "contenido_lote": {
+   "tipo": "texto",
+   "lineas": [
+    "[log_record_000001] 1121091173 2005.07.11 R30-M0-NB-C:J09-U01 2005-07-11-07.12.53.947417 R30-M0-NB-C:J09-U01 RAS KERNEL INFO CE sym 2, at 0x0d09f1c0, mask 0x80",
+    "[log_record_000002] 1121111691 2005.07.11 R22-M0-N0-I:J18-U11 2005-07-11-12.54.51.738880 R22-M0-N0-I:J18-U11 RAS APP FATAL ciod: Error loading /home/greeno/raptor.new.dev.3d.BGL.CXX_XL.MPI.ex: invalid or missing program image, No such file or directory",
+    "[log_record_000003] 1121115817 2005.07.11 R01-M0-N1-C:J09-U11 2005-07-11-14.03.37.675251 R01-M0-N1-C:J09-U11 RAS KERNEL FATAL rts panic! - stopping execution",
+    "[log_record_000004] 1121115819 2005.07.11 R04-M0-N1-C:J02-U01 2005-07-11-14.03.39.101778 R04-M0-N1-C:J02-U01 RAS KERNEL FATAL rts panic! - stopping execution",
+    "[log_record_000005] 1121172088 2005.07.12 R37-M1-N6-C:J03-U11 2005-07-12-05.41.28.215496 R37-M1-N6-C:J03-U11 RAS KERNEL INFO generating core.9079",
+    "[log_record_000006] 1121172217 2005.07.12 R27-M1-NB-C:J12-U11 2005-07-12-05.43.37.421103 R27-M1-NB-C:J12-U11 RAS KERNEL INFO generating core.6425",
+    "[log_record_000007] 1121172239 2005.07.12 R26-M1-N1-C:J16-U01 2005-07-12-05.43.59.502921 R26-M1-N1-C:J16-U01 RAS KERNEL INFO generating core.3400",
+    "[log_record_000008] 1121172258 2005.07.12 R31-M0-NA-C:J03-U11 2005-07-12-05.44.18.854186 R31-M0-NA-C:J03-U11 RAS KERNEL INFO generating core.6711",
+    "[log_record_000009] 1121172266 2005.07.12 R34-M0-N2-C:J04-U11 2005-07-12-05.44.26.319459 R34-M0-N2-C:J04-U11 RAS KERNEL INFO generating core.2263",
+    "[log_record_000010] 1121172311 2005.07.12 R25-M0-ND-C:J09-U01 2005-07-12-05.45.11.854624 R25-M0-ND-C:J09-U01 RAS KERNEL INFO generating core.9386",
+    "[log_record_000011] 1121172452 2005.07.12 R22-M1-N0-C:J10-U11 2005-07-12-05.47.32.414558 R22-M1-N0-C:J10-U11 RAS KERNEL INFO generating core.4061",
+    "[log_record_000012] 1121172512 2005.07.12 R34-M1-N4-C:J07-U11 2005-07-12-05.48.32.532637 R34-M1-N4-C:J07-U11 RAS KERNEL INFO generating core.14070",
+    "[log_record_000013] 1121172512 2005.07.12 R34-M1-N4-C:J10-U01 2005-07-12-05.48.32.925986 R34-M1-N4-C:J10-U01 RAS KERNEL INFO generating core.14021",
+    "[log_record_000014] 1121172822 2005.07.12 R16-M1-N1-C:J05-U01 2005-07-12-05.53.42.889632 R16-M1-N1-C:J05-U01 RAS KERNEL INFO generating core.1715",
+    "[log_record_000015] 1121172833 2005.07.12 R17-M0-NF-C:J10-U11 2005-07-12-05.53.53.558095 R17-M0-NF-C:J10-U11 RAS KERNEL INFO generating core.4489",
+    "[log_record_000016] 1121172957 2005.07.12 R11-M1-N6-C:J16-U11 2005-07-12-05.55.57.631026 R11-M1-N6-C:J16-U11 RAS KERNEL INFO generating core.2092",
+    "[log_record_000017] 1121172988 2005.07.12 R15-M0-N8-C:J02-U11 2005-07-12-05.56.28.419299 R15-M0-N8-C:J02-U11 RAS KERNEL INFO generating core.5967",
+    "[log_record_000018] 1121238463 2005.07.13 R11-M1-N3-C:J07-U11 2005-07-13-00.07.43.091930 R11-M1-N3-C:J07-U11 RAS KERNEL INFO total of 1 ddr error(s) detected and corrected",
+    "[log_record_000019] 1121252281 2005.07.13 R33-M1-NE-C:J07-U01 2005-07-13-03.58.01.460537 R33-M1-NE-C:J07-U01 RAS KERNEL INFO 118661512 double-hummer alignment exceptions",
+    "[log_record_000020] 1121252310 2005.07.13 R24-M0-N1-C:J03-U01 2005-07-13-03.58.30.362009 R24-M0-N1-C:J03-U01 RAS KERNEL INFO 112099344 double-hummer alignment exceptions"
+   ],
+   "total_lineas": 20,
+   "lineas_entregadas": 20,
+   "recortado": false,
+   "topes": {
+    "lineas": 200,
+    "caracteres": 20000
+   }
+  },
+  "veredicto_preliminar": "anomalia_operativa",
+  "justificacion_veredicto_preliminar": "Ocurrencia de fallos críticos 'rts panic! - stopping execution' en el kernel y generación múltiple de core dumps en el clúster sin indicios de ataque malicioso.",
+  "invalid_evidence_group_count": 0,
+  "comandos_rechazados": [],
+  "casos_historicos": [
+   {
+    "id": "bgl_des_natural_0011",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Contiene eventos de severidad alta que no se consideraron alerta: 2 × [FATAL bgl.app] ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r<n>: invalid or mi. Composición: 20 eventos, severidades INFO 18, FATAL 2.",
+    "similitud": 0.887
+   },
+   {
+    "id": "bgl_des_balanceado_0000",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "clase": "anomala",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 1 × [FATAL bgl.app] ciod: Error reading message prefix after LOAD_MESSAGE on CioStream socket to <n>.<n>.<n>.<; 1 × [FATAL bgl.kernel] rts: kernel terminated for reason <n>. Composición: 20 eventos, severidades INFO 15, FATAL 5.",
+    "similitud": 0.877
+   },
+   {
+    "id": "bgl_des_natural_0000",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "clase": "anomala",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 1 × [FATAL bgl.kernel] rts: kernel terminated for reason <n>. Composición: 20 eventos, severidades INFO 19, FATAL 1.",
+    "similitud": 0.761
+   },
+   {
+    "id": "bgl_des_natural_0019",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Contiene eventos de severidad alta que no se consideraron alerta: 2 × [FATAL bgl.app] ciod: LOGIN chdir(/g/g<n>/spelce<n>/Linpack_SWL) failed: No such file or directory. Composición: 20 eventos, severidades INFO 18, FATAL 2.",
+    "similitud": 0.742
+   }
+  ],
+  "historico_consulta": {
+   "excluidos_por_solapamiento": [
+    "rag_enriquecido_v2:bgl_des_balanceado_0001"
+   ],
+   "consultados": 56,
+   "contrastiva": true,
+   "k_por_clase": 2,
+   "tipo": "texto",
+   "omitidos_otro_tipo": 31,
+   "excluidos_mismo_incidente": [],
+   "exclusion_por_incidente_activa": true,
+   "representacion": "Eventos destacados: [FATAL bgl.app] ciod: Error loading /home/greeno/raptor.new.dev.<n>d.BGL.CXX_XL.MPI.ex: invalid or missing program image, No such file o x1 en 1 nodos; [FATAL bgl.kernel] rts panic! - stopping execution x2 en 2 nodos\nLog de texto, 20 eventos. Severidades: INFO 17, FATAL 3. Componentes: bgl.kernel 19, bgl.app 1. Nodos distintos: 20."
+  },
+  "hallazgos_cazador": [
+   {
+    "group_id": "G02",
+    "nivel_sospecha": "bajo",
+    "patron_lista": "ninguno",
+    "explicacion_benigna": "Fallo de ejecución de un trabajo de usuario (MPI) debido a una ruta incorrecta o binario inexistente en el directorio home.",
+    "explicacion_alternativa": "Intento fallido de ejecución de un binario o script malicioso que no fue transferido correctamente al nodo de E/S.",
+    "justificacion": "El registro muestra un error de ciod reportando 'invalid or missing program image, No such file or directory' al intentar ejecutar un ejecutable científico típico (/home/greeno/raptor...). Es un error operativo común de tipografía o permisos de archivo.",
+    "tecnica_candidata": null
+   },
+   {
+    "group_id": "G03",
+    "nivel_sospecha": "bajo",
+    "patron_lista": "ninguno",
+    "explicacion_benigna": "Pánico del kernel de tiempo de ejecución (rts) provocado por una excepción irrecuperable en la aplicación paralela o un fallo de hardware en los nodos.",
+    "explicacion_alternativa": "Denegación de servicio provocada intencionalmente mediante una carga útil que fuerza un colapso del kernel en los nodos de cómputo.",
+    "justificacion": "Mensaje 'rts panic! - stopping execution' en dos nodos de cómputo correlacionado con el comportamiento dominante de volcado de núcleos (core dumps). Corresponde al comportamiento estándar de parada de emergencia ante excepciones no manejadas en BlueGene/L.",
+    "tecnica_candidata": null
+   }
+  ],
+  "cazador_ejecutado": true,
+  "veredicto_consolidado": "anomalia_operativa",
+  "consulta_mitre": "",
+  "rag_omitido": "sin hipótesis de seguridad: no se consultan técnicas",
+  "revision_hallazgos": [],
+  "diagnostico_inicial": "",
+  "diagnostico_corregido": "",
+  "correcciones_auditor": 0,
+  "historial_correcciones": [],
+  "memoria_grupos": {},
+  "memoria_grupos_consulta": {
+   "excluidos_por_solapamiento": [],
+   "consultados": 0
+  },
+  "eventos_reconstruidos": [
+   {
+    "event_id": "event_001",
+    "evidence_uids": [
+     "log_record_000003",
+     "log_record_000004"
+    ],
+    "timestamp": "2005-07-11-14.03.37.675251",
+    "event_type": "kernel_panic",
+    "description": "Pánico del kernel de tiempo de ejecución (rts) que fuerza la detención de la ejecución en múltiples nodos.",
+    "confidence": null,
+    "evidence_groups": [
+     "G03"
+    ],
+    "categoria": "anomalia_operativa"
+   },
+   {
+    "event_id": "event_002",
+    "evidence_uids": [
+     "log_record_000005",
+     "log_record_000006",
+     "log_record_000007",
+     "log_record_000008",
+     "log_record_000009",
+     "log_record_000010",
+     "log_record_000011",
+     "log_record_000012",
+     "log_record_000013",
+     "log_record_000014",
+     "log_record_000015",
+     "log_record_000016",
+     "log_record_000017"
+    ],
+    "timestamp": "2005-07-12-05.41.28.215496",
+    "event_type": "core_dump_generation",
+    "description": "Generación consecutiva de archivos de volcado de memoria (core dumps) tras la terminación anómala de procesos.",
+    "confidence": null,
+    "evidence_groups": [
+     "G04"
+    ],
+    "categoria": "anomalia_operativa"
+   }
+  ],
+  "secuencia_temporal": [
+   "event_001",
+   "event_002"
+  ],
+  "tecnicas_atribuidas": [],
+  "invalid_evidence_uid_count": 0,
+  "d11_warnings": [],
+  "telemetry": {
+   "llm_call_count": 6,
+   "input_tokens": 15039,
+   "output_tokens": 1788,
+   "total_tokens": 20955,
+   "execution_time": 58.879775,
+   "replan_count": 0,
+   "intentos_correccion": 1,
+   "invalid_evidence_uid_count": 0,
+   "d11_warning_count": 0,
+   "llm_calls": [
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 1073,
+     "output_tokens": 238,
+     "total_tokens": 1783,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 472,
+     "duration_s": 8.531,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 4160,
+     "output_tokens": 210,
+     "total_tokens": 5126,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 756,
+     "duration_s": 10.526,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 1847,
+     "output_tokens": 406,
+     "total_tokens": 2930,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 677,
+     "duration_s": 10.232,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 283,
+     "output_tokens": 57,
+     "total_tokens": 683,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 343,
+     "duration_s": 5.986,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 1499,
+     "output_tokens": 102,
+     "total_tokens": 2162,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 561,
+     "duration_s": 7.412,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 6177,
+     "output_tokens": 775,
+     "total_tokens": 8271,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 1319,
+     "duration_s": 16.034,
+     "error": null
+    }
+   ]
+  },
+  "firma": "v2|lineas=20 ips=0 servicios=[bgl.kernel:19,bgl.app:1] eventos=[evento_critico:3,evento_normal:17] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[INFO:17,FATAL:3] categorias=[] cobertura=1.0",
+  "plan": {
+   "plan_version": 1,
+   "objetivo": "Investigar los fallos críticos de severidad FATAL en el supercomputador BlueGene/L para determinar su causa y establecer medidas de contención.",
+   "pasos": [
+    {
+     "id": 1,
+     "accion": "triage",
+     "objetivo": "Evaluar la naturaleza de los 3 eventos con severidad FATAL en el componente bgl.kernel y su impacto en los nodos involucrados.",
+     "estado": "ejecutado"
+    },
+    {
+     "id": 2,
+     "accion": "cve",
+     "objetivo": "Identificar posibles vulnerabilidades conocidas asociadas a los componentes de kernel y arquitectura de BlueGene/L.",
+     "estado": "omitido",
+     "motivo": "El diagnóstico indica una degradación del sistema por pánico de kernel de origen operativo, confirmando explícitamente la ausencia de compromiso de seguridad o actividad maliciosa que amerite la búsqueda de CVEs."
+    },
+    {
+     "id": 3,
+     "accion": "mitigacion",
+     "objetivo": "Formular recomendaciones y medidas de contención operativas para estabilizar los nodos afectados y prevenir recurrencias de fallos críticos.",
+     "estado": "ejecutado"
+    }
+   ],
+   "criterios_finalizacion": [
+    "Causa raíz de los eventos FATAL determinada o acotada",
+    "Vulnerabilidades conocidas del sistema BlueGene/L evaluadas",
+    "Plan de contingencia y mitigación definido"
+   ]
+  },
+  "plan_objetivo": "Investigar los fallos críticos de severidad FATAL en el supercomputador BlueGene/L para determinar su causa y establecer medidas de contención.",
+  "paso_actual": 3,
+  "historial_ejecucion": [
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_planificador",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "plan v1, 3 pasos: ['triage', 'cve', 'mitigacion']"
+   },
+   {
+    "plan_version": 1,
+    "step_id": 1,
+    "nodo": "agente_analista_triage",
+    "accion": "triage",
+    "estado": "ejecutado",
+    "resumen": "diagnóstico producido"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_cazador",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "2 hallazgos (0 alto)"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "tool_consultar_rag",
+    "accion": "rag",
+    "estado": "omitido",
+    "resumen": "técnicas MITRE no consultadas (sin hipótesis de seguridad: no se consultan técnicas)"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_selector_herramientas",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "usar_cve=False"
+   },
+   {
+    "plan_version": 1,
+    "step_id": 3,
+    "nodo": "agente_ingeniero_mitigacion",
+    "accion": "mitigacion",
+    "estado": "ejecutado",
+    "resumen": "6 comandos propuestos"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "tool_validar_comandos",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "comandos válidos"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_auditor_final",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "confianza=0.95 cobertura_suficiente=True"
+   }
+  ],
+  "desviaciones_plan": [],
+  "historial_planes": [],
+  "replan_count": 0,
+  "diagnostico": "Se identifican eventos críticos de kernel de tipo 'rts panic! - stopping execution' en múltiples nodos (log_record_000003 y log_record_000004), acompañados de una secuencia de volcados de memoria (generating core) a través de diversos componentes de cómputo. Aunque el fallo de carga reportado por ciod (log_record_000002) corresponde a un error de usuario habitual, el pánico de kernel y la consiguiente interrupción de la ejecución representan una degradación del sistema que requiere soporte e intervención operativa, sin evidencias de compromiso de seguridad o actividad maliciosa.",
+  "necesita_rag": false,
+  "usar_cve": false,
+  "razon_seleccion": "El diagnóstico indica una degradación del sistema por pánico de kernel de origen operativo, confirmando explícitamente la ausencia de compromiso de seguridad o actividad maliciosa que amerite la búsqueda de CVEs.",
+  "contexto_rag": [
+   {
+    "id": "bgl_des_natural_0011",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Contiene eventos de severidad alta que no se consideraron alerta: 2 × [FATAL bgl.app] ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r<n>: invalid or mi. Composición: 20 eventos, severidades INFO 18, FATAL 2.",
+    "similitud": 0.887
+   },
+   {
+    "id": "bgl_des_balanceado_0000",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "clase": "anomala",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 1 × [FATAL bgl.app] ciod: Error reading message prefix after LOAD_MESSAGE on CioStream socket to <n>.<n>.<n>.<; 1 × [FATAL bgl.kernel] rts: kernel terminated for reason <n>. Composición: 20 eventos, severidades INFO 15, FATAL 5.",
+    "similitud": 0.877
+   },
+   {
+    "id": "bgl_des_natural_0000",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "clase": "anomala",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 1 × [FATAL bgl.kernel] rts: kernel terminated for reason <n>. Composición: 20 eventos, severidades INFO 19, FATAL 1.",
+    "similitud": 0.761
+   },
+   {
+    "id": "bgl_des_natural_0019",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Contiene eventos de severidad alta que no se consideraron alerta: 2 × [FATAL bgl.app] ciod: LOGIN chdir(/g/g<n>/spelce<n>/Linpack_SWL) failed: No such file or directory. Composición: 20 eventos, severidades INFO 18, FATAL 2.",
+    "similitud": 0.742
+   }
+  ],
+  "tecnicas_mitre": [],
+  "cves_encontrados": [],
+  "comandos_mitigacion": [
+   "dmesg -T | grep -Ei 'panic|fatal|error|oops' | tail -n 50",
+   "journalctl -k -p err..emerg -n 50 --no-pager",
+   "coredumpctl list --no-pager -n 20",
+   "uptime",
+   "free -h",
+   "df -h"
+  ],
+  "comandos_validos": true,
+  "motivos_rechazo": [],
+  "intentos_correccion": 1,
+  "confianza": 0.95,
+  "hay_incidente": false,
+  "hay_anomalia": true,
+  "evaluacion_auditor": "Se confirma una anomalía operativa crítica debido a la detención abrupta de la ejecución por pánico de kernel ('rts panic! - stopping execution') en múltiples nodos de cómputo (G03), seguida por la generación coordinada de volcados de memoria (core dumps en G04). No existen indicios de intrusión, explotación o actividad maliciosa intencionada; el error de carga de ciod (G02) y las excepciones de alineación y memoria corresponden a fallos típicos de ejecución de aplicaciones y del entorno de cómputo.",
+  "cobertura_auditor": true,
+  "cobertura_suficiente": true,
+  "motivo_replanificacion": "",
+  "requiere_replanificacion": false,
+  "_firma": "v2|lineas=20 ips=0 servicios=[bgl.kernel:19,bgl.app:1] eventos=[evento_critico:3,evento_normal:17] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[INFO:17,FATAL:3] categorias=[] cobertura=1.0",
+  "_error_api": null,
+  "requiere_revision_humana": false,
+  "output_contract_version": "d11-v1",
+  "classification_detallada": "anomalia_operativa"
+ },
+ "observaciones": [
+  {
+   "nodo": "planificador",
+   "llamadas": [
+    0
+   ],
+   "prompt_chars": 1653,
+   "system_chars": 869,
+   "tokens": [
+    {
+     "input_tokens": 1073,
+     "output_tokens": 238,
+     "reasoning_tokens": 472,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "triage",
+   "llamadas": [
+    1
+   ],
+   "prompt_chars": 6865,
+   "system_chars": 1394,
+   "tokens": [
+    {
+     "input_tokens": 4160,
+     "output_tokens": 210,
+     "reasoning_tokens": 756,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "cazador",
+   "llamadas": [
+    2
+   ],
+   "prompt_chars": 1992,
+   "system_chars": 3788,
+   "tokens": [
+    {
+     "input_tokens": 1847,
+     "output_tokens": 406,
+     "reasoning_tokens": 677,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "selector",
+   "llamadas": [
+    3
+   ],
+   "prompt_chars": 732,
+   "system_chars": 344,
+   "tokens": [
+    {
+     "input_tokens": 283,
+     "output_tokens": 57,
+     "reasoning_tokens": 343,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "mitigacion",
+   "llamadas": [
+    4
+   ],
+   "prompt_chars": 3363,
+   "system_chars": 854,
+   "tokens": [
+    {
+     "input_tokens": 1499,
+     "output_tokens": 102,
+     "reasoning_tokens": 561,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "auditor",
+   "llamadas": [
+    5
+   ],
+   "prompt_chars": 11743,
+   "system_chars": 4839,
+   "tokens": [
+    {
+     "input_tokens": 6177,
+     "output_tokens": 775,
+     "reasoning_tokens": 1319,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  }
+ ],
+ "consultas_externas": []
+}

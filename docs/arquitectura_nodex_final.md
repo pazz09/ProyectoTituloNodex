@@ -104,6 +104,7 @@ reconstruidos llevan `categoria` (`incidente` / `anomalia_operativa` / `contexto
 | B.1-1 | `HISTORICO_CONTRASTIVO` / `HISTORICO_K_POR_CLASE` | true / 2 |
 | B.1-2 | `MEMORIA_GRUPOS_ACTIVA` / `MEMORIA_GRUPOS_PATH` | true / `experiments/knowledge/memoria_grupos_v1/memoria_grupos.json` |
 | B.1-3 | `CAZADOR_MOTIVO_FACTUAL` / `CAZADOR_LISTA_PATRONES` / `AUDITOR_REVISA_MEDIOS` | true / true / true |
+| Variante | `AUDITOR_REFORZADO` (usar con `CAZADOR_ACTIVO=false`) | false |
 
 La memoria histórica se elige con `CHROMA_PATH` (copia del snapshot): `rag_enriquecido_30_v2` (los 30
 históricos de la v1 re-indexados) o `rag_enriquecido_v2` (todos los casos de desarrollo más 8 incidentes
@@ -116,6 +117,15 @@ del incidente, etiquetados con su táctica, y 42 grupos con señal de casos beni
 su comportamiento, sin IP; para cada grupo con señal del lote se recupera el malicioso y el benigno más
 parecidos, con exclusión por solapamiento de registros. Solo logs de red. Se construye con
 `python -m src.experimentation.knowledge.memoria_grupos`.
+
+**Variante de desarrollo "B.1 sin cazador, auditor reforzado"** (`CAZADOR_ACTIVO=false`,
+`AUDITOR_REFORZADO=true`). El auditor recibe, en un bloque destacado, exactamente lo que recibiría el
+cazador (filas completas de cada grupo con señal, motivo factual, referentes de la memoria de grupos y
+resumen del comportamiento dominante), además del catálogo completo; la misma lista de verificación de
+patrones MITRE; y la instrucción de evaluar cada grupo con señal (explicación benigna, explicación
+maliciosa, patrón de la lista) antes del veredicto, en `evaluacion_grupos`, el primer campo de su
+respuesta. La única diferencia con B.1 es quién evalúa los grupos: un agente separado o el propio
+auditor. El arnés la ejecuta con `--entorno CAZADOR_ACTIVO=false --entorno AUDITOR_REFORZADO=true`.
 
 ## 6. Qué recibe cada sistema
 
@@ -137,7 +147,7 @@ parecidos, con exclusión por solapamiento de registros. Solo logs de red. Se co
 
 ## 7. Pruebas por módulo (12-nov-2026)
 
-Suite de Python: **1 593 pruebas**, 1 590 pasan; fallan 3 por el entorno de este equipo (Python 3.13 y
+Suite de Python: **1 599 pruebas**, 1 596 pasan; fallan 3 por el entorno de este equipo (Python 3.13 y
 finales de línea del corpus enriquecido v1), sin relación con NODEX final. Frontend: **100 pruebas**
 (5 archivos, vitest), todas pasan.
 
@@ -146,6 +156,7 @@ finales de línea del corpus enriquecido v1), sin relación con NODEX final. Fro
 | `test_nodex_final_fase_a.py` (M1, M2, M6, M7, M8, M9, A.1) | 52 |
 | `test_nodex_final_fase_b.py` (B1-B5, grafo, traza, ciclo de corrección extremo a extremo) | 32 |
 | `test_nodex_final_fase_b1.py` (memoria contrastiva, memoria de grupos, motivo factual, lista de patrones, revisión de medios, arnés) | 17 |
+| `test_nodex_final_variante_auditor.py` (auditor reforzado sin cazador, interruptores en el arnés) | 6 |
 | `test_output_contract_d11.py` | 26 |
 | `test_llm.py` | 38 |
 | `test_informe_pdf.py` | 34 |
@@ -162,7 +173,7 @@ finales de línea del corpus enriquecido v1), sin relación con NODEX final. Fro
 | API e historial (4 archivos: `test_api_*`, `test_historial.py`) | 87 |
 | Capa experimental (32 archivos en `tests/experimentation/`) | 846 |
 | Resto (12 archivos: reporte, baseline, evaluación de detección, memoria, reputación, telemetría, MITRE, etc.) | 105 |
-| **Total** | **1 593** |
+| **Total** | **1 599** |
 
 Las pruebas del flujo de la Fase A (triage <-> RAG, grafo de 8 nodos, contrato sin categorías) siguen
 activas con los interruptores de la Fase B apagados (`tests/conftest.py::modo_fase_a`).

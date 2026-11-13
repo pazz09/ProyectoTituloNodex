@@ -1,0 +1,942 @@
+{
+ "case_id": "bgl_des_natural_0008",
+ "dataset": "bgl",
+ "arquitectura": "nodex",
+ "segundos_pared_hijo": 54.57517989999906,
+ "estado": {
+  "resumen_logs": {
+   "formato_detectado": "bgl",
+   "total_lineas": 20,
+   "servicios": {
+    "bgl.kernel": 20
+   },
+   "eventos": {
+    "evento_normal": 20
+   },
+   "ventana_temporal": {
+    "inicio": "2005-12-01-06.46.37.568406",
+    "fin": "2005-12-01-06.52.42.454848"
+   },
+   "n_ips_distintas": 0,
+   "ips_distintas": [],
+   "por_ip": {},
+   "usuarios": {},
+   "n_usuarios_distintos": 0,
+   "codigos_respuesta": {},
+   "entidades": [],
+   "cronologia": [],
+   "cronologia_omitidos": 0,
+   "raw_procedencia": {
+    "sha256": "aad293138044b7549c3d8f302b0b6874f4e6f009119dcb562d6f9cea6392e87a",
+    "lineas": 20,
+    "bytes": 5180
+   },
+   "reputacion_ips": {},
+   "perfil_lote": {
+    "tipo": "texto",
+    "filas": 20,
+    "con_formato_reconocido": 20,
+    "severidades": {
+     "INFO": 20
+    },
+    "componentes": {
+     "bgl.kernel": 20
+    },
+    "nodos": {
+     "R66-M0-NB-C:J17-U11": 1,
+     "R41-M0-NB-C:J05-U11": 1,
+     "R73-M0-N2-C:J11-U11": 1,
+     "R73-M0-NE-C:J14-U01": 1,
+     "R44-M0-N3-C:J06-U01": 1,
+     "R77-M0-N5-C:J04-U11": 1,
+     "R61-M0-N9-C:J16-U01": 1,
+     "R64-M0-N2-C:J16-U01": 1,
+     "R45-M0-N4-C:J13-U01": 1,
+     "R64-M0-N1-C:J06-U11": 1
+    },
+    "nodos_distintos": 20,
+    "lineas_severidad_alta": {
+     "total": 0,
+     "omitidas": 0,
+     "lineas": []
+    },
+    "grupos": 2
+   }
+  },
+  "preprocessing_metadata": {
+   "schema_version": "2.0",
+   "total_lineas_fisicas": 20,
+   "total_eventos": 20,
+   "decoder_distribution": {
+    "text": 20
+   },
+   "product_distribution": {
+    "BlueGene/L": 20
+   },
+   "vendor_distribution": {
+    "IBM": 20
+   },
+   "version_distribution": {},
+   "protocol_distribution": {},
+   "profile_distribution": {
+    "bgl": 20
+   },
+   "severity_distribution": {
+    "INFO": 20
+   },
+   "event_categories": {},
+   "event_outcomes": {},
+   "entities": {
+    "host": {
+     "R25-M0-N4-C:J13-U01": 1,
+     "R26-M1-N8-C:J08-U01": 1,
+     "R26-M1-NF-C:J09-U01": 1,
+     "R27-M0-NE-C:J17-U11": 1,
+     "R27-M1-N9-C:J09-U01": 1,
+     "R27-M1-NA-C:J05-U11": 1,
+     "R41-M0-NB-C:J05-U11": 1,
+     "R42-M0-NA-C:J09-U11": 1,
+     "R44-M0-N3-C:J06-U01": 1,
+     "R45-M0-N4-C:J13-U01": 1,
+     "R45-M1-N8-C:J14-U11": 1,
+     "R46-M1-N5-C:J16-U01": 1,
+     "R61-M0-N9-C:J16-U01": 1,
+     "R64-M0-N1-C:J06-U11": 1,
+     "R64-M0-N2-C:J16-U01": 1,
+     "R64-M0-N8-C:J05-U11": 1,
+     "R66-M0-NB-C:J17-U11": 1,
+     "R73-M0-N2-C:J11-U11": 1,
+     "R73-M0-NE-C:J14-U01": 1,
+     "R77-M0-N5-C:J04-U11": 1
+    },
+    "servicio": {
+     "bgl.kernel": 20
+    },
+    "producto": {
+     "BlueGene/L": 20
+    }
+   },
+   "time_window": {
+    "inicio": "2005-12-01-06.46.37.568406",
+    "fin": "2005-12-01-06.52.42.454848"
+   },
+   "parsing": {
+    "parsed_events": 20,
+    "fallback_events": 0,
+    "coverage": 1.0
+   },
+   "segments": [
+    {
+     "index": 0,
+     "decoder": "text",
+     "line_start": 1,
+     "line_end": 20,
+     "n_records": 20,
+     "confidence": 0.1,
+     "decoder_inicial": "text",
+     "confidence_inicial": 0.1,
+     "decoder_distribution": {
+      "text": 20
+     },
+     "context": {}
+    }
+   ],
+   "entities_resumen": {
+    "host": 20,
+    "servicio": 1,
+    "producto": 1
+   },
+   "config": {
+    "LOG_DETECTION_CHUNK_SIZE": 50,
+    "LOG_ENABLE_MULTILINE": true,
+    "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+    "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+    "LOG_MAX_EVENTS": 100000,
+    "LOG_MAX_FILE_BYTES": 52428800,
+    "LOG_MAX_RAW_SAMPLES": 20,
+    "LOG_MAX_UNMAPPED_FIELDS": 100,
+    "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+    "LOG_PARSING_MODE": "hybrid",
+    "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+    "LOG_PRESERVE_RAW": true
+   }
+  },
+  "parsing_warnings": [],
+  "evidencia_logs": [
+   {
+    "uid": "log_record_000001",
+    "record_number": 1,
+    "line_start": 1,
+    "line_end": 1,
+    "timestamp": "2005-12-01-06.46.37.568406",
+    "group_id": "G01",
+    "source_host": "R66-M0-NB-C:J17-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr."
+   },
+   {
+    "uid": "log_record_000002",
+    "record_number": 2,
+    "line_start": 2,
+    "line_end": 2,
+    "timestamp": "2005-12-01-06.46.50.571631",
+    "group_id": "G01",
+    "source_host": "R41-M0-NB-C:J05-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr."
+   },
+   {
+    "uid": "log_record_000003",
+    "record_number": 3,
+    "line_start": 3,
+    "line_end": 3,
+    "timestamp": "2005-12-01-06.47.19.872148",
+    "group_id": "G02",
+    "source_host": "R73-M0-N2-C:J11-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "10738 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt."
+   },
+   {
+    "uid": "log_record_000004",
+    "record_number": 4,
+    "line_start": 4,
+    "line_end": 4,
+    "timestamp": "2005-12-01-06.47.28.616018",
+    "group_id": "G02",
+    "source_host": "R73-M0-NE-C:J14-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "10646 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt."
+   },
+   {
+    "uid": "log_record_000005",
+    "record_number": 5,
+    "line_start": 5,
+    "line_end": 5,
+    "timestamp": "2005-12-01-06.47.46.598443",
+    "group_id": "G01",
+    "source_host": "R44-M0-N3-C:J06-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr."
+   },
+   {
+    "uid": "log_record_000006",
+    "record_number": 6,
+    "line_start": 6,
+    "line_end": 6,
+    "timestamp": "2005-12-01-06.47.48.847938",
+    "group_id": "G02",
+    "source_host": "R77-M0-N5-C:J04-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "10710 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt."
+   },
+   {
+    "uid": "log_record_000007",
+    "record_number": 7,
+    "line_start": 7,
+    "line_end": 7,
+    "timestamp": "2005-12-01-06.47.49.100165",
+    "group_id": "G01",
+    "source_host": "R61-M0-N9-C:J16-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr."
+   },
+   {
+    "uid": "log_record_000008",
+    "record_number": 8,
+    "line_start": 8,
+    "line_end": 8,
+    "timestamp": "2005-12-01-06.47.59.953454",
+    "group_id": "G01",
+    "source_host": "R64-M0-N2-C:J16-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr."
+   },
+   {
+    "uid": "log_record_000009",
+    "record_number": 9,
+    "line_start": 9,
+    "line_end": 9,
+    "timestamp": "2005-12-01-06.48.11.378453",
+    "group_id": "G02",
+    "source_host": "R45-M0-N4-C:J13-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "10706 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt."
+   },
+   {
+    "uid": "log_record_000010",
+    "record_number": 10,
+    "line_start": 10,
+    "line_end": 10,
+    "timestamp": "2005-12-01-06.48.13.253997",
+    "group_id": "G01",
+    "source_host": "R64-M0-N1-C:J06-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr."
+   },
+   {
+    "uid": "log_record_000011",
+    "record_number": 11,
+    "line_start": 11,
+    "line_end": 11,
+    "timestamp": "2005-12-01-06.48.18.151322",
+    "group_id": "G01",
+    "source_host": "R64-M0-N8-C:J05-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr."
+   },
+   {
+    "uid": "log_record_000012",
+    "record_number": 12,
+    "line_start": 12,
+    "line_end": 12,
+    "timestamp": "2005-12-01-06.49.48.883198",
+    "group_id": "G02",
+    "source_host": "R46-M1-N5-C:J16-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "10765 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt."
+   },
+   {
+    "uid": "log_record_000013",
+    "record_number": 13,
+    "line_start": 13,
+    "line_end": 13,
+    "timestamp": "2005-12-01-06.50.28.913616",
+    "group_id": "G01",
+    "source_host": "R42-M0-NA-C:J09-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr."
+   },
+   {
+    "uid": "log_record_000014",
+    "record_number": 14,
+    "line_start": 14,
+    "line_end": 14,
+    "timestamp": "2005-12-01-06.50.53.822651",
+    "group_id": "G02",
+    "source_host": "R27-M1-N9-C:J09-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "10698 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt."
+   },
+   {
+    "uid": "log_record_000015",
+    "record_number": 15,
+    "line_start": 15,
+    "line_end": 15,
+    "timestamp": "2005-12-01-06.50.56.045860",
+    "group_id": "G02",
+    "source_host": "R27-M1-NA-C:J05-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "10744 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt."
+   },
+   {
+    "uid": "log_record_000016",
+    "record_number": 16,
+    "line_start": 16,
+    "line_end": 16,
+    "timestamp": "2005-12-01-06.50.58.300024",
+    "group_id": "G02",
+    "source_host": "R27-M0-NE-C:J17-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "10740 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt."
+   },
+   {
+    "uid": "log_record_000017",
+    "record_number": 17,
+    "line_start": 17,
+    "line_end": 17,
+    "timestamp": "2005-12-01-06.51.14.927478",
+    "group_id": "G01",
+    "source_host": "R26-M1-NF-C:J09-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr."
+   },
+   {
+    "uid": "log_record_000018",
+    "record_number": 18,
+    "line_start": 18,
+    "line_end": 18,
+    "timestamp": "2005-12-01-06.51.26.654520",
+    "group_id": "G02",
+    "source_host": "R45-M1-N8-C:J14-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "10684 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt."
+   },
+   {
+    "uid": "log_record_000019",
+    "record_number": 19,
+    "line_start": 19,
+    "line_end": 19,
+    "timestamp": "2005-12-01-06.51.30.715510",
+    "group_id": "G02",
+    "source_host": "R26-M1-N8-C:J08-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "10652 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt."
+   },
+   {
+    "uid": "log_record_000020",
+    "record_number": 20,
+    "line_start": 20,
+    "line_end": 20,
+    "timestamp": "2005-12-01-06.52.42.454848",
+    "group_id": "G01",
+    "source_host": "R25-M0-N4-C:J13-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr."
+   }
+  ],
+  "evidencia_logs_omitidos": 0,
+  "grupos_evidencia": [
+   {
+    "group_id": "G01",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "<n> microseconds spent in the rbs signal handler during <n> calls. <n> microseconds was the maximum time for a single in"
+    },
+    "conteo": 10,
+    "uids": [
+     "log_record_000001",
+     "log_record_000002",
+     "log_record_000005",
+     "log_record_000007",
+     "log_record_000008",
+     "log_record_000010",
+     "log_record_000011",
+     "log_record_000013",
+     "log_record_000017",
+     "log_record_000020"
+    ],
+    "nodos": [
+     "R66-M0-NB-C:J17-U11",
+     "R41-M0-NB-C:J05-U11",
+     "R44-M0-N3-C:J06-U01",
+     "R61-M0-N9-C:J16-U01",
+     "R64-M0-N2-C:J16-U01",
+     "R64-M0-N1-C:J06-U11",
+     "R64-M0-N8-C:J05-U11",
+     "R42-M0-NA-C:J09-U11",
+     "R26-M1-NF-C:J09-U01",
+     "R25-M0-N4-C:J13-U01"
+    ],
+    "n_nodos": 10
+   },
+   {
+    "group_id": "G02",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "<n> total interrupts. <n> critical input interrupts. <n> microseconds total spent on critical input interrupts, <n> micr"
+    },
+    "conteo": 10,
+    "uids": [
+     "log_record_000003",
+     "log_record_000004",
+     "log_record_000006",
+     "log_record_000009",
+     "log_record_000012",
+     "log_record_000014",
+     "log_record_000015",
+     "log_record_000016",
+     "log_record_000018",
+     "log_record_000019"
+    ],
+    "nodos": [
+     "R73-M0-N2-C:J11-U11",
+     "R73-M0-NE-C:J14-U01",
+     "R77-M0-N5-C:J04-U11",
+     "R45-M0-N4-C:J13-U01",
+     "R46-M1-N5-C:J16-U01",
+     "R27-M1-N9-C:J09-U01",
+     "R27-M1-NA-C:J05-U11",
+     "R27-M0-NE-C:J17-U11",
+     "R45-M1-N8-C:J14-U11",
+     "R26-M1-N8-C:J08-U01"
+    ],
+    "n_nodos": 10
+   }
+  ],
+  "contenido_lote": {
+   "tipo": "texto",
+   "lineas": [
+    "[log_record_000001] 1133448397 2005.12.01 R66-M0-NB-C:J17-U11 2005-12-01-06.46.37.568406 R66-M0-NB-C:J17-U11 RAS KERNEL INFO 0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr.",
+    "[log_record_000002] 1133448410 2005.12.01 R41-M0-NB-C:J05-U11 2005-12-01-06.46.50.571631 R41-M0-NB-C:J05-U11 RAS KERNEL INFO 0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr.",
+    "[log_record_000003] 1133448439 2005.12.01 R73-M0-N2-C:J11-U11 2005-12-01-06.47.19.872148 R73-M0-N2-C:J11-U11 RAS KERNEL INFO 10738 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt.",
+    "[log_record_000004] 1133448448 2005.12.01 R73-M0-NE-C:J14-U01 2005-12-01-06.47.28.616018 R73-M0-NE-C:J14-U01 RAS KERNEL INFO 10646 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt.",
+    "[log_record_000005] 1133448466 2005.12.01 R44-M0-N3-C:J06-U01 2005-12-01-06.47.46.598443 R44-M0-N3-C:J06-U01 RAS KERNEL INFO 0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr.",
+    "[log_record_000006] 1133448468 2005.12.01 R77-M0-N5-C:J04-U11 2005-12-01-06.47.48.847938 R77-M0-N5-C:J04-U11 RAS KERNEL INFO 10710 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt.",
+    "[log_record_000007] 1133448469 2005.12.01 R61-M0-N9-C:J16-U01 2005-12-01-06.47.49.100165 R61-M0-N9-C:J16-U01 RAS KERNEL INFO 0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr.",
+    "[log_record_000008] 1133448479 2005.12.01 R64-M0-N2-C:J16-U01 2005-12-01-06.47.59.953454 R64-M0-N2-C:J16-U01 RAS KERNEL INFO 0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr.",
+    "[log_record_000009] 1133448491 2005.12.01 R45-M0-N4-C:J13-U01 2005-12-01-06.48.11.378453 R45-M0-N4-C:J13-U01 RAS KERNEL INFO 10706 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt.",
+    "[log_record_000010] 1133448493 2005.12.01 R64-M0-N1-C:J06-U11 2005-12-01-06.48.13.253997 R64-M0-N1-C:J06-U11 RAS KERNEL INFO 0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr.",
+    "[log_record_000011] 1133448498 2005.12.01 R64-M0-N8-C:J05-U11 2005-12-01-06.48.18.151322 R64-M0-N8-C:J05-U11 RAS KERNEL INFO 0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr.",
+    "[log_record_000012] 1133448588 2005.12.01 R46-M1-N5-C:J16-U01 2005-12-01-06.49.48.883198 R46-M1-N5-C:J16-U01 RAS KERNEL INFO 10765 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt.",
+    "[log_record_000013] 1133448628 2005.12.01 R42-M0-NA-C:J09-U11 2005-12-01-06.50.28.913616 R42-M0-NA-C:J09-U11 RAS KERNEL INFO 0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr.",
+    "[log_record_000014] 1133448653 2005.12.01 R27-M1-N9-C:J09-U01 2005-12-01-06.50.53.822651 R27-M1-N9-C:J09-U01 RAS KERNEL INFO 10698 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt.",
+    "[log_record_000015] 1133448656 2005.12.01 R27-M1-NA-C:J05-U11 2005-12-01-06.50.56.045860 R27-M1-NA-C:J05-U11 RAS KERNEL INFO 10744 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt.",
+    "[log_record_000016] 1133448658 2005.12.01 R27-M0-NE-C:J17-U11 2005-12-01-06.50.58.300024 R27-M0-NE-C:J17-U11 RAS KERNEL INFO 10740 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt.",
+    "[log_record_000017] 1133448674 2005.12.01 R26-M1-NF-C:J09-U01 2005-12-01-06.51.14.927478 R26-M1-NF-C:J09-U01 RAS KERNEL INFO 0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr.",
+    "[log_record_000018] 1133448686 2005.12.01 R45-M1-N8-C:J14-U11 2005-12-01-06.51.26.654520 R45-M1-N8-C:J14-U11 RAS KERNEL INFO 10684 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt.",
+    "[log_record_000019] 1133448690 2005.12.01 R26-M1-N8-C:J08-U01 2005-12-01-06.51.30.715510 R26-M1-N8-C:J08-U01 RAS KERNEL INFO 10652 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt.",
+    "[log_record_000020] 1133448762 2005.12.01 R25-M0-N4-C:J13-U01 2005-12-01-06.52.42.454848 R25-M0-N4-C:J13-U01 RAS KERNEL INFO 0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr."
+   ],
+   "total_lineas": 20,
+   "lineas_entregadas": 20,
+   "recortado": false,
+   "topes": {
+    "lineas": 200,
+    "caracteres": 20000
+   }
+  },
+  "veredicto_preliminar": "normal",
+  "justificacion_veredicto_preliminar": "Todos los eventos son registros rutinarios de telemetría INFO con 0 interrupciones críticas y 0 errores de memoria DDR, sin evidencia de fallas ni actividad maliciosa.",
+  "invalid_evidence_group_count": 0,
+  "comandos_rechazados": [],
+  "casos_historicos": [
+   {
+    "id": "bgl_des_balanceado_0003",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Composición: 20 eventos, severidades INFO 20.",
+    "similitud": 1.0
+   },
+   {
+    "id": "bgl_des_natural_0006",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Composición: 20 eventos, severidades INFO 20.",
+    "similitud": 1.0
+   },
+   {
+    "id": "uwf_hist_008",
+    "dataset": "uwf",
+    "etiqueta": "malicioso",
+    "clase": "anomala",
+    "descripcion": "Malicioso (Reconnaissance; T1592). Actividad del incidente: 1 conexiones (tcp gssapi 1), 1 puertos de destino distintos, estados SF 1. Resto del lote: 3 conexiones de fondo (protocolos - 3).",
+    "similitud": 0.873
+   },
+   {
+    "id": "bgl_des_natural_0000",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "clase": "anomala",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 1 × [FATAL bgl.kernel] rts: kernel terminated for reason <n>. Composición: 20 eventos, severidades INFO 19, FATAL 1.",
+    "similitud": 0.64
+   }
+  ],
+  "historico_consulta": {
+   "excluidos_por_solapamiento": [
+    "rag_enriquecido_v2:bgl_des_natural_0008"
+   ],
+   "consultados": 56,
+   "contrastiva": true,
+   "k_por_clase": 2,
+   "tipo": "texto",
+   "omitidos_otro_tipo": 31,
+   "excluidos_mismo_incidente": [],
+   "exclusion_por_incidente_activa": true,
+   "representacion": "Eventos destacados: ninguno\nLog de texto, 20 eventos. Severidades: INFO 20. Componentes: bgl.kernel 20. Nodos distintos: 20."
+  },
+  "hallazgos_cazador": [],
+  "cazador_ejecutado": false,
+  "veredicto_consolidado": "normal",
+  "consulta_mitre": "",
+  "rag_omitido": "sin hipótesis de seguridad: no se consultan técnicas",
+  "revision_hallazgos": [],
+  "diagnostico_inicial": "",
+  "diagnostico_corregido": "",
+  "correcciones_auditor": 0,
+  "historial_correcciones": [],
+  "memoria_grupos": {},
+  "memoria_grupos_consulta": {
+   "excluidos_por_solapamiento": [],
+   "consultados": 0
+  },
+  "eventos_reconstruidos": [
+   {
+    "event_id": "event_001",
+    "evidence_uids": [
+     "log_record_000001",
+     "log_record_000002",
+     "log_record_000005",
+     "log_record_000007",
+     "log_record_000008",
+     "log_record_000010",
+     "log_record_000011",
+     "log_record_000013",
+     "log_record_000017",
+     "log_record_000020"
+    ],
+    "timestamp": "2005-12-01-06.46.37.568406",
+    "event_type": "rbs_handler_telemetry",
+    "description": "Telemetría periódica del manejador RBS de memoria DDR reportando cero llamadas y cero errores corregibles.",
+    "confidence": null,
+    "evidence_groups": [
+     "G01"
+    ],
+    "categoria": "contexto"
+   },
+   {
+    "event_id": "event_002",
+    "evidence_uids": [
+     "log_record_000003",
+     "log_record_000004",
+     "log_record_000006",
+     "log_record_000009",
+     "log_record_000012",
+     "log_record_000014",
+     "log_record_000015",
+     "log_record_000016",
+     "log_record_000018",
+     "log_record_000019"
+    ],
+    "timestamp": "2005-12-01-06.47.19.872148",
+    "event_type": "interrupt_telemetry",
+    "description": "Estadísticas periódicas de interrupciones del kernel reportando cero interrupciones críticas.",
+    "confidence": null,
+    "evidence_groups": [
+     "G02"
+    ],
+    "categoria": "contexto"
+   }
+  ],
+  "secuencia_temporal": [
+   "event_001",
+   "event_002"
+  ],
+  "tecnicas_atribuidas": [],
+  "invalid_evidence_uid_count": 0,
+  "d11_warnings": [],
+  "telemetry": {
+   "llm_call_count": 5,
+   "input_tokens": 12056,
+   "output_tokens": 951,
+   "total_tokens": 15021,
+   "execution_time": 39.437011,
+   "replan_count": 0,
+   "intentos_correccion": 1,
+   "invalid_evidence_uid_count": 0,
+   "d11_warning_count": 0,
+   "llm_calls": [
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 943,
+     "output_tokens": 245,
+     "total_tokens": 2019,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 831,
+     "duration_s": 11.071,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 4331,
+     "output_tokens": 179,
+     "total_tokens": 4748,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 238,
+     "duration_s": 6.954,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 235,
+     "output_tokens": 40,
+     "total_tokens": 483,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 208,
+     "duration_s": 5.633,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 822,
+     "output_tokens": 6,
+     "total_tokens": 878,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 50,
+     "duration_s": 4.776,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 5725,
+     "output_tokens": 481,
+     "total_tokens": 6893,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 687,
+     "duration_s": 10.859,
+     "error": null
+    }
+   ]
+  },
+  "firma": "v2|lineas=20 ips=0 servicios=[bgl.kernel:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[INFO:20] categorias=[] cobertura=1.0",
+  "plan": {
+   "plan_version": 1,
+   "objetivo": "Evaluar la normalidad operativa y posibles vulnerabilidades en los logs del kernel de BlueGene/L analizados.",
+   "pasos": [
+    {
+     "id": 1,
+     "accion": "triage",
+     "objetivo": "Realizar el diagnóstico inicial de los 20 eventos informativos registrados por el kernel en los distintos nodos de BlueGene/L.",
+     "estado": "ejecutado"
+    },
+    {
+     "id": 2,
+     "accion": "cve",
+     "objetivo": "Consultar posibles vulnerabilidades conocidas asociadas al producto identificado (IBM BlueGene/L y su kernel).",
+     "estado": "omitido",
+     "motivo": "El diagnóstico no presenta ningún ataque, anomalía o vulnerabilidad; únicamente contiene telemetría operativa estándar clasificada como INFO."
+    },
+    {
+     "id": 3,
+     "accion": "mitigacion",
+     "objetivo": "Proponer medidas de contención o pautas de monitorización continua basadas en la revisión de eventos y estado del sistema.",
+     "estado": "ejecutado"
+    }
+   ],
+   "criterios_finalizacion": [
+    "Diagnóstico de los 20 eventos de log completado sin anomalías críticas no detectadas.",
+    "Verificación de vulnerabilidades conocidas asociadas al servicio bgl.kernel y producto BlueGene/L concluida.",
+    "Plan de mitigación y recomendaciones de supervisión generado."
+   ]
+  },
+  "plan_objetivo": "Evaluar la normalidad operativa y posibles vulnerabilidades en los logs del kernel de BlueGene/L analizados.",
+  "paso_actual": 3,
+  "historial_ejecucion": [
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_planificador",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "plan v1, 3 pasos: ['triage', 'cve', 'mitigacion']"
+   },
+   {
+    "plan_version": 1,
+    "step_id": 1,
+    "nodo": "agente_analista_triage",
+    "accion": "triage",
+    "estado": "ejecutado",
+    "resumen": "diagnóstico producido"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_cazador",
+    "accion": null,
+    "estado": "omitido",
+    "resumen": "sin grupos con señal que examinar"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "tool_consultar_rag",
+    "accion": "rag",
+    "estado": "omitido",
+    "resumen": "técnicas MITRE no consultadas (sin hipótesis de seguridad: no se consultan técnicas)"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_selector_herramientas",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "usar_cve=False"
+   },
+   {
+    "plan_version": 1,
+    "step_id": 3,
+    "nodo": "agente_ingeniero_mitigacion",
+    "accion": "mitigacion",
+    "estado": "ejecutado",
+    "resumen": "0 comandos propuestos"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "tool_validar_comandos",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "comandos válidos"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_auditor_final",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "confianza=1.0 cobertura_suficiente=True"
+   }
+  ],
+  "desviaciones_plan": [],
+  "historial_planes": [],
+  "replan_count": 0,
+  "diagnostico": "El lote analizado contiene 20 registros del kernel de BlueGene/L clasificados como INFO. Los eventos corresponden a telemetría estándar de control operativo, específicamente estadísticas periódicas de interrupciones de hardware (sin registro de interrupciones críticas) y métricas del manejador de señales RBS para memoria DDR (sin tiempo invertido ni ocurrencia de errores DDR corregibles). No se identifican anomalías operativas, fallas de hardware, caídas del kernel ni patrones asociados a actividad maliciosa.",
+  "necesita_rag": false,
+  "usar_cve": false,
+  "razon_seleccion": "El diagnóstico no presenta ningún ataque, anomalía o vulnerabilidad; únicamente contiene telemetría operativa estándar clasificada como INFO.",
+  "contexto_rag": [
+   {
+    "id": "bgl_des_balanceado_0003",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Composición: 20 eventos, severidades INFO 20.",
+    "similitud": 1.0
+   },
+   {
+    "id": "bgl_des_natural_0006",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Composición: 20 eventos, severidades INFO 20.",
+    "similitud": 1.0
+   },
+   {
+    "id": "uwf_hist_008",
+    "dataset": "uwf",
+    "etiqueta": "malicioso",
+    "clase": "anomala",
+    "descripcion": "Malicioso (Reconnaissance; T1592). Actividad del incidente: 1 conexiones (tcp gssapi 1), 1 puertos de destino distintos, estados SF 1. Resto del lote: 3 conexiones de fondo (protocolos - 3).",
+    "similitud": 0.873
+   },
+   {
+    "id": "bgl_des_natural_0000",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "clase": "anomala",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 1 × [FATAL bgl.kernel] rts: kernel terminated for reason <n>. Composición: 20 eventos, severidades INFO 19, FATAL 1.",
+    "similitud": 0.64
+   }
+  ],
+  "tecnicas_mitre": [],
+  "cves_encontrados": [],
+  "comandos_mitigacion": [],
+  "comandos_validos": true,
+  "motivos_rechazo": [],
+  "intentos_correccion": 1,
+  "confianza": 1.0,
+  "hay_incidente": false,
+  "hay_anomalia": false,
+  "evaluacion_auditor": "El lote se compone exclusivamente de 20 eventos informativos (INFO) del kernel de BlueGene/L divididos en dos grupos homogéneos de telemetría de rutina: estadísticas del manejador de señales RBS para memoria DDR sin errores registrados (G01) y estadísticas de interrupciones sin interrupciones críticas (G02). No existe evidencia de degradación de hardware, fallas operativas ni actividad maliciosa.",
+  "cobertura_auditor": true,
+  "cobertura_suficiente": true,
+  "motivo_replanificacion": "",
+  "requiere_replanificacion": false,
+  "_firma": "v2|lineas=20 ips=0 servicios=[bgl.kernel:20] eventos=[evento_normal:20] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[INFO:20] categorias=[] cobertura=1.0",
+  "_error_api": null,
+  "requiere_revision_humana": false,
+  "output_contract_version": "d11-v1",
+  "classification_detallada": "normal"
+ },
+ "observaciones": [
+  {
+   "nodo": "planificador",
+   "llamadas": [
+    0
+   ],
+   "prompt_chars": 1372,
+   "system_chars": 869,
+   "tokens": [
+    {
+     "input_tokens": 943,
+     "output_tokens": 245,
+     "reasoning_tokens": 831,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "triage",
+   "llamadas": [
+    1
+   ],
+   "prompt_chars": 8605,
+   "system_chars": 1394,
+   "tokens": [
+    {
+     "input_tokens": 4331,
+     "output_tokens": 179,
+     "reasoning_tokens": 238,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "selector",
+   "llamadas": [
+    2
+   ],
+   "prompt_chars": 635,
+   "system_chars": 344,
+   "tokens": [
+    {
+     "input_tokens": 235,
+     "output_tokens": 40,
+     "reasoning_tokens": 208,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "mitigacion",
+   "llamadas": [
+    3
+   ],
+   "prompt_chars": 2001,
+   "system_chars": 854,
+   "tokens": [
+    {
+     "input_tokens": 822,
+     "output_tokens": 6,
+     "reasoning_tokens": 50,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "auditor",
+   "llamadas": [
+    4
+   ],
+   "prompt_chars": 11514,
+   "system_chars": 4839,
+   "tokens": [
+    {
+     "input_tokens": 5725,
+     "output_tokens": 481,
+     "reasoning_tokens": 687,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  }
+ ],
+ "consultas_externas": []
+}

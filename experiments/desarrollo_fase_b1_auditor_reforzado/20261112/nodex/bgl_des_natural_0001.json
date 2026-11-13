@@ -1,0 +1,1112 @@
+{
+ "case_id": "bgl_des_natural_0001",
+ "dataset": "bgl",
+ "arquitectura": "nodex",
+ "segundos_pared_hijo": 60.2444669999968,
+ "interruptores_efectivos": {
+  "RAG_POR_HIPOTESIS": true,
+  "CAZADOR_ACTIVO": false,
+  "CORRECCION_AUDITOR": true,
+  "HISTORICO_ACTIVO": true,
+  "HISTORICO_K": 3,
+  "EVENTOS_POR_CATEGORIA": true,
+  "HISTORICO_CONTRASTIVO": true,
+  "HISTORICO_K_POR_CLASE": 2,
+  "MEMORIA_GRUPOS_ACTIVA": true,
+  "CAZADOR_MOTIVO_FACTUAL": true,
+  "CAZADOR_LISTA_PATRONES": true,
+  "AUDITOR_REVISA_MEDIOS": true,
+  "AUDITOR_REFORZADO": true
+ },
+ "estado": {
+  "resumen_logs": {
+   "formato_detectado": "bgl",
+   "total_lineas": 20,
+   "servicios": {
+    "bgl.kernel": 18,
+    "bgl.app": 2
+   },
+   "eventos": {
+    "evento_critico": 2,
+    "evento_normal": 18
+   },
+   "ventana_temporal": {
+    "inicio": "2005-06-03-15.42.50.675872",
+    "fin": "2005-06-05-05.16.26.686603"
+   },
+   "n_ips_distintas": 1,
+   "ips_distintas": [
+    "172.16.96.116"
+   ],
+   "por_ip": {
+    "172.16.96.116": {
+     "intentos_fallidos": 0,
+     "usuarios_objetivo": [],
+     "servicios": [
+      "bgl.app"
+     ],
+     "n_eventos": 2,
+     "n_como_origen": 2,
+     "n_como_destino": 0
+    }
+   },
+   "usuarios": {},
+   "n_usuarios_distintos": 0,
+   "codigos_respuesta": {},
+   "entidades": [
+    {
+     "ip": "172.16.96.116",
+     "n_eventos": 2,
+     "intentos_fallidos": 0,
+     "usuarios_objetivo": [],
+     "servicios": [
+      "bgl.app"
+     ],
+     "n_como_origen": 2,
+     "n_como_destino": 0
+    }
+   ],
+   "cronologia": [
+    {
+     "n": 9,
+     "timestamp": "2005-06-04-00.24.32.432192",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1117869872 2005.06.04 R04-M1-N4-I:J18-U11 2005-06-04-00.24.32.432192 R04-M1-N4-I:J18-U11 RAS APP FATAL ciod: failed to read message prefix on control stream (CioStream socket to 17…",
+     "ip": "172.16.96.116"
+    },
+    {
+     "n": 10,
+     "timestamp": "2005-06-04-00.24.36.222560",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1117869876 2005.06.04 R27-M1-N4-I:J18-U01 2005-06-04-00.24.36.222560 R27-M1-N4-I:J18-U01 RAS APP FATAL ciod: failed to read message prefix on control stream (CioStream socket to 17…",
+     "ip": "172.16.96.116"
+    }
+   ],
+   "cronologia_omitidos": 0,
+   "raw_procedencia": {
+    "sha256": "3a18aafbc977b081386316ebb50a7302358c5d19e563ca30232d9434bdcb0310",
+    "lineas": 20,
+    "bytes": 2826
+   },
+   "reputacion_ips": {
+    "172.16.96.116": {
+     "fuente": "sin_reputacion",
+     "ip": "172.16.96.116",
+     "score": null,
+     "nota": "modo sin reputación externa: ninguna IP recibe puntaje",
+     "categoria": "desconocido"
+    }
+   },
+   "perfil_lote": {
+    "tipo": "texto",
+    "filas": 20,
+    "con_formato_reconocido": 20,
+    "severidades": {
+     "INFO": 18,
+     "FATAL": 2
+    },
+    "componentes": {
+     "bgl.kernel": 18,
+     "bgl.app": 2
+    },
+    "nodos": {
+     "R02-M1-N0-C:J12-U11": 4,
+     "R23-M0-NE-C:J05-U01": 1,
+     "R24-M0-N1-C:J13-U11": 1,
+     "R21-M1-N6-C:J08-U11": 1,
+     "R16-M1-N2-C:J17-U01": 1,
+     "R04-M1-N4-I:J18-U11": 1,
+     "R27-M1-N4-I:J18-U01": 1,
+     "R30-M0-N7-C:J08-U01": 1,
+     "R25-M0-N7-C:J02-U01": 1,
+     "R24-M1-N8-C:J09-U11": 1
+    },
+    "nodos_distintos": 17,
+    "lineas_severidad_alta": {
+     "total": 2,
+     "omitidas": 0,
+     "lineas": [
+      {
+       "uid": "log_record_000009",
+       "severidad": "FATAL",
+       "group_id": "G04"
+      },
+      {
+       "uid": "log_record_000010",
+       "severidad": "FATAL",
+       "group_id": "G04"
+      }
+     ]
+    },
+    "grupos": 5
+   }
+  },
+  "preprocessing_metadata": {
+   "schema_version": "2.0",
+   "total_lineas_fisicas": 20,
+   "total_eventos": 20,
+   "decoder_distribution": {
+    "text": 20
+   },
+   "product_distribution": {
+    "BlueGene/L": 20
+   },
+   "vendor_distribution": {
+    "IBM": 20
+   },
+   "version_distribution": {},
+   "protocol_distribution": {},
+   "profile_distribution": {
+    "bgl": 20
+   },
+   "severity_distribution": {
+    "INFO": 18,
+    "FATAL": 2
+   },
+   "event_categories": {},
+   "event_outcomes": {},
+   "entities": {
+    "ip": {
+     "172.16.96.116": 2
+    },
+    "host": {
+     "R02-M1-N0-C:J12-U11": 4,
+     "R04-M1-N4-I:J18-U11": 1,
+     "R16-M1-N2-C:J17-U01": 1,
+     "R20-M1-N8-C:J04-U01": 1,
+     "R21-M1-N2-C:J11-U01": 1,
+     "R21-M1-N6-C:J08-U11": 1,
+     "R23-M0-NE-C:J05-U01": 1,
+     "R24-M0-N1-C:J13-U11": 1,
+     "R24-M0-N8-C:J04-U11": 1,
+     "R24-M0-NE-C:J14-U11": 1,
+     "R24-M1-N8-C:J09-U11": 1,
+     "R24-M1-NB-C:J15-U11": 1,
+     "R25-M0-N7-C:J02-U01": 1,
+     "R27-M1-N4-I:J18-U01": 1,
+     "R30-M0-N7-C:J08-U01": 1,
+     "R31-M0-NE-C:J05-U11": 1,
+     "R36-M0-NA-C:J06-U01": 1
+    },
+    "servicio": {
+     "bgl.kernel": 18,
+     "bgl.app": 2
+    },
+    "producto": {
+     "BlueGene/L": 20
+    }
+   },
+   "time_window": {
+    "inicio": "2005-06-03-15.42.50.675872",
+    "fin": "2005-06-05-05.16.26.686603"
+   },
+   "parsing": {
+    "parsed_events": 20,
+    "fallback_events": 0,
+    "coverage": 1.0
+   },
+   "segments": [
+    {
+     "index": 0,
+     "decoder": "text",
+     "line_start": 1,
+     "line_end": 20,
+     "n_records": 20,
+     "confidence": 0.1,
+     "decoder_inicial": "text",
+     "confidence_inicial": 0.1,
+     "decoder_distribution": {
+      "text": 20
+     },
+     "context": {}
+    }
+   ],
+   "entities_resumen": {
+    "ip": 1,
+    "host": 17,
+    "servicio": 2,
+    "producto": 1
+   },
+   "config": {
+    "LOG_DETECTION_CHUNK_SIZE": 50,
+    "LOG_ENABLE_MULTILINE": true,
+    "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+    "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+    "LOG_MAX_EVENTS": 100000,
+    "LOG_MAX_FILE_BYTES": 52428800,
+    "LOG_MAX_RAW_SAMPLES": 20,
+    "LOG_MAX_UNMAPPED_FIELDS": 100,
+    "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+    "LOG_PARSING_MODE": "hybrid",
+    "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+    "LOG_PRESERVE_RAW": true
+   }
+  },
+  "parsing_warnings": [],
+  "evidencia_logs": [
+   {
+    "uid": "log_record_000001",
+    "record_number": 1,
+    "line_start": 1,
+    "line_end": 1,
+    "timestamp": "2005-06-03-15.42.50.675872",
+    "group_id": "G01",
+    "source_host": "R02-M1-N0-C:J12-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "instruction cache parity error corrected"
+   },
+   {
+    "uid": "log_record_000002",
+    "record_number": 2,
+    "line_start": 2,
+    "line_end": 2,
+    "timestamp": "2005-06-03-15.42.53.276129",
+    "group_id": "G01",
+    "source_host": "R02-M1-N0-C:J12-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "instruction cache parity error corrected"
+   },
+   {
+    "uid": "log_record_000003",
+    "record_number": 3,
+    "line_start": 3,
+    "line_end": 3,
+    "timestamp": "2005-06-03-15.49.36.156884",
+    "group_id": "G01",
+    "source_host": "R02-M1-N0-C:J12-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "instruction cache parity error corrected"
+   },
+   {
+    "uid": "log_record_000004",
+    "record_number": 4,
+    "line_start": 4,
+    "line_end": 4,
+    "timestamp": "2005-06-03-15.49.38.026704",
+    "group_id": "G01",
+    "source_host": "R02-M1-N0-C:J12-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "instruction cache parity error corrected"
+   },
+   {
+    "uid": "log_record_000005",
+    "record_number": 5,
+    "line_start": 5,
+    "line_end": 5,
+    "timestamp": "2005-06-03-16.47.20.730545",
+    "group_id": "G02",
+    "source_host": "R23-M0-NE-C:J05-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "63543 double-hummer alignment exceptions"
+   },
+   {
+    "uid": "log_record_000006",
+    "record_number": 6,
+    "line_start": 6,
+    "line_end": 6,
+    "timestamp": "2005-06-03-16.56.14.254137",
+    "group_id": "G02",
+    "source_host": "R24-M0-N1-C:J13-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "162 double-hummer alignment exceptions"
+   },
+   {
+    "uid": "log_record_000007",
+    "record_number": 7,
+    "line_start": 7,
+    "line_end": 7,
+    "timestamp": "2005-06-03-16.56.55.309974",
+    "group_id": "G02",
+    "source_host": "R21-M1-N6-C:J08-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "141 double-hummer alignment exceptions"
+   },
+   {
+    "uid": "log_record_000008",
+    "record_number": 8,
+    "line_start": 8,
+    "line_end": 8,
+    "timestamp": "2005-06-03-18.21.59.871925",
+    "group_id": "G03",
+    "source_host": "R16-M1-N2-C:J17-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "CE sym 2, at 0x0b85eee0, mask 0x05"
+   },
+   {
+    "uid": "log_record_000009",
+    "record_number": 9,
+    "line_start": 9,
+    "line_end": 9,
+    "timestamp": "2005-06-04-00.24.32.432192",
+    "group_id": "G04",
+    "source_ip": "172.16.96.116",
+    "source_host": "R04-M1-N4-I:J18-U11",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: failed to read message prefix on control stream (CioStream socket to 172.16.96.116:33569"
+   },
+   {
+    "uid": "log_record_000010",
+    "record_number": 10,
+    "line_start": 10,
+    "line_end": 10,
+    "timestamp": "2005-06-04-00.24.36.222560",
+    "group_id": "G04",
+    "source_ip": "172.16.96.116",
+    "source_host": "R27-M1-N4-I:J18-U01",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: failed to read message prefix on control stream (CioStream socket to 172.16.96.116:33370"
+   },
+   {
+    "uid": "log_record_000011",
+    "record_number": 11,
+    "line_start": 11,
+    "line_end": 11,
+    "timestamp": "2005-06-04-20.28.40.767551",
+    "group_id": "G03",
+    "source_host": "R30-M0-N7-C:J08-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "CE sym 20, at 0x1438f9e0, mask 0x40"
+   },
+   {
+    "uid": "log_record_000012",
+    "record_number": 12,
+    "line_start": 12,
+    "line_end": 12,
+    "timestamp": "2005-06-05-00.09.01.903373",
+    "group_id": "G05",
+    "source_host": "R25-M0-N7-C:J02-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.2275"
+   },
+   {
+    "uid": "log_record_000013",
+    "record_number": 13,
+    "line_start": 13,
+    "line_end": 13,
+    "timestamp": "2005-06-05-00.09.52.516674",
+    "group_id": "G05",
+    "source_host": "R24-M1-N8-C:J09-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.862"
+   },
+   {
+    "uid": "log_record_000014",
+    "record_number": 14,
+    "line_start": 14,
+    "line_end": 14,
+    "timestamp": "2005-06-05-00.36.20.945796",
+    "group_id": "G05",
+    "source_host": "R24-M1-NB-C:J15-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.728"
+   },
+   {
+    "uid": "log_record_000015",
+    "record_number": 15,
+    "line_start": 15,
+    "line_end": 15,
+    "timestamp": "2005-06-05-00.37.25.012681",
+    "group_id": "G05",
+    "source_host": "R20-M1-N8-C:J04-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.775"
+   },
+   {
+    "uid": "log_record_000016",
+    "record_number": 16,
+    "line_start": 16,
+    "line_end": 16,
+    "timestamp": "2005-06-05-01.18.21.778604",
+    "group_id": "G05",
+    "source_host": "R24-M0-NE-C:J14-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.3276"
+   },
+   {
+    "uid": "log_record_000017",
+    "record_number": 17,
+    "line_start": 17,
+    "line_end": 17,
+    "timestamp": "2005-06-05-01.18.33.830595",
+    "group_id": "G05",
+    "source_host": "R21-M1-N2-C:J11-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.1717"
+   },
+   {
+    "uid": "log_record_000018",
+    "record_number": 18,
+    "line_start": 18,
+    "line_end": 18,
+    "timestamp": "2005-06-05-01.19.23.822135",
+    "group_id": "G05",
+    "source_host": "R24-M0-N8-C:J04-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.3919"
+   },
+   {
+    "uid": "log_record_000019",
+    "record_number": 19,
+    "line_start": 19,
+    "line_end": 19,
+    "timestamp": "2005-06-05-05.15.59.416717",
+    "group_id": "G05",
+    "source_host": "R31-M0-NE-C:J05-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.2079"
+   },
+   {
+    "uid": "log_record_000020",
+    "record_number": 20,
+    "line_start": 20,
+    "line_end": 20,
+    "timestamp": "2005-06-05-05.16.26.686603",
+    "group_id": "G05",
+    "source_host": "R36-M0-NA-C:J06-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "generating core.1414"
+   }
+  ],
+  "evidencia_logs_omitidos": 0,
+  "grupos_evidencia": [
+   {
+    "group_id": "G01",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "instruction cache parity error corrected"
+    },
+    "conteo": 4,
+    "uids": [
+     "log_record_000001",
+     "log_record_000002",
+     "log_record_000003",
+     "log_record_000004"
+    ],
+    "nodos": [
+     "R02-M1-N0-C:J12-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G02",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "<n> double-hummer alignment exceptions"
+    },
+    "conteo": 3,
+    "uids": [
+     "log_record_000005",
+     "log_record_000006",
+     "log_record_000007"
+    ],
+    "nodos": [
+     "R23-M0-NE-C:J05-U01",
+     "R24-M0-N1-C:J13-U11",
+     "R21-M1-N6-C:J08-U11"
+    ],
+    "n_nodos": 3
+   },
+   {
+    "group_id": "G03",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "CE sym <n>, at <hex>, mask <hex>"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000008",
+     "log_record_000011"
+    ],
+    "nodos": [
+     "R16-M1-N2-C:J17-U01",
+     "R30-M0-N7-C:J08-U01"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G04",
+    "clave": {
+     "componente": "bgl.app",
+     "severidad": "FATAL",
+     "plantilla": "ciod: failed to read message prefix on control stream (CioStream socket to <n>.<n>.<n>.<n>:<n>"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000009",
+     "log_record_000010"
+    ],
+    "nodos": [
+     "R04-M1-N4-I:J18-U11",
+     "R27-M1-N4-I:J18-U01"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G05",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "generating core.<n>"
+    },
+    "conteo": 9,
+    "uids": [
+     "log_record_000012",
+     "log_record_000013",
+     "log_record_000014",
+     "log_record_000015",
+     "log_record_000016",
+     "log_record_000017",
+     "log_record_000018",
+     "log_record_000019",
+     "log_record_000020"
+    ],
+    "nodos": [
+     "R25-M0-N7-C:J02-U01",
+     "R24-M1-N8-C:J09-U11",
+     "R24-M1-NB-C:J15-U11",
+     "R20-M1-N8-C:J04-U01",
+     "R24-M0-NE-C:J14-U11",
+     "R21-M1-N2-C:J11-U01",
+     "R24-M0-N8-C:J04-U11",
+     "R31-M0-NE-C:J05-U11",
+     "R36-M0-NA-C:J06-U01"
+    ],
+    "n_nodos": 9
+   }
+  ],
+  "contenido_lote": {
+   "tipo": "texto",
+   "lineas": [
+    "[log_record_000001] 1117838570 2005.06.03 R02-M1-N0-C:J12-U11 2005-06-03-15.42.50.675872 R02-M1-N0-C:J12-U11 RAS KERNEL INFO instruction cache parity error corrected",
+    "[log_record_000002] 1117838573 2005.06.03 R02-M1-N0-C:J12-U11 2005-06-03-15.42.53.276129 R02-M1-N0-C:J12-U11 RAS KERNEL INFO instruction cache parity error corrected",
+    "[log_record_000003] 1117838976 2005.06.03 R02-M1-N0-C:J12-U11 2005-06-03-15.49.36.156884 R02-M1-N0-C:J12-U11 RAS KERNEL INFO instruction cache parity error corrected",
+    "[log_record_000004] 1117838978 2005.06.03 R02-M1-N0-C:J12-U11 2005-06-03-15.49.38.026704 R02-M1-N0-C:J12-U11 RAS KERNEL INFO instruction cache parity error corrected",
+    "[log_record_000005] 1117842440 2005.06.03 R23-M0-NE-C:J05-U01 2005-06-03-16.47.20.730545 R23-M0-NE-C:J05-U01 RAS KERNEL INFO 63543 double-hummer alignment exceptions",
+    "[log_record_000006] 1117842974 2005.06.03 R24-M0-N1-C:J13-U11 2005-06-03-16.56.14.254137 R24-M0-N1-C:J13-U11 RAS KERNEL INFO 162 double-hummer alignment exceptions",
+    "[log_record_000007] 1117843015 2005.06.03 R21-M1-N6-C:J08-U11 2005-06-03-16.56.55.309974 R21-M1-N6-C:J08-U11 RAS KERNEL INFO 141 double-hummer alignment exceptions",
+    "[log_record_000008] 1117848119 2005.06.03 R16-M1-N2-C:J17-U01 2005-06-03-18.21.59.871925 R16-M1-N2-C:J17-U01 RAS KERNEL INFO CE sym 2, at 0x0b85eee0, mask 0x05",
+    "[log_record_000009] 1117869872 2005.06.04 R04-M1-N4-I:J18-U11 2005-06-04-00.24.32.432192 R04-M1-N4-I:J18-U11 RAS APP FATAL ciod: failed to read message prefix on control stream (CioStream socket to 172.16.96.116:33569",
+    "[log_record_000010] 1117869876 2005.06.04 R27-M1-N4-I:J18-U01 2005-06-04-00.24.36.222560 R27-M1-N4-I:J18-U01 RAS APP FATAL ciod: failed to read message prefix on control stream (CioStream socket to 172.16.96.116:33370",
+    "[log_record_000011] 1117942120 2005.06.04 R30-M0-N7-C:J08-U01 2005-06-04-20.28.40.767551 R30-M0-N7-C:J08-U01 RAS KERNEL INFO CE sym 20, at 0x1438f9e0, mask 0x40",
+    "[log_record_000012] 1117955341 2005.06.05 R25-M0-N7-C:J02-U01 2005-06-05-00.09.01.903373 R25-M0-N7-C:J02-U01 RAS KERNEL INFO generating core.2275",
+    "[log_record_000013] 1117955392 2005.06.05 R24-M1-N8-C:J09-U11 2005-06-05-00.09.52.516674 R24-M1-N8-C:J09-U11 RAS KERNEL INFO generating core.862",
+    "[log_record_000014] 1117956980 2005.06.05 R24-M1-NB-C:J15-U11 2005-06-05-00.36.20.945796 R24-M1-NB-C:J15-U11 RAS KERNEL INFO generating core.728",
+    "[log_record_000015] 1117957045 2005.06.05 R20-M1-N8-C:J04-U01 2005-06-05-00.37.25.012681 R20-M1-N8-C:J04-U01 RAS KERNEL INFO generating core.775",
+    "[log_record_000016] 1117959501 2005.06.05 R24-M0-NE-C:J14-U11 2005-06-05-01.18.21.778604 R24-M0-NE-C:J14-U11 RAS KERNEL INFO generating core.3276",
+    "[log_record_000017] 1117959513 2005.06.05 R21-M1-N2-C:J11-U01 2005-06-05-01.18.33.830595 R21-M1-N2-C:J11-U01 RAS KERNEL INFO generating core.1717",
+    "[log_record_000018] 1117959563 2005.06.05 R24-M0-N8-C:J04-U11 2005-06-05-01.19.23.822135 R24-M0-N8-C:J04-U11 RAS KERNEL INFO generating core.3919",
+    "[log_record_000019] 1117973759 2005.06.05 R31-M0-NE-C:J05-U11 2005-06-05-05.15.59.416717 R31-M0-NE-C:J05-U11 RAS KERNEL INFO generating core.2079",
+    "[log_record_000020] 1117973786 2005.06.05 R36-M0-NA-C:J06-U01 2005-06-05-05.16.26.686603 R36-M0-NA-C:J06-U01 RAS KERNEL INFO generating core.1414"
+   ],
+   "total_lineas": 20,
+   "lineas_entregadas": 20,
+   "recortado": false,
+   "topes": {
+    "lineas": 200,
+    "caracteres": 20000
+   }
+  },
+  "veredicto_preliminar": "anomalia_operativa",
+  "justificacion_veredicto_preliminar": "Presencia de errores FATAL por pérdida de comunicación en sockets CioStream de ciod y generación consecutiva de múltiples volcados de memoria (core dumps).",
+  "invalid_evidence_group_count": 0,
+  "comandos_rechazados": [],
+  "casos_historicos": [
+   {
+    "id": "bgl_des_natural_0003",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "clase": "anomala",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 2 × [FATAL bgl.app] ciod: Error reading message prefix on CioStream socket to <n>.<n>.<n>.<n>:<n>, Link has be. Composición: 20 eventos, severidades INFO 15, FATAL 5.",
+    "similitud": 0.81
+   },
+   {
+    "id": "bgl_des_balanceado_0000",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "clase": "anomala",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 1 × [FATAL bgl.app] ciod: Error reading message prefix after LOAD_MESSAGE on CioStream socket to <n>.<n>.<n>.<; 1 × [FATAL bgl.kernel] rts: kernel terminated for reason <n>. Composición: 20 eventos, severidades INFO 15, FATAL 5.",
+    "similitud": 0.791
+   },
+   {
+    "id": "bgl_des_natural_0019",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Contiene eventos de severidad alta que no se consideraron alerta: 2 × [FATAL bgl.app] ciod: LOGIN chdir(/g/g<n>/spelce<n>/Linpack_SWL) failed: No such file or directory. Composición: 20 eventos, severidades INFO 18, FATAL 2.",
+    "similitud": 0.74
+   },
+   {
+    "id": "bgl_des_natural_0011",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Contiene eventos de severidad alta que no se consideraron alerta: 2 × [FATAL bgl.app] ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r<n>: invalid or mi. Composición: 20 eventos, severidades INFO 18, FATAL 2.",
+    "similitud": 0.737
+   }
+  ],
+  "historico_consulta": {
+   "excluidos_por_solapamiento": [
+    "rag_enriquecido_v2:bgl_des_natural_0001"
+   ],
+   "consultados": 56,
+   "contrastiva": true,
+   "k_por_clase": 2,
+   "tipo": "texto",
+   "omitidos_otro_tipo": 31,
+   "excluidos_mismo_incidente": [],
+   "exclusion_por_incidente_activa": true,
+   "representacion": "Eventos destacados: [FATAL bgl.app] ciod: failed to read message prefix on control stream (CioStream socket to <n>.<n>.<n>.<n>:<n> x2 en 2 nodos\nLog de texto, 20 eventos. Severidades: INFO 18, FATAL 2. Componentes: bgl.kernel 18, bgl.app 2. Nodos distintos: 17."
+  },
+  "hallazgos_cazador": [],
+  "cazador_ejecutado": false,
+  "veredicto_consolidado": "anomalia_operativa",
+  "consulta_mitre": "",
+  "rag_omitido": "sin hipótesis de seguridad: no se consultan técnicas",
+  "revision_hallazgos": [],
+  "diagnostico_inicial": "",
+  "diagnostico_corregido": "",
+  "correcciones_auditor": 0,
+  "historial_correcciones": [],
+  "memoria_grupos": {},
+  "memoria_grupos_consulta": {
+   "excluidos_por_solapamiento": [],
+   "consultados": 0
+  },
+  "evaluacion_grupos": [
+   {
+    "group_id": "G04",
+    "explicacion_benigna": "Fallo de comunicación de red o caída anormal del proceso de control en el host 172.16.96.116, provocando que los nodos de E/S de BlueGene/L no puedan leer el prefijo del mensaje a través del socket CioStream.",
+    "explicacion_maliciosa": "Interrupción inducida de la comunicación o manipulación deliberada del flujo de control del servicio de E/S.",
+    "patron_lista": "ninguno"
+   }
+  ],
+  "eventos_reconstruidos": [
+   {
+    "event_id": "event_001",
+    "evidence_uids": [
+     "log_record_000001",
+     "log_record_000002",
+     "log_record_000003",
+     "log_record_000004",
+     "log_record_000005",
+     "log_record_000006",
+     "log_record_000007",
+     "log_record_000008",
+     "log_record_000011"
+    ],
+    "timestamp": "2005-06-03-15.42.50.675872",
+    "event_type": "hardware_kernel_events",
+    "description": "Eventos de fondo del kernel reportando errores corregidos de paridad de caché, excepciones de alineación y errores CE.",
+    "confidence": null,
+    "evidence_groups": [
+     "G01",
+     "G02",
+     "G03"
+    ],
+    "categoria": "contexto"
+   },
+   {
+    "event_id": "event_002",
+    "evidence_uids": [
+     "log_record_000009",
+     "log_record_000010"
+    ],
+    "timestamp": "2005-06-04-00.24.32.432192",
+    "event_type": "control_stream_failure",
+    "description": "Fallo crítico en ciod al no poder leer el prefijo del mensaje en el socket de control contra 172.16.96.116.",
+    "confidence": null,
+    "evidence_groups": [
+     "G04"
+    ],
+    "categoria": "anomalia_operativa"
+   },
+   {
+    "event_id": "event_003",
+    "evidence_uids": [
+     "log_record_000012",
+     "log_record_000013",
+     "log_record_000014",
+     "log_record_000015",
+     "log_record_000016",
+     "log_record_000017",
+     "log_record_000018",
+     "log_record_000019",
+     "log_record_000020"
+    ],
+    "timestamp": "2005-06-05-00.09.01.903373",
+    "event_type": "core_dump_generation",
+    "description": "Múltiples nodos de cómputo generan volcados de memoria tras la desestabilización del servicio.",
+    "confidence": null,
+    "evidence_groups": [
+     "G05"
+    ],
+    "categoria": "anomalia_operativa"
+   }
+  ],
+  "secuencia_temporal": [
+   "event_001",
+   "event_002",
+   "event_003"
+  ],
+  "tecnicas_atribuidas": [],
+  "invalid_evidence_uid_count": 0,
+  "d11_warnings": [],
+  "telemetry": {
+   "llm_call_count": 5,
+   "input_tokens": 14536,
+   "output_tokens": 1750,
+   "total_tokens": 19257,
+   "execution_time": 45.722064,
+   "replan_count": 0,
+   "intentos_correccion": 1,
+   "invalid_evidence_uid_count": 0,
+   "d11_warning_count": 0,
+   "llm_calls": [
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 1204,
+     "output_tokens": 334,
+     "total_tokens": 2134,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 596,
+     "duration_s": 10.295,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 4317,
+     "output_tokens": 171,
+     "total_tokens": 5371,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 883,
+     "duration_s": 10.529,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 253,
+     "output_tokens": 49,
+     "total_tokens": 516,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 214,
+     "duration_s": 4.425,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 1363,
+     "output_tokens": 105,
+     "total_tokens": 2038,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 570,
+     "duration_s": 6.542,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 7399,
+     "output_tokens": 1091,
+     "total_tokens": 9198,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 708,
+     "duration_s": 13.768,
+     "error": null
+    }
+   ]
+  },
+  "firma": "v2|lineas=20 ips=1 servicios=[bgl.kernel:18,bgl.app:2] eventos=[evento_critico:2,evento_normal:18] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[INFO:18,FATAL:2] categorias=[] cobertura=1.0",
+  "plan": {
+   "plan_version": 1,
+   "objetivo": "Evaluar los eventos críticos FATAL detectados en el sistema BlueGene/L, determinar si corresponden a fallos de hardware/kernel o explotación de vulnerabilidades, y definir medidas de mitigación.",
+   "pasos": [
+    {
+     "id": 1,
+     "accion": "triage",
+     "objetivo": "Analizar los 20 eventos del lote, caracterizando en detalle los 2 registros con severidad FATAL en bgl.kernel y la actividad asociada a la IP 172.16.96.116.",
+     "estado": "ejecutado"
+    },
+    {
+     "id": 2,
+     "accion": "cve",
+     "objetivo": "Consultar vulnerabilidades conocidas asociadas a la plataforma IBM BlueGene/L y sus componentes de kernel y aplicaciones.",
+     "estado": "omitido",
+     "motivo": "El diagnóstico descarta explícitamente intrusión o actividad maliciosa, atribuyendo los eventos a fallos de comunicación internos y caídas de procesos del sistema."
+    },
+    {
+     "id": 3,
+     "accion": "mitigacion",
+     "objetivo": "Formular recomendaciones de contención, aislamiento de nodos afectados y recuperación del servicio operativo del clúster.",
+     "estado": "ejecutado"
+    }
+   ],
+   "criterios_finalizacion": [
+    "Causa raíz de los eventos FATAL identificada y clasificada.",
+    "Revisión de vulnerabilidades CVE para BlueGene/L completada.",
+    "Plan de mitigación y contingencia para los nodos afectados generado."
+   ]
+  },
+  "plan_objetivo": "Evaluar los eventos críticos FATAL detectados en el sistema BlueGene/L, determinar si corresponden a fallos de hardware/kernel o explotación de vulnerabilidades, y definir medidas de mitigación.",
+  "paso_actual": 3,
+  "historial_ejecucion": [
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_planificador",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "plan v1, 3 pasos: ['triage', 'cve', 'mitigacion']"
+   },
+   {
+    "plan_version": 1,
+    "step_id": 1,
+    "nodo": "agente_analista_triage",
+    "accion": "triage",
+    "estado": "ejecutado",
+    "resumen": "diagnóstico producido"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_cazador",
+    "accion": null,
+    "estado": "omitido",
+    "resumen": "sin grupos con señal que examinar"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "tool_consultar_rag",
+    "accion": "rag",
+    "estado": "omitido",
+    "resumen": "técnicas MITRE no consultadas (sin hipótesis de seguridad: no se consultan técnicas)"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_selector_herramientas",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "usar_cve=False"
+   },
+   {
+    "plan_version": 1,
+    "step_id": 3,
+    "nodo": "agente_ingeniero_mitigacion",
+    "accion": "mitigacion",
+    "estado": "ejecutado",
+    "resumen": "6 comandos propuestos"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "tool_validar_comandos",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "comandos válidos"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_auditor_final",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "confianza=0.95 cobertura_suficiente=True"
+   }
+  ],
+  "desviaciones_plan": [],
+  "historial_planes": [],
+  "replan_count": 0,
+  "diagnostico": "Se identifican eventos críticos FATAL en el servicio ciod asociados a fallos de lectura en el flujo de control sobre sockets CioStream hacia 172.16.96.116, seguidos por la generación de múltiples volcados de memoria (core dumps) en varios nodos de cómputo. Este comportamiento coincide con el patrón de fallas de comunicación y caída de procesos documentado en los casos anómalos de la organización, descartándose indicios de intrusión o actividad maliciosa.",
+  "necesita_rag": false,
+  "usar_cve": false,
+  "razon_seleccion": "El diagnóstico descarta explícitamente intrusión o actividad maliciosa, atribuyendo los eventos a fallos de comunicación internos y caídas de procesos del sistema.",
+  "contexto_rag": [
+   {
+    "id": "bgl_des_natural_0003",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "clase": "anomala",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 2 × [FATAL bgl.app] ciod: Error reading message prefix on CioStream socket to <n>.<n>.<n>.<n>:<n>, Link has be. Composición: 20 eventos, severidades INFO 15, FATAL 5.",
+    "similitud": 0.81
+   },
+   {
+    "id": "bgl_des_balanceado_0000",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "clase": "anomala",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 1 × [FATAL bgl.app] ciod: Error reading message prefix after LOAD_MESSAGE on CioStream socket to <n>.<n>.<n>.<; 1 × [FATAL bgl.kernel] rts: kernel terminated for reason <n>. Composición: 20 eventos, severidades INFO 15, FATAL 5.",
+    "similitud": 0.791
+   },
+   {
+    "id": "bgl_des_natural_0019",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Contiene eventos de severidad alta que no se consideraron alerta: 2 × [FATAL bgl.app] ciod: LOGIN chdir(/g/g<n>/spelce<n>/Linpack_SWL) failed: No such file or directory. Composición: 20 eventos, severidades INFO 18, FATAL 2.",
+    "similitud": 0.74
+   },
+   {
+    "id": "bgl_des_natural_0011",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Contiene eventos de severidad alta que no se consideraron alerta: 2 × [FATAL bgl.app] ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r<n>: invalid or mi. Composición: 20 eventos, severidades INFO 18, FATAL 2.",
+    "similitud": 0.737
+   }
+  ],
+  "tecnicas_mitre": [],
+  "cves_encontrados": [],
+  "comandos_mitigacion": [
+   "ping -c 4 172.16.96.116",
+   "ip route get 172.16.96.116",
+   "ss -tanp | grep 172.16.96.116",
+   "dmesg -T | tail -n 50",
+   "coredumpctl list --no-pager",
+   "journalctl -xe --no-pager -n 50"
+  ],
+  "comandos_validos": true,
+  "motivos_rechazo": [],
+  "intentos_correccion": 1,
+  "confianza": 0.95,
+  "hay_incidente": false,
+  "hay_anomalia": true,
+  "evaluacion_auditor": "Se confirma una anomalía puramente operativa. Los registros del grupo G04 presentan errores fatales de ciod al intentar leer el prefijo de mensaje en el socket de control CioStream hacia 172.16.96.116, lo que coincide directamente con los patrones históricos anómalos de la organización que requieren intervención técnica. Posteriormente, se observa la generación de volcados de memoria (G05) en varios nodos. No existen indicadores de compromiso, intrusión ni actividad maliciosa.",
+  "cobertura_auditor": true,
+  "cobertura_suficiente": true,
+  "motivo_replanificacion": "",
+  "requiere_replanificacion": false,
+  "_firma": "v2|lineas=20 ips=1 servicios=[bgl.kernel:18,bgl.app:2] eventos=[evento_critico:2,evento_normal:18] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[INFO:18,FATAL:2] categorias=[] cobertura=1.0",
+  "_error_api": null,
+  "requiere_revision_humana": false,
+  "output_contract_version": "d11-v1",
+  "classification_detallada": "anomalia_operativa"
+ },
+ "observaciones": [
+  {
+   "nodo": "planificador",
+   "llamadas": [
+    0
+   ],
+   "prompt_chars": 1923,
+   "system_chars": 869,
+   "tokens": [
+    {
+     "input_tokens": 1204,
+     "output_tokens": 334,
+     "reasoning_tokens": 596,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "triage",
+   "llamadas": [
+    1
+   ],
+   "prompt_chars": 7327,
+   "system_chars": 1394,
+   "tokens": [
+    {
+     "input_tokens": 4317,
+     "output_tokens": 171,
+     "reasoning_tokens": 883,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "selector",
+   "llamadas": [
+    2
+   ],
+   "prompt_chars": 605,
+   "system_chars": 344,
+   "tokens": [
+    {
+     "input_tokens": 253,
+     "output_tokens": 49,
+     "reasoning_tokens": 214,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "mitigacion",
+   "llamadas": [
+    3
+   ],
+   "prompt_chars": 3083,
+   "system_chars": 854,
+   "tokens": [
+    {
+     "input_tokens": 1363,
+     "output_tokens": 105,
+     "reasoning_tokens": 570,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "auditor",
+   "llamadas": [
+    4
+   ],
+   "prompt_chars": 11860,
+   "system_chars": 8455,
+   "tokens": [
+    {
+     "input_tokens": 7399,
+     "output_tokens": 1091,
+     "reasoning_tokens": 708,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  }
+ ],
+ "consultas_externas": [
+  {
+   "orden": 1,
+   "herramienta": "abuseipdb",
+   "parametros": {
+    "ip": "172.16.96.116"
+   },
+   "intento_externo": false,
+   "bloqueado": false,
+   "n_intentos_bloqueados": 0,
+   "hosts": [],
+   "sin_reputacion": true,
+   "respaldo_respondio": false,
+   "fuente_respuesta": "sin_reputacion"
+  }
+ ]
+}

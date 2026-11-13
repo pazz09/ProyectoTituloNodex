@@ -1,0 +1,212 @@
+diff --git a/src/agents/agente_auditor_final.py b/src/agents/agente_auditor_final.py
+index 7caf54b..cf0fb0e 100644
+--- a/src/agents/agente_auditor_final.py
++++ b/src/agents/agente_auditor_final.py
+@@ -63,6 +63,15 @@ una replanificación se disparó por el LLM, por la verificación
+ determinística, o por ambas -- información que `hay_incidente`/`hay_anomalia`
+ ya demostraron que vale la pena mantener separada en vez de colapsarla en
+ un único booleano.
++
++`evaluacion_grupos` (variante de desarrollo "B.1 sin cazador, auditor
++reforzado", interruptor `AUDITOR_REFORZADO`): el auditor recibe en un bloque
++destacado exactamente lo que recibiría el cazador (`grupos_para_cazador` y
++`resumen_dominante`), la misma lista de verificación de patrones MITRE, y debe
++evaluar cada grupo con señal (explicación benigna, explicación maliciosa,
++patrón de la lista) ANTES de emitir el veredicto. La única diferencia con B.1 es
++quién evalúa los grupos (un agente separado o el propio auditor), no la
++información disponible.
+ """
+ 
+ import json
+@@ -102,7 +111,7 @@ def agente_auditor_final(state: LogGuardState) -> dict:
+         '"hay_incidente": true/false, "evaluacion": "...", '
+         '"cobertura_auditor": true/false, "motivo_cobertura": "..."}'
+     )
+-    from src.config import AUDITOR_REVISA_MEDIOS, HISTORICO_ACTIVO, RAG_POR_HIPOTESIS
++    from src.config import AUDITOR_REFORZADO, AUDITOR_REVISA_MEDIOS, HISTORICO_ACTIVO, RAG_POR_HIPOTESIS
+     from src.tools.memoria_historica import CRITERIO_ORGANIZACION, contexto_historico
+     # B1: el auditor revisa cada hallazgo alto; B.1-3c: también los medio.
+     niveles_revisados = ("alto", "medio") if AUDITOR_REVISA_MEDIOS else ("alto",)
+@@ -120,7 +129,18 @@ def agente_auditor_final(state: LogGuardState) -> dict:
+             "(1) hay_anomalia: ¿hay una anomalía operativa o un incidente de seguridad según "
+             "las definiciones de abajo? ")
+         sys_instruction += " " + CRITERIO_ORGANIZACION
+-    if RAG_POR_HIPOTESIS:
++    from src.agents.agente_cazador import grupos_para_cazador
++    grupos_senal = grupos_para_cazador(state) if AUDITOR_REFORZADO else []
++    reforzado_sin_cazador = bool(grupos_senal) and not state.get("cazador_ejecutado")
++    if grupos_senal:
++        # Variante "auditor reforzado": evaluación de grupos ANTES del veredicto, primer campo del JSON.
++        sys_instruction = sys_instruction.replace(
++            "Responde SOLO en JSON: {", "Responde SOLO en JSON: {" + _CAMPO_EVALUACION_GRUPOS, 1)
++        sys_instruction += _instruccion_reforzada()
++    if RAG_POR_HIPOTESIS and reforzado_sin_cazador:
++        sys_instruction += (" Recibes el veredicto consolidado del triage (no hay agente cazador: los grupos con señal "
++                            "los evalúas tú). Tú decides el veredicto final.")
++    elif RAG_POR_HIPOTESIS:
+         sys_instruction += (
+             " Recibes el veredicto consolidado y los hallazgos del agente cazador (que examinó los grupos "
+             "minoritarios). Tú decides el veredicto final. Por cada hallazgo de nivel "
+@@ -144,7 +164,9 @@ def agente_auditor_final(state: LogGuardState) -> dict:
+         f"CONTEXTO RAG: {'Sí' if state.get('contexto_rag') else 'No'}"
+         + (f"\n\n{contexto_pre}" if contexto_pre else "")
+     )
+-    if RAG_POR_HIPOTESIS:
++    if RAG_POR_HIPOTESIS and reforzado_sin_cazador:
++        user_content += f"\nVEREDICTO CONSOLIDADO: {state.get('veredicto_consolidado') or 'sin veredicto'}"
++    elif RAG_POR_HIPOTESIS:
+         user_content += (f"\nVEREDICTO CONSOLIDADO: {state.get('veredicto_consolidado') or 'sin veredicto'}"
+                          + "\nHALLAZGOS DEL CAZADOR: "
+                          + (json.dumps(state.get("hallazgos_cazador"), ensure_ascii=False)
+@@ -153,6 +175,8 @@ def agente_auditor_final(state: LogGuardState) -> dict:
+     historicos = contexto_historico(state.get("casos_historicos"))
+     if historicos:
+         user_content += "\n" + historicos
++    if grupos_senal:
++        user_content += _bloque_grupos(state, grupos_senal)
+ 
+     user_content += contexto_d11(state)
+     respuesta = llm_json(user_content, system=sys_instruction)
+@@ -217,6 +241,14 @@ def agente_auditor_final(state: LogGuardState) -> dict:
+         d11["d11_warnings"] = d11["d11_warnings"] + [
+             f"hallazgo_{h['nivel_sospecha']}_sin_revision:{h['group_id']}" for h in faltantes]
+ 
++    evaluacion_grupos = []
++    if grupos_senal:
++        examinados = [g["group_id"] for g in grupos_senal]
++        evaluacion_grupos = normalizar_evaluacion_grupos(respuesta.get("evaluacion_grupos"), set(examinados))
++        evaluados = {e["group_id"] for e in evaluacion_grupos}
++        d11["d11_warnings"] = d11["d11_warnings"] + [
++            f"grupo_con_senal_sin_evaluacion:{gid}" for gid in examinados if gid not in evaluados]
++
+     print(f"   → Confianza final: {confianza:.2f} | hay_anomalia={hay_anomalia} | "
+           f"hay_incidente={hay_incidente} | cobertura_suficiente={cobertura_suficiente} | {evaluacion}")
+     return {
+@@ -230,6 +262,7 @@ def agente_auditor_final(state: LogGuardState) -> dict:
+         "motivo_replanificacion": motivo_replanificacion,
+         "requiere_replanificacion": not cobertura_suficiente,
+         "revision_hallazgos": revision,
++        "evaluacion_grupos": evaluacion_grupos,
+     }
+ 
+ 
+@@ -247,3 +280,59 @@ def _revisar_hallazgos(valor, altos: list[dict]) -> list[dict]:
+             salida.append({"group_id": gid, "decision": decision,
+                            "evidencia": str(item.get("evidencia") or "")[:600]})
+     return salida
++
++
++_CAMPO_EVALUACION_GRUPOS = (
++    '"evaluacion_grupos": [{"group_id": "G01", "explicacion_benigna": "...", "explicacion_maliciosa": "...", '
++    '"patron_lista": "id de la lista o ninguno"}], ')
++
++
++def _instruccion_reforzada() -> str:
++    """Instrucción de la variante "auditor reforzado": las mismas reglas y la misma lista que el cazador."""
++    from src.agents.agente_cazador import IDS_PATRONES, _instrucciones_b1
++    return (
++        " GRUPOS CON SEÑAL: recibes en un bloque destacado los grupos minoritarios o señalados del lote, con todas "
++        "sus filas, y un resumen del comportamiento dominante para comparar. ANTES de emitir el veredicto debes "
++        "evaluar explícitamente CADA grupo con señal, uno por uno, en evaluacion_grupos (el primer campo del JSON): "
++        "(1) explicacion_benigna: la explicación legítima más plausible; (2) explicacion_maliciosa: la explicación "
++        "maliciosa u operativa (falla) más plausible; (3) patron_lista: el patrón de la lista de verificación que "
++        "calza (" + "|".join(IDS_PATRONES) + "). Basa cada explicación en campos concretos de las filas (puertos, "
++        "protocolo, estado e historia de la conexión, bytes, duración, tiempos, severidad, componente, mensaje). "
++        "Reglas: un grupo sostiene un incidente solo si su explicación benigna NO es plausible con la evidencia "
++        "observada. Que un grupo sea minoritario no lo hace sospechoso: el tráfico de infraestructura habitual "
++        "(resolución de nombres, descubrimiento de red local, asignación de direcciones, sincronización de "
++        "tiempo, difusión) no es sospechoso por ser poco frecuente. Tampoco descartes un grupo solo porque el "
++        "resto del lote sea normal: evalúa cada grupo por sí mismo. No inventes grupos ni campos."
++        + _instrucciones_b1()
++        + " Tu veredicto (hay_anomalia, hay_incidente) debe ser coherente con esa evaluación.")
++
++
++def _bloque_grupos(state: LogGuardState, grupos: list[dict]) -> str:
++    """Bloque destacado con el mismo contenido que recibe el cazador."""
++    from src.agents.agente_cazador import resumen_dominante
++    return ("\n\n===== GRUPOS CON SEÑAL: EVALÚALOS UNO POR UNO ANTES DEL VEREDICTO =====\n"
++            "COMPORTAMIENTO DOMINANTE DEL LOTE (para comparar):\n"
++            + json.dumps(resumen_dominante(state), ensure_ascii=False)
++            + "\n\nGRUPOS A EXAMINAR (uno por uno, con todas sus filas):\n"
++            + json.dumps(grupos, ensure_ascii=False)
++            + "\n===== FIN DE LOS GRUPOS CON SEÑAL =====\n")
++
++
++def normalizar_evaluacion_grupos(valor, examinados: set) -> list[dict]:
++    """Evaluaciones válidas: grupo examinado, una por grupo, patrón validado contra la lista."""
++    from src.agents.agente_cazador import IDS_PATRONES
++    salida, vistos = [], set()
++    for item in valor if isinstance(valor, list) else []:
++        if not isinstance(item, dict):
++            continue
++        gid = str(item.get("group_id") or "").strip()
++        if gid not in examinados or gid in vistos:
++            continue
++        vistos.add(gid)
++        patron = str(item.get("patron_lista") or "").strip().lower()
++        salida.append({"group_id": gid,
++                       "explicacion_benigna": str(item.get("explicacion_benigna") or "")[:600],
++                       "explicacion_maliciosa": str(item.get("explicacion_maliciosa") or "")[:600],
++                       "patron_lista": patron if patron in IDS_PATRONES else ("no_indicado" if not patron
++                                                                               else "fuera_de_lista")})
++    return salida
+diff --git a/src/config.py b/src/config.py
+index 7cc14fe..17d488b 100644
+--- a/src/config.py
++++ b/src/config.py
+@@ -592,6 +592,16 @@ CAZADOR_LISTA_PATRONES = _env_bool("CAZADOR_LISTA_PATRONES", True)
+ #    consolidado sigue cambiando solo con "alto".
+ AUDITOR_REVISA_MEDIOS = _env_bool("AUDITOR_REVISA_MEDIOS", True)
+ 
++# --- Variante de desarrollo: "B.1 sin cazador, auditor reforzado" ---------------
++# El auditor recibe, en un bloque destacado, EXACTAMENTE lo que recibiría el cazador
++# (`grupos_para_cazador`: filas completas de cada grupo con señal, motivo factual y
++# referentes de la memoria de grupos, más el resumen del comportamiento dominante),
++# la misma lista de verificación de patrones MITRE y la instrucción de evaluar cada
++# grupo (explicación benigna, explicación maliciosa, patrón de la lista) ANTES del
++# veredicto (`evaluacion_grupos`). Pensado para usarse con CAZADOR_ACTIVO=false: la
++# única diferencia con B.1 es quién evalúa los grupos, no la información disponible.
++AUDITOR_REFORZADO = _env_bool("AUDITOR_REFORZADO", False)
++
+ 
+ def validate_config() -> None:
+     """Lanza un error claro si falta alguna key obligatoria antes de correr el grafo."""
+diff --git a/src/output_contract.py b/src/output_contract.py
+index d3d9d0d..001086c 100644
+--- a/src/output_contract.py
++++ b/src/output_contract.py
+@@ -474,7 +474,9 @@ def campos_d11(state):
+             "correcciones_auditor": state.get("correcciones_auditor") or 0,
+             "historial_correcciones": copy.deepcopy(state.get("historial_correcciones") or []),
+             # NODEX final, Fase B.1 (aditivos).
+-            "memoria_grupos": copy.deepcopy(state.get("memoria_grupos") or {})}
++            "memoria_grupos": copy.deepcopy(state.get("memoria_grupos") or {}),
++            # Variante "auditor reforzado" (AUDITOR_REFORZADO).
++            "evaluacion_grupos": copy.deepcopy(state.get("evaluacion_grupos") or [])}
+ 
+ 
+ def normalizar_salida_experimental(state):
+diff --git a/src/pipeline.py b/src/pipeline.py
+index 778c6ee..3921597 100644
+--- a/src/pipeline.py
++++ b/src/pipeline.py
+@@ -201,6 +201,7 @@ def _preparar_estado_inicial(raw_logs: str, thread_id: str | None = None):
+         "veredicto_consolidado": None,
+         "consulta_mitre": "",
+         "revision_hallazgos": [],
++        "evaluacion_grupos": [],
+         "diagnostico_inicial": "",
+         "diagnostico_corregido": "",
+         "correcciones_auditor": 0,
+diff --git a/src/state.py b/src/state.py
+index 8d4bde6..522ad0d 100644
+--- a/src/state.py
++++ b/src/state.py
+@@ -70,6 +70,7 @@ class LogGuardState(TypedDict):
+     # --- NODEX final, Fase B.1 (nov-2026) ---
+     memoria_grupos: dict             # B.1-2: por grupo con señal, el grupo malicioso y el benigno más parecidos
+     memoria_grupos_consulta: dict    # B.1-2: memoria usada, grupos excluidos por solapamiento
++    evaluacion_grupos: list          # variante AUDITOR_REFORZADO: el auditor evalúa cada grupo con señal
+     eventos_reconstruidos: list[EventoReconstruido]
+     secuencia_temporal: list[str]
+     tecnicas_atribuidas: list[TecnicaAtribuida]

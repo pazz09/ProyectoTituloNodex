@@ -1,0 +1,859 @@
+{
+ "case_id": "bgl_des_natural_0011",
+ "dataset": "bgl",
+ "arquitectura": "agente_unico",
+ "segundos_pared_hijo": 34.822470600003726,
+ "estado": {
+  "evidencia_logs": [
+   {
+    "uid": "log_record_000001",
+    "record_number": 1,
+    "line_start": 1,
+    "line_end": 1,
+    "timestamp": "2005-11-04-15.34.11.676048",
+    "group_id": "G01",
+    "source_host": "R63-M0-N1-C:J16-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 00106570 dear 0245a5ec"
+   },
+   {
+    "uid": "log_record_000002",
+    "record_number": 2,
+    "line_start": 2,
+    "line_end": 2,
+    "timestamp": "2005-11-04-15.34.33.610222",
+    "group_id": "G02",
+    "source_host": "R63-M0-N4-C:J05-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 0010653c dear 0245a63c"
+   },
+   {
+    "uid": "log_record_000003",
+    "record_number": 3,
+    "line_start": 3,
+    "line_end": 3,
+    "timestamp": "2005-11-04-15.50.49.414886",
+    "group_id": "G03",
+    "source_host": "R63-M0-N0-C:J03-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "407736 floating point alignment exceptions"
+   },
+   {
+    "uid": "log_record_000004",
+    "record_number": 4,
+    "line_start": 4,
+    "line_end": 4,
+    "timestamp": "2005-11-04-15.53.55.739224",
+    "group_id": "G03",
+    "source_host": "R63-M0-N7-C:J09-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "428412 floating point alignment exceptions"
+   },
+   {
+    "uid": "log_record_000005",
+    "record_number": 5,
+    "line_start": 5,
+    "line_end": 5,
+    "timestamp": "2005-11-04-15.54.06.214936",
+    "group_id": "G03",
+    "source_host": "R63-M0-N4-C:J02-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "441348 floating point alignment exceptions"
+   },
+   {
+    "uid": "log_record_000006",
+    "record_number": 6,
+    "line_start": 6,
+    "line_end": 6,
+    "timestamp": "2005-11-04-15.54.42.089011",
+    "group_id": "G04",
+    "source_host": "R63-M0-N0-C:J17-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 001061d4 dear 024696cc"
+   },
+   {
+    "uid": "log_record_000007",
+    "record_number": 7,
+    "line_start": 7,
+    "line_end": 7,
+    "timestamp": "2005-11-04-15.54.46.919787",
+    "group_id": "G05",
+    "source_host": "R63-M0-N2-C:J03-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 00106348 dear 024696bc"
+   },
+   {
+    "uid": "log_record_000008",
+    "record_number": 8,
+    "line_start": 8,
+    "line_end": 8,
+    "timestamp": "2005-11-04-15.54.56.089471",
+    "group_id": "G06",
+    "source_host": "R63-M0-NF-C:J08-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 00106204 dear 02f75edc"
+   },
+   {
+    "uid": "log_record_000009",
+    "record_number": 9,
+    "line_start": 9,
+    "line_end": 9,
+    "timestamp": "2005-11-04-18.02.11.252563",
+    "group_id": "G07",
+    "source_host": "R45-M1-NA-C:J11-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "CE sym 21, at 0x111d8c60, mask 0x01"
+   },
+   {
+    "uid": "log_record_000010",
+    "record_number": 10,
+    "line_start": 10,
+    "line_end": 10,
+    "timestamp": "2005-11-04-20.01.23.415003",
+    "group_id": "G08",
+    "source_host": "R63-M0-N3-C:J02-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "instruction cache parity error corrected"
+   },
+   {
+    "uid": "log_record_000011",
+    "record_number": 11,
+    "line_start": 11,
+    "line_end": 11,
+    "timestamp": "2005-11-05-07.57.31.806929",
+    "group_id": "G07",
+    "source_host": "R17-M0-N8-C:J05-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "CE sym 34, at 0x11e7ed80, mask 0x80"
+   },
+   {
+    "uid": "log_record_000012",
+    "record_number": 12,
+    "line_start": 12,
+    "line_end": 12,
+    "timestamp": "2005-11-05-11.24.43.382408",
+    "group_id": "G09",
+    "source_host": "R11-M1-N4-C:J03-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "2 ddr errors(s) detected and corrected on rank 0, symbol 18, bit 6"
+   },
+   {
+    "uid": "log_record_000013",
+    "record_number": 13,
+    "line_start": 13,
+    "line_end": 13,
+    "timestamp": "2005-11-06-23.08.06.640071",
+    "group_id": "G08",
+    "source_host": "R63-M0-N3-C:J02-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "instruction cache parity error corrected"
+   },
+   {
+    "uid": "log_record_000014",
+    "record_number": 14,
+    "line_start": 14,
+    "line_end": 14,
+    "timestamp": "2005-11-07-04.32.10.481855",
+    "group_id": "G10",
+    "source_host": "R50-M0-N4-I:J18-U01",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r1: invalid or missing program image, Permission denied"
+   },
+   {
+    "uid": "log_record_000015",
+    "record_number": 15,
+    "line_start": 15,
+    "line_end": 15,
+    "timestamp": "2005-11-07-04.34.41.779706",
+    "group_id": "G10",
+    "source_host": "R60-M0-N0-I:J18-U01",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r1: invalid or missing program image, Permission denied"
+   },
+   {
+    "uid": "log_record_000016",
+    "record_number": 16,
+    "line_start": 16,
+    "line_end": 16,
+    "timestamp": "2005-11-07-16.13.02.108416",
+    "group_id": "G11",
+    "source_host": "R63-M0-N6-C:J15-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 00105e88 dear 02f6436c"
+   },
+   {
+    "uid": "log_record_000017",
+    "record_number": 17,
+    "line_start": 17,
+    "line_end": 17,
+    "timestamp": "2005-11-07-16.13.50.630658",
+    "group_id": "G11",
+    "source_host": "R63-M0-N9-C:J10-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 00105e84 dear 0244f29c"
+   },
+   {
+    "uid": "log_record_000018",
+    "record_number": 18,
+    "line_start": 18,
+    "line_end": 18,
+    "timestamp": "2005-11-08-06.06.28.982001",
+    "group_id": "G07",
+    "source_host": "R74-M0-N1-C:J05-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "CE sym 30, at 0x042358a0, mask 0x20"
+   },
+   {
+    "uid": "log_record_000019",
+    "record_number": 19,
+    "line_start": 19,
+    "line_end": 19,
+    "timestamp": "2005-11-08-09.13.47.353261",
+    "group_id": "G12",
+    "source_host": "R27-M0-N0-I:J18-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "ciod: generated 128 core files for program /g/g24/germann2/BGL-demo/SPaSM_mpi"
+   },
+   {
+    "uid": "log_record_000020",
+    "record_number": 20,
+    "line_start": 20,
+    "line_end": 20,
+    "timestamp": "2005-11-08-10.09.13.667082",
+    "group_id": "G13",
+    "source_host": "R62-M0-N2-C:J13-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "iar 001061e8 dear 0247012c"
+   }
+  ],
+  "evidencia_logs_omitidos": 0,
+  "grupos_evidencia": [
+   {
+    "group_id": "G01",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n> dear <n>a<n>ec"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000001"
+    ],
+    "nodos": [
+     "R63-M0-N1-C:J16-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G02",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n>c dear <n>a<n>c"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000002"
+    ],
+    "nodos": [
+     "R63-M0-N4-C:J05-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G03",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "<n> floating point alignment exceptions"
+    },
+    "conteo": 3,
+    "uids": [
+     "log_record_000003",
+     "log_record_000004",
+     "log_record_000005"
+    ],
+    "nodos": [
+     "R63-M0-N0-C:J03-U01",
+     "R63-M0-N7-C:J09-U01",
+     "R63-M0-N4-C:J02-U01"
+    ],
+    "n_nodos": 3
+   },
+   {
+    "group_id": "G04",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n>d<n> dear <n>cc"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000006"
+    ],
+    "nodos": [
+     "R63-M0-N0-C:J17-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G05",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n> dear <n>bc"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000007"
+    ],
+    "nodos": [
+     "R63-M0-N2-C:J03-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G06",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n> dear <n>f<n>edc"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000008"
+    ],
+    "nodos": [
+     "R63-M0-NF-C:J08-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G07",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "CE sym <n>, at <hex>, mask <hex>"
+    },
+    "conteo": 3,
+    "uids": [
+     "log_record_000009",
+     "log_record_000011",
+     "log_record_000018"
+    ],
+    "nodos": [
+     "R45-M1-NA-C:J11-U01",
+     "R17-M0-N8-C:J05-U01",
+     "R74-M0-N1-C:J05-U01"
+    ],
+    "n_nodos": 3
+   },
+   {
+    "group_id": "G08",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "instruction cache parity error corrected"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000010",
+     "log_record_000013"
+    ],
+    "nodos": [
+     "R63-M0-N3-C:J02-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G09",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "<n> ddr errors(s) detected and corrected on rank <n>, symbol <n>, bit <n>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000012"
+    ],
+    "nodos": [
+     "R11-M1-N4-C:J03-U01"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G10",
+    "clave": {
+     "componente": "bgl.app",
+     "severidad": "FATAL",
+     "plantilla": "ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r<n>: invalid or missing program image, Permissio"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000014",
+     "log_record_000015"
+    ],
+    "nodos": [
+     "R50-M0-N4-I:J18-U01",
+     "R60-M0-N0-I:J18-U01"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G11",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n>e<n> dear <n>f<n>c"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000016",
+     "log_record_000017"
+    ],
+    "nodos": [
+     "R63-M0-N6-C:J15-U01",
+     "R63-M0-N9-C:J10-U01"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G12",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "ciod: generated <n> core files for program /g/g<n>/germann<n>/BGL-demo/SPaSM_mpi"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000019"
+    ],
+    "nodos": [
+     "R27-M0-N0-I:J18-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G13",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "iar <n>e<n> dear <n>c"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000020"
+    ],
+    "nodos": [
+     "R62-M0-N2-C:J13-U11"
+    ],
+    "n_nodos": 1
+   }
+  ],
+  "contenido_lote": {
+   "tipo": "texto",
+   "lineas": [
+    "[log_record_000001] 1131147251 2005.11.04 R63-M0-N1-C:J16-U01 2005-11-04-15.34.11.676048 R63-M0-N1-C:J16-U01 RAS KERNEL INFO iar 00106570 dear 0245a5ec",
+    "[log_record_000002] 1131147273 2005.11.04 R63-M0-N4-C:J05-U11 2005-11-04-15.34.33.610222 R63-M0-N4-C:J05-U11 RAS KERNEL INFO iar 0010653c dear 0245a63c",
+    "[log_record_000003] 1131148249 2005.11.04 R63-M0-N0-C:J03-U01 2005-11-04-15.50.49.414886 R63-M0-N0-C:J03-U01 RAS KERNEL INFO 407736 floating point alignment exceptions",
+    "[log_record_000004] 1131148435 2005.11.04 R63-M0-N7-C:J09-U01 2005-11-04-15.53.55.739224 R63-M0-N7-C:J09-U01 RAS KERNEL INFO 428412 floating point alignment exceptions",
+    "[log_record_000005] 1131148446 2005.11.04 R63-M0-N4-C:J02-U01 2005-11-04-15.54.06.214936 R63-M0-N4-C:J02-U01 RAS KERNEL INFO 441348 floating point alignment exceptions",
+    "[log_record_000006] 1131148482 2005.11.04 R63-M0-N0-C:J17-U01 2005-11-04-15.54.42.089011 R63-M0-N0-C:J17-U01 RAS KERNEL INFO iar 001061d4 dear 024696cc",
+    "[log_record_000007] 1131148486 2005.11.04 R63-M0-N2-C:J03-U11 2005-11-04-15.54.46.919787 R63-M0-N2-C:J03-U11 RAS KERNEL INFO iar 00106348 dear 024696bc",
+    "[log_record_000008] 1131148496 2005.11.04 R63-M0-NF-C:J08-U11 2005-11-04-15.54.56.089471 R63-M0-NF-C:J08-U11 RAS KERNEL INFO iar 00106204 dear 02f75edc",
+    "[log_record_000009] 1131156131 2005.11.04 R45-M1-NA-C:J11-U01 2005-11-04-18.02.11.252563 R45-M1-NA-C:J11-U01 RAS KERNEL INFO CE sym 21, at 0x111d8c60, mask 0x01",
+    "[log_record_000010] 1131163283 2005.11.04 R63-M0-N3-C:J02-U11 2005-11-04-20.01.23.415003 R63-M0-N3-C:J02-U11 RAS KERNEL INFO instruction cache parity error corrected",
+    "[log_record_000011] 1131206251 2005.11.05 R17-M0-N8-C:J05-U01 2005-11-05-07.57.31.806929 R17-M0-N8-C:J05-U01 RAS KERNEL INFO CE sym 34, at 0x11e7ed80, mask 0x80",
+    "[log_record_000012] 1131218683 2005.11.05 R11-M1-N4-C:J03-U01 2005-11-05-11.24.43.382408 R11-M1-N4-C:J03-U01 RAS KERNEL INFO 2 ddr errors(s) detected and corrected on rank 0, symbol 18, bit 6",
+    "[log_record_000013] 1131347286 2005.11.06 R63-M0-N3-C:J02-U11 2005-11-06-23.08.06.640071 R63-M0-N3-C:J02-U11 RAS KERNEL INFO instruction cache parity error corrected",
+    "[log_record_000014] 1131366730 2005.11.07 R50-M0-N4-I:J18-U01 2005-11-07-04.32.10.481855 R50-M0-N4-I:J18-U01 RAS APP FATAL ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r1: invalid or missing program image, Permission denied",
+    "[log_record_000015] 1131366881 2005.11.07 R60-M0-N0-I:J18-U01 2005-11-07-04.34.41.779706 R60-M0-N0-I:J18-U01 RAS APP FATAL ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r1: invalid or missing program image, Permission denied",
+    "[log_record_000016] 1131408782 2005.11.07 R63-M0-N6-C:J15-U01 2005-11-07-16.13.02.108416 R63-M0-N6-C:J15-U01 RAS KERNEL INFO iar 00105e88 dear 02f6436c",
+    "[log_record_000017] 1131408830 2005.11.07 R63-M0-N9-C:J10-U01 2005-11-07-16.13.50.630658 R63-M0-N9-C:J10-U01 RAS KERNEL INFO iar 00105e84 dear 0244f29c",
+    "[log_record_000018] 1131458788 2005.11.08 R74-M0-N1-C:J05-U01 2005-11-08-06.06.28.982001 R74-M0-N1-C:J05-U01 RAS KERNEL INFO CE sym 30, at 0x042358a0, mask 0x20",
+    "[log_record_000019] 1131470027 2005.11.08 R27-M0-N0-I:J18-U11 2005-11-08-09.13.47.353261 R27-M0-N0-I:J18-U11 RAS KERNEL INFO ciod: generated 128 core files for program /g/g24/germann2/BGL-demo/SPaSM_mpi",
+    "[log_record_000020] 1131473353 2005.11.08 R62-M0-N2-C:J13-U11 2005-11-08-10.09.13.667082 R62-M0-N2-C:J13-U11 RAS KERNEL INFO iar 001061e8 dear 0247012c"
+   ],
+   "total_lineas": 20,
+   "lineas_entregadas": 20,
+   "recortado": false,
+   "topes": {
+    "lineas": 200,
+    "caracteres": 20000
+   }
+  },
+  "veredicto_preliminar": null,
+  "justificacion_veredicto_preliminar": "",
+  "invalid_evidence_group_count": 0,
+  "comandos_rechazados": [],
+  "casos_historicos": [
+   {
+    "id": "bgl_des_balanceado_0001",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "clase": "anomala",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 2 × [FATAL bgl.kernel] rts panic! - stopping execution. Composición: 20 eventos, severidades INFO 17, FATAL 3.",
+    "similitud": 0.887
+   },
+   {
+    "id": "bgl_des_balanceado_0000",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "clase": "anomala",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 1 × [FATAL bgl.app] ciod: Error reading message prefix after LOAD_MESSAGE on CioStream socket to <n>.<n>.<n>.<; 1 × [FATAL bgl.kernel] rts: kernel terminated for reason <n>. Composición: 20 eventos, severidades INFO 15, FATAL 5.",
+    "similitud": 0.846
+   },
+   {
+    "id": "bgl_des_natural_0019",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Contiene eventos de severidad alta que no se consideraron alerta: 2 × [FATAL bgl.app] ciod: LOGIN chdir(/g/g<n>/spelce<n>/Linpack_SWL) failed: No such file or directory. Composición: 20 eventos, severidades INFO 18, FATAL 2.",
+    "similitud": 0.748
+   },
+   {
+    "id": "bgl_des_natural_0012",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Contiene eventos de severidad alta que no se consideraron alerta: 5 × [FATAL bgl.app] ciod: LOGIN chdir(/bgl/apps/SWL/performance/MINIBEN///<n>.<n>.<n>-<n>.<n>.<n>) failed: No ; 3 × [FATAL bgl.app] ciod: Error loading /home/yates//torus-latency.rts: invalid or missing program image, No s; 2 × [ERROR bgl.mmcs] idoproxydb hit ASSERT condition: ASSERT expression=<n> Source file=idotransportmgr.cpp Sou; 1 × [FATAL bgl.app] ciod: Error loading /home/yates//bandwidth.rts: invalid or missing program image, No such . Composición: 20 eventos, severidades FATAL 13, INFO 5, ERROR 2.",
+    "similitud": 0.666
+   }
+  ],
+  "historico_consulta": {
+   "excluidos_por_solapamiento": [
+    "rag_enriquecido_v2:bgl_des_natural_0011"
+   ],
+   "consultados": 56,
+   "contrastiva": true,
+   "k_por_clase": 2,
+   "tipo": "texto",
+   "omitidos_otro_tipo": 31,
+   "excluidos_mismo_incidente": [],
+   "exclusion_por_incidente_activa": true,
+   "representacion": "Eventos destacados: [FATAL bgl.app] ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r<n>: invalid or missing program image, Permissio x2 en 2 nodos\nLog de texto, 20 eventos. Severidades: INFO 18, FATAL 2. Componentes: bgl.kernel 18, bgl.app 2. Nodos distintos: 19."
+  },
+  "memoria_grupos": {},
+  "memoria_grupos_consulta": {
+   "excluidos_por_solapamiento": [],
+   "consultados": 0
+  },
+  "hallazgos_cazador": [],
+  "cazador_ejecutado": false,
+  "veredicto_consolidado": null,
+  "consulta_mitre": "",
+  "revision_hallazgos": [],
+  "diagnostico_inicial": "",
+  "diagnostico_corregido": "",
+  "correcciones_auditor": 0,
+  "historial_correcciones": [],
+  "eventos_reconstruidos": [
+   {
+    "event_id": "event_001",
+    "evidence_uids": [
+     "log_record_000014",
+     "log_record_000015"
+    ],
+    "timestamp": "2005-11-07-04.32.10.481855",
+    "event_type": "app_load_failure",
+    "description": "Fallo de ejecución a nivel de aplicación en ciod por denegación de permisos al cargar el ejecutable del usuario.",
+    "confidence": null,
+    "evidence_groups": [
+     "G10"
+    ],
+    "categoria": "contexto"
+   }
+  ],
+  "secuencia_temporal": [
+   "event_001"
+  ],
+  "tecnicas_atribuidas": [],
+  "invalid_evidence_uid_count": 0,
+  "d11_warnings": [],
+  "telemetry": {
+   "llm_call_count": 1,
+   "input_tokens": 9421,
+   "output_tokens": 420,
+   "total_tokens": 11493,
+   "execution_time": 20.641479,
+   "replan_count": 0,
+   "intentos_correccion": 0,
+   "invalid_evidence_uid_count": 0,
+   "d11_warning_count": 0,
+   "llm_calls": [
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 9421,
+     "output_tokens": 420,
+     "total_tokens": 11493,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 1652,
+     "duration_s": 20.549,
+     "error": null
+    }
+   ]
+  },
+  "resumen_logs": {
+   "formato_detectado": "bgl",
+   "total_lineas": 20,
+   "servicios": {
+    "bgl.kernel": 18,
+    "bgl.app": 2
+   },
+   "eventos": {
+    "evento_critico": 2,
+    "evento_normal": 18
+   },
+   "ventana_temporal": {
+    "inicio": "2005-11-04-15.34.11.676048",
+    "fin": "2005-11-08-10.09.13.667082"
+   },
+   "n_ips_distintas": 0,
+   "ips_distintas": [],
+   "por_ip": {},
+   "usuarios": {},
+   "n_usuarios_distintos": 0,
+   "codigos_respuesta": {},
+   "entidades": [],
+   "cronologia": [
+    {
+     "n": 14,
+     "timestamp": "2005-11-07-04.32.10.481855",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1131366730 2005.11.07 R50-M0-N4-I:J18-U01 2005-11-07-04.32.10.481855 R50-M0-N4-I:J18-U01 RAS APP FATAL ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r1: in…"
+    },
+    {
+     "n": 15,
+     "timestamp": "2005-11-07-04.34.41.779706",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1131366881 2005.11.07 R60-M0-N0-I:J18-U01 2005-11-07-04.34.41.779706 R60-M0-N0-I:J18-U01 RAS APP FATAL ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r1: in…"
+    }
+   ],
+   "cronologia_omitidos": 0,
+   "raw_procedencia": {
+    "sha256": "445b643897b3c0f3b1f1e88b5c8486ab73531034775feb5b7a1664ca9bb3027e",
+    "lineas": 20,
+    "bytes": 3030
+   },
+   "reputacion_ips": {},
+   "perfil_lote": {
+    "tipo": "texto",
+    "filas": 20,
+    "con_formato_reconocido": 20,
+    "severidades": {
+     "INFO": 18,
+     "FATAL": 2
+    },
+    "componentes": {
+     "bgl.kernel": 18,
+     "bgl.app": 2
+    },
+    "nodos": {
+     "R63-M0-N3-C:J02-U11": 2,
+     "R63-M0-N1-C:J16-U01": 1,
+     "R63-M0-N4-C:J05-U11": 1,
+     "R63-M0-N0-C:J03-U01": 1,
+     "R63-M0-N7-C:J09-U01": 1,
+     "R63-M0-N4-C:J02-U01": 1,
+     "R63-M0-N0-C:J17-U01": 1,
+     "R63-M0-N2-C:J03-U11": 1,
+     "R63-M0-NF-C:J08-U11": 1,
+     "R45-M1-NA-C:J11-U01": 1
+    },
+    "nodos_distintos": 19,
+    "lineas_severidad_alta": {
+     "total": 2,
+     "omitidas": 0,
+     "lineas": [
+      {
+       "uid": "log_record_000014",
+       "severidad": "FATAL",
+       "group_id": "G10"
+      },
+      {
+       "uid": "log_record_000015",
+       "severidad": "FATAL",
+       "group_id": "G10"
+      }
+     ]
+    },
+    "grupos": 13
+   }
+  },
+  "preprocessing_metadata": {
+   "schema_version": "2.0",
+   "total_lineas_fisicas": 20,
+   "total_eventos": 20,
+   "decoder_distribution": {
+    "text": 20
+   },
+   "product_distribution": {
+    "BlueGene/L": 20
+   },
+   "vendor_distribution": {
+    "IBM": 20
+   },
+   "version_distribution": {},
+   "protocol_distribution": {},
+   "profile_distribution": {
+    "bgl": 20
+   },
+   "severity_distribution": {
+    "INFO": 18,
+    "FATAL": 2
+   },
+   "event_categories": {},
+   "event_outcomes": {},
+   "entities": {
+    "host": {
+     "R63-M0-N3-C:J02-U11": 2,
+     "R11-M1-N4-C:J03-U01": 1,
+     "R17-M0-N8-C:J05-U01": 1,
+     "R27-M0-N0-I:J18-U11": 1,
+     "R45-M1-NA-C:J11-U01": 1,
+     "R50-M0-N4-I:J18-U01": 1,
+     "R60-M0-N0-I:J18-U01": 1,
+     "R62-M0-N2-C:J13-U11": 1,
+     "R63-M0-N0-C:J03-U01": 1,
+     "R63-M0-N0-C:J17-U01": 1,
+     "R63-M0-N1-C:J16-U01": 1,
+     "R63-M0-N2-C:J03-U11": 1,
+     "R63-M0-N4-C:J02-U01": 1,
+     "R63-M0-N4-C:J05-U11": 1,
+     "R63-M0-N6-C:J15-U01": 1,
+     "R63-M0-N7-C:J09-U01": 1,
+     "R63-M0-N9-C:J10-U01": 1,
+     "R63-M0-NF-C:J08-U11": 1,
+     "R74-M0-N1-C:J05-U01": 1
+    },
+    "servicio": {
+     "bgl.kernel": 18,
+     "bgl.app": 2
+    },
+    "producto": {
+     "BlueGene/L": 20
+    }
+   },
+   "time_window": {
+    "inicio": "2005-11-04-15.34.11.676048",
+    "fin": "2005-11-08-10.09.13.667082"
+   },
+   "parsing": {
+    "parsed_events": 20,
+    "fallback_events": 0,
+    "coverage": 1.0
+   },
+   "segments": [
+    {
+     "index": 0,
+     "decoder": "text",
+     "line_start": 1,
+     "line_end": 20,
+     "n_records": 20,
+     "confidence": 0.1,
+     "decoder_inicial": "text",
+     "confidence_inicial": 0.1,
+     "decoder_distribution": {
+      "text": 20
+     },
+     "context": {}
+    }
+   ],
+   "entities_resumen": {
+    "host": 19,
+    "servicio": 2,
+    "producto": 1
+   },
+   "config": {
+    "LOG_DETECTION_CHUNK_SIZE": 50,
+    "LOG_ENABLE_MULTILINE": true,
+    "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+    "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+    "LOG_MAX_EVENTS": 100000,
+    "LOG_MAX_FILE_BYTES": 52428800,
+    "LOG_MAX_RAW_SAMPLES": 20,
+    "LOG_MAX_UNMAPPED_FIELDS": 100,
+    "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+    "LOG_PARSING_MODE": "hybrid",
+    "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+    "LOG_PRESERVE_RAW": true
+   }
+  },
+  "parsing_warnings": [],
+  "firma": "v2|lineas=20 ips=0 servicios=[bgl.kernel:18,bgl.app:2] eventos=[evento_critico:2,evento_normal:18] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[INFO:18,FATAL:2] categorias=[] cobertura=1.0",
+  "plan": {},
+  "plan_objetivo": "",
+  "paso_actual": 0,
+  "historial_ejecucion": [],
+  "desviaciones_plan": [],
+  "historial_planes": [],
+  "replan_count": 0,
+  "diagnostico": "Operación normal del sistema con errores rutinarios a nivel de aplicación y eventos de corrección de hardware estándar.",
+  "necesita_rag": false,
+  "usar_cve": false,
+  "contexto_rag": [],
+  "tecnicas_mitre": [],
+  "cves_encontrados": [],
+  "comandos_mitigacion": [],
+  "comandos_validos": true,
+  "motivos_rechazo": [
+   "OK"
+  ],
+  "confianza": 0.95,
+  "hay_incidente": false,
+  "hay_anomalia": false,
+  "evaluacion_auditor": "El lote contiene registros operacionales rutinarios de la supercomputadora BlueGene/L. Se observan volcados de registros informativos (iar/dear), excepciones de alineación de coma flotante, errores de memoria DDR y caché corregidos por hardware, y dos mensajes de severidad FATAL originados por el demonio ciod reportando permisos denegados al intentar cargar un binario de usuario ('RAPTOR'). Conforme a los criterios históricos del entorno, los fallos de carga de programas de usuario y los eventos corregidos automáticamente no constituyen anomalías del sistema que requieran intervención del operador ni presentan indicios de compromiso de seguridad.",
+  "intentos_correccion": 0,
+  "cobertura_auditor": null,
+  "cobertura_suficiente": null,
+  "motivo_replanificacion": "",
+  "requiere_replanificacion": false,
+  "_error_api": null,
+  "_firma": "v2|lineas=20 ips=0 servicios=[bgl.kernel:18,bgl.app:2] eventos=[evento_critico:2,evento_normal:18] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[INFO:18,FATAL:2] categorias=[] cobertura=1.0",
+  "requiere_revision_humana": false,
+  "output_contract_version": "d11-v1",
+  "classification_detallada": "normal"
+ },
+ "observaciones": [
+  {
+   "nodo": "agente_unico",
+   "llamadas": [
+    0
+   ],
+   "prompt_chars": 15971,
+   "system_chars": 4219,
+   "tokens": [
+    {
+     "input_tokens": 9421,
+     "output_tokens": 420,
+     "reasoning_tokens": 1652,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  }
+ ],
+ "consultas_externas": []
+}

@@ -1,0 +1,737 @@
+{
+  "inicio_utc": "2026-11-12T11:33:34.508467+00:00",
+  "commit": "0ac0a4caea3cc0229b6a7b3663c0d7e1fff20aec",
+  "rama": "nodex-final",
+  "src_sin_cambios": false,
+  "tope_usd": 15.0,
+  "memoria": "experiments/knowledge/rag_enriquecido_v2",
+  "memoria_manifiesto_sha256": "55c32dfe24ab803e06aba5ce6a7cd6712ea12d2db5031e6a8c62f15236a4b756",
+  "src_diff_sha256": "d42a2374856caf1fa54f2f7be768af9af20fdd0359517ecbfc13c80a89808fd6",
+  "src_nuevos_sin_seguimiento": [
+    "src/experimentation/knowledge/memoria_grupos.py",
+    "src/tools/memoria_grupos.py"
+  ],
+  "memoria_grupos": "experiments/knowledge/memoria_grupos_v1",
+  "memoria_grupos_sha256": "93e974579d50296821958528279b56db2aa7ac12dd4c6a9e1983addfade05c42",
+  "interruptores": {
+    "RAG_POR_HIPOTESIS": true,
+    "CAZADOR_ACTIVO": true,
+    "CORRECCION_AUDITOR": true,
+    "HISTORICO_ACTIVO": true,
+    "HISTORICO_K": 3,
+    "EVENTOS_POR_CATEGORIA": true,
+    "HISTORICO_CONTRASTIVO": true,
+    "HISTORICO_K_POR_CLASE": 2,
+    "MEMORIA_GRUPOS_ACTIVA": true,
+    "CAZADOR_MOTIVO_FACTUAL": true,
+    "CAZADOR_LISTA_PATRONES": true,
+    "AUDITOR_REVISA_MEDIOS": true
+  },
+  "exclusion_por_solapamiento": "del sistema (siempre)",
+  "exclusion_por_incidente": true,
+  "criterio_exclusion_por_incidente": "mismo IP de origen atacante y al menos una táctica en común (GT de desarrollo)",
+  "parametros": {
+    "LLM_MODEL_PRIMARY": "gemini-3.8-flash",
+    "LLM_MODEL_FALLBACK": "gemini-3.8-flash",
+    "LLM_SIN_RESPALDO": true,
+    "REPUTACION_SIN_ENRIQUECIMIENTO": true,
+    "TEMPERATURE": 0.0,
+    "EMBEDDING_MODEL": "all-MiniLM-L6-v2",
+    "TOP_K_FEWSHOT": 3,
+    "TOP_K_ERRORS": 3,
+    "TOP_K_ATTACK": 3,
+    "ATTACK_MAX_CHARS_EMBED": 800,
+    "MAX_RAW_CHARS_EMBED": 2000,
+    "CONTEXTO_PREPROCESAMIENTO_MAX_CHARS": 2000,
+    "LOG_MAX_FILE_BYTES": 52428800,
+    "LOG_MAX_EVENTS": 100000,
+    "LOG_MAX_RAW_SAMPLES": 20,
+    "LOG_PRESERVE_RAW": true
+  },
+  "arquitecturas": [
+    "nodex",
+    "agente_unico"
+  ],
+  "casos": [
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_visible_0007",
+      "codigo": 0,
+      "segundos_pared": 97.4,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.10935,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_visible_0008",
+      "codigo": 0,
+      "segundos_pared": 79.9,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.08548,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_visible_0009",
+      "codigo": 0,
+      "segundos_pared": 73.7,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.08441,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_visible_0010",
+      "codigo": 0,
+      "segundos_pared": 146.2,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.18334,
+      "llamadas": 8,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_visible_0011",
+      "codigo": 0,
+      "segundos_pared": 72.8,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.08832,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_balanceado_0000",
+      "codigo": 0,
+      "segundos_pared": 43.5,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.02662,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_balanceado_0001",
+      "codigo": 0,
+      "segundos_pared": 37.0,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.01805,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_balanceado_0002",
+      "codigo": 0,
+      "segundos_pared": 26.8,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.0127,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_balanceado_0003",
+      "codigo": 0,
+      "segundos_pared": 22.3,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.0094,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0000",
+      "codigo": 0,
+      "segundos_pared": 37.9,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.01926,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0001",
+      "codigo": 0,
+      "segundos_pared": 74.1,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.04313,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0002",
+      "codigo": 0,
+      "segundos_pared": 43.8,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.02713,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0003",
+      "codigo": 0,
+      "segundos_pared": 6719.0,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.03507,
+      "llamadas": 2,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0004",
+      "codigo": 0,
+      "segundos_pared": 72.0,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.01611,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0005",
+      "codigo": 0,
+      "segundos_pared": 44.3,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.02193,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0006",
+      "codigo": 0,
+      "segundos_pared": 29.8,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.01238,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0007",
+      "codigo": 0,
+      "segundos_pared": 23.9,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.00957,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0008",
+      "codigo": 0,
+      "segundos_pared": 26.9,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.01035,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0009",
+      "codigo": 0,
+      "segundos_pared": 26.2,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.01073,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0010",
+      "codigo": 0,
+      "segundos_pared": 23.3,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.00855,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0011",
+      "codigo": 0,
+      "segundos_pared": 36.2,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.01484,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0012",
+      "codigo": 0,
+      "segundos_pared": 38.3,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.01923,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0013",
+      "codigo": 0,
+      "segundos_pared": 30.8,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.01345,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0014",
+      "codigo": 0,
+      "segundos_pared": 41.3,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.02081,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0015",
+      "codigo": 0,
+      "segundos_pared": 26.2,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.0093,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0016",
+      "codigo": 0,
+      "segundos_pared": 24.2,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.01031,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0017",
+      "codigo": 0,
+      "segundos_pared": 34.9,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.0158,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0018",
+      "codigo": 0,
+      "segundos_pared": 27.1,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.01061,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0019",
+      "codigo": 0,
+      "segundos_pared": 32.0,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.014,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0000",
+      "codigo": 0,
+      "segundos_pared": 67.4,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0002",
+        "uwf_des_visible_0001"
+      ],
+      "usd": 0.08669,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0001",
+      "codigo": 0,
+      "segundos_pared": 41.2,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0003",
+        "uwf_des_sigiloso_0004",
+        "uwf_des_sigiloso_0005",
+        "uwf_des_visible_0002",
+        "uwf_des_visible_0004"
+      ],
+      "usd": 0.06987,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0002",
+      "codigo": 0,
+      "segundos_pared": 39.5,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0000",
+        "uwf_des_visible_0001"
+      ],
+      "usd": 0.06945,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0003",
+      "codigo": 0,
+      "segundos_pared": 33.6,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0001",
+        "uwf_des_sigiloso_0004",
+        "uwf_des_sigiloso_0005",
+        "uwf_des_visible_0002",
+        "uwf_des_visible_0004"
+      ],
+      "usd": 0.0662,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0004",
+      "codigo": 0,
+      "segundos_pared": 40.6,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0001",
+        "uwf_des_sigiloso_0003",
+        "uwf_des_sigiloso_0005",
+        "uwf_des_visible_0002",
+        "uwf_des_visible_0004"
+      ],
+      "usd": 0.07067,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0005",
+      "codigo": 0,
+      "segundos_pared": 50.6,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0001",
+        "uwf_des_sigiloso_0003",
+        "uwf_des_sigiloso_0004",
+        "uwf_des_visible_0002",
+        "uwf_des_visible_0004"
+      ],
+      "usd": 0.06683,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0006",
+      "codigo": 0,
+      "segundos_pared": 33.4,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.06473,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0007",
+      "codigo": 0,
+      "segundos_pared": 85.3,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.09504,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0008",
+      "codigo": 0,
+      "segundos_pared": 33.4,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.0656,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0009",
+      "codigo": 0,
+      "segundos_pared": 32.1,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.06453,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0010",
+      "codigo": 0,
+      "segundos_pared": 43.2,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.06866,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_sigiloso_0011",
+      "codigo": 0,
+      "segundos_pared": 31.8,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.06424,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0000",
+      "codigo": 0,
+      "segundos_pared": 45.3,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_visible_0003",
+        "uwf_des_visible_0005"
+      ],
+      "usd": 0.07552,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0001",
+      "codigo": 0,
+      "segundos_pared": 37.5,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0000",
+        "uwf_des_sigiloso_0002"
+      ],
+      "usd": 0.07198,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0002",
+      "codigo": 0,
+      "segundos_pared": 43.9,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0001",
+        "uwf_des_sigiloso_0003",
+        "uwf_des_sigiloso_0004",
+        "uwf_des_sigiloso_0005",
+        "uwf_des_visible_0004"
+      ],
+      "usd": 0.07823,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0003",
+      "codigo": 0,
+      "segundos_pared": 43.3,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_visible_0000",
+        "uwf_des_visible_0005"
+      ],
+      "usd": 0.07397,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0004",
+      "codigo": 0,
+      "segundos_pared": 46.3,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_sigiloso_0001",
+        "uwf_des_sigiloso_0003",
+        "uwf_des_sigiloso_0004",
+        "uwf_des_sigiloso_0005",
+        "uwf_des_visible_0002"
+      ],
+      "usd": 0.07107,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0005",
+      "codigo": 0,
+      "segundos_pared": 39.0,
+      "excluidos_mismo_incidente_previstos": [
+        "uwf_des_visible_0000",
+        "uwf_des_visible_0003"
+      ],
+      "usd": 0.06793,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0006",
+      "codigo": 0,
+      "segundos_pared": 18.4,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.0,
+      "llamadas": 1,
+      "versiones": []
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0007",
+      "codigo": 0,
+      "segundos_pared": 17.0,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.0,
+      "llamadas": 1,
+      "versiones": []
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0008",
+      "codigo": 0,
+      "segundos_pared": 17.1,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.0,
+      "llamadas": 1,
+      "versiones": []
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0009",
+      "codigo": 0,
+      "segundos_pared": 17.5,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.0,
+      "llamadas": 1,
+      "versiones": []
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0010",
+      "codigo": 0,
+      "segundos_pared": 17.3,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.0,
+      "llamadas": 1,
+      "versiones": []
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0011",
+      "codigo": 0,
+      "segundos_pared": 17.2,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.0,
+      "llamadas": 1,
+      "versiones": []
+    }
+  ],
+  "fin_utc": "2026-11-12T14:02:00.191391+00:00",
+  "gasto_usd": 4.8324
+}

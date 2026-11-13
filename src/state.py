@@ -70,6 +70,7 @@ class LogGuardState(TypedDict):
     # --- NODEX final, Fase B.1 (nov-2026) ---
     memoria_grupos: dict             # B.1-2: por grupo con señal, el grupo malicioso y el benigno más parecidos
     memoria_grupos_consulta: dict    # B.1-2: memoria usada, grupos excluidos por solapamiento
+    evaluacion_grupos: list          # variante AUDITOR_REFORZADO: el auditor evalúa cada grupo con señal
     eventos_reconstruidos: list[EventoReconstruido]
     secuencia_temporal: list[str]
     tecnicas_atribuidas: list[TecnicaAtribuida]

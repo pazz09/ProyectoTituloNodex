@@ -1,0 +1,1024 @@
+{
+ "case_id": "bgl_des_natural_0019",
+ "dataset": "bgl",
+ "arquitectura": "nodex",
+ "segundos_pared_hijo": 60.37151279999671,
+ "interruptores_efectivos": {
+  "RAG_POR_HIPOTESIS": true,
+  "CAZADOR_ACTIVO": false,
+  "CORRECCION_AUDITOR": true,
+  "HISTORICO_ACTIVO": true,
+  "HISTORICO_K": 3,
+  "EVENTOS_POR_CATEGORIA": true,
+  "HISTORICO_CONTRASTIVO": true,
+  "HISTORICO_K_POR_CLASE": 2,
+  "MEMORIA_GRUPOS_ACTIVA": true,
+  "CAZADOR_MOTIVO_FACTUAL": true,
+  "CAZADOR_LISTA_PATRONES": true,
+  "AUDITOR_REVISA_MEDIOS": true,
+  "AUDITOR_REFORZADO": true
+ },
+ "estado": {
+  "resumen_logs": {
+   "formato_detectado": "bgl",
+   "total_lineas": 20,
+   "servicios": {
+    "bgl.kernel": 17,
+    "bgl.app": 2,
+    "bgl.discovery": 1
+   },
+   "eventos": {
+    "evento_critico": 2,
+    "evento_normal": 18
+   },
+   "ventana_temporal": {
+    "inicio": "2005-11-29-15.18.46.642475",
+    "fin": "2005-12-01-06.39.24.979006"
+   },
+   "n_ips_distintas": 0,
+   "ips_distintas": [],
+   "por_ip": {},
+   "usuarios": {},
+   "n_usuarios_distintos": 0,
+   "codigos_respuesta": {},
+   "entidades": [],
+   "cronologia": [
+    {
+     "n": 5,
+     "timestamp": "2005-11-30-19.57.55.220367",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1133409475 2005.11.30 R15-M1-NC-I:J18-U01 2005-11-30-19.57.55.220367 R15-M1-NC-I:J18-U01 RAS APP FATAL ciod: LOGIN chdir(/g/g0/spelce1/Linpack_SWL) failed: No such file or director…"
+    },
+    {
+     "n": 6,
+     "timestamp": "2005-11-30-20.02.59.033978",
+     "servicio": "bgl.app",
+     "evento": "evento_critico",
+     "mensaje": "1133409779 2005.11.30 R13-M1-NC-I:J18-U01 2005-11-30-20.02.59.033978 R13-M1-NC-I:J18-U01 RAS APP FATAL ciod: LOGIN chdir(/g/g0/spelce1/Linpack_SWL) failed: No such file or director…"
+    }
+   ],
+   "cronologia_omitidos": 0,
+   "raw_procedencia": {
+    "sha256": "7767403bbe2ed549f76ef8766b937055ff09517093670ef9394251d85e8ab4bf",
+    "lineas": 20,
+    "bytes": 4720
+   },
+   "reputacion_ips": {},
+   "perfil_lote": {
+    "tipo": "texto",
+    "filas": 20,
+    "con_formato_reconocido": 20,
+    "severidades": {
+     "INFO": 18,
+     "FATAL": 2
+    },
+    "componentes": {
+     "bgl.kernel": 17,
+     "bgl.app": 2,
+     "bgl.discovery": 1
+    },
+    "nodos": {
+     "R21-M0-N8-I:J18-U01": 1,
+     "R67-M1-N7": 1,
+     "R01-M1-NC-I:J18-U01": 1,
+     "R74-M1-NB-C:J02-U11": 1,
+     "R15-M1-NC-I:J18-U01": 1,
+     "R13-M1-NC-I:J18-U01": 1,
+     "R11-M1-ND-C:J08-U01": 1,
+     "R11-M1-NA-C:J13-U01": 1,
+     "R11-M1-NF-C:J07-U01": 1,
+     "R06-M0-N3-C:J13-U11": 1
+    },
+    "nodos_distintos": 20,
+    "lineas_severidad_alta": {
+     "total": 2,
+     "omitidas": 0,
+     "lineas": [
+      {
+       "uid": "log_record_000005",
+       "severidad": "FATAL",
+       "group_id": "G04"
+      },
+      {
+       "uid": "log_record_000006",
+       "severidad": "FATAL",
+       "group_id": "G04"
+      }
+     ]
+    },
+    "grupos": 6
+   }
+  },
+  "preprocessing_metadata": {
+   "schema_version": "2.0",
+   "total_lineas_fisicas": 20,
+   "total_eventos": 20,
+   "decoder_distribution": {
+    "text": 20
+   },
+   "product_distribution": {
+    "BlueGene/L": 20
+   },
+   "vendor_distribution": {
+    "IBM": 20
+   },
+   "version_distribution": {},
+   "protocol_distribution": {},
+   "profile_distribution": {
+    "bgl": 20
+   },
+   "severity_distribution": {
+    "INFO": 18,
+    "FATAL": 2
+   },
+   "event_categories": {},
+   "event_outcomes": {},
+   "entities": {
+    "host": {
+     "R01-M1-NC-I:J18-U01": 1,
+     "R06-M0-N3-C:J13-U11": 1,
+     "R06-M0-N7-C:J05-U01": 1,
+     "R07-M1-N0-C:J07-U01": 1,
+     "R10-M0-N7-C:J08-U11": 1,
+     "R11-M1-NA-C:J13-U01": 1,
+     "R11-M1-ND-C:J08-U01": 1,
+     "R11-M1-NF-C:J07-U01": 1,
+     "R13-M0-NA-C:J08-U01": 1,
+     "R13-M1-N9-C:J02-U11": 1,
+     "R13-M1-NC-I:J18-U01": 1,
+     "R15-M1-NC-I:J18-U01": 1,
+     "R16-M0-N4-C:J06-U11": 1,
+     "R16-M0-N4-C:J07-U11": 1,
+     "R17-M0-N8-C:J09-U11": 1,
+     "R21-M0-N8-I:J18-U01": 1,
+     "R34-M0-N8-C:J06-U11": 1,
+     "R36-M0-NB-C:J12-U01": 1,
+     "R67-M1-N7": 1,
+     "R74-M1-NB-C:J02-U11": 1
+    },
+    "servicio": {
+     "bgl.kernel": 17,
+     "bgl.app": 2,
+     "bgl.discovery": 1
+    },
+    "producto": {
+     "BlueGene/L": 20
+    }
+   },
+   "time_window": {
+    "inicio": "2005-11-29-15.18.46.642475",
+    "fin": "2005-12-01-06.39.24.979006"
+   },
+   "parsing": {
+    "parsed_events": 20,
+    "fallback_events": 0,
+    "coverage": 1.0
+   },
+   "segments": [
+    {
+     "index": 0,
+     "decoder": "text",
+     "line_start": 1,
+     "line_end": 20,
+     "n_records": 20,
+     "confidence": 0.1,
+     "decoder_inicial": "text",
+     "confidence_inicial": 0.1,
+     "decoder_distribution": {
+      "text": 20
+     },
+     "context": {}
+    }
+   ],
+   "entities_resumen": {
+    "host": 20,
+    "servicio": 3,
+    "producto": 1
+   },
+   "config": {
+    "LOG_DETECTION_CHUNK_SIZE": 50,
+    "LOG_ENABLE_MULTILINE": true,
+    "LOG_FORMAT_CONFIDENCE_THRESHOLD": 0.5,
+    "LOG_LINE_FALLBACK_THRESHOLD": 0.7,
+    "LOG_MAX_EVENTS": 100000,
+    "LOG_MAX_FILE_BYTES": 52428800,
+    "LOG_MAX_RAW_SAMPLES": 20,
+    "LOG_MAX_UNMAPPED_FIELDS": 100,
+    "LOG_NORMALIZATION_SCHEMA_VERSION": "2.0",
+    "LOG_PARSING_MODE": "hybrid",
+    "LOG_PREPROCESSING_ENGINE": "heterogeneo",
+    "LOG_PRESERVE_RAW": true
+   }
+  },
+  "parsing_warnings": [],
+  "evidencia_logs": [
+   {
+    "uid": "log_record_000001",
+    "record_number": 1,
+    "line_start": 1,
+    "line_end": 1,
+    "timestamp": "2005-11-29-15.18.46.642475",
+    "group_id": "G01",
+    "source_host": "R21-M0-N8-I:J18-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "ciod: Received signal 15, code=0, errno=0, address=0x000001f2"
+   },
+   {
+    "uid": "log_record_000002",
+    "record_number": 2,
+    "line_start": 2,
+    "line_end": 2,
+    "timestamp": "2005-11-29-16.21.56.855025",
+    "group_id": "G02",
+    "source_host": "R67-M1-N7",
+    "service_name": "bgl.discovery",
+    "severity": "INFO",
+    "message": "Node card VPD check: U01 node in processor card slot J05 do not match. VPD ecid 04D37DF2DE7BFFFF0D081AF0DAD2, found 04DD80740E2FFFFF0A0C19D0CEBD"
+   },
+   {
+    "uid": "log_record_000003",
+    "record_number": 3,
+    "line_start": 3,
+    "line_end": 3,
+    "timestamp": "2005-11-29-18.29.38.531250",
+    "group_id": "G01",
+    "source_host": "R01-M1-NC-I:J18-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "ciod: Received signal 15, code=0, errno=0, address=0x000001f5"
+   },
+   {
+    "uid": "log_record_000004",
+    "record_number": 4,
+    "line_start": 4,
+    "line_end": 4,
+    "timestamp": "2005-11-30-08.24.07.024349",
+    "group_id": "G03",
+    "source_host": "R74-M1-NB-C:J02-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "CE sym 1, at 0x01d7eaa0, mask 0x02"
+   },
+   {
+    "uid": "log_record_000005",
+    "record_number": 5,
+    "line_start": 5,
+    "line_end": 5,
+    "timestamp": "2005-11-30-19.57.55.220367",
+    "group_id": "G04",
+    "source_host": "R15-M1-NC-I:J18-U01",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: LOGIN chdir(/g/g0/spelce1/Linpack_SWL) failed: No such file or directory"
+   },
+   {
+    "uid": "log_record_000006",
+    "record_number": 6,
+    "line_start": 6,
+    "line_end": 6,
+    "timestamp": "2005-11-30-20.02.59.033978",
+    "group_id": "G04",
+    "source_host": "R13-M1-NC-I:J18-U01",
+    "service_name": "bgl.app",
+    "severity": "FATAL",
+    "message": "ciod: LOGIN chdir(/g/g0/spelce1/Linpack_SWL) failed: No such file or directory"
+   },
+   {
+    "uid": "log_record_000007",
+    "record_number": 7,
+    "line_start": 7,
+    "line_end": 7,
+    "timestamp": "2005-12-01-06.34.54.203650",
+    "group_id": "G05",
+    "source_host": "R11-M1-ND-C:J08-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr."
+   },
+   {
+    "uid": "log_record_000008",
+    "record_number": 8,
+    "line_start": 8,
+    "line_end": 8,
+    "timestamp": "2005-12-01-06.35.03.376951",
+    "group_id": "G05",
+    "source_host": "R11-M1-NA-C:J13-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr."
+   },
+   {
+    "uid": "log_record_000009",
+    "record_number": 9,
+    "line_start": 9,
+    "line_end": 9,
+    "timestamp": "2005-12-01-06.35.22.172118",
+    "group_id": "G05",
+    "source_host": "R11-M1-NF-C:J07-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr."
+   },
+   {
+    "uid": "log_record_000010",
+    "record_number": 10,
+    "line_start": 10,
+    "line_end": 10,
+    "timestamp": "2005-12-01-06.35.28.126758",
+    "group_id": "G06",
+    "source_host": "R06-M0-N3-C:J13-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "10722 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt."
+   },
+   {
+    "uid": "log_record_000011",
+    "record_number": 11,
+    "line_start": 11,
+    "line_end": 11,
+    "timestamp": "2005-12-01-06.35.38.328553",
+    "group_id": "G06",
+    "source_host": "R10-M0-N7-C:J08-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "10740 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt."
+   },
+   {
+    "uid": "log_record_000012",
+    "record_number": 12,
+    "line_start": 12,
+    "line_end": 12,
+    "timestamp": "2005-12-01-06.36.01.057694",
+    "group_id": "G06",
+    "source_host": "R17-M0-N8-C:J09-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "10744 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt."
+   },
+   {
+    "uid": "log_record_000013",
+    "record_number": 13,
+    "line_start": 13,
+    "line_end": 13,
+    "timestamp": "2005-12-01-06.36.03.872611",
+    "group_id": "G06",
+    "source_host": "R06-M0-N7-C:J05-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "10700 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt."
+   },
+   {
+    "uid": "log_record_000014",
+    "record_number": 14,
+    "line_start": 14,
+    "line_end": 14,
+    "timestamp": "2005-12-01-06.36.16.876079",
+    "group_id": "G06",
+    "source_host": "R16-M0-N4-C:J07-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "10732 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt."
+   },
+   {
+    "uid": "log_record_000015",
+    "record_number": 15,
+    "line_start": 15,
+    "line_end": 15,
+    "timestamp": "2005-12-01-06.36.17.847421",
+    "group_id": "G05",
+    "source_host": "R16-M0-N4-C:J06-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr."
+   },
+   {
+    "uid": "log_record_000016",
+    "record_number": 16,
+    "line_start": 16,
+    "line_end": 16,
+    "timestamp": "2005-12-01-06.36.29.326116",
+    "group_id": "G05",
+    "source_host": "R07-M1-N0-C:J07-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr."
+   },
+   {
+    "uid": "log_record_000017",
+    "record_number": 17,
+    "line_start": 17,
+    "line_end": 17,
+    "timestamp": "2005-12-01-06.39.00.882940",
+    "group_id": "G06",
+    "source_host": "R36-M0-NB-C:J12-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "10655 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt."
+   },
+   {
+    "uid": "log_record_000018",
+    "record_number": 18,
+    "line_start": 18,
+    "line_end": 18,
+    "timestamp": "2005-12-01-06.39.01.729708",
+    "group_id": "G06",
+    "source_host": "R13-M0-NA-C:J08-U01",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "10650 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt."
+   },
+   {
+    "uid": "log_record_000019",
+    "record_number": 19,
+    "line_start": 19,
+    "line_end": 19,
+    "timestamp": "2005-12-01-06.39.18.093254",
+    "group_id": "G05",
+    "source_host": "R13-M1-N9-C:J02-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr."
+   },
+   {
+    "uid": "log_record_000020",
+    "record_number": 20,
+    "line_start": 20,
+    "line_end": 20,
+    "timestamp": "2005-12-01-06.39.24.979006",
+    "group_id": "G06",
+    "source_host": "R34-M0-N8-C:J06-U11",
+    "service_name": "bgl.kernel",
+    "severity": "INFO",
+    "message": "10686 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt."
+   }
+  ],
+  "evidencia_logs_omitidos": 0,
+  "grupos_evidencia": [
+   {
+    "group_id": "G01",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "ciod: Received signal <n>, code=<n>, errno=<n>, address=<hex>"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000001",
+     "log_record_000003"
+    ],
+    "nodos": [
+     "R21-M0-N8-I:J18-U01",
+     "R01-M1-NC-I:J18-U01"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G02",
+    "clave": {
+     "componente": "bgl.discovery",
+     "severidad": "INFO",
+     "plantilla": "Node card VPD check: U<n> node in processor card slot J<n> do not match. VPD ecid <n>D<n>DF<n>DE<n>BFFFF<n>D<n>AF<n>DAD<"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000002"
+    ],
+    "nodos": [
+     "R67-M1-N7"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G03",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "CE sym <n>, at <hex>, mask <hex>"
+    },
+    "conteo": 1,
+    "uids": [
+     "log_record_000004"
+    ],
+    "nodos": [
+     "R74-M1-NB-C:J02-U11"
+    ],
+    "n_nodos": 1
+   },
+   {
+    "group_id": "G04",
+    "clave": {
+     "componente": "bgl.app",
+     "severidad": "FATAL",
+     "plantilla": "ciod: LOGIN chdir(/g/g<n>/spelce<n>/Linpack_SWL) failed: No such file or directory"
+    },
+    "conteo": 2,
+    "uids": [
+     "log_record_000005",
+     "log_record_000006"
+    ],
+    "nodos": [
+     "R15-M1-NC-I:J18-U01",
+     "R13-M1-NC-I:J18-U01"
+    ],
+    "n_nodos": 2
+   },
+   {
+    "group_id": "G05",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "<n> microseconds spent in the rbs signal handler during <n> calls. <n> microseconds was the maximum time for a single in"
+    },
+    "conteo": 6,
+    "uids": [
+     "log_record_000007",
+     "log_record_000008",
+     "log_record_000009",
+     "log_record_000015",
+     "log_record_000016",
+     "log_record_000019"
+    ],
+    "nodos": [
+     "R11-M1-ND-C:J08-U01",
+     "R11-M1-NA-C:J13-U01",
+     "R11-M1-NF-C:J07-U01",
+     "R16-M0-N4-C:J06-U11",
+     "R07-M1-N0-C:J07-U01",
+     "R13-M1-N9-C:J02-U11"
+    ],
+    "n_nodos": 6
+   },
+   {
+    "group_id": "G06",
+    "clave": {
+     "componente": "bgl.kernel",
+     "severidad": "INFO",
+     "plantilla": "<n> total interrupts. <n> critical input interrupts. <n> microseconds total spent on critical input interrupts, <n> micr"
+    },
+    "conteo": 8,
+    "uids": [
+     "log_record_000010",
+     "log_record_000011",
+     "log_record_000012",
+     "log_record_000013",
+     "log_record_000014",
+     "log_record_000017",
+     "log_record_000018",
+     "log_record_000020"
+    ],
+    "nodos": [
+     "R06-M0-N3-C:J13-U11",
+     "R10-M0-N7-C:J08-U11",
+     "R17-M0-N8-C:J09-U11",
+     "R06-M0-N7-C:J05-U01",
+     "R16-M0-N4-C:J07-U11",
+     "R36-M0-NB-C:J12-U01",
+     "R13-M0-NA-C:J08-U01",
+     "R34-M0-N8-C:J06-U11"
+    ],
+    "n_nodos": 8
+   }
+  ],
+  "contenido_lote": {
+   "tipo": "texto",
+   "lineas": [
+    "[log_record_000001] 1133306326 2005.11.29 R21-M0-N8-I:J18-U01 2005-11-29-15.18.46.642475 R21-M0-N8-I:J18-U01 RAS KERNEL INFO ciod: Received signal 15, code=0, errno=0, address=0x000001f2",
+    "[log_record_000002] 1133310116 2005.11.29 R67-M1-N7 2005-11-29-16.21.56.855025 R67-M1-N7 NULL DISCOVERY INFO Node card VPD check: U01 node in processor card slot J05 do not match. VPD ecid 04D37DF2DE7BFFFF0D081AF0DAD2, found 04DD80740E2FFFFF0A0C19D0CEBD",
+    "[log_record_000003] 1133317778 2005.11.29 R01-M1-NC-I:J18-U01 2005-11-29-18.29.38.531250 R01-M1-NC-I:J18-U01 RAS KERNEL INFO ciod: Received signal 15, code=0, errno=0, address=0x000001f5",
+    "[log_record_000004] 1133367847 2005.11.30 R74-M1-NB-C:J02-U11 2005-11-30-08.24.07.024349 R74-M1-NB-C:J02-U11 RAS KERNEL INFO CE sym 1, at 0x01d7eaa0, mask 0x02",
+    "[log_record_000005] 1133409475 2005.11.30 R15-M1-NC-I:J18-U01 2005-11-30-19.57.55.220367 R15-M1-NC-I:J18-U01 RAS APP FATAL ciod: LOGIN chdir(/g/g0/spelce1/Linpack_SWL) failed: No such file or directory",
+    "[log_record_000006] 1133409779 2005.11.30 R13-M1-NC-I:J18-U01 2005-11-30-20.02.59.033978 R13-M1-NC-I:J18-U01 RAS APP FATAL ciod: LOGIN chdir(/g/g0/spelce1/Linpack_SWL) failed: No such file or directory",
+    "[log_record_000007] 1133447694 2005.12.01 R11-M1-ND-C:J08-U01 2005-12-01-06.34.54.203650 R11-M1-ND-C:J08-U01 RAS KERNEL INFO 0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr.",
+    "[log_record_000008] 1133447703 2005.12.01 R11-M1-NA-C:J13-U01 2005-12-01-06.35.03.376951 R11-M1-NA-C:J13-U01 RAS KERNEL INFO 0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr.",
+    "[log_record_000009] 1133447722 2005.12.01 R11-M1-NF-C:J07-U01 2005-12-01-06.35.22.172118 R11-M1-NF-C:J07-U01 RAS KERNEL INFO 0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr.",
+    "[log_record_000010] 1133447728 2005.12.01 R06-M0-N3-C:J13-U11 2005-12-01-06.35.28.126758 R06-M0-N3-C:J13-U11 RAS KERNEL INFO 10722 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt.",
+    "[log_record_000011] 1133447738 2005.12.01 R10-M0-N7-C:J08-U11 2005-12-01-06.35.38.328553 R10-M0-N7-C:J08-U11 RAS KERNEL INFO 10740 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt.",
+    "[log_record_000012] 1133447761 2005.12.01 R17-M0-N8-C:J09-U11 2005-12-01-06.36.01.057694 R17-M0-N8-C:J09-U11 RAS KERNEL INFO 10744 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt.",
+    "[log_record_000013] 1133447763 2005.12.01 R06-M0-N7-C:J05-U01 2005-12-01-06.36.03.872611 R06-M0-N7-C:J05-U01 RAS KERNEL INFO 10700 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt.",
+    "[log_record_000014] 1133447776 2005.12.01 R16-M0-N4-C:J07-U11 2005-12-01-06.36.16.876079 R16-M0-N4-C:J07-U11 RAS KERNEL INFO 10732 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt.",
+    "[log_record_000015] 1133447777 2005.12.01 R16-M0-N4-C:J06-U11 2005-12-01-06.36.17.847421 R16-M0-N4-C:J06-U11 RAS KERNEL INFO 0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr.",
+    "[log_record_000016] 1133447789 2005.12.01 R07-M1-N0-C:J07-U01 2005-12-01-06.36.29.326116 R07-M1-N0-C:J07-U01 RAS KERNEL INFO 0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr.",
+    "[log_record_000017] 1133447940 2005.12.01 R36-M0-NB-C:J12-U01 2005-12-01-06.39.00.882940 R36-M0-NB-C:J12-U01 RAS KERNEL INFO 10655 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt.",
+    "[log_record_000018] 1133447941 2005.12.01 R13-M0-NA-C:J08-U01 2005-12-01-06.39.01.729708 R13-M0-NA-C:J08-U01 RAS KERNEL INFO 10650 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt.",
+    "[log_record_000019] 1133447958 2005.12.01 R13-M1-N9-C:J02-U11 2005-12-01-06.39.18.093254 R13-M1-N9-C:J02-U11 RAS KERNEL INFO 0 microseconds spent in the rbs signal handler during 0 calls. 0 microseconds was the maximum time for a single instance of a correctable ddr.",
+    "[log_record_000020] 1133447964 2005.12.01 R34-M0-N8-C:J06-U11 2005-12-01-06.39.24.979006 R34-M0-N8-C:J06-U11 RAS KERNEL INFO 10686 total interrupts. 0 critical input interrupts. 0 microseconds total spent on critical input interrupts, 0 microseconds max time in a critical input interrupt."
+   ],
+   "total_lineas": 20,
+   "lineas_entregadas": 20,
+   "recortado": false,
+   "topes": {
+    "lineas": 200,
+    "caracteres": 20000
+   }
+  },
+  "veredicto_preliminar": "normal",
+  "justificacion_veredicto_preliminar": "Los eventos FATAL corresponden únicamente a un error de usuario por directorio inexistente al lanzar un trabajo (ciod: LOGIN chdir failed), sin impacto en la infraestructura ni indicios de compromiso.",
+  "invalid_evidence_group_count": 0,
+  "comandos_rechazados": [],
+  "casos_historicos": [
+   {
+    "id": "bgl_des_natural_0011",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Contiene eventos de severidad alta que no se consideraron alerta: 2 × [FATAL bgl.app] ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r<n>: invalid or mi. Composición: 20 eventos, severidades INFO 18, FATAL 2.",
+    "similitud": 0.748
+   },
+   {
+    "id": "bgl_des_balanceado_0001",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "clase": "anomala",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 2 × [FATAL bgl.kernel] rts panic! - stopping execution. Composición: 20 eventos, severidades INFO 17, FATAL 3.",
+    "similitud": 0.742
+   },
+   {
+    "id": "bgl_des_natural_0001",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "clase": "anomala",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 2 × [FATAL bgl.app] ciod: failed to read message prefix on control stream (CioStream socket to <n>.<n>.<n>.<n>. Composición: 20 eventos, severidades INFO 18, FATAL 2.",
+    "similitud": 0.74
+   },
+   {
+    "id": "bgl_des_balanceado_0002",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Contiene eventos de severidad alta que no se consideraron alerta: 1 × [ERROR bgl.discovery] Node card status: no ALERTs are active. Clock Mode is Low. Clock Select is Midplane. Phy J. Composición: 20 eventos, severidades INFO 19, ERROR 1.",
+    "similitud": 0.639
+   }
+  ],
+  "historico_consulta": {
+   "excluidos_por_solapamiento": [
+    "rag_enriquecido_v2:bgl_des_natural_0019"
+   ],
+   "consultados": 56,
+   "contrastiva": true,
+   "k_por_clase": 2,
+   "tipo": "texto",
+   "omitidos_otro_tipo": 31,
+   "excluidos_mismo_incidente": [],
+   "exclusion_por_incidente_activa": true,
+   "representacion": "Eventos destacados: [FATAL bgl.app] ciod: LOGIN chdir(/g/g<n>/spelce<n>/Linpack_SWL) failed: No such file or directory x2 en 2 nodos\nLog de texto, 20 eventos. Severidades: INFO 18, FATAL 2. Componentes: bgl.kernel 17, bgl.app 2, bgl.discovery 1. Nodos distintos: 20."
+  },
+  "hallazgos_cazador": [],
+  "cazador_ejecutado": false,
+  "veredicto_consolidado": "normal",
+  "consulta_mitre": "",
+  "rag_omitido": "sin hipótesis de seguridad: no se consultan técnicas",
+  "revision_hallazgos": [],
+  "diagnostico_inicial": "",
+  "diagnostico_corregido": "",
+  "correcciones_auditor": 0,
+  "historial_correcciones": [],
+  "memoria_grupos": {},
+  "memoria_grupos_consulta": {
+   "excluidos_por_solapamiento": [],
+   "consultados": 0
+  },
+  "evaluacion_grupos": [
+   {
+    "group_id": "G04",
+    "explicacion_benigna": "Error a nivel de aplicación de usuario donde una tarea (Linpack) intenta iniciar en un directorio inexistente o no montado (/g/g0/spelce1/Linpack_SWL), común en ejecuciones de usuario que no comprometen la estabilidad del sistema.",
+    "explicacion_maliciosa": "Intento de ejecución o acceso no autorizado a rutas arbitrarias en el sistema de archivos.",
+    "patron_lista": "ninguno"
+   }
+  ],
+  "eventos_reconstruidos": [
+   {
+    "event_id": "event_001",
+    "evidence_uids": [
+     "log_record_000005",
+     "log_record_000006"
+    ],
+    "timestamp": "2005-11-30-19.57.55.220367",
+    "event_type": "application_directory_not_found",
+    "description": "Fallo al iniciar el trabajo Linpack en nodos de cómputo debido a que la ruta especificada no existe.",
+    "confidence": null,
+    "evidence_groups": [
+     "G04"
+    ],
+    "categoria": "contexto"
+   }
+  ],
+  "secuencia_temporal": [
+   "event_001"
+  ],
+  "tecnicas_atribuidas": [],
+  "invalid_evidence_uid_count": 0,
+  "d11_warnings": [],
+  "telemetry": {
+   "llm_call_count": 5,
+   "input_tokens": 15309,
+   "output_tokens": 1089,
+   "total_tokens": 19517,
+   "execution_time": 46.195306,
+   "replan_count": 0,
+   "intentos_correccion": 1,
+   "invalid_evidence_uid_count": 0,
+   "d11_warning_count": 0,
+   "llm_calls": [
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 1048,
+     "output_tokens": 235,
+     "total_tokens": 2352,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 1069,
+     "duration_s": 12.351,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 4559,
+     "output_tokens": 270,
+     "total_tokens": 5595,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 766,
+     "duration_s": 11.15,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 358,
+     "output_tokens": 54,
+     "total_tokens": 580,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 168,
+     "duration_s": 3.982,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 1401,
+     "output_tokens": 6,
+     "total_tokens": 1470,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 63,
+     "duration_s": 3.444,
+     "error": null
+    },
+    {
+     "model": "gemini-3.8-flash",
+     "input_tokens": 7943,
+     "output_tokens": 524,
+     "total_tokens": 9520,
+     "model_version": "gemini-3.8-flash",
+     "reasoning_tokens": 1053,
+     "duration_s": 15.08,
+     "error": null
+    }
+   ]
+  },
+  "firma": "v2|lineas=20 ips=0 servicios=[bgl.kernel:17,bgl.app:2,bgl.discovery:1] eventos=[evento_critico:2,evento_normal:18] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[INFO:18,FATAL:2] categorias=[] cobertura=1.0",
+  "plan": {
+   "plan_version": 1,
+   "objetivo": "Investigar los eventos críticos de severidad FATAL registrados en el kernel del sistema BlueGene/L para identificar posibles vulnerabilidades o fallos y aplicar medidas de contención.",
+   "pasos": [
+    {
+     "id": 1,
+     "accion": "triage",
+     "objetivo": "Evaluar la naturaleza e impacto de los 2 registros con severidad FATAL en el grupo G04 sobre los nodos afectados.",
+     "estado": "ejecutado"
+    },
+    {
+     "id": 2,
+     "accion": "cve",
+     "objetivo": "Consultar vulnerabilidades conocidas reportadas para la plataforma BlueGene/L y sus módulos de kernel.",
+     "estado": "omitido",
+     "motivo": "El diagnóstico no presenta indicios de actividad maliciosa ni explotación de vulnerabilidades; los eventos fatales corresponden a un error de usuario al especificar una ruta de directorio inexistente en una aplicación."
+    },
+    {
+     "id": 3,
+     "accion": "mitigacion",
+     "objetivo": "Formular recomendaciones de contención, aislamiento o recuperación para mitigar el impacto de los eventos FATAL detectados.",
+     "estado": "ejecutado"
+    }
+   ],
+   "criterios_finalizacion": [
+    "Diagnóstico completo de los eventos FATAL identificados.",
+    "Verificación de vulnerabilidades conocidas para el producto BlueGene/L.",
+    "Plan de mitigación y medidas correctivas establecidas."
+   ]
+  },
+  "plan_objetivo": "Investigar los eventos críticos de severidad FATAL registrados en el kernel del sistema BlueGene/L para identificar posibles vulnerabilidades o fallos y aplicar medidas de contención.",
+  "paso_actual": 3,
+  "historial_ejecucion": [
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_planificador",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "plan v1, 3 pasos: ['triage', 'cve', 'mitigacion']"
+   },
+   {
+    "plan_version": 1,
+    "step_id": 1,
+    "nodo": "agente_analista_triage",
+    "accion": "triage",
+    "estado": "ejecutado",
+    "resumen": "diagnóstico producido"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_cazador",
+    "accion": null,
+    "estado": "omitido",
+    "resumen": "sin grupos con señal que examinar"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "tool_consultar_rag",
+    "accion": "rag",
+    "estado": "omitido",
+    "resumen": "técnicas MITRE no consultadas (sin hipótesis de seguridad: no se consultan técnicas)"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_selector_herramientas",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "usar_cve=False"
+   },
+   {
+    "plan_version": 1,
+    "step_id": 3,
+    "nodo": "agente_ingeniero_mitigacion",
+    "accion": "mitigacion",
+    "estado": "ejecutado",
+    "resumen": "0 comandos propuestos"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "tool_validar_comandos",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "comandos válidos"
+   },
+   {
+    "plan_version": 1,
+    "step_id": null,
+    "nodo": "agente_auditor_final",
+    "accion": null,
+    "estado": "ejecutado",
+    "resumen": "confianza=0.95 cobertura_suficiente=True"
+   }
+  ],
+  "desviaciones_plan": [],
+  "historial_planes": [],
+  "replan_count": 0,
+  "diagnostico": "El análisis de los 20 registros muestra un funcionamiento general estándar del supercomputador BlueGene/L, con 18 eventos informativos del kernel y del servicio de descubrimiento y 2 eventos de severidad FATAL en el servicio ciod (bgl.app). Dichos eventos críticos (log_record_000005 y log_record_000006) corresponden a fallos de cambio de directorio al iniciar una aplicación ('ciod: LOGIN chdir(/g/g0/spelce1/Linpack_SWL) failed: No such file or directory'). Al igual que en los casos históricos de referencia donde errores a nivel de aplicación de usuario ('Error loading...') son considerados no críticos para la infraestructura, este error refleja una ruta inexistente especificada por un usuario y no una falla de kernel ('rts panic') ni problemas de comunicación del sistema de control ('failed to read message prefix'). Tampoco existen indicadores de actividad maliciosa.",
+  "necesita_rag": false,
+  "usar_cve": false,
+  "razon_seleccion": "El diagnóstico no presenta indicios de actividad maliciosa ni explotación de vulnerabilidades; los eventos fatales corresponden a un error de usuario al especificar una ruta de directorio inexistente en una aplicación.",
+  "contexto_rag": [
+   {
+    "id": "bgl_des_natural_0011",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Contiene eventos de severidad alta que no se consideraron alerta: 2 × [FATAL bgl.app] ciod: Error loading /bgl/apps/followup/RAPTOR/pre-study/raptor.newcomp.r<n>: invalid or mi. Composición: 20 eventos, severidades INFO 18, FATAL 2.",
+    "similitud": 0.748
+   },
+   {
+    "id": "bgl_des_balanceado_0001",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "clase": "anomala",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 2 × [FATAL bgl.kernel] rts panic! - stopping execution. Composición: 20 eventos, severidades INFO 17, FATAL 3.",
+    "similitud": 0.742
+   },
+   {
+    "id": "bgl_des_natural_0001",
+    "dataset": "bgl",
+    "etiqueta": "anomalo",
+    "clase": "anomala",
+    "descripcion": "Anómalo según la organización (requiere intervención). Eventos que determinan la alerta: 2 × [FATAL bgl.app] ciod: failed to read message prefix on control stream (CioStream socket to <n>.<n>.<n>.<n>. Composición: 20 eventos, severidades INFO 18, FATAL 2.",
+    "similitud": 0.74
+   },
+   {
+    "id": "bgl_des_balanceado_0002",
+    "dataset": "bgl",
+    "etiqueta": "normal",
+    "clase": "normal",
+    "descripcion": "Normal según la organización (no requiere intervención). Contiene eventos de severidad alta que no se consideraron alerta: 1 × [ERROR bgl.discovery] Node card status: no ALERTs are active. Clock Mode is Low. Clock Select is Midplane. Phy J. Composición: 20 eventos, severidades INFO 19, ERROR 1.",
+    "similitud": 0.639
+   }
+  ],
+  "tecnicas_mitre": [],
+  "cves_encontrados": [],
+  "comandos_mitigacion": [],
+  "comandos_validos": true,
+  "motivos_rechazo": [],
+  "intentos_correccion": 1,
+  "confianza": 0.95,
+  "hay_incidente": false,
+  "hay_anomalia": false,
+  "evaluacion_auditor": "Los registros corresponden a operaciones regulares del supercomputador con estadísticas normales de interrupciones y manejadores rbs. Los dos eventos con severidad FATAL en bgl.app reflejan un error de espacio de usuario al no encontrar el directorio de trabajo para un trabajo de Linpack, lo cual según los criterios históricos de la organización no constituye una falla del sistema ni un incidente de seguridad.",
+  "cobertura_auditor": true,
+  "cobertura_suficiente": true,
+  "motivo_replanificacion": "",
+  "requiere_replanificacion": false,
+  "_firma": "v2|lineas=20 ips=0 servicios=[bgl.kernel:17,bgl.app:2,bgl.discovery:1] eventos=[evento_critico:2,evento_normal:18] eventos_totales=20 decoders=[text:20] productos=[BlueGene/L:20] severidades=[INFO:18,FATAL:2] categorias=[] cobertura=1.0",
+  "_error_api": null,
+  "requiere_revision_humana": false,
+  "output_contract_version": "d11-v1",
+  "classification_detallada": "normal"
+ },
+ "observaciones": [
+  {
+   "nodo": "planificador",
+   "llamadas": [
+    0
+   ],
+   "prompt_chars": 1612,
+   "system_chars": 869,
+   "tokens": [
+    {
+     "input_tokens": 1048,
+     "output_tokens": 235,
+     "reasoning_tokens": 1069,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "triage",
+   "llamadas": [
+    1
+   ],
+   "prompt_chars": 8816,
+   "system_chars": 1394,
+   "tokens": [
+    {
+     "input_tokens": 4559,
+     "output_tokens": 270,
+     "reasoning_tokens": 766,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "selector",
+   "llamadas": [
+    2
+   ],
+   "prompt_chars": 1046,
+   "system_chars": 344,
+   "tokens": [
+    {
+     "input_tokens": 358,
+     "output_tokens": 54,
+     "reasoning_tokens": 168,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "mitigacion",
+   "llamadas": [
+    3
+   ],
+   "prompt_chars": 3425,
+   "system_chars": 854,
+   "tokens": [
+    {
+     "input_tokens": 1401,
+     "output_tokens": 6,
+     "reasoning_tokens": 63,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  },
+  {
+   "nodo": "auditor",
+   "llamadas": [
+    4
+   ],
+   "prompt_chars": 14458,
+   "system_chars": 8455,
+   "tokens": [
+    {
+     "input_tokens": 7943,
+     "output_tokens": 524,
+     "reasoning_tokens": 1053,
+     "model_version": "gemini-3.8-flash",
+     "error": null
+    }
+   ]
+  }
+ ],
+ "consultas_externas": []
+}

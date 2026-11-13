@@ -592,6 +592,16 @@ CAZADOR_LISTA_PATRONES = _env_bool("CAZADOR_LISTA_PATRONES", True)
 #    consolidado sigue cambiando solo con "alto".
 AUDITOR_REVISA_MEDIOS = _env_bool("AUDITOR_REVISA_MEDIOS", True)
 
+# --- Variante de desarrollo: "B.1 sin cazador, auditor reforzado" ---------------
+# El auditor recibe, en un bloque destacado, EXACTAMENTE lo que recibiría el cazador
+# (`grupos_para_cazador`: filas completas de cada grupo con señal, motivo factual y
+# referentes de la memoria de grupos, más el resumen del comportamiento dominante),
+# la misma lista de verificación de patrones MITRE y la instrucción de evaluar cada
+# grupo (explicación benigna, explicación maliciosa, patrón de la lista) ANTES del
+# veredicto (`evaluacion_grupos`). Pensado para usarse con CAZADOR_ACTIVO=false: la
+# única diferencia con B.1 es quién evalúa los grupos, no la información disponible.
+AUDITOR_REFORZADO = _env_bool("AUDITOR_REFORZADO", False)
+
 
 def validate_config() -> None:
     """Lanza un error claro si falta alguna key obligatoria antes de correr el grafo."""

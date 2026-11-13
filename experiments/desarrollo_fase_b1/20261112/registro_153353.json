@@ -1,0 +1,152 @@
+{
+  "inicio_utc": "2026-11-12T15:26:14.453343+00:00",
+  "commit": "8d70d6dcaa432782142fc4dd449d9accba69d5ee",
+  "rama": "nodex-final",
+  "src_sin_cambios": true,
+  "tope_usd": 15.0,
+  "memoria": "experiments/knowledge/rag_enriquecido_v2",
+  "memoria_manifiesto_sha256": "55c32dfe24ab803e06aba5ce6a7cd6712ea12d2db5031e6a8c62f15236a4b756",
+  "src_diff_sha256": null,
+  "src_nuevos_sin_seguimiento": [],
+  "memoria_grupos": "experiments/knowledge/memoria_grupos_v1",
+  "memoria_grupos_sha256": "93e974579d50296821958528279b56db2aa7ac12dd4c6a9e1983addfade05c42",
+  "interruptores": {
+    "RAG_POR_HIPOTESIS": true,
+    "CAZADOR_ACTIVO": true,
+    "CORRECCION_AUDITOR": true,
+    "HISTORICO_ACTIVO": true,
+    "HISTORICO_K": 3,
+    "EVENTOS_POR_CATEGORIA": true,
+    "HISTORICO_CONTRASTIVO": true,
+    "HISTORICO_K_POR_CLASE": 2,
+    "MEMORIA_GRUPOS_ACTIVA": true,
+    "CAZADOR_MOTIVO_FACTUAL": true,
+    "CAZADOR_LISTA_PATRONES": true,
+    "AUDITOR_REVISA_MEDIOS": true
+  },
+  "exclusion_por_solapamiento": "del sistema (siempre)",
+  "exclusion_por_incidente": true,
+  "criterio_exclusion_por_incidente": "mismo IP de origen atacante y al menos una táctica en común (GT de desarrollo)",
+  "parametros": {
+    "LLM_MODEL_PRIMARY": "gemini-3.8-flash",
+    "LLM_MODEL_FALLBACK": "gemini-3.8-flash",
+    "LLM_SIN_RESPALDO": true,
+    "REPUTACION_SIN_ENRIQUECIMIENTO": true,
+    "TEMPERATURE": 0.0,
+    "EMBEDDING_MODEL": "all-MiniLM-L6-v2",
+    "TOP_K_FEWSHOT": 3,
+    "TOP_K_ERRORS": 3,
+    "TOP_K_ATTACK": 3,
+    "ATTACK_MAX_CHARS_EMBED": 800,
+    "MAX_RAW_CHARS_EMBED": 2000,
+    "CONTEXTO_PREPROCESAMIENTO_MAX_CHARS": 2000,
+    "LOG_MAX_FILE_BYTES": 52428800,
+    "LOG_MAX_EVENTS": 100000,
+    "LOG_MAX_RAW_SAMPLES": 20,
+    "LOG_PRESERVE_RAW": true
+  },
+  "arquitecturas": [
+    "nodex",
+    "agente_unico"
+  ],
+  "casos": [
+    {
+      "arquitectura": "nodex",
+      "case_id": "uwf_des_visible_0006",
+      "codigo": 0,
+      "segundos_pared": 122.3,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.10929,
+      "llamadas": 6,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "bgl_des_natural_0003",
+      "codigo": 0,
+      "segundos_pared": 78.1,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.04065,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0006",
+      "codigo": 0,
+      "segundos_pared": 55.2,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.07659,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0007",
+      "codigo": 0,
+      "segundos_pared": 35.5,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.06938,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0008",
+      "codigo": 0,
+      "segundos_pared": 38.7,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.06624,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0009",
+      "codigo": 0,
+      "segundos_pared": 32.2,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.06318,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0010",
+      "codigo": 0,
+      "segundos_pared": 40.8,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.06739,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    },
+    {
+      "arquitectura": "agente_unico",
+      "case_id": "uwf_des_visible_0011",
+      "codigo": 0,
+      "segundos_pared": 55.3,
+      "excluidos_mismo_incidente_previstos": [],
+      "usd": 0.07655,
+      "llamadas": 1,
+      "versiones": [
+        "gemini-3.8-flash"
+      ]
+    }
+  ],
+  "fin_utc": "2026-11-12T15:33:53.042569+00:00",
+  "gasto_usd": 5.2607
+}

@@ -474,7 +474,9 @@ def campos_d11(state):
             "correcciones_auditor": state.get("correcciones_auditor") or 0,
             "historial_correcciones": copy.deepcopy(state.get("historial_correcciones") or []),
             # NODEX final, Fase B.1 (aditivos).
-            "memoria_grupos": copy.deepcopy(state.get("memoria_grupos") or {})}
+            "memoria_grupos": copy.deepcopy(state.get("memoria_grupos") or {}),
+            # Variante "auditor reforzado" (AUDITOR_REFORZADO).
+            "evaluacion_grupos": copy.deepcopy(state.get("evaluacion_grupos") or [])}
 
 
 def normalizar_salida_experimental(state):
