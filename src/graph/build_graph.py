@@ -70,8 +70,8 @@ def _con_traza(nombre: str, fn):
 def build_graph():
     """Grafo de NODEX. Con `RAG_POR_HIPOTESIS` (NODEX final, Fase B) el orden es:
 
-        planificador -> triage -> router_caza -> [agente_cazador] -> tool_consultar_rag
-          -> selector -> [cve] -> mitigación -> validación (ciclo) -> auditor
+        planificador -> triage -> tool_consultar_rag -> selector -> [cve] -> mitigación
+          -> validación (ciclo) -> auditor (reforzado: evalúa los grupos con señal)
           -> router_coherencia -> [tool_corregir_diagnostico -> mitigación ...] | router_finalizacion
 
     Apagado, el grafo es el de la Fase A (triage <-> RAG). Los interruptores se
@@ -84,14 +84,12 @@ def build_graph():
 
 
 def _grafo_fase_b(config):
-    from src.agents.agente_cazador import agente_cazador
-    from src.graph.routers import router_caza, router_coherencia
+    from src.graph.routers import router_coherencia
     from src.tools.tool_corregir_diagnostico import tool_corregir_diagnostico
 
     workflow = StateGraph(LogGuardState)
     workflow.add_node("agente_planificador", agente_planificador)
     for nombre, fn in (("agente_analista_triage", agente_analista_triage),
-                       ("agente_cazador", agente_cazador),
                        ("tool_consultar_rag", tool_consultar_rag),
                        ("agente_selector_herramientas", agente_selector_herramientas),
                        ("tool_consultar_cve", tool_consultar_cve),
@@ -103,10 +101,7 @@ def _grafo_fase_b(config):
 
     workflow.add_edge(START, "agente_planificador")
     workflow.add_edge("agente_planificador", "agente_analista_triage")
-    workflow.add_conditional_edges("agente_analista_triage", router_caza,
-                                   {"agente_cazador": "agente_cazador",
-                                    "tool_consultar_rag": "tool_consultar_rag"})
-    workflow.add_edge("agente_cazador", "tool_consultar_rag")
+    workflow.add_edge("agente_analista_triage", "tool_consultar_rag")
     workflow.add_edge("tool_consultar_rag", "agente_selector_herramientas")
     workflow.add_conditional_edges("agente_selector_herramientas", router_selector,
                                    {"tool_consultar_cve": "tool_consultar_cve",

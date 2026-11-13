@@ -45,22 +45,6 @@ def router_validacion(state: LogGuardState) -> Literal["agente_ingeniero_mitigac
     return "agente_auditor_final"
 
 
-def router_caza(state: LogGuardState) -> Literal["agente_cazador", "tool_consultar_rag"]:
-    """Router de caza (NODEX final, B1): ¿hay grupos minoritarios que examinar?
-
-    Omite al cazador si no hay grupos con señal (o si `CAZADOR_ACTIVO` está
-    apagado). La omisión queda en `historial_ejecucion` (la registra la traza del
-    nodo siguiente, ver `plan_tracking.actualizar_plan`).
-    """
-    from src.agents.agente_cazador import grupos_para_cazador
-    from src.config import CAZADOR_ACTIVO
-    if CAZADOR_ACTIVO and grupos_para_cazador(state):
-        print("   🔀 Router Caza → agente_cazador")
-        return "agente_cazador"
-    print("   🔀 Router Caza → tool_consultar_rag (sin grupos con señal: cazador omitido)")
-    return "tool_consultar_rag"
-
-
 def router_coherencia(state: LogGuardState):
     """Router de coherencia (NODEX final, B2), después del auditor.
 

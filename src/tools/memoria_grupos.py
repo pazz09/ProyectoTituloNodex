@@ -16,7 +16,7 @@ representación de flujos.
 Para cada grupo con señal del lote, `consultar_memoria_grupos` recupera el
 grupo malicioso y el grupo benigno más parecidos (contrastivo), excluyendo
 cualquier grupo que comparta registros fuente con el lote analizado (la misma
-exclusión por solapamiento de la memoria de lotes). Lo reciben el cazador y,
+exclusión por solapamiento de la memoria de lotes). Lo reciben el auditor reforzado y,
 para que la comparación sea justa, el agente único.
 """
 
@@ -184,7 +184,7 @@ def _referentes(item: dict) -> list[str]:
 
 
 def referentes_de_grupo(item: dict | None) -> dict | None:
-    """Los dos referentes de un grupo, en la forma que recibe el cazador (sin similitud numérica)."""
+    """Los dos referentes de un grupo, en la forma que recibe el auditor (sin similitud numérica)."""
     if not item:
         return None
     def corto(r):

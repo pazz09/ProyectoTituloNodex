@@ -124,7 +124,7 @@ def _consultar_memoria_grupos(resultado, analisis: dict) -> dict:
     """B.1-2 (NODEX final): para cada grupo con señal de un lote de red, el grupo malicioso y el
     benigno más parecidos de la memoria de grupos, sin solapamiento de registros.
 
-    Determinístico y común a NODEX (cazador) y al agente único. Vacío en logs de texto, sin
+    Determinístico y común a NODEX (auditor) y al agente único. Vacío en logs de texto, sin
     grupos con señal o sin la memoria.
     """
     from src.config import MEMORIA_GRUPOS_ACTIVA, MEMORIA_GRUPOS_PATH
@@ -196,11 +196,8 @@ def _preparar_estado_inicial(raw_logs: str, thread_id: str | None = None):
         # --- NODEX final, Fase B.1 ---
         "memoria_grupos": memoria_grupos["por_grupo"],
         "memoria_grupos_consulta": {k: v for k, v in memoria_grupos.items() if k != "por_grupo"},
-        "hallazgos_cazador": [],
-        "cazador_ejecutado": False,
         "veredicto_consolidado": None,
         "consulta_mitre": "",
-        "revision_hallazgos": [],
         "evaluacion_grupos": [],
         "diagnostico_inicial": "",
         "diagnostico_corregido": "",

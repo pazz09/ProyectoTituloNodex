@@ -1,5 +1,5 @@
 /**
- * Catálogo de los 7 nodos reales del grafo: su nombre en el backend, cómo se
+ * Catálogo de los 9 nodos reales del grafo: su nombre en el backend, cómo se
  * llaman en pantalla y qué hacen, en lenguaje llano.
  *
  * Acá no hay estado. El avance de una ejecución lo lleva
@@ -29,7 +29,6 @@ export type NombreNodo =
   | 'agente_ingeniero_mitigacion'
   | 'tool_validar_comandos'
   | 'agente_auditor_final'
-  | 'agente_cazador'
   | 'tool_corregir_diagnostico'
 
 export type Nodo = {
@@ -53,13 +52,6 @@ export const NODOS: Nodo[] = [
     titulo: 'Análisis inicial',
     descripcion:
       'Leyendo el archivo y buscando señales de comportamiento anómalo...',
-  },
-  {
-    nombre: 'agente_cazador',
-    titulo: 'Cazador de eventos minoritarios',
-    descripcion:
-      'Examinando uno por uno los eventos poco frecuentes del lote, comparándolos con el comportamiento dominante...',
-    opcional: true,
   },
   {
     nombre: 'agente_selector_herramientas',
@@ -97,7 +89,7 @@ export const NODOS: Nodo[] = [
     nombre: 'agente_auditor_final',
     titulo: 'Auditoría final',
     descripcion:
-      'Revisando todo el análisis para emitir el veredicto final...',
+      'Evaluando uno por uno los grupos de eventos poco frecuentes y revisando todo el análisis para emitir el veredicto final...',
   },
   {
     nombre: 'tool_corregir_diagnostico',

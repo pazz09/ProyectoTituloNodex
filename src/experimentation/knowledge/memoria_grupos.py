@@ -9,7 +9,7 @@ DESARROLLO de UWF (nunca lee la de evaluación):
   del incidente (`core_event_uids` de su ground truth de desarrollo), representados
   solo con las filas del incidente y etiquetados con sus tácticas y técnicas;
 - benigno: en cada caso benigno, los grupos con señal del perfil del lote (los
-  mismos que examinaría el cazador).
+  mismos que evalúa el auditor reforzado).
 
 Cada grupo se representa por su comportamiento, sin IP
 (`src.tools.memoria_grupos.representacion_grupo_red`), con las huellas de sus

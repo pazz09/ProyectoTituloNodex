@@ -103,13 +103,12 @@ export type ReporteFinal = {
   diagnostico_inicial?: string
   correcciones_auditor?: number
   historial_correcciones?: { correccion: number; clase_anterior: string | null; clase_nueva: string | null }[]
-  /** Hallazgos del agente cazador de eventos minoritarios (B1). */
-  hallazgos_cazador?: {
+  /** Auditor reforzado: evaluación de cada grupo con señal antes del veredicto. */
+  evaluacion_grupos?: {
     group_id: string
-    nivel_sospecha: string
-    justificacion?: string
-    tecnica_candidata?: string | null
-    /** Patrón de la lista de verificación que calzó (B.1). */
+    explicacion_benigna?: string
+    explicacion_maliciosa?: string
+    /** Patrón de la lista de verificación MITRE que calza, o `ninguno`. */
     patron_lista?: string
   }[]
   veredicto_consolidado?: string | null

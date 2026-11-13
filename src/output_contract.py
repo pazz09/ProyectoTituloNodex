@@ -465,17 +465,14 @@ def campos_d11(state):
             "comandos_rechazados": copy.deepcopy(state.get("comandos_rechazados") or []),
             # NODEX final, Fase B (aditivos).
             "casos_historicos": copy.deepcopy(state.get("casos_historicos") or []),
-            "hallazgos_cazador": copy.deepcopy(state.get("hallazgos_cazador") or []),
-            "cazador_ejecutado": bool(state.get("cazador_ejecutado")),
             "veredicto_consolidado": state.get("veredicto_consolidado"),
-            "revision_hallazgos": copy.deepcopy(state.get("revision_hallazgos") or []),
             "consulta_mitre": state.get("consulta_mitre") or "",
             "diagnostico_inicial": state.get("diagnostico_inicial") or "",
             "correcciones_auditor": state.get("correcciones_auditor") or 0,
             "historial_correcciones": copy.deepcopy(state.get("historial_correcciones") or []),
             # NODEX final, Fase B.1 (aditivos).
             "memoria_grupos": copy.deepcopy(state.get("memoria_grupos") or {}),
-            # Variante "auditor reforzado" (AUDITOR_REFORZADO).
+            # Auditor reforzado (AUDITOR_REFORZADO): evaluación de cada grupo con señal.
             "evaluacion_grupos": copy.deepcopy(state.get("evaluacion_grupos") or [])}
 
 

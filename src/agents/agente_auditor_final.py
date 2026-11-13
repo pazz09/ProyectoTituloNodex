@@ -64,14 +64,14 @@ determinística, o por ambas -- información que `hay_incidente`/`hay_anomalia`
 ya demostraron que vale la pena mantener separada en vez de colapsarla en
 un único booleano.
 
-`evaluacion_grupos` (variante de desarrollo "B.1 sin cazador, auditor
-reforzado", interruptor `AUDITOR_REFORZADO`): el auditor recibe en un bloque
-destacado exactamente lo que recibiría el cazador (`grupos_para_cazador` y
-`resumen_dominante`), la misma lista de verificación de patrones MITRE, y debe
-evaluar cada grupo con señal (explicación benigna, explicación maliciosa,
-patrón de la lista) ANTES de emitir el veredicto. La única diferencia con B.1 es
-quién evalúa los grupos (un agente separado o el propio auditor), no la
-información disponible.
+`evaluacion_grupos` (auditor reforzado, interruptor `AUDITOR_REFORZADO`,
+configuración final de NODEX): el auditor recibe en un bloque destacado los
+grupos con señal del lote con todas sus filas, su motivo factual y sus
+referentes de la memoria de grupos, más el comportamiento dominante
+(`src/tools/grupos_con_senal.py`), la lista de verificación de patrones MITRE, y
+debe evaluar cada grupo (explicación benigna, explicación maliciosa, patrón de
+la lista) ANTES de emitir el veredicto. Reemplaza al agente cazador de las Fases
+B y B.1 (docs/experimentacion/bitacora_desarrollo_nodex_final.md).
 """
 
 import json
@@ -111,11 +111,9 @@ def agente_auditor_final(state: LogGuardState) -> dict:
         '"hay_incidente": true/false, "evaluacion": "...", '
         '"cobertura_auditor": true/false, "motivo_cobertura": "..."}'
     )
-    from src.config import AUDITOR_REFORZADO, AUDITOR_REVISA_MEDIOS, HISTORICO_ACTIVO, RAG_POR_HIPOTESIS
+    from src.config import AUDITOR_REFORZADO, HISTORICO_ACTIVO, RAG_POR_HIPOTESIS
+    from src.tools.grupos_con_senal import grupos_con_senal
     from src.tools.memoria_historica import CRITERIO_ORGANIZACION, contexto_historico
-    # B1: el auditor revisa cada hallazgo alto; B.1-3c: también los medio.
-    niveles_revisados = ("alto", "medio") if AUDITOR_REVISA_MEDIOS else ("alto",)
-    altos = [h for h in state.get("hallazgos_cazador") or [] if h.get("nivel_sospecha") in niveles_revisados]
     if HISTORICO_ACTIVO:
         # B4 (NODEX final): la definición anterior de hay_anomalia contaba como
         # anomalía cualquier falla de hardware o infraestructura, lo que
@@ -129,25 +127,16 @@ def agente_auditor_final(state: LogGuardState) -> dict:
             "(1) hay_anomalia: ¿hay una anomalía operativa o un incidente de seguridad según "
             "las definiciones de abajo? ")
         sys_instruction += " " + CRITERIO_ORGANIZACION
-    from src.agents.agente_cazador import grupos_para_cazador
-    grupos_senal = grupos_para_cazador(state) if AUDITOR_REFORZADO else []
-    reforzado_sin_cazador = bool(grupos_senal) and not state.get("cazador_ejecutado")
+    grupos_senal = grupos_con_senal(state) if AUDITOR_REFORZADO else []
     if grupos_senal:
-        # Variante "auditor reforzado": evaluación de grupos ANTES del veredicto, primer campo del JSON.
+        # Auditor reforzado: evaluación de grupos ANTES del veredicto, primer campo del JSON.
         sys_instruction = sys_instruction.replace(
             "Responde SOLO en JSON: {", "Responde SOLO en JSON: {" + _CAMPO_EVALUACION_GRUPOS, 1)
         sys_instruction += _instruccion_reforzada()
-    if RAG_POR_HIPOTESIS and reforzado_sin_cazador:
-        sys_instruction += (" Recibes el veredicto consolidado del triage (no hay agente cazador: los grupos con señal "
-                            "los evalúas tú). Tú decides el veredicto final.")
-    elif RAG_POR_HIPOTESIS:
-        sys_instruction += (
-            " Recibes el veredicto consolidado y los hallazgos del agente cazador (que examinó los grupos "
-            "minoritarios). Tú decides el veredicto final. Por cada hallazgo de nivel "
-            + " o ".join(niveles_revisados) + " debes "
-            "pronunciarte explícitamente: confírmalo o descártalo con evidencia concreta, en "
-            'revision_hallazgos: [{"group_id": "G01", "decision": "confirmado|descartado", '
-            '"evidencia": "..."}].')
+    if RAG_POR_HIPOTESIS:
+        sys_instruction += (" Recibes el veredicto consolidado del triage"
+                            + (" (los grupos con señal los evalúas tú)" if grupos_senal else "")
+                            + ". Tú decides el veredicto final.")
     sys_instruction += PROMPT_D11
     # La calidad de la evidencia depende de cuánto del lote se entendió: un
     # diagnóstico sobre un lote con 30 % de cobertura no merece la misma
@@ -164,14 +153,8 @@ def agente_auditor_final(state: LogGuardState) -> dict:
         f"CONTEXTO RAG: {'Sí' if state.get('contexto_rag') else 'No'}"
         + (f"\n\n{contexto_pre}" if contexto_pre else "")
     )
-    if RAG_POR_HIPOTESIS and reforzado_sin_cazador:
+    if RAG_POR_HIPOTESIS:
         user_content += f"\nVEREDICTO CONSOLIDADO: {state.get('veredicto_consolidado') or 'sin veredicto'}"
-    elif RAG_POR_HIPOTESIS:
-        user_content += (f"\nVEREDICTO CONSOLIDADO: {state.get('veredicto_consolidado') or 'sin veredicto'}"
-                         + "\nHALLAZGOS DEL CAZADOR: "
-                         + (json.dumps(state.get("hallazgos_cazador"), ensure_ascii=False)
-                            if state.get("hallazgos_cazador") else "ninguno (el cazador no se ejecutó o no "
-                                                                    "encontró nada que examinar)"))
     historicos = contexto_historico(state.get("casos_historicos"))
     if historicos:
         user_content += "\n" + historicos
@@ -233,14 +216,6 @@ def agente_auditor_final(state: LogGuardState) -> dict:
     motivo_llm = respuesta.get("motivo_cobertura") if not cobertura_auditor else None
     motivo_replanificacion = " | ".join(filter(None, [motivo_llm, *notas_deterministicas]))
 
-    # B1: revisión explícita de cada hallazgo alto del cazador (B.1-3c: y medio).
-    revision = _revisar_hallazgos(respuesta.get("revision_hallazgos"), altos)
-    revisados = {r["group_id"] for r in revision}
-    faltantes = [h for h in altos if h["group_id"] not in revisados]
-    if faltantes:
-        d11["d11_warnings"] = d11["d11_warnings"] + [
-            f"hallazgo_{h['nivel_sospecha']}_sin_revision:{h['group_id']}" for h in faltantes]
-
     evaluacion_grupos = []
     if grupos_senal:
         examinados = [g["group_id"] for g in grupos_senal]
@@ -261,25 +236,8 @@ def agente_auditor_final(state: LogGuardState) -> dict:
         "cobertura_suficiente": cobertura_suficiente,
         "motivo_replanificacion": motivo_replanificacion,
         "requiere_replanificacion": not cobertura_suficiente,
-        "revision_hallazgos": revision,
         "evaluacion_grupos": evaluacion_grupos,
     }
-
-
-def _revisar_hallazgos(valor, altos: list[dict]) -> list[dict]:
-    """Revisiones válidas de hallazgos alto: grupo existente, decisión cerrada y evidencia."""
-    ids = {h["group_id"] for h in altos}
-    salida, vistos = [], set()
-    for item in valor if isinstance(valor, list) else []:
-        if not isinstance(item, dict):
-            continue
-        gid = str(item.get("group_id") or "").strip()
-        decision = str(item.get("decision") or "").strip().lower()
-        if gid in ids and gid not in vistos and decision in ("confirmado", "descartado"):
-            vistos.add(gid)
-            salida.append({"group_id": gid, "decision": decision,
-                           "evidencia": str(item.get("evidencia") or "")[:600]})
-    return salida
 
 
 _CAMPO_EVALUACION_GRUPOS = (
@@ -288,8 +246,8 @@ _CAMPO_EVALUACION_GRUPOS = (
 
 
 def _instruccion_reforzada() -> str:
-    """Instrucción de la variante "auditor reforzado": las mismas reglas y la misma lista que el cazador."""
-    from src.agents.agente_cazador import IDS_PATRONES, _instrucciones_b1
+    """Instrucción del auditor reforzado: reglas de evaluación de grupos y lista de patrones MITRE."""
+    from src.tools.grupos_con_senal import IDS_PATRONES, instrucciones_grupos
     return (
         " GRUPOS CON SEÑAL: recibes en un bloque destacado los grupos minoritarios o señalados del lote, con todas "
         "sus filas, y un resumen del comportamiento dominante para comparar. ANTES de emitir el veredicto debes "
@@ -303,13 +261,13 @@ def _instruccion_reforzada() -> str:
         "(resolución de nombres, descubrimiento de red local, asignación de direcciones, sincronización de "
         "tiempo, difusión) no es sospechoso por ser poco frecuente. Tampoco descartes un grupo solo porque el "
         "resto del lote sea normal: evalúa cada grupo por sí mismo. No inventes grupos ni campos."
-        + _instrucciones_b1()
+        + instrucciones_grupos()
         + " Tu veredicto (hay_anomalia, hay_incidente) debe ser coherente con esa evaluación.")
 
 
 def _bloque_grupos(state: LogGuardState, grupos: list[dict]) -> str:
-    """Bloque destacado con el mismo contenido que recibe el cazador."""
-    from src.agents.agente_cazador import resumen_dominante
+    """Bloque destacado: comportamiento dominante y grupos con señal con todas sus filas."""
+    from src.tools.grupos_con_senal import resumen_dominante
     return ("\n\n===== GRUPOS CON SEÑAL: EVALÚALOS UNO POR UNO ANTES DEL VEREDICTO =====\n"
             "COMPORTAMIENTO DOMINANTE DEL LOTE (para comparar):\n"
             + json.dumps(resumen_dominante(state), ensure_ascii=False)
@@ -320,7 +278,7 @@ def _bloque_grupos(state: LogGuardState, grupos: list[dict]) -> str:
 
 def normalizar_evaluacion_grupos(valor, examinados: set) -> list[dict]:
     """Evaluaciones válidas: grupo examinado, una por grupo, patrón validado contra la lista."""
-    from src.agents.agente_cazador import IDS_PATRONES
+    from src.tools.grupos_con_senal import IDS_PATRONES
     salida, vistos = [], set()
     for item in valor if isinstance(valor, list) else []:
         if not isinstance(item, dict):

@@ -1,5 +1,6 @@
-"""NODEX final, Fase B: B1 (cazador), B2 (corrección tras el auditor), B3 (RAG por hipótesis),
-B4 (memoria histórica de la organización) y B5 (eventos por categoría).
+"""NODEX final, Fase B: grupos con señal (antes, entrada del cazador B1; hoy, del auditor reforzado),
+B2 (corrección tras el auditor), B3 (RAG por hipótesis), B4 (memoria histórica de la organización) y
+B5 (eventos por categoría).
 
 Sin API: el modelo se simula. Lotes sintéticos construidos en las pruebas; ninguna prueba abre
 casos de la partición de evaluación ni su ground truth.
@@ -37,78 +38,32 @@ def lote_red_sin_senales():
                                         for i in range(5)) + "\n"
 
 
-# --- B1: cazador ----------------------------------------------------------------------
+# --- grupos con señal ----------------------------------------------------------------
 
-def test_el_cazador_examina_los_grupos_con_senal_y_todas_sus_filas():
-    from src.agents.agente_cazador import grupos_para_cazador
-    grupos = grupos_para_cazador(estado_de(lote_red()))
+def test_los_grupos_con_senal_traen_todas_sus_filas():
+    from src.tools.grupos_con_senal import grupos_con_senal
+    grupos = grupos_con_senal(estado_de(lote_red()))
     motivos = {m for g in grupos for m in g["motivos"]}
     assert "barrido_de_puertos" in motivos and "inversion_de_rol" in motivos
     barrido = next(g for g in grupos if "barrido_de_puertos" in g["motivos"])
     assert len(barrido["filas"]) == barrido["conteo"] == 20 and barrido["filas_omitidas"] == 0
 
 
-def test_en_texto_el_cazador_examina_severidad_alta():
-    from src.agents.agente_cazador import grupos_para_cazador
-    grupos = grupos_para_cazador(estado_de(lote_bgl()))
+def test_en_texto_los_grupos_con_senal_incluyen_severidad_alta():
+    from src.tools.grupos_con_senal import grupos_con_senal
+    grupos = grupos_con_senal(estado_de(lote_bgl()))
     assert [g["clave"]["severidad"] for g in grupos if "severidad_alta" in g["motivos"]] == ["FATAL"]
 
 
-@pytest.mark.parametrize("raw, activo, destino", [
-    (lote_red(), True, "agente_cazador"),
-    (lote_red_sin_senales(), True, "tool_consultar_rag"),
-    (lote_red(), False, "tool_consultar_rag"),
-])
-def test_router_de_caza(monkeypatch, raw, activo, destino):
-    from src.graph.routers import router_caza
-    monkeypatch.setattr(config, "CAZADOR_ACTIVO", activo)
-    assert router_caza(estado_de(raw)) == destino
-
-
-def test_el_cazador_no_recibe_el_diagnostico_del_triage(monkeypatch):
-    import src.agents.agente_cazador as cazador
-    estado = estado_de(lote_red())
-    estado["diagnostico"] = "DIAGNOSTICO_DEL_TRIAGE_QUE_NO_DEBE_LLEGAR"
-    visto = {}
-
-    def falso(prompt, system=None, **_):
-        visto["prompt"], visto["system"] = prompt, system
-        return {"hallazgos": [{"group_id": "G02", "nivel_sospecha": "alto", "explicacion_benigna": "b",
-                               "explicacion_alternativa": "barrido", "justificacion": "20 puertos REJ",
-                               "tecnica_candidata": "t1046"}]}
-
-    monkeypatch.setattr(cazador, "llm_json", falso)
-    salida = cazador.agente_cazador(estado)
-    assert "DIAGNOSTICO_DEL_TRIAGE" not in visto["prompt"]
-    assert "COMPORTAMIENTO DOMINANTE" in visto["prompt"] and "'alto' solo si" in visto["system"].replace(
-        "usa 'alto' solo si", "'alto' solo si")
-    assert salida["cazador_ejecutado"] is True
-    assert salida["hallazgos_cazador"][0]["tecnica_candidata"] == "T1046"
-
-
-def test_hallazgos_invalidos_se_descartan():
-    from src.agents.agente_cazador import normalizar_hallazgos
-    respuesta = {"hallazgos": [
-        {"group_id": "G01", "nivel_sospecha": "alto", "tecnica_candidata": "no-es-tecnica"},
-        {"group_id": "G01", "nivel_sospecha": "bajo"},          # duplicado
-        {"group_id": "G99", "nivel_sospecha": "alto"},          # grupo no examinado
-        {"group_id": "G02", "nivel_sospecha": "urgente"},       # nivel fuera de vocabulario
-    ]}
-    hallazgos = normalizar_hallazgos(respuesta, {"G01", "G02"})
-    assert [(h["group_id"], h["nivel_sospecha"], h["tecnica_candidata"]) for h in hallazgos] == [("G01", "alto", None)]
-
-
-@pytest.mark.parametrize("preliminar, niveles, esperado", [
-    ("incidente_seguridad", [], "incidente_seguridad"),
-    ("normal", ["alto"], "incidente_seguridad"),
-    ("anomalia_operativa", ["medio", "bajo"], "anomalia_operativa"),
-    ("normal", [], "normal"),
-])
-def test_veredicto_consolidado(preliminar, niveles, esperado):
+@pytest.mark.parametrize("preliminar", ["incidente_seguridad", "anomalia_operativa", "normal", None])
+def test_veredicto_consolidado_es_el_del_triage(preliminar):
     from src.graph.veredicto import veredicto_consolidado
-    estado = {"veredicto_preliminar": preliminar,
-              "hallazgos_cazador": [{"group_id": f"G{i}", "nivel_sospecha": n} for i, n in enumerate(niveles)]}
-    assert veredicto_consolidado(estado) == esperado
+    assert veredicto_consolidado({"veredicto_preliminar": preliminar}) == preliminar
+
+
+def test_sin_grupos_con_senal_la_lista_esta_vacia():
+    from src.tools.grupos_con_senal import grupos_con_senal
+    assert grupos_con_senal(estado_de(lote_red_sin_senales())) == []
 
 
 # --- B3: RAG por hipótesis ---------------------------------------------------------------
@@ -117,8 +72,7 @@ def test_sin_hipotesis_de_seguridad_no_se_consultan_tecnicas(monkeypatch):
     import src.tools.tool_consultar_rag as rag
     llamadas = []
     monkeypatch.setattr(rag.ltm, "retrieve_attack_techniques", lambda texto, **_: llamadas.append(texto) or [])
-    salida = rag.tool_consultar_rag({"veredicto_preliminar": "anomalia_operativa", "diagnostico": "falla",
-                                     "hallazgos_cazador": [{"group_id": "G01", "nivel_sospecha": "bajo"}]})
+    salida = rag.tool_consultar_rag({"veredicto_preliminar": "anomalia_operativa", "diagnostico": "falla"})
     assert llamadas == [] and salida["tecnicas_mitre"] == [] and salida["rag_omitido"]
     assert salida["veredicto_consolidado"] == "anomalia_operativa"
 
@@ -127,14 +81,11 @@ def test_la_consulta_mitre_usa_el_texto_de_la_hipotesis(monkeypatch):
     import src.tools.tool_consultar_rag as rag
     llamadas = []
     monkeypatch.setattr(rag.ltm, "retrieve_attack_techniques", lambda texto, **_: llamadas.append(texto) or [])
-    estado = {"veredicto_preliminar": "normal", "diagnostico": "Tráfico DNS normal",
-              "hallazgos_cazador": [{"group_id": "G03", "nivel_sospecha": "medio",
-                                     "explicacion_alternativa": "sondeo de servicios", "justificacion": "S0 a 445",
-                                     "tecnica_candidata": "T1046"}],
+    estado = {"veredicto_preliminar": "incidente_seguridad",
+              "diagnostico": "Sondeo de servicios: 20 puertos S0 hacia el 445",
               "casos_historicos": [{"id": "h1"}]}
     salida = rag.tool_consultar_rag(estado)
-    assert llamadas == [salida["consulta_mitre"]]
-    assert "sondeo de servicios" in llamadas[0] and "T1046" in llamadas[0] and "Tráfico DNS normal" in llamadas[0]
+    assert llamadas == [salida["consulta_mitre"]] == ["Sondeo de servicios: 20 puertos S0 hacia el 445"]
     assert salida["contexto_rag"] == [{"id": "h1"}] and salida["rag_omitido"] is None
 
 
@@ -220,34 +171,21 @@ def test_el_auditor_usa_las_definiciones_de_la_organizacion(monkeypatch):
     import src.agents.agente_auditor_final as auditor
     estado = estado_de(lote_bgl())
     estado.update(diagnostico="d", veredicto_consolidado="anomalia_operativa", casos_historicos=HISTORICOS,
-                  hallazgos_cazador=[{"group_id": "G02", "nivel_sospecha": "alto"}], plan={"pasos": []})
+                  plan={"pasos": []})
     visto = {}
 
     def falso(prompt, system=None, **_):
         visto["prompt"], visto["system"] = prompt, system
         return {"confianza": 0.9, "hay_anomalia": False, "hay_incidente": False, "evaluacion": "e",
                 "cobertura_auditor": True, "eventos_reconstruidos": [], "secuencia_temporal": [],
-                "tecnicas_atribuidas": [],
-                "revision_hallazgos": [{"group_id": "G02", "decision": "descartado", "evidencia": "paridad corregida"},
-                                       {"group_id": "G77", "decision": "confirmado"}]}
+                "tecnicas_atribuidas": []}
 
     monkeypatch.setattr(auditor, "llm_json", falso)
     salida = auditor.agente_auditor_final(estado)
     assert "también cuentan como anomalía" not in visto["system"]
-    assert "según las definiciones de abajo" in visto["system"] and "revision_hallazgos" in visto["system"]
+    assert "según las definiciones de abajo" in visto["system"] and "revision_hallazgos" not in visto["system"]
     assert "VEREDICTO CONSOLIDADO: anomalia_operativa" in visto["prompt"] and "CASOS HISTÓRICOS" in visto["prompt"]
-    assert salida["revision_hallazgos"] == [{"group_id": "G02", "decision": "descartado",
-                                             "evidencia": "paridad corregida"}]
-
-
-def test_el_auditor_avisa_si_no_revisa_un_hallazgo_alto(monkeypatch):
-    import src.agents.agente_auditor_final as auditor
-    estado = estado_de(lote_bgl())
-    estado.update(hallazgos_cazador=[{"group_id": "G02", "nivel_sospecha": "alto"}], plan={"pasos": []})
-    monkeypatch.setattr(auditor, "llm_json", lambda *a, **k: {
-        "confianza": 0.9, "hay_anomalia": True, "hay_incidente": False, "evaluacion": "e", "cobertura_auditor": True,
-        "eventos_reconstruidos": [], "secuencia_temporal": [], "tecnicas_atribuidas": []})
-    assert "hallazgo_alto_sin_revision:G02" in auditor.agente_auditor_final(estado)["d11_warnings"]
+    assert "revision_hallazgos" not in salida
 
 
 def test_descripciones_del_corpus_vienen_de_la_etiqueta_y_los_eventos():
@@ -317,7 +255,6 @@ def _grafo_simulado(monkeypatch, veredictos_auditor):
     """Corre el grafo completo con el modelo simulado. El auditor responde en orden `veredictos_auditor`."""
     import src.agents.agente_analista_triage as triage
     import src.agents.agente_auditor_final as auditor
-    import src.agents.agente_cazador as cazador
     import src.agents.agente_ingeniero_mitigacion as mitigacion
     import src.agents.agente_planificador as planificador
     import src.agents.agente_selector_herramientas as selector
@@ -333,9 +270,6 @@ def _grafo_simulado(monkeypatch, veredictos_auditor):
     monkeypatch.setattr(triage, "llm_json", lambda *a, **k: {
         "diagnostico": "Falla de hardware del kernel", "veredicto_preliminar": "anomalia_operativa",
         "justificacion_veredicto": "línea FATAL"})
-    monkeypatch.setattr(cazador, "llm_json", lambda *a, **k: {"hallazgos": [{
-        "group_id": "G02", "nivel_sospecha": "bajo", "explicacion_benigna": "error corregido",
-        "explicacion_alternativa": "falla", "justificacion": "FATAL", "tecnica_candidata": None}]})
     monkeypatch.setattr(selector, "llm_json", lambda *a, **k: {"usar_cve": False, "razon": "no aplica"})
 
     def mitigar(prompt, system=None, **_):
@@ -345,6 +279,7 @@ def _grafo_simulado(monkeypatch, veredictos_auditor):
     def auditar(prompt, system=None, **_):
         incidente, anomalia = veredictos_auditor[min(pedidos["auditor"], len(veredictos_auditor) - 1)]
         pedidos["auditor"] += 1
+        pedidos.setdefault("auditor_prompts", []).append(prompt)
         return {"confianza": 0.9, "hay_anomalia": anomalia, "hay_incidente": incidente,
                 "evaluacion": f"Evaluación del auditor {pedidos['auditor']}", "cobertura_auditor": True,
                 "eventos_reconstruidos": [], "secuencia_temporal": [], "tecnicas_atribuidas": []}
@@ -358,7 +293,8 @@ def _grafo_simulado(monkeypatch, veredictos_auditor):
 def test_el_auditor_contradice_al_triage_y_se_rediseña_la_mitigacion(monkeypatch):
     estado, pedidos = _grafo_simulado(monkeypatch, [(False, False)])       # el auditor dice "normal"
     assert estado["_error_api"] is None
-    assert estado["cazador_ejecutado"] is True
+    assert "agente_cazador" not in [e["nodo"] for e in estado["historial_ejecucion"]]
+    assert "GRUPOS CON SEÑAL" in pedidos["auditor_prompts"][0]           # auditor reforzado (por defecto)
     assert estado["correcciones_auditor"] == 1 and pedidos["auditor"] == 2 and len(pedidos["mitigacion"]) == 2
     assert "VEREDICTO CONSOLIDADO: normal" in pedidos["mitigacion"][1]
     assert estado["diagnostico_inicial"] == "Falla de hardware del kernel"
@@ -386,22 +322,22 @@ def test_sin_contradiccion_no_hay_correccion(monkeypatch):
 
 # --- grafo y trazabilidad -----------------------------------------------------------------
 
-def test_el_grafo_de_la_fase_b_tiene_el_nuevo_orden():
+def test_el_grafo_final_tiene_el_nuevo_orden_y_no_tiene_cazador():
     from src.graph.build_graph import build_graph
     g = build_graph().get_graph()
     aristas = {(e.source, e.target) for e in g.edges}
-    assert {("agente_analista_triage", "agente_cazador"), ("agente_analista_triage", "tool_consultar_rag"),
-            ("agente_cazador", "tool_consultar_rag"), ("tool_consultar_rag", "agente_selector_herramientas"),
+    assert "agente_cazador" not in g.nodes
+    assert {("agente_analista_triage", "tool_consultar_rag"), ("tool_consultar_rag", "agente_selector_herramientas"),
             ("agente_auditor_final", "tool_corregir_diagnostico"),
             ("tool_corregir_diagnostico", "agente_ingeniero_mitigacion")} <= aristas
     assert ("tool_consultar_rag", "agente_analista_triage") not in aristas
 
 
-def test_la_traza_registra_el_cazador_omitido_y_el_rag_sin_hipotesis():
+def test_la_traza_registra_el_rag_sin_hipotesis():
     from src.graph.plan_tracking import actualizar_plan
     estado = {"plan": {"plan_version": 1, "pasos": [{"id": 1, "accion": "rag", "estado": "pendiente"}]},
               "historial_ejecucion": [{"nodo": "agente_analista_triage"}]}
     traza = actualizar_plan(estado, "tool_consultar_rag", {"rag_omitido": "sin hipótesis de seguridad"})
-    assert [e["nodo"] for e in traza["historial_ejecucion"]] == ["agente_cazador", "tool_consultar_rag"]
+    assert [e["nodo"] for e in traza["historial_ejecucion"]] == ["tool_consultar_rag"]
     assert traza["historial_ejecucion"][0]["estado"] == "omitido"
     assert traza["plan"]["pasos"][0]["estado"] == "omitido"

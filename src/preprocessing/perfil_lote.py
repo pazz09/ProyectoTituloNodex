@@ -313,7 +313,7 @@ def _perfil_red(eventos, uids, grupos, grupo_de, barridos, cfg) -> tuple[dict, l
     senales["inversion_de_rol"] = inversiones
 
     # B.1-3a: el MOTIVO FACTUAL de cada señal, por grupo (conteos del lote). Lo lee el
-    # cazador; `contexto_contenido_lote` no lo muestra al triage ni al agente único.
+    # auditor reforzado; `contexto_contenido_lote` no lo muestra al triage ni al agente único.
     factuales: dict[str, list[str]] = defaultdict(list)
     motivos_de_grupo: dict[str, set] = defaultdict(set)
     for i, motivos in marcadas.items():

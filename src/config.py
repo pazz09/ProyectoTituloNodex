@@ -524,22 +524,11 @@ UWF_REBASE_FORMATO_FONDO = _env_bool("UWF_REBASE_FORMATO_FONDO", True)
 # =============================================================================
 
 # --- B3: RAG por hipótesis ------------------------------------------------------
-# Nuevo orden del grafo: triage -> [router de caza -> cazador] -> RAG -> selector.
-# La consulta de técnicas MITRE usa el texto de la hipótesis (diagnóstico más
-# hallazgos alto/medio del cazador), no la firma del lote; sin hipótesis de
-# seguridad no se consultan técnicas. El triage diagnostica en una sola pasada
-# (ya no vuelve del RAG). Apagado, el grafo es el de la Fase A.
+# Nuevo orden del grafo: triage -> RAG -> selector. La consulta de técnicas MITRE
+# usa el texto de la hipótesis (el diagnóstico), no la firma del lote; sin
+# hipótesis de seguridad no se consultan técnicas. El triage diagnostica en una
+# sola pasada (ya no vuelve del RAG). Apagado, el grafo es el de la Fase A.
 RAG_POR_HIPOTESIS = _env_bool("RAG_POR_HIPOTESIS", True)
-
-# --- B1: agente cazador de eventos minoritarios ---------------------------------
-# Requiere RAG_POR_HIPOTESIS (vive en el nuevo orden del grafo).
-CAZADOR_ACTIVO = _env_bool("CAZADOR_ACTIVO", True)
-# Topes de lo que examina el cazador: grupos y filas totales. 15 grupos y 200
-# filas cubren las señales de un lote típico (en desarrollo, 3-5 grupos con
-# señal) sin que un lote anómalo muy grande dispare el costo.
-CAZADOR_MAX_GRUPOS = _env_int("CAZADOR_MAX_GRUPOS", 15)
-CAZADOR_MAX_FILAS = _env_int("CAZADOR_MAX_FILAS", 200)
-NIVELES_SOSPECHA = ("alto", "medio", "bajo")
 
 # --- B2: ciclo de corrección tras el auditor -------------------------------------
 CORRECCION_AUDITOR = _env_bool("CORRECCION_AUDITOR", True)
@@ -582,25 +571,25 @@ MEMORIA_GRUPOS_ACTIVA = _env_bool("MEMORIA_GRUPOS_ACTIVA", True)
 MEMORIA_GRUPOS_PATH = os.environ.get("MEMORIA_GRUPOS_PATH",
                                      "./experiments/knowledge/memoria_grupos_v1/memoria_grupos.json")
 
-# --- B.1-3: cazador -----------------------------------------------------------------
+# --- Auditor reforzado (configuración final, 12-nov-2026) ----------------------------
+# Los grupos con señal del lote los evalúa el propio auditor (el agente cazador de
+# la Fase B se eliminó; decisión en docs/experimentacion/bitacora_desarrollo_nodex_final.md).
+# El auditor recibe, en un bloque destacado, las filas completas de cada grupo con
+# señal (`src/tools/grupos_con_senal.py`), su motivo factual y sus referentes de la
+# memoria de grupos, más el comportamiento dominante del lote; la lista de
+# verificación de patrones MITRE; y evalúa cada grupo (explicación benigna,
+# explicación maliciosa, patrón de la lista) ANTES del veredicto (`evaluacion_grupos`).
+AUDITOR_REFORZADO = _env_bool("AUDITOR_REFORZADO", True)
 # a) Cada grupo llega con el motivo FACTUAL de su señal (conteos del lote).
-CAZADOR_MOTIVO_FACTUAL = _env_bool("CAZADOR_MOTIVO_FACTUAL", True)
-# b) Lista de verificación general de patrones observables (MITRE ATT&CK); el
-#    cazador indica qué patrón calza con cada grupo o que ninguno calza.
-CAZADOR_LISTA_PATRONES = _env_bool("CAZADOR_LISTA_PATRONES", True)
-# c) El auditor revisa explícitamente también los hallazgos "medio". El veredicto
-#    consolidado sigue cambiando solo con "alto".
-AUDITOR_REVISA_MEDIOS = _env_bool("AUDITOR_REVISA_MEDIOS", True)
-
-# --- Variante de desarrollo: "B.1 sin cazador, auditor reforzado" ---------------
-# El auditor recibe, en un bloque destacado, EXACTAMENTE lo que recibiría el cazador
-# (`grupos_para_cazador`: filas completas de cada grupo con señal, motivo factual y
-# referentes de la memoria de grupos, más el resumen del comportamiento dominante),
-# la misma lista de verificación de patrones MITRE y la instrucción de evaluar cada
-# grupo (explicación benigna, explicación maliciosa, patrón de la lista) ANTES del
-# veredicto (`evaluacion_grupos`). Pensado para usarse con CAZADOR_ACTIVO=false: la
-# única diferencia con B.1 es quién evalúa los grupos, no la información disponible.
-AUDITOR_REFORZADO = _env_bool("AUDITOR_REFORZADO", False)
+GRUPOS_MOTIVO_FACTUAL = _env_bool("GRUPOS_MOTIVO_FACTUAL", True)
+# b) Lista de verificación general de patrones observables (MITRE ATT&CK): por cada
+#    grupo, qué patrón calza o que ninguno calza.
+LISTA_PATRONES_MITRE = _env_bool("LISTA_PATRONES_MITRE", True)
+# Topes del bloque: grupos y filas totales. 15 grupos y 200 filas cubren las señales
+# de un lote típico (en desarrollo, 3-5 grupos con señal) sin que un lote anómalo
+# muy grande dispare el costo.
+GRUPOS_SENAL_MAX_GRUPOS = _env_int("GRUPOS_SENAL_MAX_GRUPOS", 15)
+GRUPOS_SENAL_MAX_FILAS = _env_int("GRUPOS_SENAL_MAX_FILAS", 200)
 
 
 def validate_config() -> None:

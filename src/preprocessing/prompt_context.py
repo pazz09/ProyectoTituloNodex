@@ -186,7 +186,7 @@ def contexto_contenido_lote(contenido: dict | None) -> str:
     partes = ["FLUJOS MINORITARIOS (filas completas de los grupos que cumplen alguna señal "
               "del perfil del lote; el resto del tráfico está resumido en perfil_lote):"]
     for flujo in flujos:
-        # B.1-3a: el motivo factual de la señal es entrada del cazador, no del triage ni
+        # B.1-3a: el motivo factual de la señal es entrada del auditor reforzado, no del triage ni
         # del agente único (que siguen leyendo lo mismo que en la Fase B).
         partes.append(json.dumps({k: v for k, v in flujo.items() if k != "motivos_factuales"},
                                  ensure_ascii=False))

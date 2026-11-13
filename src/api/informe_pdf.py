@@ -420,21 +420,15 @@ def generar_informe_pdf(corrida: dict, comprimir: bool = True) -> bytes:
                 _parrafo(pdf, f"El auditor cambió el veredicto ({cambios}) y la mitigación se rediseñó "
                               "sobre el diagnóstico corregido.", gris=True)
             _parrafo(pdf, reporte["diagnostico_inicial"], gris=True)
-        # B1: hallazgos del agente cazador de nivel alto o medio, con la revisión del auditor.
-        hallazgos = [h for h in reporte.get("hallazgos_cazador") or []
-                     if h.get("nivel_sospecha") in ("alto", "medio")]
-        if hallazgos:
-            revision = {r.get("group_id"): r for r in reporte.get("revision_hallazgos") or []}
-            _subtitulo(pdf, "Eventos minoritarios examinados por el agente cazador")
-            for h in hallazgos:
-                r = revision.get(h.get("group_id"))
-                _parrafo(pdf, f"{h.get('group_id')} (sospecha {h.get('nivel_sospecha')}"
-                              + (f", {h.get('tecnica_candidata')}" if h.get("tecnica_candidata") else "")
-                              # B.1-3b: patrón de la lista de verificación que calzó.
-                              + (f", patrón {h.get('patron_lista')}" if h.get("patron_lista") not in
-                                 (None, "ninguno", "no_indicado", "fuera_de_lista") else "")
-                              + f"): {h.get('justificacion') or ''}"
-                              + (f" Auditor: {r.get('decision')}. {r.get('evidencia') or ''}" if r else ""))
+        # Auditor reforzado: grupos con señal que calzan con un patrón de la lista MITRE.
+        calces = [e for e in reporte.get("evaluacion_grupos") or []
+                  if e.get("patron_lista") not in (None, "ninguno", "no_indicado", "fuera_de_lista")]
+        if calces:
+            _subtitulo(pdf, "Grupos de eventos que calzan con un patrón de ataque")
+            for e in calces:
+                _parrafo(pdf, f"{e.get('group_id')} (patrón {e.get('patron_lista')}): "
+                              f"{e.get('explicacion_maliciosa') or ''} "
+                              f"Explicación benigna considerada: {e.get('explicacion_benigna') or ''}")
 
     _subtitulo(pdf, "Veredicto")
     confianza = corrida.get("confianza")

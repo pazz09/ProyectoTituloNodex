@@ -92,7 +92,7 @@ def _contenido(state: LogGuardState) -> str:
 def _triage_una_pasada(state: LogGuardState) -> dict:
     """NODEX final (B3 y B4): diagnóstico en una sola pasada.
 
-    Con el RAG por hipótesis, el RAG corre DESPUÉS del triage (y del cazador), así
+    Con el RAG por hipótesis, el RAG corre DESPUÉS del triage, así
     que el triage ya no pide contexto ni vuelve del RAG. Recibe la memoria
     histórica de la organización (B4, consulta siempre activa) y las definiciones
     generales del veredicto.

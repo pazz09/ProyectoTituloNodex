@@ -13,7 +13,6 @@ import {
   Loader2,
   RefreshCw,
   RotateCcw,
-  Search,
   ScanSearch,
   ShieldAlert,
   ShieldCheck,
@@ -46,7 +45,6 @@ const ICONOS: Record<NombreNodo, typeof Sparkles> = {
   agente_ingeniero_mitigacion: Terminal,
   tool_validar_comandos: CheckCircle2,
   agente_auditor_final: Gauge,
-  agente_cazador: Search,
   tool_corregir_diagnostico: RefreshCw,
 }
 
@@ -127,41 +125,6 @@ function CuerpoNodo({ nodo, detalle, visita }: { nodo: NombreNodo; detalle: Reco
           </p>
         )}
         <p>{diagnostico}</p>
-      </>
-    )
-  }
-
-  if (nodo === 'agente_cazador') {
-    // NODEX final, Fase B (B1): un hallazgo por grupo minoritario examinado.
-    const hallazgos = lista(detalle.hallazgos_cazador) as {
-      group_id: string
-      nivel_sospecha: string
-      justificacion?: string
-      tecnica_candidata?: string | null
-      patron_lista?: string
-    }[]
-    const altos = hallazgos.filter((h) => h.nivel_sospecha === 'alto').length
-    return (
-      <>
-        <p>
-          {hallazgos.length === 0
-            ? 'Examiné los eventos minoritarios y no encontré nada que justifique sospecha.'
-            : `Examiné ${hallazgos.length} grupo(s) de eventos minoritarios: ${altos} con sospecha alta.`}
-        </p>
-        {hallazgos
-          .filter((h) => h.nivel_sospecha !== 'bajo')
-          .map((h) => (
-            <p key={h.group_id} className="faint">
-              <span className={h.nivel_sospecha === 'alto' ? 'chip crit mono' : 'chip warn mono'}>
-                {h.group_id} · {h.nivel_sospecha}
-                {h.tecnica_candidata ? ` · ${h.tecnica_candidata}` : ''}
-                {h.patron_lista && !['ninguno', 'no_indicado', 'fuera_de_lista'].includes(h.patron_lista)
-                  ? ` · ${h.patron_lista}`
-                  : ''}
-              </span>{' '}
-              {h.justificacion}
-            </p>
-          ))}
       </>
     )
   }
@@ -289,6 +252,15 @@ function CuerpoNodo({ nodo, detalle, visita }: { nodo: NombreNodo; detalle: Reco
       ? 'Anomalía operativa (sin evidencia de seguridad)'
       : 'Sin anomalías'
   const IconoVeredicto = hayIncidente ? ShieldAlert : hayAnomalia ? AlertTriangle : ShieldCheck
+  // Auditor reforzado: evaluación de cada grupo con señal; se muestran los que calzan con un patrón.
+  const grupos = lista(detalle.evaluacion_grupos) as {
+    group_id: string
+    explicacion_maliciosa?: string
+    patron_lista?: string
+  }[]
+  const calces = grupos.filter(
+    (g) => g.patron_lista && !['ninguno', 'no_indicado', 'fuera_de_lista'].includes(g.patron_lista),
+  )
   return (
     <>
       <div className={`verdict ${nivel}`} style={{ margin: '0 -20px 0', borderRadius: 0, borderTop: 0, borderRight: 0, borderBottom: 0 }}>
@@ -316,6 +288,21 @@ function CuerpoNodo({ nodo, detalle, visita }: { nodo: NombreNodo; detalle: Reco
         </div>
       </div>
       <p>{String(detalle.evaluacion_auditor ?? 'Sin evaluación registrada.')}</p>
+      {grupos.length > 0 && (
+        <p className="faint">
+          {calces.length === 0
+            ? `Evalué ${grupos.length} grupo(s) de eventos poco frecuentes: ninguno calza con un patrón de ataque de la lista.`
+            : `Evalué ${grupos.length} grupo(s) de eventos poco frecuentes: ${calces.length} calza(n) con un patrón de ataque.`}
+        </p>
+      )}
+      {calces.map((g) => (
+        <p key={g.group_id} className="faint">
+          <span className="chip warn mono">
+            {g.group_id} · {g.patron_lista}
+          </span>{' '}
+          {g.explicacion_maliciosa}
+        </p>
+      ))}
     </>
   )
 }

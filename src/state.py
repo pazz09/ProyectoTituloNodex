@@ -57,12 +57,9 @@ class LogGuardState(TypedDict):
     # --- NODEX final, Fase B (nov-2026) ---
     casos_historicos: list           # B4: k casos históricos más parecidos (pipeline)
     historico_consulta: dict         # B4: representación consultada y patrones excluidos por solapamiento
-    hallazgos_cazador: list          # B1: hallazgos por grupo del agente cazador
-    cazador_ejecutado: bool          # B1: el cazador corrió (False si el router lo omitió)
-    veredicto_consolidado: str       # B1: triage o hallazgo alto del cazador (determinístico)
+    veredicto_consolidado: str       # veredicto del triage (o el corregido por el auditor, B2)
     consulta_mitre: str              # B3: texto de la hipótesis usado para consultar técnicas
     rag_omitido: str                 # B3: motivo si no se consultaron técnicas (sin hipótesis)
-    revision_hallazgos: list         # B1: el auditor confirma o descarta cada hallazgo alto
     diagnostico_inicial: str         # B2: diagnóstico antes de la corrección del auditor
     diagnostico_corregido: str       # B2: diagnóstico tras la corrección (evaluación del auditor)
     correcciones_auditor: int        # B2: correcciones aplicadas tras el auditor
@@ -70,7 +67,7 @@ class LogGuardState(TypedDict):
     # --- NODEX final, Fase B.1 (nov-2026) ---
     memoria_grupos: dict             # B.1-2: por grupo con señal, el grupo malicioso y el benigno más parecidos
     memoria_grupos_consulta: dict    # B.1-2: memoria usada, grupos excluidos por solapamiento
-    evaluacion_grupos: list          # variante AUDITOR_REFORZADO: el auditor evalúa cada grupo con señal
+    evaluacion_grupos: list          # AUDITOR_REFORZADO: el auditor evalúa cada grupo con señal
     eventos_reconstruidos: list[EventoReconstruido]
     secuencia_temporal: list[str]
     tecnicas_atribuidas: list[TecnicaAtribuida]

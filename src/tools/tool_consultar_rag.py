@@ -22,14 +22,15 @@ ltm = LongTermMemory()
 
 
 def _rag_por_hipotesis(state: LogGuardState) -> dict:
-    """B3 (NODEX final). Corre después del triage y del cazador.
+    """B3 (NODEX final). Corre después del triage.
 
-    - Técnicas MITRE: se consultan con el texto de la HIPÓTESIS (diagnóstico más
-      hallazgos alto/medio del cazador). Sin hipótesis de seguridad no se consultan.
+    - Técnicas MITRE: se consultan con el texto de la HIPÓTESIS (el diagnóstico, si
+      el veredicto es un incidente de seguridad). Sin hipótesis de seguridad no se
+      consultan.
     - Patrones históricos: ya están en el estado (`casos_historicos`, consulta
       siempre activa de B4, con la representación por grupos y la exclusión por
       solapamiento); aquí solo se exponen como `contexto_rag` por compatibilidad.
-    - Fija el `veredicto_consolidado` (B1), determinístico, antes de la mitigación.
+    - Fija el `veredicto_consolidado`, determinístico, antes de la mitigación.
     """
     from src.graph.veredicto import texto_hipotesis, veredicto_consolidado
     print("   🔍 [Tool RAG] Consulta por hipótesis...")

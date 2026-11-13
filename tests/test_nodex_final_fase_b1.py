@@ -1,5 +1,5 @@
 """NODEX final, Fase B.1: memoria contrastiva por lote, memoria por grupo de eventos, motivo factual
-y lista de patrones del cazador, y revisión de los hallazgos "medio" por el auditor.
+de cada grupo con señal y lista de patrones MITRE (hoy, entrada del auditor reforzado).
 
 Sin API: el modelo se simula. Lotes sintéticos; ninguna prueba abre casos de la partición de
 evaluación ni su ground truth.
@@ -139,20 +139,20 @@ def test_consulta_de_grupos_contrastiva_con_exclusion_por_solapamiento():
     assert item["malicioso"]["tacticas"] == ["Discovery"]
 
 
-def test_el_cazador_recibe_motivo_factual_y_referentes(monkeypatch):
-    from src.agents.agente_cazador import grupos_para_cazador
+def test_los_grupos_con_senal_traen_motivo_factual_y_referentes(monkeypatch):
+    from src.tools.grupos_con_senal import grupos_con_senal
     estado = estado_de(lote_red())
     gid = estado["contenido_lote"]["flujos_minoritarios"][0]["group_id"]
     estado["memoria_grupos"] = {gid: {"representacion": "r", "malicioso": {
         "id": "c2:G1", "etiqueta": "malicioso", "tacticas": ["Discovery"], "comportamiento": "barrido",
         "similitud": 0.9}, "benigno": None}}
-    grupo = next(g for g in grupos_para_cazador(estado) if g["group_id"] == gid)
+    grupo = next(g for g in grupos_con_senal(estado) if g["group_id"] == gid)
     assert grupo["motivos_factuales"]
     assert grupo["memoria"] == {"malicioso_mas_parecido": {"tacticas": ["Discovery"], "comportamiento": "barrido"},
                                 "benigno_mas_parecido": None}
-    monkeypatch.setattr(config, "CAZADOR_MOTIVO_FACTUAL", False)
+    monkeypatch.setattr(config, "GRUPOS_MOTIVO_FACTUAL", False)
     monkeypatch.setattr(config, "MEMORIA_GRUPOS_ACTIVA", False)
-    grupo = next(g for g in grupos_para_cazador(estado) if g["group_id"] == gid)
+    grupo = next(g for g in grupos_con_senal(estado) if g["group_id"] == gid)
     assert "motivos_factuales" not in grupo and "memoria" not in grupo
 
 
@@ -175,66 +175,20 @@ def test_la_memoria_de_grupos_construida_no_tiene_ip_ni_casos_de_evaluacion():
 
 # --- B.1-3b: lista de patrones ----------------------------------------------------------------
 
-def test_el_prompt_del_cazador_trae_la_lista_y_pide_patron():
-    from src.agents.agente_cazador import IDS_PATRONES, _SISTEMA, _sistema
-    sistema = _sistema()
-    assert "LISTA DE VERIFICACIÓN" in sistema and "patron_lista" in sistema
-    for pid in IDS_PATRONES:
-        assert pid in sistema
-    assert "T1046" in sistema and "T1110" in sistema
+def test_las_instrucciones_traen_la_lista_y_piden_patron():
+    from src.tools.grupos_con_senal import IDS_PATRONES, instrucciones_grupos
+    texto = instrucciones_grupos()
+    assert "LISTA DE VERIFICACIÓN" in texto and "patron_lista" in texto
+    for pid in IDS_PATRONES[:-1]:
+        assert pid in texto
+    assert "T1046" in texto and "T1110" in texto
 
 
-def test_con_los_interruptores_b1_apagados_el_prompt_es_el_de_la_fase_b(monkeypatch):
-    from src.agents.agente_cazador import _SISTEMA, _sistema
-    for nombre in ("CAZADOR_MOTIVO_FACTUAL", "CAZADOR_LISTA_PATRONES", "MEMORIA_GRUPOS_ACTIVA"):
+def test_con_los_interruptores_apagados_no_hay_instrucciones_de_grupos(monkeypatch):
+    from src.tools.grupos_con_senal import instrucciones_grupos
+    for nombre in ("GRUPOS_MOTIVO_FACTUAL", "LISTA_PATRONES_MITRE", "MEMORIA_GRUPOS_ACTIVA"):
         monkeypatch.setattr(config, nombre, False)
-    assert _sistema() == _SISTEMA
-
-
-def test_el_patron_se_valida_contra_la_lista():
-    from src.agents.agente_cazador import normalizar_hallazgos
-    hallazgos = normalizar_hallazgos({"hallazgos": [
-        {"group_id": "G01", "nivel_sospecha": "medio", "patron_lista": "enumeracion_reconocimiento_dns"},
-        {"group_id": "G02", "nivel_sospecha": "bajo", "patron_lista": "inventado"},
-        {"group_id": "G03", "nivel_sospecha": "bajo"}]}, {"G01", "G02", "G03"})
-    assert [h["patron_lista"] for h in hallazgos] == ["enumeracion_reconocimiento_dns", "fuera_de_lista",
-                                                      "no_indicado"]
-
-
-# --- B.1-3c: el auditor revisa los hallazgos medio -----------------------------------------------
-
-def test_el_auditor_revisa_alto_y_medio(monkeypatch):
-    import src.agents.agente_auditor_final as auditor
-    estado = estado_de(lote_bgl())
-    estado.update(diagnostico="d", veredicto_consolidado="normal", plan={"pasos": []},
-                  hallazgos_cazador=[{"group_id": "G02", "nivel_sospecha": "medio"},
-                                     {"group_id": "G03", "nivel_sospecha": "alto"},
-                                     {"group_id": "G04", "nivel_sospecha": "bajo"}])
-    visto = {}
-
-    def falso(prompt, system=None, **_):
-        visto["system"] = system
-        return {"confianza": 0.9, "hay_anomalia": False, "hay_incidente": False, "evaluacion": "e",
-                "cobertura_auditor": True, "eventos_reconstruidos": [], "secuencia_temporal": [],
-                "tecnicas_atribuidas": [],
-                "revision_hallazgos": [{"group_id": "G02", "decision": "descartado", "evidencia": "x"},
-                                       {"group_id": "G04", "decision": "confirmado", "evidencia": "y"}]}
-
-    monkeypatch.setattr(auditor, "llm_json", falso)
-    salida = auditor.agente_auditor_final(estado)
-    assert "Por cada hallazgo de nivel alto o medio" in visto["system"]
-    assert [r["group_id"] for r in salida["revision_hallazgos"]] == ["G02"]
-    assert "hallazgo_alto_sin_revision:G03" in salida["d11_warnings"]
-    monkeypatch.setattr(config, "AUDITOR_REVISA_MEDIOS", False)
-    salida = auditor.agente_auditor_final(estado)
-    assert salida["revision_hallazgos"] == [] and "Por cada hallazgo de nivel alto debes" in visto["system"]
-
-
-def test_el_veredicto_consolidado_sigue_cambiando_solo_con_alto():
-    from src.graph.veredicto import veredicto_consolidado
-    base = {"veredicto_preliminar": "normal"}
-    assert veredicto_consolidado(dict(base, hallazgos_cazador=[{"nivel_sospecha": "medio"}])) == "normal"
-    assert veredicto_consolidado(dict(base, hallazgos_cazador=[{"nivel_sospecha": "alto"}])) == "incidente_seguridad"
+    assert instrucciones_grupos() == ""
 
 
 # --- agente único --------------------------------------------------------------------------------

@@ -73,7 +73,7 @@ def agente_ingeniero_mitigacion(state: LogGuardState) -> dict:
 
     user_content = f"DIAGNÓSTICO: {state.get('diagnostico', '')}\n"
     if MITIGACION_CON_CONTEXTO:
-        # Fase B: el veredicto consolidado (triage + hallazgos alto del cazador)
+        # Fase B: el veredicto consolidado (o el corregido por el auditor, B2)
         # manda sobre el preliminar cuando existe.
         consolidado = state.get("veredicto_consolidado")
         veredicto = consolidado or state.get("veredicto_preliminar") or "sin veredicto preliminar"
@@ -82,9 +82,6 @@ def agente_ingeniero_mitigacion(state: LogGuardState) -> dict:
                          + (f" ({state['justificacion_veredicto_preliminar']})"
                             if state.get("justificacion_veredicto_preliminar") else "")
                          + "\nEVIDENCIA: " + json.dumps(_resumen_evidencia(state), ensure_ascii=False) + "\n")
-        hallazgos = [h for h in state.get("hallazgos_cazador") or [] if h.get("nivel_sospecha") in ("alto", "medio")]
-        if hallazgos:
-            user_content += "HALLAZGOS DEL CAZADOR (alto/medio): " + json.dumps(hallazgos, ensure_ascii=False) + "\n"
 
     if state.get("cves_encontrados"):
         user_content += f"\nCVEs RELACIONADOS: {state['cves_encontrados'][:2]}\n"

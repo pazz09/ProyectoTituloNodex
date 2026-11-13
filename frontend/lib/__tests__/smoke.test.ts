@@ -17,15 +17,14 @@ describe('cn', () => {
 })
 
 describe('NODOS', () => {
-  it('tiene exactamente los 10 nodos del grafo del backend', () => {
+  it('tiene exactamente los 9 nodos del grafo del backend', () => {
     // Si esto falla, el catálogo del frontend quedó desincronizado del
-    // grafo real (src/graph/build_graph.py). NODEX final, Fase B: 6 agentes
-    // LLM (se suma el cazador) + 4 tools (se suma la corrección del diagnóstico).
-    expect(NODOS).toHaveLength(10)
+    // grafo real (src/graph/build_graph.py). NODEX final: 5 agentes LLM
+    // + 4 tools (se suma la corrección del diagnóstico).
+    expect(NODOS).toHaveLength(9)
     expect(NODOS.map((n) => n.nombre)).toEqual([
       'agente_planificador',
       'agente_analista_triage',
-      'agente_cazador',
       'agente_selector_herramientas',
       'tool_consultar_rag',
       'tool_consultar_cve',

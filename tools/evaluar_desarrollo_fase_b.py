@@ -4,8 +4,7 @@
     python tools/evaluar_desarrollo_fase_b.py --ejecutar --arquitectura nodex
     python tools/evaluar_desarrollo_fase_b.py --ejecutar --carpeta desarrollo_fase_b1   # Fase B.1
     python tools/evaluar_desarrollo_fase_b.py --ejecutar --arquitectura nodex --tope 8 \
-        --carpeta desarrollo_fase_b1_auditor_reforzado \
-        --entorno CAZADOR_ACTIVO=false --entorno AUDITOR_REFORZADO=true     # variante sin cazador
+        --carpeta desarrollo_ablacion --entorno AUDITOR_REFORZADO=false      # ablación de un interruptor
 
 Configuración de evaluación del piloto (`gemini-3.8-flash`, temperatura 0, sin respaldo, sin
 reputación externa, red bloqueada con registro de intentos), un proceso por caso y una copia
@@ -24,6 +23,9 @@ de los casos del mismo incidente. La memoria de lotes se filtra ANTES de elegir 
 Variantes (`--entorno CLAVE=valor`, repetible): fija interruptores de `src/config.py` en el entorno de
 cada proceso hijo. El registro guarda lo pedido (`entorno_sobrescrito`) y cada caso guarda los
 interruptores EFECTIVOS leídos de `src.config` dentro del proceso hijo (`interruptores_efectivos`).
+Las carpetas `desarrollo_fase_b*` se generaron con versiones anteriores de este arnés y de los
+interruptores (con el agente cazador: `CAZADOR_ACTIVO`, `CAZADOR_MOTIVO_FACTUAL`,
+`CAZADOR_LISTA_PATRONES`, `AUDITOR_REVISA_MEDIOS`); sus registros conservan esos nombres.
 
 Tokens por nodo: el `llm_json` de cada agente se envuelve solo para observar. Tope de gasto conjunto
 (USD 15 por omisión), verificado antes de cada caso con la cota máxima de su celda. Los resultados
@@ -52,15 +54,15 @@ if str(ROOT) not in sys.path:
 MEMORIA = ROOT / "experiments/knowledge/rag_enriquecido_v2"
 MEMORIA_GRUPOS = ROOT / "experiments/knowledge/memoria_grupos_v1"
 #: Interruptores de NODEX final que se registran con cada corrida.
-INTERRUPTORES = ("RAG_POR_HIPOTESIS", "CAZADOR_ACTIVO", "CORRECCION_AUDITOR", "HISTORICO_ACTIVO", "HISTORICO_K",
+INTERRUPTORES = ("RAG_POR_HIPOTESIS", "CORRECCION_AUDITOR", "HISTORICO_ACTIVO", "HISTORICO_K",
                  "EVENTOS_POR_CATEGORIA", "HISTORICO_CONTRASTIVO", "HISTORICO_K_POR_CLASE", "MEMORIA_GRUPOS_ACTIVA",
-                 "CAZADOR_MOTIVO_FACTUAL", "CAZADOR_LISTA_PATRONES", "AUDITOR_REVISA_MEDIOS", "AUDITOR_REFORZADO")
+                 "AUDITOR_REFORZADO", "GRUPOS_MOTIVO_FACTUAL", "LISTA_PATRONES_MITRE")
 CONFIG_REFERENCIA = ROOT / "experiments/config/config_oficial-12casos-r1-20261028.json"
 PRECIO = {"entrada": 0.75, "salida": 3.75}
 COTA = {("nodex", "bgl"): 0.08, ("nodex", "uwf"): 0.35, ("agente_unico", "bgl"): 0.04,
         ("agente_unico", "uwf"): 0.20}
 NODOS = {"agente_planificador": "planificador", "agente_analista_triage": "triage",
-         "agente_cazador": "cazador", "agente_selector_herramientas": "selector",
+         "agente_selector_herramientas": "selector",
          "agente_ingeniero_mitigacion": "mitigacion", "agente_auditor_final": "auditor"}
 
 
