@@ -3,10 +3,10 @@
 Rama `nodex-final` (desde el tag `piloto-12casos`). Fases A, A.1, B y B.1, con la configuración final
 elegida en desarrollo el 12-nov-2026: **"B.1 sin cazador, auditor reforzado"**. El agente cazador de las
 Fases B y B.1 se eliminó; los grupos con señal los evalúa el propio auditor (decisión y motivos en
-`docs/experimentacion/bitacora_desarrollo_nodex_final.md`). En evaluación, todos los agentes LLM usan
-`gemini-3.8-flash` con temperatura 0 y sin modelo de respaldo (fijados por la configuración congelada de
-la evaluación). Cada mejora tiene un interruptor en `src/config.py`, con el valor final por omisión; con
-los de la Fase B apagados el grafo vuelve al de la Fase A.
+`docs/experimentacion/bitacora_desarrollo_nodex_final.md`). Todos los agentes LLM usan `gemini-3.8-flash`
+con temperatura 0, en la aplicación y en la evaluación (sección 6). Cada mejora tiene un interruptor en
+`src/config.py`, con el valor final por omisión; con los de la Fase B apagados el grafo vuelve al de la
+Fase A.
 
 ## 1. Grafo
 
@@ -144,7 +144,34 @@ tú)". Sin grupos con señal (10 de los 48 casos de desarrollo, todos BGL), el a
 recibía la instrucción de revisar hallazgos del cazador y la línea "HALLAZGOS DEL CAZADOR: ninguno"; el
 final recibe solo el veredicto consolidado.
 
-## 6. Qué recibe cada sistema
+## 6. Configuración de aplicación y configuración de evaluación
+
+El mismo código corre con dos configuraciones:
+
+- **Aplicación** (uso normal: API, interfaz, `src/config.py` y `.env`). Los valores por omisión de
+  `src/config.py`; un `.env` local puede reemplazarlos.
+- **Evaluación** (corridas del experimento: campañas y arnés de desarrollo). La configuración congelada
+  `experiments/config/config_oficial-12casos-r1-20261028.json` reemplaza en cada proceso hijo los
+  parámetros del `.env` y de `src/config.py` (`src/experimentation/campana.py::entorno_de_la_corrida`).
+  Además, cada caso corre con una copia desechable de la memoria, la red bloqueada (con registro de
+  intentos) y la exclusión de patrones que comparten registros con el caso.
+
+La **arquitectura** (interruptores de la sección 5) y el **modelo principal** son los mismos en las dos.
+Difieren solo funciones de operación de la aplicación:
+
+| Parámetro | Aplicación (`src/config.py`) | Evaluación (congelada) | Por qué difiere |
+|---|---|---|---|
+| `LLM_MODEL_PRIMARY` | `gemini-3.8-flash` | `gemini-3.8-flash` | No difiere (desde el 12-nov-2026; antes la aplicación usaba `gemini-3.1-pro-preview`). |
+| `LLM_MODEL_FALLBACK` / `LLM_SIN_RESPALDO` | `gemini-3.6-flash` / false | `gemini-3.8-flash` / true | En la aplicación, si el principal agota sus reintentos por cuota o error transitorio, se reintenta con el respaldo para no perder el análisis. En la evaluación, cada respuesta debe venir del modelo evaluado: sin respaldo. |
+| `REPUTACION_SIN_ENRIQUECIMIENTO` | false | true | La aplicación consulta la reputación externa de las IP. La evaluación no la consulta, para que el resultado no dependa de servicios externos ni de la fecha. |
+| `CHROMA_PATH` | `./data/chroma` | copia por caso de `experiments/knowledge/rag_enriquecido_v2/chroma_snapshot` | La aplicación usa su memoria viva, que crece con la retroalimentación del analista. La evaluación usa una memoria congelada y desechable. |
+| `IP_CACHE_PATH` | `./data/ip_reputation_cache.json` | archivo temporal por caso | Igual que la memoria: la evaluación no reutiliza estado entre casos. |
+| `MEMORIA_GRUPOS_PATH` | `experiments/knowledge/memoria_grupos_v1/memoria_grupos.json` | el mismo archivo | No difiere. |
+
+Los demás parámetros congelados (temperatura 0, modelo de embeddings `all-MiniLM-L6-v2`, topes de
+recuperación y de ingesta) coinciden con los valores por omisión de la aplicación.
+
+## 7. Qué recibe cada sistema
 
 | | NODEX | Agente único |
 |---|---|---|
@@ -162,7 +189,7 @@ final recibe solo el veredicto consolidado.
 | Evaluación explícita de cada grupo con señal antes del veredicto | sí (auditor reforzado) | no |
 | Ciclos de corrección (comandos y coherencia) y replanificación | sí | no |
 
-## 7. Pruebas por módulo (12-nov-2026)
+## 8. Pruebas por módulo (12-nov-2026)
 
 Suite de Python: **1 591 pruebas**, 1 588 pasan; fallan 3 por el entorno de este equipo (Python 3.13 y
 finales de línea del corpus enriquecido v1), sin relación con NODEX final. Frontend: **100 pruebas**

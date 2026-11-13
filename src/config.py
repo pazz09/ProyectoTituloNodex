@@ -47,7 +47,15 @@ NVD_API_KEY = os.environ.get("NVD_API_KEY")  # opcional: rate limit bajo si falt
 # un error reconocido (cuota o transitorio -- ver `_generate_con_fallback`
 # en `src/llm.py`), reintenta automáticamente con LLM_MODEL_FALLBACK antes
 # de darse por vencido. Ver README, sección "Modelo LLM en la práctica".
-LLM_MODEL_PRIMARY = os.environ.get("LLM_MODEL_PRIMARY", "gemini-3.1-pro-preview")
+#
+# CAMBIO (12-nov-2026, NODEX final): el principal por omisión pasa a
+# gemini-3.8-flash, el modelo con que se evaluó la configuración final, para
+# que el sistema entregado se comporte como el evaluado. El respaldo
+# (gemini-3.6-flash), LLM_SIN_RESPALDO=false, REPUTACION_SIN_ENRIQUECIMIENTO=false
+# y CHROMA_PATH=./data/chroma siguen siendo los de la aplicación normal; en la
+# evaluación los reemplaza la configuración congelada
+# (docs/arquitectura_nodex_final.md, "Configuración de aplicación y de evaluación").
+LLM_MODEL_PRIMARY = os.environ.get("LLM_MODEL_PRIMARY", "gemini-3.8-flash")
 LLM_MODEL_FALLBACK = os.environ.get("LLM_MODEL_FALLBACK", "gemini-3.6-flash")
 TEMPERATURE = float(os.environ.get("TEMPERATURE", "0"))
 # LLM_SIN_RESPALDO (opt-in) apaga el cambio al modelo de respaldo; se define
